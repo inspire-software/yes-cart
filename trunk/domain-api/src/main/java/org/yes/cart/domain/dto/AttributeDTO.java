@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -219,15 +219,15 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return validation message.
      */
-    String getValidationFailedMessage();
+    Map<String, String> getValidationFailedMessage();
 
 
     /**
      * Set validation message.
      *
-     * @param validationFailedMessage messageto set.
+     * @param validationFailedMessage message to set.
      */
-    void setValidationFailedMessage(String validationFailedMessage);
+    void setValidationFailedMessage(Map<String, String> validationFailedMessage);
 
     /**
      * Get order in UI form.
@@ -249,14 +249,14 @@ public interface AttributeDTO extends Identifiable {
      *
      * @return comma separated choices.
      */
-    String getChoiceData();
+    Map<String, String> getChoiceData();
 
     /**
      * Set comma separated choices.
      *
      * @param choiceData comma separated choices.
      */
-    void setChoiceData(String choiceData);
+    void setChoiceData(Map<String, String> choiceData);
 
 
 }

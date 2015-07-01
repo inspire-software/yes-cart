@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
   -
   -    Licensed under the Apache License, Version 2.0 (the "License");
   -    you may not use this file except in compliance with the License.
@@ -29,9 +29,10 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.collections.ArrayCollection;
+        import mx.collections.Sort;
+        import mx.collections.SortField;
 
         import mx.controls.Alert;
-        import mx.controls.Text;
         import mx.core.Container;
         import mx.core.IVisualElement;
         import mx.events.IndexChangedEvent;
@@ -40,7 +41,6 @@
         import mx.rpc.AsyncToken;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
-        import mx.utils.URLUtil;
 
         import org.yes.cart.filter.InventoryFilter;
         import org.yes.cart.filter.PriceListFilter;
@@ -188,7 +188,7 @@
             var url:String;
             if (this.url && (this.url.indexOf("file:/") != -1 )) { //local connection
                 // When running standalone (e.g. from IDEA) make sure transport-guarantee is NONE in web.xml
-                url = "http://localhost:8080/yes-manager/spring/amf";
+                url = resourceManager.getString('ShopManagerApplication', 'devClientLocalurl');
                 myamf = new AMFChannel("myamf", url);
             } else if (this.url && (this.url.indexOf("http:/") != -1 )) {
                 url = "http://{server.name}:{server.port}/yes-manager/spring/amf";
@@ -207,12 +207,21 @@
             // Also make sure crossdomain.xml is accessible at the root
             // Alert.show("URL is '" + this.url + "', url is '" + url + "', channel is '" + myamf.url + "'");
 
+            var _enabled:String = resourceManager.getString('ShopManagerApplication', 'devClientAdminCheatlogon');
+
+            cheatLoginEnabled = ('enabled' == _enabled);
+
         }
 
 
         private function cheatLogin():void {
-            username.text = "admin@yes-cart.com";
-            password.text = "1234567";
+
+            if (!cheatLoginEnabled) {
+                return;
+            }
+
+            username.text = resourceManager.getString('ShopManagerApplication', 'devClientAdminUser');
+            password.text = resourceManager.getString('ShopManagerApplication', 'devClientAdminPass');
             login();
         }
 
@@ -288,12 +297,13 @@
         }
 
         private function onHelpClick(event:MouseEvent):void {
-            Alert.show(
-                    resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
-                            resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
-                            resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n",
-                    resourceManager.getString('ShopManagerApplication', 'info')
-            );
+
+            var _appName:String = resourceManager.getString('ShopManagerApplication', 'appName');
+//            var _appName:String = resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
+//                    resourceManager.getString('ShopManagerApplication', 'revDateLabel') + resourceManager.getString('ShopManagerApplication', 'revDate') + "\n" +
+//                    resourceManager.getString('ShopManagerApplication', 'buildDateLabel') + resourceManager.getString('ShopManagerApplication', 'buildDate') + "\n";
+
+            Alert.show(_appName, resourceManager.getString('ShopManagerApplication', 'info'));
         }
 
         private function onHelpURLClick(event:MouseEvent):void {
@@ -612,12 +622,31 @@
                 }
             }
 
+            var shopCodes:ArrayCollection = new ArrayCollection();
+            for (var shopProp:String in this.shops) {
+                var shop:ShopDTOImpl = this.shops[shopProp];
+                shopCodes.addItem({
+                    id: shopProp,
+                    label: shop.code + (shop.name != null && shop.name.length > 0 ? ': ' + shop.name : ''),
+                    code: shop.code,
+                    name: shop.name
+                });
+            }
+
+            var dataSortField:SortField = new SortField('code'); // sort by code
+            dataSortField.numeric = false;
+
+            var dataSort:Sort = new Sort();
+            dataSort.fields = [ dataSortField ];
+
+            shopCodes.sort = dataSort;
+            shopCodes.refresh();
+
             var storeButtonIndex:int = 1; // 0th is the spacer
-            for (var shopId:String in this.shops) {
-                var shop:ShopDTOImpl = this.shops[shopId];
+            for each (var shopData:Object in shopCodes) {
                 var shopButton:LinkButton = new LinkButton();
-                shopButton.label = shop.name + ' (' + shop.code + ')';
-                shopButton.id = shopId;
+                shopButton.label = shopData['label'];
+                shopButton.id = shopData['id'];
                 shopButton.addEventListener(MouseEvent.CLICK, clickFunction);
                 shopButton.percentWidth = 100;
                 buttonBox.addChildAt(shopButton, storeButtonIndex++);
@@ -636,6 +665,7 @@
 
     <mx:Boolean id="invalidLogin">false</mx:Boolean>
     <mx:Boolean id="loginButtonEnabled">false</mx:Boolean>
+    <mx:Boolean id="cheatLoginEnabled">false</mx:Boolean>
 
     <mx:AMFChannel xmlns:mx="http://www.adobe.com/2006/mxml"
                    id="myamf"/>
@@ -701,7 +731,9 @@
                                                click="login()"/>
                                         <mx:Button id="cheatLoginButton"
                                                label="Cheat"
-                                               enabled="true"
+                                               enabled="{cheatLoginEnabled}"
+                                               visible="{cheatLoginEnabled}"
+                                               includeInLayout="{cheatLoginEnabled}"
                                                click="cheatLogin()"/>
                                 </mx:ControlBar>
                             </mx:Panel>
@@ -719,7 +751,7 @@
                         <mx:HDividedBox width="100%" height="100%">
                             <mx:Accordion id="mainAccordion" width="230" height="100%" change="onMainAccordionChange(event)">
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='customerService')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="ordersBtn"
@@ -741,8 +773,7 @@
                                     </mx:VBox>
                                 </mx:Canvas>
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
-                                           toolTip="@Resource(bundle='ShopManagerApplication',key='catalogManagement')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="productsBtn"
@@ -762,8 +793,8 @@
                                     </mx:VBox>
                                 </mx:Canvas>
 
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='content')" width="100%"
-                                           height="100%">
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='content')"
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%" id="contentButtons">
                                         <mx:Spacer height="10"/>
 
@@ -771,7 +802,7 @@
                                 </mx:Canvas>
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='marketing')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="pricesBtn"
@@ -796,7 +827,7 @@
 
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='inventoryManagement')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="warehouseBtn"
@@ -815,7 +846,7 @@
                                 </mx:Canvas>
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='reporting')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
 
@@ -864,7 +895,7 @@
                                 </mx:Canvas>
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='shipping')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
 
                                         <mx:Spacer height="10"/>
@@ -884,8 +915,8 @@
 
                                 </mx:Canvas>
 
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')" width="100%"
-                                           height="100%">
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='stores')"
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%" id="storesButtons">
                                         <mx:Spacer height="10"/>
 
@@ -899,7 +930,7 @@
                                 </mx:Canvas>
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='employees')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%" horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="userBtn"
@@ -911,8 +942,8 @@
                                     </mx:VBox>
                                 </mx:Canvas>
 
-                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='system')" width="100%"
-                                           height="100%">
+                                <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='system')"
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%" id="productTypesBtn"
@@ -967,7 +998,7 @@
 
 
                                 <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='help')"
-                                           width="100%" height="100%">
+                                           width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%"

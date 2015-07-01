@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -28,22 +28,25 @@ import java.io.Serializable;
 import java.util.Map;
 
 @Dto
-@XmlRootElement(name = "attribute")
+@XmlRootElement(name = "category-attribute")
 public class AttrValueCategoryRO implements Serializable {
 
-    private static final long serialVersionUID = 20100717L;
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(value = "attrvalueId", readOnly = true)
     private long attrvalueId;
 
-    @DtoField(value = "val")
+    @DtoField(value = "val", readOnly = true)
     private String val;
 
-    @DtoField(value = "displayVal", converter = "i18nStringConverter")
+    @DtoField(value = "displayVal", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayVals;
 
     @DtoField(value = "attribute.attributeId", readOnly = true)
     private long attributeId;
+
+    @DtoField(value = "attribute.code", readOnly = true)
+    private String attributeCode;
 
     @DtoField(value = "attribute.name", readOnly = true)
     private String attributeName;
@@ -91,6 +94,15 @@ public class AttrValueCategoryRO implements Serializable {
         this.attributeId = attributeId;
     }
 
+    @XmlAttribute(name = "attribute-code")
+    public String getAttributeCode() {
+        return attributeCode;
+    }
+
+    public void setAttributeCode(final String attributeCode) {
+        this.attributeCode = attributeCode;
+    }
+
     @XmlElement(name = "attribute-name")
     public String getAttributeName() {
         return attributeName;
@@ -101,7 +113,7 @@ public class AttrValueCategoryRO implements Serializable {
     }
 
     @XmlJavaTypeAdapter(I18nMapAdapter.class)
-    @XmlElement(name = "attribute-display-vals")
+    @XmlElement(name = "attribute-display-names")
     public Map<String, String> getAttributeDisplayNames() {
         return attributeDisplayNames;
     }
@@ -121,7 +133,7 @@ public class AttrValueCategoryRO implements Serializable {
 
     @Override
     public String toString() {
-        return "AttrValueCategoryROImpl{" +
+        return "AttrValueCategoryRO{" +
                 "attrvalueId=" + attrvalueId +
                 ", val='" + val + '\'' +
                 ", attributeId=" + attributeId +

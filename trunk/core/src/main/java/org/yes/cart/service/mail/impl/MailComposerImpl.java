@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ import java.util.regex.Pattern;
  */
 public class MailComposerImpl implements MailComposer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
 
     /**
      * Default regular expression.
@@ -350,7 +350,7 @@ public class MailComposerImpl implements MailComposer {
         }
 
         if (model.get("root") instanceof CustomerOrder) {
-            mail.setSubject(prop.getProperty("subject") + " " + ((CustomerOrder)model.get("root")).getOrdernum());
+            mail.setSubject(((CustomerOrder)model.get("root")).getOrdernum() + ": " + prop.getProperty("subject"));
         } else {
             mail.setSubject(prop.getProperty("subject"));
         }

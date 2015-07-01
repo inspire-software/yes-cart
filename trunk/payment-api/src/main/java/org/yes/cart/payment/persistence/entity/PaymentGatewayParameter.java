@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.io.Serializable;
  * Date: 07-May-2011
  * Time: 10:22:53
  */
-public interface PaymentGatewayParameter extends Serializable, Descriptor {
+public interface PaymentGatewayParameter extends Serializable, Descriptor, Auditable {
 
     /**
      * @return pk value

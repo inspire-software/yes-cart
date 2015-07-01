@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -42,6 +42,20 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
      * @param customerId pk value to set
      */
     void setCustomerId(long customerId);
+
+    /**
+     * Get public key for this user.
+     *
+     * @return public key
+     */
+    String getPublicKey();
+
+    /**
+     * Set public key for this user.
+     *
+     * @param publicKey public key
+     */
+    void setPublicKey(String publicKey);
 
 
     /**

@@ -1,17 +1,9 @@
-Dear $customer.firstname $customer.lastname !
-<%
-if (paymentGatewayFeatures.isOnlineGateway()) {
-%>
-Result of payment at $shop.name for $root.ordernum was $result
-<%
-} else {
-%>
-Need payment or order confirmation
-<%
-}
-%>
-Please check detail at self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
-Order information
+Dear $customer.firstname $customer.lastname!
+Your payment for order has been received. Thank You!
+You can view detailed information in order history
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+
+Order information:
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -41,4 +33,3 @@ try {
 out.print(e.getMessage());
 }
 %>
-

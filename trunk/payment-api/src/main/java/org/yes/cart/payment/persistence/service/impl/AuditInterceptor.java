@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,9 +16,9 @@
 
 package org.yes.cart.payment.persistence.service.impl;
 
-import com.sun.corba.se.spi.ior.Identifiable;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EmptyInterceptor;
+import org.hibernate.Hibernate;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +28,20 @@ import org.springframework.security.core.userdetails.User;
 import org.yes.cart.payment.persistence.entity.Auditable;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 
 /**
- * Audit interseptor for entities.
+ * Audit interceptor for entities.
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
  * Time: 10:22:53
  */
 public class AuditInterceptor extends EmptyInterceptor {
 
-    private static final Logger LOG = LoggerFactory.getLogger("AUDIT");
+    private final Logger LOG = LoggerFactory.getLogger("AUDIT");
+
+    private Map<String, Set<String>> prohibitedFields = new HashMap<String, Set<String>>();
 
     private String getUserName() {
 
@@ -57,16 +57,15 @@ public class AuditInterceptor extends EmptyInterceptor {
 
         }
 
-        return "user unknown";
+        return "anonymous";
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean onSave(final Object entity, final Serializable serializable,
-                          final Object[] objects, final String[] propertyNames, final Type[] types) {
+    public boolean onSave(final Object entity, final Serializable id,
+                          final Object[] state, final String[] propertyNames, final Type[] types) {
         if (entity instanceof Auditable) {
             final Auditable auditable = ((Auditable) entity);
 
@@ -75,34 +74,36 @@ public class AuditInterceptor extends EmptyInterceptor {
 
             if (StringUtils.isBlank(auditable.getGuid())) {
                 final String guid = UUID.randomUUID().toString();
-                setValue(objects, propertyNames, "guid", guid);
+                setValue(state, propertyNames, "guid", guid);
                 auditable.setGuid(guid);
             }
 
-            setValue(objects, propertyNames, "createdBy", userName);
+            setValue(state, propertyNames, "createdBy", userName);
             auditable.setCreatedBy(userName);
-            setValue(objects, propertyNames, "createdTimestamp", date);
+            setValue(state, propertyNames, "createdTimestamp", date);
             auditable.setCreatedTimestamp(date);
 
-            setValue(objects, propertyNames, "updatedBy", userName);
+            setValue(state, propertyNames, "updatedBy", userName);
             auditable.setUpdatedBy(userName);
-            setValue(objects, propertyNames, "updatedTimestamp", date);
+            setValue(state, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
 
-            logOperation("SAVE", entity, userName);
+            logOperation("SAVE", (Auditable) entity, userName, id, state, propertyNames, types);
         }
-        return super.onSave(entity, serializable, objects, propertyNames, types);
+
+        return super.onSave(entity, id, state, propertyNames, types);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+    public void onDelete(final Object entity, final Serializable id,
+                         final Object[] state, final String[] propertyNames, final Type[] types) {
 
         if (entity instanceof Auditable) {
             final String userName = getUserName();
-            logOperation("DELETE", entity, userName);
+            logOperation("DELETE", (Auditable) entity, userName, id, state, propertyNames, types);
         }
         super.onDelete(entity, id, state, propertyNames, types);
 
@@ -112,8 +113,8 @@ public class AuditInterceptor extends EmptyInterceptor {
      * {@inheritDoc}
      */
     @Override
-    public boolean onFlushDirty(final Object entity, final Serializable serializable, final Object[] currentState,
-                                final Object[] previousState, final String[] propertyNames, final Type[] types) {
+    public boolean onFlushDirty(final Object entity, final Serializable id,
+                                final Object[] currentState, final Object[] previousState, final String[] propertyNames, final Type[] types) {
         if (entity instanceof Auditable) {
             final Auditable auditable = (Auditable) entity;
 
@@ -140,24 +141,74 @@ public class AuditInterceptor extends EmptyInterceptor {
             setValue(currentState, propertyNames, "updatedTimestamp", date);
             auditable.setUpdatedTimestamp(date);
 
-            logOperation("FLUSH", entity, userName);
+            logOperation("FLUSH-PREV", (Auditable) entity, userName, id, previousState, propertyNames, types);
+            logOperation("FLUSH-CURR", (Auditable) entity, userName, id, currentState, propertyNames, types);
         }
 
-        return super.onFlushDirty(entity, serializable, currentState, previousState, propertyNames, types);
+        return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
 
     }
 
-    private void logOperation(final String operation, final Object entity, final String user) {
-        if (LOG.isInfoEnabled()) {
+    private void logOperation(final String operation, final Auditable entity, final String user,
+                              final Serializable id, final Object[] state, final String[] propertyNames, final Type[] types) {
+        if (LOG.isTraceEnabled()) {
+
+            final String className = entity.getClass().getSimpleName();
+            final Set<String> prohibited = prohibitedFields.get(className);
+
             final StringBuilder line = new StringBuilder();
             line.append(operation);
-            line.append(",");
-            line.append(entity.getClass().getSimpleName());
-            line.append(",");
-            line.append(((entity instanceof Identifiable) ? ((Identifiable) entity).getId() : "N/A"));
-            line.append(",");
+            line.append(",\"");
+            line.append(className);
+            line.append("\",\"");
+            if (id == null || (id instanceof Number && ((Number) id).longValue() <= 0L)) {
+                line.append("N/A");
+            } else {
+                line.append(id);
+            }
+            line.append("\",\"");
             line.append(user);
-            LOG.info(line.toString());
+            line.append("\",\"");
+            line.append(entity.getGuid());
+            line.append('"');
+            if (state != null) {
+                for (int i = 0; i < propertyNames.length; i++) {
+                    final Type type = types[i];
+                    if (type.isCollectionType()) {
+                        continue; // skip collections
+                    }
+                    final String prop = propertyNames[i];
+                    final Object value = state[i];
+
+                    line.append(",\"");
+                    line.append(prop);
+                    line.append(":");
+
+                    if (prohibited == null || !prohibited.contains(prop)) {
+                        if (type.isEntityType()) {
+                            if (Hibernate.isInitialized(value)) {
+                                line.append(value);
+                            } else {
+                                line.append("lazy");
+                            }
+                        } else {
+
+                            if (value instanceof String) {
+                                line.append(((String) value).replace('"','\''));
+                            } else {
+                                line.append(value);
+                            }
+
+                        }
+                    } else {
+                        line.append("[prohibited]");
+                    }
+
+                    line.append("\"");
+
+                }
+            }
+            LOG.trace(line.toString());
         }
     }
 
@@ -166,6 +217,17 @@ public class AuditInterceptor extends EmptyInterceptor {
         int index = Arrays.asList(propertyNames).indexOf(propertyToSet);
         if (index > -1) {
             currentState[index] = value;
+        }
+    }
+
+    /**
+     * Set field that should not output to audit log due to security reasons.
+     *
+     * @param prohibitedFields class to fields map
+     */
+    public void setProhibitedFields(final Map<String, Set<String>> prohibitedFields) {
+        if (prohibitedFields != null) {
+            this.prohibitedFields.putAll(prohibitedFields);
         }
     }
 

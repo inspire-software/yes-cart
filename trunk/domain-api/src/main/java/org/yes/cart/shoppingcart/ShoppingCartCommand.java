@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,6 +32,8 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_ADDTOWISHLIST = "addToWishListCmd";
     String CMD_ADDTOWISHLIST_P_TYPE = "type";
     String CMD_ADDTOWISHLIST_P_TAGS = "tags";
+    String CMD_ADDTOWISHLIST_P_TAGS_REPLACE = "tagsr";
+    String CMD_ADDTOWISHLIST_P_VISIBILITY = "wlv";
     String CMD_ADDTOWISHLIST_P_QTY = "qty";
     String CMD_REMOVEFROMWISHLIST = "removeFromWishListCmd";
     String CMD_REMOVEFROMWISHLIST_P_ID = "i";
@@ -67,7 +69,9 @@ public interface ShoppingCartCommand extends Serializable {
 
     String CMD_CHANGECURRENCY = "changeCurrencyCmd";
     String CMD_CHANGELOCALE = "changeLocaleCmd";
+
     String CMD_INTERNAL_VIEWSKU = "viewSkuInternalCmd";
+    String CMD_INTERNAL_SETIP = "setIpInternalCmd";
 
     String CMD_CLEAN = "cleanCartCmd";
     String CMD_EXPIRE = "expireCartCmd";
@@ -75,6 +79,8 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_LOGIN_P_EMAIL = "email";
     String CMD_LOGIN_P_PASS = "password";
     String CMD_LOGOUT = "logoutCmd";
+
+    String CMD_RESET_PASSWORD = "resetPasswordCmd";
 
 
     /**

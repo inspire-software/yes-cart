@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,15 +20,18 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.web.context.ServletContextAware;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.request.HttpServletRequestWrapper;
+import org.yes.cart.web.support.request.IPResolver;
+import org.yes.cart.web.support.request.impl.HttpServletRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -42,15 +45,19 @@ import java.io.IOException;
  */
 public class ShopResolverFilter extends AbstractFilter implements Filter, ServletContextAware {
 
+    private final ShopService shopService;
     private final SystemService systemService;
+    private final IPResolver ipResolver;
 
     private ServletContext servletContext;
 
 
-    public ShopResolverFilter(final ApplicationDirector applicationDirector,
-                              final SystemService systemService) {
-        super(applicationDirector);
+    public ShopResolverFilter(final ShopService shopService,
+                              final SystemService systemService,
+                              final IPResolver ipResolver) {
+        this.shopService = shopService;
         this.systemService = systemService;
+        this.ipResolver = ipResolver;
     }
 
     /**
@@ -61,7 +68,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
 
         final String serverDomainName = servletRequest.getServerName().toLowerCase();
 
-        final Shop shop = getApplicationDirector().getShopByDomainName(serverDomainName);
+        final Shop shop = shopService.getShopByDomainName(serverDomainName);
 
         if (shop == null) {
             final String url = systemService.getDefaultShopURL();
@@ -77,19 +84,14 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());
         ShopCodeContext.setShopId(shop.getShopId());
-        //ApplicationDirector.setCurrentServletContext(servletContext);
 
-        return getModifiedRequest(servletRequest, shop);
+        return getModifiedRequest(servletRequest, ApplicationDirector.getCurrentThemeChain());
 
     }
 
     private String getRemoteIpAddr(final ServletRequest servletRequest) {
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        String userIpAddress = httpRequest.getHeader("X-Forwarded-For");
-        if (userIpAddress == null) {
-            return httpRequest.getRemoteAddr();
-        }
-        return userIpAddress;
+        return ipResolver.resolve(httpRequest);
     }
 
 
@@ -97,16 +99,16 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
      * Create http servlet wrapper to handle multi store requests.
      *
      * @param servletRequest current request
-     * @param shop           resolved shop
+     * @param themes         theme chain
      * @return servlet wrapper
      */
-    private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final Shop shop) {
+    private ServletRequest getModifiedRequest(final ServletRequest servletRequest, final List<String> themes) {
 
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         final String servletPath = httpServletRequest.getServletPath();
 
         if (StringUtils.isNotEmpty(servletPath)) {
-            final String newServletPath = shop.getMarkupFolder() + servletPath;
+            final String newServletPath = "/" + themes.get(0) + "/markup" + servletPath;
             try {
                 return new HttpServletRequestWrapper(httpServletRequest, newServletPath);
             } catch (/*MalformedURL*/Exception e) {

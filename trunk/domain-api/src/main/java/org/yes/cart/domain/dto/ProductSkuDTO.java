@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -248,18 +248,6 @@ public interface ProductSkuDTO extends Identifiable, Guidable {
      * @param metadescription localised locale => name pairs
      */
     void setDisplayMetadescriptions(Map<String, String> metadescription);
-
-    /**
-     * @return price for this sku
-     */
-    Collection<SkuPriceDTO> getPrice();
-
-    /**
-     * Set sku prices
-     *
-     * @param price pice collection
-     */
-    void setPrice(Collection<SkuPriceDTO> price);
 
     /**
      * Get attribute collection.

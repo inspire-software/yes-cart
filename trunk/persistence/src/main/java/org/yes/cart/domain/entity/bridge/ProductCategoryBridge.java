@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -50,9 +50,9 @@ public class ProductCategoryBridge implements FieldBridge {
                 document.add(new Field(
                         "productCategory.category",
                         String.valueOf(productCategory.getCategory().getCategoryId()),
-                        luceneOptions.getStore(),
+                        Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
-                        luceneOptions.getTermVector()
+                        Field.TermVector.NO
                 ));
 
             }
@@ -80,7 +80,7 @@ public class ProductCategoryBridge implements FieldBridge {
                         document.add(new Field(
                                 ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD,
                                 String.valueOf(shop.getShopId()),
-                                luceneOptions.getStore(),
+                                Field.Store.NO,
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
                         ));

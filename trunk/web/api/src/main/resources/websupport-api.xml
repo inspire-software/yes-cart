@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@
     <!-- ################################### filter delegates begin ################################### -->
 
     <bean id="requestLocaleResolverFilter" class="org.yes.cart.web.filter.RequestLocaleResolverFilter">
-        <constructor-arg index="0" ref="applicationDirector"/>
-        <constructor-arg index="1" ref="languageService"/>
-        <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
+        <constructor-arg index="0" ref="languageService"/>
+        <constructor-arg index="1" ref="shoppingCartCommandFactory"/>
     </bean>
 
     <!-- ################################### filter delegates end ################################### -->

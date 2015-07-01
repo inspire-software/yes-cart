@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -54,6 +54,16 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
      * @return update price sku pk value
      */
     long updateSkuPrice(SkuPriceDTO skuPriceDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get all prices by product PK.
+     *
+     * @param productId product PK.
+     *
+     * @return all prices
+     */
+    List<SkuPriceDTO> getAllProductPrices(long productId, String currency, long shopId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -208,6 +208,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @return list of found objects
      */
     List<Object> findQueryObjectByNamedQuery(String namedQueryName, Object... parameters);
+
+    /**
+     * Find "query objects" within named query .
+     *
+     * @param namedQueryName name of query
+     * @param parameters     optional parameters for named query
+     *
+     * @return list of found objects
+     */
+    ResultsIterator<Object> findQueryObjectByNamedQueryIterator(String namedQueryName, Object... parameters);
 
     /**
      * Find "query objects" within named query .

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          autowire="byName">
+        <!--<property name="configLocation" value="classpath:hibernate-nc.cfg.xml"/>-->
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AdminInterceptor">
+                <property name="entityOperationCache" ref="evictionConfig"/>
+                <property name="prohibitedFields">
+                    <map key-type="java.lang.String" value-type="java.lang.String">
+                        <entry key="CustomerEntity">
+                            <set>
+                                <value>password</value>
+                            </set>
+                        </entry>
+                        <entry key="ManagerEntity">
+                            <set>
+                                <value>password</value>
+                            </set>
+                        </entry>
+                        <entry key="MailEntity">
+                            <set>
+                                <value>textVersion</value>
+                                <value>htmlVersion</value>
+                            </set>
+                        </entry>
+                        <entry key="MailPartEntity">
+                            <set>
+                                <value>data</value>
+                            </set>
+                        </entry>
+                        <entry key="ShoppingCartStateEntity">
+                            <set>
+                                <value>state</value>
+                            </set>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.dialect">${db.config.yes.hibernate.dialect}</prop>
+                <prop key="show_sql">false</prop>
+
+                <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="payDataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/ycp.xml</value>
+            </list>
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dialect">${db.config.yespay.hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!-- Disable hibernate search automatic support - no indexing for payments -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
+            </props>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
+                <property name="prohibitedFields">
+                    <map key-type="java.lang.String" value-type="java.lang.String">
+                        <entry key="CustomerOrderPaymentEntity">
+                            <set>
+                                <value>cardExpireYear</value>
+                                <value>cardExpireMonth</value>
+                                <value>cardStartDate</value>
+                                <value>cardNumber</value>
+                                <value>cardIssueNumber</value>
+                            </set>
+                        </entry>
+                        <entry key="PaymentGatewayParameterEntity">
+                            <set>
+                                <value>value</value>
+                            </set>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
+        

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="wicketUtil" class="org.yes.cart.web.util.WicketUtil">
+        <constructor-arg index="0" ref="commandConfig"/>
+    </bean>
+
+    <bean id="wicketMarkupCache" class="org.yes.cart.web.application.MultiMarkupEhCacheProvider">
+        <constructor-arg index="0" ref="cacheManager"/>
+        <constructor-arg index="1" value="web.wicket-wicketMarkupCache"/>
+    </bean>
+
+    <bean id="wicketMarkupKeyCache" class="org.yes.cart.web.application.MultiMarkupEhCacheProvider">
+        <constructor-arg index="0" ref="cacheManager"/>
+        <constructor-arg index="1" value="web.wicket-wicketMarkupKeyCache"/>
+    </bean>
+
+    <!--
+        Internal implementation of MultiMarkupCache is Wicket application specific
+        so it has to be setup as prototype and provided by lookup method in factory.
+     -->
+    <bean id="wicketMultiMarkupCache" class="org.yes.cart.web.application.MultiMarkupCache" scope="prototype">
+        <constructor-arg index="0" ref="wicketMarkupCache"/>
+        <constructor-arg index="1" ref="wicketMarkupKeyCache"/>
+    </bean>
+
+    <bean id="wicketMultiMarkupFactory" class="org.yes.cart.web.application.MultiMarkupFactory">
+        <lookup-method name="getNewInstance" bean="wicketMultiMarkupCache"/>
+    </bean>
+
+    <bean id="wicketPagesMounter" class="org.yes.cart.web.theme.impl.WicketPagesMounterImpl">
+        <constructor-arg index="0" ref="seoBookmarkablePageParametersEncoder"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="/">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.HomePage"/>
+                    </map>
+                </entry>
+                <entry key="/ajaxatb">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.AjaxAtbPage"/>
+                    </map>
+                </entry>
+                <entry key="/ajaxwl">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.AjaxWlPage"/>
+                    </map>
+                </entry>
+                <entry key="/login">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.LoginPage"/>
+                    </map>
+                </entry>
+                <entry key="/wishlistadd">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.component.customer.wishlist.WishListItemAddPage"/>
+                    </map>
+                </entry>
+                <entry key="/cart">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.ShoppingCartPage"/>
+                    </map>
+                </entry>
+                <entry key="/profile">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.ProfilePage"/>
+                    </map>
+                </entry>
+                <entry key="/wishlist">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.WishListPage"/>
+                    </map>
+                </entry>
+                <entry key="/orders">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.OrdersPage"/>
+                    </map>
+                </entry>
+                <entry key="/order">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.OrderPage"/>
+                    </map>
+                </entry>
+                <entry key="/faq">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.FaqPage"/>
+                    </map>
+                </entry>
+                <entry key="/contact">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.ContactPage"/>
+                    </map>
+                </entry>
+                <entry key="/registration">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.RegistrationPage"/>
+                    </map>
+                </entry>
+                <entry key="/address">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.component.customer.address.CreateEditAddressPage"/>
+                    </map>
+                </entry>
+                <entry key="/checkout">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.CheckoutPage"/>
+                    </map>
+                </entry>
+                <entry key="/payment">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.PaymentPage"/>
+                    </map>
+                </entry>
+                <entry key="/paymentresult">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.ResultPage"/>
+                    </map>
+                </entry>
+                <entry key="/anetsim">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage"/>
+                    </map>
+                </entry>
+                <entry key="/paypallreturn">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage"/>
+                    </map>
+                </entry>
+                <entry key="/liqpayreturn">
+                    <map>
+                        <entry key="default" value="org.yes.cart.web.page.payment.callback.LiqPayReturnUrlPage"/>
+                    </map>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>/login</value>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <list>
+                <value>/</value>
+                <value>/ajaxatb</value>
+                <value>/ajaxwl</value>
+                <value>/cart</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="wicketResourceMounter" class="org.yes.cart.web.theme.impl.WicketResourceMounterImpl">
+        <property name="enabledPatterns">
+            <list>
+                <!-- Custom fonts support -->
+                <value>+*.eot</value>
+                <value>+*.svg</value>
+                <value>+*.ttf</value>
+                <value>+*.woff</value>
+
+                <!-- Support for JS dev mode tools -->
+                <value>+*.map</value>
+
+                <!-- PDF streams -->
+                <!--<value>+*.pdf</value>-->
+
+                <!-- Google sitemap generation -->
+                <value>+*sitemap.xml</value>
+            </list>
+        </property>
+        <property name="sitemapXml" ref="sitemapXmlResource"/>
+    </bean>
+
+    <bean id="wicketCentralViewProvider" class="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2">
+            <map key-type="java.lang.String" value-type="java.lang.Class">
+                <entry key="subcats"        value="org.yes.cart.web.page.component.SubCategoriesCentralView"/>
+                <entry key="products"       value="org.yes.cart.web.page.component.ProductsCentralView"/>
+                <entry key="searchrez"      value="org.yes.cart.web.page.component.ProductsCentralView"/>
+                <entry key="product"        value="org.yes.cart.web.page.component.SkuCentralView"/>
+                <entry key="sku"            value="org.yes.cart.web.page.component.SkuCentralView"/>
+                <entry key="content"        value="org.yes.cart.web.page.component.ContentCentralView"/>
+                <entry key="dynocontent"    value="org.yes.cart.web.page.component.DynoContentCentralView"/>
+                <entry key="category"       value="org.yes.cart.web.page.component.EmptyCentralView"/>
+                <entry key="default"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
+                <entry key="include"        value="org.yes.cart.web.page.component.EmptyCentralView"/>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="3">
+            <map key-type="java.lang.Class" value-type="org.yes.cart.web.theme.impl.WicketCentralViewProviderImpl.CategoryType">
+                <entry key="org.yes.cart.web.page.component.EmptyCentralView"           value="CATEGORY"/>
+                <entry key="org.yes.cart.web.page.component.SubCategoriesCentralView"   value="CATEGORY"/>
+                <entry key="org.yes.cart.web.page.component.ProductsCentralView"        value="ANY"/>
+                <entry key="org.yes.cart.web.page.component.SkuCentralView"             value="ANY"/>
+                <entry key="org.yes.cart.web.page.component.ContentCentralView"         value="CONTENT"/>
+                <entry key="org.yes.cart.web.page.component.DynoContentCentralView"     value="CONTENT"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="sitemapXmlResource" class="org.yes.cart.web.resource.SitemapXmlResource">
+        <constructor-arg ref="sitemapXmlService"/>
+    </bean>
+
+    <bean id="wicketSupportFacade" class="org.yes.cart.web.service.wicketsupport.impl.WicketSupportFacadeImpl">
+        <constructor-arg index="0">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.LinksSupportImpl">
+                <constructor-arg index="0" ref="wicketUtil"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.web.service.wicketsupport.impl.PaginationSupportImpl">
+                <constructor-arg index="0" ref="wicketUtil"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="2" ref="groovyContentServiceTemplateSupport"/>
+        <constructor-arg index="3" ref="wicketUtil"/>
+    </bean>
+
+    <bean id="seoBookmarkablePageParametersEncoder" class="org.yes.cart.web.service.wicketsupport.impl.SeoBookmarkablePageParametersEncoder">
+        <constructor-arg index="0" ref="bookmarkService"/>
+        <constructor-arg index="1" value="true"/>
+        <!-- is seo url rewriting enabled -->
+    </bean>
+
+
+    <bean id="breadCrumbsBuilder" class="org.yes.cart.web.page.component.breadcrumbs.impl.BreadCrumbsBuilderImpl">
+        <constructor-arg index="0" ref="categoryService"/>
+        <constructor-arg index="1" ref="currencySymbolService"/>
+        <constructor-arg index="2" ref="priceNavigation"/>
+        <constructor-arg index="3" ref="attributeService"/>
+        <constructor-arg index="4" ref="wicketUtil"/>
+    </bean>
+
+
+</beans>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -149,5 +149,21 @@ public interface RemoteBackdoorService {
      * @param name name of cache to evict
      */
     Map<String, Boolean> evictCache(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Enable cache statistics by name.
+     *
+     * @param context web service context
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> enableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Disable cache statistics by name.
+     *
+     * @param context web service context
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> disableStats(AsyncContext context, String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

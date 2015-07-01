@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -62,6 +62,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private Address shippingAddressDetails;
     private boolean multipleShipmentOption;
     private Date orderTimestamp;
+    private String orderIp;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -214,6 +215,23 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setOrderTimestamp(Date orderTimestamp) {
         this.orderTimestamp = orderTimestamp;
+    }
+
+    public String getOrderIp() {
+        return orderIp;
+    }
+
+    public void setOrderIp(final String orderIp) {
+        this.orderIp = orderIp;
+    }
+
+    public BigDecimal getOrderTotal() {
+        BigDecimal total = getPrice();
+        // deliveries are eagerly fetched so there should not be a lazy init issue
+        for (final CustomerOrderDelivery delivery : getDelivery()) {
+            total = total.add(delivery.getPrice());
+        }
+        return total;
     }
 
     public BigDecimal getPrice() {

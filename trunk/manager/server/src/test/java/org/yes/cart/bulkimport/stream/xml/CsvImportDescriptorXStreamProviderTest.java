@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,11 +21,14 @@ import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.FieldTypeEnum;
+import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -40,10 +43,17 @@ public class CsvImportDescriptorXStreamProviderTest {
     public void testProvide() throws Exception {
         final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
-        final InputStream inputStream = new FileInputStream("src/test/resources/import/attributenames.xml");
+        final InputStream inputStream = new FileInputStream("src/test/resources/import/schematest001.xml");
         final ImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
+
+        assertEquals(ImportDescriptor.ImportMode.DELETE, desc.getMode());
+        assertEquals(ImportDescriptor.ImportMode.DELETE.name(), desc.getModeName());
+
+        assertNotNull(desc.getContext());
+        assertEquals("SHOP10", desc.getContext().getShopCode());
+
         assertEquals("org.yes.cart.domain.entity.Attribute", desc.getEntityType());
         assertNull(desc.getImportDirectory());
         assertNotNull(desc.getImportFileDescriptor());
@@ -54,10 +64,16 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertEquals(';', ((CsvImportFile) desc.getImportFileDescriptor()).getColumnDelimiter());
         assertEquals('"', ((CsvImportFile) desc.getImportFileDescriptor()).getTextQualifier());
 
+        assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
+        assertEquals("INSERT INTO TATTRIBUTE (VERSION, GUID, CODE) VALUES (0, {GUID}, {code})", desc.getInsertSql());
+        assertEquals("delete from AttributeEntity b where b.code = {code}", desc.getDeleteSql());
+
         assertNotNull(desc.getImportColumns());
         assertEquals(11, desc.getImportColumns().size());
 
-        final CsvImportColumn col0 = (CsvImportColumn) desc.getImportColumns().iterator().next();
+        final List<ImportColumn> colums = new ArrayList<ImportColumn>(desc.getImportColumns());
+
+        final CsvImportColumn col0 = (CsvImportColumn) colums.get(0);
         assertNotNull(col0);
         assertEquals(0, col0.getColumnIndex());
         assertEquals(FieldTypeEnum.FK_FIELD, col0.getFieldType());
@@ -66,8 +82,16 @@ public class CsvImportDescriptorXStreamProviderTest {
         assertEquals(Integer.valueOf(1), col0.getValueRegExGroup());
         assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
 
-
-
+        final CsvImportColumn col5 = (CsvImportColumn) colums.get(5);
+        assertNotNull(col5);
+        assertEquals(4, col5.getColumnIndex());
+        assertEquals(FieldTypeEnum.FIELD, col5.getFieldType());
+        assertEquals("displayName", col5.getName());
+        assertEquals("(.{0,255})(.*)", col5.getValueRegEx());
+        assertEquals(Integer.valueOf(1), col5.getValueRegExGroup());
+        assertEquals("Rus: $1", col5.getValueRegExTemplate());
+        assertEquals("ru", col5.getLanguage());
+        assertNull(col5.getLookupQuery());
 
     }
 

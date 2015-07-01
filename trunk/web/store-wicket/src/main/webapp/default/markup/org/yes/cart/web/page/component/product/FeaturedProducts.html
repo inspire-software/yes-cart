@@ -1,0 +1,72 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:head>
+    <!-- fire plugin onDocumentReady -->
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () {
+
+                    $("#featuredProducts").carouFredSel(
+
+                            {
+                                responsive:true,
+                                width:'100%',
+                                scroll: {
+                                    items:2,
+                                    fx: "fade",
+                                    duration: 2000,
+                                    pauseOnHover: true
+                                },
+                                items:{
+                                    width:80,
+                                    height: 80,	//	optionally resize item-height
+                                    visible:{
+                                        min:2,
+                                        max:6
+                                    }
+                                }
+                            }
+                    );
+
+                }
+        );
+
+
+    </script>
+
+</wicket:head>
+<body>
+<wicket:panel>
+    <div class="featured-panel hidden-xs">
+        <div class="container">
+            <ul id="featuredProducts">
+                <li wicket:id="products">
+                    <a wicket:id="productLinkImage" rel="bookmark">
+                        <img wicket:id="productDefaultImage"/>
+                    </a>
+
+                    <p align="center">
+                        <a wicket:id="productLinkName" rel="bookmark"><span wicket:id="name">[product name]</span></a>
+                    </p>
+                </li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+    </div>
+</wicket:panel>
+</body>
+</html>

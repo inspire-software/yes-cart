@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public class TestAddressServiceImpl extends BaseCoreDBTestCase {
         customer = customerService.findById(customer.getCustomerId());
         assertEquals(2, customer.getAddress().size());
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId()).size());
-        assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPING).isEmpty());
+        assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPPING).isEmpty());
         assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_BILLING).size());
     }
 }

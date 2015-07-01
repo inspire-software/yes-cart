@@ -1,5 +1,5 @@
 Уважаемый (-ая) $customer.firstname $customer.lastname !
-Оформлен новый заказ $root.ordernum на $shop.name
+Оформлен новый заказ $root.ordernum на $shop.name.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -30,5 +30,5 @@ out.print(e.getMessage());
 }
 %>
 
-
-Пожалуйста, проверьте информацию на странице Вашего профиля на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
+Подробную информацию Вы можете посмотреть в истории заказов
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

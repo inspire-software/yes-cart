@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -32,21 +32,23 @@
 
     <import resource="persistence.xml"/>
 
-    <import resource="classpath*:core-config.xml"/>
-    <import resource="classpath*:core-services.xml"/>
-    <import resource="classpath*:core-io.xml"/>
-    <import resource="classpath*:api-services-commands.xml"/>
+    <import resource="classpath:core-config.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:core-io.xml"/>
+    <import resource="classpath:api-services-commands.xml"/>
+    <import resource="classpath:core-orderstate.xml"/>
 
-    <import resource="websupport-services.xml"/>
-    <import resource="websupport-cluster.xml"/>
-    <import resource="websupport-tools.xml"/>
-    <import resource="websupport-cronjob.xml"/>
-    <import resource="websupport-storefront.xml"/>
+    <import resource="classpath:websupport-services.xml"/>
+    <import resource="classpath:websupport-cluster-WS.xml"/>
+    <import resource="classpath:websupport-cluster.xml"/>
+    <import resource="classpath:websupport-tools.xml"/>
+    <import resource="classpath:websupport-cronjob.xml"/>
+    <import resource="classpath:websupport-storefront.xml"/>
+    <import resource="websupport-api.xml"/>
 
-    <import resource="classpath*:payment-api.xml"/>
-    <import resource="classpath*:core-module-payment-base.xml"/>
-    <import resource="classpath*:core-module-payment-capp.xml"/>
-    <import resource="classpath*:core-module-payment-gswm.xml"/>
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-module-payment-base.xml"/>
 
     <import resource="api.xml"/>
     <import resource="rest-mvc.xml"/>

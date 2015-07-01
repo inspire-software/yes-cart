@@ -1,5 +1,5 @@
 --
---  Copyright 2009 Igor Azarnyi, Denys Pavlov
+--  Copyright 2009 Denys Pavlov, Igor Azarnyi
 --
 --     Licensed under the Apache License, Version 2.0 (the "License");
 --     you may not use this file except in compliance with the License.
@@ -271,7 +271,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11022,  'PRODUCT_DESCRIPTION_uk', 'PRODUCT_DESCRIPTION_uk',  0,  NULL,  'Опис Продукту (uk)',  'Опис Продукту Українською (uk)',  1011, 1003);
 
-INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Igor Azarnyi, Denys Pavlov
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12014,'CONTENT_BODY_uk_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,11 +41,25 @@ public interface CustomerOrderPaymentService extends PaymentModuleGenericService
      * @param transactionOperation   operation name at payment gateway. optional
      * @return list of payments
      */
-    List<CustomerOrderPayment> findBy(
-            String orderNumber,
-            String shipmentNumber,
-            String paymentProcessorResult,
-            String transactionOperation);
+    List<CustomerOrderPayment> findBy(String orderNumber,
+                                      String shipmentNumber,
+                                      String paymentProcessorResult,
+                                      String transactionOperation);
+
+    /**
+     * Find all payments by given parameters.
+     * Warning order number or shipment number must be present.
+     *
+     * @param orderNumber            given order number. optional
+     * @param shipmentNumber         given shipment/delivery number. optional
+     * @param paymentProcessorResult statuses of payment at payment processor . optional
+     * @param transactionOperation   operation names at payment gateway. optional
+     * @return list of payments
+     */
+    List<CustomerOrderPayment> findBy(String orderNumber,
+                                      String shipmentNumber,
+                                      String[] paymentProcessorResult,
+                                      String[] transactionOperation);
 
     /**
      * Find all payments by given parameters.

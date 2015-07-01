@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +25,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.service.rest.impl.BookmarkMixin;
+import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
-import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 
@@ -46,20 +49,25 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/category")
-public class CategoryController extends AbstractApiController {
+public class CategoryController {
 
     @Autowired
     private CentralViewResolver centralViewResolver;
     @Autowired
     private CategoryServiceFacade categoryServiceFacade;
-    @Autowired
-    private BookmarkService bookmarkService;
 
+    @Autowired
+    private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
+    @Autowired
+    private BookmarkMixin bookmarkMixin;
 
     private List<CategoryRO> listRootInternal() {
 
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, ShopCodeContext.getShopId());
-        return map(categories, CategoryRO.class, Category.class);
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, cartMixin.getCurrentShopId());
+        return mappingMixin.map(categories, CategoryRO.class, Category.class);
 
     }
 
@@ -141,7 +149,7 @@ public class CategoryController extends AbstractApiController {
     public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return listRootInternal();
 
@@ -172,18 +180,20 @@ public class CategoryController extends AbstractApiController {
      * <pre><code>
      *   &lt;categories&gt;
      *   &lt;category category-id="1" navigation-by-attributes="true" navigation-by-brand="true" navigation-by-price="true" parent-id="100" product-type-id="1"&gt;
-     *       &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
-     *          &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
-     *          &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
+     *       &lt;attribute-values&gt;
+     *           &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
+     *              &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
+     *              &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *       &lt;/attribute-values&gt;
      *       &lt;breadcrumbs&gt;
      *           &lt;breadcrumb category-id="1"&gt;
      *               &lt;display-names&gt;
@@ -234,7 +244,7 @@ public class CategoryController extends AbstractApiController {
     public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listRootInternal());
 
@@ -310,18 +320,20 @@ public class CategoryController extends AbstractApiController {
      *     <tr><td>XML object CategoryRO</td><td>
      * <pre><code>
      *   &lt;category category-id="1" navigation-by-attributes="true" navigation-by-brand="true" navigation-by-price="true" parent-id="100" product-type-id="1"&gt;
-     *       &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
-     *          &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
-     *          &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
+     *       &lt;attribute-values&gt;
+     *           &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
+     *              &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
+     *              &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *       &lt;/attribute-values&gt;
      *       &lt;breadcrumbs&gt;
      *           &lt;breadcrumb category-id="1"&gt;
      *               &lt;display-names&gt;
@@ -372,18 +384,22 @@ public class CategoryController extends AbstractApiController {
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
-        final long categoryId = resolveId(category);
+        final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, shopId);
 
         if (categoryEntity != null && !CentralViewLabel.INCLUDE.equals(categoryEntity.getUitemplate())) {
 
-            final CategoryRO catRO = map(categoryEntity, CategoryRO.class, Category.class);
+            final CategoryRO catRO = mappingMixin.map(categoryEntity, CategoryRO.class, Category.class);
             catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), shopId));
-            catRO.setUitemplate(resolveTemplate(catRO));
+            final Pair<String, String> templates = resolveTemplate(catRO);
+            if (templates != null) {
+                catRO.setUitemplate(templates.getFirst());
+                catRO.setUitemplateFallback(templates.getSecond());
+            }
             return catRO;
 
         }
@@ -394,14 +410,14 @@ public class CategoryController extends AbstractApiController {
 
     private List<CategoryRO> listCategoryInternal(final String category) {
 
-        final long categoryId = resolveId(category);
+        final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
 
         final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
 
         if (!menu.isEmpty()) {
 
-            final List<CategoryRO> cats = map(menu, CategoryRO.class, Category.class);
+            final List<CategoryRO> cats = mappingMixin.map(menu, CategoryRO.class, Category.class);
             if (cats.size() > 0) {
 
                 for (final CategoryRO cat : cats) {
@@ -501,7 +517,7 @@ public class CategoryController extends AbstractApiController {
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return listCategoryInternal(category);
 
@@ -533,18 +549,20 @@ public class CategoryController extends AbstractApiController {
      * <pre><code>
      *   &lt;categories&gt;
      *   &lt;category category-id="1" navigation-by-attributes="true" navigation-by-brand="true" navigation-by-price="true" parent-id="100" product-type-id="1"&gt;
-     *       &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
-     *           &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
-     *           &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
-     *       &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
-     *          &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
-     *          &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
-     *       &lt;/attribute-value&gt;
+     *       &lt;attribute-values&gt;
+     *           &lt;attribute-value attribute-id="11014" attrvalue-id="3" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Опис Категорії (uk)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11006" attrvalue-id="1" category-id="1"&gt;
+     *               &lt;attribute-name&gt;Category Description (en)&lt;/attribute-name&gt;
+     *               &lt;val&gt;A notebook, also known as laptop, is a po...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *           &lt;attribute-value attribute-id="11007" attrvalue-id="2" category-id="1"&gt;
+     *              &lt;attribute-name&gt;Описание Категории (ru)&lt;/attribute-name&gt;
+     *              &lt;val&gt;A notebook, also known as laptop, is a port...&lt;/val&gt;
+     *           &lt;/attribute-value&gt;
+     *       &lt;/attribute-values&gt;
      *       &lt;breadcrumbs&gt;
      *           &lt;breadcrumb category-id="1"&gt;
      *               &lt;display-names&gt;
@@ -595,23 +613,13 @@ public class CategoryController extends AbstractApiController {
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listCategoryInternal(category));
 
     }
 
-    private long resolveId(final String category) {
-        final long categoryId = NumberUtils.toLong(category, 0L);
-        if (categoryId > 0L) {
-            bookmarkService.saveBookmarkForCategory(category);
-            return categoryId;
-        }
-        final String categoryIdStr = bookmarkService.getCategoryForURI(category);
-        return NumberUtils.toLong(categoryIdStr, 0L);
-    }
-
-    private String resolveTemplate(final CategoryRO catRO) {
+    private Pair<String, String> resolveTemplate(final CategoryRO catRO) {
         final Map params = new HashMap();
         params.put(WebParametersKeys.CATEGORY_ID, String.valueOf(catRO.getCategoryId()));
         return centralViewResolver.resolveMainPanelRendererLabel(params);
@@ -631,7 +639,7 @@ public class CategoryController extends AbstractApiController {
                 break;
             }
 
-            final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
+            final BreadcrumbRO crumb = mappingMixin.map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
 
             current = cat.getParentId();

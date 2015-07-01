@@ -1,0 +1,2 @@
+Guten Tag $firstName $lastName!
+Ihr Passwort ist: $password

@@ -1,0 +1,112 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <wicket:container wicket:id="cookiePolicy">
+        [cookie policy]
+    </wicket:container>
+
+    <div class="top-menu">
+        <div class="container no-padding">
+            <div class="col-xs-12 no-margin">
+                <ul class="text-right">
+                    <wicket:container wicket:id="profile">[Profile]</wicket:container>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="language">
+                            [switch language]
+                        </wicket:container>
+                    </li>
+                    <li class="dropdown">
+                        <wicket:container wicket:id="currency">
+                            [switch currency]
+                        </wicket:container>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-header">
+        <div class="container">
+            <div class="col-xs-12 col-sm-6 text-center">
+                <wicket:link>
+                    <a href="HomePage.html" rel="bookmark">
+                        <img wicket:id="headerLogo" class="center-block"  border="0"/>
+                    </a>
+                </wicket:link>
+            </div>
+            <div class="col-xs-12 col-sm-6 text-center">
+                <wicket:container wicket:id="smallCart">
+                    [small shopping cart]
+                </wicket:container>
+            </div>
+        </div>
+    </div>
+
+
+    <wicket:fragment wicket:id="profileLoggedIn">
+        <li class="dropdown">
+            <a class="dropdown-toggle" id="profileMenu" data-toggle="dropdown" href="#">
+                <span><wicket:container wicket:id="profileName">[Profile]</wicket:container></span>
+                <span class="glyphicon glyphicon-user"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="profileMenu">
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="ProfilePage.html" rel="nofollow">
+                            <span><wicket:message key="profile">[Profile]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="WishListPage.html" rel="nofollow">
+                            <span><wicket:message key="wishlist">[Wishlist]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:link>
+                        <a href="OrdersPage.html" rel="nofollow">
+                            <span><wicket:message key="orderHistory">[Orders]</wicket:message></span>
+                        </a>
+                    </wicket:link>
+                </li>
+                <li role="presentation">
+                    <wicket:container wicket:id="logout">
+                        [logout language]
+                    </wicket:container>
+                </li>
+            </ul>
+        </li>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="profileLoggedOff">
+        <li>
+            <wicket:link>
+                <a href="ProfilePage.html" rel="nofollow">
+                    <span><wicket:message key="profileLogin">[Profile]</wicket:message></span>
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </wicket:link>
+        </li>
+    </wicket:fragment>
+
+</wicket:panel>
+</body>
+</html>

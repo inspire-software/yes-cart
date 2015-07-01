@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@ package org.yes.cart.web.service.ws;
 
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 
-import javax.jws.WebMethod;
-import javax.jws.WebResult;
-import javax.jws.WebService;
 import java.util.List;
 
 /**
@@ -30,7 +27,6 @@ import java.util.List;
  * Date: 18 Aug 2013
  * Time: 9:50 AM
  */
-@WebService
 public interface CacheDirector {
 
     public interface EntityOperation {
@@ -44,31 +40,33 @@ public interface CacheDirector {
     /**
      * @return true if service is online
      */
-    @WebMethod
-    @WebResult(name = "ping")
     boolean ping();
 
     /**
      * Get cache information.
      * @return list of information per each cache.
      */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
     List<CacheInfoDTOImpl> getCacheInfo();
 
     /**
      * Evict all caches, which are represent in getCacheInfo list.
      */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
     void evictAllCache();
 
     /**
      * Evict specific cache.
      */
-    @WebMethod
-    @WebResult(name = "cacheInfoResult")
     void evictCache(String cache);
+
+    /**
+     * Enable specific cache statistics.
+     */
+    void enableStats(String cache);
+
+    /**
+     * Enable specific cache statistics.
+     */
+    void disableStats(String cache);
 
     /**
      * Fire event entity change event
@@ -77,8 +75,6 @@ public interface CacheDirector {
      * @param entityName entity type
      * @param pkValue primary key
      */
-    @WebMethod
-    @WebResult(name = "itemCount")
     int onCacheableChange(String entityOperation, String entityName, Long pkValue);
 
 }

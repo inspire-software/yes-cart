@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -121,6 +121,16 @@ public interface CategoryServiceFacade {
      * @return pagination options
      */
     List<String> getItemsPerPageOptionsConfig(long categoryId, long shopId);
+
+    /**
+     * Get sorting options configuration.
+     *
+     * @param categoryId category PK
+     * @param shopId     current shop
+     *
+     * @return sorting options
+     */
+    List<String> getPageSortingOptionsConfig(long categoryId, long shopId);
 
     /**
      * Get number of columns options configuration.

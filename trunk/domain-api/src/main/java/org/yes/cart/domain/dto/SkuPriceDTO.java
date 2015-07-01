@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,19 +30,6 @@ import java.util.Date;
  */
 public interface SkuPriceDTO extends Identifiable {
 
-    /**
-     * Get the product sku id .
-     *
-     * @return product sku id
-     */
-    long getProductSkuId();
-
-    /**
-     * Set product sku.
-     *
-     * @param productSkuId product sku id .
-     */
-    void setProductSkuId(long productSkuId);
 
     /**
      * Get shop id.
@@ -189,15 +176,15 @@ public interface SkuPriceDTO extends Identifiable {
      *
      * @return sku code.
      */
-    String getCode();
+    String getSkuCode();
 
 
     /**
-     * Setsku code.
+     * Set sku code.
      *
      * @param code sku code.
      */
-    void setCode(String code);
+    void setSkuCode(String code);
 
     /**
      * Tag allows classification of price entries. E.g. It is hard to understand

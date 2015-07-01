@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -216,7 +216,7 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
             stringBuilder.append(File.separator);
         }
         if (code != null) {
-            stringBuilder.append(code.charAt(0));
+            stringBuilder.append(Character.toUpperCase(code.charAt(0)));
             stringBuilder.append(File.separator);
             stringBuilder.append(code);
             stringBuilder.append(File.separator);

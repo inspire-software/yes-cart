@@ -1,5 +1,5 @@
-Шановний (-на) $customer.firstname $customer.lastname !
-Сформоване нове замовлення $root.ordernum на $shop.name
+Шановний (-на) $customer.firstname $customer.lastname!
+Сформоване нове замовлення $root.ordernum на $shop.name.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -30,5 +30,5 @@ out.print(e.getMessage());
 }
 %>
 
-
-Будь ласка, перевірте інформацію на сторінці Вашого профілю на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
+Детальну інформацію Ви можете переглянути в історії замовлень
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

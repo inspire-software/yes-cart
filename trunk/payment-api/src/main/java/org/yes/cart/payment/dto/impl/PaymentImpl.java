@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -67,6 +67,7 @@ public class PaymentImpl implements Payment {
     private String billingAddressString;
 
     private String paymentProcessorResult = Payment.PAYMENT_STATUS_PROCESSING;
+    private boolean paymentProcessorBatchSettlement;
 
     private PaymentAddress shippingAddress;
 
@@ -125,6 +126,20 @@ public class PaymentImpl implements Payment {
      */
     public void setPaymentProcessorResult(final String paymentProcessorResult) {
         this.paymentProcessorResult = paymentProcessorResult;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPaymentProcessorBatchSettlement() {
+        return paymentProcessorBatchSettlement;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPaymentProcessorBatchSettlement(final boolean paymentProcessorBatchSettlement) {
+        this.paymentProcessorBatchSettlement = paymentProcessorBatchSettlement;
     }
 
     /**

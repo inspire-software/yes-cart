@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -109,7 +109,9 @@ public abstract class AbstractTestDAO  {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder().build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
+        return new FlatXmlDataSetBuilder()
+                //.setColumnSensing(true) // This enables auto discovery of columns but breaks the tests, possibly our data needs clean up
+                .build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
     }
 
     protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {

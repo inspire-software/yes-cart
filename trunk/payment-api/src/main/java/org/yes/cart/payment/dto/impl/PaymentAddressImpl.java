@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class PaymentAddressImpl implements PaymentAddress {
     private String addressType;
     private String countryCode;
     private String stateCode;
-    private String phoneList;
+    private String phone1;
     private String firstname;
     private String lastname;
     private String middlename;
@@ -140,15 +140,15 @@ public class PaymentAddressImpl implements PaymentAddress {
     /**
      * {@inheritDoc}
      */
-    public String getPhoneList() {
-        return phoneList;
+    public String getPhone1() {
+        return phone1;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setPhoneList(final String phoneList) {
-        this.phoneList = phoneList;
+    public void setPhone1(final String phone1) {
+        this.phone1 = phone1;
     }
 
     /**

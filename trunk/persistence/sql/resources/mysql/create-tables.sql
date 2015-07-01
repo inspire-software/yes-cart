@@ -8,10 +8,19 @@
         ADDRESS_TYPE varchar(1) not null,
         COUNTRY_CODE varchar(64) not null,
         STATE_CODE varchar(64),
-        PHONES varchar(255),
+        PHONE1 varchar(255),
+        PHONE2 varchar(255),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
+        EMAIL1 varchar(255),
+        EMAIL2 varchar(255),
+        MOBILE1 varchar(255),
+        MOBILE2 varchar(255),
+        CUSTOM1 varchar(255),
+        CUSTOM2 varchar(255),
+        CUSTOM3 varchar(255),
+        CUSTOM4 varchar(255),
         DEFAULT_ADDR bit,
         CUSTOMER_ID bigint,
         CREATED_TIMESTAMP datetime,
@@ -233,6 +242,9 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        PUBLICKEY varchar(255),
+        AUTHTOKEN varchar(255),
+        AUTHTOKENEXPIRY datetime,
         TAG varchar(255) comment 'Set of customer tags',
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -281,6 +293,7 @@
         SHIPPING_ADDRESS varchar(255) comment 'Shipping address',
         MULTIPLE_SHIPMENT bit default 0 comment 'Wait for all skus in case of not all available.',
         ORDER_TIMESTAMP datetime not null,
+        ORDER_IP varchar(45),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -463,6 +476,8 @@
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
+        AUTHTOKEN varchar(255),
+        AUTHTOKENEXPIRY datetime,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -828,7 +843,7 @@
     create table TSKUPRICE (
         SKUPRICE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        SKU_ID bigint not null,
+        SKU_CODE varchar(255) not null,
         SHOP_ID bigint not null,
         CURRENCY varchar(3) not null,
         QTY decimal(19,2) not null comment 'Quantity of SKU. Price tier',
@@ -850,7 +865,7 @@
         SKUWAREHOUSE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         WAREHOUSE_ID bigint not null,
-        SKU_ID bigint not null,
+        SKU_CODE varchar(255) not null,
         QUANTITY decimal(19,2) not null comment 'Current quantity',
         RESERVED decimal(19,2) default 0 comment 'Reserved by payment transaction quantity.',
         CREATED_TIMESTAMP datetime,
@@ -1066,6 +1081,35 @@
         UPDATED_BY varchar(64),
         GUID varchar(255) not null unique,
         primary key (TAXCONFIG_ID)
+    );
+
+        create table TDATAGROUP (
+        DATAGROUP_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        NAME varchar(255) not null unique,
+        DISPLAYNAME longtext,
+        QUALIFIER varchar(45),
+        TYPE varchar(45) not null,
+        DESCRIPTORS longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (DATAGROUP_ID)
+    );
+
+
+    create table TDATADESCRIPTOR (
+        DATADESCRIPTOR_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        NAME varchar(255) not null unique,
+        TYPE varchar(45) not null,
+        VALUE longtext,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        primary key (DATADESCRIPTOR_ID)
     );
 
 
@@ -1449,25 +1493,14 @@
 
 
 
-    alter table TSKUPRICE 
-        add index FK_SP_SKU (SKU_ID), 
-        add constraint FK_SP_SKU 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
-
-    alter table TSKUPRICE 
+    alter table TSKUPRICE
         add index FK_SP_SHOP (SHOP_ID), 
         add constraint FK_SP_SHOP 
         foreign key (SHOP_ID) 
         references TSHOP (SHOP_ID);
 
+    create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
 
-
-    alter table TSKUWAREHOUSE 
-        add index FKAC00F89A4EC4B749 (SKU_ID), 
-        add constraint FKAC00F89A4EC4B749 
-        foreign key (SKU_ID) 
-        references TSKU (SKU_ID);
 
     alter table TSKUWAREHOUSE 
         add index FKAC00F89A1C1544FC (WAREHOUSE_ID), 
@@ -1476,7 +1509,9 @@
         references TWAREHOUSE (WAREHOUSE_ID);
 
     alter table TSKUWAREHOUSE
-        add constraint U_SKUINVENTORY unique (WAREHOUSE_ID, SKU_ID);
+        add constraint SKUWAREHOUSE_SKU unique (WAREHOUSE_ID, SKU_CODE);
+
+    create index SKUWAREHOUSE_SKUCODE on TSKUWAREHOUSE (SKU_CODE);
 
     alter table TSYSTEMATTRVALUE 
         add index FK_SYS_ATTRIBUTE (CODE), 

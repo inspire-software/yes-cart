@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     public List<Attribute> findAttributesWithMultipleValues(final String attributeGroupCode) {
         List<Attribute> attr = attributeDao.findByNamedQuery(
                 "ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE",
-                attributeGroupCode);
+                attributeGroupCode, Boolean.TRUE);
         if (attr.isEmpty()) {
             return null;
         }
@@ -88,14 +88,30 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
      */
     public List<Attribute> findAvailableAttributes(
             final String attributeGroupCode,
-            final List<String> assignedAttributeCodes) {
-        if (assignedAttributeCodes == null || assignedAttributeCodes.isEmpty()) {
+            final List<String> exclude) {
+        if (exclude == null || exclude.isEmpty()) {
             return findByAttributeGroupCode(attributeGroupCode);
         } else {
             return attributeDao.findByNamedQuery(
                     "ATTRIBUTES.BY.GROUPCODE.NOT.IN.LIST",
                     attributeGroupCode,
-                    assignedAttributeCodes);
+                    exclude);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Attribute> findAttributesByCodes(
+            final String attributeGroupCode,
+            final List<String> codes) {
+        if (codes == null || codes.isEmpty()) {
+            return Collections.emptyList();
+        } else {
+            return attributeDao.findByNamedQuery(
+                    "ATTRIBUTES.BY.GROUPCODE.IN.LIST",
+                    attributeGroupCode,
+                    codes);
         }
     }
 

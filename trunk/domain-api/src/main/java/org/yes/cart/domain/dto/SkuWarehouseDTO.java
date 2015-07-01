@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -42,20 +42,6 @@ public interface SkuWarehouseDTO extends Identifiable {
      * @param skuWarehouseId value to set
      */
     void setSkuWarehouseId(long skuWarehouseId);
-
-    /**
-     * The sku pk.
-     *
-     * @return sku pk.
-     */
-    long getProductSkuId();
-
-    /**
-     * Set sku pk.
-     *
-     * @param productSkuId sku pk value.
-     */
-    void setProductSkuId(long productSkuId);
 
     /**
      * Get sku code.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -67,9 +67,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
         implements GenericDAO<T, PK> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
 
-    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+    private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     private final Class<T> persistentClass;
     private final boolean persistentClassIndexble;
@@ -338,6 +338,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
+    public ResultsIterator<Object> findQueryObjectByNamedQueryIterator(final String namedQueryName, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
+        setQueryParameters(query, parameters);
+        final ScrollableResults results = query.scroll(ScrollMode.FORWARD_ONLY);
+        return new ResultsIteratorImpl<Object>(results);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
     public List<Object> findQueryObjectRangeByNamedQuery(final String namedQueryName, final int firstResult, final int maxResults, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().getNamedQuery(namedQueryName);
         setQueryParameters(query, parameters);
@@ -543,7 +554,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     final T unproxied = (T) HibernateHelper.unproxy(entity);
 
                     if (entityIndexingInterceptor != null) {
-                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(unproxied)) {
+                        if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(unproxied)) {
                             fullTextSession.index(unproxied);
                         }
                     } else {
@@ -653,7 +664,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                             }
 
                             if (entityIndexingInterceptor != null) {
-                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onAdd(entity)) {
+                                if (IndexingOverride.APPLY_DEFAULT == entityIndexingInterceptor.onUpdate(entity)) {
                                     fullTextSession.index(entity);
                                 }
                             } else {
@@ -686,7 +697,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     if (async) {
                         asyncRunningState.set(COMPLETED);
                         try {
-                            sessionFactory.getCurrentSession().close();
+                            if (persistentClassIndexble) {
+                                sessionFactory.getCurrentSession().close();
+                            }
                         } catch (Exception exp) { }
                     }
                 }

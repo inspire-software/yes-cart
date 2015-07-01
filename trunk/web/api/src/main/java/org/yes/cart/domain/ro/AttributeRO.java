@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.util.Map;
 @XmlRootElement(name = "attribute")
 public class AttributeRO implements Serializable {
 
-    private static final long serialVersionUID = 20100717L;
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(value = "attributeId", readOnly = true)
     private long attributeId;
@@ -62,26 +62,26 @@ public class AttributeRO implements Serializable {
     @DtoField(value = "attributeGroup.attributegroupId", readOnly=true)
     private long attributegroupId;
 
-    @DtoField(value = "allowduplicate")
+    @DtoField(value = "allowduplicate", readOnly=true)
     private boolean allowduplicate;
 
-    @DtoField(value = "allowfailover")
+    @DtoField(value = "allowfailover", readOnly=true)
     private boolean allowfailover;
 
 
-    @DtoField(value = "regexp")
+    @DtoField(value = "regexp", readOnly=true)
     private String regexp;
 
-    @DtoField(value = "validationFailedMessage")
-    private String validationFailedMessage;
+    @DtoField(value = "validationFailedMessage", converter = "i18nStringConverter", readOnly=true)
+    private Map<String, String> validationFailedMessage;
 
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "choiceData")
-    private String choiceData;
+    @DtoField(value = "choiceData", converter = "i18nStringConverter", readOnly=true)
+    private Map<String, String> choiceData;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly=true)
     private Map<String, String> displayNames;
 
     public int getRank() {
@@ -92,21 +92,23 @@ public class AttributeRO implements Serializable {
         this.rank = rank;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "choice-data")
-    public String getChoiceData() {
+    public Map<String, String> getChoiceData() {
         return choiceData;
     }
 
-    public void setChoiceData(final String choiceData) {
+    public void setChoiceData(final Map<String, String> choiceData) {
         this.choiceData = choiceData;
     }
 
+    @XmlJavaTypeAdapter(I18nMapAdapter.class)
     @XmlElement(name = "validation-failed-message")
-    public String getValidationFailedMessage() {
+    public Map<String, String> getValidationFailedMessage() {
         return validationFailedMessage;
     }
 
-    public void setValidationFailedMessage(final String validationFailedMessage) {
+    public void setValidationFailedMessage(final Map<String, String> validationFailedMessage) {
         this.validationFailedMessage = validationFailedMessage;
     }
 

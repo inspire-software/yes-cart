@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,7 +27,9 @@ import java.util.List;
  * Time: 00:26
  */
 @XmlRootElement(name = "site")
-public class ContentListRO {
+public class ContentListRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private List<ContentRO> content;
 

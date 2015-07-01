@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -66,6 +66,11 @@ public class StandardMessageListener implements Runnable {
     public static final String RESULT = "result";
 
     /**
+     * All order payments.  Payment context variable.
+     */
+    public static final String PAYMENTS = "payments";
+
+    /**
      * All parameters will be passed with index param0, param1, etc
      */
     public static final String PARAM_PREFIX = "param";
@@ -89,6 +94,11 @@ public class StandardMessageListener implements Runnable {
      * Template folder.
      */
     public static final String LOCALE = "locale";
+
+    /**
+     * Carrier name.
+     */
+    public static final String DELIVERY = "delivery";
 
     /**
      * Carrier name.

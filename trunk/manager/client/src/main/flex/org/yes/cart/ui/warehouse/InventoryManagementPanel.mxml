@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
   -
   -    Licensed under the Apache License, Version 2.0 (the "License");
   -    you may not use this file except in compliance with the License.
@@ -90,10 +90,10 @@
                 <mx:DataGridColumn width="300" headerText="@Resource(bundle='ProductManagementPanel',key='skuName')"
                                    dataField="skuName" editable="false"/>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
-                                   dataField="quantity" editable="false"
+                                   dataField="quantity" editable="false" textAlign="right"
                                    labelFunction="quantityLabelFunction"/>
                 <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='reserved')"
-                                   dataField="reserved" editable="false"
+                                   dataField="reserved" editable="false" textAlign="right"
                                    labelFunction="quantityLabelFunction"/>
             </mx:columns>
         </mx:DataGrid>

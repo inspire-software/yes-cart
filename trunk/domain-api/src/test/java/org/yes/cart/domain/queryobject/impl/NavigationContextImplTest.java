@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class NavigationContextImplTest {
     @Test
     public void testCategoriesCanBeNull() throws Exception {
 
-        new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
+        new NavigationContextImpl(10L, null, Collections.EMPTY_MAP, null, null);
 
     }
 

@@ -1,8 +1,26 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.web.service.ws.client.impl;
 
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.interceptor.Slf4JLoggingInInterceptor;
+import org.apache.cxf.interceptor.Slf4JLoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
@@ -10,6 +28,7 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.ws.security.WSConstants;
 import org.apache.ws.security.WSPasswordCallback;
 import org.apache.ws.security.handler.WSHandlerConstants;
+import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.web.service.ws.client.WsClientFactory;
 
 import javax.security.auth.callback.Callback;
@@ -36,7 +55,8 @@ public class PerUserPerServiceClientFactory<T> implements WsClientFactory<T> {
     private final Map<Integer, T> pool = new ConcurrentHashMap<Integer, T>();
     private final Map<Integer, Boolean> semaphore = new ConcurrentHashMap<Integer, Boolean>();
 
-    protected PerUserPerServiceClientFactory(Class<T> serviceInterface,
+    protected PerUserPerServiceClientFactory(final NodeService nodeService,
+                                             final Class<T> serviceInterface,
                                              final String userName,
                                              final String password,
                                              final String url,
@@ -48,6 +68,16 @@ public class PerUserPerServiceClientFactory<T> implements WsClientFactory<T> {
         this.factory = new JaxWsProxyFactoryBean();
         this.factory.setServiceClass(serviceInterface);
         this.factory.setAddress(this.url);
+
+        final Slf4JLoggingInInterceptor loggingInInterceptor = new Slf4JLoggingInInterceptor(nodeService);
+        loggingInInterceptor.setPrettyLogging(false);
+        final Slf4JLoggingOutInterceptor loggingOutInterceptor = new Slf4JLoggingOutInterceptor(nodeService);
+        loggingOutInterceptor.setPrettyLogging(false);
+
+        this.factory.getInInterceptors().add(loggingInInterceptor);
+        this.factory.getInFaultInterceptors().add(loggingInInterceptor);
+        this.factory.getOutInterceptors().add(loggingOutInterceptor);
+        this.factory.getOutFaultInterceptors().add(loggingOutInterceptor);
     }
 
     /** {@inheritDoc} */

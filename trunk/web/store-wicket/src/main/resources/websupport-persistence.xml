@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          autowire="byName"><!-- add if using 2nd lvl cache: depends-on="hibernateCacheManagerProvider" -->
+        <!--
+            YC-315 investigation showed that we should not use 2nd level cache as it created adverse
+            effect on performance by splitting selects into N + 1 selects in order to manage cache
+            for joined objects.
+            It seems like we never use objects by PK and hence YC does not benefit from 2nd level cache
+         -->
+        <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/yc.xml</value>
+            </list>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.domain.interceptor.AuditInterceptor">
+                <property name="prohibitedFields">
+                    <map key-type="java.lang.String" value-type="java.lang.String">
+                        <entry key="CustomerEntity">
+                            <set>
+                                <value>password</value>
+                            </set>
+                        </entry>
+                        <entry key="ManagerEntity">
+                            <set>
+                                <value>password</value>
+                            </set>
+                        </entry>
+                        <entry key="MailEntity">
+                            <set>
+                                <value>textVersion</value>
+                                <value>htmlVersion</value>
+                            </set>
+                        </entry>
+                        <entry key="MailPartEntity">
+                            <set>
+                                <value>data</value>
+                            </set>
+                        </entry>
+                        <entry key="ShoppingCartStateEntity">
+                            <set>
+                                <value>state</value>
+                            </set>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+                <prop key="hibernate.dialect">${db.config.yes.hibernate.dialect}</prop>
+                <prop key="show_sql">false</prop>
+
+                <prop key="hibernate.search.default.directory_provider">${db.config.yes.hibernate.search.default.directory_provider}</prop>
+
+                <prop key="hibernate.search.default.indexBase">
+                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
+                </prop>
+                <prop key="hibernate.search.worker.execution">async</prop>
+                <prop key="hibernate.search.worker.thread_pool.size">10</prop>
+                <prop key="hibernate.search.default.exclusive_index_use">false</prop>
+                <!-- Disable hibernate search automatic support - since we do indexing manually -->
+                <prop key="hibernate.search.autoregister_listeners">true</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+
+    <bean id="paySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="payDataSource"/>
+        <property name="mappingResources">
+            <list>
+                <value>hibernate/ycp.xml</value>
+            </list>
+        </property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.dialect">${db.config.yespay.hibernate.dialect}</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!-- Disable hibernate search automatic support - no indexing for payments -->
+                <prop key="hibernate.search.autoregister_listeners">false</prop>
+                <prop key="hibernate.search.indexing_strategy">manual</prop>
+            </props>
+        </property>
+        <property name="entityInterceptor">
+            <bean class="org.yes.cart.payment.persistence.service.impl.AuditInterceptor">
+                <property name="prohibitedFields">
+                    <map key-type="java.lang.String" value-type="java.lang.String">
+                        <entry key="CustomerOrderPaymentEntity">
+                            <set>
+                                <value>cardExpireYear</value>
+                                <value>cardExpireMonth</value>
+                                <value>cardStartDate</value>
+                                <value>cardNumber</value>
+                                <value>cardIssueNumber</value>
+                            </set>
+                        </entry>
+                        <entry key="PaymentGatewayParameterEntity">
+                            <set>
+                                <value>value</value>
+                            </set>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+
+</beans>

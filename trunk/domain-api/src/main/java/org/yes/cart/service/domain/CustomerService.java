@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,9 +46,29 @@ public interface CustomerService extends GenericService<Customer> {
      * Get customer by email.
      *
      * @param email email
+     *
      * @return {@link Customer} or null if customer not found
      */
     Customer getCustomerByEmail(String email);
+
+    /**
+     * Get customer by auth token.
+     *
+     * @param token auth token
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer getCustomerByToken(String token);
+
+    /**
+     * Get customer by public key exact match.
+     *
+     * @param publicKey public key
+     * @param lastName last name
+     *
+     * @return {@link Customer} or null if customer not found
+     */
+    Customer getCustomerByPublicKey(String publicKey, String lastName);
 
     /**
      * Get customer shops by email.
@@ -90,8 +110,9 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @param customer customer to create
      * @param shop     shop to assign
+     * @param authToken authentication token for password reset
      */
-    void resetPassword(Customer customer, final Shop shop);
+    void resetPassword(Customer customer, Shop shop, String authToken);
 
 
     /**
@@ -101,7 +122,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param shop     shop to assign
      * @return customer instance
      */
-    Customer create(final Customer customer, final Shop shop);
+    Customer create(Customer customer, Shop shop);
 
 
     /**
@@ -111,7 +132,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param shopCode shop to assign
      * @return customer instance
      */
-    Customer update(final String email, final String shopCode);
+    Customer update(String email, String shopCode);
 
 
     /**
@@ -132,7 +153,7 @@ public interface CustomerService extends GenericService<Customer> {
      * @param attributeCode given attribute code
      * @param attributeValue given attribute value
      */
-    void addAttribute(final Customer customer, final String attributeCode, final String attributeValue);
+    void addAttribute(Customer customer, String attributeCode, String attributeValue);
 
 
 }

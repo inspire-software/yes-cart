@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.ro.NodeRO;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.Node;
 
 /**
  * User: denispavlov
@@ -34,7 +34,7 @@ import org.yes.cart.web.service.ws.node.dto.Node;
  */
 @Controller
 @RequestMapping("/node")
-public class NodeController extends AbstractApiController {
+public class NodeController {
 
     @Autowired
     private NodeService nodeService;
@@ -62,8 +62,8 @@ public class NodeController extends AbstractApiController {
      *     <tr><td>JSON example</td><td>
      * <pre><code>
      * {
-     *    "shop-code" : "SHOP10",
-     *    "node-id" : "YES1"
+     *    "shopCode" : "SHOP10",
+     *    "nodeId" : "YES1"
      * }
      * </code></pre>
      *     </td></tr>
@@ -90,7 +90,7 @@ public class NodeController extends AbstractApiController {
         final Node node = nodeService.getCurrentNode();
 
         final NodeRO nodeRO = new NodeRO();
-        nodeRO.setNodeId(node.getNodeId());
+        nodeRO.setNodeId(node.getId());
         nodeRO.setShopCode(ShopCodeContext.getShopCode());
         return nodeRO;
     }

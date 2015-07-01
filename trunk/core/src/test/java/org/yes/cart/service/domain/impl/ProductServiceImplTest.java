@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -103,52 +103,6 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("PRODUCT5", product.getCode());
         product = productService.getProductById(654321987456L); //not existing product
         assertNull(product);
-    }
-
-    @Test
-    public void testPricesOnSkuAreLazy() throws Exception {
-
-        final Product product = productService.getProductById(10000L); // Sobot
-        final Collection<SkuPrice> prodPrices = product.getSku().iterator().next().getSkuPrice();
-        try {
-            prodPrices.iterator().next().getRegularPrice();
-            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
-        final ProductSku productSku = productService.getSkuById(10000L); // Sobot
-        final Collection<SkuPrice> skuPrices = productSku.getSkuPrice();
-        try {
-            skuPrices.iterator().next().getRegularPrice();
-            fail("Prices must be lazy. We work with prices through priceService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
-    }
-
-    @Test
-    public void testInventoryOnSkuAreLazy() throws Exception {
-
-        final Product product = productService.getProductById(10000L); // Sobot
-        final Collection<SkuWarehouse> prodInventory = product.getSku().iterator().next().getQuantityOnWarehouse();
-        try {
-            prodInventory.iterator().next().getQuantity();
-            fail("Inventory must be lazy. We work with inventory through skuWarehouseService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
-        final ProductSku productSku = productService.getSkuById(10000L); // Sobot
-        final Collection<SkuWarehouse> skuInventory = productSku.getQuantityOnWarehouse();
-        try {
-            skuInventory.iterator().next().getQuantity();
-            fail("Inventory must be lazy. We work with inventory through skuWarehouseService with appropriate cache and timing");
-        } catch (LazyInitializationException exp) {
-            // good we need it lazy - as prices are retrieved from priceService
-        }
-
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ public class CustomerOrderDTOImpl {
 
     public var orderTimestamp:Date;
 
+    public var orderIp:String;
+
     public var email:String;
 
     public var firstname:String;
@@ -65,6 +67,7 @@ public class CustomerOrderDTOImpl {
     public var promoApplied:Boolean;
     public var appliedPromo:String;
 
+    public var orderTotal:Number;
     public var amount:Number;
 
     public function get fullname():String {

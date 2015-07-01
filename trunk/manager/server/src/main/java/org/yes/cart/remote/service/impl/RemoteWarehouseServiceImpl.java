@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -164,10 +164,10 @@ public class RemoteWarehouseServiceImpl
      */
     public void removeSkuOnWarehouse(final long skuWarehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final SkuWarehouse skuWarehouse = getSkuWarehouseService().findById(skuWarehouseId);
-        getById(skuWarehouse.getWarehouse().getWarehouseId()); // check access
-        dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
         if (skuWarehouse != null) {
-            reindexService.reindexProductSku(skuWarehouse.getSku().getSkuId());
+            getById(skuWarehouse.getWarehouse().getWarehouseId()); // check access
+            dtoWarehouseService.removeSkuOnWarehouse(skuWarehouseId);
+            reindexService.reindexProductSkuCode(skuWarehouse.getSkuCode());
         }
     }
 
@@ -177,7 +177,7 @@ public class RemoteWarehouseServiceImpl
     public SkuWarehouseDTO createSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         getById(skuWarehouseDTO.getWarehouseId()); // check access
         SkuWarehouseDTO rez = dtoWarehouseService.createSkuOnWarehouse(skuWarehouseDTO);
-        reindexService.reindexProductSku(rez.getProductSkuId());
+        reindexService.reindexProductSkuCode(rez.getSkuCode());
         return rez;
     }
 
@@ -187,7 +187,7 @@ public class RemoteWarehouseServiceImpl
     public SkuWarehouseDTO updateSkuOnWarehouse(final SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         getById(skuWarehouseDTO.getWarehouseId()); // check access
         SkuWarehouseDTO rez = dtoWarehouseService.updateSkuOnWarehouse(skuWarehouseDTO);
-        reindexService.reindexProductSku(rez.getProductSkuId());
+        reindexService.reindexProductSkuCode(rez.getSkuCode());
         return rez;
     }
 

@@ -1,0 +1,159 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <div wicket:id="deliveryList">
+        <div class="col-xs-12 col-md-8 mo-margin order-items-holder">
+            <label class="col-xs-12 no-padding delivery-no-title">
+                <wicket:message key="deliveryNum">[ Delivery ]</wicket:message>
+                <span wicket:id="deliveryCode">[delivery Code]</span>
+            </label>
+            <div class="row no-margin cart-items-header hidden-xs">
+                <div class="col-xs-12 col-sm-6">
+                    <span><wicket:message key="productName">[Product name]</wicket:message></span>
+                </div>
+                <div class="col-xs-12 col-sm-2 text-right">
+                    <wicket:message key="price">[price]</wicket:message>
+                </div>
+                <div class="col-xs-12 col-sm-2 text-right">
+                    <wicket:message key="qty">[qty]</wicket:message>
+                </div>
+                <div class="col-xs-12 col-sm-2 text-right">
+                    <wicket:message key="amount">[ amount ]</wicket:message>
+                </div>
+            </div>
+
+            <div wicket:id="itemList">
+                <div class="row cart-item">
+                    <div class="col-xs-6 col-sm-2">
+                        <div class="thumbnail">
+                            <img wicket:id="defaultImage"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-4">
+                        <div class="cart-item-name">
+                            <a  wicket:id="itemNameLink"><span wicket:id="itemNameLinkName">[sku name]</span></a>
+                            <span wicket:id="itemName">[sku name]</span>
+                        </div>
+                        <span wicket:id="itemCode">[sku code]</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 text-right">
+                        <wicket:container wicket:id="itemPrice">
+                            [sku price]
+                        </wicket:container>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 text-right">
+                        <span wicket:id="itemQty">[qty]</span>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 text-right">
+                        <wicket:container wicket:id="itemTotal">[total line]</wicket:container>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-12 col-md-3 mo-margin order-items-sidebar">
+
+            <div class="subtotal-block">
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotal">[Delivery sub total]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliverySubTotal">[sub total]</wicket:container>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotalTax">[Delivery sub total tax ]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliverySubTotalTax">[sub total tax ]</wicket:container>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliverySubTotalAmount">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliverySubTotalAmount">[sub total amount ]</wicket:container>
+                </div>
+            </div>
+
+            <div class="delivery-block">
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryMethod">[Delivery method]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryMethod">[delivery method]</wicket:container>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCost">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryCost">[delivery cost]</wicket:container>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCostTax">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryCostTax">[delivery tax]</wicket:container>
+                </div>
+                <div class="pull-left">
+                    <label><wicket:message key="deliveryCostAmount">[Delivery sub total amount]</wicket:message></label>
+                </div>
+                <div class="text-right clearfix">
+                    <wicket:container wicket:id="deliveryCostAmount">[delivery amount]</wicket:container>
+                </div>
+                <div class="pull-left clearfix">
+                    <wicket:container wicket:id="deliveryAddress">[delivery address]</wicket:container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 col-md-8">
+        <div class="order-grand-total">
+            <div class="pull-left">
+                <label><wicket:message key="grandTotal">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
+                <wicket:container wicket:id="grandTotal">[grand  total]</wicket:container>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="grandTotalTax">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
+                <wicket:container wicket:id="grandTotalTax">[grand total tax ]</wicket:container>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="grandTotalAmount">[Delivery sub total amount]</wicket:message></label>
+            </div>
+            <div class="text-right">
+                <wicket:container wicket:id="grandTotalAmount">
+                    [grand total amount]
+                </wicket:container>
+            </div>
+            <div class="pull-left">
+                <label><wicket:message key="billingAddress">[Billing address]</wicket:message></label>
+            </div>
+            <div class="text-right clearfix">
+                <wicket:container wicket:id="billingAddress">[billing address]</wicket:container>
+            </div>
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>

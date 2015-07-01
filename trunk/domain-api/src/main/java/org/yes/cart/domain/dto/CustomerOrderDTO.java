@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -194,6 +194,21 @@ public interface CustomerOrderDTO extends Identifiable {
 
 
     /**
+     * IP address of the request that created this order.
+     *
+     * @return order creation IP.
+     */
+    String getOrderIp();
+
+    /**
+     * IP address of the request that created this order.
+     *
+     * @param orderIp order creation IP.
+     */
+    void setOrderIp(String orderIp);
+
+
+    /**
      * Get person id.
      *
      * @return customer email.
@@ -308,6 +323,21 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setAmount(BigDecimal amount);
 
+
+    /**
+     * Get sum of order details prices less promotion discounts applied
+     * (included delivery).
+     *
+     * @return order price.
+     */
+    BigDecimal getOrderTotal();
+
+    /**
+     * Set order total.
+     *
+     * @param orderTotal order total
+     */
+    void setOrderTotal(BigDecimal orderTotal);
 
     /**
      * Calculated delivery price.

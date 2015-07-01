@@ -1,2 +1,2 @@
-Здравствуйте $firstName $lastName !
+Здравствуйте $firstName $lastName!
 Ваш пароль: $password

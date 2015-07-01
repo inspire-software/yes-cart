@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -81,12 +81,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set shopper ip address.
-         *
-         * TODO: YC-361
-         *
-         * @param resolvedIp resolved ip address.
-         */
+     * Set shopper ip address.
+     *
+     * @param resolvedIp resolved ip address.
+     */
     public void setResolvedIp(final String resolvedIp) {
         this.resolvedIp = resolvedIp;
     }

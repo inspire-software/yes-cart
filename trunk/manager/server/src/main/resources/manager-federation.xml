@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath*:core-federation.xml"/>
+    <import resource="classpath:core-federation.xml"/>
 
     <bean id="managerFederationFilter" class="org.yes.cart.service.federation.impl.ManagerFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>

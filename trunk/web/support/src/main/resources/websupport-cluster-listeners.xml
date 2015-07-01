@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="warmUpService" class="org.yes.cart.cluster.service.impl.WarmUpServiceImpl">
+        <constructor-arg index="0" ref="languageService"/>
+        <constructor-arg index="1" ref="productTypeService"/>
+        <constructor-arg index="2" ref="productTypeAttrService"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="attributeService"/>
+        <constructor-arg index="5" ref="shopService"/>
+        <constructor-arg index="6" ref="addressBookFacade"/>
+        <constructor-arg index="7" ref="promotionService"/>
+        <constructor-arg index="8" ref="promotionConditionParser"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="backDoor" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
+                <property name="productService" ref="productService"/>
+                <property name="cacheManager" ref="cacheManager"/>
+                <property name="warmUpService" ref="warmUpService"/>
+                <property name="nodeService" ref="nodeService"/>
+                <lookup-method name="getSelf" bean="backDoor"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <prop key="sqlQuery">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="hsqlQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="luceneQuery">PROPAGATION_REQUIRED,readOnly,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="cacheDirector" class="org.yes.cart.web.service.ws.impl.WsCacheDirectorImpl">
+        <property name="entityOperationCache" ref="evictionConfig"/>
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+</beans>

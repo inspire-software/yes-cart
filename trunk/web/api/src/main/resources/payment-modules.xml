@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
                       http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath*:payment-persistence.xml"/>
-    <import resource="classpath*:payment-api.xml"/>
-    <import resource="classpath*:core-module-payment-base.xml"/>
-    <import resource="classpath*:core-module-payment-capp.xml"/>
-    <import resource="classpath*:core-module-payment-gswm.xml"/>
+    <import resource="classpath:payment-persistence.xml"/>
+    <import resource="classpath:payment-api.xml"/>
+    <import resource="classpath:core-payments.xml"/>
+    <import resource="classpath:core-module-payment-base.xml"/>
 
 </beans>

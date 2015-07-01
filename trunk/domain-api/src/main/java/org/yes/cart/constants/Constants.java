@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -142,6 +142,21 @@ public interface Constants {
      */
     List<String> DEFAULT_ITEMS_ON_PAGE = Arrays.asList("10", "20", "30");
 
+    /**
+     * Sort options on page. In case if default value in root category not set
+     * the default values will be used.
+     */
+    List<String> DEFAULT_PAGE_SORT = Arrays.asList("displayName", "sku", "basePrice");
+
+    /**
+     * Default customer password reset token expiry.
+     */
+    int DEFAULT_CUSTOMER_TOKEN_EXPIRY_SECONDS = 86400;
+
+    /**
+     * Constant to determine unsuccessful reset password command
+     */
+    String PASSWORD_RESET_AUTH_TOKEN_INVALID = "PASSWORD_RESET_AUTH_TOKEN_INVALID";
 
     /**
      * Delimiter for range navigation value. Need to select this value carefully so that
@@ -149,6 +164,7 @@ public interface Constants {
      */
     String RANGE_NAVIGATION_DELIMITER = "-_-";
 
+    /** Root category PK. */
     long ROOT_CATEGORY_ID = 100L;
 
 }

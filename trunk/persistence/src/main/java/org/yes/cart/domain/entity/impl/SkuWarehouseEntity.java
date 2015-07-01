@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.util.MoneyUtils;
 
@@ -35,7 +34,7 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
     private long version;
 
     private Warehouse warehouse;
-    private ProductSku sku;
+    private String skuCode;
     private BigDecimal quantity;
     private BigDecimal reserved;
     private Date createdTimestamp;
@@ -56,12 +55,12 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
         this.warehouse = warehouse;
     }
 
-    public ProductSku getSku() {
-        return this.sku;
+    public String getSkuCode() {
+        return skuCode;
     }
 
-    public void setSku(ProductSku sku) {
-        this.sku = sku;
+    public void setSkuCode(final String skuCode) {
+        this.skuCode = skuCode;
     }
 
     public BigDecimal getQuantity() {

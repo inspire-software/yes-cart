@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 
 import java.util.Date;
@@ -53,6 +54,6 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      *
      * @return all saved states that were not modified since given date
      */
-    List<ShoppingCartState> findByModificationPrior(Date lastModification);
+    ResultsIterator<ShoppingCartState> findByModificationPrior(Date lastModification);
 
 }

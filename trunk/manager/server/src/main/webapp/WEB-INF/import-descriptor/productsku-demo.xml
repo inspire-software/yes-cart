@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
   -->
 
 <import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/import-descriptor-1.0.0.xsd">
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/import-descriptor.xsd">
 
     <!--
         Demo fast insert import (no safe guard deletion for native inserts)
@@ -101,6 +101,15 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
+        <column-descriptor>
+            <column-index>10</column-index>
+            <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>de</language>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
         <!--  bar code -->
         <column-descriptor>
             <column-index>5</column-index>
@@ -112,39 +121,11 @@
         
         <!-- Description -->
         <column-descriptor>
-            <column-index>10</column-index>
+            <column-index>11</column-index>
             <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>11</column-index>
-            <field-type>SLAVE_INLINE_FIELD</field-type>
-            <name/>
-            <import-descriptor>
-                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
-                <import-file-descriptor>
-                    <file-encoding>UTF-8</file-encoding>
-                    <file-name-mask/>
-                    <ignore-first-line>false</ignore-first-line>
-                    <column-delimiter>,</column-delimiter>
-                    <text-qualifier>&quot;</text-qualifier>
-                </import-file-descriptor>
-                <select-sql/>
-                <insert-sql>
-                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
-                </insert-sql>
-                <import-columns>
-                    <column-descriptor>
-                        <column-index>11</column-index>
-                        <field-type>FIELD</field-type>
-                        <name>val</name>
-                    </column-descriptor>
-                </import-columns>
-            </import-descriptor>
         </column-descriptor>
 
         <column-descriptor>
@@ -163,7 +144,7 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_en', 'PRODUCT_DESCRIPTION_en','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
@@ -191,11 +172,67 @@
                 <select-sql/>
                 <insert-sql>
                     INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
-                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_uk', 'PRODUCT_DESCRIPTION_uk','{val}')
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_ru', 'PRODUCT_DESCRIPTION_ru','{val}')
                 </insert-sql>
                 <import-columns>
                     <column-descriptor>
                         <column-index>13</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>14</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                        VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_uk', 'PRODUCT_DESCRIPTION_uk','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>14</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </import-columns>
+            </import-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>15</column-index>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name/>
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueProductSku</entity-type>
+                <import-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>,</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+                <select-sql/>
+                <insert-sql>
+                    INSERT INTO TPRODUCTSKUATTRVALUE (VERSION, SKU_ID, GUID, CODE, VAL)
+                    VALUES (0, {masterObjectId}, '{masterObjectId}_SKUDESC_de', 'PRODUCT_DESCRIPTION_de','{val}')
+                </insert-sql>
+                <import-columns>
+                    <column-descriptor>
+                        <column-index>15</column-index>
                         <field-type>FIELD</field-type>
                         <name>val</name>
                     </column-descriptor>

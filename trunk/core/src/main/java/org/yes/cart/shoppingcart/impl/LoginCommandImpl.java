@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         if (!shoppingCart.getOrderInfo().isBillingAddressNotRequired()
                 || !shoppingCart.getOrderInfo().isDeliveryAddressNotRequired()) {
 
-            final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+            final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             final Address billing = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
 
             if (!shoppingCart.getOrderInfo().isDeliveryAddressNotRequired() && delivery != null) {

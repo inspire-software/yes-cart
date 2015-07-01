@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shortcuts>
+    <skipIfNotSupported/>
+    <programGroup defaultName="Yes-Cart"
+                  location="applications"/>
+
+    <shortcut
+            name="Start Yes-Cart server"
+            commandLine="sh $INSTALL_PATH/yesbin/startcart.sh"
+            workingDirectory="$INSTALL_PATH/yesbin"
+            description="Starts tomcat and data base"
+            iconFile="$INSTALL_PATH/yesbin/startcart.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="yes"
+            desktop="yes"
+            applications="no"
+            startMenu="no"
+            startup="no"
+            type="Application"
+            terminal="true"
+            encoding="UTF-8">
+    </shortcut>
+
+    <shortcut
+            name="Stop Yes-Cart server"
+            commandLine="sh $INSTALL_PATH/yesbin/stopcart.sh"
+            workingDirectory="$INSTALL_PATH/yesbin"
+            description="Stop tomcat and data base"
+            iconFile="$INSTALL_PATH/yesbin/stopcart.ico"
+            iconIndex="0"
+            initialState="normal"
+            programGroup="yes"
+            desktop="yes"
+            applications="no"
+            startMenu="no"
+            startup="no"
+            type="Application"
+            terminal="true"
+            encoding="UTF-8">
+    </shortcut>
+
+    <shortcut
+            name="Documentation"
+            description="Open yes cart documentation"
+            iconFile="$INSTALL_PATH\yesbin\opendoc.ico"
+            iconIndex="0"
+            initialState="noShow"
+            programGroup="yes"
+            desktop="yes"
+            type="Link"
+            url="http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki"
+            terminal="false"
+            encoding="UTF-8">
+    </shortcut>
+
+    <shortcut
+            name="Open demo store"
+            description="Open yes cart demo store"
+            iconFile="$INSTALL_PATH\yesbin\opendemostore.ico"
+            iconIndex="0"
+            initialState="noShow"
+            programGroup="yes"
+            desktop="yes"
+            type="Link"
+            url="http://localhost:8080/yes-shop"
+            terminal="false"
+            encoding="UTF-8">
+    </shortcut>
+
+    <shortcut
+            name="Open demo store admin"
+            description="Open yes cart demo store"
+            iconFile="$INSTALL_PATH\yesbin\openyum.ico"
+            iconIndex="0"
+            initialState="noShow"
+            programGroup="yes"
+            desktop="yes"
+            type="Link"
+            url="http://localhost:8080/yes-manager"
+            terminal="false"
+            encoding="UTF-8">
+    </shortcut>
+
+</shortcuts>

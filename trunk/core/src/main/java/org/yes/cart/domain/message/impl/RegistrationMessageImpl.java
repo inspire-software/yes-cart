@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String firstname;
     private String lastname;
     private String password;
+    private String authToken;
     private List<String> mailTemplatePathChain;
     private String templateName;
 
@@ -105,6 +106,16 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    /** {@inheritDoc} */
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    /** {@inheritDoc} */
+    public void setAuthToken(final String authToken) {
+        this.authToken = authToken;
     }
 
     /** {@inheritDoc} */

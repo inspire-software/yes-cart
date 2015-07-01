@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -356,6 +356,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="priceService-allPrices"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="filteredNavigationSupport-priceFilteredNavigationRecords"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -365,6 +369,25 @@
         <entry key="Create" value-ref="SkuPriceAll"/>
         <entry key="Update" value-ref="SkuPriceAll"/>
         <entry key="Delete" value-ref="SkuPriceAll"/>
+    </util:map>
+
+    <!-- ###################### SkuWarehouse  ################################################################################################################## -->
+
+    <util:set id="SkuWarehouseAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="skuWarehouseService-productOnWarehouse"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="skuWarehouseService-productSkusOnWarehouse"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="SkuWarehouseCUD">
+        <entry key="Create" value-ref="SkuWarehouseAll"/>
+        <entry key="Update" value-ref="SkuWarehouseAll"/>
+        <entry key="Delete" value-ref="SkuWarehouseAll"/>
     </util:map>
 
 
@@ -713,18 +736,19 @@
 
 
     <util:map id="evictionConfig">
-        <entry key="AttributeEntity" value-ref="AttributeCUD"/>
-        <entry key="CategoryEntity" value-ref="CategoryCUD"/>
-        <entry key="SeoImageEntity" value-ref="SeoImageCUD"/>
-        <entry key="SkuPriceEntity" value-ref="SkuPriceCUD"/>
-        <entry key="ProductEntity" value-ref="ProductCUD"/>
-        <entry key="ProductTypeEntity" value-ref="ProductTypeCUD"/>
-        <entry key="ShopEntity" value-ref="ShopCUD"/>
-        <entry key="PromotionEntity" value-ref="PromotionCUD"/>
-        <entry key="AttrValueEntitySystem" value-ref="SystemCUD"/>
-        <entry key="TaxEntity" value-ref="TaxCUD"/>
-        <entry key="CarrierEntity" value-ref="CarrierCUD"/>
-        <entry key="CarrierSlaEntity" value-ref="CarrierSlaCUD"/>
+        <entry key="AttributeEntity"        value-ref="AttributeCUD"/>
+        <entry key="CategoryEntity"         value-ref="CategoryCUD"/>
+        <entry key="SeoImageEntity"         value-ref="SeoImageCUD"/>
+        <entry key="SkuPriceEntity"         value-ref="SkuPriceCUD"/>
+        <entry key="SkuWarehouseEntity"     value-ref="SkuWarehouseCUD"/>
+        <entry key="ProductEntity"          value-ref="ProductCUD"/>
+        <entry key="ProductTypeEntity"      value-ref="ProductTypeCUD"/>
+        <entry key="ShopEntity"             value-ref="ShopCUD"/>
+        <entry key="PromotionEntity"        value-ref="PromotionCUD"/>
+        <entry key="AttrValueEntitySystem"  value-ref="SystemCUD"/>
+        <entry key="TaxEntity"              value-ref="TaxCUD"/>
+        <entry key="CarrierEntity"          value-ref="CarrierCUD"/>
+        <entry key="CarrierSlaEntity"       value-ref="CarrierSlaCUD"/>
     </util:map>
 
 

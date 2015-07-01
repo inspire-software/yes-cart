@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -90,6 +90,20 @@ public interface RemoteDevService {
      * @return state if the cache has evicted on nodes
      */
     Map<String, Boolean> evictCache(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Enable cache statistics by name.
+     *
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> enableStats(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Disable cache statistics by name.
+     *
+     * @param name name of cache to evict
+     */
+    Map<String, Boolean> disableStats(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Warm up all storefront servers.

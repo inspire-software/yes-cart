@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.yes.cart.domain.ro;
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
+import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
 import org.yes.cart.domain.entity.AttrValueCategory;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
@@ -40,54 +40,55 @@ import java.util.*;
 @XmlRootElement(name = "content")
 public class ContentRO implements Serializable {
 
-    private static final long serialVersionUID = 20100717L;
+    private static final long serialVersionUID = 20150301L;
 
     @DtoField(value = "categoryId", readOnly = true)
     private long categoryId;
 
-    @DtoField(value = "parentId")
+    @DtoField(value = "parentId", readOnly = true)
     private long parentId;
 
-    @DtoField(value = "rank")
+    @DtoField(value = "rank", readOnly = true)
     private int rank;
 
-    @DtoField(value = "name")
+    @DtoField(value = "name", readOnly = true)
     private String name;
 
-    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    @DtoField(value = "displayName", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayNames;
 
-    @DtoField(value = "description")
+    @DtoField(value = "description", readOnly = true)
     private String description;
 
-    @DtoField(value = "uitemplate")
+    @DtoField(value = "uitemplate", readOnly = true)
     private String uitemplate;
+    private String uitemplateFallback;
 
-    @DtoField(value = "availablefrom")
+    @DtoField(value = "availablefrom", readOnly = true)
     private Date availablefrom;
 
-    @DtoField(value = "availableto")
+    @DtoField(value = "availableto", readOnly = true)
     private Date availableto;
 
-    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String uri;
 
-    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    @DtoField(value = "seo.title", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String title;
 
-    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    @DtoField(value = "seo.metakeywords", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String metakeywords;
 
-    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
+    @DtoField(value = "seo.metadescription", entityBeanKeys = "org.yes.cart.domain.entity.Seo", readOnly = true)
     private String metadescription;
 
-    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayTitle", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayTitles;
 
-    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayMetakeywords", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayMetakeywords;
 
-    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter")
+    @DtoField(value = "seo.displayMetadescription", converter = "i18nStringConverter", readOnly = true)
     private Map<String, String> displayMetadescriptions;
 
     @DtoCollection(
@@ -96,7 +97,7 @@ public class ContentRO implements Serializable {
             entityGenericType = AttrValueCategory.class,
             entityCollectionClass = HashSet.class,
             dtoCollectionClass = HashSet.class,
-            dtoToEntityMatcher = IdentifiableMatcher.class,
+            dtoToEntityMatcher = NoopMatcher.class,
             readOnly = true
     )
     private Set<AttrValueCategoryRO> attributes;
@@ -184,6 +185,15 @@ public class ContentRO implements Serializable {
         this.uitemplate = uitemplate;
     }
 
+    @XmlElement(name = "uitemplate-fallback")
+    public String getUitemplateFallback() {
+        return uitemplateFallback;
+    }
+
+    public void setUitemplateFallback(final String uitemplateFallback) {
+        this.uitemplateFallback = uitemplateFallback;
+    }
+
     public Date getAvailablefrom() {
         return availablefrom;
     }
@@ -200,6 +210,7 @@ public class ContentRO implements Serializable {
         this.availableto = availableto;
     }
 
+    @XmlElementWrapper(name = "attribute-values")
     @XmlElement(name = "attribute-value")
     public Set<AttrValueCategoryRO> getAttributes() {
         return attributes;

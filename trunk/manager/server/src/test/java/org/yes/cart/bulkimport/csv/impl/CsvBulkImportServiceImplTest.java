@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -39,6 +41,7 @@ import org.yes.cart.stream.xml.XStreamProvider;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -810,7 +813,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             );
         } catch (Exception e1) {
             e1.printStackTrace();
-            assertTrue(e1.getMessage(), false);
+            fail(e1.getMessage());
         }
 
 
@@ -844,7 +847,7 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testDoImportWithSimpleSlaveFiled() throws Exception {
+    public void testDoImportWithSimpleSlaveField() throws Exception {
 
         final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 
@@ -888,4 +891,56 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
         mockery.assertIsSatisfied();
 
     }
+
+    @Test
+    public void testDoImportWithConversions() throws Exception {
+
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyPing();
+            allowing(listener).notifyPing(with(any(String.class)));
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/conversiontest001.xml", listener, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO'");
+            rs.next();
+            assertEquals("GUID-ASIMO", rs.getString(1));
+            assertEquals("SKU-ASIMO", rs.getString(2));
+            assertEquals("ASIMO", rs.getString(3));
+            assertEquals(100L, rs.getLong(4)); // Unknown
+            assertEquals(1L, rs.getLong(5)); // Robots
+            assertEquals("Robot ASIMO", rs.getString(6));
+            final I18NModel model = new StringI18NModel(rs.getString(7));
+            assertEquals(2, model.getAllValues().size());
+            assertEquals("Robot ASIMO", model.getValue("en"));
+            assertEquals("Робот ASIMO", model.getValue("ru"));
+            assertEquals(1, rs.getInt(8));
+            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
+            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
+
 }

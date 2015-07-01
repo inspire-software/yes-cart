@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 
+import java.util.Map;
+
 /**
  * Strategy to find the parameter values for given queryTemplate
  * and produce LookUpQuery object for ORM framework
@@ -28,6 +30,14 @@ import org.yes.cart.bulkimport.model.ValueAdapter;
  * Time: 8:43 AM
  */
 public interface LookUpQueryParameterStrategy {
+
+    String GUID                = "{GUID}";
+    String MASTER              = "{masterObject}";
+    String MASTER_ID           = "{masterObjectId}";
+    String CONTEXT_SHOP        = "{contextShop}";
+    String CONTEXT_SHOP_ID     = "{contextShopId}";
+    String CONTEXT_SHOP_CODE   = "{contextShopCode}";
+
 
     /**
      * @param descriptor current import descriptor

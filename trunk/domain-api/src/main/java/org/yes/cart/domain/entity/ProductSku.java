@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -175,20 +175,6 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
     void setRank(int rank);
 
     /**
-     * Get collection of sku prive tiers.
-     *
-     * @return collection of sku prive tiers.
-     */
-    Collection<SkuPrice> getSkuPrice();
-
-    /**
-     * Set collection of sku prive tiers.
-     *
-     * @param skuPrice collection of sku prive tiers.
-     */
-    void setSkuPrice(Collection<SkuPrice> skuPrice);
-
-    /**
      * Get the sku bar code.
      *
      * @return Sku bar code
@@ -201,27 +187,6 @@ public interface ProductSku extends Auditable, Attributable, Rankable , Seoable,
      * @param barCode bar code.
      */
     void setBarCode(String barCode);
-
-    /**
-     * Get quantity of sku on warehouse.
-     * @return quantity of sku on warehouse.
-     */
-    Collection<SkuWarehouse> getQuantityOnWarehouse();
-
-    /**
-     * Set quantity of sku on warehouse.
-     * @param quantityOnWarehouse quantity of sku on warehouse.
-     */
-    void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse);
-
-    /**
-     * Get total quantity of skus on all warehouses.
-     *
-     * @param warehouses warehouse to consider
-     *
-     * @return total quantity
-     */
-    BigDecimal getQty(Collection<Warehouse> warehouses);
 
 }
 

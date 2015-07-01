@@ -1,17 +1,9 @@
-Шановний (-на) $customer.firstname $customer.lastname !
-<%
-if (paymentGatewayFeatures.isOnlineGateway()) {
-%>
-Результат оплати по замовленню $root.ordernum на $shop.name - $result
-<%
-} else {
-%>
-Очікується підтвердження оплати або замовлення
-<%
-}
-%>
-Будь ласка, перевірте інформацію на сторінці Вашого профілю на "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
-Інформація по замовленню
+Шановний (-на) $customer.firstname $customer.lastname!
+Оплату по Вашому замовленню прийнято. Дякуємо!
+Детальну інформацію Ви можете переглянути в історії замовлень
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"
+
+Інформація по замовленню:
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -73,7 +73,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     private final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao;
     private final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport;
     private final Random rand;
-    private final DtoFactory dtoFactory;
 
     /**
      * Construct product service.
@@ -94,8 +93,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                               final AttributeService attributeService,
                               final GenericDAO<ProductCategory, Long> productCategoryDao,
                               final GenericDAO<ProductTypeAttr, Long> productTypeAttrDao,
-                              final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport,
-                              final DtoFactory dtoFactory) {
+                              final ShopCategoryRelationshipSupport shopCategoryRelationshipSupport) {
         super(productDao);
         this.productDao = productDao;
         this.productSkuDao = productSkuDao;
@@ -107,7 +105,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         this.shopCategoryRelationshipSupport = shopCategoryRelationshipSupport;
         rand = new Random();
         rand.setSeed((new Date().getTime()));
-        this.dtoFactory = dtoFactory;
     }
 
     /** {@inheritDoc} */
@@ -385,7 +382,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     public Product getProductById(final Long productId) {
-        return proxy().getProductById(productId, false);
+        // by default we use product with attributes, so true is better for caching
+        return proxy().getProductById(productId, true);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!--
-  - Copyright 2009 Igor Azarnyi, Denys Pavlov
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
   -
   -    Licensed under the Apache License, Version 2.0 (the "License");
   -    you may not use this file except in compliance with the License.
@@ -118,7 +118,7 @@
                 var selected:Array = productFinderPopUp.productSelection;
                 if (selected != null && selected.length > 0) {
                     selectedProductDTOImpl = selected[0];
-                    productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
+                    productLabel.text = selectedProductDTOImpl.code + ': ' + selectedProductDTOImpl.name;
                     productLabel.toolTip = selectedProductDTOImpl.description;
                     productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
                     PopUpManager.removePopUp(productFinderPopUp);

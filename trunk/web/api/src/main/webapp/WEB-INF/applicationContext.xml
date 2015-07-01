@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -30,14 +30,16 @@
 
     <aop:aspectj-autoproxy/>
 
-    <import resource="classpath*:core-config.xml"/>
-    <import resource="classpath*:core-persistence.xml"/>
-    <import resource="classpath*:core-io.xml"/>
-    <import resource="classpath*:core-services.xml"/>
-    <import resource="classpath*:api-services-commands.xml"/>
-    <import resource="classpath*:websupport-webapp.xml"/>
-    <import resource="classpath*:websupport-api.xml"/>
-    <import resource="classpath*:payment-modules.xml"/>
-    <import resource="classpath*:api.xml"/>
+    <import resource="classpath:core-config.xml"/>
+    <import resource="classpath:core-persistence.xml"/>
+    <import resource="classpath:core-io.xml"/>
+    <import resource="classpath:core-services.xml"/>
+    <import resource="classpath:api-services-commands.xml"/>
+    <import resource="classpath:websupport-cluster.xml"/>
+    <import resource="classpath:websupport-persistence.xml"/>
+    <import resource="classpath:websupport-webapp.xml"/>
+    <import resource="classpath:websupport-api.xml"/>
+    <import resource="classpath:payment-modules.xml"/>
+    <import resource="classpath:api.xml"/>
 
 </beans>
