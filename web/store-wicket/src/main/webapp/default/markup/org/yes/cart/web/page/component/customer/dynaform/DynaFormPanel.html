@@ -1,0 +1,74 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+
+    <form wicket:id="form" class="form-horizontal">
+
+        <div class="col-sx-12">
+            <h2 id="customerAdditional" class="profile-title"><wicket:message key="customerAdditional">[additional info]</wicket:message></h2>
+        </div>
+
+
+        <div class="form-group" wicket:id="fields">
+
+            <label wicket:id="name" class="control-label col-xs-12 col-sm-2">
+
+            </label>
+            <div class="col-xs-12 col-sm-5" wicket:id="editor">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <wicket:container wicket:id="dynaformContent">[dynaform content include]</wicket:container>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12 col-sm-offset-2 col-sm-5">
+                <a wicket:id="saveLink" class="btn btn-primary" rel="nofollow">
+                    <span>
+                        <wicket:message key="save">[save]</wicket:message>
+                    </span>
+                </a>
+            </div>
+        </div>
+
+    </form>
+
+
+    <wicket:fragment wicket:id="booleanEditor">
+        <p><input type="checkbox" wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="stringEditor">
+        <p><input type="text"  wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="singleChoiceEditor">
+        <p><select wicket:id="edit"  class="form-control"></select></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="multipleChoicesEditor">
+        <p><span wicket:id="edit" class="form-control"></span></p>
+    </wicket:fragment>
+
+
+</wicket:panel>
+</body>
+</html>

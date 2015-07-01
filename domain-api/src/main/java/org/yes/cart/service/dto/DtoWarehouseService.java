@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
     SkuWarehouseDTO updateSkuOnWarehouse(SkuWarehouseDTO skuWarehouseDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
-     * Dind product skus quantity objects on given warehouse.
+     * Find product skus quantity objects on given warehouse.
      *
      * @param productId   given product id
      * @param warehouseId given warehouse id.

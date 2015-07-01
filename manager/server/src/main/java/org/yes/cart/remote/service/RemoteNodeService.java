@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.yes.cart.remote.service;
 
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.Node;
 
 import java.util.List;
 

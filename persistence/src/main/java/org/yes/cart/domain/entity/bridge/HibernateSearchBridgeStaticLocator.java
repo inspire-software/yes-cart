@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Igor Azarnyi, Denys Pavlov
+ * Copyright 2013 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@ package org.yes.cart.domain.entity.bridge;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
-import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
-import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
+import org.yes.cart.domain.entity.bridge.support.*;
 
 /**
  * User: denispavlov
@@ -31,6 +29,8 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
 
     private static ShopCategoryRelationshipSupport SHOP_CATEGORY_SUPPORT;
     private static ShopWarehouseRelationshipSupport SHOP_WAREHOUSE_SUPPORT;
+    private static SkuWarehouseRelationshipSupport SKU_WAREHOUSE_SUPPORT;
+    private static SkuPriceRelationshipSupport SKU_PRICE_SUPPORT;
     private static NavigatableAttributesSupport NAVIGATABLE_ATTRIBUTES_SUPPORT;
 
     public static ShopCategoryRelationshipSupport getShopCategoryRelationshipSupport() {
@@ -39,6 +39,14 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
 
     public static ShopWarehouseRelationshipSupport getShopWarehouseRelationshipSupport() {
         return SHOP_WAREHOUSE_SUPPORT;
+    }
+
+    public static SkuWarehouseRelationshipSupport getSkuWarehouseRelationshipSupport() {
+        return SKU_WAREHOUSE_SUPPORT;
+    }
+
+    public static SkuPriceRelationshipSupport getSkuPriceRelationshipSupport() {
+        return SKU_PRICE_SUPPORT;
     }
 
     public static NavigatableAttributesSupport getNavigatableAttributesSupport() {
@@ -50,6 +58,8 @@ public class HibernateSearchBridgeStaticLocator implements ApplicationContextAwa
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         SHOP_CATEGORY_SUPPORT = applicationContext.getBean("shopCategoryRelationshipSupport", ShopCategoryRelationshipSupport.class);
         SHOP_WAREHOUSE_SUPPORT = applicationContext.getBean("shopWarehouseRelationshipSupport", ShopWarehouseRelationshipSupport.class);
+        SKU_WAREHOUSE_SUPPORT = applicationContext.getBean("skuWarehouseRelationshipSupport", SkuWarehouseRelationshipSupport.class);
+        SKU_PRICE_SUPPORT = applicationContext.getBean("skuPriceRelationshipSupport", SkuPriceRelationshipSupport.class);
         NAVIGATABLE_ATTRIBUTES_SUPPORT = applicationContext.getBean("navigatableAttributesSupport", NavigatableAttributesSupport.class);
     }
 }

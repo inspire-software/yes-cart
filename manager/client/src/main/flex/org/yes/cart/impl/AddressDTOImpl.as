@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -52,7 +52,19 @@ public class AddressDTOImpl {
 
     public var defaultAddress:Boolean;
 
-    public var phoneList:String;
+    public var phone1:String;
+    public var phone2:String;
+
+    public var mobile1:String;
+    public var mobile2:String;
+
+    public var email1:String;
+    public var email2:String;
+
+    public var custom1:String;
+    public var custom2:String;
+    public var custom3:String;
+    public var custom4:String;
 
     public var customerId:Number;
 
@@ -69,6 +81,48 @@ public class AddressDTOImpl {
 
     public function get fullcountry():String {
         return countryCode + '\n' + stateCode;
+    }
+
+    public function get phonelist():String {
+        var _list:String = '';
+        var _nl:Boolean = false;
+        if (DomainUtils.isNotBlankString(phone1)) {
+            _list += phone1;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(phone2)) {
+            _list += (_nl ? '\n' : '') + phone2;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(mobile1)) {
+            _list += (_nl ? '\n' : '') + mobile1;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(mobile2)) {
+            _list += mobile2;
+        }
+        return _list;
+    }
+
+    public function get customlist():String {
+        var _list:String = '';
+        var _nl:Boolean = false;
+        if (DomainUtils.isNotBlankString(custom1)) {
+            _list += custom1;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(custom2)) {
+            _list += (_nl ? '\n' : '') + custom2;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(custom3)) {
+            _list += (_nl ? '\n' : '') + custom3;
+            _nl = true;
+        }
+        if (DomainUtils.isNotBlankString(custom4)) {
+            _list += custom4;
+        }
+        return _list;
     }
 
     public function AddressDTOImpl() {

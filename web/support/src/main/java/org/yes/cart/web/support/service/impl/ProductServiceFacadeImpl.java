@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;

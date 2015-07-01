@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 
 package org.yes.cart.domain.ro;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * User: denispavlov
@@ -27,13 +26,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Time: 22:16
  */
 @XmlRootElement(name = "node")
-public class NodeRO {
+public class NodeRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private String nodeId;
     private String shopCode;
 
     @XmlElement(name = "node-id")
-    @JsonProperty(value = "node-id")
     public String getNodeId() {
         return nodeId;
     }
@@ -43,7 +43,6 @@ public class NodeRO {
     }
 
     @XmlElement(name = "shop-code")
-    @JsonProperty(value = "shop-code")
     public String getShopCode() {
         return shopCode;
     }

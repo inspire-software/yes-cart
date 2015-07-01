@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;
@@ -74,11 +73,8 @@ public class ImageFilter extends AbstractFilter implements Filter {
 
     private Integer etagExpiration = null;
 
-    public ImageFilter(
-            final ApplicationDirector applicationDirector,
-            final ImageService imageService,
-            final SystemService systemService) {
-        super(applicationDirector);
+    public ImageFilter(final ImageService imageService,
+                       final SystemService systemService) {
         this.imageService = imageService;
         this.systemService = systemService;
         fileTypeMap = new MimetypesFileTypeMap();
@@ -115,9 +111,9 @@ public class ImageFilter extends AbstractFilter implements Filter {
     public void handleRequestInternal(final HttpServletRequest httpServletRequest,
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
-
-        final String servletPath = URLDecoder.decode(httpServletRequest.getServletPath(), "UTF-8"); //this for filter
-        //httpServletRequest.getPathInfo(); //this for servlet
+        final String requestPath = httpServletRequest.getRequestURI();            // RequestURI  -> /yes-shop/imagevault/product/image.png
+        final String contextPath = httpServletRequest.getContextPath();           // ContextPath -> /yes-shop
+        final String servletPath = requestPath.substring(contextPath.length());   // ServletPath ->          /imagevault/product/image.png
 
         final String previousToken = httpServletRequest.getHeader(IF_NONE_MATCH);
         final String currentToken = getETagValue(httpServletRequest);

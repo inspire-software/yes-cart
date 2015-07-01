@@ -1,0 +1,88 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+    <meta wicket:id="created" name="date" content=""/>
+</wicket:head>
+
+<body>
+
+    <span wicket:id="header">[header]</span>
+
+    <div class="container">
+
+        <div class="col-xs-12 contacts-title">
+            <h2><wicket:message key="contact">[contact]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12 contacts-body">
+            <h2>Сообщество</h2>
+            <p class="text-justify">
+                Команда разработчиков Yes-Cart имеет глубокий опыт в электронной коммерции, разработке и интеграции программного обеспечения.
+                Мы всегда рады новым участникам Yes-Cart сообщества, так как новые люди могут привнести свежие идеи.
+                Мы будем рады услышать о Ваших проектах на Yes-Cart.
+                Полная документация по Yes-Cart <a href="http://inspire-software.com/confluence/display/YC2R/Home" target="_blank"><b>находится здесь</b></a>
+                и мы создали <a href="https://groups.google.com/d/forum/yescart---open-source-ecommerce-platform" target="_blank"><b>группу в Google</b></a>
+                для обсуждения всех вопросов связанных с Yes-Cart.
+            </p>
+            <h2>Наши услуги</h2>
+            <p class="text-justify">
+                Мы предлагаем широкий спектр услуг для наших клиентов, включая (но не ограничиваясь):
+                <ul class="list">
+                    <li>Консультации - содержащие подробную информацию о том, как использовать YesCart, возможности системы и ее производительность</li>
+                    <li>Архитектурное проектирование - предоставляя подробное описание, как реализовать определенные функции</li>
+                    <li>Услуги по внедрению - все, от изменения функциональности, добавления новых тем для магазина, интеграции сторонних систем до полной реализации Вашего проекта</li>
+                    <li>Конфигурация серверов - полная конфигурация рабочего сервера в соответствии с потребностями Вашего бизнеса</li>
+                    <li>Техническая поддержка - для Вашего спокойствия, когда ваша система электронной коммерции находится в рабочем состоянии</li>
+                </ul>
+                Чтобы узнать больше о том, что мы можем сделать для Вашего бизнеса, свяжитесь с нами, используя
+                <a href="http://www.yes-cart.org/index-ru.html#contact" target="_blank"><b>форму обратной связи</b>.</a>
+            </p>
+        </div>
+
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import java.util.*;
  */
 public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements BrandFilteredNavigationSupport {
 
-    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+    private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     public BrandFilteredNavigationSupportImpl(final LuceneQueryFactory luceneQueryFactory,
                                               final ProductService productService) {

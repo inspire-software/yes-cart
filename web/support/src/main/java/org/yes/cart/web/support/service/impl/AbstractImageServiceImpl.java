@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import java.util.*;
  */
 public abstract class AbstractImageServiceImpl implements AttributableImageService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractImageServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(AbstractImageServiceImpl.class);
 
     private final Cache IMAGE_URI_CACHE;
     private final Cache OBJECT_IMAGES_CACHE;

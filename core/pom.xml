@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -20,33 +20,14 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>core</artifactId>
-    <name>Yes cart core</name>
-    <properties>
-        <GeDA.version>2.1.2</GeDA.version>
-    </properties>
+    <name>Yes cart core service</name>
     <dependencies>
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>payment-api</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>core-module-payment-base</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>core-module-payment-capp</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>core-module-payment-gcwm</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -120,7 +101,7 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.7.4</version>
+            <version>${groovy-all.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
@@ -136,7 +117,7 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2</version>
+            <version>3.2.1</version>
         </dependency>
             
         <dependency>
@@ -170,7 +151,7 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.6.8</version>
+            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>javassist</groupId>
@@ -290,26 +271,6 @@
         </dependency>
     </dependencies>
     <build>
-        <testResources>
-            <testResource>
-                <directory>../payment-api/src/test/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>../core-modules/core-module-payment-base/src/test/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </testResource>
-        </testResources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -328,19 +289,6 @@
                             <configuration>
                                 <includes>
                                     <include>**/*Test.java</include>
-                                </includes>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>dto-tezt</id>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <phase>test-compile</phase>
-                            <configuration>
-                                <!-- Running only isolated dirty tests -->
-                                <includes>
-                                    <include>**/*Tezt.java</include>
                                 </includes>
                             </configuration>
                         </execution>

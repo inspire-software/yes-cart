@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -84,21 +84,6 @@ public interface AttributeGroup extends Auditable, Codable {
      * @param description description value.
      */
     void setDescription(String description);
-
-    /**
-     * Get list of slave attributes
-     *
-     * @return attributes
-     */
-    Set<Attribute> getAttributes();
-
-    /**
-     * Set attributes.
-     *
-     * @param attributes attributes definition.
-     */
-    void setAttributes(Set<Attribute> attributes);
-
 
 }
 

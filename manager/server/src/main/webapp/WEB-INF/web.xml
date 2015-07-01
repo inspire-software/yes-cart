@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -39,11 +39,17 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>WEB-INF/applicationContext.xml</param-value>
+        <param-value>
+            WEB-INF/applicationContext.xml
+            ${payment.cybersource.context}
+            ${payment.liqpay.context}
+            ${payment.authorizenet.context}
+            ${payment.paypal.context}
+        </param-value>
     </context-param>
 
     <listener>
-        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+        <listener-class>org.yes.cart.web.context.LogbackJMXContextListener</listener-class>
     </listener>
 
     <listener>

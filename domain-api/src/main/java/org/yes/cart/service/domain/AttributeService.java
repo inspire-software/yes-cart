@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -108,10 +108,19 @@ public interface AttributeService extends GenericService<Attribute> {
      * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
      *
      * @param attributeGroupCode     see AttributeGroup#code
-     * @param assignedAttributeCodes list of codes, that already assigned to entity (hence excluded)
+     * @param exclude list of codes, that already assigned to entity (hence excluded)
      * @return list of available attributes to fill with values.
      */
-    List<Attribute> findAvailableAttributes(String attributeGroupCode, List<String> assignedAttributeCodes);
+    List<Attribute> findAvailableAttributes(String attributeGroupCode, List<String> exclude);
+
+    /**
+     * Get list of available attributes within given <code>attributeGroupCode</code>, that can be assigned to business entity.
+     *
+     * @param attributeGroupCode     see AttributeGroup#code
+     * @param codes list of codes, that for which to find attributes
+     * @return list of available attributes to fill with values.
+     */
+    List<Attribute> findAttributesByCodes(String attributeGroupCode, List<String> codes);
 
 
     /**

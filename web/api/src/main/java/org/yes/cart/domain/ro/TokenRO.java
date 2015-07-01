@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * User: denispavlov
@@ -24,7 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Time: 15:11
  */
 @XmlRootElement(name = "token")
-public class TokenRO {
+public class TokenRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private String uuid;
 

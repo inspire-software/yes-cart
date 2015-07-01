@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ package org.yes.cart.service.domain.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 
@@ -84,14 +87,28 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
         final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
 
-        List<ShoppingCartState> carts;
-        carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
-        assertNotNull(carts);
-        assertTrue(carts.isEmpty());
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation);
+                assertNotNull(carts);
+                assertFalse(carts.hasNext());
+                carts.close();
+                return null;
+            }
+        });
 
-        carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
-        assertNotNull(carts);
-        assertEquals(carts.size(), 1);
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
+                assertNotNull(carts);
+                assertTrue(carts.hasNext()); // one
+                assertFalse(carts.hasNext()); // no second
+                carts.close();
+                return null;
+            }
+        });
 
         shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
 

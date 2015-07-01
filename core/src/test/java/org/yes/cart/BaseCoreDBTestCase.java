@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
@@ -67,6 +66,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
     @After
     public void tearDown() throws Exception {
+
+        final CacheManager cacheManager = (CacheManager) ctx().getBean("cacheManager");
+        for (final String name : cacheManager.getCacheNames()) {
+            // clear all cache between the tests
+            cacheManager.getCache(name).clear();
+        }
         //sharedContext =  null;
     }
 
@@ -237,25 +242,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         String prefix = getTestName() + number;
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
         CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
-        AttributeService attributeService = (AttributeService) ctx().getBean(ServiceSpringKeys.ATTRIBUTE_SERVICE);
         AddressService addressService = (AddressService) ctx().getBean(ServiceSpringKeys.ADDRESS_SERVICE);
-        HashHelper hashHelper = (HashHelper) ctx().getBean("hashHelper");
-        GenericDAO<Customer, Long> customerDao = (GenericDAO<Customer, Long>) ctx().getBean("customerDao");
         Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
         customer.setEmail(prefix + "jd@domain.com");
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
-        try {
-            final String passw = hashHelper.getHash("rawpassword");
-            customer.setPassword(passw);
-        } catch (Exception exp) {
-            fail("Unable to generate password hash");
-        }
-        //AttrValueCustomer attrValueCustomer = customerService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-        //attrValueCustomer.setCustomer(customer);
-        //attrValueCustomer.setVal("555-55-51");
-        //attrValueCustomer.setAttribute(attributeService.findByAttributeCode(AttributeNamesKeys.CUSTOMER_PHONE));
-        //customer.getAttribute().add(attrValueCustomer);
+        customer.setPassword("rawpassword");
         customerService.addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, "555-55-51");
         customer = customerService.create(customer, shopService.getById(10L));
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
@@ -265,9 +257,9 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setAddrline1("line1");
         address.setAddrline2("shipping addr");
         address.setCountryCode("CA");
-        address.setAddressType(Address.ADDR_TYPE_SHIPING);
+        address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setCustomer(customer);
-        address.setPhoneList("555-55-51");
+        address.setPhone1("555-55-51");
         addressService.create(address);
         address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("John");
@@ -278,7 +270,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         address.setCountryCode("CA");
         address.setAddressType(Address.ADDR_TYPE_BILLING);
         address.setCustomer(customer);
-        address.setPhoneList("555-55-52");
+        address.setPhone1("555-55-52");
         addressService.create(address);
 //        customer = customerService.getCustomerByEmail("jd@domain.com");
         //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));

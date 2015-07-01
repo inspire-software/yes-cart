@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -38,26 +38,5 @@ public interface CsvImportDescriptor extends ImportDescriptor {
      * @return {@link CsvImportFile}
      */
     CsvImportFile getImportFileDescriptor();
-
-    /**
-     * Get the collection of all import columns.
-     *
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns();
-
-    /**
-     * @param columnName column name
-     * @return get column by name
-     */
-    ImportColumn getImportColumn(String columnName);
-
-    /**
-     * Get the collection of import columns filtered by given field type.
-     *
-     * @param fieldType {@link FieldTypeEnum} discriminator.
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType);
 
 }

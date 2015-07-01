@@ -1,5 +1,5 @@
-Dear $customer.firstname $customer.lastname !
-New order $root.ordernum at $shop.name was created
+Dear $customer.firstname $customer.lastname!
+New order $root.ordernum at $shop.name was created.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {
@@ -30,5 +30,5 @@ out.print(e.getMessage());
 }
 %>
 
-
-Please check detail on self care page at "<%out.print(shop.getDefaultShopUrl())%>" $shop.name
+You can view detailed information in order history
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

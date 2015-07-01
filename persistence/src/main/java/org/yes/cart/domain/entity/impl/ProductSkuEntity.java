@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.yes.cart.domain.entity.bridge.ProductBridge;
 import org.yes.cart.domain.entity.bridge.SkuPriceBridge;
 import org.yes.cart.domain.interceptor.ProductSkuEntityIndexingInterceptor;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -35,6 +34,7 @@ import java.util.*;
  */
 
 @Indexed(index = "luceneindex/productsku", interceptor = ProductSkuEntityIndexingInterceptor.class)
+@ClassBridge(impl = SkuPriceBridge.class)
 public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, java.io.Serializable {
 
     private long skuId;
@@ -50,7 +50,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     private String barCode;
     private Collection<SkuPrice> skuPrice = new ArrayList<SkuPrice>(0);
     private Collection<AttrValueProductSku> attributes = new ArrayList<AttrValueProductSku>(0);
-    private Collection<SkuWarehouse> quantityOnWarehouse = new ArrayList<SkuWarehouse>(0);
     private SeoEntity seoInternal;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -144,15 +143,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
         this.barCode = barCode;
     }
 
-    @Field(bridge = @FieldBridge(impl = SkuPriceBridge.class))
-    public Collection<SkuPrice> getSkuPrice() {
-        return this.skuPrice;
-    }
-
-    public void setSkuPrice(Collection<SkuPrice> skuPrice) {
-        this.skuPrice = skuPrice;
-    }
-
     @Field(bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.AttributeValueBridge.class))
     public Collection<AttrValueProductSku> getAttributes() {
         return this.attributes;
@@ -160,14 +150,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setAttributes(Collection<AttrValueProductSku> attributes) {
         this.attributes = attributes;
-    }
-
-    public Collection<SkuWarehouse> getQuantityOnWarehouse() {
-        return this.quantityOnWarehouse;
-    }
-
-    public void setQuantityOnWarehouse(Collection<SkuWarehouse> quantityOnWarehouse) {
-        this.quantityOnWarehouse = quantityOnWarehouse;
     }
 
     public SeoEntity getSeoInternal() {
@@ -294,26 +276,6 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setSeo(final Seo seo) {
         this.setSeoInternal((SeoEntity) seo);
-    }
-
-    public BigDecimal getQty(final Collection<Warehouse> warehouses) {
-        final Set<Long> pks = new HashSet<Long>();
-        for (final Warehouse warehouse : warehouses) {
-            if (warehouse != null) {
-                pks.add(warehouse.getWarehouseId());
-            }
-        }
-        return getQtyInternal(pks);
-    }
-
-    public BigDecimal getQtyInternal(final Set<Long> warehousesIds) {
-        BigDecimal rez = BigDecimal.ZERO.setScale(2);
-        for (SkuWarehouse swe : getQuantityOnWarehouse()) {
-            if (warehousesIds.contains(swe.getWarehouse().getWarehouseId())) {
-                rez = rez.add(swe.getQuantity());
-            }
-        }
-        return rez;
     }
 
     /**

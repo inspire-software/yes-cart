@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>3.0.0-SHAPSHOT</version>
     </parent>
+    <properties>
+        <packaging.type>swf</packaging.type>
+    </properties>
     <artifactId>yes-manager-client</artifactId>
-    <name>YUM Yes cart update manager client</name>
-    <!--<packaging>swf</packaging>-->
+    <name>Yes cart YUM: client</name>
     <packaging>${packaging.type}</packaging>
     <dependencies>
 
@@ -45,7 +47,45 @@
 
     </dependencies>
     <build>
+
         <sourceDirectory>src/main/flex</sourceDirectory>
+
+        <filters>
+            <filter>${basedir}/../../env/maven/${env}/config-yum-client.properties</filter>
+        </filters>
+
+        <resources>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/ShopManagerApplication.properties</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/ShopManagerApplication.properties</exclude>
+                </excludes>
+            </resource>
+
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
     </build>
 
     <profiles>
@@ -68,9 +108,10 @@
                                     <goal>run</goal>
                                 </goals>
                                 <configuration>
-                                    <tasks>
-                                        <ant antfile="${basedir}/build.xml"  target="all"/>
-                                    </tasks>
+                                    <target>
+                                        <property name="BUILD_TARGETS" value="${env.yum.lang}"/>
+                                        <ant antfile="${basedir}/build.xml"  target="maven_bridge"/>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -95,10 +136,9 @@
                             <configuration>
                                 <debug>true</debug>
                                 <!--webappDirectory>${basedir}../server/src/main/webapp</webappDirectory-->
-                                <localesSourcePath>${basedir}/src/main/resources/{locale}</localesSourcePath>
+                                <localesSourcePath>${basedir}/target/classes/{locale}</localesSourcePath>
                                 <localesCompiled>
                                     <locale>en_US</locale>
-                                    <locale>ru_RU</locale>
                                 </localesCompiled>
                             </configuration>
                         </plugin>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package org.yes.cart.bulkjob.product;
 
 import org.slf4j.Logger;
+import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.node.NodeService;
 
 import java.util.Date;
 import java.util.List;
@@ -66,15 +66,17 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
         final List<Object> discontinued = productService.getGenericDao().findQueryObjectByNamedQuery("DISCONTINUED.PRODUCTS.AFTER.DATE", now());
 
         for (final Object pk : discontinued) {
-            log.info("Reindexing discontinued product {} on {}", pk, nodeId);
+            log.debug("Reindexing discontinued product {} on {}", pk, nodeId);
             productService.reindexProduct((Long) pk);
         }
+
+        log.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued.size());
 
         final long finish = System.currentTimeMillis();
 
         final long ms = (finish - start);
 
-        log.info("Reindexing discontinued on {} ... complete {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing discontinued on {} ... completeed {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
     }
 
@@ -83,9 +85,8 @@ public class ProductsPassedAvailbilityDateIndexProcessorImpl implements Runnable
     }
 
     protected Boolean isLuceneIndexDisabled() {
-        return Boolean.TRUE.toString().equals(nodeService.getConfiguration().get(NodeService.LUCENE_INDEX_DISABLED));
+        return nodeService.getCurrentNode().isLuceneIndexDisabled();
     }
-
 
     protected Date now() {
         return new Date();

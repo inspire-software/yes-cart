@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,7 +18,10 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
@@ -37,6 +40,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -88,7 +92,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<CustomerOrderPayment> findPaymentRecordsByOrderNumber(final String orderNumber) {
-        return customerOrderPaymentService.findBy(orderNumber, null, null, null);
+        return customerOrderPaymentService.findBy(orderNumber, null, (String) null, (String) null);
     }
 
     /** {@inheritDoc} */
@@ -169,26 +173,22 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             return false;
         }
 
+        // AUTH or AUTH_CAPTURE for full order amount with successful result
         final List<CustomerOrderPayment> payments =
-                customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null, null, null);
+                customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null,
+                        new String[] { Payment.PAYMENT_STATUS_OK },
+                        new String[] { PaymentGateway.AUTH, PaymentGateway.AUTH_CAPTURE });
 
         if (payments == null || payments.isEmpty()) {
             return false;
         }
 
+        BigDecimal amount = BigDecimal.ZERO;
         for (final CustomerOrderPayment payment : payments) {
-            // AUTH or AUTH_CAPTURE for full order amount with successful result
-            if (
-                    (payment.getTransactionOperation().equals(PaymentGateway.AUTH)
-                            || payment.getTransactionOperation().equals(PaymentGateway.AUTH_CAPTURE))
-                    && (customerOrder.getPrice().compareTo(payment.getPaymentAmount()) == 0)
-                    && Payment.PAYMENT_STATUS_OK.equals(payment.getPaymentProcessorResult())
-                    ) {
-                return true;
-            }
+            amount = amount.add(payment.getPaymentAmount());
         }
 
-        return false;
+        return amount.compareTo(customerOrder.getOrderTotal()) == 0;
 
     }
 

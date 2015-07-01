@@ -1,0 +1,103 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<body>
+<wicket:panel>
+    <form wicket:id="registerForm" class="form-horizontal">
+
+        <div class="new-customer-title">
+            <h2><wicket:message key="newUser">[new user]</wicket:message></h2>
+        </div>
+
+        <div class="form-group">
+            <label for="registerEmail" class="control-label col-xs-12 col-sm-3">
+                <wicket:message key="email">[user email]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="email" class="form-control" id="registerEmail" wicket:message="placeholder:email"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="registerFirstName" class="control-label col-xs-12 col-sm-3">
+                <wicket:message key="firstname">[first name]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="firstname" class="form-control" id="registerFirstName" wicket:message="placeholder:firstname"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="registerLastName" class="control-label col-xs-12 col-sm-3">
+                <wicket:message key="lastname">[last name]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="lastname" class="form-control" id="registerLastName" wicket:message="placeholder:lastname"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="registerPhone" class="control-label col-xs-12 col-sm-3">
+                <wicket:message key="phone">[phone]</wicket:message>
+            </label>
+            <div class="col-xs-12 col-sm-8">
+                <input type="text" wicket:id="phone" class="form-control" id="registerPhone" wicket:message="placeholder:phone"/>
+            </div>
+        </div>
+
+        <div class="form-group" wicket:id="fields">
+
+            <label wicket:id="name" class="control-label col-xs-12 col-sm-3">
+
+            </label>
+            <div class="col-xs-12 col-sm-8" wicket:id="editor">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <wicket:container wicket:id="regformContent">[reg form content include]</wicket:container>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-8 buttons">
+                <input type="submit" class="btn btn-primary" wicket:id="registerBtn" wicket:message="value:register"/>
+            </div>
+        </div>
+
+    </form>
+
+
+    <wicket:fragment wicket:id="booleanEditor">
+        <p><input type="checkbox" wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="stringEditor">
+        <p><input type="text"  wicket:id="edit" class="form-control"/></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="singleChoiceEditor">
+        <p><select wicket:id="edit"  class="form-control"></select></p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="multipleChoicesEditor">
+        <p><span wicket:id="edit" class="form-control"></span></p>
+    </wicket:fragment>
+
+</wicket:panel>
+</body>
+</html>

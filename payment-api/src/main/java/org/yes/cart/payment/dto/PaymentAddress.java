@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ public interface PaymentAddress extends Serializable {
     /**
      * Get country.
      *
-     * @return coubtry.
+     * @return country.
      */
     String getCountryCode();
 
@@ -169,19 +169,19 @@ public interface PaymentAddress extends Serializable {
 
 
     /**
-     * Get comma separated list of phones of one phone.
+     * Get phone.
      *
-     * @return comma separated list of phones of one phone.
+     * @return phone.
      */
-    String getPhoneList();
+    String getPhone1();
 
 
     /**
-     * set comma separated list of phones of one phone.
+     * set phone.
      *
-     * @param phoneList comma separated list of phones of one phone.
+     * @param phone1 phone.
      */
-    void setPhoneList(String phoneList);
+    void setPhone1(String phone1);
 
 
 }

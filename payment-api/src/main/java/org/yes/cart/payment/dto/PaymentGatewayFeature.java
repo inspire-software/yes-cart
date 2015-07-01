@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public interface PaymentGatewayFeature extends Serializable {
     boolean isSupportCapture();
 
     /**
-     * Is payment gateway supports imediate sale operation, without delivery confirmation.
+     * Is payment gateway supports immediate sale operation, without delivery confirmation.
      *
      * @return true if supports
      */

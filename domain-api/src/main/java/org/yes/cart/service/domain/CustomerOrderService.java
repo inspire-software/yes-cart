@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -54,14 +56,6 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     List<CustomerOrder> findCustomerOrders(long customerId, Date since);
 
     /**
-     * Get order amount
-     *
-     * @param orderNumber given order number
-     * @return order amount
-     */
-    BigDecimal getOrderAmount(String orderNumber);
-
-    /**
      * Find customer's order by given criteria.
      *
      * @param customerId  customer id. Rest of parameters will be ignored, if customerId more that 0.
@@ -85,6 +79,24 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
             Date toDate,
             String orderNum
     );
+
+    /**
+     * Find specific delivery.
+     *
+     * @param deliveryId PK
+     * @return delivery
+     */
+    CustomerOrderDelivery findDelivery(long deliveryId);
+
+    /**
+     * Find orders, which are waiting for inventory to be completed.
+     *
+     * @param skuCodes       what sku is required. optional
+     * @param deliveryStatus status of delivery
+     * @param orderStatus    order status
+     * @return awaiting orders
+     */
+    List<Long> findAwaitingDeliveriesIds(List<String> skuCodes, String deliveryStatus, List<String> orderStatus);
 
     /**
      * Find orders, which are waiting for inventory to be completed.

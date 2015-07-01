@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -52,6 +52,11 @@
                 <prop key="fireTransition">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="handle">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="reservation*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <!-- order transitions -->
+                <prop key="updateOrderSetConfirmed*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="updateOrderSetCancelled*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="updateDeliveryStatus*">PROPAGATION_REQUIRED,readOnly</prop>
+                <prop key="transitionOrder*">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
                 <!-- Content special -->
                 <prop key="createRootContent">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Full text search -->
@@ -158,6 +163,9 @@
                 <entry key="org.yes.cart.domain.entity.ManagerShop" value="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
 
                 <entry key="org.yes.cart.domain.entity.ShoppingCartState" value="org.yes.cart.domain.entity.impl.ShoppingCartStateEntity"/>
+
+                <entry key="org.yes.cart.domain.entity.DataGroup" value="org.yes.cart.domain.entity.impl.DataGroupEntity"/>
+                <entry key="org.yes.cart.domain.entity.DataDescriptor" value="org.yes.cart.domain.entity.impl.DataDescriptorEntity"/>
 
             </map>
         </property>
@@ -499,6 +507,18 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
+    <bean id="dataGroupDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.DataGroupEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="dataDescriptorDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.DataDescriptorEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
     <bean id="hibernateSearchBridgeStaticLocator" class="org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator"/>
 
     <bean id="navigatableAttributesSupport" parent="txProxyTemplate">
@@ -527,6 +547,21 @@
         </property>
     </bean>
 
+    <bean id="skuWarehouseRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuWarehouseRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuWarehouseDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="skuPriceRelationshipSupport" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportImpl">
+                <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+            </bean>
+        </property>
+    </bean>
 
 
 </beans>

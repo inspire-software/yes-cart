@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -80,8 +80,6 @@ public interface ShoppingContext extends Serializable {
 
     /**
      * Get shopper ip address
-     *
-     * TODO: YC-361
      *
      * @return customer's IP
      */

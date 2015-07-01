@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -28,12 +28,24 @@
     <bean id="passPhraseGenerator" class="org.yes.cart.service.domain.impl.PassPhraseGeneratorImpl">
         <constructor-arg index="0" value="8"/>
     </bean>
-    <bean id="passwordHashHelper" class="org.yes.cart.service.domain.impl.MD5HashHelperImpl"/>
 
-    <bean id="managerRegistrationAspect" class="org.yes.cart.service.dto.impl.TestManagerRegistrationAspect">
+    <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
+                <property name="salt" value="YCPWSALT"/>
+                <lookup-method name="getSelf" bean="passwordHashHelper"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="managerRegistrationAspect" class="org.yes.cart.service.mail.impl.TestManagerRegistrationAspect">
         <constructor-arg ref="passPhraseGenerator"/>
         <constructor-arg ref="passwordHashHelper"/>
+    </bean>
 
+    <bean id="customerRegistrationAspect" class="org.yes.cart.service.mail.impl.TestCustomerRegistrationAspect">
+        <constructor-arg ref="passPhraseGenerator"/>
+        <constructor-arg ref="passwordHashHelper"/>
     </bean>
 
 

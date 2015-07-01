@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class CsvImportDescriptorImplTest {
 
         final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
 
-        CsvImportColumn importColumn;
+        CsvImportColumnImpl importColumn;
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
@@ -89,7 +89,7 @@ public class CsvImportDescriptorImplTest {
 
         final List<CsvImportColumn> columns = new ArrayList<CsvImportColumn>();
 
-        CsvImportColumn importColumn;
+        CsvImportColumnImpl importColumn;
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
@@ -171,18 +171,19 @@ public class CsvImportDescriptorImplTest {
         csvImportDescriptor.getImportFileDescriptor().setTextQualifier('"');
         csvImportDescriptor.setImportDirectory("/yescart/import");
 
-        CsvImportColumn csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
+        CsvImportColumnImpl csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
         csvImportColumn.setLookupQuery("select a from table a");
         csvImportColumn.setValueRegEx(".*");
         csvImportColumn.setUseMasterObject(true);
         csvImportDescriptor.setImportColumns((List) Arrays.asList(csvImportColumn));
 
 
-        csvImportColumn.setImportDescriptor(new CsvImportDescriptorImpl());
-        csvImportColumn.getImportDescriptor().setEntityType("SomeEntityIntefrace");
-        ((CsvImportDescriptorImpl) csvImportColumn.getImportDescriptor()).setImportColumns(
+        final CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
+        descriptor.setEntityType("SomeEntityIntefrace");
+        descriptor.setImportColumns(
                 (List) Arrays.asList(new CsvImportColumnImpl(0, FieldTypeEnum.FIELD, "code", "re", "lookup query")));
 
+        csvImportColumn.setImportDescriptor(descriptor);
 
 
         xmlSerializationResult = new CsvImportDescriptorXStreamProvider().toXML(csvImportDescriptor);

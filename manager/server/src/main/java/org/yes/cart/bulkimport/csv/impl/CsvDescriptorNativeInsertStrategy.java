@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class CsvDescriptorNativeInsertStrategy extends AbstractByParameterByColu
                                 final String queryTemplate) {
 
         final StringBuilder sql = new StringBuilder();
-        replaceColumnNamesInTemplate(queryTemplate, sql, null, (CsvImportDescriptor) descriptor, masterObject, tuple, adapter);
+        replaceColumnNamesInTemplate(queryTemplate, sql, null, descriptor, masterObject, tuple, adapter);
         return new NativeSQLQuery(sql.toString());
     }
 }

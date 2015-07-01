@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Shopping cart  filter responsible to restore shopping cart from cookies, if it possible.
@@ -51,16 +52,13 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
 
 
     /**
-     * @param applicationDirector app director.
      * @param tuplizerPool        pool of tuplizer to manage cookie to object to cookie transformation
      * @param calculationStrategy calculation strategy
      * @param cartCommandFactory  cart command factory
      */
-    public ShoppingCartFilter(final ApplicationDirector applicationDirector,
-                              final TargetSource tuplizerPool,
+    public ShoppingCartFilter(final TargetSource tuplizerPool,
                               final AmountCalculationStrategy calculationStrategy,
                               final ShoppingCartCommandFactory cartCommandFactory) {
-        super(applicationDirector);
         this.tuplizerPool = tuplizerPool;
         this.calculationStrategy = calculationStrategy;
         this.cartCommandFactory = cartCommandFactory;
@@ -96,6 +94,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
             cart.initialise(calculationStrategy);
             setDefaultValuesIfNecessary(ApplicationDirector.getCurrentShop(), cart);
             ApplicationDirector.setShoppingCart(cart);
+            request.setAttribute("ShoppingCart", cart);
 
         } catch (Exception e) {
             ShopCodeContext.getLog(this).error("Can process request", e);
@@ -121,14 +120,18 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      */
     private void setDefaultValuesIfNecessary(final Shop shop, final ShoppingCart cart) {
 
+        final Map<String, Object> params = new HashMap<String, Object>();
         if (cart.getCurrencyCode() == null && shop != null) { // new cart only may satisfy this condition
 
-            cartCommandFactory.execute(cart, new HashMap<String, Object>() {{
-                put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
-                put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
-            }});
+            params.put(ShoppingCartCommand.CMD_SETSHOP, shop.getShopId());
+            params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, shop.getDefaultCurrency());
+
+            cartCommandFactory.execute(cart, params);
 
         }
+
+        params.put(ShoppingCartCommand.CMD_INTERNAL_SETIP, ApplicationDirector.getShopperIPAddress());
+        cartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_SETIP, cart, params);
 
     }
 
@@ -139,6 +142,7 @@ public class ShoppingCartFilter extends AbstractFilter implements Filter {
      */
     public void doAfter(final ServletRequest servletRequest, final ServletResponse servletResponse) throws IOException, ServletException {
         ApplicationDirector.setShoppingCart(null);
+        servletRequest.removeAttribute("ShoppingCart");
     }
 
 

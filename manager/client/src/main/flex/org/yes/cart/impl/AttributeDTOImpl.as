@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -46,11 +46,11 @@ public class AttributeDTOImpl {
 
     public var regexp:String;
 
-    public var validationFailedMessage:String;
+    public var validationFailedMessage:Object;
 
     public var rank:int;
 
-    public var  choiceData:String;
+    public var choiceData:Object;
 
 
 

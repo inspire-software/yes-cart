@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 
@@ -37,6 +38,7 @@ public class CartItemImpl implements CartItem {
 
     private String productSkuCode;
 
+    @JsonProperty("qty")
     private BigDecimal quantity = DEFAULT_QUANTITY;
 
     private BigDecimal price = BigDecimal.ZERO;

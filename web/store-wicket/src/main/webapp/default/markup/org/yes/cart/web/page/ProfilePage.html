@@ -1,0 +1,119 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+    <meta wicket:id="created" name="date" content=""/>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex" />
+
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('body').scrollspy({ target: '#profileScroll' });
+        });
+    </script>
+
+</wicket:head>
+
+<body>
+
+    <span wicket:id="header">[header]</span>
+
+    <div class="container">
+
+        <div class="profile-page">
+            <div class="hidden-xs hidden-sm col-md-3" id="profileScroll">
+                <ul class="nav nav-tabs nav-stacked affix-top" data-spy="affix" data-offset-top="150">
+                    <li class="active"><a href="#customerSummary"><wicket:message key="customerSummary">[summary]</wicket:message></a></li>
+                    <li><a href="#customerAdditional"><wicket:message key="customerAdditional">[additional]</wicket:message></a></li>
+                    <li><a href="#password"><wicket:message key="password">[password]</wicket:message></a></li>
+                    <li><a href="#addresses"><wicket:message key="addresses">[addresses]</wicket:message></a></li>
+                </ul>
+            </div>
+
+            <div class="col-xs-12 col-md-9 profile-sections">
+
+                <div class="col-xs-12">
+                    <span wicket:id="feedback">[feedback panel]</span>
+                </div>
+
+                <div class="col-xs-12">
+                    <h2><wicket:message key="profileSummary">[profileSummary]</wicket:message></h2>
+                </div>
+                <div class="col-xs-12">
+                    <wicket:container wicket:id="summaryView">
+                        [summary info]
+                    </wicket:container>
+                </div>
+                <div class="col-xs-12">
+                    <wicket:container wicket:id="attributesView">
+                        [optional info]
+                    </wicket:container>
+                </div>
+                <div class="col-xs-12">
+                    <wicket:container wicket:id="passwordView">
+                        [change password]
+                    </wicket:container>
+                </div>
+                <div class="col-xs-12">
+                    <h2 class="col-xs-12 profile-title address-title">
+                        <wicket:message key="addresses">[addresses]</wicket:message>
+                    </h2>
+
+                    <wicket:container wicket:id="shippingAddressesView">
+                        [shipping address]
+                    </wicket:container>
+
+                    <wicket:container wicket:id="billingAddressesView">
+                        [billing address]
+                    </wicket:container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+</body>
+</html>

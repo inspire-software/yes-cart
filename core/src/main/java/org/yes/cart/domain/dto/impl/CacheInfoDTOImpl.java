@@ -1,6 +1,6 @@
 
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,6 +40,12 @@ public class CacheInfoDTOImpl implements Serializable {
     private long  calculateInMemorySize;
 
     private long  calculateOnDiskSize;
+
+    private long  hits;
+
+    private long  misses;
+
+    private boolean stats;
 
     private String nodeId;
 
@@ -109,16 +115,36 @@ public class CacheInfoDTOImpl implements Serializable {
         this.inMemorySize = inMemorySize;
     }
 
-    public CacheInfoDTOImpl(final String cacheName, final int cacheSize, final long inMemorySize) {
-        this.cacheName = cacheName;
-        this.cacheSize = cacheSize;
-        this.inMemorySize = inMemorySize;
+    public long getHits() {
+        return hits;
+    }
+
+    public void setHits(final long hits) {
+        this.hits = hits;
+    }
+
+    public long getMisses() {
+        return misses;
+    }
+
+    public void setMisses(final long misses) {
+        this.misses = misses;
+    }
+
+    public boolean isStats() {
+        return stats;
+    }
+
+    public void setStats(final boolean stats) {
+        this.stats = stats;
     }
 
     public CacheInfoDTOImpl(final String cacheName,
                             final int cacheSize,
                             final long inMemorySize,
                             final int diskStoreSize,
+                            final long hits,
+                            final long misses,
                             final long calculateInMemorySize,
                             final long calculateOnDiskSize) {
         this.cacheName = cacheName;
@@ -127,26 +153,25 @@ public class CacheInfoDTOImpl implements Serializable {
         this.diskStoreSize = diskStoreSize;
         this.calculateInMemorySize = calculateInMemorySize;
         this.calculateOnDiskSize = calculateOnDiskSize;
+        this.hits = hits;
+        this.misses = misses;
+        this.stats = true;
     }
-
 
     public CacheInfoDTOImpl(final String cacheName,
                             final int cacheSize,
                             final long inMemorySize,
-                            final int diskStoreSize,
-                            final long calculateInMemorySize,
-                            final long calculateOnDiskSize,
-                            final String nodeUri) {
+                            final int diskStoreSize) {
         this.cacheName = cacheName;
         this.cacheSize = cacheSize;
         this.inMemorySize = inMemorySize;
         this.diskStoreSize = diskStoreSize;
-        this.calculateInMemorySize = calculateInMemorySize;
-        this.calculateOnDiskSize = calculateOnDiskSize;
-        this.nodeUri = nodeUri;
-
+        this.calculateInMemorySize = -1;
+        this.calculateOnDiskSize = -1;
+        this.hits = -1;
+        this.misses = -1;
+        this.stats = false;
     }
-
 
 
     public CacheInfoDTOImpl() {

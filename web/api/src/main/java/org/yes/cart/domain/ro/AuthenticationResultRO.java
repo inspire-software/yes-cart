@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.yes.cart.domain.ro;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * User: denispavlov
@@ -25,12 +26,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Time: 14:55
  */
 @XmlRootElement(name = "authentication-result")
-public class AuthenticationResultRO {
+public class AuthenticationResultRO implements Serializable {
+
+    private static final long serialVersionUID = 20150301L;
 
     private boolean authenticated;
     private String code;
     private String greeting;
-    private TokenRO tokenRO;
+    private TokenRO token;
 
     public AuthenticationResultRO() {
     }
@@ -55,7 +58,7 @@ public class AuthenticationResultRO {
     public AuthenticationResultRO(final String greeting, final TokenRO token) {
         this.authenticated = true;
         this.greeting = greeting;
-        this.tokenRO = token;
+        this.token = token;
     }
 
     public boolean isAuthenticated() {
@@ -83,11 +86,11 @@ public class AuthenticationResultRO {
     }
 
     @XmlElement(name = "token")
-    public TokenRO getTokenRO() {
-        return tokenRO;
+    public TokenRO getToken() {
+        return token;
     }
 
-    public void setTokenRO(final TokenRO tokenRO) {
-        this.tokenRO = tokenRO;
+    public void setToken(final TokenRO token) {
+        this.token = token;
     }
 }

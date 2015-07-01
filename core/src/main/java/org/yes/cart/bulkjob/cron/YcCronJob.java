@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.service.ws.node.NodeService;
+import org.yes.cart.cluster.node.NodeService;
 
 /**
  * Generic job contained to run Runnable jobs.
@@ -47,7 +47,7 @@ public class YcCronJob extends QuartzJobBean implements StatefulJob {
         final Runnable job = (Runnable) context.getMergedJobDataMap().get("job");
         final NodeService nodeService = (NodeService) context.getMergedJobDataMap().get("nodeService");
 
-        final String nodeId = nodeService.getCurrentNodeId();
+        final String nodeId = nodeService.getCurrentNode().getId();
 
         log.info("Starting job {} on {}", jobName, nodeId);
 

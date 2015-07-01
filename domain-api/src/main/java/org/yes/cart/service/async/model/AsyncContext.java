@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ public interface AsyncContext {
     String USERNAME = "USERNAME";
     String CREDENTIALS = "CREDENTIALS";
     String FLEX_SESSION_CREDENTIALS = "pwd";
+    String TIMEOUT_KEY = "TIMEOUT_KEY";
 
     /**
      * Convenience method for retrieving attributes.

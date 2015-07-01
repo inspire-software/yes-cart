@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package org.yes.cart.utils.impl;
 
-import org.springframework.core.convert.support.ConversionServiceFactory;
+import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 
 
@@ -29,7 +29,7 @@ public class ExtendedConversionService extends GenericConversionService {
 
     public ExtendedConversionService() {
         super();
-        ConversionServiceFactory.addDefaultConverters(this);
+        DefaultConversionService.addDefaultConverters(this);
         addConverter(new StringValueToPairListConverter());
         addConverter(new StringValueToDateConverter());
     }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+ <configuration debug="false">
+
+    <appender name="SHOP20" class="ch.qos.logback.core.FileAppender">
+        <File>target/shop20.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="SHOP10" class="ch.qos.logback.core.FileAppender">
+        <File>target/shop10.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="DEFAULT" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <Append>true</Append>
+        <File>yes-cart-default.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>yes-cart-default.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+    <!--<logger name="org.hibernate.jdbc" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.type" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.transaction" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.yes" level="INFO"/>-->
+    <!--<logger name="org.hibernate.pretty">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <logger name="org.hibernate.tool.hbm2ddl" level="OFF">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <!--<logger name="org.hibernate" level="OFF">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.secure" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.SQL" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="net.sf.hibernate" level="OFF">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="com.opensymphony.oscache" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <!--<logger name="org.hibernate.cache" level="INFO">-->
+        <!--<appender-ref ref="stdout"/>-->
+    <!--</logger>-->
+    <logger name="SHOP20" additivity="false" level="debug">
+        <appender-ref ref="SHOP20"/>
+    </logger>
+    <logger name="SHOP10" additivity="false" level="debug">
+        <appender-ref ref="SHOP10"/>
+    </logger>
+    <root level="ERROR"><!-- Lower logging level to diagnose problems with tests -->
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

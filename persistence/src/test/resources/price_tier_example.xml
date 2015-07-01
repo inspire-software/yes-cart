@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
   -->
 
 <price-navigation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/xstream/category-price-navigation-1.0.0.xsd">
+                  xsi:noNamespaceSchemaLocation="file:../../../../domain-api/src/main/resources/META-INF/schema/category-price-navigation.xsd">
     <currencies>
         <currency>
             <name>EUR</name>

@@ -9,7 +9,6 @@ import org.yes.cart.domain.dto.DtoPaymentGatewayInfo;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl;
-import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 
 import java.util.*;

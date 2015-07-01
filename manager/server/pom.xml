@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -22,22 +22,12 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>2.3.0-SNAPSHOT</version>
+        <version>3.0.0-SHAPSHOT</version>
     </parent>
     <artifactId>yes-manager</artifactId>
     <packaging>war</packaging>
-    <name>Yes cart manager server</name>
+    <name>Yes cart YUM: server</name>
     <description>Yes cart manager server</description>
-    <properties>
-        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
-        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
-        <blazeds.version>4.0.0.14931</blazeds.version>
-
-        <junit.version>4.0</junit.version>
-        <servlet-api.version>2.5</servlet-api.version>
-        <mysql-connector.version>5.1.13</mysql-connector.version>
-        <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
-    </properties>
     <repositories>
         <repository>
             <id>spring-maven-external</id>
@@ -54,6 +44,21 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-dto</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-orderstate</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-cluster-ws</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
@@ -66,12 +71,6 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-        <!-- dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>yes-manager-client</artifactId>
-            <version>${project.parent.version}</version>
-            <type>swf</type>
-        </dependency -->
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>domain-api</artifactId>
@@ -159,11 +158,6 @@
             <version>${backport-util-concurrent.version}</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
             <version>${cxf.version}</version>
@@ -211,6 +205,7 @@
     </dependencies>
 
     <profiles>
+
         <profile>
             <id>mysql</id>
             <dependencies>
@@ -221,6 +216,7 @@
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
@@ -237,6 +233,89 @@
                 </dependency>
             </dependencies>
         </profile>
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>paymentAll</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPay</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-liqpay</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentCybersource</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-cybersource</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorize</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-authorizenet</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentPaypal</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>jgroups</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <id>templates</id>
             <build>
@@ -275,6 +354,7 @@
                                                     <include>en_US/**</include>
                                                     <include>ru_RU/**</include>
                                                     <include>uk_UK/**</include>
+                                                    <include>de_DE/**</include>
                                                 </includes>
                                             </resource>
                                         </resources>
@@ -289,6 +369,39 @@
     </profiles>
 
     <build>
+
+        <filters>
+            <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+        </filters>
+
+        <testResources>
+            <testResource>
+                <directory>../../payment-api/src/test/resources</directory>
+                <includes>
+                    <include>**/test-payment-api.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>../../core-modules/core-module-payment-base/src/test/resources</directory>
+                <includes>
+                    <include>**/test-core-module-payment-base.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </testResource>
+        </testResources>
+
         <finalName>yes-manager</finalName>
 
         <pluginManagement>
@@ -363,6 +476,7 @@
                                     <include>en_US/**</include>
                                     <include>ru_RU/**</include>
                                     <include>uk_UK/**</include>
+                                    <include>de_DE/**</include>
                                 </includes>
                             </resource>
                             <resource>

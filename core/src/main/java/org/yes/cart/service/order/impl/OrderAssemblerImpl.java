@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -122,6 +122,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         customerOrder.setOrderTimestamp(new Date());
         customerOrder.setGuid(shoppingCart.getGuid());
         customerOrder.setCartGuid(shoppingCart.getGuid());
+        customerOrder.setOrderIp(shoppingCart.getShoppingContext().getResolvedIp());
 
         customerOrder.setListPrice(cartTotal.getListSubTotal());
         customerOrder.setPrice(cartTotal.getSubTotal());
@@ -163,9 +164,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     usage.setCustomerEmail(shoppingCart.getCustomerEmail());
                     usage.setCustomerOrder(customerOrder);
 
-                    customerOrder.getCoupons().add(usage);
-
-                    promotionCouponService.updateUsage(coupon, 1);
+                    customerOrder.getCoupons().add(usage); // Usage is tracked by order state manager listener
 
                 }
             }
@@ -207,7 +206,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
             }
             if (shippingAddress == null) {
-                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPING);
+                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             }
 
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
@@ -314,7 +313,14 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setFirstname(address.getFirstname());
             copy.setLastname(address.getLastname());
             copy.setMiddlename(address.getMiddlename());
-            copy.setPhoneList(address.getPhoneList());
+            copy.setPhone1(address.getPhone1());
+            copy.setPhone2(address.getPhone2());
+            copy.setEmail1(address.getEmail1());
+            copy.setEmail2(address.getEmail2());
+            copy.setCustom1(address.getCustom1());
+            copy.setCustom2(address.getCustom2());
+            copy.setCustom3(address.getCustom3());
+            copy.setCustom4(address.getCustom4());
 
             return copy;
         }

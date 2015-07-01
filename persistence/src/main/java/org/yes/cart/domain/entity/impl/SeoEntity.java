@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -91,6 +91,19 @@ public class SeoEntity implements org.yes.cart.domain.entity.Seo, java.io.Serial
 
     public void setDisplayMetadescription(final String displayMetadescription) {
         this.displayMetadescription = displayMetadescription;
+    }
+
+    @Override
+    public String toString() {
+        return "SeoEntity{" +
+                "uri:'" + uri + '\'' +
+                ",title:'" + title + '\'' +
+                ",displayTitle:'" + displayTitle + '\'' +
+                ",metakeywords:'" + metakeywords + '\'' +
+                ",displayMetakeywords:'" + displayMetakeywords + '\'' +
+                ",metadescription:'" + metadescription + '\'' +
+                ",displayMetadescription:'" + displayMetadescription + '\'' +
+                '}';
     }
 }
 

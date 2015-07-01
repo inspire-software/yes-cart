@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class PriceListDTOImpl {
                ",salePrice=" + String(salePrice) +
                ",salefrom=" + String(salefrom) +
                ",saleto=" + String(saleto) +
-               ",productSkuId=" + skuCode +
+               ",skuCode=" + skuCode +
                ",shopId=" + shopCode +
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -129,11 +129,11 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     public List<Pair<String, SkuPrice>> getAllPrices(final long productId) {
-        final List<Object[]> prices = (List) getGenericDao().findQueryObjectsByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
+        final List<SkuPrice> prices = skuPriceDao.findByNamedQuery("SKUPRICE.BY.PRODUCT", productId);
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
-            for (final Object[] price : prices) {
-                rez.add(new Pair<String, SkuPrice>((String) price[1], (SkuPrice) price[0]));
+            for (final SkuPrice price : prices) {
+                rez.add(new Pair<String, SkuPrice>(price.getSkuCode(), price));
             }
             return rez;
         }
@@ -177,7 +177,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             "productService-skuById"
     }, allEntries = true)
     public void removeAllPrices(final ProductSku sku) {
-         getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", sku);
+         getGenericDao().executeUpdate("REMOVE.ALL.SKUPRICE.BY.SKUCODE", sku.getCode());
 
      }
 
@@ -185,8 +185,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById"
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse"
     }, allEntries = true)
     public void removeAllInventory(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
@@ -199,21 +199,50 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * {@inheritDoc}
      */
     @CacheEvict(value = {
-        "productSkuService-productSkuBySkuCode",
-        "productService-skuById"
+        "skuWarehouseService-productSkusOnWarehouse",
+        "skuWarehouseService-productOnWarehouse"
     }, allEntries = true)
     public void removeAllInventory(final ProductSku sku) {
-            getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku);
+            getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku.getCode());
     }
 
     /**
      * {@inheritDoc}
      */
-    /*public void delete(ProductSku instance) {
-        getGenericDao().executeUpdate("REMOVE.ALL.SKU.PRICES", instance);
-        getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", instance);
-        getGenericDao().evict(instance.getProduct());
+    @CacheEvict(value = {
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse",
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById",
+            "productService-productById"
+    }, allEntries = true)
+    public ProductSku create(final ProductSku instance) {
+        return super.create(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById"
+    }, allEntries = true)
+    public ProductSku update(final ProductSku instance) {
+        return super.update(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "skuWarehouseService-productSkusOnWarehouse",
+            "skuWarehouseService-productOnWarehouse",
+            "productSkuService-productSkuBySkuCode",
+            "productService-skuById",
+            "productService-productById"
+    }, allEntries = true)
+    public void delete(final ProductSku instance) {
         super.delete(instance);
-        instance.getProduct().getSku().remove(instance);
-    }*/
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ public class AttributeGroupEntity implements org.yes.cart.domain.entity.Attribut
     private String code;
     private String name;
     private String description;
-    private Set<Attribute> attributes = new HashSet<Attribute>(0);
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -67,14 +66,6 @@ public class AttributeGroupEntity implements org.yes.cart.domain.entity.Attribut
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Set<Attribute> getAttributes() {
-        return this.attributes;
-    }
-
-    public void setAttributes(Set<Attribute> attributes) {
-        this.attributes = attributes;
     }
 
     public Date getCreatedTimestamp() {

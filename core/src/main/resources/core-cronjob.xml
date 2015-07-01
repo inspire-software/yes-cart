@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -33,24 +33,13 @@
         </property>
     </bean>
 
-    <bean id="bulkAwaitingInvetoryDeliveriesProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
-                <constructor-arg index="0" ref="customerOrderService"/>
-                <constructor-arg index="1" ref="orderStateManager"/>
-                <constructor-arg index="2" ref="skuWarehouseService"/>
-                <constructor-arg index="3" ref="systemService"/>
-                <constructor-arg index="4" ref="runtimeAttributeService"/>
-            </bean>
-        </property>
-    </bean>
-
     <bean id="bulkCustomerTagProcessor" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
                 <constructor-arg index="0" ref="shopService"/>
                 <constructor-arg index="1" ref="customerService"/>
                 <constructor-arg index="2" ref="promotionContextFactory"/>
+                <property name="batchSize" value="20"/>
             </bean>
         </property>
     </bean>
@@ -59,7 +48,10 @@
         <property name="target">
             <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
                 <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="systemService"/>
                 <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
+                <property name="batchSize" value="20"/> <!-- CPOINT -->
             </bean>
         </property>
     </bean>

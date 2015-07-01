@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -42,6 +42,10 @@ public enum DataTypeEnum {
     /**
      * BigDecimal value.
      */
-    DECIMAL
+    DECIMAL,
+    /**
+     * Date value. For date format see {@link org.yes.cart.constants.Constants#DEFAULT_IMPORT_DATE_TIME_FORMAT}
+     */
+    DATETIME,
 
 }

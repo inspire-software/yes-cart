@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -35,7 +35,10 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String lastname;
     private String middlename;
     private String password;
+    private String authToken;
+    private Date authTokenExpiry;
     private String tag;
+    private String publicKey;
 
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<CustomerWishList>(0);
@@ -93,6 +96,22 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.password = password;
     }
 
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(final String authToken) {
+        this.authToken = authToken;
+    }
+
+    public Date getAuthTokenExpiry() {
+        return authTokenExpiry;
+    }
+
+    public void setAuthTokenExpiry(final Date authTokenExpiry) {
+        this.authTokenExpiry = authTokenExpiry;
+    }
+
     public String getTag() {
         return this.tag;
     }
@@ -101,6 +120,13 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.tag = tag;
     }
 
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(final String publicKey) {
+        this.publicKey = publicKey;
+    }
 
     public Collection<CustomerOrder> getOrders() {
         return this.orders;

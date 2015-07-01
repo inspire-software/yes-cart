@@ -1,0 +1,108 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+    <meta wicket:id="created" name="date" content=""/>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery.carouFredSel-6.2.1.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../js/slimbox2.js"></script>
+        <link rel="stylesheet" href="../../../../../style/slimbox2.css" type="text/css" media="screen" />
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
+
+</wicket:head>
+
+<body>
+
+    <wicket:container wicket:id="header">
+        [header]
+    </wicket:container>
+
+    <wicket:container wicket:id="featured">
+        [featured products]
+    </wicket:container>
+
+    <div class="col-xs-12">
+        <span wicket:id="feedback">[feedback panel]</span>
+    </div>
+
+    <wicket:container wicket:id="breadCrumbs">
+        [bread crumbs]
+    </wicket:container>
+
+    <wicket:container wicket:id="centralView">
+        [central view]
+    </wicket:container>
+
+
+    <div class="container">
+        <div class="bottom-tabs-holder">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#newarrival" data-toggle="tab">
+                    <wicket:message key="newArrivals">[Profile]</wicket:message>
+                </a></li>
+                <li><a href="#viewed" data-toggle="tab">
+                    <wicket:message key="recentlyViewed">[Profile]</wicket:message>
+                </a></li>
+            </ul>
+            <div id="bottomTabs" class="tab-content">
+                <div class="tab-pane active" id="newarrival">
+                    <wicket:container wicket:id="newArrival">
+                        [category new arrival and promo]
+                    </wicket:container>
+                </div>
+                <div class="tab-pane" id="viewed">
+                    <wicket:container wicket:id="recentlyViewed">
+                        [recently viewed items]
+                    </wicket:container>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+</body>
+</html>

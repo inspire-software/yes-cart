@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import java.util.*;
  */
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger("FTQ");
+    private final Logger LOG = LoggerFactory.getLogger("FTQ");
 
     private final AttributeService attributeService;
     private final ProductService productService;

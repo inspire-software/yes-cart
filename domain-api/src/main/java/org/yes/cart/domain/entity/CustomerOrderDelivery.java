@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,6 +37,11 @@ public interface CustomerOrderDelivery extends Auditable {
      * On fulfilment center.
      */
     String DELIVERY_STATUS_ON_FULLFILMENT = "ds.fullfillment";
+
+    /**
+     * Wait for allocation. Use for standard.
+     */
+    String DELIVERY_STATUS_ALLOCATION_WAIT = "ds.wait.allocation";
 
     /**
      * Wait for particular date. Use for preorder.
@@ -85,9 +90,19 @@ public interface CustomerOrderDelivery extends Auditable {
     String DELIVERY_STATUS_SHIPMENT_READY = "ds.shipment.ready";
 
     /**
+     * Wait for shipment (online CAPTURE failed).
+     */
+    String DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT = "ds.shipment.ready.waiting.payment";
+
+    /**
      * Delivery in progress.
      */
     String DELIVERY_STATUS_SHIPMENT_IN_PROGRESS = "ds.shipment.inprogress";
+
+    /**
+     * Delivery in progress (offline CAPTURE pending).
+     */
+    String DELIVERY_STATUS_SHIPMENT_IN_PROGRESS_WAITING_PAYMENT = "ds.shipment.inprogress.waiting.payment";
 
     /**
      * Delivered.

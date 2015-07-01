@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,18 +16,26 @@
 
 package org.yes.cart.web.service.rest;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.ro.*;
+import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.ro.AttrValueCategoryRO;
+import org.yes.cart.domain.ro.BreadcrumbRO;
+import org.yes.cart.domain.ro.ContentListRO;
+import org.yes.cart.domain.ro.ContentRO;
+import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.service.rest.impl.BookmarkMixin;
+import org.yes.cart.web.service.rest.impl.CartMixin;
+import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.BookmarkService;
@@ -45,7 +53,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping("/content")
-public class ContentController extends AbstractApiController {
+public class ContentController {
 
     @Autowired
     private CentralViewResolver centralViewResolver;
@@ -56,22 +64,33 @@ public class ContentController extends AbstractApiController {
     @Autowired
     private AttributeService attributeService;
 
+    @Autowired
+    private CartMixin cartMixin;
+    @Autowired
+    @Qualifier("restRoMappingMixin")
+    private RoMappingMixin mappingMixin;
+    @Autowired
+    private BookmarkMixin bookmarkMixin;
 
     private ContentRO viewContentInternal(final String content,
                                           final Map<String, Object> contentParams) {
 
-        final long contentId = resolveId(content);
+        final long contentId = bookmarkMixin.resolveContentId(content);
         final long shopId = ShopCodeContext.getShopId();
 
         final Category contentEntity = contentServiceFacade.getContent(contentId, shopId);
 
         if (contentEntity != null && !CentralViewLabel.INCLUDE.equals(contentEntity.getUitemplate())) {
 
-            final ContentRO cntRO = map(contentEntity, ContentRO.class, Category.class);
+            final ContentRO cntRO = mappingMixin.map(contentEntity, ContentRO.class, Category.class);
             cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), shopId));
             removeContentBodyAttributes(cntRO);
             cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), shopId, contentParams));
-            cntRO.setUitemplate(resolveTemplate(cntRO));
+            final Pair<String, String> templates = resolveTemplate(cntRO);
+            if (templates != null) {
+                cntRO.setUitemplate(templates.getFirst());
+                cntRO.setUitemplateFallback(templates.getSecond());
+            }
             return cntRO;
 
         }
@@ -190,7 +209,7 @@ public class ContentController extends AbstractApiController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, null);
     }
@@ -270,7 +289,7 @@ public class ContentController extends AbstractApiController {
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_JSON_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public @ResponseBody ContentRO viewContent(@PathVariable(value = "id") final String content,
@@ -278,7 +297,7 @@ public class ContentController extends AbstractApiController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, params);
     }
@@ -363,7 +382,7 @@ public class ContentController extends AbstractApiController {
     @RequestMapping(
             value = "/view/{id}",
             method = RequestMethod.PUT,
-            produces = MediaType.APPLICATION_XML_VALUE,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             consumes = MediaType.APPLICATION_XML_VALUE
     )
     public @ResponseBody ContentRO viewContentXML(@PathVariable(value = "id") final String content,
@@ -371,21 +390,21 @@ public class ContentController extends AbstractApiController {
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, (Map) params.getParameters());
     }
 
     private List<ContentRO> listContentInternal(final String content) {
 
-        final long contentId = resolveId(content);
+        final long contentId = bookmarkMixin.resolveContentId(content);
         final long shopId = ShopCodeContext.getShopId();
 
         final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
 
         if (!menu.isEmpty()) {
 
-            final List<ContentRO> cnts = map(menu, ContentRO.class, Category.class);
+            final List<ContentRO> cnts = mappingMixin.map(menu, ContentRO.class, Category.class);
             if (cnts.size() > 0) {
 
                 for (final ContentRO cnt : cnts) {
@@ -476,7 +495,7 @@ public class ContentController extends AbstractApiController {
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return listContentInternal(content);
 
@@ -561,29 +580,19 @@ public class ContentController extends AbstractApiController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-        persistShoppingCart(request, response);
+        cartMixin.persistShoppingCart(request, response);
 
         return new ContentListRO(listContentInternal(content));
 
     }
 
 
-    private String resolveTemplate(final ContentRO catRO) {
+    private Pair<String, String> resolveTemplate(final ContentRO catRO) {
         final Map params = new HashMap();
         params.put(WebParametersKeys.CONTENT_ID, String.valueOf(catRO.getCategoryId()));
         return centralViewResolver.resolveMainPanelRendererLabel(params);
     }
 
-
-    private long resolveId(final String content) {
-        final long contentId = NumberUtils.toLong(content, 0L);
-        if (contentId > 0L) {
-            bookmarkService.saveBookmarkForContent(content);
-            return contentId;
-        }
-        final String contentIdStr = bookmarkService.getContentForURI(content);
-        return NumberUtils.toLong(contentIdStr, 0L);
-    }
 
     private List<BreadcrumbRO> generateBreadcrumbs(final long contentId, final long shopId) {
 
@@ -600,7 +609,7 @@ public class ContentController extends AbstractApiController {
                 break;
             }
 
-            final BreadcrumbRO crumb = map(cat, BreadcrumbRO.class, Category.class);
+            final BreadcrumbRO crumb = mappingMixin.map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
 
             current = cat.getParentId();
@@ -641,14 +650,14 @@ public class ContentController extends AbstractApiController {
 
     private String generateContentBody(final long contentId, final long shopId, final Map<String, Object> parameters) {
 
-        final ShoppingCart cart = getCurrentCart();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
         final String locale = cart.getCurrentLocale();
 
         if (parameters != null && !parameters.isEmpty()) {
 
             final Map<String, Object> params = new HashMap<String, Object>(parameters);
 
-            params.put("shop", getCurrentShop());
+            params.put("shop", cartMixin.getCurrentShop());
             params.put("shoppingCart", cart);
 
             return contentServiceFacade.getDynamicContentBody(contentId, shopId, locale, params);

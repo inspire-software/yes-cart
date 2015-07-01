@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartUpdateProcessor;
+import org.yes.cart.web.support.shoppingcart.tokendriven.ShoppingCartStateSerializer;
 
-import java.io.*;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,13 +40,16 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private final ShoppingCartStateService shoppingCartStateService;
     private final AddressService addressService;
     private final ShoppingCartCommandFactory shoppingCartCommandFactory;
+    private final ShoppingCartStateSerializer shoppingCartStateSerializer;
 
     public CartUpdateProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
                                    final AddressService addressService,
-                                   final ShoppingCartCommandFactory shoppingCartCommandFactory) {
+                                   final ShoppingCartCommandFactory shoppingCartCommandFactory,
+                                   final ShoppingCartStateSerializer shoppingCartStateSerializer) {
         this.shoppingCartStateService = shoppingCartStateService;
         this.addressService = addressService;
         this.shoppingCartCommandFactory = shoppingCartCommandFactory;
+        this.shoppingCartStateSerializer = shoppingCartStateSerializer;
     }
 
     /** {@inheritDoc} */
@@ -174,13 +175,16 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private void mergeCouponCodes(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
         for (final String coupon : oldCart.getCoupons()) {
+            // Only add coupon codes that are not in the current cart
+            if (!shoppingCart.getCoupons().contains(coupon)) {
 
-            cmdParams.clear();
+                cmdParams.clear();
 
-            cmdParams.put(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
+                cmdParams.put(ShoppingCartCommand.CMD_ADDCOUPON, coupon);
 
-            shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
+                shoppingCartCommandFactory.execute(shoppingCart, cmdParams);
 
+            }
 
         }
     }
@@ -188,7 +192,8 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     private void mergeNonGiftSKU(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
         for (final CartItem cartItem : oldCart.getCartItemList()) {
-            if (!cartItem.isGift()) {
+            // Only merge non gifts and items that are NOT already in the cart
+            if (!cartItem.isGift() && shoppingCart.indexOfProductSku(cartItem.getProductSkuCode()) == -1) {
 
                 cmdParams.clear();
 
@@ -207,63 +212,15 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
     @Override
     public ShoppingCart restoreState(final byte[] bytes) {
 
-        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
-        ObjectInputStream objectInputStream = null;
-        try {
+        return shoppingCartStateSerializer.restoreState(bytes);
 
-            objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            final ShoppingCart shoppingCart = (ShoppingCart) objectInputStream.readObject();
-            return shoppingCart;
-
-        } catch (Exception exception) {
-            final String errMsg = "Unable to convert bytes assembled from tuple into object";
-            ShopCodeContext.getLog(this).error(errMsg, exception);
-            return null;
-        } finally {
-            try {
-                if (objectInputStream != null) {
-                    objectInputStream.close();
-                }
-                byteArrayInputStream.close();
-            } catch (IOException ioe) { // leave this one silent as we have the object.
-                ShopCodeContext.getLog(this).error("Unable to close object stream", ioe);
-            }
-
-        }
     }
 
     /** {@inheritDoc} */
     @Override
     public byte[] saveState(final ShoppingCart shoppingCart) {
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        ObjectOutputStream objectOutputStream = null;
-        try {
-
-            objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-            objectOutputStream.writeObject(shoppingCart);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-
-            return byteArrayOutputStream.toByteArray();
-
-        } catch (Throwable ioe) {
-            ShopCodeContext.getLog(this).error(
-                    MessageFormat.format("Unable to serialize object {0}", shoppingCart),
-                    ioe
-            );
-        } finally {
-            try {
-                if (objectOutputStream != null) {
-                    objectOutputStream.close();
-                }
-                byteArrayOutputStream.close();
-            } catch (IOException e) {
-                ShopCodeContext.getLog(this).error("Can not close stream", e);
-            }
-        }
-        return null;
+        return shoppingCartStateSerializer.saveState(shoppingCart);
 
     }
 

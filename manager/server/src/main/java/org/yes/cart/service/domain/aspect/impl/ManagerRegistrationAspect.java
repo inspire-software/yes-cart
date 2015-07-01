@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -45,10 +45,10 @@ import java.util.Arrays;
 public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
 
-    private static final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
+    private final Logger LOG = LoggerFactory.getLogger(ManagerRegistrationAspect.class);
 
 
-    private final HashHelper hashHelper;
+    private final HashHelper passwordHashHelper;
 
     private final PassPhrazeGenerator phrazeGenerator;
 
@@ -63,12 +63,12 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
      */
     public ManagerRegistrationAspect( final TaskExecutor taskExecutor,
                                       final PassPhrazeGenerator phrazeGenerator,
-                                      final HashHelper hashHelper,
+                                      final HashHelper passwordHashHelper,
                                       final MailService mailService,
                                       final MailComposer mailComposer
                                       ) {
         super(taskExecutor);
-        this.hashHelper = hashHelper;
+        this.passwordHashHelper = passwordHashHelper;
         this.phrazeGenerator = phrazeGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
@@ -80,11 +80,11 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
      */
     public ManagerRegistrationAspect(
             final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper hashHelper,
+            final HashHelper passwordHashHelper,
             final MailService mailService,
             final MailComposer mailComposer) {
         super(null);
-        this.hashHelper = hashHelper;
+        this.passwordHashHelper = passwordHashHelper;
         this.phrazeGenerator = phrazeGenerator;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
@@ -109,7 +109,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
 
     private void setNewPassword(Manager manager) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         final String generatedPassword  = phrazeGenerator.getNextPassPhrase();
-        final String passwordHash = hashHelper.getHash(generatedPassword);
+        final String passwordHash = passwordHashHelper.getHash(generatedPassword);
         manager.setPassword(passwordHash);
 
         final RegistrationMessage registrationMessage = new RegistrationMessageImpl();

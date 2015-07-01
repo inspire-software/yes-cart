@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
         <property name="javaMailProperties">
             <props>
                 <!-- Use SMTP-AUTH to authenticate to SMTP server -->
-                <!--<prop key="mail.smtp.auth">true</prop>-->
+                <prop key="mail.smtp.auth">${yum.mail.smtp.auth.enable}</prop>
                 <!-- Use TLS to encrypt communication with SMTP server -->
                 <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
             </props>

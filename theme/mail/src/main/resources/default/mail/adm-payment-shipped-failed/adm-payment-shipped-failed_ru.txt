@@ -1,0 +1,15 @@
+Не удалось выполнить оплату для доставки $param1 для заказа $root.ordernum на $shop.name,
+товары подготовлены к отправке.
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+    for (Object payment : payments) {
+          out.println(lineDelimiter);
+          def line = "| " + payment.transactionGatewayLabel  + " | " + payment.orderShipment + " | " +  payment.transactionOperation + " | " + payment.paymentProcessorResult + " | " + payment.paymentAmount + " | " + payment.createdTimestamp;
+          out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+    }
+} catch (Exception e) {
+out.print(e.getMessage());
+}
+%>

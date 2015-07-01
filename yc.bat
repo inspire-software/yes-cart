@@ -95,30 +95,20 @@ if %1.==derbycon. (
     call cd %RUNDIR%
 	goto finish
 )
-if %1.==clndemo. (
-    call cd %YC_HOME%
-	set comeBack=clndemo
-    goto prepare_demo_clean
-:clndemo
-    call cd %RUNDIR%
-	goto finish
-)
-if %1.==pkgdemo. (
-    call cd %YC_HOME%
-	set comeBack=pkgdemo1
-    goto prepare_demo_clean
-:pkgdemo1
-	set comeBack=pkgdemo2
-    goto prepare_demo_pkg
-:pkgdemo2
-    call cd %RUNDIR%
-	goto finish
-)
 if %1.==luke. (
     call cd %YC_HOME%
 	set comeBack=luke
     goto start_luke
 :luke
+    call cd %RUNDIR%
+	goto finish
+)
+
+if %1.==nullsmtp. (
+    call cd %YC_HOME%
+	set comeBack=nullsmtp
+    goto start_nullsmtp
+:nullsmtp
     call cd %RUNDIR%
 	goto finish
 )
@@ -159,6 +149,8 @@ rem Sub routines below this comment
     echo.                                                 
     echo   luke      - start luke
     echo.
+    echo   nullsmtp  - start DevNullSmtp
+    echo.
     echo   dbimysql  - initialise db for mysql
     echo.                                                 
     echo   dbiderby  - initialise db for derby           
@@ -166,9 +158,6 @@ rem Sub routines below this comment
     echo   derbygob  - start derby server (in back mode) 
     echo   derbyend  - stop derby server                 
     echo   derbycon  - connect to derby with ij          
-    echo.                                                 
-    echo   pkgdemo   - prepare demo package              
-    echo   clndemo   - clean demo package                
     echo ================================================
 	goto %comeBack%
 	
@@ -268,6 +257,11 @@ rem Sub routines below this comment
     start java -jar derbyrun.jar server start
 
     echo  Derby server started on port 1527...           
+    echo.
+    echo  Tips:
+    echo  * if you see 'started and ready to accept connections on port 1527' but no prompt, just hit ENTER
+    echo  * if you encounter problems check http://www.inspire-software.com/confluence/display/YC3EN/Derby+quick+start
+    echo.
 	goto %comeBack%
 
 
@@ -334,123 +328,6 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
 	goto %comeBack%
 
 
-	
-:prepare_demo_clean
-
-    echo ================================================
-    echo  Cleaning DEMO package                          
-    echo ================================================
-    echo.                                                 
-
-    echo  Cleaning Tomcat Logs                           
-    call del /Q %YC_HOME%\demo\yes-server\logs\*.log
-    call del /Q %YC_HOME%\demo\yes-server\logs\catalina.out
-    echo  done...                                        
-
-    echo  Cleaning Tomcat Temp                           
-    call del /Q %YC_HOME%\demo\yes-server\work\*
-    call del /Q %YC_HOME%\demo\yes-server\temp\*
-    echo  done...                                        
-
-    echo  Cleaning Derby bundle %YC_HOME%\demo\yes-db\*   
-    call rmdir /S /Q %YC_HOME%\demo\yes-db\yes
-	call rmdir /S /Q %YC_HOME%\demo\yes-db\yespay
-	call del /Q %YC_HOME%\demo\yes-db\*
-    echo  done...                                        
-
-    echo  Cleaning demo import data %YC_HOME%\demo\import-data\*
-    call del /Q %YC_HOME%\demo\import-data\*
-    echo  done...
-
-    set YESCONF=%YC_HOME%\demo\yes-server\conf\Catalina\localhost
-
-    set YESCONFSHOP=%YESCONF%\yes-shop.xml
-    set YESCONFMANAGER=%YESCONF%\yes-manager.xml
-
-    echo  Removing old context.xml:                      
-    echo  %YESCONFSHOP%                                   
-    call del /Q %YESCONFSHOP%
-    echo  %YESCONFMANAGER%                                
-    call del /Q %YESCONFMANAGER%
-
-    set YESWEBAPPS=%YC_HOME%\demo\yes-server\webapps
-
-    set YESSHOP_OLD=%YESWEBAPPS%\yes-shop
-    set YESSHOPWAR_OLD=%YESWEBAPPS%\yes-shop.war
-    set YESMANAGER_OLD=%YESWEBAPPS%\yes-manager
-    set YESMANAGERWAR_OLD=%YESWEBAPPS%\yes-manager.war
-
-    echo  Removing old wars:                             
-    echo  %YESSHOP_OLD%                                   
-    call rmdir /S /Q %YESSHOP_OLD%
-    echo  %YESSHOPWAR_OLD%                                
-    call del /Q %YESSHOPWAR_OLD%
-    echo  %YESMANAGER_OLD%                                
-    call rmdir /S /Q %YESMANAGER_OLD%
-    echo  %YESMANAGERWAR_OLD%                             
-    call del /Q %YESMANAGERWAR_OLD%
-    echo  done...                                        
-	goto %comeBack%
-
-
-
-	
-:prepare_demo_pkg
-
-    echo ================================================
-    echo  Preparing DEMO package                         
-    echo ================================================
-    echo.                                                 
-    echo  Make sure that you have prepared derby dbs and 
-    echo  created a full maven build with derby profile. 
-    echo.                                                 
-
-    echo  Copying Derby package                          
-    call xcopy %YC_HOME%\env\derby\lib\*.jar %YC_HOME%\demo\yes-db
-    echo  done...                                        
-
-    set YESDB_OLD=%YC_HOME%\demo\yes-db\yes
-    set YESDB_NEW=%YC_HOME%\env\derby\lib\yes
-    echo  Copying new db: %YESDB_NEW%                     
-    call xcopy /E %YESDB_NEW% %YESDB_OLD%
-    echo  done...                                        
-
-    set YESPAYDB_OLD=%YC_HOME%\demo\yes-db\yespay
-    set YESPAYDB_NEW=%YC_HOME%\env\derby\lib\yespay
-    echo  Copying new db: %YESPAYDB_NEW%                  
-    call xcopy /E %YESPAYDB_NEW% %YESPAYDB_OLD%
-    echo  done...                                        
-
-    set YESWEBAPPS=%YC_HOME%\demo\yes-server\webapps
-
-
-    set YESSHOPWAR_NEW=%YC_HOME%\web\store\target\yes-shop.war
-    set YESMANAGERWAR_NEW=%YC_HOME%\manager\server\target\yes-manager.war
-    echo  Copying new wars:                              
-    echo  %YESSHOPWAR_NEW%                                
-    echo  %YESMANAGERWAR_NEW%                             
-    call copy %YESSHOPWAR_NEW% %YESWEBAPPS%
-    call copy %YESMANAGERWAR_NEW% %YESWEBAPPS%
-    echo  done...                                        
-
-    echo  Copy demo import data...
-    call copy "%YC_HOME%\env\sampledata\demo-data\yc\import\import.zip" "%YC_HOME%\demo\import-data\"
-    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,UK,RU.zip" "%YC_HOME%\demo\import-data\"
-    call copy "%YC_HOME%\env\sampledata\demo-data\icecat\import\import-EN,UK,RU-img.zip" "%YC_HOME%\demo\import-data\"
-    echo  done...
-
-    echo  Creating zip package...
-    call cd %YC_HOME%
-    call del /Q yescart.zip
-    call zip -r yescart.zip .\demo -x *.svn*
-    echo  done...                                        
-    echo.                                                 
-    echo ================================================
-    echo  Demo package created                           
-    echo ================================================
-	goto %comeBack%
-
-
 :start_luke
 
     echo ================================================
@@ -458,6 +335,17 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo ================================================
 
     call java -jar "%YC_HOME%\env\luke\lukeall-3.5.0.jar"
+
+    goto %comeBack%
+
+
+:start_nullsmtp
+
+    echo ================================================
+    echo  Starting DevNullSmtp (dummy SMTP server)
+    echo ================================================
+
+    call java -jar "%YC_HOME%\env\devnullsmtp\DevNullSmtp.jar"
 
     goto %comeBack%
 

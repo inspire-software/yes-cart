@@ -1,6 +1,23 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.service.domain.impl;
 
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.PromotionCoupon;
 import org.yes.cart.domain.misc.Pair;
@@ -107,7 +124,9 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
 
         // if we have customer usage limit
         if (couponEntity.getUsageLimitPerCustomer() > 0) {
-            final List<Object> count = getGenericDao().findQueryObjectByNamedQuery("COUPON.USAGE.BY.ID.AND.EMAIL", couponEntity.getPromotioncouponId(), customerEmail);
+            final List<Object> count = getGenericDao()
+                    .findQueryObjectByNamedQuery("COUPON.USAGE.BY.ID.AND.EMAIL",
+                            couponEntity.getPromotioncouponId(), customerEmail, CustomerOrder.ORDER_STATUS_NONE);
             if (!count.isEmpty()) {
 
                 final Number usage = (Number) count.get(0);
@@ -125,7 +144,9 @@ public class PromotionCouponServiceImpl extends BaseGenericServiceImpl<Promotion
     /** {@inheritDoc} */
     public void updateUsage(final PromotionCoupon promotionCoupon, final int offset) {
 
-        final List<Object> count = getGenericDao().findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.ID", promotionCoupon.getPromotioncouponId());
+        final List<Object> count = getGenericDao()
+                .findQueryObjectByNamedQuery("COUPON.USAGE.BY.COUPON.ID",
+                        promotionCoupon.getPromotioncouponId(), CustomerOrder.ORDER_STATUS_NONE);
 
         int usage = offset;
         if (!count.isEmpty()) {

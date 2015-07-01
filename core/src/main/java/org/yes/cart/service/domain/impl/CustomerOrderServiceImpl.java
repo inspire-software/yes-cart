@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,27 +16,31 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.PromotionCouponUsage;
+import org.yes.cart.domain.misc.Result;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.PromotionCouponService;
-import org.yes.cart.service.order.DeliveryAssembler;
-import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.*;
+import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -55,9 +59,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
 
     private final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao;
 
-    private final CustomerOrderPaymentService customerOrderPaymentService;
-
-    private final PromotionCouponService promotionCouponService;
 
     /**
      * Construct order service.
@@ -67,8 +68,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
-     * @param customerOrderPaymentService to calculate order amount payments.
-     * @param promotionCouponService coupon service
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
@@ -76,27 +75,42 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final GenericDAO<Object, Long> genericDao,
             final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
-            final DeliveryAssembler deliveryAssembler,
-            final CustomerOrderPaymentService customerOrderPaymentService,
-            final PromotionCouponService promotionCouponService) {
+            final DeliveryAssembler deliveryAssembler) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
-        this.customerOrderPaymentService = customerOrderPaymentService;
         this.genericDao = genericDao;
         this.customerOrderDeliveryDao = customerOrderDeliveryDao;
-        this.promotionCouponService = promotionCouponService;
     }
 
     /**
-     * Get order amount
-     *
-     * @param orderNumber given order number
-     * @return order amount
+     * {@inheritDoc}
      */
-    public BigDecimal getOrderAmount(final String orderNumber) {
-        return customerOrderPaymentService.getOrderAmount(orderNumber);
+    public CustomerOrderDelivery findDelivery(final long deliveryId) {
+        return customerOrderDeliveryDao.findById(deliveryId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findAwaitingDeliveriesIds(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
+
+        final List<Long> waitingDeliveries;
+
+        if (skuCodes != null) {
+            waitingDeliveries = (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("DELIVERIES.IDS.WAITING.FOR.INVENTORY.BY.SKU",
+                    deliveryStatus,
+                    orderStatus,
+                    skuCodes);
+        } else {
+            waitingDeliveries = (List) customerOrderDeliveryDao.findByNamedQuery("DELIVERIES.IDS.WAITING.FOR.INVENTORY",
+                    deliveryStatus,
+                    orderStatus);
+        }
+
+        return waitingDeliveries;
+
     }
 
     /**
@@ -208,14 +222,6 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                 );
             }
 
-            final Collection<PromotionCouponUsage> couponUsages = customerOrderToDelete.getCoupons();
-
-            for (final PromotionCouponUsage usage : couponUsages) {
-
-                promotionCouponService.updateUsage(usage.getCoupon(), -1);
-
-            }
-
             getGenericDao().delete(customerOrderToDelete);
 
             getGenericDao().flushClear();
@@ -256,4 +262,5 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
         }
         super.delete(instance);
     }
+
 }

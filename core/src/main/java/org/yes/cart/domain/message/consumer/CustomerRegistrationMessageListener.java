@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -90,6 +90,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
 
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("password", registrationMessage.getPassword());
+        model.put("authToken", registrationMessage.getAuthToken());
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
         model.put("shopUrl", registrationMessage.getShopUrl());

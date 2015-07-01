@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -85,6 +85,20 @@ public interface RegistrationMessage extends Serializable {
      * @param password password
      */
     void setPassword(String password);
+
+    /**
+     * Authorisation token.
+     *
+     * @return auth token (for resetting passwords)
+     */
+    String getAuthToken();
+
+    /**
+     * Authorisation token.
+     *
+     * @param authToken auth token (for resetting passwords)
+     */
+    void setAuthToken(String authToken);
 
     /**
      * Get shop mail from addr.

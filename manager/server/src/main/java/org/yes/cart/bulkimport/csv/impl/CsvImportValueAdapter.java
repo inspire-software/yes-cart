@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.yes.cart.bulkimport.model.DataTypeEnum;
 import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class CsvImportValueAdapter implements ValueAdapter {
         put(DataTypeEnum.INT,       Integer.class);
         put(DataTypeEnum.LONG,      Long.class);
         put(DataTypeEnum.DECIMAL,   BigDecimal.class);
+        put(DataTypeEnum.DATETIME,  Date.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {

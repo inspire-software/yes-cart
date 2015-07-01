@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import java.util.*;
  */
 public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavigationSupportImpl implements AttributeFilteredNavigationSupport {
 
-    private static final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
+    private final Logger LOGFTQ = LoggerFactory.getLogger("FTQ");
 
     private final ProductTypeAttrService productTypeAttrService;
 

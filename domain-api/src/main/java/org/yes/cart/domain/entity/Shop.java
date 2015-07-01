@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -153,14 +153,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isB2BProfileActive();
 
-    /**
-     * TODO: YC-420 Unify all themes into a separate module
-     * TODO: This is standard directory - no need for this getter
-     * Get markup folder. @see fspointer for more details.
-     * @return folder with markup.
-     */
-    String getMarkupFolder();
-
 
     /**
      * Get default shop url. localhost will never be return.
@@ -270,6 +262,50 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @return  list of language codes
      */
     List<String> getSupportedLanguagesAsList();
+
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedRegistrationFormAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedRegistrationFormAttributesAsList();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedProfileFormAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedProfileFormAttributesAsList();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedProfileFormReadOnlyAttributes();
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedProfileFormReadOnlyAttributesAsList();
+
 
 }
 

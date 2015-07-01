@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -366,16 +365,6 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
      * @param tag space separated product tags.
      */
     void setTag(String tag);
-
-
-    /**
-     * Get total quantity of skus on all warehouses.
-     *
-     * @param warehouses warehouse to consider
-     *
-     * @return total quantity
-     */
-    Map<String, BigDecimal> getQtyOnWarehouse(Collection<Warehouse> warehouses);
 
     /**
      * Get minimal quantity for order. E.g. 5.0 means customer can only buy 5 or more.

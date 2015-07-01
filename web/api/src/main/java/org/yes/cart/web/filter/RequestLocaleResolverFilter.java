@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -43,10 +43,8 @@ public class RequestLocaleResolverFilter extends  AbstractFilter implements Filt
 
     private ServletContext servletContext;
 
-    public RequestLocaleResolverFilter(final ApplicationDirector applicationDirector,
-                                       final LanguageService languageService,
+    public RequestLocaleResolverFilter(final LanguageService languageService,
                                        final ShoppingCartCommandFactory cartCommandFactory) {
-        super(applicationDirector);
         this.languageService = languageService;
         this.cartCommandFactory = cartCommandFactory;
     }

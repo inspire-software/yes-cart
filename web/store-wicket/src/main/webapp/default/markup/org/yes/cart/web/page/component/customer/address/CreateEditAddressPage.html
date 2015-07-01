@@ -1,0 +1,181 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex" />
+
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+
+        <!--[if lt IE 9]>
+        <script src="../../../../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+    <meta wicket:id="created" name="date" content=""/>
+
+</head>
+
+<body>
+
+    <span wicket:id="header">[header]</span>
+
+    <div class="container">
+
+        <div class="col-xs-12 edit-address-title">
+            <h2><wicket:message key="createEditAddress">[Create edit address]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12" wicket:id="feedback">[feedpack panel]</div>
+
+        <form wicket:id="addressForm" class="form-horizontal">
+
+            <div class="form-group">
+                <label for="inputFirstName" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="firstName">[First name]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="firstName" class="form-control" id="inputFirstName" maxlength="128"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputLastName" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="lastName">[Last Name]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="lastName" class="form-control" id="inputLastName" maxlength="128"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddr1" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="line1">[Address Line 1]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="line1" class="form-control" id="inputAddr1" maxlength="255"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputAddr2" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="line2">[Address Line 2]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="line2" class="form-control" id="inputAddr2" maxlength="255"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="selectCountry" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="country">[Country]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <select class="form-control" wicket:id="country" id="selectCountry"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="selectState" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="state">[State]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <select class="form-control" wicket:id="state" id="selectState"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputCity" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="city">[City]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="city" class="form-control" id="inputCity" maxlength="128"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPostCode" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="postcode">[Post code]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="postcode" class="form-control" id="inputPostCode" maxlength="16"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPhone" class="control-label col-xs-12 col-sm-2">
+                    <wicket:message key="phone1">[Phone list]</wicket:message>
+                </label>
+                <div class="col-xs-12 col-sm-7">
+                    <input type="text" wicket:id="phone1" class="form-control" id="inputPhone" maxlength="256"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <a wicket:id="cancel" class="btn btn-default" rel="nofollow">
+                        <wicket:message key="cancel">[cancel]</wicket:message>
+                    </a>
+                    <a wicket:id="addAddress" class="btn btn-primary" rel="nofollow">
+                        <wicket:message key="create">[create]</wicket:message>
+                    </a>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4983157-12']);
+    _gaq.push(['_setDomainName', 'yes-cart.org']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+
+</body>
+</html>

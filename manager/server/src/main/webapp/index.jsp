@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
-  ~ Copyright 2009 Igor Azarnyi, Denys Pavlov
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
   ~    you may not use this file except in compliance with the License.
@@ -17,10 +17,19 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>YUM Yes cart update manager</title>
     <link rel="stylesheet" href="style/style.css" type="text/css"/>
 </head>
 <body>
+<div class="container">
+    <div class="inside">
+        <div class="lang lang-uk"><a class="btn btn-info" href="uk_UK/ShopManagerApplication.html">Старт Українська</a></div>
+        <div class="lang lang-en"><a class="btn btn-info" href="en_US/ShopManagerApplication.html">Start English</a></div>
+        <div class="lang lang-ru"><a class="btn btn-info" href="ru_RU/ShopManagerApplication.html">Старт Русский</a></div>
+        <div class="lang lang-de"><a class="btn btn-info" href="de_DE/ShopManagerApplication.html">German starten</a></div>
+    </div>
+</div>
 <script type="text/javascript">
     <!--
 
@@ -32,14 +41,13 @@
     }
 
     var redirectToPage = "ShopManagerApplication.html";
-    document.write('<p align="center"><a href="uk_UK/'+redirectToPage+'">Старт Українська</a></p>');
-    document.write('<p align="center"><a href="en_US/'+redirectToPage+'">Start English</a></p>');
-    document.write('<p align="center"><a href="ru_RU/'+redirectToPage+'">Старт Русский</a></p>');
 
     if(browserLanguage == "ru" || browserLanguage == "be") {
         redirectToPage = "ru_RU/" + redirectToPage;
     } else if(browserLanguage == "ua") {
         redirectToPage = "uk_UK/" + redirectToPage;
+    } else if(browserLanguage == "de") {
+        redirectToPage = "de_DE/" + redirectToPage;
     } else {
         redirectToPage = "en_US/" + redirectToPage;
     }

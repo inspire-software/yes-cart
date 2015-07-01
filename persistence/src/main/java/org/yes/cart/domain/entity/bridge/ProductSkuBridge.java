@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ public class ProductSkuBridge implements FieldBridge {
                 ));
 
 
-                skuPriceBridge.set("", sku.getSkuPrice(), document, luceneOptions);
+                skuPriceBridge.set("", sku, document, luceneOptions);
                 attributeValueBridge.set("attribute", sku.getAttributes(), document, luceneOptions);
 
             }

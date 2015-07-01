@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
@@ -32,8 +33,8 @@ import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-import org.yes.cart.web.service.ws.node.NodeService;
-import org.yes.cart.web.service.ws.node.dto.Node;
+import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.cluster.node.Node;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ import java.util.Map;
  */
 public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
+    private final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
     private final RemoteBackdoorService remoteBackdoorService;
 
@@ -129,7 +130,6 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                         final Integer nodeCnt = cntNode.getValue();
                         summaryProd.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
-                    summaryProd.append("CAUTION this may not be the full count of products that was indexed.\n");
                     listener.notifyMessage(summaryProd.toString());
 
                     for (final Node yesNode : nodeService.getYesNodes()) {
@@ -167,8 +167,6 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                         final Integer nodeCnt = cntNode.getValue();
                         summarySku.append(nodeUri).append(": ").append(nodeCnt).append(" ... finished\n");
                     }
-                    summarySku.append("CAUTION this may not be the full count of SKU that was indexed.\n");
-
                     listener.notifyMessage(summarySku.toString());
 
                     long finish = System.currentTimeMillis();
@@ -199,36 +197,46 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
     /** {@inheritDoc} */
     @Override
     public String reindexAllProducts() {
-        return doJob(createAsyncContext(true, 0L));
+        return doJob(createAsyncContext(true, 0L, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 
     /** {@inheritDoc} */
     @Override
     public String reindexShopProducts(final long shopPk) {
-        return doJob(createAsyncContext(true, shopPk));
+        return doJob(createAsyncContext(true, shopPk, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProduct(long pk) {
-        return remoteBackdoorService.reindexProduct(createAsyncContext(false, 0L), pk);
+        return remoteBackdoorService.reindexProduct(
+                createAsyncContext(false, 0L, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS),
+                pk
+        );
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSku(long pk) {
-        return remoteBackdoorService.reindexProductSku(createAsyncContext(false, 0L), pk);
+        return remoteBackdoorService.reindexProductSku(
+                createAsyncContext(false, 0L, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS),
+                pk
+        );
     }
 
     /** {@inheritDoc} */
     @Override
     public Map<String, Integer> reindexProductSkuCode(String code) {
-        return remoteBackdoorService.reindexProductSkuCode(createAsyncContext(false, 0L), code);
+        return remoteBackdoorService.reindexProductSkuCode(
+                createAsyncContext(false, 0L, AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS),
+                code
+        );
     }
 
-    private JobContext createAsyncContext(final boolean bulk, final long shopId) {
+    private JobContext createAsyncContext(final boolean bulk, final long shopId, final String timeoutKey) {
 
         final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, timeoutKey);
         param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE, new HashMap<String, Boolean>());
         if (shopId > 0L) {
             param.put(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP, shopId);
@@ -237,13 +245,13 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         final AsyncContext flex = new AsyncFlexContextImpl(param);
 
         // Max char of report to UI since it will get huge and simply will crash the UI, not to mention traffic cost.
-        final int logSize = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE));
+        final int logSize = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_LOG_SIZE), 100);
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
         final int timeout;
         if (bulk) {
-            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS));
+            timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS), 100);
         } else {
-            timeout = Integer.parseInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS));
+            timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_SINGLE_INDEX_TIMEOUT_MS), 100);
         }
 
         return new JobContextImpl(true, new JobStatusListenerImpl(logSize, timeout), flex.getAttributes());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package org.yes.cart.domain.entity.impl;
 
 
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 
 import java.math.BigDecimal;
@@ -32,7 +31,7 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     private long skuPriceId;
     private long version;
 
-    private ProductSku sku;
+    private String skuCode;
     private Shop shop;
     private String currency;
     private BigDecimal quantity;
@@ -52,12 +51,12 @@ public class SkuPriceEntity implements org.yes.cart.domain.entity.SkuPrice, java
     }
 
 
-    public ProductSku getSku() {
-        return this.sku;
+    public String getSkuCode() {
+        return skuCode;
     }
 
-    public void setSku(ProductSku sku) {
-        this.sku = sku;
+    public void setSkuCode(final String skuCode) {
+        this.skuCode = skuCode;
     }
 
     public Shop getShop() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Igor Azarnyi, Denys Pavlov
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -36,7 +36,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.impl.AttrValueRankComparator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,7 +46,7 @@ import java.util.List;
  */
 public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implements CustomerService {
 
-    private final HashHelper hashHelper;
+    private final HashHelper passwordHashHelper;
 
     private final GenericDAO<Object, Long> customerShopDao;
 
@@ -62,19 +61,19 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * Construct customer service.
      *
      * @param genericDao customer dao to use.
-     * @param hashHelper to generate password hash
+     * @param passwordHashHelper to generate password hash
      * @param customerShopDao    to delete
      * @param shopService shop service (reuse retrieval + caching)
      * @param customerNameFormatter customer name formatter
      */
     public CustomerServiceImpl(final GenericDAO<Customer, Long> genericDao,
-                               final HashHelper hashHelper,
+                               final HashHelper passwordHashHelper,
                                final GenericDAO<Object, Long> customerShopDao,
                                final AttributeService attributeService,
                                final ShopService shopService,
                                final CustomerNameFormatter customerNameFormatter) {
         super(genericDao);
-        this.hashHelper = hashHelper;
+        this.passwordHashHelper = passwordHashHelper;
         this.customerShopDao = customerShopDao;
         this.attributeService = attributeService;
         this.shopService = shopService;
@@ -82,14 +81,39 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     }
 
     /**
-     * Get customer by email.
-     *
-     * @param email email
-     * @return {@link Customer}
+     * {@inheritDoc}
      */
     @Cacheable(value = "customerService-customerByEmail")
     public Customer getCustomerByEmail(final String email) {
         Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+        if (customer != null) {
+            Hibernate.initialize(customer.getAttributes());
+            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
+                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+            }
+        }
+        return customer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Customer getCustomerByToken(final String token) {
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("authToken", token));
+        if (customer != null) {
+            Hibernate.initialize(customer.getAttributes());
+            for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
+                Hibernate.initialize(attrValueCustomer.getAttribute().getEtype());
+            }
+        }
+        return customer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Customer getCustomerByPublicKey(final String publicKey, final String lastName) {
+        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("publicKey", publicKey), Restrictions.eq("lastname", lastName));
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
             for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
@@ -190,7 +214,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         try {
             final List<Criterion> criterionList = new ArrayList<Criterion>();
 
-            final String hash = hashHelper.getHash(password);
+            final String hash = passwordHashHelper.getHash(password);
 
             criterionList.add(Restrictions.eq("email", email));
             criterionList.add(Restrictions.eq("password", hash));
@@ -224,6 +248,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                 attrVal.setVal(attributeValue);
             } else {
                 Attribute attr = attributeService.findByAttributeCode(attributeCode);
+                Hibernate.initialize(attr.getEtype()); //load lazy values
                 if (attr != null) {
                     attrVal = getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
                     attrVal.setVal(attributeValue);
@@ -239,26 +264,29 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * {@inheritDoc}
      */
     public List<AttrValueCustomer> getRankedAttributeValues(final Customer customer) {
-        final List<String> filledAttributes = getFilledAttributes(customer.getAttributes());
+        final List<String> filledAttributes;
+        final List<AttrValueCustomer> rez;
+        if (customer != null) {
+            rez = new ArrayList<AttrValueCustomer>(customer.getAttributes());
+            filledAttributes = new ArrayList<String>(customer.getAttributes().size());
+            for (AttrValueCustomer attrVal : customer.getAttributes()) {
+                filledAttributes.add(attrVal.getAttribute().getCode());
+                rez.add(attrVal);
+            }
+        } else {
+            rez = new ArrayList<AttrValueCustomer>();
+            filledAttributes = Collections.EMPTY_LIST;
+        }
         final List<Attribute> emptyAttributes = attributeService.findAvailableAttributes(AttributeGroupNames.CUSTOMER, filledAttributes);
         for (Attribute attr : emptyAttributes) {
             AttrValueCustomer attrValueCustomer = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
             attrValueCustomer.setAttribute(attr);
             attrValueCustomer.setCustomer(customer);
-            customer.getAttributes().add(attrValueCustomer);
+            rez.add(attrValueCustomer);
         }
-        final List<AttrValueCustomer> rez = new ArrayList<AttrValueCustomer>(customer.getAttributes());
         Collections.sort(rez, new AttrValueRankComparator());
         for (AttrValueCustomer avc : rez) {
-            avc.getAttribute().getEtype().getBusinesstype(); //load lazy values
-        }
-        return rez;
-    }
-
-    private List<String> getFilledAttributes(final Collection<AttrValueCustomer> attrValues) {
-        final List<String> rez = new ArrayList<String>(attrValues.size());
-        for (AttrValueCustomer attrVal : attrValues) {
-            rez.add(attrVal.getAttribute().getCode());
+            Hibernate.initialize(avc.getAttribute().getEtype()); //load lazy values
         }
         return rez;
     }
@@ -277,6 +305,14 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             customer.getShops().add(customerShop);
         }
         return super.create(customer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Customer create(final Customer instance) {
+        throw new UnsupportedOperationException("Please use create(final Customer customer, final Shop shop)");
     }
 
     /**
@@ -306,8 +342,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public void resetPassword(final Customer customer, final Shop shop) {
-        getGenericDao().update(customer);
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#customer.email")
+    public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
+        super.update(customer);
     }
 
     /**
@@ -315,11 +354,21 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
-    public void delete(final Customer customer) {
-        for(CustomerShop cshop : customer.getShops()) {
+    }, allEntries = false, key = "#instance.email")
+    public Customer update(final Customer instance) {
+        return super.update(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, key = "#instance.email")
+    public void delete(final Customer instance) {
+        for(CustomerShop cshop : instance.getShops()) {
             customerShopDao.delete(cshop);
         }
-        super.delete(customer);
+        super.delete(instance);
     }
 }
