@@ -16,12 +16,15 @@
 
 package org.yes.cart.web.support.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.Enumeration;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -81,6 +84,77 @@ public class HttpUtil {
         return stringBuilder.toString();
     }
 
+    /**
+     * Get all request parameters as map.
+     *
+     * @param requestURL request URL {@link HttpServletRequest#getRequestURL()}
+     * @param pathVariables path markers that should be identified as extra parameters
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> getParameters(final String requestURL,
+                                                          final Set<String> pathVariables) {
+
+
+        final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
+
+        try {
+            final String[] request = StringUtils.splitPreserveAllTokens(requestURL, '?');
+
+            String key = null;
+
+            if (request != null && request.length > 0) {
+                final String[] pathPairs = StringUtils.splitPreserveAllTokens(request[0], '/');
+
+                for (String pathItem : pathPairs) {
+                    if (key != null) {
+                        if (!parameters.containsKey(key)) {
+                            parameters.put(key, new LinkedList<String>());
+                        }
+                        final String value = URLDecoder.decode(pathItem, "UTF-8");
+                        parameters.get(key).add(value);
+                        key = null;
+                    } else if (pathVariables.contains(pathItem)) {
+                        key = pathItem; // next path is value
+                    }
+                }
+            }
+
+            if (request != null && request.length > 1) {
+
+                final String[] parameterPairs = StringUtils.splitPreserveAllTokens(request[1], '&');
+                for (String parameterPair : parameterPairs) {
+                    final int idx = parameterPair.indexOf("=");
+                    key = idx > 0 ? URLDecoder.decode(parameterPair.substring(0, idx), "UTF-8") : parameterPair;
+                    if (!parameters.containsKey(key)) {
+                        parameters.put(key, new LinkedList<String>());
+                    }
+                    final String value = idx > 0 && parameterPair.length() > idx + 1 ? URLDecoder.decode(parameterPair.substring(idx + 1), "UTF-8") : null;
+                    parameters.get(key).add(value);
+                }
+            }
+
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
+        }
+        return parameters;
+
+    }
+
+    /**
+     * Get all request parameters as map.
+     *
+     * @param request request
+     * @param pathVariables path markers that should be identified as extra parameters
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> getParameters(final HttpServletRequest request,
+                                                          final Set<String> pathVariables) {
+
+        return getParameters(request.getRequestURL().toString(), pathVariables);
+    }
+
 
     /**
      * Work with with param values, when it can return
@@ -94,6 +168,9 @@ public class HttpUtil {
             return (String) param;
         } else if (param instanceof Collection) {
             if (!((Collection) param).isEmpty()) {
+                if (param instanceof List) {
+                    return ((List) param).get(0).toString();
+                }
                 return ((Collection) param).iterator().next().toString();
             }
         } else if (param instanceof String[]) {
