@@ -29,10 +29,7 @@
                            http://www.springframework.org/schema/cache
                            http://www.springframework.org/schema/cache/spring-cache.xsd">
 
-    <context:component-scan base-package="org.yes.cart"/>
-
     <cache:annotation-driven />
-
     <aop:aspectj-autoproxy/>
 
     <import resource="classpath:core-config.xml"/>
