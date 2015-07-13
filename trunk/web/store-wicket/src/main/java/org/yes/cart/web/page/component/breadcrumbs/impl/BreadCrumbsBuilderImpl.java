@@ -180,7 +180,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
                                 final String queryPrefix,
                                 final String tagPrefix) {
 
-        final Set<String> allowedAttributeNames = attributeService.getAllAttributeCodes();
+        final Set<String> allowedAttributeNames = attributeService.getAllNavigatableAttributeCodes();
         /*
            Call below creates very unproductive query for all attribute codes, so we
            use a separate method for that:
