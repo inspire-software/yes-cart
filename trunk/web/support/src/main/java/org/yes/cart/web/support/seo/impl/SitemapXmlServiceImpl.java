@@ -23,6 +23,8 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
 
@@ -92,16 +94,28 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         xml.append("<!-- Categories -->\n");
 
+        final Date now = new Date();
+
         final List<Category> categories = categoryService.getTopLevelCategories(shop.getShopId());
         for (final Category category : categories) {
 
-            final Set<Category> children = categoryService.getChildCategoriesRecursive(category.getCategoryId());
+            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now) &&
+                    !CentralViewLabel.INCLUDE.equals(category.getUitemplate())) {
 
-            if (children != null) {
+                final Set<Category> children = categoryService.getChildCategoriesRecursive(category.getCategoryId());
 
-                for (final Category child : children) {
+                if (children != null) {
 
-                    appendCategoryLoc(xml, child, languages, urlBase);
+                    for (final Category child : children) {
+
+                        if (DomainApiUtils.isObjectAvailableNow(true, child.getAvailablefrom(), child.getAvailableto(), now) &&
+                                !CentralViewLabel.INCLUDE.equals(child.getUitemplate())) {
+
+                            appendCategoryLoc(xml, child, languages, urlBase);
+
+                        }
+
+                    }
 
                 }
 
@@ -120,12 +134,17 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
                 for (final Category contentItem : content) {
 
-                    if (contentItem.getCategoryId() != root.getCategoryId()) {
 
-                        appendContentLoc(xml, contentItem, languages, urlBase);
+                    if (DomainApiUtils.isObjectAvailableNow(true, contentItem.getAvailablefrom(), contentItem.getAvailableto(), now) &&
+                            !CentralViewLabel.INCLUDE.equals(contentItem.getUitemplate())) {
 
+
+                        if (contentItem.getCategoryId() != root.getCategoryId()) {
+
+                            appendContentLoc(xml, contentItem, languages, urlBase);
+
+                        }
                     }
-
                 }
 
             }
@@ -148,16 +167,19 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
                         for (final Product product : products) {
 
-                            appendProductLoc(xml, product, languages, urlBase);
+                            if (DomainApiUtils.isObjectAvailableNow(true, product.getAvailablefrom(), product.getAvailableto(), now)) {
 
-                            if (product.isMultiSkuProduct()) {
+                                appendProductLoc(xml, product, languages, urlBase);
 
-                                for (final ProductSku sku : product.getSku()) {
+                                if (product.isMultiSkuProduct()) {
 
-                                    appendSkuLoc(xml, sku, languages, urlBase);
+                                    for (final ProductSku sku : product.getSku()) {
+
+                                        appendSkuLoc(xml, sku, languages, urlBase);
+
+                                    }
 
                                 }
-
                             }
                         }
 
