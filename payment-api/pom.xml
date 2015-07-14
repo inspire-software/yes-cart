@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>3.0.0-SHAPSHOT</version>
+        <version>3.0.0.RC1</version>
     </parent>
     <artifactId>payment-api</artifactId>
     <name>Yes cart payment API</name>

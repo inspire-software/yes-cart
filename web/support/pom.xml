@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>3.0.0-SHAPSHOT</version>
+        <version>3.0.0.RC1</version>
     </parent>
     <artifactId>websupport</artifactId>
     <name>Yes cart web: web support</name>
