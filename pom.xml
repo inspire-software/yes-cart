@@ -568,6 +568,24 @@
             </modules>
         </profile>
 
+        <!--
+            DEMO STORE
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildDemo</id>
+            <properties>
+                <env>demo</env>
+                <env.db>mysql</env.db>
+                <env.ssl>off</env.ssl>
+                <env.yum.lang>all</env.yum.lang>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
 
         <!--
             ADDITIONAL MODULES ACTIVATION

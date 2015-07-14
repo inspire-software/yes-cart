@@ -267,7 +267,7 @@ VALUES (257, 'testPaymentGateway', 'htmlForm_de',
           <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
         </div>
     </div>'
-, 'Ein Teil der HTML-Formular (DE)', 'Ein Teil der HTML-Formular, das Display, wenn der Benutzer wählen Sie diese Tor zu bezahlen (UK)');
+, 'Ein Teil der HTML-Formular (DE)', 'Ein Teil der HTML-Formular, das Display, wenn der Benutzer wählen Sie diese Tor zu bezahlen (DE)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (58, 'testPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
