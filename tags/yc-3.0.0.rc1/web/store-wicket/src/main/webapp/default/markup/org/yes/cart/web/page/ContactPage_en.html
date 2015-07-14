@@ -1,0 +1,88 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <wicket:link>
+
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
+    <title wicket:id="pageTitle">[page title]</title>
+    <meta wicket:id="description" name="description" content=""/>
+    <meta wicket:id="keywords" name="keywords" content=""/>
+    <meta wicket:id="created" name="date" content=""/>
+</wicket:head>
+
+<body>
+
+    <span wicket:id="header">[header]</span>
+
+    <div class="container">
+
+        <div class="col-xs-12 contacts-title">
+            <h2><wicket:message key="contact">[contact]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12 contacts-body">
+            <h2>The community</h2>
+            <p class="text-justify">
+                YC core team are dedicated professionals with vast experience in eCommerce and software development in general.
+                But we always welcome a helping hand and are very keen on expanding our community and making YC a true success.
+                At the moment a number of companies are actively using YC so we are very excited to hear about these projects.
+                YC has a comprehensive <a href="http://inspire-software.com/confluence/display/YC2/Home" target="_blank"><b>user guide</b></a> and we just created a Google
+                <a href="https://groups.google.com/d/forum/yescart---open-source-ecommerce-platform" target="_blank"><b>group</b></a>
+                for discussions around implementations, challenges and new features.
+            </p>
+            <h2>Our services</h2>
+            <p class="text-justify">
+                We offer a wide range of services to our clients including (but not limited to):
+                <ul class="list">
+                    <li>Consultations - providing detailed information on how to use YesCart, its features and performance</li>
+                    <li>Architectural design - giving detailed description of how to implement certain features</li>
+                    <li>Implementation services - anything from altering functionality, adding new themes to your shop, third party systems integrations to full implementation of your project</li>
+                    <li>Environment configuration - full configuration of your production environment according to your business needs</li>
+                    <li>Support services - for piece of mind when your e-commerce system is up and running</li>
+                </ul>
+                To find more about what we can do for your business contact us using our
+                <a href="http://www.yes-cart.org/index.html#contact" target="_blank"><b>feedback form</b>.</a>
+            </p>
+        </div>
+
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
+</body>
+</html>

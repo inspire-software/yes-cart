@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="roInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
+        <constructor-arg>
+            <map>
+                <entry key="org.yes.cart.domain.ro.AttributeRO" value="org.yes.cart.domain.ro.AttributeRO"/>
+                <entry key="org.yes.cart.domain.ro.BreadcrumbRO" value="org.yes.cart.domain.ro.BreadcrumbRO"/>
+                <entry key="org.yes.cart.domain.ro.CategoryRO" value="org.yes.cart.domain.ro.CategoryRO"/>
+                <entry key="org.yes.cart.domain.ro.ContentRO" value="org.yes.cart.domain.ro.ContentRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductRO" value="org.yes.cart.domain.ro.ProductRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductSearchResultRO" value="org.yes.cart.domain.ro.ProductSearchResultRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductSkuSearchResultRO" value="org.yes.cart.domain.ro.ProductSkuSearchResultRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductWishlistRO" value="org.yes.cart.domain.ro.ProductWishlistRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductAvailabilityModelRO" value="org.yes.cart.domain.ro.ProductAvailabilityModelRO"/>
+                <entry key="org.yes.cart.domain.ro.ProductSkuRO" value="org.yes.cart.domain.ro.ProductSkuRO"/>
+                <entry key="org.yes.cart.domain.ro.SkuPriceRO" value="org.yes.cart.domain.ro.SkuPriceRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueCategoryRO" value="org.yes.cart.domain.ro.AttrValueCategoryRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueCustomerRO" value="org.yes.cart.domain.ro.AttrValueCustomerRO"/>
+                <entry key="org.yes.cart.domain.ro.CustomerRO" value="org.yes.cart.domain.ro.CustomerRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueProductRO" value="org.yes.cart.domain.ro.AttrValueProductRO"/>
+                <entry key="org.yes.cart.domain.ro.AttrValueProductSkuRO" value="org.yes.cart.domain.ro.AttrValueProductSkuRO"/>
+
+                <entry key="org.yes.cart.domain.ro.AddressRO"  value="org.yes.cart.domain.ro.AddressRO"/>
+                <entry key="org.yes.cart.domain.ro.CountryRO"  value="org.yes.cart.domain.ro.CountryRO"/>
+                <entry key="org.yes.cart.domain.ro.StateRO"  value="org.yes.cart.domain.ro.StateRO"/>
+                <entry key="org.yes.cart.domain.ro.CarrierRO"  value="org.yes.cart.domain.ro.CarrierRO"/>
+                <entry key="org.yes.cart.domain.ro.CarrierSlaRO"  value="org.yes.cart.domain.ro.CarrierSlaRO"/>
+
+                <entry key="org.yes.cart.domain.ro.OrderRO"  value="org.yes.cart.domain.ro.OrderRO"/>
+                <entry key="org.yes.cart.domain.ro.OrderItemRO"  value="org.yes.cart.domain.ro.OrderItemRO"/>
+                <entry key="org.yes.cart.domain.ro.DeliveryRO" value="org.yes.cart.domain.ro.DeliveryRO"/>
+                <entry key="org.yes.cart.domain.ro.DeliveryItemRO" value="org.yes.cart.domain.ro.DeliveryItemRO"/>
+
+                <entry key="org.yes.cart.domain.ro.CartItemRO"  value="org.yes.cart.domain.ro.CartItemRO"/>
+                <entry key="org.yes.cart.domain.ro.CartOrderInfoRO"  value="org.yes.cart.domain.ro.CartOrderInfoRO"/>
+                <entry key="org.yes.cart.domain.ro.CartShoppingContextRO"  value="org.yes.cart.domain.ro.CartShoppingContextRO"/>
+                <entry key="org.yes.cart.domain.ro.CartTotalRO"  value="org.yes.cart.domain.ro.CartTotalRO"/>
+                <entry key="org.yes.cart.domain.ro.CartRO"  value="org.yes.cart.domain.ro.CartRO"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="roAssemblerAdaptersRepository"
+          class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
+        <constructor-arg>
+            <map>
+
+                <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
+                <entry key="productAvailabilityModelATSConverter" value-ref="productAvailabilityModelATSConverter"/>
+
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
+
+    <bean id="productAvailabilityModelATSConverter" class="org.yes.cart.domain.dto.adapter.impl.ProductAvailabilityModelATSConverter"/>
+
+    <bean id="apiSupportFacade" class="org.yes.cart.web.service.apisupport.impl.ApiSupportFacadeImpl">
+        <constructor-arg index="0" ref="groovyContentServiceTemplateSupport"/>
+    </bean>
+
+</beans>

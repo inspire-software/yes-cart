@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         width="100%" height="100%" creationComplete="init();"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+    <mx:Script>
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+        import mx.rpc.events.FaultEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.model.CurrencyModel;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+        /**
+         * Init supported by shop currency panel.
+         * @return nothing
+         */
+        private function init():void {
+            remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
+        }
+
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        private function availableCurrencySelected(event:MouseEvent):void {
+            addAvailableEnabled = this.availableCurrencyList.selectedItem != null;
+        }
+
+        private function assignedCurrencySelected(event:MouseEvent):void {
+            addAssignedEnabled = this.assignedCurrencyList.selectedItem != null;
+        }
+
+        private function assignCurrency(event:Event):void {
+            if (this.addAvailableEnabled && this.availableCurrencyList.selectedItem != null) {
+                var curr:String = constructStringList(true, this.availableCurrencyList.selectedItem as String);
+                addAvailableEnabled = false;
+                remoteShopService.updateSupportedCurrencies(_shopDTOImpl.shopId, curr);
+            }
+        }
+
+        private function unassignCurrency(event:Event):void {
+            if (this.addAssignedEnabled && this.assignedCurrencyList.selectedItem != null) {
+                var curr:String = constructStringList(false, this.assignedCurrencyList.selectedItem as String);
+                addAssignedEnabled = false;
+                remoteShopService.updateSupportedCurrencies(_shopDTOImpl.shopId, curr);
+            }
+        }
+
+        private function constructStringList(addFlag:Boolean, item:String):String {
+            var result:String = "";
+            if (addFlag) {
+                if (assignedCurrency != null) {
+                    for (var i:int = 0; i < assignedCurrency.length; i++) {
+                        result = result + assignedCurrency[i] + ",";
+                    }
+                }
+                result = result + item + ",";
+            } else {
+                if (assignedCurrency != null) {
+                    for (var j:int = 0; j < assignedCurrency.length; j++) {
+                        if (assignedCurrency[j] != item) {
+                            result = result + assignedCurrency[j] + ",";
+                        }
+                    }
+                }
+            }
+            if (result != null && result.length > 0) {
+                result = result.substr(0, result.length - 1);
+            }
+            Debug.trace("result -> " + result);
+            return result;
+        }
+
+        private function onGetSupportedCurrenciesResult(event:ResultEvent):void {
+
+            var assignedCurrencyStr:String = String(event.result);
+            if (assignedCurrencyStr == null || assignedCurrencyStr == "null") {
+                assignedCurrency.removeAll();
+            } else {
+                assignedCurrency = new ArrayCollection(assignedCurrencyStr.split(","));
+            }
+            availableCurrency = CurrencyModel.getAvailableCurrencyCodes(assignedCurrency);
+            addAssignedEnabled = false;
+            addAvailableEnabled = false;
+
+        }
+
+        private function onUpdateSupportedCurrenciesResult(event:ResultEvent):void {
+
+            remoteShopService.getSupportedCurrencies(_shopDTOImpl.shopId);
+
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getSupportedCurrencies" name="getSupportedCurrencies"
+                   result="onGetSupportedCurrenciesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateSupportedCurrencies" name="updateSupportedCurrencies"
+                   result="onUpdateSupportedCurrenciesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="availableCurrency"/>
+    <mx:ArrayCollection id="assignedCurrency"/>
+
+    <mx:Boolean id="addAvailableEnabled">false</mx:Boolean>
+    <mx:Boolean id="addAssignedEnabled">false</mx:Boolean>
+
+    <mx:Grid x="0" y="0" width="100%" height="100%" id="supportedCurrencyPanel">
+        <mx:GridRow width="100%" height="50">
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCurrency')"/>
+            </mx:GridItem>
+            <mx:GridItem width="10%" height="50">
+            </mx:GridItem>
+            <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='StoresManagementPanel',key='supportedCurrency')"/>
+            </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%" height="100%">
+            <mx:GridItem width="45%" height="100%">
+                <mx:List
+                        id="availableCurrencyList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{availableCurrency}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="assignCurrency(event)"
+                        click="availableCurrencySelected(event)"
+                        >
+                </mx:List>
+            </mx:GridItem>
+            <mx:GridItem width="10%" height="100%" verticalAlign="middle" textAlign="center">
+                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                    <mx:Button enabled="{addAvailableEnabled}"
+                               label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                               toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                               click="assignCurrency(event)"/>
+                    <mx:Button enabled="{addAssignedEnabled}"
+                               label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                               toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                               click="unassignCurrency(event)"/>
+                </mx:VBox>
+            </mx:GridItem>
+            <mx:GridItem width="45%" height="100%">
+                <mx:List
+                        id="assignedCurrencyList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{assignedCurrency}"
+                        doubleClickEnabled="true"
+                        itemDoubleClick="unassignCurrency(event)"
+                        click="assignedCurrencySelected(event)"
+                        >
+
+                </mx:List>
+            </mx:GridItem>
+        </mx:GridRow>
+
+    </mx:Grid>
+</mx:VBox>

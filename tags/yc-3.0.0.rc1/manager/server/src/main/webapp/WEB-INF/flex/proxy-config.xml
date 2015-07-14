@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<service id="proxy-service"
+    class="flex.messaging.services.HTTPProxyService">
+
+    <properties>
+        <connection-manager>
+            <max-total-connections>100</max-total-connections>
+            <default-max-connections-per-host>5</default-max-connections-per-host>
+        </connection-manager>
+        <allow-lax-ssl>true</allow-lax-ssl>
+    </properties>
+
+    <adapters>
+        <adapter-definition id="http-proxy" class="flex.messaging.services.http.HTTPProxyAdapter" default="true"/>
+        <adapter-definition id="soap-proxy" class="flex.messaging.services.http.SOAPProxyAdapter"/>
+    </adapters>
+
+    <default-channels>
+        <channel ref="my-amf"/>
+    </default-channels>
+
+    <destination id="DefaultHTTP">
+    </destination>
+
+</service>

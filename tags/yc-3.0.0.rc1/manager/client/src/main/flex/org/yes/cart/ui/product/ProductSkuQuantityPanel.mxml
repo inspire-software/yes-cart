@@ -1,0 +1,326 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="onPanelInit();">
+
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:Form width="100%">
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='product')">
+                <mx:Label id="productCodeName"/>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='warehouse')">
+                <mx:HBox>
+                    <mx:ComboBox id="warehouseComboBox"
+                                 labelField="name"
+                                 change="onWarehouseSelectionChanged(event)"
+                                 prompt="@Resource(bundle='ProductManagementPanel',key='selectWarehousePropmt')">
+                    </mx:ComboBox>
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
+                               click="onRefreshWarehousesClick(event)"
+                            />
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='quantity')">
+                <mx:HBox>
+                    <mx:Button id="addQuantityBtn"
+                               label="@Resource(bundle='ProductManagementPanel',key='addQuantity')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='addQuantityHint')"
+                               enabled="{allowAddInventory}"
+                               click="onAddQuantityClick(event);"
+                            />
+                    <mx:Button id="editQuantityBtn"
+                               label="@Resource(bundle='ProductManagementPanel',key='editQuantity')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='editQuantityHint')"
+                               click="onEditQuantityClick(event);"
+                               enabled="{allowEditInventory}"
+
+                            />
+                    <mx:Button id="deleteQuantityBtn"
+                               label="@Resource(bundle='ProductManagementPanel',key='deleteQuantity')"
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='deleteQuantityHint')"
+                               enabled="{allowEditInventory}"
+                               click="onDeleteQuantityClick(event);"
+                            />
+                </mx:HBox>
+            </mx:FormItem>
+
+        </mx:Form>
+        <mx:DataGrid
+                id="inventoryDataGrid"
+                width="100%" height="100%" editable="false"
+                itemClick="onSkuWarehouseQuantitySelected(event)">
+            <mx:columns>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
+                                   dataField="skuWarehouseId" editable="false"/>
+                <mx:DataGridColumn width="120" headerText="@Resource(bundle='ProductManagementPanel',key='skuCode')"
+                                   dataField="skuCode" editable="false"/>
+                <mx:DataGridColumn width="300" headerText="@Resource(bundle='ProductManagementPanel',key='skuName')"
+                                   dataField="skuName" editable="false"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='quantity')"
+                                   dataField="quantity" editable="false" textAlign="right"
+                                   labelFunction="quantityLabelFunction"/>
+                <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='reserved')"
+                                   dataField="reserved" editable="false" textAlign="right"
+                                   labelFunction="quantityLabelFunction"/>
+            </mx:columns>
+        </mx:DataGrid>
+    </mx:VBox>
+
+    <mx:NumberFormatter
+            id="quantityFormatter"
+            useThousandsSeparator="false"
+            precision="2"
+
+            />
+
+    <mx:Boolean id="allowAddInventory">false</mx:Boolean>
+    <mx:Boolean id="allowEditInventory">false</mx:Boolean>
+    <mx:Boolean id="allowDeleteInventory">false</mx:Boolean>
+
+    <mx:ArrayCollection id="allProductSkus"/>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService" destination="remoteWarehouseService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllWarehouses" name="getAll"
+                   result="onGetAllWarehousesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="findProductSkusOnWarehouse" name="findProductSkusOnWarehouse"
+                   result="onFindProductSkusOnWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createSkuOnWarehouse" name="createSkuOnWarehouse"
+                   result="onCreateSkuOnWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateSkuOnWarehouse" name="updateSkuOnWarehouse"
+                   result="onUpdateSkuOnWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeSkuOnWarehouse" name="removeSkuOnWarehouse"
+                   result="onRemoveSkuOnWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllProductSkus" name="getAllProductSkus"
+                   result="onGetAllProductSkusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.core.FlexGlobals;
+        import mx.rpc.events.FaultEvent;
+
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.SkuWarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.ResultEvent;
+
+        private var _productId:Number;
+
+        public function get productId():Number {
+            return _productId;
+        }
+
+        public function set product(value:ProductDTOImpl):void {
+            _productId = value.productId;
+            productCodeName.text = value.name + ' (' + value.code + ')';
+            remoteProductSkuService.getAllProductSkus(productId);
+            refreshSkuWarehouseList();
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onPanelInit():void {
+            // select all warehouses since we do not care for the shop assignment data
+            // but when the product will be assigned to a shop then the inventory will be immediately
+            // available
+            remoteWarehouseService.getAll();
+        }
+
+        private function onSkuWarehouseQuantitySelected(event:ListEvent):void {
+            if (inventoryDataGrid.selectedItem != null) {
+                allowEditInventory = true;
+                allowDeleteInventory = true;
+            } else {
+                allowEditInventory = false;
+                allowDeleteInventory = false;
+            }
+        }
+
+        private function onDeleteQuantityClick(event:MouseEvent):void {
+            if (allowDeleteInventory && inventoryDataGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ProductManagementPanel', 'deleteQuantityConfirm',
+                                [ inventoryDataGrid.selectedItem.skuCode, inventoryDataGrid.selectedItem.warehouseCode ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteQuantityConfirmClick, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteQuantityConfirmClick(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                if (allowDeleteInventory && inventoryDataGrid.selectedItem != null) {
+                    remoteWarehouseService.removeSkuOnWarehouse(inventoryDataGrid.selectedItem.skuWarehouseId);
+                }
+            }
+        }
+
+        private var createQuantityDialog:CreateQuantityDialog = null;
+
+        private function onEditQuantityClick(event:MouseEvent):void {
+            if (allowEditInventory && inventoryDataGrid.selectedItem != null) {
+                createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
+                createQuantityDialog.skuComboBox.dataProvider = allProductSkus;
+                createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateSkuWarehouseSaveClick);
+                createQuantityDialog.skuQuantity = inventoryDataGrid.selectedItem as SkuWarehouseDTOImpl;
+                PopUpManager.centerPopUp(createQuantityDialog);
+            }
+        }
+
+        private function onAddQuantityClick(event:MouseEvent):void {
+            if (allowAddInventory && warehouseComboBox.selectedItem != null) {
+                createQuantityDialog = CreateQuantityDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CreateQuantityDialog, true));
+                createQuantityDialog.skuComboBox.dataProvider = allProductSkus;
+                createQuantityDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateSkuWarehouseSaveClick);
+                createQuantityDialog.skuQuantityCreate();
+                PopUpManager.centerPopUp(createQuantityDialog);
+            }
+        }
+
+        private function onCreateSkuWarehouseSaveClick(event:Event):void {
+
+            if (createQuantityDialog != null) {
+                if (allowAddInventory && warehouseComboBox.selectedItem != null) {
+                    var swh:SkuWarehouseDTOImpl = createQuantityDialog.skuQuantity;
+                    swh.warehouseId = warehouseComboBox.selectedItem.warehouseId;
+                    Debug.trace("INFO swh to create is " + swh);
+
+                    remoteWarehouseService.createSkuOnWarehouse(swh);
+                }
+                createQuantityDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateSkuWarehouseSaveClick);
+                PopUpManager.removePopUp(createQuantityDialog);
+                createQuantityDialog = null;
+            }
+
+        }
+
+        private function onUpdateSkuWarehouseSaveClick(event:Event):void {
+
+            if (createQuantityDialog != null) {
+                if (allowEditInventory) {
+                    var swh:SkuWarehouseDTOImpl = createQuantityDialog.skuQuantity;
+                    remoteWarehouseService.updateSkuOnWarehouse(swh);
+                    createQuantityDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateSkuWarehouseSaveClick);
+                    PopUpManager.removePopUp(createQuantityDialog);
+                    createQuantityDialog = null;
+                }
+            }
+        }
+
+
+        /**
+         * Quantity label function.
+         * @param item row
+         * @param column column
+         * @return string representation of qty
+         */
+        public function quantityLabelFunction(item:Object, column:DataGridColumn):String {
+            if (item[column.dataField] == null || isNaN(item[column.dataField])) {
+                return "0.00";
+            }
+            return Number(item[column.dataField]).toFixed(2);
+        }
+
+        private function onWarehouseSelectionChanged(event:Event):void {
+            inventoryDataGrid.dataProvider = null;
+            refreshSkuWarehouseList();
+        }
+
+        private function onGetAllWarehousesResult(event:ResultEvent):void {
+            warehouseComboBox.dataProvider = event.result;
+            inventoryDataGrid.dataProvider = null;
+            allowAddInventory = false;
+            // do preselect in case if only one warehouse
+            if (warehouseComboBox.dataProvider.length == 1) {
+
+                warehouseComboBox.selectedIndex = 0;
+                warehouseComboBox.selectedItem = warehouseComboBox.dataProvider.getItemAt(0);
+                onWarehouseSelectionChanged(null);
+
+            }
+        }
+
+        private function onFindProductSkusOnWarehouseResult(event:ResultEvent):void {
+            inventoryDataGrid.dataProvider = event.result;
+            allowEditInventory = false;
+            allowDeleteInventory = false;
+        }
+
+        private function onGetAllProductSkusResult(event:ResultEvent):void {
+            allProductSkus = event.result as ArrayCollection;
+        }
+
+        private function onCreateSkuOnWarehouseResult(event:ResultEvent):void {
+            refreshSkuWarehouseList();
+        }
+
+        private function refreshSkuWarehouseList():void {
+            if (warehouseComboBox.selectedItem != null) {
+                allowAddInventory = true;
+                remoteWarehouseService.findProductSkusOnWarehouse(productId, warehouseComboBox.selectedItem.warehouseId);
+            } else {
+                allowAddInventory = false;
+            }
+        }
+
+        private function onUpdateSkuOnWarehouseResult(event:ResultEvent):void {
+            refreshSkuWarehouseList();
+        }
+
+        private function onRemoveSkuOnWarehouseResult(event:ResultEvent):void {
+            refreshSkuWarehouseList();
+        }
+
+        private function onRefreshWarehousesClick(event:MouseEvent):void {
+            onPanelInit();
+        }
+        ]]></mx:Script>
+</mx:Canvas>

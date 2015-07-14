@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" width="100%" height="100%"
+           creationComplete="init();">
+
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.AsyncToken;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        public var customerId:Number;
+
+        public function init():void {
+
+            remoteCustomerService.getAssignedShop(customerId);
+            remoteCustomerService.getAvailableShop(customerId);
+
+        }
+
+
+        /**
+         * Get shop name for representation in list.
+         * @param item
+         * @return
+         */
+        private function shopName(item:Object):String {
+
+            try {
+
+                if (item != null) {
+                    return item.toString();
+
+                } else {
+                    return "" + item;
+                }
+
+            }
+            catch (error:Error) {
+                var e2:String = "none";
+                if (item is ShopDTOImpl) {
+
+                    e2 = item.shopId;
+
+                }
+                var emsg:String = error.toString() + " --- " + item.toString() + "   ++++ " + e2;
+                Alert.show(emsg);
+
+
+            }
+
+            return "";
+
+
+        }
+
+        private function onGetAvailableShop(event:ResultEvent):void {
+            availableShop = ArrayCollection(event.result);
+        }
+
+        private function onGetAssignedShop(event:ResultEvent):void {
+            assignedShop = ArrayCollection(event.result);
+        }
+
+        private function onGrantShop(event:ResultEvent):void {
+            init();
+        }
+
+        private function onRevokeShop(event:ResultEvent):void {
+            init();
+        }
+
+        private function onAvailableShopClick(event:MouseEvent):void {
+            var _shop:ShopDTOImpl = availableShopList.selectedItem as ShopDTOImpl;
+            if (_shop != null) {
+                remoteCustomerService.grantShop(customerId, _shop.code);
+            }
+        }
+
+        private function onAvailableShopDblClick(event:MouseEvent):void {
+            onAvailableShopClick(event);
+        }
+
+        private function onAssignedShopClick(event:MouseEvent):void {
+            var _shop:ShopDTOImpl = assignedShopList.selectedItem as ShopDTOImpl;
+            if (_shop != null) {
+                remoteCustomerService.revokeShop(customerId, _shop.code);
+            }
+        }
+
+        private function onAssignedShopDblClick(event:MouseEvent):void {
+            onAssignedShopClick(event);
+        }
+
+        ]]>
+    </mx:Script>
+
+
+    <mx:ArrayCollection id="availableShop"/>
+    <mx:ArrayCollection id="assignedShop"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerService"
+                     destination="remoteCustomerService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAvailableShop" name="getAvailableShop"
+                   result="onGetAvailableShop(event)"/>
+
+        <mx:method id="getAssignedShop" name="getAssignedShop"
+                   result="onGetAssignedShop(event)"/>
+
+        <mx:method id="grantShop" name="grantShop"
+                   result="onGrantShop(event)"/>
+
+        <mx:method id="revokeShop" name="revokeShop"
+                   result="onRevokeShop(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Grid x="0" y="0" width="100%" height="100%" paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+        <mx:GridRow width="100%" height="50">
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='availableShop')"/>
+            </mx:GridItem>
+            <mx:GridItem width="12%" height="50">
+            </mx:GridItem>
+            <mx:GridItem width="44%" height="50" textAlign="center" verticalAlign="middle">
+                <mx:Label text="@Resource(bundle='CustomerShopPanel',key='assignedShop')"/>
+            </mx:GridItem>
+        </mx:GridRow>
+        <mx:GridRow width="100%" height="100%">
+            <mx:GridItem width="44%" height="100%">
+                <mx:List id="availableShopList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{availableShop}"
+                        labelFunction="shopName"
+                        doubleClickEnabled="true"
+                        doubleClick="onAvailableShopDblClick(event)"
+                        >
+                </mx:List>
+            </mx:GridItem>
+            <mx:GridItem width="12%" height="100%" verticalAlign="middle" textAlign="center">
+                <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                    <mx:Button width="100"
+                               enabled="{availableShopList.selectedItem != null}"
+                               label="@Resource(bundle='CustomerShopPanel',key='assign')"
+                               toolTip="@Resource(bundle='CustomerShopPanel',key='assignHint')"
+                               click="onAvailableShopClick(event)"/>
+                    <mx:Button width="100" enabled="{assignedShopList.selectedItem != null}"
+                               label="@Resource(bundle='CustomerShopPanel',key='unassign')"
+                               toolTip="@Resource(bundle='CustomerShopPanel',key='unassignHint')"
+                               click="onAssignedShopClick(event)"/>
+                </mx:VBox>
+            </mx:GridItem>
+            <mx:GridItem width="44%" height="100%">
+                <mx:List id="assignedShopList"
+                        width="100%"
+                        height="100%"
+                        dataProvider="{assignedShop}"
+                        labelFunction="shopName"
+                        doubleClickEnabled="true"
+                        doubleClick="onAssignedShopDblClick(event)"
+                        >
+
+                </mx:List>
+            </mx:GridItem>
+        </mx:GridRow>
+
+    </mx:Grid>
+
+
+</mx:Canvas>

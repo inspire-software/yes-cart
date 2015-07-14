@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="initIndexPanel()">
+
+	<mx:Script>
+		<![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+
+        import org.yes.cart.impl.JobStatusImpl;
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.util.DomainUtils;
+
+        private var indexJobToken:String;
+
+        private var indexStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
+
+        private function onReindexBtnClick(event:MouseEvent):void {
+
+            allowReindex = false;
+            var _shop:ShopDTOImpl = storesComboBox.selectedItem as ShopDTOImpl;
+            if (_shop != null && DomainUtils.isPersistentPK(_shop.shopId)) {
+                reindexService.reindexShopProducts(_shop.shopId);
+            } else {
+                reindexService.reindexAllProducts();
+            }
+
+        }
+
+        private function onReindexAllProductsFault(event:FaultEvent):void {
+
+            resultDetails.text += resourceManager.getString("ReindexPanel", "reindexFailedOk") + event.fault;
+            allowReindex = true;
+        }
+
+        private function onReindexAllProductsResult(event:ResultEvent):void {
+            indexJobToken = event.result as String;
+            jobToken.text = indexJobToken;
+            resultDetails.text = resourceManager.getString('ReindexPanel', 'reindexInProcess', [ indexJobToken ]);
+            indexStatusTimer.start(); // start the status update timer
+        }
+
+        private function initIndexPanel():void {
+
+            remoteShopService.getAll();
+            indexStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
+
+        }
+
+        private function onStatusTimerComplete(event:TimerEvent):void {
+
+            if (jobToken.text != null) {
+                reindexService.getIndexAllStatus(indexJobToken);
+            }
+
+        }
+
+        private function onWatchClick(event:MouseEvent):void {
+
+            if (jobToken.text != null) {
+                indexJobToken = jobToken.text;
+                reindexService.getIndexAllStatus(indexJobToken);
+            }
+
+        }
+
+        private function onGetIndexAllStatusResult(event:ResultEvent):void {
+            var status:JobStatusImpl = event.result as JobStatusImpl;
+            resultDetails.text = resourceManager.getString('ReindexPanel', 'reindexInProcess', [ indexJobToken ])
+                    + '\n' + status.report;
+            if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
+                indexStatusTimer.start(); // do another timed status update
+            } else {
+                allowReindex = true;
+                Alert.show(resourceManager.getString('ReindexPanel', 'reindexStatusSuccess'),
+                        resourceManager.getString('ShopManagerApplication', 'info'),
+                        Alert.YES | Alert.CANCEL, this, onGetReindexStatusResultSuccess, null, Alert.YES);
+            }
+        }
+
+        private function onGetReindexStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictAllCache();
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllShopsResult(event:ResultEvent):void {
+            var _result:ArrayCollection = ArrayCollection(event.result);
+            var _selection:ArrayCollection = new ArrayCollection();
+            var _allShops:ShopDTOImpl = new ShopDTOImpl();
+            _allShops.name = resourceManager.getString('ReindexPanel', 'allShops');
+            _selection.addItem(_allShops);
+            _selection.addAll(_result);
+            storesComboBox.dataProvider = _selection;
+        }
+
+        ]]>
+	</mx:Script>
+
+    <mx:Boolean id="allowReindex">true</mx:Boolean>
+
+	<mx:RemoteObject showBusyCursor="true"  id="reindexService"
+					 destination="reindexService"
+					 channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="reindexAllProducts" name="reindexAllProducts"
+                   result="onReindexAllProductsResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
+        <mx:method id="reindexShopProducts" name="reindexShopProducts"
+                   result="onReindexAllProductsResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
+        <mx:method id="getIndexAllStatus" name="getIndexAllStatus"
+                   result="onGetIndexAllStatusResult(event)"
+                   fault="onReindexAllProductsFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteShopService"
+                     destination="remoteShopService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllShops" name="getAll"
+                   result="onGetAllShopsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+
+    <mx:Panel height="100%" width="100%" title="@Resource(bundle='ReindexPanel',key='reindexProducts')"
+              paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+
+        <mx:VBox width="100%" height="100%">
+
+            <mx:Text width="100%" text="@Resource(bundle='ReindexPanel',key='description')"/>
+
+            <mx:Form width="100%" height="120">
+                <mx:FormHeading label="@Resource(bundle='ReindexPanel',key='reindexMessage')"/>
+                <mx:FormItem label="@Resource(bundle='ReindexPanel',key='startMessage')">
+                    <mx:HBox>
+                        <mx:ComboBox id="storesComboBox" width="200"
+                                     labelField="name" data="shopId"
+                                     enabled="{allowReindex}"
+                                     prompt="@Resource(bundle='ProductManagementPanel',key='selectStorePropmt')"/>
+                        <mx:Button id="reindexBtn" label="@Resource(bundle='ReindexPanel',key='start')"
+                                   enabled="{allowReindex}"
+                                   click="onReindexBtnClick(event)"/>
+                    </mx:HBox>
+                </mx:FormItem>
+                <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
+                    <mx:HBox>
+                        <mx:TextInput id="jobToken" width="200"/>
+                        <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
+                                   click="onWatchClick(event)"/>
+                    </mx:HBox>
+                </mx:FormItem>
+            </mx:Form>
+
+            <mx:TextArea id="resultDetails" width="100%" height="100%"/>
+
+        </mx:VBox>
+	</mx:Panel>
+
+</mx:Canvas>

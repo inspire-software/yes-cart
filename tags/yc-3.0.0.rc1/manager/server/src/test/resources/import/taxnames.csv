@@ -1,0 +1,3 @@
+guid;code;shop code;currency;tax rate;exclusive of price;description
+SHOIP_EUR_VAT;VAT;SHOIP;EUR;10.00;false;VAT 10% in EUR;
+SHOIP_USD_VAT;VAT;SHOIP;USD;12.00;false;VAT 12% in USD;

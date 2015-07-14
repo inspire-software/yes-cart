@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" layout="absolute"
+                width="600" height="500"
+                title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();">
+
+
+    <mx:VBox width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
+        <mx:TabBar id="rangesTabBar" itemClick="rangeTabSelected(event)"
+                   dataProvider="{rangesViewStack}"/>
+        <mx:ViewStack id="rangesViewStack" width="100%" height="100%" creationPolicy="all">
+            <mx:VBox label="@Resource(bundle='ProductTypeManagementPanel',key='ranges')" width="100%" height="100%"
+                     paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:HBox paddingTop="5" width="100%">
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationAddRowHint')"
+                               enabled="{addRowEnabled}"
+                               click="onAddNewNavRangeRowClick(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRow')"
+                               toolTip="@Resource(bundle='ProductTypeManagementPanel',key='priceNavigationDeleteRowHint')"
+                               enabled="{removeRowEnabled}"
+                               click="deleteSelectedNavRangeRow(event)"
+                            />
+                </mx:HBox>
+                <mx:DataGrid id="rangesGrid" itemEditEnd="onItemEditEnd(event)" itemClick="onXmlNodeSelected(event)"
+                             editable="true"
+                             width="100%" height="100%">
+                    <mx:columns>
+                        <mx:DataGridColumn dataField="from" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueFrom')"/>
+                        <mx:DataGridColumn dataField="to" headerText="@Resource(bundle='ProductTypeManagementPanel',key='valueTo')"/>
+                    </mx:columns>
+                </mx:DataGrid>
+                <mx:HBox paddingTop="5" width="100%">
+                    <yci18n:i18nStringField id="displayNames" change="onDisplayNamesChange(event)" enabled="{editDisplayNamesEnabled}"/>
+                </mx:HBox>
+            </mx:VBox>
+            <mx:VBox label="XML" width="100%" height="100%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+                <mx:TextArea id="rawXML" x="0" y="0" width="100%" height="100%"/>
+            </mx:VBox>
+        </mx:ViewStack>
+    </mx:VBox>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Boolean id="addRowEnabled">true</mx:Boolean>
+    <mx:Boolean id="removeRowEnabled">false</mx:Boolean>
+    <mx:Boolean id="editDisplayNamesEnabled">false</mx:Boolean>
+
+
+    <mx:Script><![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.containers.Canvas;
+        import mx.controls.DataGrid;
+        import mx.controls.Label;
+        import mx.controls.TextArea;
+        import mx.controls.dataGridClasses.DataGridColumn;
+        import mx.core.UIComponent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.FlexEvent;
+        import mx.events.ItemClickEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        private var xmlNode:XML;
+
+        public var xmlString:String;
+
+        private var xml:XML;
+        private var gridXml:XMLList;
+
+        public var displayNamesValues:Object = {};
+
+        public function init():void {
+            internalInit();
+            rangesTabBar.selectedIndex = 0;
+            this.displayNames.setSourceObject(this, 'displayNamesValues');
+        }
+
+        private function rangeTabSelected(event:ItemClickEvent):void {
+            removeRowEnabled = false;
+            editDisplayNamesEnabled = false;
+            addRowEnabled = (event.label != "XML");
+            xmlNode = null;
+            if (event.label == "XML") {
+                xml = getGridXml();
+                if (rawXML != null) {
+                    rawXML.text = xml.toXMLString();
+                }
+            } else {
+                try {
+                    xml = new XML(rawXML.text);
+                    gridXml = xml.ranges.range.copy();
+                    rangesGrid.dataProvider = gridXml;
+                } catch (e:Error) {
+
+                    Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message); //TODO alert
+                }
+            }
+        }
+
+        public function deleteNode(node:XML):void {
+            if (node != null && node.parent() != null) {
+                delete node.parent().children()[node.childIndex()];
+            }
+        }
+
+        private function deleteSelectedNavRangeRow(event:MouseEvent):void {
+
+            var xmlRowIndex:int = rangesGrid.selectedIndex;
+            if (xmlRowIndex > -1) {
+                delete gridXml[xmlRowIndex];
+                xmlNode = null;
+                xml.ranges.range = gridXml.copy();
+                rangesGrid.dataProvider = gridXml;
+                rangesTabBar.selectedIndex = 0;
+                rangesViewStack.selectedIndex = 0;
+                editDisplayNamesEnabled = false;
+                removeRowEnabled = false;
+            }
+        }
+
+        private function getGridXml():XML {
+            var newXml:XML = xml;
+
+            if (gridXml != null) {
+                newXml.ranges.range = gridXml;
+            }
+
+            return newXml;
+        }
+
+        /**
+         * Get the price navigation xml string.
+         * @return price navigation xml string
+         */
+        public function getXmlString():String {
+            var idx:int = rangesTabBar.selectedIndex;
+            if (idx == 1) {
+                return rawXML.text;
+            }
+            return getGridXml().toXMLString();
+        }
+
+        private function internalInit():void {
+
+            try {
+                if (xmlString == null || xmlString.length == 0) {
+                    xml = <range-list>
+                        <ranges>
+                            <range>
+                                <from>1</from>
+                                <to>2</to>
+                            </range>
+                        </ranges>
+                    </range-list>;
+                } else {
+                    xml = new XML(xmlString);
+                }
+                gridXml = xml.ranges.range;
+
+                rangesGrid.dataProvider = gridXml;
+
+            } catch (e:Error) {
+
+                Debug.trace("ERROR RangeNavigationDialog can not convert string to xml " + e.message);
+            }
+
+        }
+
+        private function onXmlNodeSelected(event:ListEvent):void {
+            var _xmlNode:XML = event.currentTarget.selectedItem;
+            editDisplayNamesEnabled = _xmlNode != null;
+            removeRowEnabled = _xmlNode != null;
+
+            this.displayNamesValues = {};
+            if (editDisplayNamesEnabled) {
+                xmlNode = _xmlNode;
+                this.displayNamesValues = {};
+                if (xmlNode.hasOwnProperty('i18n')) {
+                    for each (var fromDisplay:XML in xmlNode['i18n'].display) {
+                        this.displayNamesValues[fromDisplay.lang.toString()] = fromDisplay.value.toString();
+                    }
+                }
+            }
+            this.displayNames.setSourceObject(this, 'displayNamesValues');
+        }
+
+        protected function onItemEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+            var obj:Object = DataGrid(event.target).dataProvider[event.rowIndex];
+        }
+
+        private function onAddNewNavRangeRowClick(event:MouseEvent):void {
+            var xml:XML = <root/>;
+            xml.appendChild(gridXml.copy());
+            xml.appendChild(
+                    <range>
+                        <from>1</from>
+                        <to>2</to>
+                    </range>);
+            gridXml = new XMLList(xml.range);
+            rangesGrid.dataProvider = gridXml;
+
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+
+            onDisplayNamesChangeInternal(event, 'i18n', displayNamesValues);
+
+        }
+
+        private function onDisplayNamesChangeInternal(event:FlexEvent, nodeName:String, nodeValues:Object):void {
+
+            var _xmlNode:XML = xmlNode;
+
+            if (editDisplayNamesEnabled && _xmlNode != null) {
+
+                var xmlStr:String = '<' + nodeName + '>';
+                for (var lang:String in nodeValues) {
+                    if (isLocaleProp(lang)) {
+                        xmlStr += '<display><lang>' + lang + '</lang><value>' + nodeValues[lang] + '</value></display>';
+                    }
+                }
+                xmlStr += '</' + nodeName + '>';
+
+                if (_xmlNode.hasOwnProperty(nodeName)) {
+                    for each (var display:XML in _xmlNode[nodeName].display) {
+                        deleteNode(display);
+                    }
+                } else {
+                    _xmlNode.appendChild(new XML('<' + nodeName + '/>'))
+                }
+                _xmlNode[nodeName] = new XML(xmlStr);
+
+            }
+
+            xml.ranges.range = gridXml.copy();
+
+        }
+
+
+        private function isLocaleProp(prop:String):Boolean {
+            /*
+             * simple hack to only use locale properties, since
+             * flex has other internal properties (like mx_internal_id)
+             * which we do not want to mess with.
+             */
+            return prop.length <= 6;
+        }
+        ]]>
+    </mx:Script>
+
+</mx:TitleWindow>

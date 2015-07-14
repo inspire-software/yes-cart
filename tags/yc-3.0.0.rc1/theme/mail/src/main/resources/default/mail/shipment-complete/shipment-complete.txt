@@ -1,0 +1,5 @@
+Dear $customer.firstname $customer.lastname!
+Your payment for delivery $param1 for order $root.ordernum has been received. Thank You!
+
+You can view detailed information in order history
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

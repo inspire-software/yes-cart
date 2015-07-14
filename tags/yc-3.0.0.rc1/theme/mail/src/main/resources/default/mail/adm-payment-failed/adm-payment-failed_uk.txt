@@ -1,0 +1,14 @@
+Не вдалося виконати оплату для $root.ordernum на $shop.name
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+    for (Object payment : payments) {
+          out.println(lineDelimiter);
+          def line = "| " + payment.transactionGatewayLabel  + " | " + payment.orderShipment + " | " +  payment.transactionOperation + " | " + payment.paymentProcessorResult + " | " + payment.paymentAmount + " | " + payment.createdTimestamp;
+          out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+    }
+} catch (Exception e) {
+out.print(e.getMessage());
+}
+%>

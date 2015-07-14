@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:prod="org.yes.cart.ui.product.*"
+           width="100%" height="100%">
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+
+        import mx.core.FlexGlobals;
+
+        import org.yes.cart.event.DtoEvent;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.util.DomainUtils;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.IndexChangedEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import spark.collections.Sort;
+        import spark.collections.SortField;
+
+        private var TAB_SUMMARY_IDX:int = 0;
+        private var TAB_SEO_IDX:int = 1;
+        private var TAB_IMAGE_IDX:int = 2;
+        private var TAB_ATTR_IDX:int = 3;
+
+
+        private var _product:ProductDTOImpl;
+        [Bindable]
+        private var selectedSku:ProductSkuDTOImpl;
+
+        private var productSkuCreateDialog:ProductSkuCreateDialog;
+
+        public function get product():ProductDTOImpl {
+            return _product;
+        }
+
+        public function set product(value:ProductDTOImpl):void {
+            if (_product != null && value != null && _product.productId == value.productId) {
+                return;
+            }
+            _product = value;
+            if (_product != null) {
+                remoteProductSkuService.getAllProductSkus(_product.productId);
+            }
+        }
+
+        private function onSkuSelected(event:ListEvent):void {
+            if (skusComboBox.selectedItem != null) {
+                skuSelected = true;
+                selectedSku = skusComboBox.selectedItem as ProductSkuDTOImpl;
+                initTab(skuTabNavigator.selectedIndex);
+            } else {
+                skuSelected = false;
+            }
+        }
+
+        private function onTabClick(event:IndexChangedEvent):void {
+            initTab(event.newIndex);
+        }
+
+        private function initTab(idx:int):void {
+            Debug.trace("INFO ProductSkuManagementPanel selected tab idx is " + idx);
+            if (!skuSelected) {
+                return;
+            }
+            Debug.trace("INFO ProductSkuManagementPanel selected sku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
+            switch (idx) {
+
+                case TAB_SUMMARY_IDX:
+                {
+                    skuSummaryTabSelect();
+                    break;
+                }
+
+                case TAB_SEO_IDX:
+                {
+                    skuSeoTabSelect();
+                    break;
+                }
+
+                case TAB_IMAGE_IDX:
+                {
+                    imageTabSelected();
+                    break;
+                }
+
+                case TAB_ATTR_IDX:
+                {
+                    attrTabSelected();
+                    break;
+                }
+
+
+            }
+
+        }
+
+        private function attrTabSelected():void {
+            Debug.trace("INFO attrs tab selected, selected productSku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
+            if (skuSelected && this.selectedSku != null) {
+                skuAttributesTab.productSku = this.selectedSku;
+            } else {
+                skuAttributesTab.productSku = null;
+            }
+        }
+
+        private function imageTabSelected():void {
+            Debug.trace("INFO image tab selected, selected productSku code is " + (selectedSku != null ?
+                    selectedSku.code : "null"));
+            if (skuSelected && this.selectedSku != null) {
+                skuImagesTab.productSku = this.selectedSku;
+            } else {
+                skuImagesTab.productSku = null;
+            }
+        }
+
+
+
+        private function skuSummaryTabSelect():void {
+            skuSummaryPanel.productSku = selectedSku;
+        }
+
+        private function skuSeoTabSelect():void {
+            skuSeoPanel.productSku = selectedSku;
+        }
+
+        private function onCreateSkuClick(event:MouseEvent):void {
+            productSkuCreateDialog = ProductSkuCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductSkuCreateDialog, true));
+            productSkuCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewProductSkuSaveClick);
+            PopUpManager.centerPopUp(productSkuCreateDialog);
+        }
+
+        private function onCreateNewProductSkuSaveClick(event:Event):void {
+            if (productSkuCreateDialog != null) {
+                var sku:ProductSkuDTOImpl = productSkuCreateDialog.productSku;
+                sku.productId = _product.productId;
+                //TODO add validation
+                remoteProductSkuService.create(sku);
+                productSkuCreateDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewProductSkuSaveClick);
+                PopUpManager.removePopUp(productSkuCreateDialog);
+                productSkuCreateDialog = null;
+            }
+        }
+
+        private function onDeleteSkuClick(event:MouseEvent):void {
+            if (skuSelected && selectedSku != null) {
+                Alert.show(
+                        resourceManager.getString('ProductSkuManagementPanel', 'deleteSkuConfirm', [ selectedSku.code ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteSkuConfirmClick, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteSkuConfirmClick(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (skuSelected && selectedSku != null) {
+                    remoteProductSkuService.remove(selectedSku.skuId);
+                }
+            }
+        }
+
+        public function onSkuChanged(sku:ProductSkuDTOImpl):void {
+            if (DomainUtils.isNewPK(sku.skuId)) {
+                remoteProductSkuService.create(sku);
+            } else {
+                remoteProductSkuService.update(sku);
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllProductSkusResult(event:ResultEvent):void {
+            var _skus:ArrayCollection = event.result as ArrayCollection;
+            var _sort:Sort = new Sort();
+            _sort.fields = [ new SortField('name') ];
+            _skus.sort = _sort;
+            _skus.refresh();
+            skusComboBox.dataProvider = _skus;
+            if (skusComboBox.dataProvider != null && skusComboBox.dataProvider.length == 1) {
+                skusComboBox.selectedIndex = 1;
+                skusComboBox.dispatchEvent(new ListEvent("change"));
+            }
+        }
+
+
+        /**
+         * Create label for given product sku. Format: "code: name (bar code)".
+         * @param value product sku dto
+         * @return label for given sku
+         */
+        private function skuLabelFunction(value:Object):String {
+            var _label:String = value.code + ': ' + value.name;
+            if (value.barCode != null && value.barCode.length > 0) {
+                _label += ' (' + value.barCode + ')';
+            }
+            return _label;
+        }
+
+        private function onCreateUpdateResult(event:ResultEvent):void {
+            remoteProductSkuService.getAllProductSkus(_product.productId);
+        }
+
+        private function initSummaryPanelListeners():void {
+            skuSummaryPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function initSeoPanelListeners():void {
+            skuSeoPanel.addEventListener(DtoEvent.UPDATE, onSummaryUpdateClick);
+        }
+
+        private function onSummaryUpdateClick(event:DtoEvent):void {
+            selectedSku = event.dto as ProductSkuDTOImpl;
+            onSkuChanged(selectedSku);
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagementPanel', 'skuDeleted'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+            remoteProductSkuService.getAllProductSkus(_product.productId);
+        }
+
+        private function onRemoveFault(event:FaultEvent):void {
+            Alert.show(
+                    resourceManager.getString('ProductSkuManagementPanel', 'skuCanNotBeDeleted'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+        }
+
+        ]]>
+	</mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllProductSkus" name="getAllProductSkus"
+                   result="onGetAllProductSkusResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="create" name="create"
+                   result="onCreateUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onCreateUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"
+                   fault="onRemoveFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="skuSelected">false</mx:Boolean>
+
+    <mx:VBox width="100%" height="100%" id="productSkuManagmenlPanel"
+             paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:HBox paddingTop="5" width="100%">
+            <mx:Text text="@Resource(bundle='ProductSkuManagementPanel',key='productSku')"/>
+            <mx:ComboBox id="skusComboBox" width="300"
+                         labelFunction="skuLabelFunction"
+                         data="skuId"
+                         prompt="@Resource(bundle='ProductSkuManagementPanel',key='selectSkuPropmt')"
+                         dataProvider="{remoteProductSkuService.getAllProductSkus.lastResult}"
+                         change="onSkuSelected(event);"
+                    >
+            </mx:ComboBox>
+            <mx:Button label="@Resource(bundle='ProductSkuManagementPanel',key='createSku')"
+                       toolTip="@Resource(bundle='ProductSkuManagementPanel',key='createSkuHint')"
+                       id="createSkuBtn"
+                       click="onCreateSkuClick(event)"/>
+            <mx:Button label="@Resource(bundle='ProductSkuManagementPanel',key='deleteSku')"
+                       toolTip="@Resource(bundle='ProductSkuManagementPanel',key='deleteSkuHint')"
+                       id="deleteSkuBtn"
+                       click="onDeleteSkuClick(event)"/>
+        </mx:HBox>
+        <mx:TabNavigator width="100%" height="100%" id="skuTabNavigator"
+                         change="onTabClick(event);">
+            <mx:Canvas label="@Resource(bundle='ProductSkuManagementPanel',key='summary')" width="100%" height="100%">
+                <prod:ProductSkuSummaryPanel id="skuSummaryPanel"
+                                             creationComplete="initSummaryPanelListeners()"/>
+            </mx:Canvas>
+            <mx:Canvas label="@Resource(bundle='ShopManagerApplication',key='seo')" width="100%" height="100%">
+                <prod:ProductSkuSeoPanel id="skuSeoPanel"
+                                             creationComplete="initSeoPanelListeners()"/>
+            </mx:Canvas>
+            <prod:ProductSkuImageAttributesPanel id="skuImagesTab"/>
+            <prod:ProductSkuNonImageAttributesPanel id="skuAttributesTab"/>
+        </mx:TabNavigator>
+    </mx:VBox>
+
+</mx:Canvas>

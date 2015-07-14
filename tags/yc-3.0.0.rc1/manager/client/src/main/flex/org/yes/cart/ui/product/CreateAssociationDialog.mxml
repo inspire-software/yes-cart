@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+                width="500"
+                height="250"
+                title="@Resource(bundle='ProductManagementPanel',key='createAssociation')"
+                showCloseButton="true" close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='associationType')">
+            <mx:ComboBox id="associationComboBox" width="300"
+                         labelField="name"
+                         dataProvider="{associationTypes}"
+                         change="onAssociationTypeChanged(event)"
+                         prompt="@Resource(bundle='ProductManagementPanel',key='associationPropmt')">
+            </mx:ComboBox>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='selectProduct')">
+            <mx:HBox>
+                <mx:Label id="productLabel" width="262"/>
+                <mx:Button id="selectProductBtn" width="30"
+                           label="..."
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='selectProductHint')"
+                           click="onProductSelectedClick(event);"
+                        />
+            </mx:HBox>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='rank')">
+            <mx:TextInput id="rankTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='reverseAssociation')">
+            <mx:CheckBox id="reverseCheckBox" selected="true"
+                         toolTip="@Resource(bundle='ProductManagementPanel',key='reverseAssociationHint')"
+                    />
+        </mx:FormItem>
+    </mx:Form>
+
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='saveAssociation')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='saveAssociationHint')"
+                   enabled="{selectedAssociationDTOImpl != null &amp;&amp; selectedProductDTOImpl != null}"
+                />
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    
+    <mx:NumberValidator id="rankValidator"
+        source="{rankTextInput}" property="text"
+        minValue="0" maxValue="99999" domain="int"
+        invalidCharError="@Resource(bundle='ProductManagementPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductManagementPanel',key='rankInvalidCharError')"
+    />
+
+    <mx:ArrayCollection id="associationTypes"/>
+
+    <mx:Script>
+        <![CDATA[
+        import mx.core.FlexGlobals;
+
+        import org.yes.cart.impl.AssociationDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import flash.events.MouseEvent;
+
+        import mx.core.Application;
+        import mx.managers.PopUpManager;
+
+        [Bindable]
+        public var selectedAssociationDTOImpl:AssociationDTOImpl;
+        [Bindable]
+        public var selectedProductDTOImpl:ProductDTOImpl;
+
+
+        private var productFinderPopUp:ProductFinderDialog;
+
+
+        public function init():void {
+
+        }
+
+
+        private function onAssociationTypeChanged(event:Event):void {
+            if (associationComboBox.selectedItem != null) {
+                selectedAssociationDTOImpl = associationComboBox.selectedItem as AssociationDTOImpl;
+            } else {
+                selectedAssociationDTOImpl = null;
+            }
+        }
+
+        private function onProductSelectedClick(event:MouseEvent):void {
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
+            productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+            PopUpManager.centerPopUp(productFinderPopUp);
+
+        }
+
+        private function onProductSelectedConfirm(event:Event):void {
+            if (productFinderPopUp != null) {
+                var selected:Array = productFinderPopUp.productSelection;
+                if (selected != null && selected.length > 0) {
+                    selectedProductDTOImpl = selected[0];
+                    productLabel.text = selectedProductDTOImpl.code + ': ' + selectedProductDTOImpl.name;
+                    productLabel.toolTip = selectedProductDTOImpl.description;
+                    productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+                    PopUpManager.removePopUp(productFinderPopUp);
+                    productFinderPopUp = null;
+                }
+            }
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

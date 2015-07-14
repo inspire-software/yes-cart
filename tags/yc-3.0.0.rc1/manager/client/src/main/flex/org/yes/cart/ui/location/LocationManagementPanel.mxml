@@ -1,0 +1,386 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="init();"
+           paddingLeft="2" paddingRight="2" paddingBottom="5">
+    <mx:Script>
+		<![CDATA[
+        import mx.controls.Alert;
+        import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CountryDTOImpl;
+        import org.yes.cart.impl.StateDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.CloneUtil;
+
+        private var countryCreateEditDialog:CountryCreateEditDialog;
+
+        private var stateCreateEditDialog:StateCreateEditDialog;
+
+        public function init():void {
+            remoteCountryService.getAll();
+        }
+
+        private function onCountrySelected(event:ListEvent):void {
+            this.countrySelected = this.countryGrid.selectedItem != null;
+            if (this.countrySelected) {
+                countrySelectedAndHasNoStates = false;
+                stateSelected = false;
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+        }
+
+        private function onDeleteCountryClick(event:MouseEvent):void {
+            if (this.countrySelected && this.countryGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('LocationManagementPanel', 'deleteCountryConfirm', [ this.countryGrid.selectedItem.countryCode ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteCountryConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteCountryConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (this.countrySelected && this.countryGrid.selectedItem != null) {
+                    var countryId:Object = this.countryGrid.selectedItem.countryId;
+                    remoteCountryService.remove(countryId);
+                }
+                this.countrySelected = false;
+                this.countrySelectedAndHasNoStates = false;
+                this.stateSelected = false;
+            }
+        }
+
+        private function onEditCountryClick(event:Event):void {
+            if (this.countrySelected && this.countryGrid.selectedItem != null) {
+                countryCreateEditDialog = CountryCreateEditDialog(
+                        PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
+                countryCreateEditDialog.newCountryFlag = false;
+                countryCreateEditDialog.countryDTOImpl = CountryDTOImpl(CloneUtil.clone(this.countryGrid.selectedItem));
+                countryCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateCountryClick);
+                PopUpManager.centerPopUp(countryCreateEditDialog);
+            }
+        }
+
+        private function onUpdateCountryClick(event:Event):void {
+            remoteCountryService.update(countryCreateEditDialog.countryDTOImpl);
+        }
+
+
+        private function onNewCountryClick(event:MouseEvent):void {
+            countryCreateEditDialog = CountryCreateEditDialog(
+                    PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CountryCreateEditDialog, true));
+            countryCreateEditDialog.newCountryFlag = true;
+            countryCreateEditDialog.countryDTOImpl = new CountryDTOImpl();
+            countryCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onSaveCountryClick);
+            PopUpManager.centerPopUp(countryCreateEditDialog);
+        }
+
+        private function onSaveCountryClick(event:Event):void {
+            remoteCountryService.create(countryCreateEditDialog.countryDTOImpl);
+        }
+
+
+        private function onNewStateClick(event:MouseEvent):void {
+            if (this.countrySelected && this.countryGrid.selectedItem != null) {
+
+                var state:StateDTOImpl = new StateDTOImpl();
+                var countryCode:String = countryGrid.selectedItem.countryCode;
+                state.countryCode = countryCode;
+                stateCreateEditDialog = StateCreateEditDialog(PopUpManager.createPopUp(parent, StateCreateEditDialog, true));
+                stateCreateEditDialog.newStateFlag = true;
+
+                stateCreateEditDialog.stateDTOImpl = state;
+                stateCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onSaveStateClick);
+                PopUpManager.centerPopUp(stateCreateEditDialog);
+            }
+        }
+
+        private function onEditStateClick(event:Event):void {
+            if (this.stateSelected && this.stateGrid.selectedItem != null) {
+                stateCreateEditDialog = StateCreateEditDialog(
+                        PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), StateCreateEditDialog, true));
+                stateCreateEditDialog.newStateFlag = false;
+                stateCreateEditDialog.stateDTOImpl = StateDTOImpl(CloneUtil.clone(this.stateGrid.selectedItem));
+                stateCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateStateClick);
+                PopUpManager.centerPopUp(stateCreateEditDialog);
+            }
+        }
+
+        private function onSaveStateClick(event:Event):void {
+            var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
+            remoteStateService.create(stateDTOImpl);
+        }
+
+        private function onUpdateStateClick(event:Event):void {
+            var stateDTOImpl:StateDTOImpl = stateCreateEditDialog.stateDTOImpl;
+            remoteStateService.update(stateDTOImpl);
+        }
+
+        private function onDeleteStateClick(event:MouseEvent):void {
+            if (this.stateSelected && this.stateGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('LocationManagementPanel', 'deleteStateConfirm', [ this.stateGrid.selectedItem.stateCode ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteStateConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteStateConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (this.stateSelected && this.stateGrid.selectedItem != null) {
+                    remoteStateService.remove(this.stateGrid.selectedItem.stateId);
+                }
+                stateSelected = false;
+            }
+        }
+
+        private function onStateSelected(event:ListEvent):void {
+            this.stateSelected = this.stateGrid.selectedItem != null;
+        }
+
+        private function onGetAllCountriesResult(event:ResultEvent):void {
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            this.countryGrid.dataProvider = event.result;
+        }
+
+        private function onFindByCountryResult(event:ResultEvent):void {
+            this.stateGrid.dataProvider = event.result;
+            stateSelected = false;
+            countrySelectedAndHasNoStates = countrySelected && this.stateGrid.dataProvider.length == 0;
+        }
+
+        private function onRemoveCountryResult(event:ResultEvent):void {
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+        }
+
+        private function onUpdateCountryResult(event:ResultEvent):void {
+
+            if (countryCreateEditDialog != null) {
+                countryCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateCountryClick);
+                PopUpManager.removePopUp(countryCreateEditDialog);
+                countryCreateEditDialog = null;
+            }
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+        }
+
+        private function onCreateCountryResult(event:ResultEvent):void {
+
+            if (countryCreateEditDialog != null) {
+                countryCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onSaveCountryClick);
+                PopUpManager.removePopUp(countryCreateEditDialog);
+                countryCreateEditDialog = null;
+            }
+            countrySelected = false;
+            countrySelectedAndHasNoStates = false;
+            stateSelected = false;
+            remoteCountryService.getAll();
+
+        }
+
+        private function onUpdateStateResult(event:ResultEvent):void {
+
+            if (stateCreateEditDialog != null) {
+                stateCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onUpdateStateClick);
+                PopUpManager.removePopUp(stateCreateEditDialog);
+                stateCreateEditDialog = null;
+            }
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
+
+        private function onCreateStateResult(event:ResultEvent):void {
+
+            if (stateCreateEditDialog != null) {
+                stateCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onSaveStateClick);
+                PopUpManager.removePopUp(stateCreateEditDialog);
+                stateCreateEditDialog = null;
+            }
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
+
+        private function onRemoveStateResult(event:ResultEvent):void {
+
+            stateCreateEditDialog = null;
+            stateSelected = false;
+            if (countrySelected && this.countryGrid.selectedItem != null) {
+                remoteStateService.findByCountry(this.countryGrid.selectedItem.countryCode);
+            }
+
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCountryService"
+                     destination="remoteCountryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+    
+        <mx:method id="getAllCountries" name="getAll"
+                   result="onGetAllCountriesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="removeCountry" name="remove"
+                   result="onRemoveCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="updateCountry" name="update"
+                   result="onUpdateCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="createCountry" name="create"
+                   result="onCreateCountryResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteStateService"
+                     destination="remoteStateService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+            
+        <mx:method id="findByCountry" name="findByCountry"
+                   result="onFindByCountryResult(event)"/>
+        <mx:method id="removeState" name="remove"
+                   result="onRemoveStateResult(event)"/>
+        <mx:method id="updateState" name="update"
+                   result="onUpdateStateResult(event)"/>
+        <mx:method id="createState" name="create"
+                   result="onCreateStateResult(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="countrySelected">false</mx:Boolean>
+    <mx:Boolean id="countrySelectedAndHasNoStates">false</mx:Boolean>
+    <mx:Boolean id="stateSelected">false</mx:Boolean>
+
+    <mx:VDividedBox height="100%" width="100%">
+        <mx:Panel width="100%" title="@Resource(bundle='LocationManagementPanel',key='countries')"
+                  paddingLeft="2" paddingRight="2" paddingBottom="5">
+            <mx:HBox paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='newCountryHint')"
+                           click="onNewCountryClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='editCountryHint')"
+                           enabled="{countrySelected}"
+                           click="onEditCountryClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteCountry')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='deleteCountryHint')"
+                           enabled="{countrySelectedAndHasNoStates}"
+                           click="onDeleteCountryClick(event)"
+                        />
+
+            </mx:HBox>
+            <mx:DataGrid id="countryGrid"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="onEditCountryClick(event)"
+                         itemClick="onCountrySelected(event)"
+                         width="100%" height="100%">
+                <mx:columns>
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='countryId')"
+                                       dataField="countryId"/>
+                    <mx:DataGridColumn width="100"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='countryCode')"
+                                       dataField="countryCode"/>
+                    <mx:DataGridColumn width="100"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='isoCode')"
+                                       dataField="isoCode"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='displayName')"
+                                       dataField="displayName"/>
+                </mx:columns>
+                <!--countries dg-->
+            </mx:DataGrid>
+        </mx:Panel>
+
+        <mx:Panel width="100%" visible="{countrySelected}" layout="vertical"
+                  title="@Resource(bundle='LocationManagementPanel',key='states')"
+                  paddingLeft="2" paddingRight="2" paddingBottom="5">
+            <mx:HBox paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='newState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='newStateHint')"
+                           enabled="{countrySelected}"
+                           click="onNewStateClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='editState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='editStateHint')"
+                           enabled="{stateSelected}"
+                           click="onEditStateClick(event)"
+                        />
+                <mx:Button label="@Resource(bundle='LocationManagementPanel',key='deleteState')"
+                           toolTip="@Resource(bundle='LocationManagementPanel',key='deleteStateHint')"
+                           enabled="{stateSelected}"
+                           click="onDeleteStateClick(event)"
+                        />
+
+            </mx:HBox>
+            <mx:DataGrid id="stateGrid"
+                         doubleClickEnabled="true"
+                         itemDoubleClick="onEditStateClick(event)"
+                         itemClick="onStateSelected(event)"
+                         width="100%" height="100%">
+                <mx:columns>
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='stateId')"
+                                       dataField="stateId"/>
+
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='LocationManagementPanel',key='stateCode')"
+                                       dataField="stateCode"/>
+
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='stateName')"
+                                       dataField="name"/>
+
+                    <mx:DataGridColumn headerText="@Resource(bundle='LocationManagementPanel',key='displayName')"
+                                       dataField="displayName"/>
+
+                </mx:columns>
+            </mx:DataGrid>
+        </mx:Panel>
+
+    </mx:VDividedBox>
+
+</mx:VBox>

@@ -1,0 +1,52 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<userInput>
+    <panel id="WebServerConfigurationPanel">
+        <field id="WebServerConfigurationPanel.title" type="title"/>
+        <field type="text" variable="http.port">
+            <spec size="30" id="WebServerConfigurationPanel.http.port" set="8080"/>
+            <validators>
+                <validator class="org.yes.cart.installer.PortValidator"
+                           id="WebServerConfigurationPanel.port.validation.error">
+                    <param name="required" value="true"/>
+                </validator>
+            </validators>
+        </field>
+        <field type="text" variable="https.port">
+            <spec size="30" id="WebServerConfigurationPanel.https.port" set="8443"/>
+            <validator class="org.yes.cart.installer.PortValidator"
+                       id="WebServerConfigurationPanel.port.validation.error"/>
+        </field>
+        <field type="staticText" align="left" id="WebServerConfigurationPanel.ssl.keystore.file"/>
+        <field type="file" align="left" variable="ssl.keystore.file">
+            <spec size="23" set="" allowEmptyValue="true"/>
+        </field>
+        <field type="staticText" align="left" id="WebServerConfigurationPanel.ssl.keystore.password"/>
+        <field type="password" variable="ssl.keystore.password">
+            <spec>
+                <pwd txt="" size="30" set=""/>
+                <pwd txt="Retype:" size="30" set=""/>
+            </spec>
+            <validator class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator"
+                       id="WebServerConfigurationPanel.ssl.keystore.password.validation.error"/>
+            <!--<validator class="org.yes.cart.installer.KeystorePasswordValidator"
+                       id="WebServerConfigurationPanel.ssl.keystore.file.password.validation.error">
+                <param name="keystoreFile" value="${ssl.keystore.file}"/>
+            </validator>-->
+        </field>
+    </panel>
+</userInput>

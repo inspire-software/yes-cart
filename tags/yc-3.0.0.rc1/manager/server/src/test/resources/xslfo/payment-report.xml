@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<yes-report>
+    <payment>
+        <cardHolderName>John Smith</cardHolderName>
+        <customerOrderPaymentId>21</customerOrderPaymentId>
+        <cardExpireYear>2011</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-07-31T21:32:30.911Z</orderDate>
+        <paymentAmount>1535.36</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120731-1</orderNumber>
+        <orderShipment>20120731-1-0</orderShipment>
+        <transactionReferenceId>29a47b4c-f6a3-4383-8e8e-0bc34fe2f490</transactionReferenceId>
+        <transactionAuthorizationCode>b402d278-3dfe-4950-9304-eef605955ca2</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-07-31T21:33:03.616Z</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-07-31T21:33:03.616Z</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>346b1fda-42bf-4adf-9549-8255309ac946</guid>
+        <cardNumber>1111</cardNumber>
+    </payment>
+    <payment>
+        <cardHolderName>Kaarel Noges</cardHolderName>
+        <customerOrderPaymentId>22</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01T22:03:46.79Z</orderDate>
+        <paymentAmount>1194.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01T22:04:06.596Z</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01T22:04:06.596Z</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>2222</cardNumber>
+    </payment>
+    <payment>
+        <cardHolderName>Ivan Pertoff</cardHolderName>
+        <customerOrderPaymentId>23</customerOrderPaymentId>
+        <cardExpireYear>2013</cardExpireYear>
+        <cardExpireMonth>12</cardExpireMonth>
+        <orderDate class="sql-timestamp">2012-08-01T22:03:46.79Z</orderDate>
+        <paymentAmount>4.02</paymentAmount>
+        <orderCurrency>USD</orderCurrency>
+        <orderNumber>20120801-2</orderNumber>
+        <orderShipment>20120801-2-0</orderShipment>
+        <transactionReferenceId>49dbcb7b-d964-43f5-84d9-f317abf5a097</transactionReferenceId>
+        <transactionAuthorizationCode>eec36f9e-3ee0-4129-a2bc-307cd2ddef03</transactionAuthorizationCode>
+        <transactionGatewayLabel>testPaymentGateway</transactionGatewayLabel>
+        <transactionOperation>REVERSE_AUTH</transactionOperation>
+        <transactionOperationResultCode>EXTERNAL_OK</transactionOperationResultCode>
+        <paymentProcessorResult>Ok</paymentProcessorResult>
+        <paymentProcessorBatchSettlement>false</paymentProcessorBatchSettlement>
+        <createdTimestamp class="sql-timestamp">2012-08-01T22:04:06.596Z</createdTimestamp>
+        <updatedTimestamp class="sql-timestamp">2012-08-01T22:04:06.596Z</updatedTimestamp>
+        <createdBy>user unknown</createdBy>
+        <updatedBy>user unknown</updatedBy>
+        <guid>fbaadceb-2f4a-4ddc-a0e3-1cb33ba488db</guid>
+        <cardNumber>3333</cardNumber>
+    </payment>
+</yes-report>

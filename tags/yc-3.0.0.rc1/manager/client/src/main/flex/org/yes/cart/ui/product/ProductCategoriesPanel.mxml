@@ -1,0 +1,177 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%"
+         paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+    <mx:HBox paddingTop="5" width="100%">
+        <mx:Button id="addProductCategoryBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategoryHint')"
+                   enabled="true"
+                   click="onAddProductCategoryClick(event)"
+                />
+        <mx:Button id="deleteProductCategoryBtn"
+                   label="@Resource(bundle='ProductManagementPanel',key='deleteProductCategory')"
+                   toolTip="@Resource(bundle='ProductManagementPanel',key='deleteProductCategoryHint')"
+                   enabled="{categorySelected}"
+                   click="onDeleteProductCategoryClick(event);"
+                />
+    </mx:HBox>
+    <mx:DataGrid
+            id="productCategoriesGrid"
+            width="100%" height="100%" editable="false"
+            itemClick="onProductCategorySelected(event)">
+        <mx:columns>
+            <mx:DataGridColumn width="50" headerText="@Resource(bundle='ProductManagementPanel',key='id')"
+                               dataField="categoryId"/>
+            <mx:DataGridColumn width="200" headerText="@Resource(bundle='ProductManagementPanel',key='category')"
+                               dataField="name"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='ProductManagementPanel',key='description')"
+                               dataField="description"/>
+        </mx:columns>
+    </mx:DataGrid>
+
+    <mx:Boolean id="categorySelected">false</mx:Boolean>
+
+    <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
+                     id="remoteCategoryService" destination="remoteCategoryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getByProductId" name="getByProductId"
+                   result="onGetByProductIdResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" makeObjectsBindable="true"
+                     id="remoteProductCategoryService"
+                     destination="remoteProductCategoryService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="removeByCategoryProductIds" name="removeByCategoryProductIds"
+                   result="onRemoveByCategoryProductIdsResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.core.FlexGlobals;
+        import mx.rpc.events.FaultEvent;
+
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.category.CategoryFinderDialog;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.ResultEvent;
+
+        [Bindable]
+        private var _productId:Number;
+
+        private var categoryFinderPopUp:CategoryFinderDialog;
+
+        public function get productId():Number {
+            return _productId;
+        }
+
+        public function set productId(value:Number):void {
+            _productId = value;
+            remoteCategoryService.getByProductId(_productId);
+        }
+
+        private function readCategories(event:ResultEvent, ojb:Object = null):void {
+            remoteCategoryService.getByProductId(productId);
+        }
+
+        private function onProductCategorySelected(event:ListEvent):void {
+            categorySelected = productCategoriesGrid.selectedItem != null;
+        }
+
+
+        private function onDeleteProductCategoryClick(event:MouseEvent):void {
+            if (categorySelected && productCategoriesGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('ProductManagementPanel', 'deleteProductFromCategoryConfirm', [ productCategoriesGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteProductCategoryConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteProductCategoryConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+                if (categorySelected && productCategoriesGrid.selectedItem != null) {
+                    remoteProductCategoryService.removeByCategoryProductIds(
+                            productCategoriesGrid.selectedItem.categoryId, productId);
+                }
+                categorySelected = false;
+            }
+        }
+
+        private function onAddProductCategoryClick(event:MouseEvent):void {
+            categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
+
+            categoryFinderPopUp.assignedCategories = /* has to be new(toArray) since we want a clone */
+                    new ArrayCollection((productCategoriesGrid.dataProvider as ArrayCollection).toArray());
+
+            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
+            PopUpManager.centerPopUp(categoryFinderPopUp);
+
+        }
+
+        private function onAssignSelectedProductCategorySaveClick(event:Event):void {
+            if (categoryFinderPopUp != null) {
+                var productCategoryDTOImpl:ProductCategoryDTOImpl = new ProductCategoryDTOImpl();
+                productCategoryDTOImpl.productId = productId;
+                productCategoryDTOImpl.categoryId = categoryFinderPopUp.selectedCategoryDTOImpl.categoryId;
+                productCategoryDTOImpl.rank = 0;
+
+                remoteProductCategoryService.create(productCategoryDTOImpl);
+                categoryFinderPopUp.assignedCategories = null;
+                categoryFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductCategorySaveClick);
+                PopUpManager.removePopUp(categoryFinderPopUp);
+                categoryFinderPopUp = null;
+            }
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetByProductIdResult(event:ResultEvent):void {
+            productCategoriesGrid.dataProvider = event.result;
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            remoteCategoryService.getByProductId(productId);
+        }
+
+        private function onRemoveByCategoryProductIdsResult(event:ResultEvent):void {
+            remoteCategoryService.getByProductId(productId);
+        }
+        ]]></mx:Script>
+</mx:VBox>

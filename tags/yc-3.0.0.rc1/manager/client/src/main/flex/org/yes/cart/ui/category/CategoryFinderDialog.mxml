@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="375" height="500"
+                title="@Resource(bundle='CategoryManagementPanel',key='find')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init()">
+
+    <mx:Tree id="categoryTree" height="100%" width="100%"
+             labelField="name"
+             change="onCategorySelected(event)"/>
+
+    <mx:ControlBar  width="100%" horizontalAlign="right">
+        <mx:Button id="selectProductButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
+                   enabled="{categorySelected}"/>
+        <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService" destination="remoteCategoryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="assignedCategories"/>
+    <mx:Boolean id="categorySelected">false</mx:Boolean>
+
+    <mx:Script>
+            <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CategoryDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        import org.yes.cart.ui.CategoryTreeDescriptor;
+        import org.yes.cart.util.DomainUtils;
+
+        [Bindable]
+        public var selectedCategoryDTOImpl:CategoryDTOImpl;
+
+        public function init():void {
+            remoteCategoryService.getAll();
+        }
+
+        private function onCategorySelected(event:ListEvent):void {
+            categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
+            if (categorySelected) {
+                selectedCategoryDTOImpl = categoryTree.selectedItem as CategoryDTOImpl;
+            }
+            Debug.trace("Selected category dto name is :" + (selectedCategoryDTOImpl != null ?
+                    selectedCategoryDTOImpl.name : "null"));
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllResult(event:ResultEvent):void {
+            categoryTree.dataProvider = event.result;
+            categoryTree.dataDescriptor = new CategoryTreeDescriptor({
+                dataProvider: assignedCategories
+            });
+            if (categoryTree.dataProvider.length > 0) {
+                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
+                categoryTree.validateNow();
+            }
+        }
+
+        ]]>
+    </mx:Script>
+
+</mx:TitleWindow>

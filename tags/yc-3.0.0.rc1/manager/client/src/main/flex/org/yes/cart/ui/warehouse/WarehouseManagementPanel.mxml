@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml"
+          title="@Resource(bundle='WarehouseManagementPanel',key='warehouses')"
+           width="100%"
+           height="100%"
+           creationComplete="init();"
+           paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
+        import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.CloneUtil;
+
+        private var newPopUp:WarehouseCreateEditDialog;
+
+
+        public function init():void {
+            remoteWarehouseService.getAll();
+        }
+
+        private function onWarehouseSelectedClick(event:ListEvent):void {
+            this.warehouseSelected = this.warehouseGrid.selectedItem != null;
+        }
+
+        private function onNewWarehouseClick(event:MouseEvent):void {
+            Debug.trace("warehouse panel onNewWarehouseClick");
+            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, createNewWarehouse);
+            newPopUp.createEditWarehouse(new WarehouseDTOImpl());
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        private function createNewWarehouse(event:Event):void {
+            remoteWarehouseService.create(newPopUp.warehouseDTOImpl);
+        }
+
+        private function onEditWarehouseClick(event:Event):void {
+            if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+                Debug.trace("warehouse panel onEditWarehouseClick");
+                newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
+                newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, updateExistingWarehouse);
+                newPopUp.createEditWarehouse(WarehouseDTOImpl(CloneUtil.clone(this.warehouseGrid.selectedItem)));
+                PopUpManager.centerPopUp(newPopUp);
+            }
+        }
+
+        private function updateExistingWarehouse(event:Event):void {
+
+            remoteWarehouseService.update(newPopUp.warehouseDTOImpl);
+
+        }
+
+        private function onDeleteWarehouseClick(event:MouseEvent):void {
+            if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+                Alert.show(
+                        resourceManager.getString('WarehouseManagementPanel', 'deleteWarehouseConfirm', [ this.warehouseGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteWarehouseConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteWarehouseConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                if (this.warehouseSelected && this.warehouseGrid.selectedItem != null) {
+
+                    Debug.trace("warehouse panel deleteWarehouse with id " + this.warehouseGrid.selectedItem.warehouseId);
+                    remoteWarehouseService.remove(this.warehouseGrid.selectedItem.warehouseId);
+
+                }
+            }
+            this.warehouseSelected = false;
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetAllResult(event:ResultEvent):void {
+            this.warehouseSelected = false;
+            this.warehouseGrid.dataProvider = event.result;
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onNewWarehouseClick);
+                PopUpManager.removePopUp(newPopUp);
+            }
+            newPopUp = null;
+            remoteWarehouseService.getAll();
+        }
+
+        private function onUpdateResult(event:ResultEvent):void {
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, updateExistingWarehouse);
+                PopUpManager.removePopUp(newPopUp);
+            }
+            newPopUp = null;
+            remoteWarehouseService.getAll();
+
+        }
+
+        private function onRemoveResult(event:ResultEvent):void {
+            Debug.trace("warehouse panel delete fault:" + event.toString());
+            Alert.show(
+                    resourceManager.getString('WarehouseManagementPanel', 'warehouseDeletedConfirm'),
+                    resourceManager.getString('ShopManagerApplication', 'info'));
+            remoteWarehouseService.getAll();
+
+        }
+
+        private function onRefreshWarehouseListButtonClick(event:MouseEvent):void {
+            init();
+        }
+        ]]>
+    </mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true"  id="remoteWarehouseService"
+                     destination="remoteWarehouseService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="create" name="create"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="update" name="update"
+                   result="onUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="remove" name="remove"
+                   result="onRemoveResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="warehouseSelected">false</mx:Boolean>
+
+    <mx:VBox height="100%" width="100%">
+
+        <mx:HBox paddingTop="5" width="100%">
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='newWarehouseHint')"
+                       click="onNewWarehouseClick(event)"/>
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='editWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='editWarehouseHint')"
+                       enabled="{warehouseSelected}"
+                       click="onEditWarehouseClick(event)"/>
+            <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouse')"
+                       toolTip="@Resource(bundle='WarehouseManagementPanel',key='deleteWarehouseHint')"
+                       enabled="{warehouseSelected}"
+                       click="onDeleteWarehouseClick(event)"/>
+            <mx:Button id="refreshShopList"
+                       label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                       click="onRefreshWarehouseListButtonClick(event)"/>
+
+        </mx:HBox>
+
+        <mx:DataGrid id="warehouseGrid"
+                     width="100%" height="100%"
+                     doubleClickEnabled="true"
+                     doubleClick="onEditWarehouseClick(event)"
+                     itemClick="onWarehouseSelectedClick(event)">
+            <mx:columns>
+                <mx:DataGridColumn width="80" headerText="@Resource(bundle='WarehouseManagementPanel',key='code')" dataField="code"/>
+                <mx:DataGridColumn width="300" headerText="@Resource(bundle='WarehouseManagementPanel',key='name')" dataField="name"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='WarehouseManagementPanel',key='description')" dataField="description"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+    </mx:VBox>
+
+
+</mx:Panel>

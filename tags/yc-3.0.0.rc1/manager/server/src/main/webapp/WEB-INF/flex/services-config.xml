@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<services-config>
+    <services>
+
+        <default-channels>
+            <channel ref="my-amf"/>
+        </default-channels>
+
+        <!--<service-include file-path="remoting-config.xml" />-->
+        <!--<service-include file-path="messaging-config.xml" />
+          <service-include file-path="proxy-config.xml" />
+      -->
+
+    </services>
+
+    <channels>
+        <channel-definition id="my-amf"
+                            class="mx.messaging.channels.AMFChannel">
+            <!--
+                        <endpoint
+                            uri="http://{server.name}:{server.port}/{context.root}/messagebroker/amf"
+                            class="flex.messaging.endpoints.AMFEndpoint" />
+            -->
+            <endpoint
+                    uri="http://localhost:8080/yes-manager/spring/amf"
+                    class="flex.messaging.endpoints.AMFEndpoint"/>
+
+
+        </channel-definition>
+
+    </channels>
+
+    <logging>
+        <target class="flex.messaging.log.ConsoleTarget" level="Info">
+            <properties>
+                <prefix>[BlazeDS]</prefix>
+                <includeDate>true</includeDate>
+                <includeTime>true</includeTime>
+                <includeLevel>true</includeLevel>
+                <includeCategory>true</includeCategory>
+            </properties>
+        </target>
+    </logging>
+
+</services-config>

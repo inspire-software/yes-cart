@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" layout="absolute"
+                width="500" height="400"
+                title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttrViewGroup')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();">
+
+    <mx:Script>
+        <![CDATA[
+        import mx.binding.utils.BindingUtils;
+        import mx.controls.Alert;
+        import mx.managers.PopUpManager;
+
+        import org.yes.cart.impl.ProdTypeAttributeViewGroupDTOImpl;
+
+
+        [Bindable]
+        public var productTypeAttrVG:ProdTypeAttributeViewGroupDTOImpl;
+        
+        private function init():void {
+
+            displayNames.setSourceObject(productTypeAttrVG, 'displayNames');
+            
+            BindingUtils.bindProperty(rankTextInput, "text", productTypeAttrVG, "rank");
+            BindingUtils.bindProperty(nameTextInput, "text", productTypeAttrVG, "name");
+
+            BindingUtils.bindProperty(productTypeAttrVG, "rank", rankTextInput, "text");
+            BindingUtils.bindProperty(productTypeAttrVG, "name", nameTextInput, "text");
+            
+        }
+        
+        
+        ]]>
+    </mx:Script>
+    
+    
+    
+    <mx:Form width="100%">
+
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='name')">
+            <mx:TextInput id="nameTextInput" width="200"/>
+        </mx:FormItem>
+
+        <mx:FormItem  width="100%" label="@Resource(bundle='ProductTypeManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
+        </mx:FormItem>
+
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='rankEdit')">
+            <mx:TextInput id="rankTextInput" width="50"/>
+        </mx:FormItem>
+
+     </mx:Form>
+
+    <mx:ControlBar width="100%" horizontalAlign="right">
+
+        <mx:Button id="saveBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='save')"/>
+        <mx:Button id="cancelBtn" label="@Resource(bundle='ProductTypeManagementPanel',key='cancel')"
+                   click="PopUpManager.removePopUp(this)"/>
+
+    </mx:ControlBar>
+
+    
+</mx:TitleWindow>

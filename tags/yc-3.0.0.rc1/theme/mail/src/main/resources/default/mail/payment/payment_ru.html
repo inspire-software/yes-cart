@@ -1,0 +1,152 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>YesCart pure e-commerce</title>
+</head>
+<body>
+
+<table width="700" cellpadding="0" cellspacing="0">
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-bottom: 0px;">
+            <img src="cid:mail-head_jpeg" border="0">
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 1px solid #CEE3F6; border-top: 0px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="2%">&nbsp;</td>
+                    <td>
+                        Уважаемый (-ая) <b>$customer.firstname $customer.lastname</b>!<br>
+                        Оплата по Вашему заказу <b>$root.ordernum</b> получена. Спасибо!
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left">Информация по заказу:</td>
+                            </tr>
+                            <%
+                            def totalSum = 0;
+                            for (Object delivery : root.getDelivery()) {
+                            def deliverySum = 0;
+                            %>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>Доставка</td>
+                                <td align="right"><b>$delivery.deliveryNum</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <table width="100%" style="border-collapse: collapse;" cellpadding="3" cellspacing="0">
+                                        <tr bgcolor="#DBEAF9">
+                                            <td width="20%" style="border: 1px solid #E0E0E0;">Артикул</td>
+                                            <td width="40%" style="border: 1px solid #E0E0E0;">Наименование</td>
+                                            <td width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Кол-во</td>
+                                            <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Цена (<%=root.currency%>)</td>
+                                            <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Сумма(<%=root.currency%>)</td>
+                                        </tr>
+                                        <%
+                                        for(Object deliveryItem : delivery.getDetail()) {
+                                        def lineTotal = (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+                                        deliverySum += lineTotal;
+                                        %>
+                                        <tr>
+                                            <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                                                <%=deliveryItem.productSkuCode %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                                                <%=deliveryItem.productName %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP) %>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=deliveryItem.price.setScale(2,BigDecimal.ROUND_HALF_UP)%>
+                                            </td>
+                                            <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                                                <%=lineTotal%>
+                                            </td>
+                                        </tr>
+                                        <%
+                                        }
+                                        %>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Всего (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=deliverySum%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Стоимость доставки (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=delivery.price%></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border: 1px solid #E0E0E0;">Итого по доставке (<%=root.currency%>)</td>
+                                            <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <%
+                            totalSum += (delivery.price + deliverySum);
+                            }
+                            %>
+                            <tr>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><b>Итого по заказу (<%=root.currency%>)</b></td>
+                                <td align="right"><b><%=totalSum.setScale(2, BigDecimal.ROUND_HALF_UP)%></b></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="2%">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        Подробную информацию Вы можете посмотреть в
+                        <a href="<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>">истории заказов</a>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="border-top: 1px solid #CEE3F6;">
+                        Контактная информация:
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: right">&#169; YesCart.org 2015</td>
+    </tr>
+</table>
+
+</body>
+</html>

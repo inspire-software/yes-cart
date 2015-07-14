@@ -1,0 +1,34 @@
+Шановний (-на) $customer.firstname $customer.lastname!
+Ваше замовлення $root.ordernum at $shop.name було підтверджено.
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+    def totalSum = 0;
+    for (Object delivery : root.getDelivery()) {
+          def deliverySum = 0;
+          out.println(lineDelimiter);
+          out.println(("| Доставка " + delivery.deliveryNum).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+          for(Object deliveryItem : delivery.getDetail()) {
+              def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+              def line = "| " + deliveryItem.productSkuCode  + " - " + deliveryItem.productName   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
+              deliverySum += lineTotal;
+              out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+          }
+          out.println(lineDelimiter);
+          out.println(("| Всього                 " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Вартість доставки      " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(("| Загалом по доставці    " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
+          out.println(lineDelimiter);
+          totalSum += (delivery.price + deliverySum);
+    }
+    out.println(lineDelimiter);
+    out.println(("| Загалом по замовленню  " + totalSum.setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+    out.println(lineDelimiter);
+} catch (Exception e) {
+out.print(e.getMessage());
+}
+%>
+
+Детальну інформацію Ви можете переглянути в історії замовлень
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

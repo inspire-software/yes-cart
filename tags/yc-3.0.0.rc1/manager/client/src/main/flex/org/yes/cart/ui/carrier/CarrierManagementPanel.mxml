@@ -1,0 +1,270 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:carrier="org.yes.cart.ui.carrier.*"
+         width="100%"
+         height="100%"
+         creationComplete="init();"
+         paddingLeft="2" paddingRight="2" paddingBottom="5">
+    <mx:Script><![CDATA[
+
+        import mx.controls.Alert;
+        import mx.core.FlexGlobals;
+        import mx.events.CloseEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CarrierDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        [Bindable]
+        private var slaTypes:Object;
+
+        private var carrierCreateEditDialog:CarrierCreateDialog;
+
+        /**
+         * Init panel.
+         * @return nothing
+         */
+        private function init():void {
+            remoteCarrierService.getAll();
+        }
+
+        private function onCarrierSelected(event:ListEvent):void {
+            var _selected:CarrierDTOImpl = this.carrierGrid.selectedItem as CarrierDTOImpl;
+            carrierSelected = _selected != null;
+            this.carrierSelectedAndHasNoSla = false;
+            this.carrierSla.removeAllChildren();
+            this.carrierShops.removeAllChildren();
+            if (carrierSelected) {
+
+                carrierEditForm.carrierDTOImpl = _selected;
+                carrierEditForm.saveBtn.addEventListener(MouseEvent.CLICK, onUpdateCarrierClick);
+
+                var _shops:CarrierShopPanel = new CarrierShopPanel();
+                _shops.carrierId = _selected.carrierId;
+                this.carrierShops.addChild(_shops);
+
+                var _sla:CarrierSlaManagementPanel = new CarrierSlaManagementPanel();
+                _sla.carrierDTOImpl = _selected;
+                this.carrierSla.addChild(_sla);
+            }
+        }
+
+        private function onCreateNewCarrierClick(event:MouseEvent):void {
+
+            carrierCreateEditDialog = CarrierCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CarrierCreateDialog, true));
+            carrierCreateEditDialog.newCarrierFlag = true;
+            carrierCreateEditDialog.carrierDTOImpl = new CarrierDTOImpl();
+            carrierCreateEditDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewCarrierSaveClick);
+            PopUpManager.centerPopUp(carrierCreateEditDialog);
+
+        }
+
+        private function onCreateNewCarrierSaveClick(event:Event):void {
+            if (carrierCreateEditDialog != null) {
+                remoteCarrierService.create(carrierCreateEditDialog.carrierDTOImpl);
+                carrierCreateEditDialog.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCarrierSaveClick);
+                PopUpManager.removePopUp(carrierCreateEditDialog);
+                carrierCreateEditDialog = null;
+            }
+        }
+
+        private function onUpdateCarrierClick(event:Event):void {
+            if (carrierEditForm != null) {
+                remoteCarrierService.update(carrierEditForm.carrierDTOImpl);
+            }
+        }
+
+
+        private function onDeleteCarrierClick(event:MouseEvent):void {
+
+            if (this.carrierSelected && this.carrierGrid.selectedItem != null) {
+
+                Alert.show(
+                        resourceManager.getString('CarrierManagementPanel', 'deleteCarrierConfirm', [ this.carrierGrid.selectedItem.name ]),
+                        resourceManager.getString('ShopManagerApplication', 'warning'),
+                        Alert.OK | Alert.CANCEL, this, onDeleteCarrierConfirm, null, Alert.OK);
+            }
+        }
+
+        private function onDeleteCarrierConfirm(event:CloseEvent):void {
+            if (event.detail == Alert.OK) {
+
+                if (this.carrierSelected && this.carrierGrid.selectedItem != null) {
+                    remoteCarrierService.remove(this.carrierGrid.selectedItem.carrierId);
+                }
+            }
+        }
+
+        private function onGetAllCarriersResult(event:ResultEvent):void {
+
+            this.carrierSelected = false;
+            this.carrierSelectedAndHasNoSla = false;
+            this.carrierGrid.dataProvider = event.result;
+
+        }
+
+        private function onCreateCarrierResult(event:ResultEvent):void {
+            this.carrierSelected = false;
+            this.carrierSelectedAndHasNoSla = false;
+            remoteCarrierService.getAll();
+        }
+
+        private function onUpdateCarrierResult(event:ResultEvent):void {
+            this.carrierSelected = false;
+            this.carrierSelectedAndHasNoSla = false;
+            remoteCarrierService.getAll();
+        }
+
+        private function onRemoveCarrierResult(event:ResultEvent):void {
+            this.carrierSelected = false;
+            this.carrierSelectedAndHasNoSla = false;
+            remoteCarrierService.getAll();
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onRefreshCarrierListButtonClick(event:MouseEvent):void {
+            init();
+        }
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCarrierService"
+                     destination="remoteCarrierService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAllCarriers" name="getAll"
+                   result="onGetAllCarriersResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="createCarrier" name="create"
+                   result="onCreateCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="updateCarrier" name="update"
+                   result="onUpdateCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="removeCarrier" name="remove"
+                   result="onRemoveCarrierResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="carrierSelected">false</mx:Boolean>
+    <mx:Boolean id="carrierSelectedAndHasNoSla">false</mx:Boolean>
+
+    <mx:VDividedBox height="100%" width="100%">
+        <mx:Panel width="100%" title="@Resource(bundle='CarrierManagementPanel',key='carriers')"
+                  paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+            <mx:HBox paddingTop="5" width="100%">
+                <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='newCarrier')"
+                           toolTip="@Resource(bundle='CarrierManagementPanel',key='newCarrierHint')"
+                           click="onCreateNewCarrierClick(event)"
+
+                        />
+                <mx:Button label="@Resource(bundle='CarrierManagementPanel',key='deleteCarrier')"
+                           toolTip="@Resource(bundle='CarrierManagementPanel',key='deleteCarrierHint')"
+                           enabled="{carrierSelectedAndHasNoSla}"
+                           click="onDeleteCarrierClick(event)"
+
+                        />
+                <mx:Button id="refreshShopList"
+                           label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                           click="onRefreshCarrierListButtonClick(event)"/>
+
+            </mx:HBox>
+            <mx:DataGrid id="carrierGrid"
+                         doubleClickEnabled="true"
+                         itemClick="onCarrierSelected(event)"
+                         width="100%" height="100%">
+                <mx:columns>
+                    <mx:DataGridColumn width="80"
+                                       headerText="@Resource(bundle='CarrierManagementPanel',key='carrierId')"
+                                       dataField="carrierId"/>
+                    <mx:DataGridColumn width="300"
+                                       headerText="@Resource(bundle='CarrierManagementPanel',key='name')"
+                                       dataField="name"/>
+                    <!-- TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes -->
+                    <!--<mx:DataGridColumn-->
+                            <!--headerText="@Resource(bundle='CarrierManagementPanel',key='worldwide')"-->
+                            <!--dataField="worldwide">-->
+                        <!--<mx:itemRenderer>-->
+                            <!--<mx:Component>-->
+                                <!--<mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.worldwide}"/></mx:HBox>-->
+                            <!--</mx:Component>-->
+                        <!--</mx:itemRenderer>-->
+                    <!--</mx:DataGridColumn>-->
+                    <!--<mx:DataGridColumn-->
+                            <!--headerText="@Resource(bundle='CarrierManagementPanel',key='country')"-->
+                            <!--dataField="country">-->
+                        <!--<mx:itemRenderer>-->
+                            <!--<mx:Component>-->
+                                <!--<mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.country}"/></mx:HBox>-->
+                            <!--</mx:Component>-->
+                        <!--</mx:itemRenderer>-->
+                    <!--</mx:DataGridColumn>-->
+
+                    <!--<mx:DataGridColumn-->
+                            <!--headerText="@Resource(bundle='CarrierManagementPanel',key='state')"-->
+                            <!--dataField="state">-->
+                        <!--<mx:itemRenderer>-->
+                            <!--<mx:Component>-->
+                                <!--<mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.state}"/></mx:HBox>-->
+                            <!--</mx:Component>-->
+                        <!--</mx:itemRenderer>-->
+                    <!--</mx:DataGridColumn>-->
+
+                    <!--<mx:DataGridColumn-->
+                            <!--headerText="@Resource(bundle='CarrierManagementPanel',key='local')"-->
+                            <!--dataField="local">-->
+                        <!--<mx:itemRenderer>-->
+                            <!--<mx:Component>-->
+                                <!--<mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.local}"/></mx:HBox>-->
+                            <!--</mx:Component>-->
+                        <!--</mx:itemRenderer>-->
+                    <!--</mx:DataGridColumn>-->
+
+                    <mx:DataGridColumn
+                            headerText="@Resource(bundle='CarrierManagementPanel',key='description')"
+                            dataField="description"/>
+                </mx:columns>
+                <!--countries dg-->
+            </mx:DataGrid>
+        </mx:Panel>
+        <mx:TabNavigator width="100%" height="100%" id="shopTabNavigator" creationPolicy="all">
+
+            <mx:Canvas id="carrierEdit" label="@Resource(bundle='CarrierManagementPanel',key='carrierMain')"
+                       width="100%" height="100%">
+                <carrier:CarrierEditPanel id="carrierEditForm" visible="{carrierSelected}"/>
+            </mx:Canvas>
+
+            <mx:Canvas id="carrierSla" label="@Resource(bundle='CarrierManagementPanel',key='carrierSLA')"
+                       width="100%" height="100%" />
+
+            <mx:Canvas id="carrierShops" label="@Resource(bundle='CarrierManagementPanel',key='carrierShops')"
+                       width="100%" height="100%"/>
+
+        </mx:TabNavigator>
+
+    </mx:VDividedBox>
+
+
+</mx:VBox>

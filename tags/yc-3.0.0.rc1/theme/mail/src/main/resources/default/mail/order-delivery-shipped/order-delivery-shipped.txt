@@ -1,0 +1,28 @@
+Dear $customer.firstname $customer.lastname!
+Delivery $deliveryNum for order $root.ordernum at $shop.name is shipped
+by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+      def deliverySum = 0;
+      out.println(lineDelimiter);
+      out.println(("| Delivery " + delivery.deliveryNum).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(lineDelimiter);
+      for(Object deliveryItem : delivery.getDetail()) {
+          def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+          def line = "| " + deliveryItem.productSkuCode  + " - " + deliveryItem.productName   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
+          deliverySum += lineTotal;
+          out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+      }
+      out.println(lineDelimiter);
+      out.println(("| Delivery items cost    " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(("| Delivery cost          " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(("| Delivery total         " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(lineDelimiter);
+} catch (Exception e) {
+out.print(e.getMessage());
+}
+%>
+
+You can view detailed information in order history
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

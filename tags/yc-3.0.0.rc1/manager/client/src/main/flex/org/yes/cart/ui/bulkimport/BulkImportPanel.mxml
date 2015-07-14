@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="initImportPanel()">
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.controls.Alert;
+        import mx.events.CloseEvent;
+
+        import org.yes.cart.impl.JobStatusImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        private var loadFileRef:FileReference;
+        private var reportHeaderText:String;
+        private var importJobToken:String;
+
+        private var importStatusTimer:Timer = new Timer(15000, 1); // 15 sec timer
+
+        private var _importCompletedListener:Function;
+
+        private function onSelectFileClick(event:MouseEvent):void {
+
+            if (importGroups.selectedItem == null) {
+                return;
+            }
+
+            loadFileRef = new FileReference();
+            loadFileRef.addEventListener(Event.SELECT, onFileSelected);
+            loadFileRef.addEventListener(Event.COMPLETE, onFileLoadingCompleted);
+            loadFileRef.addEventListener(ProgressEvent.PROGRESS, onFileLoadingInProgress);
+            loadFileRef.browse();
+
+            Debug.trace("INFO current state is inProgressState");
+        }
+
+
+        private function onFileLoadingInProgress(evt:ProgressEvent):void {
+            invalidateDisplayList();
+            validateNow();
+            Debug.trace("Loaded " + evt.bytesLoaded + " from " + evt.bytesTotal);
+        }
+
+        private function onFileSelected(e:Event):void {
+            loadFileRef.load();
+            reportHeaderText = resourceManager.getString("BulkImportPanel", "loadingFile", [ loadFileRef.name ]) + '\n';
+            resultDetails.text = reportHeaderText;
+        }
+
+        private function onFileLoadingCompleted(e:Event):void {
+            selectFileBtn.enabled = false;
+            remoteUploadService.upload(loadFileRef.data, loadFileRef.name);
+            Debug.trace("INFO current state is inProgressState");
+        }
+
+
+        protected function onImportResult(event:ResultEvent):void {
+            Debug.trace("INFO Bulk import result is " + bulkImportService.doImport.lastResult);
+            importJobToken = event.result as String;
+            jobToken.text = importJobToken;
+            reportHeaderText += resourceManager.getString("BulkImportPanel", "importToken", [ importJobToken ]) +
+                    '\n' + event.result;
+            resultDetails.text = reportHeaderText;
+            Debug.trace("INFO current state is readyToImport");
+            importStatusTimer.start(); // start the status update timer
+        }
+
+
+        protected function onImportFault(event:FaultEvent):void {
+            Debug.trace("FAULT Bulk import fault");
+            Debug.traceObj(event);
+
+            var msg:String = resourceManager.getString("BulkImportPanel", "importFailed") +
+                    '\n' + event.fault.faultDetail;
+
+            Alert.show(resourceManager.getString('ShopManagerApplication', 'error'), msg);
+            reportHeaderText += msg;
+            resultDetails.text += reportHeaderText;
+
+            Debug.trace("INFO current state is readyToImport");
+        }
+
+        protected function onUploadToServerResult(event:ResultEvent):void {
+            Debug.trace("INFO uploaded file on server " + remoteUploadService.upload.lastResult);
+            reportHeaderText += resourceManager.getString('BulkImportPanel', 'uploadSuccess', [ loadFileRef.name ]) +
+                    '\n' + resourceManager.getString('BulkImportPanel', 'importInProcess') + '\n';
+            resultDetails.text = reportHeaderText;
+            bulkImportService.doImport(this.importGroups.selectedItem['name'], event.result, true); // result is full server filename with path
+        }
+
+        private function onUploadToServerFault(event:FaultEvent):void {
+
+            var msg:String = resourceManager.getString('BulkImportPanel', 'uploadFailed', [ loadFileRef.name ]) +
+                    '\n' + event.fault.faultDetail;
+
+            Alert.show(msg, resourceManager.getString('ShopManagerApplication', 'error'));
+            resultDetails.text += msg;
+            selectFileBtn.enabled = true;
+        }
+
+        private function onWatchClick(event:MouseEvent):void {
+            if (jobToken.text != null) {
+                reportHeaderText = "";
+                importJobToken = jobToken.text;
+                bulkImportService.getImportStatus(importJobToken);
+            }
+        }
+
+        private function initImportPanel():void {
+
+            importStatusTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onStatusTimerComplete);
+            bulkImportService.getImportGroups(resourceManager.getString('Common', 'localeFilter'));
+
+        }
+
+        private function onStatusTimerComplete(event:TimerEvent):void {
+            if (importJobToken != null) {
+                bulkImportService.getImportStatus(importJobToken);
+            }
+        }
+
+        private function onGetImportStatusResult(event:ResultEvent):void {
+            var status:JobStatusImpl = event.result as JobStatusImpl;
+            resultDetails.text = reportHeaderText + '\n' + status.report;
+            if (status.state == 'INPROGRESS' || status.state == 'STARTED') {
+                importStatusTimer.start(); // do another timed status update
+            } else if (_importCompletedListener != null) {
+                selectFileBtn.enabled = true;
+                _importCompletedListener();
+                Alert.show(resourceManager.getString('BulkImportPanel', 'checkStatusSuccess', [ importJobToken ]),
+                        resourceManager.getString('ShopManagerApplication', 'info'),
+                        Alert.YES | Alert.CANCEL, this, onGetImportStatusResultSuccess, null, Alert.YES);
+            }
+
+        }
+
+        private function onGetImportStatusResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.evictAllCache();
+            }
+        }
+
+        private function onGetImportStatusFault(event:FaultEvent):void {
+            importStatusTimer.stop();
+            Alert.show(resourceManager.getString('BulkImportPanel', 'checkStatusFailed', [ importJobToken, event.fault.faultDetail ]),
+                    resourceManager.getString('ShopManagerApplication', 'error'),
+                    Alert.YES | Alert.CANCEL, this, onGetImportStatusFaultTryAgain, null, Alert.YES);
+        }
+
+        private function onGetImportStatusFaultTryAgain(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                selectFileBtn.enabled = true;
+                importStatusTimer.start();
+            }
+        }
+
+        private function onGetImportGroupsResult(event:ResultEvent):void {
+            this.importGroups.dataProvider = event.result;
+        }
+
+        private function onGetImportGroupsFault(event:FaultEvent):void {
+            // do nothing
+        }
+
+        public function get importCompletedListener():Function {
+            return _importCompletedListener;
+        }
+
+        public function set importCompletedListener(value:Function):void {
+            _importCompletedListener = value;
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onEvictCacheResult(event:ResultEvent):void {
+            Alert.show(resourceManager.getString('BulkImportPanel', 'warmUpServers'),
+                    resourceManager.getString('ShopManagerApplication', 'info'),
+                    Alert.YES | Alert.CANCEL, this, onEvictCacheResultSuccess, null, Alert.YES);
+        }
+
+
+        private function onEvictCacheResultSuccess(event:CloseEvent):void {
+            if (event.detail == Alert.YES) {
+                remoteDevService.warmUp();
+            }
+        }
+
+        ]]>
+	</mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="bulkImportService" destination="bulkImportService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="doImport" name="doImport"
+                   result="onImportResult(event)"
+                   fault="onImportFault(event)"/>
+
+        <mx:method id="getImportGroups" name="getImportGroups"
+                   result="onGetImportGroupsResult(event)"
+                   fault="onGetImportGroupsFault(event)"/>
+
+        <mx:method id="getImportStatus" name="getImportStatus"
+                   result="onGetImportStatusResult(event)"
+                   fault="onGetImportStatusFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteUploadService" destination="remoteUploadService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="upload" name="upload"
+                   result="onUploadToServerResult(event)"
+                   fault="onUploadToServerFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="warmUp" name="warmUp"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Panel id="bulkImportPanel" height="100%" width="100%" title="@Resource(bundle='BulkImportPanel',key='title')"
+              paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+        <mx:VBox width="100%" height="100%">
+
+            <mx:Text width="100%" text="@Resource(bundle='BulkImportPanel',key='description')"/>
+
+            <mx:Form width="100%" height="120">
+                <mx:FormHeading label="@Resource(bundle='BulkImportPanel',key='importMessage')"/>
+                <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='selectFile')">
+                    <mx:HBox>
+                        <mx:ComboBox id="importGroups" width="350" labelField="label"/>
+                        <mx:Button id="selectFileBtn" label="@Resource(bundle='BulkImportPanel',key='open')"
+                                   click="onSelectFileClick(event)"/>
+                    </mx:HBox>
+                </mx:FormItem>
+                <mx:FormItem label="@Resource(bundle='BulkImportPanel',key='jobToken')">
+                    <mx:HBox>
+                        <mx:TextInput id="jobToken" width="350"/>
+                        <mx:Button id="watchBtn" label="@Resource(bundle='BulkImportPanel',key='watch')"
+                                   click="onWatchClick(event)"/>
+                    </mx:HBox>
+                </mx:FormItem>
+
+            </mx:Form>
+
+            <mx:TextArea id="resultDetails" width="100%" height="100%"/>
+        </mx:VBox>
+    </mx:Panel>
+
+
+</mx:Canvas>

@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<attr:EntityAttributeValuesManagementPanel
+           label="@Resource(bundle='CategoryManagementPanel',key='image')"
+           xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:attr="org.yes.cart.ui.attributes.*"
+           width="100%"
+           height="100%">
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.events.DataGridEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.constants.AttributeGroupNames;
+        import org.yes.cart.impl.AttrValueProductSkuDTOImpl;
+        import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.util.DomainUtils;
+
+        private var _productSku:ProductSkuDTOImpl;
+
+        public function get productSku():ProductSkuDTOImpl {
+            return _productSku;
+        }
+
+        public function set productSku(value:ProductSkuDTOImpl):void {
+            if (_productSku != null && value != null && _productSku.skuId == value.skuId) {
+                return;
+            }
+            _productSku = value;
+            entityCode = value != null ? value.code : null;
+
+            this.attrValues.removeAll();
+            this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting
+            onEntitySet(AttributeGroupNames.PRODUCT);
+
+            if (_productSku != null) {
+                remoteProductSkuService.getEntityAttributes(_productSku.skuId);
+            }
+        }
+
+        override protected function onValueAdded(selectedAttributeDTO:AttributeDTOImpl):void {
+            var prodAttr:AttrValueProductSkuDTOImpl = new AttrValueProductSkuDTOImpl();
+            prodAttr.attributeDTO = selectedAttributeDTO;
+            prodAttr.skuId = this._productSku.skuId;
+            remoteProductSkuService.createEntityAttributeValue(prodAttr);
+        }
+
+
+        override public function onValueChanged(event:DataGridEvent, attrValue:Object, newValue:Object):void {
+            var catAttr:AttrValueProductSkuDTOImpl = attrValue as AttrValueProductSkuDTOImpl;
+            catAttr.val = String(newValue);
+            if (DomainUtils.isNewPK(catAttr.attrvalueId)) {
+                remoteProductSkuService.createEntityAttributeValue(catAttr);
+            } else {
+                remoteProductSkuService.updateEntityAttributeValue(catAttr);
+            }
+        }
+
+        override protected function onValueDelete(selectedItem:Object):void {
+            var pk:Number = selectedItem != null ? selectedItem.attrvalueId : 0;
+            if (!isNaN(pk) && pk > 0) {
+                remoteProductSkuService.deleteAttributeValue(selectedItem.attrvalueId);
+                selectedItem.attrvalueId = Number.NaN;
+                selectedItem.val = null;
+            }
+        }
+
+        /**
+         * Overwrite this method to allow different sibling panels to display different
+         * groups of attributes
+         *
+         * @param attr currently loaded (into this panel) attribute
+         * @return true to allow this attribute to be managed through this pannel
+         */
+        protected function allowManageAttribute(attr:AttrValueProductSkuDTOImpl):Boolean {
+            return true; // manage all available attributes by default
+        }
+
+        private function onGetEntityAttributesResult(event:ResultEvent):void {
+            var attrs:ArrayCollection = event.result as ArrayCollection;
+            if (attrs != null) {
+                for each (var attr:AttrValueProductSkuDTOImpl in attrs) {
+                    if (allowManageAttribute(attr)) {
+                        this.attrValues.addItem(attr);
+                    }
+                }
+            }
+        }
+
+        private function onCreateEntityAttributeValueResult(event:ResultEvent):void {
+            var prodAttr:AttrValueProductSkuDTOImpl = event.result as AttrValueProductSkuDTOImpl;
+            var _replace:AttrValueProductSkuDTOImpl = null;
+            for each (var old:AttrValueProductSkuDTOImpl in this.attrValues) {
+                if (DomainUtils.isPersistentPK(old.attrvalueId) && old.attrvalueId == prodAttr.attrvalueId) {
+                    _replace = old;
+                    break; // this is exact match by id so replace this one
+                } else if (old.attributeDTO.attributeId == prodAttr.attributeDTO.attributeId && DomainUtils.isNewPK(old.attrvalueId)) {
+                    _replace = old; // this is a candidate - but there can be multi values
+                }
+            }
+
+            if (_replace != null) {
+                _replace.attrvalueId = prodAttr.attrvalueId;
+                _replace.val = prodAttr.val;
+                _replace.displayVals = prodAttr.displayVals;
+            } else {
+                this.attrValues.addItem(prodAttr);
+                var idx:int = this.attrValues.length - 1;
+                if (idx >= 0) {
+                    valueDataGrid.selectedIndex = idx;
+                    valueDataGrid.validateNow();
+                    valueDataGrid.scrollToIndex(idx);
+                }
+            }
+        }
+
+        private function onUpdateEntityAttributeValueResult(event:ResultEvent):void {
+            onCreateEntityAttributeValueResult(event);
+        }
+
+        private function onDeleteAttributeValueResult(event:ResultEvent):void {
+            // ok deleted
+        }
+        ]]></mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductSkuService"
+                     destination="remoteProductSkuService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getEntityAttributes" name="getEntityAttributes"
+                   result="onGetEntityAttributesResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createEntityAttributeValue" name="createEntityAttributeValue"
+                   result="onCreateEntityAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="updateEntityAttributeValue" name="updateEntityAttributeValue"
+                   result="onUpdateEntityAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="deleteAttributeValue" name="deleteAttributeValue"
+                   result="onDeleteAttributeValueResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+</attr:EntityAttributeValuesManagementPanel>

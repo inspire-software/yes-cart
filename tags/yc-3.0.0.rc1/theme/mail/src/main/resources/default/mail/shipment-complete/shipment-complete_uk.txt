@@ -1,0 +1,5 @@
+Шановний (-на) $customer.firstname $customer.lastname!
+Оплату по доставці $param1 по Вашому замовленню $root.ordernum прийнято. Дякуємо!
+
+Детальну інформацію Ви можете переглянути в історії замовлень
+"<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

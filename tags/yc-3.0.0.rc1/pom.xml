@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.yes</groupId>
+    <artifactId>yes-cart</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.0.RC1</version>
+    <name>Yes Cart</name>
+    <url>http://code.google.com/p/yes-cart/</url>
+    <modules>
+        <module>payment-api</module>
+        <module>domain-api</module>
+        <module>persistence</module>
+        <module>core-modules</module>
+        <module>core</module>
+        <module>core-dto</module>
+        <module>theme</module>
+        <module>web</module>
+        <module>manager</module>
+    </modules>
+    <properties>
+
+        <!-- Environment switches -->
+        <env>dev</env>
+        <env.db>derby</env.db>
+        <env.ssl>off</env.ssl>
+        <env.yum.lang>all</env.yum.lang>
+        <payment.liqpay.module>off</payment.liqpay.module>
+        <payment.cybersource.module>off</payment.cybersource.module>
+        <payment.authorizenet.module>off</payment.authorizenet.module>
+        <payment.paypal.module>off</payment.paypal.module>
+
+        <!-- Core frameworks globals versions -->
+        <hibernate.core.version>4.2.0.Final</hibernate.core.version>
+        <hibernate.search.version>4.2.0.Final</hibernate.search.version>
+        <lucene.version>3.6.2</lucene.version>
+        <!--<lucene.version>4.3.0</lucene.version>-->
+        <cxf.version>2.5.2</cxf.version>
+        <spring-security.version>3.1.4.RELEASE</spring-security.version>
+        <spring.version>3.2.3.RELEASE</spring.version>
+        <lucene.config.index.dir>/yes-cart/lucene-index</lucene.config.index.dir>
+        <ehcache.version>2.6.6</ehcache.version>
+        <!--<ehcache.version>1.6.2</ehcache.version>-->
+        <jackson.version>1.9.13</jackson.version>
+        <GeDA.version>3.1.0</GeDA.version>
+        <mysql-connector.version>5.1.13</mysql-connector.version>
+        <servlet-api.version>2.5</servlet-api.version>
+
+        <!-- Groovy support -->
+        <!--<groovy-all.version>1.7.4</groovy-all.version>-->
+        <groovy-all.version>2.4.3</groovy-all.version>
+
+        <!-- Storefront global versions -->
+        <wicket.version>1.5.11</wicket.version>
+        <jetty.version>6.1.4</jetty.version>
+
+        <!-- Storefront API global versions -->
+        <spring-ws.version>2.2.0.RELEASE</spring-ws.version>
+        <spring-oxm.version>1.5.10</spring-oxm.version>
+
+        <!-- YUM global versions -->
+        <backport-util-concurrent.version>3.1</backport-util-concurrent.version>
+        <!-- <blazeds.version>3.2.0.3978</blazeds.version>-->
+        <blazeds.version>4.0.0.14931</blazeds.version>
+        <spring-flex.version>1.5.2.RELEASE</spring-flex.version>
+
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+
+        <!-- Suppress local changes check for buildNumber maven plugin -->
+        <maven.buildNumber.doCheck>false</maven.buildNumber.doCheck>
+
+    </properties>
+    <scm>
+        <connection>scm:svn:http://yes-cart.googlecode.com/svn/</connection>
+        <developerConnection>scm:svn:https://yes-cart.googlecode.com/svn/</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://yes-cart.googlecode.com/svn/</url>
+    </scm>
+    <repositories>
+
+        <repository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <!--<repository>-->
+            <!--<id>terracota</id>-->
+            <!--<url>http://www.terracotta.org/download/reflector/releases</url>-->
+            <!--<snapshots><enabled>false</enabled></snapshots>-->
+        <!--</repository>-->
+        <repository>
+            <id>spring-release</id>
+            <url>http://maven.springframework.org/release</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>spring-release-external</id>
+            <url>http://repo.spring.io/ext-release-local</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+        <repository>
+            <id>jboss-public</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public</url>
+            <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-central</id>
+            <url>http://repo1.maven.org/maven2</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-public</id>
+            <url>http://repository.sonatype.org/content/groups/public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-flexgroup</id>
+            <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!--dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring.version}</version>
+        </dependency-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-log4j12</artifactId>-->
+            <!--<version>1.6.1</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>log4j</groupId>-->
+            <!--<artifactId>log4j</artifactId>-->
+            <!--<scope>runtime</scope>-->
+            <!--<version>1.2.16</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.mail</groupId>
+                    <artifactId>mail</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jms_1.1_spec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-integration</artifactId>
+            <version>1.3.RC2</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- XSLT 2.0 support -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.5.1-8</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.4.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.5.1</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.3.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.3.2</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.10</version>
+                    <configuration>
+                        <runOrder>hourly</runOrder>
+                        <argLine>-Xms512m -Xmx1024m</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.1.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>dbunit-maven-plugin</artifactId>
+                    <version>1.0-beta-3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>hibernate3-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.flexmojos</groupId>
+                    <artifactId>flexmojos-maven-plugin</artifactId>
+                    <version>4.0-RC2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.3</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>=========================================================================================================================================================</echo>
+                                <echo>Preparing to build YC ${project.artifactId}-${project.version}-r${buildNumber} with the following configurations:</echo>
+                                <echo> </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)            : ${env.db} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)                  : ${env.ssl} </echo>
+                                <echo>YUM language packages (use -Denv.yum.lang=x to switch): ${env.yum.lang} </echo>
+                                <echo> </echo>
+                                <echo>Additional modules</echo>
+                                <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)           : ${payment.liqpay.module} </echo>
+                                <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll) : ${payment.cybersource.module} </echo>
+                                <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
+                                <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)           : ${payment.paypal.module} </echo>
+                                <echo> </echo>
+                                <echo>Tips:</echo>
+                                <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
+                                <echo>* documentation for YC profiles is available at http://www.inspire-software.com/confluence/display/YC3EN/From+source#Fromsource-Mavenprofilesandvariables</echo>
+                                <echo>=========================================================================================================================================================</echo>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+
+        <!--
+            ENVIRONMENT SPECIFIC
+
+            Some basic profiles for quick switching in Intellij IDEA.
+
+            dev - single Tomcat deployment (default for standalone Tomcat with three webapps)
+            devIntellijIDEA - multi deployment to three Tomcats from Intellij
+        -->
+        <profile>
+            <!-- Basic development profile used for building YC -->
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Continuous integration NO CONFIG out of the box -->
+            <id>ci</id>
+            <properties>
+                <env>ci</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- System testing NO CONFIG out of the box -->
+            <id>systest</id>
+            <properties>
+                <env>systest</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- User acceptance testing NO CONFIG out of the box -->
+            <id>uat</id>
+            <properties>
+                <env>uat</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Production NO CONFIG out of the box -->
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Special config for development via Intellij IDEA -->
+            <id>devIntellijIDEA</id>
+            <properties>
+                <env>dev-idea</env>
+            </properties>
+        </profile>
+
+        <!--
+            DATABASE PROFILES
+        -->
+        <profile>
+            <!-- Use this profile to setup MySQL connection -->
+            <id>mysql</id>
+            <properties>
+                <env.db>mysql</env.db>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Use this profile to setup Derby connection -->
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>derby</id>
+            <properties>
+                <env.db>derby</env.db>
+            </properties>
+        </profile>
+
+        <!--
+            HTTP/HTTPS PROFILES
+        -->
+        <profile>
+            <!-- Use this profile to setup HTTPS within Tomcat -->
+            <id>ssl</id>
+            <properties>
+                <env.ssl>on</env.ssl>
+            </properties>
+        </profile>
+
+        <!--
+            BUILD PROCESS OPTIMISATION
+
+            Includes profiles to skip some steps of full build to save some time
+
+            skipInstaller - installer module is not built
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildInstaller</id>
+            <properties>
+                <env>installer</env>
+                <env.db>derby</env.db>
+                <env.ssl>off</env.ssl>
+                <env.yum.lang>all</env.yum.lang>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+            <modules>
+                <module>payment-api</module>
+                <module>domain-api</module>
+                <module>persistence</module>
+                <module>core-modules</module>
+                <module>core</module>
+                <module>theme</module>
+                <module>web</module>
+                <module>manager</module>
+                <module>installer</module>
+            </modules>
+        </profile>
+
+        <!--
+            DEMO STORE
+        -->
+
+        <profile>
+            <activation><activeByDefault>false</activeByDefault></activation>
+            <id>buildDemo</id>
+            <properties>
+                <env>demo</env>
+                <env.db>mysql</env.db>
+                <env.ssl>off</env.ssl>
+                <env.yum.lang>all</env.yum.lang>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <!--
+            ADDITIONAL MODULES ACTIVATION
+        -->
+
+        <profile>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <id>paymentBase</id>
+            <properties>
+                <payment.liqpay.module>off</payment.liqpay.module>
+                <payment.cybersource.module>off</payment.cybersource.module>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAll</id>
+            <properties>
+                <payment.liqpay.module>on</payment.liqpay.module>
+                <payment.cybersource.module>on</payment.cybersource.module>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+                <payment.paypal.module>on</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPay</id>
+            <properties>
+                <payment.liqpay.module>on</payment.liqpay.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentLiqPayOff</id>
+            <properties>
+                <payment.liqpay.module>off</payment.liqpay.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentCybersource</id>
+            <properties>
+                <payment.cybersource.module>on</payment.cybersource.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentCybersourceOff</id>
+            <properties>
+                <payment.cybersource.module>off</payment.cybersource.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorize</id>
+            <properties>
+                <payment.authorizenet.module>on</payment.authorizenet.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentAuthorizeOff</id>
+            <properties>
+                <payment.authorizenet.module>off</payment.authorizenet.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPaypal</id>
+            <properties>
+                <payment.paypal.module>on</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPaypalOff</id>
+            <properties>
+                <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                </exclusions>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                </exclusions>
+
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring-security.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-aop</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+
+                </exclusions>
+
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

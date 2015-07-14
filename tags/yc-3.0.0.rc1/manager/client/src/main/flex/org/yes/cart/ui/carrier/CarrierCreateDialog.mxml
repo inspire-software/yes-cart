@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*"
+                creationComplete="init()"
+                creationCompleteEffect="Zoom"
+                title="@Resource(bundle='CarrierManagementPanel',key='newCarrierDialogTitle')" showCloseButton="true"
+                close="PopUpManager.removePopUp(this)">
+
+
+
+
+    <mx:Form>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
+            <mx:TextInput   width="160" id="cname"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='description')">
+            <mx:TextArea   width="160" id="description"/>
+        </mx:FormItem>
+        <mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='displayDescription')">
+            <yci18n:i18nStringField id="displayDescriptions"/>
+        </mx:FormItem>
+        <!-- TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes -->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='worldwide')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="worldwideCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='worldwideHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='country')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="countryCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='countryHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='state')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="stateCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='stateHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+        <!--<mx:FormItem  width="100%" label="@Resource(bundle='CarrierManagementPanel',key='local')">-->
+            <!--<mx:CheckBox-->
+                    <!--id="localCheckBox"-->
+                    <!--toolTip="@Resource(bundle='CarrierManagementPanel',key='localHint')"-->
+                    <!--/>-->
+        <!--</mx:FormItem>-->
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button  id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+
+    <mx:Script><![CDATA[
+        import org.yes.cart.impl.CarrierDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+
+        public var newCarrierFlag:Boolean;
+        private var _carrierDTOImpl:CarrierDTOImpl;
+
+
+        public function get carrierDTOImpl():CarrierDTOImpl {
+            return _carrierDTOImpl;
+        }
+
+        public function set carrierDTOImpl(value:CarrierDTOImpl):void {
+            _carrierDTOImpl = value;
+        }
+
+        private function init():void {
+            if (newCarrierFlag) {
+                this.title = resourceManager.getString('CarrierManagementPanel', 'newCarrierDialogTitle');
+                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'create');
+            } else {
+                this.title = resourceManager.getString('CarrierManagementPanel', 'editCarrierDialogTitle');
+                saveBtn.label = resourceManager.getString('CarrierManagementPanel', 'update');
+            }
+
+            displayNames.setSourceObject(_carrierDTOImpl, 'displayNames');
+            displayDescriptions.setSourceObject(_carrierDTOImpl, 'displayDescriptions');
+
+            BindingUtils.bindProperty(this.cname, "text", _carrierDTOImpl, "name");
+            BindingUtils.bindProperty(this.description, "text", _carrierDTOImpl, "description");
+
+            // TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes
+//            BindingUtils.bindProperty(this.worldwideCheckBox, "selected", _carrierDTOImpl, "worldwide");
+//            BindingUtils.bindProperty(this.countryCheckBox, "selected", _carrierDTOImpl, "country");
+//            BindingUtils.bindProperty(this.stateCheckBox, "selected", _carrierDTOImpl, "state");
+//            BindingUtils.bindProperty(this.localCheckBox, "selected", _carrierDTOImpl, "local");
+
+            BindingUtils.bindProperty(_carrierDTOImpl, "name", this.cname, "text");
+            BindingUtils.bindProperty(_carrierDTOImpl, "description", this.description, "text");
+            // TODO: YC-450 CarrierCreateEditDialog support for worldwide, country, state and local checkboxes
+//            BindingUtils.bindProperty(_carrierDTOImpl, "worldwide", this.worldwideCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "country", this.countryCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "state", this.stateCheckBox, "selected");
+//            BindingUtils.bindProperty(_carrierDTOImpl, "local", this.localCheckBox, "selected");
+
+
+        }
+        ]]>
+    </mx:Script>
+</mx:TitleWindow>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- ########################################## bulk import ########################## -->
+
+    <import resource="manager-federation-impex.xml"/>
+
+    <bean id="importDescriptorXStreamProvider" class="org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider"/>
+
+    <util:map id="lookUpQueryParameterStrategyValueProviders"
+              key-type="java.lang.String"
+              value-type="org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategyValueProvider">
+        <entry key="{GUID}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.GUIDLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{masterObject}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.MasterObjectLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{masterObjectId}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+        <entry key="{contextShop}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopLookUpQueryParameterStrategyValueProviderImpl">
+                <constructor-arg index="0" ref="shopService"/>
+            </bean>
+        </entry>
+        <entry key="{contextShopId}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopIdLookUpQueryParameterStrategyValueProviderImpl">
+                <constructor-arg index="0" ref="shopService"/>
+            </bean>
+        </entry>
+        <entry key="{contextShopCode}">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ContextShopCodeLookUpQueryParameterStrategyValueProviderImpl"/>
+        </entry>
+    </util:map>
+
+    <bean id="csvColumnLookUpQueryStrategy" class="org.yes.cart.bulkimport.csv.impl.CsvColumnLookUpQueryStrategy">
+        <property name="providers" ref="lookUpQueryParameterStrategyValueProviders"/>
+        <property name="defaultProvider">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
+        </property>
+    </bean>
+
+    <bean id="csvDescriptorNativeInsertStrategy" class="org.yes.cart.bulkimport.csv.impl.CsvDescriptorNativeInsertStrategy">
+        <property name="providers" ref="lookUpQueryParameterStrategyValueProviders"/>
+        <property name="defaultProvider">
+            <bean class="org.yes.cart.bulkimport.csv.impl.ColumnValueLookUpQueryParameterStrategyValueProviderImpl"/>
+        </property>
+    </bean>
+
+    <bean id="csvColumnLookUpQueryCacheKeyStrategy" class="org.yes.cart.bulkimport.csv.impl.ColumnLookUpQueryCacheKeyStrategy">
+        <constructor-arg index="0" ref="csvColumnLookUpQueryStrategy"/>
+        <constructor-arg index="1" ref="genericDao"/>
+    </bean>
+    <bean id="csvImportValueAdapter" class="org.yes.cart.bulkimport.csv.impl.CsvImportValueAdapter">
+        <constructor-arg index="0" ref="extendedConversionService"/>
+    </bean>
+    <bean id="csvPlainStringValueAdapter"  class="org.yes.cart.bulkimport.csv.impl.CsvPlainStringValueAdapter"/>
+
+    <bean id="csvBulkImportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.csv.impl.CsvBulkImportServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="importFederationFacade"/>
+                <property name="genericDAO" ref="genericDao"/>
+                <property name="extendedConversionService" ref="extendedConversionService"/>
+                <property name="columnLookUpQueryParameterStrategy" ref="csvColumnLookUpQueryStrategy"/>
+                <property name="descriptorInsertLookUpQueryParameterStrategy" ref="csvDescriptorNativeInsertStrategy"/>
+                <property name="cacheKey" ref="csvColumnLookUpQueryCacheKeyStrategy"/>
+                <property name="valueDataAdapter" ref="csvImportValueAdapter"/>
+                <property name="valueStringAdapter" ref="csvPlainStringValueAdapter"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="categoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="categoryService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
+    <bean id="brandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="brandService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
+    <bean id="shopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
+    <bean id="productImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
+    <bean id="productSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
+        <constructor-arg index="0" ref="importFederationFacade"/>
+        <constructor-arg index="1" ref="productSkuService"/>
+        <constructor-arg index="2" ref="attributeService"/>
+    </bean>
+
+    <bean id="imagesBulkImportService" parent="txProxyTemplate">
+        <property name="target">
+            <bean  class="org.yes.cart.bulkimport.image.impl.ImagesBulkImportServiceImpl" scope="prototype">
+                <constructor-arg index="0" ref="importFederationFacade"/>
+                <constructor-arg index="1" ref="imageService"/>
+                <constructor-arg index="2">
+                    <array>
+                        <ref bean="productImageImportDomainObjectStrategy"/>
+                        <ref bean="productSkuImageImportDomainObjectStrategy"/>
+                        <ref bean="categoryImageImportDomainObjectStrategy"/>
+                        <ref bean="brandImageImportDomainObjectStrategy"/>
+                        <ref bean="shopImageImportDomainObjectStrategy"/>
+                    </array>
+                </constructor-arg>
+            </bean>
+        </property>
+    </bean>
+
+</beans>
+        

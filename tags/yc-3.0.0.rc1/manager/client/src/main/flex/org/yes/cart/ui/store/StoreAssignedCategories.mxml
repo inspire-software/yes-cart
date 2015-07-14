@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*"
+           width="100%" height="100%"
+           creationComplete="init();"
+           paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+
+
+    <mx:Script>
+
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+        import mx.core.FlexGlobals;
+
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+        import mx.rpc.AsyncResponder;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.CategoryDTOImpl;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.CategoryTreeDescriptor;
+        import org.yes.cart.ui.category.CategoryCreateDialog;
+        import org.yes.cart.util.DomainUtils;
+
+        public var shopDto:ShopDTOImpl;
+
+        private var newCategoryPopUp:CategoryCreateDialog;
+
+        private function init():void {
+            remoteCategoryService.getAll();
+        }
+
+        private function isCategoryAlreadyAssigned(cat:Object):Boolean {
+            var selectedId:Object = cat.categoryId;
+            for each (var assignedCat:CategoryDTOImpl in this.assignedCategoriesList.dataProvider) {
+                if (assignedCat.categoryId == selectedId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private function onCategorySelected(event:ListEvent):void {
+            this.availableSelected = this.categoryTree.selectedItem != null &&
+                    !DomainUtils.isRootCategory(this.categoryTree.selectedItem) &&
+                    !isCategoryAlreadyAssigned(this.categoryTree.selectedItem);
+            Debug.trace("Selected to assign category dto id is :" +
+                    (this.availableSelected ? this.categoryTree.selectedItem.categoryId : 'none'));
+        }
+
+        private function onCategoryToUnassignSelected(event:ListEvent):void {
+            this.assignedSelected = this.assignedCategoriesList.selectedItem != null;
+            Debug.trace("Selected to unassign category dto id is :" +
+                    (this.assignedSelected ? this.assignedCategoriesList.selectedItem.categoryId : 'none'));
+
+        }
+
+        private function onAssignCategoryClick(event:Event):void {
+            if (this.availableSelected && this.categoryTree.selectedItem != null) {
+                var selectedId:Object = this.categoryTree.selectedItem.categoryId;
+                for each (var cat:CategoryDTOImpl in this.assignedCategoriesList.dataProvider) {
+                    if (cat.categoryId == selectedId) {
+                        return; // no duplicates
+                    }
+                }
+                remoteCategoryService.assignToShop(selectedId, shopDto.shopId);
+                this.availableSelected = false;
+            }
+        }
+
+        private function onUnassignCategoryClick(event:Event):void {
+            if (this.assignedSelected && this.assignedCategoriesList.selectedItem != null) {
+                remoteCategoryService.unassignFromShop(this.assignedCategoriesList.selectedItem.categoryId, shopDto.shopId);
+            }
+        }
+
+        private function onGetAllResult(event:ResultEvent):void {
+
+            categoryTree.dataProvider = event.result;
+            categoryTree.dataDescriptor = new CategoryTreeDescriptor(assignedCategoriesList);
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+            if (categoryTree.dataProvider.length > 0) {
+                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
+                categoryTree.validateNow();
+            }
+
+        }
+
+        private function onGetAllByShopIdResult(event:ResultEvent):void {
+
+            categoryTree.selectedItem = null;
+            assignedCategoriesList.dataProvider = event.result;
+            categoryTree.expandItem(this.categoryTree.dataProvider.getItemAt(0), false);
+            categoryTree.expandItem(this.categoryTree.dataProvider.getItemAt(0), true);
+            categoryTree.validateNow();
+
+        }
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onAssignToShopResult(event:ResultEvent):void {
+            this.availableSelected = false;
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+        }
+
+        private function onUnAssignFromShopResult(event:ResultEvent):void {
+            this.assignedSelected = false;
+            remoteCategoryService.getAllByShopId(shopDto.shopId);
+        }
+
+        private function onCreateNewCategoryClick(event:MouseEvent):void {
+            newCategoryPopUp = CategoryCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryCreateDialog, true));
+            newCategoryPopUp.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewCategorySaveClick);
+            PopUpManager.centerPopUp(newCategoryPopUp);
+        }
+
+
+        private function onCreateNewCategorySaveClick(event:Event):void {
+            if (newCategoryPopUp != null) {
+                var newCategory:CategoryDTOImpl = new CategoryDTOImpl();
+                newCategory.name = newCategoryPopUp.categoryName.text;
+
+                newCategoryPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onCreateNewCategoryClick);
+                PopUpManager.removePopUp(newCategoryPopUp);
+                newCategoryPopUp = null;
+
+                onCategorySelected(null);
+                onCategoryToUnassignSelected(null);
+
+                remoteCategoryService.createForShop(newCategory, shopDto.shopId);
+            }
+        }
+
+        private function onCreateForShopResult(event:ResultEvent):void {
+            init();
+        }
+
+        ]]>
+
+   </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCategoryService"
+                     destination="remoteCategoryService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="getAllByShopId" name="getAllByShopId"
+                   result="onGetAllByShopIdResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="assignToShop" name="assignToShop"
+                   result="onAssignToShopResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="unassignFromShop" name="unassignFromShop"
+                   result="onUnAssignFromShopResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="createForShop" name="createForShop"
+                   result="onCreateForShopResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="availableSelected">false</mx:Boolean>
+    <mx:Boolean id="assignedSelected">false</mx:Boolean>
+
+    <mx:HBox  width="100%">
+        <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='addCategory')"
+                   toolTip="@Resource(bundle='CategoryManagementPanel',key='addCategoryHint')"
+                   click="onCreateNewCategoryClick(event)"
+                />
+    </mx:HBox>
+    <mx:HBox width="100%" height="100%">
+        <mx:VBox height="100%" width="45%">
+            <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableCategories')"/>
+            <mx:Tree height="100%" width="100%" id="categoryTree"
+                     labelField="name"
+                     doubleClickEnabled="true"
+                     itemDoubleClick="onAssignCategoryClick(event)"
+                     itemClick="onCategorySelected(event)"
+                    />
+        </mx:VBox>
+        <mx:VBox width="10%" height="100%" verticalAlign="middle" horizontalAlign="center">
+            <mx:Button label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                       toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                       width="70" id="assignCategoryBtn"
+                       enabled="{availableSelected}"
+                       click="onAssignCategoryClick(event);"
+                    />
+            <mx:Button
+                    label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                    toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                    width="70" id="unassignCategoryBtn"
+                    enabled="{assignedSelected}"
+                    click="onUnassignCategoryClick(event);"
+                    />
+        </mx:VBox>
+        <mx:VBox width="45%" height="100%">
+            <mx:Label text="@Resource(bundle='StoresManagementPanel',key='assignedCategories')"/>
+            <mx:List height="100%" width="100%" id="assignedCategoriesList"
+                     labelField="name"
+                     doubleClickEnabled="true"
+                     itemDoubleClick="onUnassignCategoryClick(event)"
+                     itemClick="onCategoryToUnassignSelected(event);"
+                    />
+        </mx:VBox>
+    </mx:HBox>
+</mx:VBox>

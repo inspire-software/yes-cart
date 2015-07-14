@@ -1,0 +1,345 @@
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="800" height="520"
+                title="@Resource(bundle='ProductManagementPanel',key='find')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteCustomerOrderDeliveryDetailService"
+                     destination="remoteCustomerOrderDeliveryDetailService"
+                     result="ShopManagerGlobal.instance.defaultOnRpcMethodResult(event)"
+                     fault="ShopManagerGlobal.instance.defaultOnRpcMethodFault(event)"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="create" name="create"
+                   result="onCreateDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="update" name="update"
+                   result="onUpdateDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="remove" name="remove"
+                   result="onRemoveDeliveryDetailResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+    <mx:VBox width="100%" height="100%">
+
+        <mx:ControlBar width="100%">
+
+            <!--        TODO: V2
+                        <mx:Button height="100%"
+                                   label="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item')"
+                                   toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.new.item.hint')"
+                                   click="onAddNewItemClick(event)"/>
+
+                        <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
+                                   label="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item')"
+                                   toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.edit.item.hint')"
+                                   click="onAddNewItemClick(event)"/>
+            -->
+
+            <mx:Button height="100%" enabled="{deliveryDetailDataGrid.selectedItem != null}"
+                       label="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item')"
+                       toolTip="@Resource(bundle='CustomerOrderPanel',key='delivery.delete.item.hint')"
+                       click="onDeleteItemClick(event)"/>
+
+            <mx:Label id="currentAmount"/>
+            <mx:Label id="allowedAmount"/>
+
+        </mx:ControlBar>
+
+        <mx:DataGrid id="deliveryDetailDataGrid" x="0" y="0" width="100%" height="99%"
+                     editable="true" dataProvider="{detail}"
+                     itemEditEnd="onDeliveryDetailItemEditEnd(event)"
+
+                >
+            <mx:columns>
+
+                <mx:DataGridColumn width="50" editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='id')"
+                                   dataField="customerOrderDeliveryDetId"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='skuCode')"
+                                   dataField="skuCode"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='skuName')"
+                                   dataField="skuName"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='price')"
+                                   dataField="price"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='tax')"
+                                   labelFunction="lineTaxLabelFunction" showDataTips="true" dataTipFunction="lineTaxTipFunction"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='CustomerOrderPanel',key='qty')"
+                                   dataField="qty"/>
+                <mx:DataGridColumn editable="false"
+                                   headerText="@Resource(bundle='CustomerOrderPanel',key='total')"
+                                   labelFunction="lineTotalLabelFunction"/>
+
+            </mx:columns>
+
+        </mx:DataGrid>
+
+
+    </mx:VBox>
+
+    <mx:ArrayCollection id="detail"/>
+
+
+    <mx:Script><![CDATA[
+        import mx.collections.ArrayCollection;
+        import mx.controls.Alert;
+        import mx.controls.TextInput;
+        import mx.core.FlexGlobals;
+        import mx.events.CollectionEvent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.managers.PopUpManager;
+        import mx.utils.ObjectUtil;
+
+        import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
+        import org.yes.cart.impl.ProductDTOImpl;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        import mx.rpc.events.ResultEvent;
+        import mx.rpc.events.FaultEvent;
+
+        import org.yes.cart.ui.product.ProductFinderDialog;
+
+
+        private var productFinderPopUp:ProductFinderDialog;
+
+
+        public var customerOrderDeliveryDTO:Object;
+        public var supportCaptureMore:Boolean;
+        public var supportCaptureLess:Boolean;
+        public var maxAmount:Number;
+
+
+        public function init():void {
+        }
+
+        /**
+         * Default fault handler.
+         * @param event
+         */
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+
+        /**
+         * Handle create new delivery detail.
+         * @param event event with result
+         */
+        private function onCreateDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
+        /**
+         * Handle update delivery detail record.
+         * @param event event with result
+         */
+        private function onUpdateDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
+        /**
+         * Handle create new delivery detail.
+         * @param event event with result
+         */
+        private function onRemoveDeliveryDetailResult(event:ResultEvent):void {
+
+        }
+
+
+        /**
+         * Get line tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxLabelFunction(item:Object, column:DataGridColumn):String {
+            return (item.grossPrice - item.netPrice).toFixed(2);
+        }
+
+        /**
+         * Get line tax .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTaxTipFunction(item:Object):String {
+            return item.taxCode + ': ' + item.taxRate.toFixed(2) + '%';
+        }
+
+
+        /**
+         * Get line total .
+         * @param item
+         * @param column
+         * @return
+         */
+        private function lineTotalLabelFunction(item:Object, column:DataGridColumn):String {
+            return (item.qty * item.grossPrice).toFixed(2);
+        }
+
+
+        /**
+         * Handle new item
+         * @param event
+         */
+        private function onAddNewItemClick(event:MouseEvent):void {
+
+            productFinderPopUp = ProductFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductFinderDialog, true));
+            productFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+            PopUpManager.centerPopUp(productFinderPopUp);
+
+        }
+
+
+        private function onProductSelectedConfirm(event:Event):void {
+            if (productFinderPopUp != null) {
+                var selected:Array = productFinderPopUp.productSelection;
+                if (selected != null && selected.length > 0) {
+                    //selectedProductDTOImpl = selected[0];
+                    //productLabel.text = selectedProductDTOImpl.name  + ' (' + selectedProductDTOImpl.code + ')';
+                    //productLabel.toolTip = selectedProductDTOImpl.description;
+
+                    var selectedProductDTOImpl:ProductDTOImpl = selected[0];
+                    var detLine:CustomerOrderDeliveryDetailDTOImpl = new CustomerOrderDeliveryDetailDTOImpl();
+                    detLine.skuCode = selectedProductDTOImpl.code;
+                    detLine.skuName = selectedProductDTOImpl.name;
+                    detLine.qty = 1;
+                    detLine.price = 0;
+                    detLine.netPrice = 0;
+                    detLine.grossPrice = 0;
+                    detLine.customerOrderDeliveryDetId = 0;
+
+                    //detLine.deliveryNum = customerOrderDeliveryDTO
+                    detail.addItem(detLine); //todo  fill rest of fields and save
+
+                    productFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onProductSelectedConfirm);
+                    PopUpManager.removePopUp(productFinderPopUp);
+                    productFinderPopUp = null;
+                }
+            }
+        }
+
+
+        /**
+         * Handle new item
+         * @param event
+         */
+        private function onDeleteItemClick(event:MouseEvent):void {
+
+            remoteCustomerOrderDeliveryDetailService.remove(deliveryDetailDataGrid.selectedItem.customerOrderDeliveryDetId);
+
+            detail.removeItemAt(deliveryDetailDataGrid.selectedIndex);
+
+        }
+
+
+        /**
+         * Amount of items in delivery.
+         * @param item delivery
+         * @param column column
+         * @return amount of items in delivery.
+         */
+        public function itemsCostInDeliveryLabelFunction():String {
+            var sum:Number = 0;
+            for (var i:int = 0; i < detail.length; i++) {
+                var _det:CustomerOrderDeliveryDetailDTOImpl = detail[i] as CustomerOrderDeliveryDetailDTOImpl
+                sum += Number((_det.qty * _det.grossPrice).toFixed(2));
+            }
+            return sum.toFixed(2);
+        }
+
+
+        private function onDeliveryDetailItemEditEnd(event:DataGridEvent):void {
+
+            var origDetail:ArrayCollection = ArrayCollection(mx.utils.ObjectUtil.copy(detail));
+
+            var myEditor:TextInput = TextInput(event.currentTarget.itemEditorInstance);
+            var newVal:String = myEditor.text;
+            var oldVal:String = event.currentTarget.editedItemRenderer.data[event.dataField];
+
+            if (event.reason == DataGridEventReason.CANCELLED ||
+                    event.reason == DataGridEventReason.OTHER) {
+                return;
+            }
+            if (oldVal == newVal) {
+                event.preventDefault();
+            } else {
+
+                var customerOrderDeliveryDetailDTOImpl:CustomerOrderDeliveryDetailDTOImpl = (DataGrid(event.target).dataProvider[event.rowIndex] as CustomerOrderDeliveryDetailDTOImpl);
+
+
+                if (isNaN(Number(newVal)) || Number(newVal) < 0) {
+
+                    event.preventDefault();
+
+                    Alert.show(
+                            resourceManager.getString('Common', 'require.positive.number'),
+                            resourceManager.getString('Common', 'error')
+                    );
+
+                    return;
+                }
+
+                event.currentTarget.editedItemRenderer.data[event.dataField] = newVal;
+                var newTotalAmount:Number = Number( itemsCostInDeliveryLabelFunction());
+
+
+                if (newTotalAmount > maxAmount && !supportCaptureMore) {
+                    event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
+                    event.preventDefault();
+                    Alert.show(
+                            resourceManager.getString('CustomerOrderPanel', 'amount.must.be.less', [maxAmount, newTotalAmount]),
+                            resourceManager.getString('Common', 'error')
+                    );
+                    detail = origDetail;
+                    myEditor.text = oldVal;
+
+                } else if (newTotalAmount < maxAmount && !supportCaptureLess) {
+                    event.currentTarget.editedItemRenderer.data[event.dataField] = oldVal;
+                    event.preventDefault();
+                    Alert.show(
+                            resourceManager.getString('CustomerOrderPanel', 'amount.must.be.more', [maxAmount, newTotalAmount]),
+                            resourceManager.getString('Common', 'error')
+                    );
+                    detail = origDetail;
+                    myEditor.text = oldVal;
+
+                } else {
+                    remoteCustomerOrderDeliveryDetailService.update(customerOrderDeliveryDetailDTOImpl);
+                }
+
+
+            }
+        }
+        ]]></mx:Script>
+</mx:TitleWindow>

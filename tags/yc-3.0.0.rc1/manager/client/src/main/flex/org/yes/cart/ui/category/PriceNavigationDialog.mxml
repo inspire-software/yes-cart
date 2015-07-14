@@ -1,0 +1,291 @@
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="500" height="400"
+                title="@Resource(bundle='CategoryManagementPanel',key='priceNavigation')" showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();">
+    <mx:VBox paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2" width="100%" height="100%">
+        <mx:TabBar id="editorTabBar" itemClick="editorTabSelected(event);"
+                       dataProvider="{editorViewStack}"/>
+        <mx:ViewStack id="editorViewStack" width="100%" height="100%" creationPolicy="all">
+            <mx:VBox label="XML">
+                <mx:TextArea id="rawXML" width="100%" height="100%"/>
+            </mx:VBox>
+            <mx:VBox label="@Resource(bundle='CategoryManagementPanel',key='priceNavigationVisual')">
+                <mx:HBox>
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='priceNavigationAddCurrency')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='priceNavigationAddCurrencyHint')"
+                               enabled="{addCurrencyEnabled}"
+                               click="showCurrencies(event)"
+                            />
+                    <mx:TextInput id="addRowStep" text="10" width="40"
+                                  toolTip="@Resource(bundle='CategoryManagementPanel',key='priceNavigationAddRowStepHint')"
+                                  enabled="{addRowEnabled}"/>
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='priceNavigationAddRow')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='priceNavigationAddRowHint')"
+                               enabled="{addRowEnabled}"
+                               click="addNewPriceRangeRow(event)"
+                            />
+                    <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='priceNavigationDeleteRow')"
+                               toolTip="@Resource(bundle='CategoryManagementPanel',key='priceNavigationDeleteRowHint')"
+                               enabled="{xmlNode != null}"
+                               click="deleteSelectedPriceRangeRow(event)"
+                            />
+                </mx:HBox>
+                <mx:TabBar id="currencyTabBar" dataProvider="{currencyViewStack}"/>
+                <mx:ViewStack id="currencyViewStack" width="100%" height="100%"/>
+            </mx:VBox>
+        </mx:ViewStack>
+    </mx:VBox>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='CategoryManagementPanel',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Boolean id="addCurrencyEnabled">true</mx:Boolean>
+    <mx:Boolean id="addRowEnabled">false</mx:Boolean>
+
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.containers.Canvas;
+        import mx.controls.DataGrid;
+        import mx.controls.Label;
+        import mx.controls.TextArea;
+        import mx.controls.dataGridClasses.DataGridColumn;
+        import mx.core.FlexGlobals;
+        import mx.core.UIComponent;
+        import mx.events.DataGridEvent;
+        import mx.events.DataGridEventReason;
+        import mx.events.ItemClickEvent;
+        import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
+
+        import org.yes.cart.model.CurrencyModel;
+        import org.yes.cart.model.PriceRangeModel;
+
+        [Bindable]
+        private var xml:XML;
+        private var currArray:Array = new Array();
+
+        [Bindable]
+        private var xmlNode:XML;
+
+        private var selectCurrencyDialog:SelectCurrencyDialog;
+
+        private function deleteSelectedPriceRangeRow(event:MouseEvent):void {
+            var selectedIdx:int = currencyTabBar.selectedIndex;
+            var dg:DataGrid = (currencyViewStack.getChildAt(selectedIdx) as Canvas).getChildAt(0) as DataGrid;
+            var pnl:PriceRangeModel = PriceRangeModel(currArray[selectedIdx]);
+            Debug.trace("INFO PriceNavigationdialog delete node " + xml.currencies.currency.(name = pnl.currency)['price-tiers']['price-tier'][dg.selectedIndex]);
+            delete xml.currencies.currency.(name = pnl.currency)['price-tiers']['price-tier'][dg.selectedIndex];
+            xmlNode = null;
+            dg.dataProvider = pnl.entry['price-tiers']['price-tier'];
+            currencyViewStack.selectedIndex = selectedIdx;
+
+        }
+
+        private function addNewPriceRangeRow(event:MouseEvent):void {
+            var selectedIdx:int = currencyTabBar.selectedIndex;
+            var pnl:PriceRangeModel = PriceRangeModel(currArray[selectedIdx]);
+            var x:XMLList = pnl.entry['price-tiers'];
+            if (x['price-tier'].length() > 0) {
+                var newXML:XML = x['price-tier'][x['price-tier'].length() - 1].copy();
+                newXML.from = newXML.to.text();
+                newXML.to = Number(Number(newXML.to.text()) + Number(addRowStep.text)).toFixed(2);
+                x.appendChild(newXML);
+            } else {
+                x.appendChild(
+                        <price-tier>
+                            <from>0.00</from>
+                            <to>9.99</to>
+                        </price-tier>
+                );
+            }
+            ((currencyViewStack.getChildAt(selectedIdx) as Canvas).getChildAt(0) as DataGrid).dataProvider = pnl.entry['price-tiers']['price-tier'];
+            currencyTabBar.selectedIndex = selectedIdx;
+
+        }
+
+        private function showCurrencies(event:MouseEvent):void {
+            selectCurrencyDialog = SelectCurrencyDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), SelectCurrencyDialog, true));
+            selectCurrencyDialog.currenciesComboBox.dataProvider = CurrencyModel.getAllCurrencyCodes();
+            selectCurrencyDialog.okBtn.addEventListener(MouseEvent.CLICK, newCurrencySelected);
+            PopUpManager.centerPopUp(selectCurrencyDialog);
+        }
+
+        private function newCurrencySelected(event:Event):void {
+            if (xml == null || xml.currencies.currency.length() == 0) {
+                xml = <price-navigation>
+                    <currencies>
+                    </currencies>
+                </price-navigation>;
+                Debug.trace("INFO PriceNavigationDialog empty navigation xml was created");
+            }
+            var newXML:XML = <currency>
+                <name/>
+                <price-tiers>
+                    <price-tier>
+                        <from>0.00</from>
+                        <to>9.99</to>
+                    </price-tier>
+                </price-tiers>
+            </currency>;
+            newXML.name = selectCurrencyDialog.currency;
+            xml.currencies.appendChild(newXML);
+            rawXML.text = xml.toXMLString();
+            recreateTabs(xml);
+            selectCurrencyDialog.removeEventListener(MouseEvent.CLICK, newCurrencySelected);
+            PopUpManager.removePopUp(selectCurrencyDialog);
+            selectCurrencyDialog = null;
+            currencyTabBar.selectedIndex = currencyTabBar.numChildren - 1;
+            addRowEnabled = currencyViewStack.numChildren > 0;
+        }
+
+        public function set xmlString(xmlString:String):void {
+            xml = new XML(xmlString);
+        }
+
+        /**
+         * @return price navigation xml string
+         */
+        public function get xmlString():String {
+            if (xml != null && xml.currencies.currency.length() > 0) {
+                var idx:int = currencyTabBar.selectedIndex;
+                if (PriceRangeModel(currArray[idx]).currency == "XML") {
+                    return rawXML.text;
+                }
+                return xml.toXMLString();
+            }
+            return null;
+        }
+
+        private function editorTabSelected(event:ItemClickEvent):void {
+            if (event.label == "XML") {
+                rawXML.text = xml.toXMLString();
+            } else {
+                xml = new XML(rawXML.text);
+                recreateTabs(xml);
+                addRowEnabled = currencyViewStack.numChildren > 0;
+            }
+        }
+
+        private function recreateTabs(xml:XML):void {
+            this.currencyViewStack.removeAllChildren();
+            internalInit(xml);
+
+        }
+
+        protected function onItemEditEnd(event:DataGridEvent):void {
+            if (event.reason == DataGridEventReason.CANCELLED) {
+                return; // Do not update cell.
+            }
+            var obj:Object = DataGrid(event.target).dataProvider[event.rowIndex];
+        }
+
+
+        public function init():void {
+            internalInit(xml);
+            rawXML.text = xml.toXMLString();
+            editorTabBar.selectedIndex = 1;
+            addRowEnabled = currencyViewStack.numChildren > 0;
+        }
+
+
+        /**
+         * Create tab and datagrids to edit xml price navigation model.
+         */
+        private function internalInit(xml:XML):void {
+            currArray = [];
+            var curr:PriceRangeModel, entry:XML;
+            for each (entry in xml.currencies.currency) {
+                curr = new PriceRangeModel(entry.name, entry, 0);
+                currArray.push(curr);
+                addTab(curr);
+            }
+
+        }
+
+        private function onXmlNodeSelected(event:ListEvent):void {
+            Debug.trace("TRACE PriceNavigationDialog selected node " + event.currentTarget.selectedItem);
+            xmlNode = event.currentTarget.selectedItem;
+
+        }
+
+        private function getEditComponent(priceRangeList:PriceRangeModel):UIComponent {
+            var result:UIComponent;
+            if (priceRangeList.tag == 0) {
+                var dataGrid:DataGrid = new DataGrid();
+                dataGrid.editable = true;
+
+                addDataGridColumn(dataGrid, "from", resourceManager.getString('CategoryManagementPanel', 'priceFrom'));
+                addDataGridColumn(dataGrid, "to", resourceManager.getString('CategoryManagementPanel', 'priceTo'));
+
+                dataGrid.dataProvider = priceRangeList.entry['price-tiers']['price-tier'];
+
+                dataGrid.addEventListener(DataGridEvent.ITEM_EDIT_END, onItemEditEnd);
+                dataGrid.addEventListener(ListEvent.ITEM_CLICK, onXmlNodeSelected);
+
+                result = dataGrid;
+            } else if (priceRangeList.tag == 1) {
+                var textArea:TextArea = new TextArea();
+                textArea.text = priceRangeList.entry.toXMLString();
+                result = textArea;
+            } else {
+                result = new Label();
+            }
+
+            result.percentWidth = 100;
+            result.percentHeight = 100;
+
+            return result;
+
+
+        }
+
+        private function addDataGridColumn(dataGrid:DataGrid, dataField:String, headerText:String):void {
+            var dgc:DataGridColumn = new DataGridColumn(dataField);
+            dgc.editable = true;
+            dgc.sortable = false;
+            dgc.headerText = headerText;
+
+            var cols:Array = dataGrid.columns;
+            cols.push(dgc);
+            dataGrid.columns = cols;
+        }
+
+
+        /**
+         * Add new tab to tab bar
+         */
+        private function addTab(priceRangeList:PriceRangeModel):void {
+
+            var canvas:Canvas = new Canvas();
+            canvas.label = priceRangeList.currency;
+            currencyViewStack.addChild(canvas);
+
+            var editComponent:UIComponent = getEditComponent(priceRangeList);
+
+            canvas.addChild(editComponent);
+        }
+        ]]>
+	</mx:Script>
+
+</mx:TitleWindow>

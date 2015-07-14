@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+                creationComplete="init()"
+                creationCompleteEffect="Zoom"
+                title="@Resource(bundle='LocationManagementPanel',key='newCountryDialogTitle')" showCloseButton="true"
+                close="PopUpManager.removePopUp(this)">
+
+    <mx:Boolean id="newCountryFlag">false</mx:Boolean>
+
+
+    <mx:Form>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='charCode')">
+            <mx:TextInput width="160" id="charCode" change="onFocusLost(event);"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='digitCode')">
+            <mx:TextInput width="160" id="digitCode" change="onFocusLost(event);"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='name')">
+            <mx:TextInput width="160" id="lname" change="onFocusLost(event);"/>
+        </mx:FormItem>
+        <mx:FormItem width="100%" label="@Resource(bundle='LocationManagementPanel',key='displayName')">
+            <mx:TextInput width="160" id="dname" change="onFocusLost(event);"/>
+        </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar horizontalAlign="right" width="100%">
+        <mx:Button id="saveBtn" label="@Resource(bundle='ShopManagerApplication',key='save')"/>
+        <mx:Button id="closeBtn" label="@Resource(bundle='ShopManagerApplication',key='close')"
+                   click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+
+    <mx:Array id="validatorArr">
+        <mx:NumberValidator id="digitCodeValidator"
+                            source="{digitCode}"
+                            property="text"
+                            minValue="0" maxValue="999" allowNegative="false" domain="int"/>
+
+        <mx:StringValidator id="charCodeValidator"
+                            source="{charCode}" property="text"
+                            minLength="2"
+                            maxLength="2"
+                            required="true"/>
+
+        <mx:StringValidator id="lnameValidator"
+                            source="{lname}" property="text"
+                            minLength="2"
+                            maxLength="64"
+                            required="true"/>
+
+        <mx:StringValidator id="dnameValidator"
+                            source="{dname}" property="text"
+                            minLength="2"
+                            maxLength="255"
+                            required="false"/>
+
+    </mx:Array>
+
+
+    <mx:Script>
+       <![CDATA[
+        import mx.validators.Validator;
+
+        import org.yes.cart.impl.CountryDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.managers.PopUpManager;
+
+
+        [Bindable]
+        private var _countryDTOImpl:CountryDTOImpl;
+
+
+        public function get countryDTOImpl():CountryDTOImpl {
+            return _countryDTOImpl;
+        }
+
+        public function set countryDTOImpl(value:CountryDTOImpl):void {
+            _countryDTOImpl = value;
+        }
+
+        /**
+         * Validate  form.
+         * @param evt
+         */
+        private function onFocusLost(evt:Event):void {
+            saveBtn.enabled = (Validator.validateAll(validatorArr).length == 0);
+        }
+
+
+        private function init():void {
+            if (newCountryFlag) {
+                this.title = resourceManager.getString('LocationManagementPanel', 'newCountryDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'create');
+                saveBtn.enabled = false;
+            } else {
+                this.title = resourceManager.getString('LocationManagementPanel', 'editCountryDialogTitle');
+                saveBtn.label = resourceManager.getString('LocationManagementPanel', 'update');
+            }
+
+            BindingUtils.bindProperty(this.digitCode, "text", _countryDTOImpl, "isoCode");
+            BindingUtils.bindProperty(this.charCode, "text", _countryDTOImpl, "countryCode");
+            BindingUtils.bindProperty(this.lname, "text", _countryDTOImpl, "name");
+            BindingUtils.bindProperty(this.dname, "text", _countryDTOImpl, "displayName");
+
+            BindingUtils.bindProperty(_countryDTOImpl, "isoCode", this.digitCode, "text");
+            BindingUtils.bindProperty(_countryDTOImpl, "countryCode", this.charCode, "text");
+            BindingUtils.bindProperty(_countryDTOImpl, "name", this.lname, "text");
+            BindingUtils.bindProperty(_countryDTOImpl, "displayName", this.dname, "text");
+
+
+        }
+        ]]>
+
+        </mx:Script>
+</mx:TitleWindow>

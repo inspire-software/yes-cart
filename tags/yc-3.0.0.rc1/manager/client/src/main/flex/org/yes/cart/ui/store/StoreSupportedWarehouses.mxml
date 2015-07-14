@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+         width="100%" height="100%"
+         creationComplete="init();"
+         paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2">
+    <mx:Script>
+<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.core.FlexGlobals;
+
+        import mx.managers.PopUpManager;
+
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.impl.ShopDTOImpl;
+        import org.yes.cart.impl.WarehouseDTOImpl;
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.warehouse.WarehouseCreateEditDialog;
+
+        private var _shopDTOImpl:ShopDTOImpl;
+
+        public function set shopDTOImpl(value:ShopDTOImpl):void {
+            _shopDTOImpl = value;
+        }
+
+        private function init():void {
+            remoteWarehouseService.getAll();
+        }
+
+        private function onAssignWarehouseClick(event:Event):void {
+
+            if (this.addAvailableEnabled && this.availableWarehousesList.selectedItem != null) {
+                remoteWarehouseService.assignWarehouse(
+                        this.availableWarehousesList.selectedItem.warehouseId, _shopDTOImpl.shopId);
+            }
+
+
+        }
+
+        private function onUnassignWarehouseClick(event:Event):void {
+
+            if (this.addAssignedEnabled && this.assignedWarehousesList.selectedItem != null) {
+                remoteWarehouseService.unassignWarehouse(
+                        this.assignedWarehousesList.selectedItem.warehouseId, _shopDTOImpl.shopId);
+            }
+        }
+
+        private function onAvailableWarehouseSelected(event:Event):void {
+            addAvailableEnabled = this.availableWarehousesList.selectedItem != null;
+        }
+
+        private function onAssignedWarehouseSelected(event:Event):void {
+            addAssignedEnabled = this.assignedWarehousesList.selectedItem != null;
+        }
+
+
+        private function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+
+        /**
+         * Is given warehouse assigned to shop ?
+         * @param warehouse warehouse
+         * @return true if assigned
+         */
+        private function isAssigned(warehouse:WarehouseDTOImpl):Boolean {
+            for each (var shopWarehouse:Object in assignedWarehouses) {
+                if (shopWarehouse.warehouseId == warehouse.warehouseId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private function onFindByShopIdResult(event:ResultEvent):void {
+
+            assignedWarehouses = event.result as ArrayCollection;
+            availableWarehouses.removeAll();
+            for each (var warehouse:WarehouseDTOImpl in allWarehouses) {
+                if (!isAssigned(warehouse)) {
+                    availableWarehouses.addItem(warehouse);
+                }
+            }
+
+            addAvailableEnabled = false;
+            addAssignedEnabled = false;
+
+        }
+
+        private function onGetAllResult(event:ResultEvent):void {
+
+            this.allWarehouses = event.result as ArrayCollection;
+            remoteWarehouseService.findByShopId(_shopDTOImpl.shopId);
+
+        }
+
+        private function onUnassignWarehouseResult(event:ResultEvent):void {
+            remoteWarehouseService.getAll();
+        }
+
+        private function onAssignWarehouseResult(event:ResultEvent):void {
+            remoteWarehouseService.getAll();
+        }
+
+        private var newPopUp:WarehouseCreateEditDialog;
+
+        private function onNewWarehouseClick(event:MouseEvent):void {
+            Debug.trace("warehouse panel onNewWarehouseClick");
+            newPopUp = WarehouseCreateEditDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), WarehouseCreateEditDialog, true));
+            newPopUp.saveBtn.addEventListener(MouseEvent.CLICK, createNewWarehouse);
+            newPopUp.createEditWarehouse(new WarehouseDTOImpl());
+            PopUpManager.centerPopUp(newPopUp);
+        }
+
+        private function createNewWarehouse(event:Event):void {
+            remoteWarehouseService.createForShop(newPopUp.warehouseDTOImpl, _shopDTOImpl.shopId);
+        }
+
+        private function onCreateResult(event:ResultEvent):void {
+            if (newPopUp != null) {
+                newPopUp.saveBtn.removeEventListener(MouseEvent.CLICK, onNewWarehouseClick);
+                PopUpManager.removePopUp(newPopUp);
+            }
+            newPopUp = null;
+            remoteWarehouseService.getAll();
+        }
+
+        ]]>
+    </mx:Script>
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteWarehouseService"
+                     destination="remoteWarehouseService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getAll" name="getAll"
+                   result="onGetAllResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="findByShopId" name="findByShopId"
+                   result="onFindByShopIdResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="unassignWarehouse" name="unassignWarehouse"
+                   result="onUnassignWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="assignWarehouse" name="assignWarehouse"
+                   result="onAssignWarehouseResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="createForShop" name="createForShop"
+                   result="onCreateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+    <mx:ArrayCollection id="availableWarehouses"/>
+    <mx:ArrayCollection id="assignedWarehouses"/>
+    <mx:ArrayCollection id="allWarehouses"/>
+
+    <mx:Boolean id="addAvailableEnabled">false</mx:Boolean>
+    <mx:Boolean id="addAssignedEnabled">false</mx:Boolean>
+
+    <mx:HBox  width="100%">
+        <mx:Button label="@Resource(bundle='WarehouseManagementPanel',key='newWarehouse')"
+                   toolTip="@Resource(bundle='WarehouseManagementPanel',key='newWarehouseHint')"
+                   click="onNewWarehouseClick(event)"/>
+    </mx:HBox>
+    <mx:HBox width="100%" height="100%">
+        <mx:Grid width="100%" height="100%" id="supportedCurrencyPanel">
+            <mx:GridRow width="100%" height="50">
+                <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                    <mx:Label text="@Resource(bundle='StoresManagementPanel',key='availableWarehouses')"/>
+                </mx:GridItem>
+                <mx:GridItem width="10%" height="50">
+                </mx:GridItem>
+                <mx:GridItem width="45%" height="50" textAlign="center" verticalAlign="middle">
+                    <mx:Label text="@Resource(bundle='StoresManagementPanel',key='supportedWarehouses')"/>
+                </mx:GridItem>
+            </mx:GridRow>
+            <mx:GridRow width="100%" height="100%">
+                <mx:GridItem width="45%" height="100%">
+                    <mx:List
+                            id="availableWarehousesList"
+                            width="100%"
+                            height="100%"
+                            dataProvider="{availableWarehouses}"
+                            labelField="name"
+                            doubleClickEnabled="true"
+                            doubleClick="onAssignWarehouseClick(event)"
+                            itemClick="onAvailableWarehouseSelected(event)"
+                            >
+                    </mx:List>
+                </mx:GridItem>
+                <mx:GridItem width="10%" height="100%" verticalAlign="middle" textAlign="center">
+                    <mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center">
+                        <mx:Button enabled="{addAvailableEnabled}"
+                                   label="@Resource(bundle='StoresManagementPanel',key='assign')"
+                                   toolTip="@Resource(bundle='StoresManagementPanel',key='assignHint')"
+                                   click="onAssignWarehouseClick(event)"/>
+                        <mx:Button enabled="{addAssignedEnabled}"
+                                   label="@Resource(bundle='StoresManagementPanel',key='unassign')"
+                                   toolTip="@Resource(bundle='StoresManagementPanel',key='unassignHint')"
+                                   click="onUnassignWarehouseClick(event)"/>
+                    </mx:VBox>
+                </mx:GridItem>
+                <mx:GridItem width="45%" height="100%">
+                    <mx:List
+                            id="assignedWarehousesList"
+                            width="100%"
+                            height="100%"
+                            dataProvider="{assignedWarehouses}"
+                            labelField="name"
+                            doubleClickEnabled="true"
+                            itemDoubleClick="onUnassignWarehouseClick(event)"
+                            itemClick="onAssignedWarehouseSelected(event)"
+                            >
+
+                    </mx:List>
+                </mx:GridItem>
+            </mx:GridRow>
+
+        </mx:Grid>
+    </mx:HBox>
+</mx:VBox>

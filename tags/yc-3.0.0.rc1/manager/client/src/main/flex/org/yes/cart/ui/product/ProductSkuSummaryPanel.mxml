@@ -1,0 +1,240 @@
+<?xml version="1.0" ?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:controls="controls.*" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%"
+           creationComplete="onInitPanel()">
+
+    <mx:Form x="0" y="0">
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='guid')">
+            <mx:TextInput id="guidTextInput" width="300" focusOut="onGuidChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='code')">
+            <mx:TextInput id="codeTextInput" width="300" focusOut="onCodeChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='manufacturerCode')">
+            <mx:TextInput id="manCodeTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='name')">
+            <mx:TextInput id="nameTextInput" width="300" />
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='displayName')">
+            <yci18n:i18nStringField id="displayNames" change="onDisplayNamesChange(event)"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='barCode')">
+            <mx:TextInput id="barCodeTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='rank')">
+            <mx:TextInput id="rankTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='ProductSkuManagementPanel',key='description')">
+            <mx:TextArea id="descriptionTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem>
+            <mx:Button
+                enabled="{productSkuChangedFlag}"
+                label="@Resource(bundle='ProductSkuManagementPanel',key='save')"
+                toolTip="@Resource(bundle='ProductSkuManagementPanel',key='saveHint')"
+                click="saveProductsKU(event)"/>
+        </mx:FormItem>
+    </mx:Form>
+
+
+    <mx:NumberValidator id="rankValidator"
+        source="{rankTextInput}" property="text"
+        minValue="0" maxValue="99999" domain="int"
+        invalidCharError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
+        integerError="@Resource(bundle='ProductSkuManagementPanel',key='rankInvalidCharError')"
+            />
+
+    <mx:StringValidator  id="skuNameValidator"
+        source="{nameTextInput}" property="text"
+        minLength="1"
+        required="true"
+        />
+
+    <mx:NumberValidator id="barCodeValidator"
+                        source="{barCodeTextInput}" property="text"
+                        required="false"
+                        domain="int"/>
+
+
+    <mx:Boolean id="productSkuChangedFlag">false</mx:Boolean>
+
+    <mx:ArrayCollection id="propertyWatchers"/>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteProductService" destination="remoteProductService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+
+        <mx:method id="isGuidAvailableForProductSku" name="isGuidAvailableForProductSku"
+                   result="onGuidAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="isCodeAvailableForProductSku" name="isCodeAvailableForProductSku"
+                   result="onCodeAvailableForProductResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+    </mx:RemoteObject>
+
+
+    <mx:Script>
+        <![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.events.FlexEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.event.DtoEvent;
+
+        import org.yes.cart.impl.ProductSkuDTOImpl;
+
+        import mx.binding.utils.BindingUtils;
+        import mx.binding.utils.ChangeWatcher;
+        import mx.events.PropertyChangeEvent;
+        import mx.validators.Validator;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+        [Bindable]
+        private var _productSku:ProductSkuDTOImpl;
+
+        public function get productSku():ProductSkuDTOImpl {
+            return _productSku;
+        }
+
+        public function set productSku(value:ProductSkuDTOImpl):void {
+            if (_productSku != null && value != null && _productSku.skuId == value.skuId) {
+                return;
+            }
+            unbindProperties();
+            _productSku = value;
+            bindProperties();
+            if (guidTextInput != null) {
+                guidTextInput.errorString = '';
+            }
+            if (codeTextInput != null) {
+                codeTextInput.errorString = '';
+            }
+        }
+
+        private var validatorArr:Array;
+
+        private function onInitPanel():void {
+            validatorArr = [ rankValidator, skuNameValidator, barCodeValidator ];
+        }
+
+        private function unbindProperties():void {
+            for each (var watcher:ChangeWatcher in propertyWatchers) {
+                watcher.unwatch();
+            }
+            propertyWatchers.removeAll();
+            displayNames.setSourceObject(null, null);
+        }
+
+        private function bindProperties():void {
+
+            if (_productSku != null) {
+                Debug.trace("INFO ProductSkuSummaryPanel rebind begin");
+
+                displayNames.setSourceObject(_productSku, 'displayNames');
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(guidTextInput, "text", _productSku, "guid"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(codeTextInput, "text", _productSku, "code"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(manCodeTextInput, "text", _productSku, "manufacturerCode"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(nameTextInput, "text", _productSku, "name"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(barCodeTextInput, "text", _productSku, "barCode"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(rankTextInput, "text", _productSku, "rank"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(descriptionTextInput, "text", _productSku, "description"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "guid", guidTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "code", codeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "manufacturerCode", manCodeTextInput, "text"));
+
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "name", nameTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "barCode", barCodeTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "rank", rankTextInput, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_productSku, "description", descriptionTextInput, "text"));
+
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "guid", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "code", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "manufacturerCode", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "name", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "barCode", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "rank", productSkuChanged));
+                propertyWatchers.addItem(ChangeWatcher.watch(_productSku, "description", productSkuChanged));
+
+                Debug.trace("INFO ProductSkuSummaryPanel rebind end");
+
+            }
+
+        }
+
+        private function productSkuChanged(event:PropertyChangeEvent):void {
+            var validatorErrorArray:Array = Validator.validateAll(validatorArr);
+            productSkuChangedFlag = (validatorErrorArray.length == 0);
+        }
+
+        private function onDisplayNamesChange(event:FlexEvent):void {
+            productSkuChanged(null);
+        }
+
+        private function saveProductsKU(event:MouseEvent):void {
+            dispatchEvent(new DtoEvent(DtoEvent.UPDATE, _productSku));
+            productSkuChangedFlag = false;
+        }
+
+
+
+        private function onGuidChange(event:Event):void {
+            remoteProductService.isGuidAvailableForProductSku(guidTextInput.text, _productSku.skuId);
+        }
+
+        private function onCodeChange(event:Event):void {
+            remoteProductService.isCodeAvailableForProductSku(codeTextInput.text, _productSku.skuId);
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGuidAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                guidTextInput.errorString = '';
+            } else {
+                guidTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'guidIsNotAvailable', [ guidTextInput.text ]);
+            }
+        }
+
+        private function onCodeAvailableForProductResult(event:ResultEvent):void {
+            var _available:Boolean = Boolean(event.result);
+            if (_available) {
+                codeTextInput.errorString = '';
+            } else {
+                codeTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'codeIsNotAvailable', [ codeTextInput.text ]);
+            }
+        }
+
+
+        ]]>
+</mx:Script>
+</mx:Canvas>
