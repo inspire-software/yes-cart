@@ -216,6 +216,60 @@ VALUES (57, 'testPaymentGateway', 'htmlForm_uk',
 , 'Частина HTML форми для оплати (UK)', 'Частина HTML форми для оплати, яка буде показана на останньому кроці при оформленні замовлення (UK)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (256, 'testPaymentGateway', 'name_de', 'Test Payment-Gateway', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (257, 'testPaymentGateway', 'htmlForm_de',
+    '<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Name auf der Karte</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccHolderName" value="@CARDHOLDERNAME@" maxlength="128"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">Kartennummer</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccNumber" maxlength="16"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Verfallsdatum</label>
+        <div class="col-xs-8 col-sm-7 col-md-4">
+          <select name="ccExpireMonth" class="form-control">
+            <option value="01">01 - Січень</option>
+            <option value="02">02 - Лютий</option>
+            <option value="03">03 - Березень</option>
+            <option value="04">04 - Квітень</option>
+            <option value="05">05 - Травень</option>
+            <option value="06">06 - Червень</option>
+            <option value="07">07 - Липень</option>
+            <option value="08">08 - Серпень</option>
+            <option value="09">09 - Вересень</option>
+            <option value="10">10 - Жовтень</option>
+            <option value="11">11 - Листопад</option>
+            <option value="12">12 - Грудень</option>
+          </select>
+        </div>
+        <div class="col-xs-4 col-sm-2 col-md-2 no-padding">
+          <select name="ccExpireYear" class="form-control">
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+          </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-3 col-md-2">Karten-Sicherheitscode</label>
+        <div class="col-xs-12 col-sm-9 col-md-6">
+          <input type="text" class="form-control" name="ccSecCode" maxlength="3"/>
+        </div>
+    </div>'
+, 'Ein Teil der HTML-Formular (DE)', 'Ein Teil der HTML-Formular, das Display, wenn der Benutzer wählen Sie diese Tor zu bezahlen (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (58, 'testPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
@@ -231,6 +285,9 @@ VALUES (62, 'courierPaymentGateway', 'name_ru', 'Оплата курьеру', '
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (63, 'courierPaymentGateway', 'name_uk', 'Оплата кур''єру', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (263, 'courierPaymentGateway', 'name_de', 'Zahlung per Kurier', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (64, 'courierPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
@@ -250,6 +307,9 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (68, 'prePaymentGateway', 'name_uk', 'Попередня оплата', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (268, 'prePaymentGateway', 'name_de', 'Offline Vorauszahlung', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (69, 'prePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
 
@@ -264,6 +324,9 @@ VALUES (72, 'inStorePaymentGateway', 'name_ru', 'Оплата в магазин�
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (73, 'inStorePaymentGateway', 'name_uk', 'Оплата у магазині', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (273, 'inStorePaymentGateway', 'name_de', 'Lieferung in store', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (74, 'inStorePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
