@@ -23,7 +23,7 @@
     <packaging>pom</packaging>
     <version>3.0.0-SNAPSHOT</version>
     <name>Yes Cart</name>
-    <url>http://code.google.com/p/yes-cart/</url>
+    <url>https://github.com/inspire-software/yes-cart</url>
     <modules>
         <module>payment-api</module>
         <module>domain-api</module>
@@ -93,10 +93,10 @@
 
     </properties>
     <scm>
-        <connection>scm:svn:http://yes-cart.googlecode.com/svn/</connection>
-        <developerConnection>scm:svn:https://yes-cart.googlecode.com/svn/</developerConnection>
+        <connection>scm:git:git://github.com:inspire-software/yes-cart.git</connection>
+        <developerConnection>scm:git:git://github.com:inspire-software/yes-cart.git</developerConnection>
         <tag>HEAD</tag>
-        <url>http://yes-cart.googlecode.com/svn/</url>
+        <url>https://github.com/inspire-software/yes-cart</url>
     </scm>
     <repositories>
 
