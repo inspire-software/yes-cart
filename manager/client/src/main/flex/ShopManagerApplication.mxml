@@ -789,7 +789,11 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='brands')"
                                                        click="onBrandManagementClick(event)"
                                                 />
-
+                                        <mx:Spacer height="10"/>
+                                        <mx:LinkButton width="100%" id="productTypesBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
+                                                       click="onProductTypesManagementClick(event)"
+                                                />
                                     </mx:VBox>
                                 </mx:Canvas>
 
@@ -946,10 +950,6 @@
                                            width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton width="100%" id="productTypesBtn"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='productTypes')"
-                                                       click="onProductTypesManagementClick(event)"
-                                                />
                                         <mx:LinkButton width="100%" id="attributesBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='attributes')"
                                                        click="onAttributesManagementClick(event)"
