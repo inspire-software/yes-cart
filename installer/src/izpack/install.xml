@@ -3,7 +3,7 @@
 <installation version="5.0">
     <info>
         <appname>yes-cart</appname>
-        <appversion>${project.version}-r${buildNumber}</appversion>
+        <appversion>${project.version}-rev.${buildNumber}</appversion>
         <authors>
             <author name="Igor Azarny" email="igor.azarny@yes-cart.org"/>
             <author name="Denis Pavlov" email="denis.pavlov@yes-cart.org"/>
@@ -139,7 +139,7 @@
 
     </packs>
 
-    <jar src="target/izpack/installer-${project.version}-r${buildNumber}.jar"/>
+    <jar src="target/izpack/installer-${project.version}-rev.${buildNumber}.jar"/>
     <jar src="target/izpack/guava-r09.jar"/>
 
 

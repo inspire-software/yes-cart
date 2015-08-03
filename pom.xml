@@ -420,7 +420,7 @@
                         <configuration>
                             <target>
                                 <echo>=========================================================================================================================================================</echo>
-                                <echo>Preparing to build YC ${project.artifactId}-${project.version}-r${buildNumber} with the following configurations:</echo>
+                                <echo>Preparing to build YC ${project.artifactId}-${project.version}-rev.${buildNumber} with the following configurations:</echo>
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
                                 <echo>Database provider (use -Pmysql or -Pderby)            : ${env.db} </echo>
