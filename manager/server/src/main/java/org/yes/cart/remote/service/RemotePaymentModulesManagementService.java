@@ -159,6 +159,18 @@ public interface RemotePaymentModulesManagementService {
 
 
     /**
+     * Create new configuration parameter of payment gateway.
+     *
+     * @param gatewayLabel payment gateway label.
+     * @param parameterLabel parameter label, unique identification.
+     * @param parameterName parameter localised name.
+     *
+     * @return  true in case if update was ok
+     */
+    boolean createConfigurationParameter(String gatewayLabel, String parameterLabel, String parameterName);
+
+
+    /**
      * Update configuration parameter of payment gateway.
      *
      * @param gatewayLabel payment gateway label.

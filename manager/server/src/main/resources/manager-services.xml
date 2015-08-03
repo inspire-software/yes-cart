@@ -793,6 +793,7 @@
             <security:protect method="getAvailablePaymentGateways" access="ROLE_SMADMIN"/>
             <security:protect method="getPaymentGatewayParameters" access="ROLE_SMADMIN"/>
             <security:protect method="updateConfigurationParameter" access="ROLE_SMADMIN"/>
+            <security:protect method="createConfigurationParameter" access="ROLE_SMADMIN"/>
             <security:protect method="allowPaymentGateway" access="ROLE_SMADMIN"/>
             <security:protect method="disallowPaymentGateway" access="ROLE_SMADMIN"/>
 

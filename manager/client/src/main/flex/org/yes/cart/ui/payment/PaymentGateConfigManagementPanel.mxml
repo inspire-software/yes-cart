@@ -101,6 +101,13 @@
                 </mx:DataGrid>
             </mx:VBox>
             <mx:VBox width="100%" height="50%">
+                <mx:HBox id="systemControls" paddingLeft="5" paddingTop="5" width="100%" visible="false" includeInLayout="false">
+                    <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNew')"
+                               toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
+                               click="onCreateParameterClick(event)"
+                               enabled="{pgEnabled}"
+                            />
+                </mx:HBox>
                 <mx:DataGrid id="parameterGrid" dataProvider="{pgParameters}" width="100%" height="100%"
                              itemEditEnd="onAttributeValueEditEnd(event);"
                              visible="{pgSelected}">
@@ -250,6 +257,10 @@
         <mx:method id="updateConfigurationParameter" name="updateConfigurationParameter"
                    fault="onRpcMethodFault(event)"/>
 
+        <mx:method id="createConfigurationParameter" name="createConfigurationParameter"
+                   result="onCreateConfigurationParameterResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
         <mx:method id="updateConfigurationParameterForShop" name="updateConfigurationParameterForShop"
                    fault="onRpcMethodFault(event)"/>
 
@@ -272,6 +283,7 @@
     <mx:ArrayCollection id="pgList"/>
     <mx:ArrayCollection id="pgParameters"/>
     <mx:Boolean id="pgSelected"/>
+    <mx:Boolean id="pgEnabled"/>
     <mx:String id="localeFilter"/>
 
 
@@ -279,11 +291,14 @@
         import com.hexagonstar.util.debug.Debug;
 
         import mx.controls.CheckBox;
+        import mx.core.FlexGlobals;
+        import mx.core.IFlexDisplayObject;
         import mx.events.CloseEvent;
 
         import mx.events.DataGridEvent;
         import mx.events.DataGridEventReason;
         import mx.events.ListEvent;
+        import mx.managers.PopUpManager;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
         import mx.controls.Alert;
@@ -291,6 +306,8 @@
         import org.yes.cart.impl.ShopDTOImpl;
 
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.attributes.valuedialog.SimpleTextDialog;
+        import org.yes.cart.ui.attributes.valuedialog.ValueDialog;
 
         private var _shopDTOImpl:ShopDTOImpl;
 
@@ -312,6 +329,10 @@
 
             //Load list of payment gateways.
             if (_shopDTOImpl == null) {
+
+                systemControls.visible = true;
+                systemControls.includeInLayout = true;
+
                 remotePaymentModulesManagementService.getPaymentGateways(localeFilter);
             } else {
                 remotePaymentModulesManagementService.getPaymentGatewaysForShop(localeFilter, _shopDTOImpl.code);
@@ -328,8 +349,10 @@
 
             var _item:Object = gatewayGrid.selectedItem;
             pgSelected = _item != null;
+            pgEnabled = false;
             if (pgSelected) {
-                if (_item.active) {
+                pgEnabled = _item.active as Boolean;
+                if (pgEnabled) {
                     if (_shopDTOImpl == null) {
                         remotePaymentModulesManagementService.getPaymentGatewayParameters(_item.label, localeFilter);
                     } else {
@@ -401,9 +424,9 @@
         protected function onValueChanged(event:DataGridEvent, pgParameter:Object, newValue:Object):void {
             if (_shopDTOImpl == null) {
                 Debug.trace("INFO new value " + pgParameter.value +
-                        " for " + pgParameter.label +
-                        " in gateway " + gatewayGrid.selectedItem.label +
-                        " at DEFAULT");
+                " for " + pgParameter.label +
+                " in gateway " + gatewayGrid.selectedItem.label +
+                " at DEFAULT");
 
                 remotePaymentModulesManagementService.updateConfigurationParameter(
                         gatewayGrid.selectedItem.label,
@@ -411,9 +434,9 @@
                         pgParameter.value);
             } else {
                 Debug.trace("INFO new value " + pgParameter.value +
-                        " for " + pgParameter.label +
-                        " in gateway " + gatewayGrid.selectedItem.label +
-                        " at shop " + _shopDTOImpl.code);
+                " for " + pgParameter.label +
+                " in gateway " + gatewayGrid.selectedItem.label +
+                " at shop " + _shopDTOImpl.code);
 
                 remotePaymentModulesManagementService.updateConfigurationParameterForShop(
                         gatewayGrid.selectedItem.label,
@@ -450,6 +473,63 @@
             }
         }
 
+        private function onCreateParameterClick(event:MouseEvent):void {
 
+            var _item:Object = gatewayGrid.selectedItem;
+            var _pgLabel:String = _item != null ? _item.label : '?';
+
+            var clz:Class = SimpleTextDialog;
+            var dname:Object = { 'na': '-' };
+
+            popUp = ValueDialog(PopUpManager.createPopUp(
+                    DisplayObject(FlexGlobals.topLevelApplication), clz, true));
+            popUp.windowTitle = _pgLabel;
+            popUp.value = '';
+            popUp.displayValues = dname;
+            popUp.setInformation(resourceManager.getString('PaymentGateConfigManagementPanel', 'addParameter', [_pgLabel]));
+
+            var btnSave:Button = popUp.getButtonSave();
+
+            btnSave.addEventListener(MouseEvent.CLICK, onCreateBtnclick);
+
+            PopUpManager.centerPopUp(IFlexDisplayObject(popUp));
+
+        }
+
+        private var popUp:ValueDialog = null;
+
+        private function onCreateBtnclick(event:MouseEvent):void {
+            if (popUp != null) {
+
+                var _item:Object = gatewayGrid.selectedItem;
+
+                if (_item != null) {
+                    var _pgLabel:String = _item.label;
+                    var _label:String = popUp.value;
+                    var _names:Object = popUp.displayValues;
+                    var _name:String = '';
+                    if (_names.hasOwnProperty('na')) {
+                        _name = _names['na'];
+                    } else {
+                        _name = _label;
+                    }
+
+                    remotePaymentModulesManagementService.createConfigurationParameter(_pgLabel, _label, _name);
+                }
+
+            }
+        }
+
+        private function onCreateConfigurationParameterResult(event:ResultEvent):void {
+
+            if (Boolean(event.result)) {
+                onGatewaySelected(null); // reloads the parameters
+            }
+
+            popUp.getButtonSave().removeEventListener(MouseEvent.CLICK, onCreateBtnclick);
+            PopUpManager.removePopUp(IFlexDisplayObject(popUp));
+            popUp = null;
+
+        }
         ]]></mx:Script>
 </mx:Canvas>

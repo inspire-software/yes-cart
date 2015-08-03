@@ -264,6 +264,30 @@ public class RemotePaymentModulesManagementServiceImpl implements RemotePaymentM
     }
 
     /** {@inheritDoc}*/
+    public boolean createConfigurationParameter(final String gatewayLabel,
+                                                final String parameterLabel,
+                                                final String parameterName) {
+
+        final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(gatewayLabel, DEFAULT_SHOP_CODE);
+        final Collection<PaymentGatewayParameter> params = gateway.getPaymentGatewayParameters();
+        for (PaymentGatewayParameter param : params ) {
+            if (param.getLabel().equals(parameterLabel)) {
+                return false;
+            }
+        }
+
+        final PaymentGatewayParameter parameter = new PaymentGatewayParameterEntity();
+        parameter.setPgLabel(gateway.getLabel());
+        parameter.setName(parameterName);
+        parameter.setLabel(parameterLabel);
+        parameter.setDescription(parameterName);
+        parameter.setGuid(UUID.randomUUID().toString());
+        gateway.addParameter(parameter);
+
+        return true;
+    }
+
+    /** {@inheritDoc}*/
     public boolean updateConfigurationParameterForShop(final String gatewayLabel,
                                                        final String parameterLabel,
                                                        final String parameterValue,
