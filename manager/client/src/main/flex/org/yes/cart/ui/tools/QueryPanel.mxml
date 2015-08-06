@@ -179,6 +179,12 @@
 
         <mx:HBox paddingTop="5" width="100%">
 
+            <mx:ComboBox id="node" dataProvider="{nodes}"/>
+
+
+            <mx:Button id="executeQueryBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"
+                       label="@Resource(bundle='QueryPanel',key='execute')" click="onExecuteQueryClick(event)"/>
+
             <mx:RadioButtonGroup id="queryType"/>
 
             <mx:Label text="@Resource(bundle='QueryPanel',key='queryType')"/>
@@ -187,11 +193,6 @@
             <mx:RadioButton group="{queryType}" id="Hsql" label="@Resource(bundle='QueryPanel',key='hsql')"/>
             <mx:RadioButton group="{queryType}" id="Lucene" label="@Resource(bundle='QueryPanel',key='lucene')"/>
 
-            <mx:ComboBox id="node" dataProvider="{nodes}"/>
-
-
-            <mx:Button id="executeQueryBtn" toolTip="@Resource(bundle='QueryPanel',key='executeHint')"
-                       label="@Resource(bundle='QueryPanel',key='execute')" click="onExecuteQueryClick(event)"/>
             <mx:Button id="addTabBtn" toolTip="@Resource(bundle='QueryPanel',key='newTabHint')"
                        label="@Resource(bundle='QueryPanel',key='newTab')" click="onAddTabClick(event)"/>
             <mx:Button id="deleteTabBtn" toolTip="@Resource(bundle='QueryPanel',key='deleteTabHint')"
