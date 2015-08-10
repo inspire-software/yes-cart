@@ -26,7 +26,8 @@
         import org.yes.cart.impl.AttrValueCategoryDTOImpl;
 
         override protected function allowManageAttribute(attr:AttrValueCategoryDTOImpl):Boolean {
-            return attr.attributeDTO.code.indexOf("IMAGE") == -1; // manage all non image attributes
+            return attr.attributeDTO.code.indexOf("IMAGE") == -1
+                    && attr.attributeDTO.code.indexOf("CONTENT_BODY_") == -1;  // manage all non image attributes
         }
         ]]></mx:Script>
 
