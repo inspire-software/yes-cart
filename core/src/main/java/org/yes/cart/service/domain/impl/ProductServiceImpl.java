@@ -638,7 +638,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         final I18NModel toI18n = new StringI18NModel(display);
         final String localName = toI18n.getValue(locale);
         if (StringUtils.isBlank(localName)) {
-            return getRangeValueRepresentation(from, to);
+            return from + " - " + to;
         }
         return localName;
     }

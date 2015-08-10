@@ -99,7 +99,7 @@ public class AttributeFilteredNavigationSupportImpl extends AbstractFilteredNavi
 
                     if (!rangeValues.isEmpty()) {
 
-                        final FilteredNavigationRecordRequest rangeSingleValue = new FilteredNavigationRecordRequestImpl(facetName, facetName, rangeValues);
+                        final FilteredNavigationRecordRequest rangeSingleValue = new FilteredNavigationRecordRequestImpl(facetName, fieldName, rangeValues);
                         requests.add(rangeSingleValue);
                         requestsMap.put(facetName, rangeSingleValue);
 
