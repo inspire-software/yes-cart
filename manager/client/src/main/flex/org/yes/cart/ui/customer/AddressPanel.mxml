@@ -28,7 +28,12 @@
     </mx:RemoteObject>
 
     <mx:VBox paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" width="100%" height="100%">
+        <mx:HBox width="100%">
+            <mx:Button id="refreshShopList"
+                       label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                       click="onRefreshAddressListButtonClick(event)"/>
 
+        </mx:HBox>
         <mx:DataGrid width="100%" height="100%" id="addressBookGrid">
             <mx:columns>
                 <!--<mx:DataGridColumn width="70" headerText="@Resource(bundle='CustomerManagementPanel',key='id')"-->
@@ -126,6 +131,10 @@
 
         private function onGetAddressesByCustomerIdResult(event:ResultEvent):void {
             addressBookGrid.dataProvider = event.result;
+        }
+
+        private function onRefreshAddressListButtonClick(event:MouseEvent):void {
+            remoteAddressService.getAddressesByCustomerId(customerId);
         }
 
         ]]></mx:Script>

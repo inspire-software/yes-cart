@@ -87,7 +87,7 @@
     <mx:VBox>
         <mx:Form>
             <mx:FormItem label="@Resource(bundle='CustomerManagementPanel',key='tags')">
-                <mx:TextInput id="tagsInput" width="150" change="onChangeTags(event)"/>
+                <mx:TextArea id="tagsInput" width="300" change="onChangeTags(event)"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar horizontalAlign="right" width="100%">
