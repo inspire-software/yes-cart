@@ -83,21 +83,31 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
 
         @Override
         public int compare(final TaxConfig tc1, final TaxConfig tc2) {
-            if (tc1.getProductCode() != null) { // product specific tax
-                if (tc1.getStateCode() != null) { // product state specific tax
+
+            final String tc1country = StringUtils.isEmpty(tc1.getCountryCode()) ? null : tc1.getCountryCode();
+            final String tc1state = StringUtils.isEmpty(tc1.getStateCode()) ? null : tc1.getStateCode();
+            final String tc1product = StringUtils.isEmpty(tc1.getProductCode()) ? null : tc1.getProductCode();
+
+            final String tc2country = StringUtils.isEmpty(tc2.getCountryCode()) ? null : tc2.getCountryCode();
+            final String tc2state = StringUtils.isEmpty(tc2.getStateCode()) ? null : tc2.getStateCode();
+            final String tc2product = StringUtils.isEmpty(tc2.getProductCode()) ? null : tc2.getProductCode();
+
+
+            if (tc1product != null) { // product specific tax
+                if (tc1state != null) { // product state specific tax
                     return UP; // should be only 1 product state specific tax
-                } else if (tc1.getCountryCode() != null) { // product country specific tax
+                } else if (tc1country != null) { // product country specific tax
                     // product state specific tax wins
-                    return tc2.getProductCode() != null && tc2.getStateCode() != null ? DOWN : UP;
+                    return tc2product != null && tc2state != null ? DOWN : UP;
                 } // else product shop specific tax
-                return tc2.getProductCode() != null && (tc2.getCountryCode() != null || tc2.getStateCode() != null) ? DOWN : UP;
-            } else if (tc1.getStateCode() != null) { // state specific tax
-                if (tc2.getProductCode() != null) {
+                return tc2product != null && (tc2country != null || tc2state != null) ? DOWN : UP;
+            } else if (tc1state != null) { // state specific tax
+                if (tc2product != null) {
                     return DOWN; // product specific tax is higher up
                 }
                 return UP; // should be only 1 state specific tax
-            } else if (tc1.getCountryCode() != null) { // country specific tax
-                if (tc2.getProductCode() != null || tc2.getStateCode() != null) {
+            } else if (tc1country != null) { // country specific tax
+                if (tc2product != null || tc2state != null) {
                     return DOWN; // product specific or state specific tax is higher up
                 }
                 return UP;
