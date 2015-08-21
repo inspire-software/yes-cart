@@ -121,8 +121,9 @@
         }
 
         private function summaryTabSelected():void {
-            this.promotionSummary.promotion = promotionDTOImpl;
             Debug.trace("INFO Summary tab selected for promotion id" + promotionDTOImpl.promotionId);
+            promotionSummary.promotionEnabled = promotionDTOImplEnabled;
+            promotionSummary.promotion = promotionDTOImpl;
         }
 
         private function conditionTabSelected():void {

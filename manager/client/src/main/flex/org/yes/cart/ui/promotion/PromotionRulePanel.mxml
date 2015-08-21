@@ -47,10 +47,17 @@
 
         public function set promotion(value:PromotionDTOImpl):void {
             unbindProperties();
-            _promotion = value;
+            if (_promotion != null && _promotion.promotionId == value.promotionId &&
+                    (_promotion.eligibilityCondition != value.eligibilityCondition ||
+                    _promotion.promoActionContext != value.promoActionContext)) {
+                // same promotion we may have unsaved changed, so leave as it was
+                formChanged = true;
+            } else {
+                formChanged = false;
+                _promotion = value;
+            }
             allowEditing = DomainUtils.isNewPK(_promotion.promotionId) || (!promotionEnabled && !_promotion.enabled);
             bindProperties();
-            formChanged = false;
         }
 
         private function onUpdatePromotionResult(event:ResultEvent):void {
@@ -142,6 +149,7 @@
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoActionContext')">
                 <mx:TextInput id="promoActionContext" width="150" editable="{allowEditing}" change="onChange(event)" toolTip="{promoActionContextTooltip()}"/>
+                <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar horizontalAlign="right" width="100%">

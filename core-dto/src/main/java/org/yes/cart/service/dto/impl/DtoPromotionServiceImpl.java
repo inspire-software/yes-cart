@@ -84,6 +84,8 @@ public class DtoPromotionServiceImpl
     @Override
     protected void updatePostProcess(final PromotionDTO dto, final Promotion entity) {
         if (!entity.isEnabled()) { // We allow modifications if entity is disabled
+            entity.setCanBeCombined(dto.isCanBeCombined());
+            entity.setCouponTriggered(dto.isCouponTriggered());
             entity.setEligibilityCondition(dto.getEligibilityCondition());
             entity.setPromoActionContext(dto.getPromoActionContext());
         }

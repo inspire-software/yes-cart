@@ -49,6 +49,7 @@
             unbindProperties();
             _promotion = value;
             entityIsNew = DomainUtils.isNewPK(_promotion.promotionId);
+            allowEditing = DomainUtils.isNewPK(_promotion.promotionId) || (!promotionEnabled && !_promotion.enabled);
             bindProperties();
             this.label = _promotion.code;
         }
@@ -264,6 +265,8 @@
     <mx:ArrayCollection id="propertyWatchers"/>
     <mx:Boolean id="formChanged"/>
     <mx:Boolean id="entityIsNew"/>
+    <mx:Boolean id="allowEditing"/>
+    <mx:Boolean id="promotionEnabled"/>
 
     <mx:VBox>
         <mx:HBox>
@@ -285,10 +288,12 @@
                         <mx:ComboBox id="promoAction" enabled="{entityIsNew}" width="150" change="onChangeAction(event)"/>
                     </mx:FormItem>
                     <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='couponTriggered')">
-                        <mx:CheckBox id="couponTriggered" enabled="{entityIsNew}" change="onChange(event)"/>
+                        <mx:CheckBox id="couponTriggered" enabled="{allowEditing}" change="onChange(event)"/>
+                        <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
                     </mx:FormItem>
                     <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='canBeCombined')">
-                        <mx:CheckBox id="canBeCombined" enabled="{entityIsNew}" change="onChange(event)"/>
+                        <mx:CheckBox id="canBeCombined" enabled="{allowEditing}" change="onChange(event)"/>
+                        <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
                     </mx:FormItem>
                     <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='rank')">
                         <mx:TextInput id="promoRank" change="onChange(event)" width="150"/>
