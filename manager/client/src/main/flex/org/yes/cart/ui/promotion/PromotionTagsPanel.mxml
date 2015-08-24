@@ -103,7 +103,7 @@
     <mx:VBox>
         <mx:Form>
             <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='tags')">
-                <mx:TextInput id="tagsInput" width="150" change="onChangeTags(event)"/>
+                <mx:TextArea id="tagsInput"  width="400" height="200" change="onChangeTags(event)"/>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar horizontalAlign="right" width="100%">

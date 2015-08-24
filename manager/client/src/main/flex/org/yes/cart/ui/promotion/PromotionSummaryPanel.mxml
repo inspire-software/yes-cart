@@ -176,10 +176,6 @@
                         setPromoActionOptions(_promotion.promoType);
                         preselectCombo(promoAction, _promotion.promoAction);
                     }
-                    propertyWatchers.addItem(BindingUtils.bindProperty(couponTriggered, "selected", _promotion, "couponTriggered"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "couponTriggered", couponTriggered, "selected"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(canBeCombined, "selected", _promotion, "canBeCombined"));
-                    propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "canBeCombined", canBeCombined, "selected"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(promoRank, "text", _promotion, "rank"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "rank", promoRank, "text"));
                     propertyWatchers.addItem(BindingUtils.bindProperty(promoName, "text", _promotion, "name"));
@@ -286,14 +282,6 @@
                     </mx:FormItem>
                     <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoAction')">
                         <mx:ComboBox id="promoAction" enabled="{entityIsNew}" width="150" change="onChangeAction(event)"/>
-                    </mx:FormItem>
-                    <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='couponTriggered')">
-                        <mx:CheckBox id="couponTriggered" enabled="{allowEditing}" change="onChange(event)"/>
-                        <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
-                    </mx:FormItem>
-                    <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='canBeCombined')">
-                        <mx:CheckBox id="canBeCombined" enabled="{allowEditing}" change="onChange(event)"/>
-                        <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
                     </mx:FormItem>
                     <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='rank')">
                         <mx:TextInput id="promoRank" change="onChange(event)" width="150"/>

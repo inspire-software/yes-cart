@@ -49,7 +49,9 @@
             unbindProperties();
             if (_promotion != null && _promotion.promotionId == value.promotionId &&
                     (_promotion.eligibilityCondition != value.eligibilityCondition ||
-                    _promotion.promoActionContext != value.promoActionContext)) {
+                    _promotion.promoActionContext != value.promoActionContext ||
+                    _promotion.couponTriggered != value.couponTriggered ||
+                    _promotion.canBeCombined != value.canBeCombined)) {
                 // same promotion we may have unsaved changed, so leave as it was
                 formChanged = true;
             } else {
@@ -58,6 +60,20 @@
             }
             allowEditing = DomainUtils.isNewPK(_promotion.promotionId) || (!promotionEnabled && !_promotion.enabled);
             bindProperties();
+
+            var _promoName:String = resourceManager.getString('PromotionManagementPanel', 'promoType' + value.promoType);
+            if (_promoName == null) {
+                eligibilityConditionLabel = resourceManager.getString('PromotionManagementPanel', 'eligibilityCondition');
+            } else {
+                eligibilityConditionLabel = resourceManager.getString('PromotionManagementPanel', 'eligibilityCondition') + ' (' + _promoName + ')';
+            }
+
+            var _actionName:String = resourceManager.getString('PromotionManagementPanel', 'promoAction' + value.promoAction);
+            if (_actionName == null) {
+                promoActionContextLabel = resourceManager.getString('PromotionManagementPanel', 'promoActionContext');
+            } else {
+                promoActionContextLabel = _actionName;
+            }
         }
 
         private function onUpdatePromotionResult(event:ResultEvent):void {
@@ -111,6 +127,10 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(promoActionContext, "text", _promotion, "promoActionContext"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "eligibilityCondition", eligibilityCondition, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "promoActionContext", promoActionContext, "text"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(couponTriggered, "selected", _promotion, "couponTriggered"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "couponTriggered", couponTriggered, "selected"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(canBeCombined, "selected", _promotion, "canBeCombined"));
+                propertyWatchers.addItem(BindingUtils.bindProperty(_promotion, "canBeCombined", canBeCombined, "selected"));
 
             } catch (e:Error) {
 
@@ -140,16 +160,32 @@
     <mx:Boolean id="formChanged"/>
     <mx:Boolean id="allowEditing"/>
     <mx:Boolean id="promotionEnabled"/>
+    <mx:String id="eligibilityConditionLabel"/>
+    <mx:String id="promoActionContextLabel"/>
 
     <mx:VBox>
         <mx:Form>
-            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='eligibilityCondition')">
+            <mx:FormItem label="{eligibilityConditionLabel}">
                 <mx:TextArea id="eligibilityCondition" width="400" height="200" editable="{allowEditing}" change="onChange(event)"/>
                 <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
             </mx:FormItem>
-            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='promoActionContext')">
-                <mx:TextInput id="promoActionContext" width="150" editable="{allowEditing}" change="onChange(event)" toolTip="{promoActionContextTooltip()}"/>
-                <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
+            <mx:FormItem label="{promoActionContextLabel}">
+                <mx:HBox>
+                    <mx:TextInput id="promoActionContext" width="150" editable="{allowEditing}" change="onChange(event)" toolTip="{promoActionContextTooltip()}"/>
+                    <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='couponTriggered')">
+                <mx:HBox>
+                    <mx:CheckBox id="couponTriggered" enabled="{allowEditing}" change="onChange(event)"/>
+                    <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
+                </mx:HBox>
+            </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='PromotionManagementPanel',key='canBeCombined')">
+                <mx:HBox>
+                    <mx:CheckBox id="canBeCombined" enabled="{allowEditing}" change="onChange(event)"/>
+                    <mx:Text text="@Resource(bundle='PromotionManagementPanel',key='eligibilityConditionEditHint')" visible="{!allowEditing}" includeInLayout="{!allowEditing}"/>
+                </mx:HBox>
             </mx:FormItem>
         </mx:Form>
         <mx:ControlBar horizontalAlign="right" width="100%">
