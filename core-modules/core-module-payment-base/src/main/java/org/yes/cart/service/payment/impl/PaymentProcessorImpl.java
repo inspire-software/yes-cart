@@ -453,19 +453,26 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             if (existing.isEmpty()) {
 
                 Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-                for (CustomerOrderDelivery delivery : order.getDelivery()) {
-                    fillPayment(order, delivery, payment, true);
+                BigDecimal runningTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                final Iterator<CustomerOrderDelivery> deliveryIt = order.getDelivery().iterator();
+                while (deliveryIt.hasNext()) {
+                    final CustomerOrderDelivery delivery = deliveryIt.next();
+                    runningTotal = runningTotal.add(fillPayment(order, delivery, payment, true, runningTotal, !deliveryIt.hasNext()));
                 }
                 rez.add(payment);
 
             }
 
         } else {
-            for (CustomerOrderDelivery delivery : order.getDelivery()) {
+
+            BigDecimal runningTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            final Iterator<CustomerOrderDelivery> deliveryIt = order.getDelivery().iterator();
+            while (deliveryIt.hasNext()) {
+                final CustomerOrderDelivery delivery = deliveryIt.next();
                 final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), delivery.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, transactionOperation);
                 if (existing.isEmpty()) {
                     Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-                    fillPayment(order, delivery, payment, false);
+                    runningTotal = runningTotal.add(fillPayment(order, delivery, payment, false, runningTotal, !deliveryIt.hasNext()));
                     rez.add(payment);
                 }
             }
@@ -480,8 +487,17 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * @param delivery  delivery
      * @param payment   payment to fill
      * @param singlePay is it single pay for whole order
+     * @param runningTotal total amount for created payments so far
+     * @param lastDelivery last delivery in this order
+     *
+     * @return amount for current payment
      */
-    private void fillPayment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment, final boolean singlePay) {
+    private BigDecimal fillPayment(final CustomerOrder order,
+                                   final CustomerOrderDelivery delivery,
+                                   final Payment payment,
+                                   final boolean singlePay,
+                                   final BigDecimal runningTotal,
+                                   final boolean lastDelivery) {
 
         if (payment.getTransactionReferenceId() == null) {
             // can be set by external payment gateway
@@ -493,7 +509,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         fillPaymentItems(delivery, payment);
         fillPaymentShipment(order, delivery, payment);
-        fillPaymentAmount(order, delivery, payment);
+        return fillPaymentAmount(order, delivery, payment, singlePay, runningTotal, lastDelivery);
     }
 
     /**
@@ -502,40 +518,68 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * @param order    order
      * @param delivery delivery
      * @param payment  payment
+     * @param singlePay is it single pay for whole order
+     * @param runningTotal total amount for created payments so far
+     * @param lastDelivery last delivery in this order
+     *
+     * @return amount for current payment
      */
-    private void fillPaymentAmount(final CustomerOrder order,
-                                   final CustomerOrderDelivery delivery,
-                                   final Payment payment) {
-        BigDecimal rez = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
-        for (PaymentLine paymentLine : payment.getOrderItems()) {
-            if (paymentLine.isShipment()) {
-                // shipping price already includes shipping level promotions
-                rez = rez.add(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-            } else {
-                // unit price already includes item level promotions
-                rez = rez.add(paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+    private BigDecimal fillPaymentAmount(final CustomerOrder order,
+                                         final CustomerOrderDelivery delivery,
+                                         final Payment payment,
+                                         final boolean singlePay,
+                                         final BigDecimal runningTotal,
+                                         final boolean lastDelivery) {
+        BigDecimal itemsAndShipping = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+        if (singlePay) {
+            // Single pay is just the total
+            itemsAndShipping = order.getOrderTotal();
+        } else if (lastDelivery) {
+            // For last delivery we apply the remainder to avoid rounding errors
+            itemsAndShipping = itemsAndShipping.add(order.getOrderTotal()).subtract(runningTotal);
+        } else {
+            BigDecimal itemsOnly = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            BigDecimal shippingOnly = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            // Calculate sum of all payment lines (which include shipping as well)
+            for (PaymentLine paymentLine : payment.getOrderItems()) {
+                if (paymentLine.isShipment()) {
+                    // shipping price already includes shipping level promotions
+                    final BigDecimal shipping = paymentLine.getUnitPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    itemsAndShipping = itemsAndShipping.add(shipping);
+                    shippingOnly = shippingOnly.add(shipping);
+                } else {
+                    // unit price already includes item level promotions
+                    final BigDecimal item = paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    itemsAndShipping = itemsAndShipping.add(item);
+                    itemsOnly = itemsOnly.add(item);
+                }
+            }
+            // Order promotions are applied to all items in all deliveries so we scale the amounts equally
+            if (order.isPromoApplied()) {
+                // work out the percentage of order level promotion per delivery
+
+                // work out the real sub total using item promotional prices
+                // DO NOT use the order.getListPrice() as this is the list price in catalog and we calculate
+                // promotions against sale price
+                BigDecimal orderTotalList = BigDecimal.ZERO;
+                for (final CustomerOrderDet detail : order.getOrderDetail()) {
+                    orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
+                }
+
+                final BigDecimal orderTotal = order.getGrossPrice();
+                // take the list price (sub total of items using list price)
+                final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
+                // scale delivery items without shipping total in accordance with order level discount percentage
+                itemsAndShipping = itemsOnly.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                // add unscaled shipping
+                itemsAndShipping = itemsAndShipping.add(shippingOnly);
             }
         }
-        if (order.isPromoApplied()) {
-            // work out the percentage of order level promotion per delivery
-
-            // work out the real sub total using item promotional prices
-            // DO NOT use the order.getListPrice() as this is the list price in catalog and we calculate
-            // promotions against sale price
-            BigDecimal orderTotalList = BigDecimal.ZERO;
-            for (final CustomerOrderDet detail : order.getOrderDetail()) {
-                orderTotalList = orderTotalList.add(detail.getQty().multiply(detail.getGrossPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP));
-            }
-
-            final BigDecimal orderTotal = order.getGrossPrice();
-            // take the list price (sub total of items using list price)
-            final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
-            // scale delivery items total in accordance with order level discount percentage
-            rez = rez.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-        }
-        payment.setPaymentAmount(rez);
+        payment.setPaymentAmount(itemsAndShipping);
         payment.setOrderCurrency(order.getCurrency());
         payment.setOrderLocale(order.getLocale());
+
+        return itemsAndShipping;
     }
 
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
