@@ -399,8 +399,9 @@ public class ContentController {
 
         final long contentId = bookmarkMixin.resolveContentId(content);
         final long shopId = ShopCodeContext.getShopId();
+        final String lang = cartMixin.getCurrentCart().getCurrentLocale();
 
-        final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
+        final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId, lang);
 
         if (!menu.isEmpty()) {
 

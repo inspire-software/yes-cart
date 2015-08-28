@@ -33,10 +33,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
-import org.yes.cart.service.domain.ContentService;
-import org.yes.cart.service.domain.GenericService;
-import org.yes.cart.service.domain.ImageService;
-import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
@@ -136,9 +133,10 @@ public class DtoContentServiceImpl
     private List<CategoryDTO> getAllFromRoot(final CategoryDTO rootDTO, final boolean withAvailalilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final ContentService categoryService = (ContentService) service;
-        final List<Category> childCategories = categoryService.findChildContentWithAvailability(
+        final List<Category> childCategories = new ArrayList<Category>(categoryService.findChildContentWithAvailability(
                 rootDTO.getCategoryId(),
-                withAvailalilityFiltering);
+                withAvailalilityFiltering));
+        Collections.sort(childCategories, new CategoryRankNameComparator());
         final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childCategories.size());
         fillDTOs(childCategories, childCategoriesDTO);
         rootDTO.setChildren(childCategoriesDTO);

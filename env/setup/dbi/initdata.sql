@@ -465,7 +465,20 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (9005,'CATEGORY_IMAGE_HEIGHT','80',100,'9005_CAV');
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10000, 0, 0, 'SHOP10 Content', 'SHOP10 Content','content', 'SHOP10');
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10000, 0, 'License', 'License Page','content', 'License','license');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10100, 10000, 0, 'Page Templates', 'Page Templates','include', 'SHOP10-10100');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10200, 10100, 0, 'General Components', 'General Components','include', 'SHOP10-10200');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10201, 10200, 0, 'Header Component', 'Header Component','include', 'SHOP10-10201');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10202, 10200, 0, 'Footer Component', 'Footer Component','include', 'SHOP10-10202');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10250, 10100, 0, 'Shopping Cart Template', 'Shopping Cart Template','include', 'SHOP10-10250');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10251, 10100, 0, 'Profile Template', 'Profile Template','include', 'SHOP10-10251');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10300, 10000, 0, 'Microsites', 'Microsites','include', 'SHOP10-10300');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10400, 10300, 0, 'Main site', 'Main site','include', 'SHOP10-10400');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10400, 0, 'License', 'License Page','content', 'License','license');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -522,7 +535,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     See the License for the specific language governing permissions and
     limitations under the License.
 </pre>',10001,'12017_CAV');
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10002, 10000, 0, 'Sitemap', 'Dynamic Content Site Map Page','dynocontent', 'Sitemap','sitemap');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10002, 10400, 0, 'Sitemap', 'Dynamic Content Site Map Page','dynocontent', 'Sitemap','sitemap');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12012,'CONTENT_BODY_en_1','
 <p>This page demonstrates dynamic content features</p>
 
@@ -596,7 +609,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 ${include(''license'')}
 
 ',10002,'12016_CAV');
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10003, 10000, 0, 'header_include', 'Header include for SHOP10','include', 'SHOP10_header_include','SHOP10_header_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10003, 10201, 0, 'header_include', 'Header include for SHOP10','include', 'SHOP10_header_include','SHOP10_header_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12022,'CONTENT_BODY_en_1','
     <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
 ',10003,'12022_CAV');
@@ -610,7 +623,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
     <meta name="google-site-verification" content="rHZLga_ppoOy7iVYFQgRVDZOLa7fuT7cGs2t8TY4m6c" />
 ',10003,'12026_CAV');
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10004, 10000, 0, 'footer_include', 'Footer include for SHOP10','include', 'SHOP10_footer_include','SHOP10_footer_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10004, 10202, 0, 'footer_include', 'Footer include for SHOP10','include', 'SHOP10_footer_include','SHOP10_footer_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12032,'CONTENT_BODY_en_1','
     <script type="text/javascript">
 
@@ -672,7 +685,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
     </script>',10004,'12036_CAV');
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10005, 10000, 0, 'header_search_include', 'Header search include for SHOP10','include', 'SHOP10_header_search_include','SHOP10_header_search_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10005, 10201, 0, 'header_search_include', 'Header search include for SHOP10','include', 'SHOP10_header_search_include','SHOP10_header_search_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12042,'CONTENT_BODY_en_1','
 <span class="glyphicon glyphicon-envelope blue"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Contact form</a>
@@ -690,7 +703,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <a href="http://www.yes-cart.org/#contact" target="_blank">Kontaktformular</a>
 ',10005,'12046_CAV');
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10006, 10000, 0, 'shopping_cart_checkout_include', 'Shopping cart checkout include for SHOP10','include', 'SHOP10_s_cart_checkout_include','SHOP10_shopping_cart_checkout_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10006, 10250, 0, 'shopping_cart_checkout_include', 'Shopping cart checkout include for SHOP10','include', 'SHOP10_s_cart_checkout_include','SHOP10_shopping_cart_checkout_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12052,'CONTENT_BODY_en_1','
 <div class="section-title"><h2>Shopping cart</h2></div>
 ',10006,'12052_CAV');
@@ -705,7 +718,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 ',10006,'12056_CAV');
 
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10007, 10000, 0, 'shopping_cart_coupons_include', 'Shopping cart coupons include for SHOP10','include', 'SHOP10_shopping_cart_coupons_include','SHOP10_shopping_cart_coupons_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10007, 10250, 0, 'shopping_cart_coupons_include', 'Shopping cart coupons include for SHOP10','include', 'SHOP10_shopping_cart_coupons_include','SHOP10_shopping_cart_coupons_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12062,'CONTENT_BODY_en_1','
 <div class="section-title"><h2>Add Coupons</h2></div>
 ',10007,'12062_CAV');
@@ -721,7 +734,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
 
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10008, 10000, 0, 'shopping_cart_message_include', 'Shopping cart message include for SHOP10','include', 'SHOP10_shopping_cart_message_include','SHOP10_shopping_cart_message_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10008, 10250, 0, 'shopping_cart_message_include', 'Shopping cart message include for SHOP10','include', 'SHOP10_shopping_cart_message_include','SHOP10_shopping_cart_message_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12072,'CONTENT_BODY_en_1','
 <div class="section-title"><h2>Order Message</h2></div>
 <div class="clearfix"><% if (shoppingCart.orderMessage != null) { %>
@@ -744,7 +757,7 @@ aktuelle Meldung: "${shoppingCart.orderMessage}"<% } else { %>Bitte Text einfüg
 ',10008,'12076_CAV');
 
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10009, 10000, 0, 'cookie_policy_include', 'Cookie policy message include for SHOP10','include', 'SHOP10_cookie_policy_include','SHOP10_cookie_policy_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10009, 10201, 0, 'cookie_policy_include', 'Cookie policy message include for SHOP10','include', 'SHOP10_cookie_policy_include','SHOP10_cookie_policy_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12080,'CONTENT_BODY_en_1','
 <small><b>Cookie Policy</b><br>
  We may store information about you using cookies (files which are sent by us to your computer or other access device) which
@@ -782,7 +795,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
  deleting our cookies or disabling future cookies you may not be able to access certain areas or features of our site.</small>
 ',10009,'12083_CAV');
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10010, 10000, 0, 'profile_wishlist_owner_include', 'Profile wishlist owner include for SHOP10','include', 'SHOP10_profile_wishlist_o_include','SHOP10_profile_wishlist_owner_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10010, 10251, 0, 'profile_wishlist_owner_include', 'Profile wishlist owner include for SHOP10','include', 'SHOP10_profile_wishlist_o_include','SHOP10_profile_wishlist_owner_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12090,'CONTENT_BODY_en_1','
 <div class="col-xs-12 no-padding">
 <h2 class="profile-title">&nbsp;</h2>
@@ -809,7 +822,7 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 ',10010,'12093_CAV');
 
 
-INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10011, 10000, 0, 'profile_wishlist_viewer_include', 'Profile wishlist viewer include for SHOP10','include', 'SHOP10_profile_wishlist_v_include','SHOP10_profile_wishlist_viewer_include');
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10011, 10251, 0, 'profile_wishlist_viewer_include', 'Profile wishlist viewer include for SHOP10','include', 'SHOP10_profile_wishlist_v_include','SHOP10_profile_wishlist_viewer_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12095,'CONTENT_BODY_en_1','
 <div class="col-xs-12 no-padding">
 <h2 class="profile-title">&nbsp;</h2>

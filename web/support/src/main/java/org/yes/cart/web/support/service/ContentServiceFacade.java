@@ -130,10 +130,11 @@ public interface ContentServiceFacade {
      *
      * @param currentContentId current category (optional)
      * @param shopId            current shop
+     * @param locale            locale
      *
      * @return list of sub categories (or top shop categories)
      */
-    List<Category> getCurrentContentMenu(final long currentContentId, long shopId);
+    List<Category> getCurrentContentMenu(final long currentContentId, long shopId, String locale);
 
 
     /**

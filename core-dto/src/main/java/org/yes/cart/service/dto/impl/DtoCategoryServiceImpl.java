@@ -128,9 +128,10 @@ public class DtoCategoryServiceImpl
     private List<CategoryDTO> getAllFromRoot(final CategoryDTO rootDTO, final boolean withAvailalilityFiltering)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final CategoryService categoryService = (CategoryService) service;
-        final List<Category> childCategories = categoryService.findChildCategoriesWithAvailability(
+        final List<Category> childCategories = new ArrayList<Category>(categoryService.findChildCategoriesWithAvailability(
                 rootDTO.getCategoryId(),
-                withAvailalilityFiltering);
+                withAvailalilityFiltering));
+        Collections.sort(childCategories, new CategoryRankNameComparator());
         final List<CategoryDTO> childCategoriesDTO = new ArrayList<CategoryDTO>(childCategories.size());
         fillDTOs(childCategories, childCategoriesDTO);
         rootDTO.setChildren(childCategoriesDTO);
@@ -190,7 +191,8 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Category> categories = ((CategoryService) service).findAllByShopId(shopId);
+        final List<Category> categories = new ArrayList<Category>(((CategoryService) service).findAllByShopId(shopId));
+        Collections.sort(categories, new CategoryRankNameComparator());
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
         return dtos;

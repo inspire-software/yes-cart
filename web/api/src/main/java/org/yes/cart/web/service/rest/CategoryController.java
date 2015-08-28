@@ -66,7 +66,8 @@ public class CategoryController {
 
     private List<CategoryRO> listRootInternal() {
 
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, cartMixin.getCurrentShopId());
+        final String lang = cartMixin.getCurrentCart().getCurrentLocale();
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, cartMixin.getCurrentShopId(), lang);
         return mappingMixin.map(categories, CategoryRO.class, Category.class);
 
     }
@@ -412,8 +413,9 @@ public class CategoryController {
 
         final long categoryId = bookmarkMixin.resolveCategoryId(category);
         final long shopId = ShopCodeContext.getShopId();
+        final String lang = cartMixin.getCurrentCart().getCurrentLocale();
 
-        final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
+        final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId, lang);
 
         if (!menu.isEmpty()) {
 

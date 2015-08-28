@@ -88,8 +88,9 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
         final long categoryId = getCategoryId();
         final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
 
-        final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId));
+        final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId, lang));
 
         final SortableDataProvider<CategoryDecorator> dataProvider = new SortableCategoryDataProvider(categories);
 

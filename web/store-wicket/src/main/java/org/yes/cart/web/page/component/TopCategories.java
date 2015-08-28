@@ -71,16 +71,17 @@ public class TopCategories extends BaseComponent {
         final long categoryId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CATEGORY_ID).toString());
         final long contentId = NumberUtils.toLong(getPage().getPageParameters().get(WebParametersKeys.CONTENT_ID).toString());
         final long shopId = ShopCodeContext.getShopId();
+        final String lang = getLocale().getLanguage();
         final List<Category> categories;
         final long currentCategoryId;
         final boolean viewingCategory;
         if (contentId > 0L) { // content menu
-            final List<Category> contentMenu = contentServiceFacade.getCurrentContentMenu(contentId, shopId);
+            final List<Category> contentMenu = contentServiceFacade.getCurrentContentMenu(contentId, shopId, lang);
             if (CollectionUtils.isEmpty(contentMenu)) {
                 // if this content does not have sub content, display parent's menu
                 final Category content = contentServiceFacade.getContent(contentId, shopId);
                 if (content != null) {
-                    categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), shopId);
+                    categories = contentServiceFacade.getCurrentContentMenu(content.getParentId(), shopId, lang);
                 } else {
                     categories = contentMenu;
                 }
@@ -90,12 +91,12 @@ public class TopCategories extends BaseComponent {
             currentCategoryId = contentId;
             viewingCategory = false;
         } else { // sub categories or top categories
-            final List<Category> categoryMenu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId);
+            final List<Category> categoryMenu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId, lang);
             if (CollectionUtils.isEmpty(categoryMenu)) {
                 // if this content does not have sub content, display parent's menu
                 final Category category = categoryServiceFacade.getCategory(categoryId, shopId);
                 if (category != null) {
-                    categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId);
+                    categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId, lang);
                 } else {
                     categories = categoryMenu;
                 }

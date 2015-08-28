@@ -57,10 +57,11 @@ public interface CategoryServiceFacade {
      *
      * @param currentCategoryId current category (optional)
      * @param shopId            current shop
+     * @param locale            locale
      *
      * @return list of sub categories (or top shop categories)
      */
-    List<Category> getCurrentCategoryMenu(final long currentCategoryId, long shopId);
+    List<Category> getCurrentCategoryMenu(long currentCategoryId, long shopId, String locale);
 
     /**
      * Get thumbnail size configuration.

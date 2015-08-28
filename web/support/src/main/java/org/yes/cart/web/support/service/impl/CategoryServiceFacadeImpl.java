@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.support.constants.CentralViewLabel;
@@ -74,7 +75,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-currentCategoryMenu")
-    public List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long shopId) {
+    public List<Category> getCurrentCategoryMenu(final long currentCategoryId, final long shopId, final String locale) {
 
         final List<Category> categories;
 
@@ -95,6 +96,9 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
                 itCat.remove();
             }
         }
+
+        Collections.sort(categories, new CategoryRankDisplayNameComparator(locale));
+
         return categories;
 
 
@@ -310,7 +314,6 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         return defaultWidthAndHeight;
     }
-
 
 
 }
