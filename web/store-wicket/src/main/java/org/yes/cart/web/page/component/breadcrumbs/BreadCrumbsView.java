@@ -110,7 +110,11 @@ public class BreadCrumbsView extends BaseComponent {
                         final Crumb crumb = crumbListItem.getModelObject();
                         final I18NModel crumbModel;
                         if ("tag".equals(crumb.getKey())) {
-                            crumbModel = getI18NSupport().getFailoverModel(null, getString(crumb.getName()));
+                            String tag = crumb.getName();
+                            try {
+                                tag = getString(crumb.getName());
+                            } catch (Exception exp) { }
+                            crumbModel = getI18NSupport().getFailoverModel(null, tag);
                         } else {
                             crumbModel = getI18NSupport().getFailoverModel(crumb.getDisplayName(), crumb.getName());
                         }
