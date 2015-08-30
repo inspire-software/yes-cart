@@ -19,6 +19,7 @@ package org.yes.cart.web.page.component.breadcrumbs.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
@@ -204,10 +205,40 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
         base.remove(WebParametersKeys.SKU_ID);
 
         for (PageParameters.NamedPair namedPair : attributesOnly.getAllNamed()) {
-            final I18NModel displayValue = attributeService.getNavigatableAttributeDisplayValue(namedPair.getKey(), namedPair.getValue());
+
+            final String displayValueName = determineDisplayValueName(namedPair.getKey(), namedPair.getValue(), locale);
             navigationCrumbs.add(createFilteredNavigationCrumb(
-                    base, namedPair.getKey(), namedPair.getValue(), displayValue, locale, pageParameters,
+                    base, namedPair.getKey(), namedPair.getValue(), displayValueName, locale, pageParameters,
                     brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName));
+        }
+    }
+
+    private String determineDisplayValueName(final String code, final String rawValue, final String locale) {
+        if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(code)) {
+            Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(rawValue);
+            Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(pair.getFirst());
+            final StringBuilder displayPrice = new StringBuilder();
+            if (symbol.getSecond()) {
+                displayPrice.append(pair.getSecond().getFirst().toPlainString()).append(' ').append(symbol.getFirst());
+                displayPrice.append(" ... ");
+                displayPrice.append(pair.getSecond().getSecond().toPlainString()).append(' ').append(symbol.getFirst());
+            } else {
+                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getFirst().toPlainString());
+                displayPrice.append(" ... ");
+                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getSecond().toPlainString());
+            }
+            return displayPrice.toString();
+        } else if (rawValue != null && rawValue.contains(Constants.RANGE_NAVIGATION_DELIMITER)) {
+            final String[] range = StringUtils.split(rawValue, Constants.RANGE_NAVIGATION_DELIMITER);
+            if (range.length == 2) {
+                final I18NModel fromDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, range[0]);
+                final I18NModel toDisplayValue = attributeService.getNavigatableAttributeDisplayValue(code, range[1]);
+                return fromDisplayValue.getValue(locale) + " - " + toDisplayValue.getValue(locale);
+            }
+            return null;
+        } else {
+            final I18NModel displayValue = attributeService.getNavigatableAttributeDisplayValue(code, rawValue);
+            return displayValue.getValue(locale);
         }
     }
 
@@ -226,7 +257,7 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     private Crumb createFilteredNavigationCrumb(final PageParameters base,
                                                 final String key,
                                                 final String value,
-                                                final I18NModel displayValue,
+                                                final String displayValue,
                                                 final String locale,
                                                 final PageParameters pageParameters,
                                                 final String brandPrefix,
@@ -243,9 +274,9 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
 
         String linkName = getLinkNamePrefix(key, locale, brandPrefix, pricePrefix, queryPrefix, tagPrefix, attributeCodeName);
         if (StringUtils.isNotBlank(linkName)) {
-            linkName += "::" + getLinkName(key, value, displayValue.getValue(locale));
+            linkName += "::" + getLinkName(key, value, displayValue);
         } else {
-            linkName = getLinkName(key, value, displayValue.getValue(locale));
+            linkName = getLinkName(key, value, displayValue);
         }
 
         base.add(key, value);
@@ -275,20 +306,8 @@ public class BreadCrumbsBuilderImpl implements BreadCrumbsBuilder {
     }
 
     private String getLinkName(final String key, final String value, final String displayValue) {
-        if (ProductSearchQueryBuilder.PRODUCT_PRICE.equals(key)) {
-            Pair<String, Pair<BigDecimal, BigDecimal>> pair = priceNavigation.decomposePriceRequestParams(value);
-            Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(pair.getFirst());
-            final StringBuilder displayPrice = new StringBuilder();
-            if (symbol.getSecond()) {
-                displayPrice.append(pair.getSecond().getFirst().toPlainString()).append(' ').append(symbol.getFirst());
-                displayPrice.append(" ... ");
-                displayPrice.append(pair.getSecond().getSecond().toPlainString()).append(' ').append(symbol.getFirst());
-            } else {
-                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getFirst().toPlainString());
-                displayPrice.append(" ... ");
-                displayPrice.append(symbol.getFirst()).append(' ').append(pair.getSecond().getSecond().toPlainString());
-            }
-            return displayPrice.toString();
+        if (displayValue == null) {
+            return value;
         }
         return displayValue;
     }
