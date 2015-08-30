@@ -217,9 +217,9 @@ public class ProductInListView extends BaseComponent {
                 product, getWicketUtil().getHttpServletRequest().getContextPath(), lang, width, height, product.getDefaultImage()
         );
 
-        if (log.isInfoEnabled()) {
+        if (log.isDebugEnabled()) {
 
-            log.info("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
+            log.debug("Default image is [" + product.getDefaultImage() + "]  result is [" + result + "]");
 
         }
 
