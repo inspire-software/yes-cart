@@ -280,7 +280,7 @@
                 if (fileName.indexOf("_" + objectCode + "_") == -1) {
                     return FileNameUtils.getFileNameWithoutExtension(fileName)
                             + "_"
-                            + code
+                            + objectCode
                             + "_"
                             + getFileNameSuffix(attributeImageCode)
                             + "."

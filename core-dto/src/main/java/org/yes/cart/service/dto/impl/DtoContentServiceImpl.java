@@ -146,28 +146,29 @@ public class DtoContentServiceImpl
         return childCategoriesDTO;
     }
 
-
     /**
      * {@inheritDoc}
      */
-    public CategoryDTO create(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = getPersistenceEntityFactory().getByIface(Category.class);
-        assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
-        bindDictionaryData(instance, category);
-        category = service.create(category);
-        return getById(category.getCategoryId());
+    protected void createPostProcess(final CategoryDTO dto, final Category entity) {
+        bindDictionaryData(dto, entity);
+        ensureBlankUriIsNull(entity);
+        super.createPostProcess(dto, entity);
     }
 
     /**
      * {@inheritDoc}
      */
-    public CategoryDTO update(final CategoryDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Category category = service.findById(instance.getCategoryId());
-        assembler.assembleEntity(instance, category, getAdaptersRepository(), dtoFactory);
-        bindDictionaryData(instance, category);
-        category = service.update(category);
-        return getById(category.getCategoryId());
+    protected void updatePostProcess(final CategoryDTO dto, final Category entity) {
+        bindDictionaryData(dto, entity);
+        ensureBlankUriIsNull(entity);
+        super.updatePostProcess(dto, entity);
+    }
 
+
+    private void ensureBlankUriIsNull(final Seoable entity) {
+        if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
+            entity.getSeo().setUri(null);
+        }
     }
 
     /**

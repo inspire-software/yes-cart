@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -190,6 +191,28 @@ public class DtoProductSkuServiceImpl
 
         priceService.update(skuPrice);
         return skuPrice.getSkuPriceId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void createPostProcess(final ProductSkuDTO dto, final ProductSku entity) {
+        ensureBlankUriIsNull(entity);
+        super.createPostProcess(dto, entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void updatePostProcess(final ProductSkuDTO dto, final ProductSku entity) {
+        ensureBlankUriIsNull(entity);
+        super.updatePostProcess(dto, entity);
+    }
+
+    private void ensureBlankUriIsNull(final Seoable entity) {
+        if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
+            entity.getSeo().setUri(null);
+        }
     }
 
     /**

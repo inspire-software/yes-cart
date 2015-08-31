@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Restrictions;
@@ -213,6 +214,27 @@ public class DtoProductServiceImpl
         return super.update(instance);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected void createPostProcess(final ProductDTO dto, final Product entity) {
+        ensureBlankUriIsNull(entity);
+        super.createPostProcess(dto, entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void updatePostProcess(final ProductDTO dto, final Product entity) {
+        ensureBlankUriIsNull(entity);
+        super.updatePostProcess(dto, entity);
+    }
+
+    private void ensureBlankUriIsNull(final Seoable entity) {
+        if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
+            entity.getSeo().setUri(null);
+        }
+    }
 
     /**
      * Get the dto interface.
