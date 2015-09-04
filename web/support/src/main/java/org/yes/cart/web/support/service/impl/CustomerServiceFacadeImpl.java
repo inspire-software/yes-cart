@@ -259,11 +259,11 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
                     if (readonly.contains(entry.getKey())) {
 
-                        customerService.addAttribute(customer, entry.getKey(), entry.getValue());
+                        ShopCodeContext.getLog(this).warn("Profile data contains attribute that is read only: {}", entry.getKey());
 
                     } else {
 
-                        ShopCodeContext.getLog(this).warn("Profile data contains attribute that is read only: {}", entry.getKey());
+                        customerService.addAttribute(customer, entry.getKey(), entry.getValue());
 
                     }
 
