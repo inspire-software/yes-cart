@@ -3493,6 +3493,12 @@
         ]]>
     </query>
 
+    <query name="OLDEST.MAIL.AFTER">
+        <![CDATA[
+            select m from MailEntity m where m.mailId > ?1 order by m.createdTimestamp asc
+        ]]>
+    </query>
+
     <query name="DATAGROUPS.BY.TYPE">
         <![CDATA[
             select dg from DataGroupEntity dg where dg.type = ?1

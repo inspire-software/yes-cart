@@ -22,10 +22,13 @@ import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
 import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -38,7 +41,7 @@ public class BulkMailProcessorImpl implements Runnable {
 
     private final MailService mailService;
     private final MailComposer mailComposer;
-    private final JavaMailSender javaMailSender;
+    private final JavaMailSenderFactory javaMailSenderFactory;
     private final SystemService systemService;
     private final RuntimeAttributeService runtimeAttributeService;
 
@@ -49,12 +52,12 @@ public class BulkMailProcessorImpl implements Runnable {
 
     public BulkMailProcessorImpl(final MailService mailService,
                                  final MailComposer mailComposer,
-                                 final JavaMailSender javaMailSender,
+                                 final JavaMailSenderFactory javaMailSenderFactory,
                                  final SystemService systemService,
                                  final RuntimeAttributeService runtimeAttributeService) {
         this.mailService = mailService;
         this.mailComposer = mailComposer;
-        this.javaMailSender = javaMailSender;
+        this.javaMailSenderFactory = javaMailSenderFactory;
         this.systemService = systemService;
         this.runtimeAttributeService = runtimeAttributeService;
     }
@@ -82,41 +85,60 @@ public class BulkMailProcessorImpl implements Runnable {
 
         log.info("Bulk send mail");
 
-        int exceptionsThreshold = this.cycleExceptionsThreshold;
+        final Map<String, Integer> exceptionsThresholdsByShop = new HashMap<String, Integer>();
 
-        Mail mail = mailService.findOldestMail();
+        Long lastFailedEmailId = null;
+        Mail mail = mailService.findOldestMail(lastFailedEmailId);
         while (mail != null) {
 
             log.info("Preparing mail object {}/{} for {} with subject {}",
                     new Object[] { mail.getMailId(), mail.getShopCode(), mail.getRecipients(), mail.getSubject() });
 
-            final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            final String shopCode = mail.getShopCode();
 
-            boolean sent = false;
-            try {
-                mailComposer.convertMessage(mail, mimeMessage);
-                javaMailSender.send(mimeMessage);
-                sent = true;
-                log.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
-                mailService.delete(mail);
-            } catch (Exception exp) {
-                //
-                log.error("Unable to send mail " + mail.getMailId(), exp);
-                exceptionsThreshold--;
-                if (exceptionsThreshold <= 0) {
-                    return;
+            if (!exceptionsThresholdsByShop.containsKey(shopCode)) {
+                exceptionsThresholdsByShop.put(shopCode, this.cycleExceptionsThreshold);
+            }
+
+            int exceptionsThreshold = exceptionsThresholdsByShop.get(shopCode);
+            if (exceptionsThreshold <= 0) {
+                lastFailedEmailId = mail.getMailId();
+                log.info("Skipping send mail as exception threshold is exceeded for shop {}", shopCode);
+            } else {
+
+                final JavaMailSender javaMailSender = javaMailSenderFactory.getJavaMailSender(shopCode);
+                if (javaMailSender == null) {
+                    log.info("No mail sender configured for {}", shopCode);
+                    lastFailedEmailId = mail.getMailId();
+                } else {
+
+                    final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+                    boolean sent = false;
+                    try {
+                        mailComposer.convertMessage(mail, mimeMessage);
+                        javaMailSender.send(mimeMessage);
+                        sent = true;
+                        log.info("Sent mail to {} with subject {}", mail.getRecipients(), mail.getSubject());
+                        mailService.delete(mail);
+                    } catch (Exception exp) {
+                        log.error("Unable to send mail " + mail.getMailId() + " for shop " + shopCode, exp);
+                        lastFailedEmailId = mail.getMailId();
+                        exceptionsThresholdsByShop.put(shopCode, exceptionsThreshold - 1);
+
+                    }
+
+                    if (sent && delayBetweenEmailsMs > 0) {
+                        try {
+                            Thread.sleep(delayBetweenEmailsMs);
+                        } catch (InterruptedException e) {
+                            // resume
+                        }
+                    }
                 }
             }
 
-            if (sent && delayBetweenEmailsMs > 0) {
-                try {
-                    Thread.sleep(delayBetweenEmailsMs);
-                } catch (InterruptedException e) {
-                    // resume
-                }
-            }
-
-            mail = mailService.findOldestMail();
+            mail = mailService.findOldestMail(lastFailedEmailId);
 
         }
 

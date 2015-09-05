@@ -26,8 +26,10 @@ import org.yes.cart.domain.entity.Mail;
 public interface MailService extends GenericService<Mail> {
 
     /**
+     * @param lastFailedMailId last failed email PK.
+     *
      * @return single email object which has the oldest creation timestamp
      */
-    Mail findOldestMail();
+    Mail findOldestMail(Long lastFailedMailId);
 
 }

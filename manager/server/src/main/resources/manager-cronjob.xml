@@ -84,7 +84,7 @@
     <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
         <constructor-arg index="0" ref="mailService"/>
         <constructor-arg index="1" ref="mailComposer"/>
-        <constructor-arg index="2" ref="mailSender"/>
+        <constructor-arg index="2" ref="mailSenderFactory"/>
         <constructor-arg index="3" ref="systemService"/>
         <constructor-arg index="4" ref="runtimeAttributeService"/>
         <property name="delayBetweenEmailsMs" value="1000"/>

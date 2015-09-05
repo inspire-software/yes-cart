@@ -202,7 +202,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-allShops",
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
-            "web.addressBookFacade-allCountries"
+            "web.addressBookFacade-allCountries",
+            "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
@@ -247,7 +248,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopWarehousesIds",
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",
-            "themeService-mailTemplateChainByShopId"
+            "themeService-mailTemplateChainByShopId",
+            "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public Shop update(Shop instance) {
         return super.update(instance);
@@ -266,7 +268,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopWarehousesIds",
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",
-            "themeService-mailTemplateChainByShopId"
+            "themeService-mailTemplateChainByShopId",
+            "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public void delete(Shop instance) {
         super.delete(instance);

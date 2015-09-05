@@ -23,7 +23,11 @@
 
     <!-- #################################  message consumers begin ######################################-->
 
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <bean id="mailSenderBuilder" class="org.yes.cart.service.mail.impl.JavaMailSenderBuilderImpl">
+        <constructor-arg index="0" ref="shopService"/>
+    </bean>
+
+    <bean id="defaultMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${yum.mail.host}"/>
         <property name="port" value="${yum.mail.port}"/>
         <property name="username" value="${yum.mail.username}"/>
@@ -38,7 +42,10 @@
         </property>
     </bean>
 
-
+    <bean id="mailSenderFactory" class="org.yes.cart.service.mail.impl.JavaMailSenderFactoryImpl">
+        <constructor-arg index="0" ref="defaultMailSender"/>
+        <constructor-arg index="1" ref="mailSenderBuilder"/>
+    </bean>
 
     <!-- #################################  message consumers end ######################################-->
 

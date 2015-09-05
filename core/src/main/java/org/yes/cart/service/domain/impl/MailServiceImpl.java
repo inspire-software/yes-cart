@@ -33,7 +33,10 @@ public class MailServiceImpl extends BaseGenericServiceImpl<Mail> implements Mai
 
     /** {@inheritDoc} */
     @Override
-    public Mail findOldestMail() {
-        return getGenericDao().findSingleByNamedQuery("OLDEST.MAIL");
+    public Mail findOldestMail(Long lastFailedMailId) {
+        if (lastFailedMailId == null) {
+            return getGenericDao().findSingleByNamedQuery("OLDEST.MAIL");
+        }
+        return getGenericDao().findSingleByNamedQuery("OLDEST.MAIL.AFTER", lastFailedMailId);
     }
 }

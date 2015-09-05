@@ -371,6 +371,42 @@ public interface AttributeNamesKeys {
          * Special token for customer password reset from YUM
          */
         String SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS = "SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS";
+
+        /**
+         * Flag to indicate that this shop is using custom mail sender configurations.
+         */
+        String SHOP_MAIL_SERVER_CUSTOM_ENABLE = "SHOP_MAIL_SERVER_CUSTOM_ENABLE";
+
+        /**
+         * Custom mail sender configurations - host.
+         */
+        String SHOP_MAIL_SERVER_HOST = "SHOP_MAIL_SERVER_HOST";
+
+        /**
+         * Custom mail sender configurations - port.
+         */
+        String SHOP_MAIL_SERVER_PORT = "SHOP_MAIL_SERVER_PORT";
+
+        /**
+         * Custom mail sender configurations - username.
+         */
+        String SHOP_MAIL_SERVER_USERNAME = "SHOP_MAIL_SERVER_USERNAME";
+
+        /**
+         * Custom mail sender configurations - password.
+         */
+        String SHOP_MAIL_SERVER_PASSWORD = "SHOP_MAIL_SERVER_PASSWORD";
+
+        /**
+         * Custom mail sender configurations - Use SMTP-AUTH.
+         */
+        String SHOP_MAIL_SERVER_SMTPAUTH_ENABLE = "SHOP_MAIL_SERVER_SMTPAUTH_ENABLE";
+
+        /**
+         * Custom mail sender configurations - Use TLS to encrypt.
+         */
+        String SHOP_MAIL_SERVER_STARTTLS_ENABLE = "SHOP_MAIL_SERVER_STARTTLS_ENABLE";
+
     }
 
     interface Brand {

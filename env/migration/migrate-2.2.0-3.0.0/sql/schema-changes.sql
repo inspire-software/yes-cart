@@ -568,3 +568,36 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <p>Sie sehen einen gemeinsamen Wunschzettel</p>
 </div>
 ',10011,'12098_CAV');
+
+--
+-- YC-576 Shop specific mail servers
+--
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10976,  'SHOP_MAIL_SERVER_CUSTOM_ENABLE', 'SHOP_MAIL_SERVER_CUSTOM_ENABLE',  0,  NULL,  'Mail: use custom mail server settings',
+    'Enable custom mail server settings for this shop',  1008, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10975,  'SHOP_MAIL_SERVER_HOST', 'SHOP_MAIL_SERVER_HOST',  0,  NULL,  'Mail: custom mail server host',
+    'Custom mail server host e.g. mail.somedomain.com',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10974,  'SHOP_MAIL_SERVER_PORT', 'SHOP_MAIL_SERVER_PORT',  0,  NULL,  'Mail: custom mail server port',
+    'Custom mail server port e.g. 587',  1006, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10973,  'SHOP_MAIL_SERVER_USERNAME', 'SHOP_MAIL_SERVER_USERNAME',  0,  NULL,  'Mail: custom mail server username',
+    'Custom mail server username. Required if SMTP-AUTH is enabled',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10972,  'SHOP_MAIL_SERVER_PASSWORD', 'SHOP_MAIL_SERVER_PASSWORD',  0,  NULL,  'Mail: custom mail server password',
+    'Custom mail server password. Required if SMTP-AUTH is enabled',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10971,  'SHOP_MAIL_SERVER_SMTPAUTH_ENABLE', 'SHOP_MAIL_SERVER_SMTPAUTH_ENABLE',  0,  NULL,  'Mail: use custom mail server SMTP-AUTH enable',
+    'Enable SMTP authentication on custom mail server (Require username and password)',  1008, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10970,  'SHOP_MAIL_SERVER_STARTTLS_ENABLE', 'SHOP_MAIL_SERVER_STARTTLS_ENABLE',  0,  NULL,  'Mail: use custom mail server TLS encryption enable',
+    'Enable TLS encryption on custom mail server (Must be supported)',  1008, 1001);
