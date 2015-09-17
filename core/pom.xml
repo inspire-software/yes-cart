@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>yes-cart</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0-SHAPSHOT</version>
     </parent>
     <artifactId>core</artifactId>
     <name>Yes cart core service</name>
