@@ -2251,7 +2251,7 @@ public class CustomerController {
         if (customer != null) {
 
             // all in DB
-            final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, null);
+            final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, since);
 
             // remove temporary orders
             final Iterator<CustomerOrder> ordersIt = orders.iterator();
