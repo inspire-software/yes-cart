@@ -47,13 +47,14 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public void markSelectedSortLink(final Link link,
-                                     final PageParameters pageParameters, final String sortOrder, final String sortField) {
+    public boolean markSelectedSortLink(final Link link,
+                                        final PageParameters pageParameters, final String sortOrder, final String sortField) {
         if (isSortSelected(pageParameters, sortOrder, sortField)) {
-            link.add(new AttributeModifier("class", "sort-order-active"));
+            link.add(new AttributeModifier("class", "sort-order-active sort-order active"));
+            return true;
         } else {
             link.add(new AttributeModifier("class", "sort-order"));
-
+            return false;
         }
     }
 
@@ -65,13 +66,14 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public void markSelectedPageLink(final Link link,
-                                     final PageParameters pageParameters, final int pageIndex) {
+    public boolean markSelectedPageLink(final Link link,
+                                        final PageParameters pageParameters, final int pageIndex) {
         if (isPageSelected(pageParameters, pageIndex)) {
-            link.add(new AttributeModifier("class", "nav-page-active"));
+            link.add(new AttributeModifier("class", "nav-page-active nav-page active"));
+            return true;
         } else {
             link.add(new AttributeModifier("class", "nav-page"));
-
+            return false;
         }
     }
 
@@ -85,13 +87,14 @@ public class PaginationSupportImpl implements PaginationSupport {
 
     /** {@inheritDoc} */
     @Override
-    public void markSelectedPageSizeLink(final Link link,
-                                         final PageParameters pageParameters, final List<String> itemsPerPageOptions, final int pageSize) {
+    public boolean markSelectedPageSizeLink(final Link link,
+                                            final PageParameters pageParameters, final List<String> itemsPerPageOptions, final int pageSize) {
         if (isPageSizeSelected(pageParameters, itemsPerPageOptions, pageSize)) {
-            link.add(new AttributeModifier("class", "items-per-page-active"));
+            link.add(new AttributeModifier("class", "items-per-page-active items-per-page active"));
+            return true;
         } else {
             link.add(new AttributeModifier("class", "items-per-page"));
-
+            return false;
         }
     }
 
@@ -102,11 +105,7 @@ public class PaginationSupportImpl implements PaginationSupport {
         final String currentPage = pageParameters.get(WebParametersKeys.PAGE).toString();
         int currentPageIdx = 0;
         if (currentPage != null) {
-            currentPageIdx = NumberUtils.toInt(currentPage);
-        }
-
-        if (currentPageIdx < 0) {
-            return 0;
+            currentPageIdx = NumberUtils.toInt(currentPage, -1);
         }
         return currentPageIdx;
     }

@@ -17,22 +17,16 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <span>
-        <wicket:message key="language">[additional info]</wicket:message>
-    </span>
-
     <a class="dropdown-toggle" id="languageMenu" data-toggle="dropdown" href="#">
         <span wicket:id="activeLanguageName"/>
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="languageMenu">
-        <span wicket:id="languageList">
-            <li role="presentation">
-                <a wicket:id="languageLink" rel="nofollow">
-                    <span wicket:id="languageName"/>
-                </a>
-            </li>
-        </span>
+        <li wicket:id="languageList" role="presentation">
+            <a wicket:id="languageLink" rel="nofollow">
+                <span wicket:id="languageName"/>
+            </a>
+        </li>
     </ul>
 
 </wicket:panel>

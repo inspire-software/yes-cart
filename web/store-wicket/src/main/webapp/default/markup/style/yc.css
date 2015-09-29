@@ -74,6 +74,10 @@ a {
     border-radius: 5px;
 }
 
+.modal-dialog {
+    z-index: 9999;
+}
+
 .product-added-msg {
     font-size: 120%;
     font-weight: bold;
@@ -81,10 +85,6 @@ a {
 
 .white {
     color: #fff;
-}
-
-.blue {
-    color: #3498db;
 }
 
 .margin-top10 {
@@ -225,6 +225,53 @@ a {
 #mini-cart.loading {
     background: url('../image/loading.gif') left center no-repeat
 }
+
+.btn-primary2 {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.btn-primary2:hover,
+.btn-primary2:focus,
+.btn-primary2.focus,
+.btn-primary2:active,
+.btn-primary2.active,
+.open > .dropdown-toggle.btn-primary2 {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+.btn-primary2:active,
+.btn-primary2.active,
+.open > .dropdown-toggle.btn-primary2 {
+    background-image: none;
+}
+.btn-primary2.disabled,
+.btn-primary2[disabled],
+fieldset[disabled] .btn-primary2,
+.btn-primary2.disabled:hover,
+.btn-primary2[disabled]:hover,
+fieldset[disabled] .btn-primary2:hover,
+.btn-primary2.disabled:focus,
+.btn-primary2[disabled]:focus,
+fieldset[disabled] .btn-primary2:focus,
+.btn-primary2.disabled.focus,
+.btn-primary2[disabled].focus,
+fieldset[disabled] .btn-primary2.focus,
+.btn-primary2.disabled:active,
+.btn-primary2[disabled]:active,
+fieldset[disabled] .btn-primary2:active,
+.btn-primary2.disabled.active,
+.btn-primary2[disabled].active,
+fieldset[disabled] .btn-primary2.active {
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+.btn-primary2 .badge {
+    color: #f0ad4e;
+    background-color: #fff;
+}
+
 
 /*===================================================================================*/
 /*	FEATURED PANEL
@@ -390,95 +437,32 @@ a {
 /*	CONTROLS AND PAGINATION
 /*===================================================================================*/
 
-.nav-page,
-.nav-page-control {
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    padding: 5px 10px;
+.paginator ul.pagination {
+    margin: 5px 0;
+}
+
+.paginator .glyphicon {
     line-height: 1.42857143;
+}
+
+.controls-holder .sorter ul.pagination {
+    margin: 5px 0;
+}
+
+.controls-holder .sorter .glyphicon:hover {
     color: #3d3d3d;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
 }
 
-.nav-page-active,
-.nav-page-control-active {
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    padding: 5px 10px;
-    line-height: 1.42857143;
-    text-decoration: none;
-    border: 1px solid #e0e0e0;
-    color: #ffffff;
-    background-color: #3498db;
-}
-
-.nav-page:hover,
-.nav-page-control:hover {
-    border: 1px solid #3498db;
-}
-
-.nav-page-active:hover,
-.nav-page-control-active:hover {
-    color: #ffffff;
+.controls-holder .sorter .active .glyphicon {
+    color: #3d3d3d;
 }
 
 .controls-holder .product-items {
     text-align: right;
-    margin-bottom: 5px;
 }
 
-.controls-holder .sorter .glyphicon {
-    color: #3d3d3d;
-}
-
-.controls-holder .sorter .glyphicon:hover {
-    color: #3498db;
-}
-
-.paginator {
-    margin-bottom: 10px;
-}
-
-.paginator .nav-page-control {
-    padding-top: 6px;
-    padding-bottom: 10px;
-    border: 1px solid #e0e0e0;
-}
-
-.paginator .nav-page-control:hover {
-    border: 1px solid #3498db;
-}
-
-.product-items .items-per-page {
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    color: #3d3d3d;
-    padding: .1em 0.5em .1em;
-    border: 1px solid #e0e0e0;
-}
-
-.product-items .items-per-page:hover {
-    border: 1px solid #3498db;
-}
-
-.product-items .items-per-page-active {
-    display: inline-block;
-    outline: none;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    color: #ffffff;
-    font-weight: bold;
-    padding: .1em 0.5em .1em;
-    border: 1px solid #e0e0e0;
-    background-color: #3498db;
+.controls-holder .product-items ul.pagination {
+    margin: 5px 0;
 }
 
 /*===================================================================================*/
@@ -1752,8 +1736,12 @@ ul.feedbackPanel > li {
 }
 
 /*===================================================================================*/
-/*  BLUE COLOR THEME
+/*  THEME COLOR
 /*===================================================================================*/
+
+.themecolor {
+    color: #3498db;
+}
 
 a:hover,
 a:focus,

@@ -717,19 +717,19 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10005, 10201, 0, 'header_search_include', 'Header search include for SHOP10','include', 'SHOP10_header_search_include','SHOP10_header_search_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12042,'CONTENT_BODY_en_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Contact form</a>
 ',10005,'12042_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12043,'CONTENT_BODY_ru_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/index-ru.html#contact" target="_blank">Контактная форма</a>
 ',10005,'12043_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12045,'CONTENT_BODY_uk_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/index-uk.html#contact" target="_blank">Контактна форма</a>
 ',10005,'12045_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12046,'CONTENT_BODY_de_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Kontaktformular</a>
 ',10005,'12046_CAV');
 

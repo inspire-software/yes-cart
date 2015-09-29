@@ -115,6 +115,14 @@ public class ProductsCentralView extends AbstractCentralView {
         final PageParameters pageParameters = getPage().getPageParameters();
         final PaginationSupport pagination = getWicketSupportFacade().pagination();
         int currentPageIdx = pagination.getCurrentPage(pageParameters);
+        if (currentPageIdx < 0) {
+            // if we have gone overboard restart from 0 by redirect!
+            final PageParameters params = new PageParameters(getPage().getPageParameters());
+            getWicketSupportFacade().pagination().removePageParam(params);
+            setResponsePage(getPage().getClass(), params);
+            currentPageIdx = 0;
+        }
+
         final int selectedItemPerPage = pagination.getCurrentItemsPerPage(pageParameters, itemsPerPageValues);
         final Pair<String, Boolean> sortResult = getSortField();
 
