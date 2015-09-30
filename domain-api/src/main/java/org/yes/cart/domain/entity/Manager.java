@@ -58,4 +58,18 @@ public interface Manager extends RegisteredPerson, Auditable {
      */
     void setManagerId(long managerId);
 
+    /**
+     * Get enabled flag
+     *
+     * @return true if account is enabled
+     */
+    boolean getEnabled();
+
+    /**
+     * Set enabled flag
+     *
+     * @param enabled true if account is enabled
+     */
+    void setEnabled(boolean enabled);
+
 }

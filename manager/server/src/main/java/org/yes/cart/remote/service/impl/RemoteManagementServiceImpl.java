@@ -262,4 +262,25 @@ public class RemoteManagementServiceImpl implements RemoteManagementService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void enableAccount(final String userId) {
+        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
+            managementService.enableAccount(userId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disableAccount(final String userId) {
+        if (federationFacade.isManageable(userId, ManagerDTO.class)) {
+            managementService.disableAccount(userId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
 }

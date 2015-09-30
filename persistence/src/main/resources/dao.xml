@@ -38,6 +38,8 @@
                 <!-- Role management -->
                 <prop key="grant*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="revoke*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="enableAccount*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="disableAccount*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Reset password -->
                 <prop key="reset*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Attribute management -->

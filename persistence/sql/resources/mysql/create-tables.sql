@@ -478,6 +478,7 @@
         PASSWORD varchar(255) not null,
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY datetime,
+        ENABLED bit not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

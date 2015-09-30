@@ -42,6 +42,9 @@ public class ManagerDTOImpl implements ManagerDTO {
     @DtoField(value = "lastname", readOnly = true)
     private String lastName;
 
+    @DtoField(value = "enabled", readOnly = true)
+    private boolean enabled;
+
     /**
      * {@inheritDoc}
      */
@@ -103,6 +106,20 @@ public class ManagerDTOImpl implements ManagerDTO {
      */
     public void setLastName(final String lastName) {
         this.lastName = lastName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
 
     /**

@@ -422,4 +422,26 @@ public class ManagementServiceImpl implements ManagementService {
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void enableAccount(final String userId) {
+
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        manager.setEnabled(true);
+        managerService.update(manager);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disableAccount(final String userId) {
+
+        final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
+        manager.setEnabled(false);
+        managerService.update(manager);
+
+    }
 }

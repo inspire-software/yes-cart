@@ -216,6 +216,10 @@
             }
         }
 
+        private function onChangeAccountStateResult(event:ResultEvent):void {
+            onApplyFilterClick(null);
+        }
+
         private function onAddUserResult(event:ResultEvent):void {
             onApplyFilterClick(null);
             if (newPopUp != null) {
@@ -306,7 +310,6 @@
                 userShops.addChild(panel);
             }
         }
-
         ]]>
     </mx:Script>
 
@@ -340,6 +343,12 @@
                    fault="onRpcMethodFault(event)"/>
         <mx:method id="deleteUser" name="deleteUser"
                    result="onDeleteUserResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="enableAccount" name="enableAccount"
+                   result="onChangeAccountStateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+        <mx:method id="disableAccount" name="disableAccount"
+                   result="onChangeAccountStateResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
@@ -402,6 +411,54 @@
 					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='email')" dataField="email"/>
 					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='firstName')" dataField="firstName"/>
 					<mx:DataGridColumn headerText="@Resource(bundle='UserManagementPanel',key='lastName')" dataField="lastName"/>
+					<mx:DataGridColumn headerText="" dataField="enable" sortable="false">
+                        <mx:itemRenderer>
+                            <mx:Component>
+                                <mx:VBox horizontalAlign="center" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+                                    <mx:Button id="activate"
+                                               label="@Resource(bundle='UserManagementPanel',key='deactivated')"
+                                               toolTip="@Resource(bundle='UserManagementPanel',key='activate')"
+                                               click="onActivateClick(event)"
+                                               visible="{!data.enabled}" includeInLayout="{!data.enabled}">
+                                        <mx:Script><![CDATA[
+                                            import com.hexagonstar.util.debug.Debug;
+
+                                            private function onActivateClick(event:MouseEvent):void {
+
+                                                Debug.trace("DEBUG new active status is ON for " + data.email);
+                                                outerDocument.remoteUserManagementService.enableAccount(data.email);
+
+                                                data.enabled = true;
+                                                activate.visible = false;
+                                                activate.includeInLayout = false;
+                                                deactivate.visible = true;
+                                                deactivate.includeInLayout = true;
+
+                                            }
+                                            ]]></mx:Script>
+                                    </mx:Button>
+                                    <mx:Button id="deactivate"
+                                               label="@Resource(bundle='UserManagementPanel',key='activated')"
+                                               toolTip="@Resource(bundle='UserManagementPanel',key='deactivate')"
+                                               click="onDeactivateClick(event)"
+                                               visible="{data.enabled}" includeInLayout="{data.enabled}">
+                                        <mx:Script><![CDATA[
+                                            private function onDeactivateClick(event:MouseEvent):void {
+                                                Debug.trace("DEBUG new active status is OFF for " + data.email);
+                                                outerDocument.remoteUserManagementService.disableAccount(data.email);
+
+                                                data.enabled = false;
+                                                activate.visible = true;
+                                                activate.includeInLayout = true;
+                                                deactivate.visible = false;
+                                                deactivate.includeInLayout = false;
+                                            }
+                                            ]]></mx:Script>
+                                    </mx:Button>
+                                </mx:VBox>
+                            </mx:Component>
+                        </mx:itemRenderer>
+                    </mx:DataGridColumn>
 				</mx:columns>
 			</mx:DataGrid>
 

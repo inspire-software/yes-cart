@@ -494,6 +494,7 @@
         PASSWORD varchar(255) not null,
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY timestamp,
+        ENABLED smallint not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

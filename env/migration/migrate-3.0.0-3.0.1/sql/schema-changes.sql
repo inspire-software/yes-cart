@@ -31,3 +31,10 @@
 
 alter table TSHOPURL add column THEME_CHAIN longtext;
 -- alter table TSHOPURL add column THEME_CHAIN varchar(512);
+
+--
+-- YC-581 Allow quick enable/disable of YUM accounts
+--
+
+alter table TMANAGER add column ENABLED bit not null default 1;
+-- alter table TMANAGER add column ENABLED smallint not null default 1;
