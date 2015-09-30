@@ -33,6 +33,9 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     @DtoField(value = "url")
     private String url;
 
+    @DtoField(value = "themeChain")
+    private String themeChain;
+
     @DtoField(value = "storeUrlId", readOnly = true)
     private long storeUrlId;
 
@@ -47,6 +50,16 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     /** {@inheritDoc}  */
     public void setUrl(final String url) {
         this.url = url;
+    }
+
+    /** {@inheritDoc}  */
+    public String getThemeChain() {
+        return themeChain;
+    }
+
+    /** {@inheritDoc}  */
+    public void setThemeChain(final String themeChain) {
+        this.themeChain = themeChain;
     }
 
     /** {@inheritDoc}  */
@@ -77,6 +90,7 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     public String toString() {
         return "ShopUrlDTOImpl{" +
                 "url='" + url + '\'' +
+                ", themeChain='" + themeChain + '\'' +
                 ", storeUrlId=" + storeUrlId +
                 ", shopId=" + shopId +
                 '}';

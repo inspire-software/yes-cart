@@ -21,9 +21,14 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.web.application.ApplicationDirector;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertSame;
@@ -35,16 +40,29 @@ import static org.junit.Assert.assertSame;
  */
 public class ThemePageProviderTest {
 
-    public interface IRequestablePageTheme1 extends IRequestablePage {}
-    public interface IRequestablePageTheme2 extends IRequestablePage {}
+    public interface IRequestablePageTheme1 extends IRequestablePage {
+    }
+
+    public interface IRequestablePageTheme2 extends IRequestablePage {
+    }
 
     private final Mockery mockery = new JUnit4Mockery();
 
     @Test
     public void testGet() throws Exception {
 
+        final ApplicationContext applicationContextDefault = mockery.mock(ApplicationContext.class, "applicationContextDefault");
+        final ApplicationContext applicationContextTheme1 = mockery.mock(ApplicationContext.class, "applicationContextTheme1");
+        final ApplicationContext applicationContextTheme2 = mockery.mock(ApplicationContext.class, "applicationContextTheme2");
 
-        final ThemePageProvider onlyDefault = new ThemePageProvider(new HashMap() {{
+        final ShopService shopService = mockery.mock(ShopService.class, "shopService");
+        final SystemService systemService = mockery.mock(SystemService.class, "systemService");
+
+        final ThemeService themeServiceDefault = mockery.mock(ThemeService.class, "themeServiceDefault");
+        final ThemeService themeServiceTheme1 = mockery.mock(ThemeService.class, "themeServiceTheme1");
+        final ThemeService themeServiceTheme2 = mockery.mock(ThemeService.class, "themeServiceTheme2");
+
+        final ThemePageProvider page = new ThemePageProvider(new HashMap() {{
             put("default", IRequestablePage.class);
             put("theme1", IRequestablePageTheme1.class);
             put("theme2", IRequestablePageTheme2.class);
@@ -57,22 +75,57 @@ public class ThemePageProviderTest {
 
 
         mockery.checking(new Expectations() {{
-            allowing(shopDefault).getFspointer(); will(returnValue("default"));
-            allowing(shopTheme1).getFspointer(); will(returnValue("theme1;default"));
-            allowing(shopTheme2).getFspointer(); will(returnValue("theme2;theme1;default"));
+            allowing(applicationContextDefault).getBean("shopService", ShopService.class);
+            will(returnValue(shopService));
+            allowing(applicationContextDefault).getBean("systemService", SystemService.class);
+            will(returnValue(systemService));
+            allowing(applicationContextDefault).getBean("themeService", ThemeService.class);
+            will(returnValue(themeServiceDefault));
+            allowing(shopDefault).getShopId();
+            will(returnValue(1L));
+            allowing(themeServiceDefault).getThemeChainByShopId(1L, null);
+            will(returnValue(Arrays.asList("default")));
+
+            allowing(applicationContextTheme1).getBean("shopService", ShopService.class);
+            will(returnValue(shopService));
+            allowing(applicationContextTheme1).getBean("systemService", SystemService.class);
+            will(returnValue(systemService));
+            allowing(applicationContextTheme1).getBean("themeService", ThemeService.class);
+            will(returnValue(themeServiceTheme1));
+            allowing(shopTheme1).getShopId();
+            will(returnValue(2L));
+            allowing(themeServiceTheme1).getThemeChainByShopId(2L, null);
+            will(returnValue(Arrays.asList("theme1","default")));
+
+            allowing(applicationContextTheme2).getBean("shopService", ShopService.class);
+            will(returnValue(shopService));
+            allowing(applicationContextTheme2).getBean("systemService", SystemService.class);
+            will(returnValue(systemService));
+            allowing(applicationContextTheme2).getBean("themeService", ThemeService.class);
+            will(returnValue(themeServiceTheme2));
+            allowing(shopTheme2).getShopId();
+            will(returnValue(3L));
+            allowing(themeServiceTheme2).getThemeChainByShopId(3L, null);
+            will(returnValue(Arrays.asList("theme2","theme1","default")));
         }});
 
+        new ApplicationDirector();
+
+        ApplicationDirector.getInstance().setApplicationContext(applicationContextDefault);
         ApplicationDirector.setCurrentShop(shopDefault);
-        assertSame(IRequestablePage.class, onlyDefault.get());
+        assertSame(IRequestablePage.class, page.get());
         ApplicationDirector.clear();
 
+        ApplicationDirector.getInstance().setApplicationContext(applicationContextTheme1);
         ApplicationDirector.setCurrentShop(shopTheme1);
-        assertSame(IRequestablePageTheme1.class, onlyDefault.get());
+        assertSame(IRequestablePageTheme1.class, page.get());
         ApplicationDirector.clear();
 
+        ApplicationDirector.getInstance().setApplicationContext(applicationContextTheme2);
         ApplicationDirector.setCurrentShop(shopTheme2);
-        assertSame(IRequestablePageTheme2.class, onlyDefault.get());
+        assertSame(IRequestablePageTheme2.class, page.get());
         ApplicationDirector.clear();
 
     }
+
 }

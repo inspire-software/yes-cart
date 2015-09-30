@@ -16,16 +16,17 @@
 
 package org.yes.cart.web.application;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SystemService;
+import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -41,8 +42,10 @@ public class ApplicationDirector implements ApplicationContextAware {
 
     private ShopService shopService;
     private SystemService systemService;
+    private ThemeService themeService;
     private static ApplicationDirector applicationDirector;
 
+    private static ThreadLocal<String> domainThreadLocal = new ThreadLocal<String>();
     private static ThreadLocal<Shop> shopThreadLocal = new ThreadLocal<Shop>();
     private static ThreadLocal<List<String>> currentThemeChainThreadLocal = new ThreadLocal<List<String>>();
     private static ThreadLocal<ShoppingCart> shoppingCartThreadLocal = new ThreadLocal<ShoppingCart>();
@@ -104,9 +107,6 @@ public class ApplicationDirector implements ApplicationContextAware {
         return shopThreadLocal.get();
     }
 
-    private static final String DEFAULT_THEME = "default";
-    private static final List<String> DEFAULT_CHAIN = Arrays.asList(DEFAULT_THEME);
-
     /**
      * @return current shop's theme
      */
@@ -114,44 +114,20 @@ public class ApplicationDirector implements ApplicationContextAware {
         List<String> chain = currentThemeChainThreadLocal.get();
         if (chain == null) {
 
-            final Shop shop = shopThreadLocal.get();
-            if (shop == null) {
-                chain = DEFAULT_CHAIN;
-            } else {
-                final String themeCfg = shop.getFspointer();
-                if (themeCfg != null) {
-
-                    final List<String> cached = chainCache.get(themeCfg);
-                    if (cached == null) {
-                        if (StringUtils.isBlank(themeCfg)) {
-                            chain = DEFAULT_CHAIN;
-                        } else if (themeCfg.indexOf(';') == -1) {
-                            final List<String> tmpChain = new ArrayList<String>(Arrays.asList(themeCfg));
-                            if (!tmpChain.contains(DEFAULT_THEME)) {
-                                tmpChain.add(DEFAULT_THEME);
-                            }
-                            chain = Collections.unmodifiableList(tmpChain);
-                        } else {
-                            final List<String> tmpChain = new ArrayList<String>(Arrays.asList(StringUtils.split(shop.getFspointer(), ';')));
-                            if (!tmpChain.contains(DEFAULT_THEME)) {
-                                tmpChain.add(DEFAULT_THEME);
-                            }
-                            chain = Collections.unmodifiableList(tmpChain);
-                        }
-                        chainCache.put(themeCfg, chain);
-                    } else {
-                        chain = cached;
-                    }
-                } else {
-                    chain = DEFAULT_CHAIN;
-                }
+            ThemeService service = getInstance().themeService;
+            if (service == null) {
+                throw new IllegalStateException("ApplicationDirector.themeService is not initialised");
             }
+
+            final Shop shop = shopThreadLocal.get();
+            chain = service.getThemeChainByShopId(shop == null ? null : shop.getShopId(), domainThreadLocal.get());
             currentThemeChainThreadLocal.set(chain);
 
         }
         return chain;
 
     }
+
 
     /**
      * Set {@link Shop} instance to current thread.
@@ -161,6 +137,27 @@ public class ApplicationDirector implements ApplicationContextAware {
     public static void setCurrentShop(final Shop currentShop) {
         shopThreadLocal.set(currentShop);
     }
+
+
+
+    /**
+     * Get current domain name from local thread.
+     *
+     * @return {@link Shop} URL domain for this request
+     */
+    public static String getCurrentDomain() {
+        return domainThreadLocal.get();
+    }
+
+    /**
+     * Set domain name used to access {@link Shop} instance to current thread.
+     *
+     * @param currentDomain current request domain.
+     */
+    public static void setCurrentDomain(final String currentDomain) {
+        domainThreadLocal.set(currentDomain);
+    }
+
 
     /**
      * Get shopping cart from local thread storage.
@@ -184,6 +181,7 @@ public class ApplicationDirector implements ApplicationContextAware {
      * Clear thread locals at the end of the request
      */
     public static void clear() {
+        domainThreadLocal.set(null);
         shopThreadLocal.set(null);
         shoppingCartThreadLocal.set(null);
         shopperIPAddressThreadLocal.set(null);
@@ -199,5 +197,6 @@ public class ApplicationDirector implements ApplicationContextAware {
     public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
         this.shopService = applicationContext.getBean("shopService", ShopService.class);
         this.systemService = applicationContext.getBean("systemService", SystemService.class);
+        this.themeService = applicationContext.getBean("themeService", ThemeService.class);
     }
 }

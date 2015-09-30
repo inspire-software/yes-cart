@@ -791,6 +791,7 @@
         STOREURL_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         URL longtext not null,
+        THEME_CHAIN longtext,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
