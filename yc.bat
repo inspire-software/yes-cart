@@ -334,7 +334,7 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo  Starting Luke (lucene index browser)
     echo ================================================
 
-    call java -jar "%YC_HOME%\env\luke\lukeall-3.5.0.jar"
+    start javaw -jar "%YC_HOME%\env\luke\lukeall-3.5.0.jar"
 
     goto %comeBack%
 
