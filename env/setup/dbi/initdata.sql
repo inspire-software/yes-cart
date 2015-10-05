@@ -484,6 +484,8 @@ INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, GUID )  VALUES (10, 10, 'testde
 INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (11, 10, 'demo.yes-cart.org', 'ycdemolive;ycdemo', 'SHOP10_11');
 INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, GUID )  VALUES (12, 10, 'localhost', 'SHOP10_12');
 INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (13, 10, 'demo-journal.yes-cart.org', 'journal;ycdemolive;ycdemo', 'SHOP10_13');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (14, 10, 'demo-yeti.yes-cart.org', 'yeti;ycdemolive;ycdemo', 'SHOP10_14');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (15, 10, 'demo-united.yes-cart.org', 'united;ycdemolive;ycdemo', 'SHOP10_15');
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (100, 100, 0, 'root', 'Master category','default', '100');
 
