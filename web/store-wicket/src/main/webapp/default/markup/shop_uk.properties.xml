@@ -336,6 +336,9 @@
 
     <!-- PriceView -->
     <entry key="savePercent">Знижка ${discount}%</entry>
+    <entry key="savePercentTitle">Акція</entry>
+    <entry key="taxNoteNet">без ${tax} ${code}</entry>
+    <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Переглянуті</entry>

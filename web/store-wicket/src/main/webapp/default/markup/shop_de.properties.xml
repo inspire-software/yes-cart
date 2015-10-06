@@ -336,6 +336,9 @@
 
     <!-- PriceView -->
     <entry key="savePercent">Rabatt ${discount}%</entry>
+    <entry key="savePercentTitle">Abverkauf</entry>
+    <entry key="taxNoteNet">zzgl. ${tax} ${code}</entry>
+    <entry key="taxNoteGross">inkl. ${tax} ${code}</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Besuchte Seiten</entry>

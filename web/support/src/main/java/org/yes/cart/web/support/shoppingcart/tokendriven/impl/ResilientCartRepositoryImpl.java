@@ -22,7 +22,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShopService;
@@ -32,8 +31,6 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
 import org.yes.cart.web.support.shoppingcart.tokendriven.CartUpdateProcessor;
-
-import java.util.Date;
 
 /**
  * User: denispavlov
@@ -179,9 +176,9 @@ public class ResilientCartRepositoryImpl implements CartRepository {
 
         final Shop shop = shopService.getById(shopId);
         if (shop != null) {
-            final AttrValue av = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS);
-            if (av != null && StringUtils.isNotBlank(av.getVal())) {
-                expiry = NumberUtils.toInt(av.getVal(), this.sessionExpiryInSeconds);
+            final String av = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS);
+            if (StringUtils.isNotBlank(av)) {
+                expiry = NumberUtils.toInt(av, this.sessionExpiryInSeconds);
             }
         }
 

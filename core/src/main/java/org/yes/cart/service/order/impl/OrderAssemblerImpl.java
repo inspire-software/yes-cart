@@ -337,11 +337,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
      */
     private String formatAddress(final Address address, final Shop shop) {
 
-        final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
-        if (format != null) {
-            return addressFormatter.formatAddress(address, format.getVal());
-        }
-        return addressFormatter.formatAddress(address);
+        final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
+        return addressFormatter.formatAddress(address, format);
 
     }
 }

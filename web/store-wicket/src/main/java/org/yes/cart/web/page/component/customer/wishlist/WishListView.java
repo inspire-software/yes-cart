@@ -29,8 +29,10 @@ import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -184,9 +186,56 @@ public class WishListView extends AbstractProductSearchResultList {
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
 
+        final PriceView priceView = getPriceView(product, itemData);
+
+        final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
+
+        final boolean simpleWishList = CustomerWishList.SIMPLE_WISH_ITEM.equals(itemData.getWlType());
+        final boolean share = CustomerWishList.PRIVATE.equals(itemData.getVisibility());
+        final PageParameters visibilityLinks = new PageParameters();
+        visibilityLinks.add(WebParametersKeys.PAGE_TYPE, "wishlist");
+
+        listItem.add(
+                links.newAddToWishListLink("shareItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.SHARED, visibilityLinks)
+                        .setVisible(ownerViewing && simpleWishList && share)
+        );
+        listItem.add(
+                links.newAddToWishListLink("hideItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.PRIVATE, visibilityLinks)
+                        .setVisible(ownerViewing && simpleWishList && !share)
+        );
+
+        listItem.add(
+                determineAtbLink(links, "addToCardFromWishListLink", product, itemData, qty)
+                        .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
+                                getLocalizer().getString("addToCartWlBtn", this,
+                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty)))) :
+                                getLocalizer().getString("preorderCartWlBtn", this,
+                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty))))))
+                        .setVisible(pam.isAvailable())
+        );
+
+        listItem.add(
+                links.newRemoveFromWishListLink("removeFromWishListLink", product.getDefaultSkuCode(), itemData.getCustomerwishlistId(), (Class) getPage().getClass(), null)
+                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this)))
+                                .setVisible(ownerViewing)
+        );
+
+        listItem.add(priceView);
+
+
+        listItem.add(new AttributeModifier("data-tag", itemData.getTag()));
+        listItem.add(new AttributeModifier("data-visibility", itemData.getVisibility()));
+        listItem.add(new AttributeModifier("data-type", itemData.getWlType()));
+        listItem.add(new AttributeModifier("data-sku", product.getDefaultSkuCode()));
+        listItem.add(new AttributeModifier("data-qty", itemData.getQuantity().toPlainString()));
+
+    }
+
+    private PriceView getPriceView(final ProductSearchResultDTO product, final CustomerWishList itemData) {
+
         final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
         final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
-        final String currency = priceNow != null ? priceNow.getCurrency() : "";
+
         final String addedPriceCurr = itemData.getRegularPriceCurrencyWhenAdded();
         final Pair<BigDecimal, BigDecimal> price;
         String priceInfo = "";
@@ -227,49 +276,14 @@ public class WishListView extends AbstractProductSearchResultList {
             price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
         }
 
-        final String qty = itemData.getQuantity().stripTrailingZeros().toPlainString();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        final boolean simpleWishList = CustomerWishList.SIMPLE_WISH_ITEM.equals(itemData.getWlType());
-        final boolean share = CustomerWishList.PRIVATE.equals(itemData.getVisibility());
-        final PageParameters visibilityLinks = new PageParameters();
-        visibilityLinks.add(WebParametersKeys.PAGE_TYPE, "wishlist");
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, product.getDefaultSkuCode(), BigDecimal.ONE, price.getFirst(), price.getSecond());
 
-        listItem.add(
-                links.newAddToWishListLink("shareItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.SHARED, visibilityLinks)
-                        .setVisible(ownerViewing && simpleWishList && share)
-        );
-        listItem.add(
-                links.newAddToWishListLink("hideItemLink", product.getDefaultSkuCode(), "0", itemData.getWlType(), null, CustomerWishList.PRIVATE, visibilityLinks)
-                        .setVisible(ownerViewing && simpleWishList && !share)
-        );
+        final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
 
-        listItem.add(
-                determineAtbLink(links, "addToCardFromWishListLink", product, itemData, qty)
-                        .add(new Label("addToCardFromWishListLinkLabel", pam.isInStock() || pam.isPerpetual() ?
-                                getLocalizer().getString("addToCartWlBtn", this,
-                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty)))) :
-                                getLocalizer().getString("preorderCartWlBtn", this,
-                                        new Model<Serializable>(new ValueMap(Collections.singletonMap("quantity", qty))))))
-                        .setVisible(pam.isAvailable())
-        );
-
-        listItem.add(
-                links.newRemoveFromWishListLink("removeFromWishListLink", product.getDefaultSkuCode(), itemData.getCustomerwishlistId(), (Class) getPage().getClass(), null)
-                        .add(new Label("removeFromWishListLinkLabel", getLocalizer().getString("removeFromWishlist", this)))
-                                .setVisible(ownerViewing)
-        );
-
-        listItem.add(
-                new PriceView("priceView", price, currency, priceInfo, true, false).setVisible(isPriceNowAvailable)
-        );
-
-
-        listItem.add(new AttributeModifier("data-tag", itemData.getTag()));
-        listItem.add(new AttributeModifier("data-visibility", itemData.getVisibility()));
-        listItem.add(new AttributeModifier("data-type", itemData.getWlType()));
-        listItem.add(new AttributeModifier("data-sku", product.getDefaultSkuCode()));
-        listItem.add(new AttributeModifier("data-qty", itemData.getQuantity().toPlainString()));
-
+        priceView.setVisible(isPriceNowAvailable);
+        return priceView;
     }
 
     /**

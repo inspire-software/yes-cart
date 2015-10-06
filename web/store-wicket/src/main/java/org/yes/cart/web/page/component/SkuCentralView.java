@@ -22,13 +22,13 @@ import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -42,7 +42,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -277,7 +276,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final ObjectDecorator decorator = getDecorator();
 
-        add(new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice()), true, true));
+        add(getPriceView());
         add(new SkuListView(SKU_LIST_VIEW, product.getSku(), sku, isProduct));
         add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(shop, sku)));
         add(new Label(PRODUCT_NAME_LABEL, decorator.getName(selectedLocale)));
@@ -376,12 +375,10 @@ public class SkuCentralView extends AbstractCentralView {
                         new ProductAssociationsView(PRODUCTS_VIEW, productsBuy)
                 ).setVisible(buyVisible));
 
-
-
-        final Collection<SkuPrice> prices = getSkuPrices();
+        final Collection<ProductPriceModel> prices = getSkuPrices();
         final boolean multibuy = CollectionUtils.isNotEmpty(prices) && prices.size() > 1;
         add(new Fragment(VOLUME_DISCOUNT_HEAD_CONTAINER, VOLUME_DISCOUNT_HEAD, this).setVisible(multibuy));
-        add(new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, getSkuPrices()));
+        add(new PriceTierView(VOLUME_DISCOUNT_BODY_CONTAINER, prices));
 
         add(new WishListNotification("wishListNotification"));
 
@@ -413,13 +410,12 @@ public class SkuCentralView extends AbstractCentralView {
      *
      * @return collection of sku prices.
      */
-    private Collection<SkuPrice> getSkuPrices() {
+    private List<ProductPriceModel> getSkuPrices() {
         /* We always preselect a SKU */
         return productServiceFacade.getSkuPrices(
+                ApplicationDirector.getShoppingCart(),
                 product.getProductId(),
-                sku.getCode(),
-                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                ApplicationDirector.getCurrentShop().getShopId());
+                sku.getCode());
     }
 
     /*
@@ -441,21 +437,18 @@ public class SkuCentralView extends AbstractCentralView {
     }
 
 
+    private PriceView getPriceView() {
 
-    /**
-     * Get product or his sku price.
-     * In case of multisku product the minimal regular price from multiple sku was used for single item.
-     *
-     * @return {@link SkuPrice}
-     */
-    private SkuPrice getSkuPrice() {
-        return productServiceFacade.getSkuPrice(
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(
+                cart,
                 null,
                 sku.getCode(), /* We always preselect a SKU */
-                BigDecimal.ONE,
-                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                ApplicationDirector.getCurrentShop().getShopId()
+                BigDecimal.ONE
         );
+
+        return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
     }
 
     @Override

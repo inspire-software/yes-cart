@@ -24,7 +24,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShopService;
@@ -86,7 +85,6 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart cachedCart = context.mock(ShoppingCart.class, "cachedCart");
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
-        final AttrValueShop cartSession = context.mock(AttrValueShop.class, "cartSession");
 
         final Date modified = new Date();
 
@@ -99,8 +97,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(cartSession));
-            allowing(cartSession).getVal(); will(returnValue("120"));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
         }});
 
         final ResilientCartRepositoryImpl repo = new ResilientCartRepositoryImpl(shoppingCartStateService, shopService, cartUpdateProcessor, 60, cacheManager, taskExecutor);
@@ -163,7 +160,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
         }});
 
         final ResilientCartRepositoryImpl repo = new ResilientCartRepositoryImpl(shoppingCartStateService, shopService, cartUpdateProcessor, 60, cacheManager, taskExecutor);
@@ -215,7 +212,6 @@ public class ResilientCartRepositoryImplTest {
         final ShoppingCart cachedCart = context.mock(ShoppingCart.class, "cachedCart");
         final ShoppingContext cachedCartCtx = context.mock(ShoppingContext.class, "cachedCartCtx");
         final Shop shop = context.mock(Shop.class, "shop");
-        final AttrValueShop cartSession = context.mock(AttrValueShop.class, "cartSession");
 
         final Date modified = new Date();
 
@@ -228,8 +224,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(cartSession));
-            allowing(cartSession).getVal(); will(returnValue("120"));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
             one(cartCache).evict("IN-CACHE");  // Important to evict this state from cache if it is expired
             one(shoppingCartStateService).findByGuid("IN-CACHE"); will(returnValue(null)); // Just return null for this case
         }});
@@ -295,15 +290,13 @@ public class ResilientCartRepositoryImplTest {
         cachedCart.getShoppingContext().setCustomerEmail("bob@doe.com");
         cachedCart.getShoppingContext().setShopId(111L);
         final Shop shop = context.mock(Shop.class, "shop");
-        final AttrValueShop cartSession = context.mock(AttrValueShop.class, "cartSession");
 
         context.checking(new Expectations() {{
             one(cacheManager).getCache("web.shoppingCart"); will(returnValue(cartCache));
             one(cartCache).get("IN-CACHE"); will(returnValue(wrapper));
             one(wrapper).get(); will(returnValue(cachedCart));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(cartSession));
-            allowing(cartSession).getVal(); will(returnValue("120"));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
         }});
 
         final ResilientCartRepositoryImpl repo = new ResilientCartRepositoryImpl(shoppingCartStateService, shopService, cartUpdateProcessor, 60, cacheManager, taskExecutor) {
@@ -393,7 +386,7 @@ public class ResilientCartRepositoryImplTest {
             allowing(cachedCart).getShoppingContext(); will(returnValue(cachedCartCtx));
             allowing(cachedCartCtx).getShopId(); will(returnValue(111L));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
             one(cartCache).evict("IN-CACHE");  // Important to evict this state from cache if it is expired
             one(shoppingCartStateService).findByGuid("IN-CACHE"); will(returnValue(null)); // Just return null for this case
         }});
@@ -469,7 +462,6 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
         final Shop shop = context.mock(Shop.class, "shop");
-        final AttrValueShop cartSession = context.mock(AttrValueShop.class, "cartSession");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
@@ -491,8 +483,7 @@ public class ResilientCartRepositoryImplTest {
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(cartSession));
-            allowing(cartSession).getVal(); will(returnValue("120"));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
         }});
 
@@ -584,7 +575,7 @@ public class ResilientCartRepositoryImplTest {
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
         }});
 
@@ -654,7 +645,6 @@ public class ResilientCartRepositoryImplTest {
         final Cache cartCache = context.mock(Cache.class, "cartCache");
         final ShoppingCartState cartState = context.mock(ShoppingCartState.class, "cartState");
         final Shop shop = context.mock(Shop.class, "shop");
-        final AttrValueShop cartSession = context.mock(AttrValueShop.class, "cartSession");
 
         final MutableShoppingCart cart = new ShoppingCartImpl();
         cart.getShoppingContext().setCustomerEmail("bob@doe.com");
@@ -676,8 +666,7 @@ public class ResilientCartRepositoryImplTest {
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(cartSession));
-            allowing(cartSession).getVal(); will(returnValue("120"));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue("120"));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
         }});
 
@@ -780,7 +769,7 @@ public class ResilientCartRepositoryImplTest {
             one(cartState).getState(); will(returnValue(bytes));
             one(cartUpdateProcessor).restoreState(bytes); will(returnValue(restored));
             one(shopService).getById(111L); will(returnValue(shop));
-            one(shop).getAttributeByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
+            one(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS); will(returnValue(null));
             one(cartCache).put(with(equal(cart.getGuid())), with(any(ShoppingCart.class)));
         }});
 

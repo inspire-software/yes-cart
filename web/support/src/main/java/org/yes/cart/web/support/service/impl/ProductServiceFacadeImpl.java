@@ -17,16 +17,24 @@
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.*;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
@@ -47,7 +55,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final ProductAvailabilityStrategy productAvailabilityStrategy;
     private final ProductQuantityStrategy productQuantityStrategy;
     private final PriceService priceService;
+    private final ShoppingCartCalculator shoppingCartCalculator;
     private final CategoryServiceFacade categoryServiceFacade;
+    private final ShopService shopService;
 
     public ProductServiceFacadeImpl(final ProductService productService,
                                     final ProductSkuService productSkuService,
@@ -56,7 +66,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                     final ProductAvailabilityStrategy productAvailabilityStrategy,
                                     final ProductQuantityStrategy productQuantityStrategy,
                                     final PriceService priceService,
-                                    final CategoryServiceFacade categoryServiceFacade) {
+                                    final ShoppingCartCalculator shoppingCartCalculator,
+                                    final CategoryServiceFacade categoryServiceFacade,
+                                    final ShopService shopService) {
         this.productService = productService;
         this.productSkuService = productSkuService;
         this.productAssociationService = productAssociationService;
@@ -64,7 +76,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.productAvailabilityStrategy = productAvailabilityStrategy;
         this.productQuantityStrategy = productQuantityStrategy;
         this.priceService = priceService;
+        this.shoppingCartCalculator = shoppingCartCalculator;
         this.categoryServiceFacade = categoryServiceFacade;
+        this.shopService = shopService;
     }
 
     /**
@@ -309,10 +323,359 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    public ProductPriceModel getSkuPrice(final ShoppingCart cart,
+                                         final Long productId,
+                                         final String skuCode,
+                                         final BigDecimal quantity) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+
+        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity);
+
+        if (resolved != null) {
+
+            return getSkuPrice(
+                    cart,
+                    resolved.getSkuCode(),
+                    resolved.getQuantity(),
+                    resolved.getRegularPrice(),
+                    resolved.getSalePriceForCalculation()
+            );
+
+        }
+        return new ProductPriceModelImpl(null, currency, null, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getSkuPrice(final ShoppingCart cart,
+                                         final String ref,
+                                         final BigDecimal quantity,
+                                         final BigDecimal listPrice,
+                                         final BigDecimal salePrice) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+
+        final Shop shop = shopService.getById(shopId);
+
+        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
+        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
+        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+
+        final BigDecimal sale = salePrice;
+        final BigDecimal list = listPrice;
+
+        if (showTax) {
+            // prices with tax
+            if (sale != null) {
+                // if sale price exists use it as primary target as this one will be shown
+                ShoppingCartCalculator.PriceModel saleModel = shoppingCartCalculator.calculatePrice(cart, ref, sale);
+
+                final BigDecimal saleAdjusted, listAdjusted;
+
+                if (showTaxNet) {
+                    saleAdjusted = saleModel.getNetPrice();
+                    // recalculate list price so that discounts are correct
+                    listAdjusted = list != null ? MoneyUtils.getMoney(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()).getNet() : null;
+                } else {
+                    saleAdjusted = saleModel.getGrossPrice();
+                    // recalculate list price so that discounts are correct
+                    listAdjusted = list != null ? MoneyUtils.getMoney(list, saleModel.getTaxRate(), !saleModel.isTaxExclusive()).getGross() : null;
+                }
+
+                return new ProductPriceModelImpl(
+                        ref,
+                        currency,
+                        quantity,
+                        listAdjusted, saleAdjusted,
+                        showTax, showTaxNet, showTaxAmount,
+                        saleModel.getTaxCode(),
+                        saleModel.getTaxRate(),
+                        saleModel.isTaxExclusive(),
+                        saleModel.getTaxAmount()
+                );
+
+            } else if (list != null) {
+                // use list price to calculate taxes
+                ShoppingCartCalculator.PriceModel listModel = shoppingCartCalculator.calculatePrice(cart, ref, list);
+
+                final BigDecimal listAdjusted = showTaxNet ? listModel.getNetPrice() : listModel.getGrossPrice();
+
+                return new ProductPriceModelImpl(
+                        ref,
+                        currency,
+                        quantity,
+                        listAdjusted, null,
+                        showTax, showTaxNet, showTaxAmount,
+                        listModel.getTaxCode(),
+                        listModel.getTaxRate(),
+                        listModel.isTaxExclusive(),
+                        listModel.getTaxAmount()
+                );
+
+            }
+
+        }
+        // standard "as is" prices
+        return new ProductPriceModelImpl(
+                ref,
+                currency,
+                quantity,
+                list, sale
+        );
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+
+        final Shop shop = shopService.getById(shopId);
+
+        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
+        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
+        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+
+        // For total we use only list price since we already show discount in unit prices
+        final BigDecimal sale = total ? null : item.getSalePrice();
+        final BigDecimal list = total ? (item.getPrice() != null ? item.getPrice().multiply(item.getQty()) : null) : item.getListPrice();
+
+        if (showTax) {
+            if (sale != null) {
+                // if sale price exists use it as primary target as this one will be shown
+                final BigDecimal saleAdjusted, listAdjusted;
+
+                if (showTaxNet) {
+                    saleAdjusted = item.getNetPrice();
+                    // recalculate list price so that discounts are correct
+                    listAdjusted = list != null ? MoneyUtils.getMoney(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getNet() : null;
+                } else {
+                    saleAdjusted = item.getGrossPrice();
+                    // recalculate list price so that discounts are correct
+                    listAdjusted = list != null ? MoneyUtils.getMoney(list, item.getTaxRate(), !item.isTaxExclusiveOfPrice()).getGross() : null;
+                }
+
+                return new ProductPriceModelImpl(
+                        item.getProductSkuCode(),
+                        currency,
+                        item.getQty(),
+                        listAdjusted, saleAdjusted,
+                        showTax, showTaxNet, showTaxAmount,
+                        item.getTaxCode(),
+                        item.getTaxRate(),
+                        item.isTaxExclusiveOfPrice(),
+                        item.getGrossPrice().subtract(item.getNetPrice())
+                );
+
+            } else if (list != null) {
+
+                if (total) {
+
+                    // use list price to calculate taxes
+                    final BigDecimal listAdjusted = showTaxNet ? item.getNetPrice().multiply(item.getQty()) : item.getGrossPrice().multiply(item.getQty());
+
+                    return new ProductPriceModelImpl(
+                            item.getProductSkuCode(),
+                            currency,
+                            item.getQty(),
+                            listAdjusted, null,
+                            showTax, showTaxNet, showTaxAmount,
+                            item.getTaxCode(),
+                            item.getTaxRate(),
+                            item.isTaxExclusiveOfPrice(),
+                            item.getGrossPrice().subtract(item.getNetPrice()).multiply(item.getQty())
+                    );
+
+                }
+
+                // use list price to calculate taxes
+                final BigDecimal listAdjusted = showTaxNet ? item.getNetPrice() : item.getGrossPrice();
+
+                return new ProductPriceModelImpl(
+                        item.getProductSkuCode(),
+                        currency,
+                        item.getQty(),
+                        listAdjusted, null,
+                        showTax, showTaxNet, showTaxAmount,
+                        item.getTaxCode(),
+                        item.getTaxRate(),
+                        item.isTaxExclusiveOfPrice(),
+                        item.getGrossPrice().subtract(item.getNetPrice())
+                );
+
+            }
+        }
+
+        // standard "as is" prices
+        return new ProductPriceModelImpl(
+                item.getProductSkuCode(),
+                currency,
+                item.getQty(),
+                list, sale
+        );
+
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public Collection<SkuPrice> getSkuPrices(final Long productId,
                                              final String skuCode,
                                              final String currency,
                                              final long shopId) {
         return priceService.getAllCurrentPrices(productId, skuCode, shopId, currency);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductPriceModel> getSkuPrices(final ShoppingCart cart,
+                                                final Long productId,
+                                                final String skuCode) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+
+        final Collection<SkuPrice> prices = priceService.getAllCurrentPrices(productId, skuCode, shopId, currency);
+
+        if (CollectionUtils.isNotEmpty(prices)) {
+
+            final List<ProductPriceModel> models = new ArrayList<ProductPriceModel>(prices.size());
+            for (final SkuPrice price : prices) {
+
+                models.add(getSkuPrice(
+                        cart,
+                        price.getSkuCode(),
+                        price.getQuantity(),
+                        price.getRegularPrice(),
+                        price.getSalePriceForCalculation()
+                ));
+
+            }
+            return models;
+
+        }
+
+        return Collections.emptyList();
+    }
+
+    static final String CART_ITEMS_TOTAL_REF = "yc-cart-items-total";
+
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getCartItemsTotal(final ShoppingCart cart) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+
+        final BigDecimal list = cart.getTotal().getListSubTotal();
+        final BigDecimal sale = cart.getTotal().getSubTotal();
+
+        final Shop shop = shopService.getById(shopId);
+
+        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
+        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
+        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+
+        if (showTax) {
+
+            final BigDecimal totalInclTax = cart.getTotal().getSubTotalAmount();
+
+            if (MoneyUtils.isFirstBiggerThanSecond(totalInclTax, Total.ZERO)) {
+                final BigDecimal totalTax = cart.getTotal().getSubTotalTax();
+                final BigDecimal net = totalInclTax.subtract(totalTax);
+                final BigDecimal gross = totalInclTax;
+
+                final BigDecimal totalAdjusted = showTaxNet ? net : gross;
+
+                final Set<String> taxes = new TreeSet<String>(); // sorts and de-dup's
+                final Set<BigDecimal> rates = new TreeSet<BigDecimal>();
+                for (final CartItem item : cart.getCartItemList()) {
+                    if (StringUtils.isNotBlank(item.getTaxCode())) {
+                        taxes.add(item.getTaxCode());
+                    }
+                    rates.add(item.getTaxRate());
+                }
+
+                final BigDecimal taxRate;
+                if (rates.size() > 1) {
+                    // mixed rates in cart we use average with round up so that tax is not reduced by rounding
+                    taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
+                } else {
+                    // single rate for all items, use it to prevent rounding errors
+                    taxRate = rates.iterator().next();
+                }
+
+                final String tax = StringUtils.join(taxes, ',');
+                final boolean exclusiveTax = totalInclTax.compareTo(sale) > 0;
+
+                if (MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
+                    // if we have discounts
+
+                    final MoneyUtils.Money listMoney = MoneyUtils.getMoney(list, taxRate, !exclusiveTax);
+                    final BigDecimal listAdjusted = showTaxNet ? listMoney.getNet() : listMoney.getGross();
+
+                    return new ProductPriceModelImpl(
+                            CART_ITEMS_TOTAL_REF,
+                            currency,
+                            BigDecimal.ONE,
+                            listAdjusted, totalAdjusted,
+                            showTax, showTaxNet, showTaxAmount,
+                            tax,
+                            taxRate,
+                            exclusiveTax,
+                            totalTax
+                    );
+
+                }
+                // no discounts
+                return new ProductPriceModelImpl(
+                        CART_ITEMS_TOTAL_REF,
+                        currency,
+                        BigDecimal.ONE,
+                        totalAdjusted, null,
+                        showTax, showTaxNet, showTaxAmount,
+                        tax,
+                        taxRate,
+                        exclusiveTax,
+                        totalTax
+                );
+
+            }
+        }
+
+        // standard "as is" prices
+
+        if (MoneyUtils.isFirstBiggerThanSecond(sale, Total.ZERO)
+                && MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
+            // if we have discounts
+            return new ProductPriceModelImpl(
+                    CART_ITEMS_TOTAL_REF,
+                    currency,
+                    BigDecimal.ONE,
+                    list, sale
+            );
+
+        }
+        // no discounts
+        return new ProductPriceModelImpl(
+                CART_ITEMS_TOTAL_REF,
+                currency,
+                BigDecimal.ONE,
+                sale, null
+        );
+
+    }
+
 }

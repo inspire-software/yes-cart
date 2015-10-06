@@ -18,6 +18,7 @@ package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
@@ -61,5 +62,16 @@ public interface ShippingServiceFacade {
      * @return selected Carrier and SLA pair or pair with null's if none selected
      */
     Pair<Carrier, CarrierSla> getCarrierSla(ShoppingCart shoppingCart, List<Carrier> carriersChoices);
+
+    /**
+     * Get cart total price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can be shown as net or gross.
+     *
+     * @param cart      current cart
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getCartShippingTotal(ShoppingCart cart);
 
 }

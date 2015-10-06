@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.aspect.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.*;
@@ -114,7 +114,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
         final OrderEvent orderEvent = (OrderEvent) args[0];
 
-        final AttrValueShop attrVal = orderEvent.getCustomerOrder().getShop().getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        final String adminEmail = orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
 
         try {
             Object rez = pjp.proceed();
@@ -124,10 +124,10 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getCustomer().getEmail());
 
-                if (attrVal == null) {
+                if (StringUtils.isBlank(adminEmail)) {
                     LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
                 }   else {
-                    fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), attrVal.getVal());
+                    fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), adminEmail);
                 }
 
             }
@@ -136,9 +136,9 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
             LOG.error("Cant allocation quantity for product " + th.getProductSkuCode() );
 
-            if (attrVal == null) {
+            if (StringUtils.isBlank(adminEmail)) {
                 LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
-            }   else {
+            } else {
 
                 final ProductSku sku = productSkuService.getProductSkuBySkuCode(th.getProductSkuCode());
 
@@ -146,7 +146,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
                         orderEvent,
                         "adm-cant-allocate-product-qty",
                         new HashMap<String, Object>() {{ put("sku", sku); }},
-                        attrVal.getVal());
+                        adminEmail);
             }
 
             throw th;

@@ -25,7 +25,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.RegistrationMessage;
@@ -188,9 +187,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
     }
 
     private String determineFromEmail(final Shop shop) {
-        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-        if (attrVal != null) {
-            return attrVal.getVal();
+        final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        if (StringUtils.isNotBlank(attrVal)) {
+            return attrVal;
         }
         return null;
     }
@@ -198,9 +197,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
     private Date determineExpiryTime(final Shop shop) {
 
         int secondsTimeout = Constants.DEFAULT_CUSTOMER_TOKEN_EXPIRY_SECONDS;
-        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS);
+        final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS);
         if (attrVal != null) {
-            secondsTimeout = NumberUtils.toInt(attrVal.getVal(), secondsTimeout);
+            secondsTimeout = NumberUtils.toInt(attrVal, secondsTimeout);
         }
         final Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, secondsTimeout);
@@ -210,8 +209,8 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
     private boolean isCallcenterToken(final Shop shop, final String token) {
 
-        final AttrValueShop attrVal = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
-        return attrVal != null && StringUtils.isNotBlank(attrVal.getVal()) && attrVal.getVal().equals(token);
+        final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+        return StringUtils.isNotBlank(attrVal) && attrVal.equals(token);
 
     }
 

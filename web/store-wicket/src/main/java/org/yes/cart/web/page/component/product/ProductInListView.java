@@ -22,7 +22,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -31,9 +30,10 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -43,7 +43,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 
@@ -170,12 +169,18 @@ public class ProductInListView extends BaseComponent {
                         .setVisible(!ableToAddDefault)
         );
 
-        add(
-                new PriceView(PRICE_VIEW, new Model<SkuPrice>(getSkuPrice(skuPam.getDefaultSkuCode())), true, true)
-        );
-
+        add(getPriceView(skuPam));
 
         super.onBeforeRender();
+    }
+
+    private PriceView getPriceView(final ProductAvailabilityModel skuPam) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, null, skuPam.getDefaultSkuCode(), BigDecimal.ONE);
+
+        return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
     }
 
 
@@ -189,24 +194,6 @@ public class ProductInListView extends BaseComponent {
         }
         return product.getCode();
 
-    }
-
-
-    /**
-     * Get product or his sku price.
-     * In case of multisku product the minimal regular price from multiple sku was used for single item.
-     *
-     * @param firstAvailableSkuCode first available sku code.
-     * @return {@link org.yes.cart.domain.entity.SkuPrice}
-     */
-    private SkuPrice getSkuPrice(final String firstAvailableSkuCode) {
-        return productServiceFacade.getSkuPrice(
-                null,
-                firstAvailableSkuCode,
-                BigDecimal.ONE,
-                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                ApplicationDirector.getCurrentShop().getShopId()
-        );
     }
 
     private String getDefaultImage(final String width, final String height, final String lang) {

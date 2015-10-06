@@ -208,11 +208,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedCurrencies() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES);
     }
 
     public String getDefaultCurrency() {
@@ -237,11 +233,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
 
     public String getSupportedShippingCountries() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_SHIP);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_SHIP);
     }
 
     public List<String> getSupportedShippingCountriesAsList() {
@@ -258,11 +250,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedBillingCountries() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_BILL);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_COUNTRY_BILL);
     }
 
     public List<String> getSupportedBillingCountriesAsList() {
@@ -278,11 +266,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedLanguages() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES);
     }
 
     public List<String> getSupportedLanguagesAsList() {
@@ -298,11 +282,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedRegistrationFormAttributes() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES);
     }
 
     public List<String> getSupportedRegistrationFormAttributesAsList() {
@@ -318,11 +298,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedProfileFormAttributes() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE);
     }
 
     public List<String> getSupportedProfileFormAttributesAsList() {
@@ -338,11 +314,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getSupportedProfileFormReadOnlyAttributes() {
-        final AttrValueShop attrValueShop = getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY);
-        if (attrValueShop != null) {
-            return attrValueShop.getVal();
-        }
-        return null;
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY);
     }
 
     public List<String> getSupportedProfileFormReadOnlyAttributesAsList() {
@@ -383,16 +355,20 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return null;
     }
 
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValueShop val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
     @Override
     public String toString() {
         return this.getClass().getName() + this.getShopId();
     }
 
     public boolean isB2BProfileActive() {
-        final AttrValueShop avs = getAttributeByCode(
-                AttributeNamesKeys.Shop.SHOP_B2B);
+        final String avs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_B2B);
         if (avs != null) {
-            return Boolean.valueOf(avs.getVal());
+            return Boolean.valueOf(avs);
         }
         return false;
     }

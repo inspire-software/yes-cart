@@ -288,6 +288,21 @@ public interface AttributeNamesKeys {
         String CART_ADD_ENABLE_QTY_PICKER = "CART_ADD_ENABLE_QTY_PICKER";
 
         /**
+         * Setting for whether to show prices with tax information
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO";
+
+        /**
+         * Setting for whether to show prices with tax information using NET price or GROSS price
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET";
+
+        /**
+         * Setting for whether to show prices with tax information using tax amount or tax percent
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT";
+
+        /**
          * Flag whether to include subcategories in search
          */
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";

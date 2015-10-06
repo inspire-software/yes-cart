@@ -18,20 +18,17 @@ package org.yes.cart.web.page.component.cart;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.util.WicketUtil;
-
-import java.math.BigDecimal;
+import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -54,8 +51,8 @@ public class SmallShoppingCartView extends BaseComponent {
             "itemForm2"
     };
 
-    @SpringBean(name = ServiceSpringKeys.PRICE_SERVICE)
-    private PriceService priceService;
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
 
     @SpringBean(name = ServiceSpringKeys.PLURAL_FORM_SERVICE)
     private PluralFormService pluralFormService;
@@ -74,13 +71,13 @@ public class SmallShoppingCartView extends BaseComponent {
      */
     @Override
     protected void onBeforeRender() {
+
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
+
         final Integer itemsInCart = cart.getCartItemsCount();
-        final SkuPrice skuPrice = priceService.getGenericDao().getEntityFactory().getByIface(SkuPrice.class);
         final String linkTarget = getLinkTarget();
-        skuPrice.setRegularPrice(cart.getTotal().getSubTotal());
-        skuPrice.setCurrency(cart.getCurrencyCode());
-        skuPrice.setQuantity(BigDecimal.ONE);
 
         add(
                 new ExternalLink(
@@ -90,8 +87,10 @@ public class SmallShoppingCartView extends BaseComponent {
                         .add(
                                 new PriceView(
                                         SUB_TOTAL_VIEW,
-                                        new Model<SkuPrice>(skuPrice),
-                                        true, false
+                                        model,
+                                        null,
+                                        true, false,
+                                        model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount()
                                 ) {
                                     @Override
                                     public boolean isVisible() {

@@ -146,10 +146,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public String formatNameFor(final Customer customer, final Shop shop) {
 
         if (shop != null) {
-            final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
-            if (format != null) {
-                return customerNameFormatter.formatName(customer, format.getVal());
-            }
+            final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
+            return customerNameFormatter.formatName(customer, format);
         }
         return customerNameFormatter.formatName(customer);
 
