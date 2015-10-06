@@ -17,6 +17,7 @@
 package org.yes.cart.util;
 
 import org.yes.cart.constants.Constants;
+import org.yes.cart.shoppingcart.Total;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -187,6 +188,152 @@ public final class MoneyUtils {
                 .divide(original, RoundingMode.FLOOR).setScale(0, RoundingMode.HALF_EVEN);
 
     }
+
+
+
+    /**
+     * Create money object from amount and tax configuration.
+     *
+     * @param money to calculate tax.
+     * @param taxRate tax rate.
+     * @param taxIncluded tax is included in price.
+     *
+     * @return tax.
+     */
+    public static Money getMoney(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
+        if (money == null) {
+            return new Money(Total.ZERO, Total.ZERO, Total.ZERO, Total.ZERO, taxRate, taxIncluded);
+        }
+
+        final BigDecimal tax = getTaxAmount(money, taxRate, taxIncluded);
+
+        if (taxIncluded) {
+
+            return new Money(money, money.subtract(tax), money, tax, taxRate, taxIncluded);
+        }
+
+        return new Money(money, money, money.add(tax), tax, taxRate, taxIncluded);
+    }
+
+
+
+
+    /**
+     * Calculate tax for given money.
+     *
+     * @param money to calculate tax.
+     * @param taxRate tax rate.
+     * @param taxIncluded tax is included in price.
+     *
+     * @return tax.
+     */
+    public static BigDecimal getTaxAmount(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
+        if (money == null || taxRate == null) {
+            return Total.ZERO;
+        }
+        if (taxIncluded) {
+            // vat = item * vatRate / (vat + 100). Round CEILING to make sure we are not underpaying tax
+            return money.multiply(taxRate)
+                    .divide(taxRate.add(HUNDRED), Constants.DEFAULT_SCALE)
+                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
+        }
+        // tax = item * taxRate / 100. Round CEILING to make sure we are not underpaying tax
+        return money.multiply(taxRate).divide(HUNDRED, Constants.DEFAULT_SCALE)
+                .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
+    }
+
+
+
+    /**
+     * Determine NET (without tax) money amount.
+     *
+     * @param money to calculate tax.
+     * @param taxRate tax rate.
+     * @param taxIncluded tax is included in price.
+     *
+     * @return tax.
+     */
+    public static BigDecimal getNetAmount(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
+        if (money == null) {
+            return Total.ZERO;
+        }
+        if (taxIncluded) {
+            return money.subtract(getTaxAmount(money, taxRate, taxIncluded));
+        }
+        // taxes excluded so this is net
+        return money;
+    }
+
+
+    /**
+     * Determine GROSS (with tax) money amount.
+     *
+     * @param money to calculate tax.
+     * @param taxRate tax rate.
+     * @param taxIncluded tax is included in price.
+     *
+     * @return tax.
+     */
+    public static BigDecimal getGrossAmount(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
+        if (money == null) {
+            return Total.ZERO;
+        }
+        if (taxIncluded) {
+            // taxes included so this is gross
+            return money;
+        }
+        return money.add(getTaxAmount(money, taxRate, taxIncluded));
+    }
+
+    public static class Money {
+
+        private final BigDecimal money;
+        private final BigDecimal net;
+        private final BigDecimal gross;
+        private final BigDecimal tax;
+        private final BigDecimal rate;
+        private final boolean included;
+
+        public Money(final BigDecimal money,
+                     final BigDecimal net,
+                     final BigDecimal gross,
+                     final BigDecimal tax,
+                     final BigDecimal rate,
+                     final boolean included) {
+            this.money = money;
+            this.net = net;
+            this.gross = gross;
+            this.tax = tax;
+            this.rate = rate;
+            this.included = included;
+        }
+
+        public BigDecimal getMoney() {
+            return money;
+        }
+
+        public BigDecimal getNet() {
+            return net;
+        }
+
+        public BigDecimal getGross() {
+            return gross;
+        }
+
+        public BigDecimal getTax() {
+            return tax;
+        }
+
+        public BigDecimal getRate() {
+            return rate;
+        }
+
+        public boolean isIncluded() {
+            return included;
+        }
+
+    }
+
 
 
 }

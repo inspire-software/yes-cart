@@ -95,60 +95,6 @@ public class DefaultAmountCalculationStrategyTest {
     }
 
     @Test
-    public void testCalculateTaxNull() throws Exception {
-
-        final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");
-        final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
-        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
-        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
-
-        final BigDecimal amount = null;
-
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, BigDecimal.ZERO, true);
-        assertEquals("0.00", taxIncluded.toPlainString());
-
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, BigDecimal.ZERO, false);
-        assertEquals("0.00", taxExcluded.toPlainString());
-
-    }
-
-    @Test
-    public void testCalculateTaxNone() throws Exception {
-
-        final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");
-        final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
-        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
-        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
-
-        final BigDecimal amount = new BigDecimal("100.00");
-
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, BigDecimal.ZERO, true);
-        assertEquals("0.00", taxIncluded.toPlainString());
-
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, BigDecimal.ZERO, false);
-        assertEquals("0.00", taxExcluded.toPlainString());
-
-    }
-
-    @Test
-    public void testCalculateTax() throws Exception {
-
-        final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");
-        final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
-        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
-        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
-
-        final BigDecimal amount = new BigDecimal("100.00");
-
-        final BigDecimal taxIncluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, TAX, true);
-        assertEquals("16.67", taxIncluded.toPlainString());
-
-        final BigDecimal taxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService).calculateTax(amount, TAX, false);
-        assertEquals("20.00", taxExcluded.toPlainString());
-
-    }
-
-    @Test
     public void testCalculateSubTotalInclusiveTax() throws Exception {
 
         final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");

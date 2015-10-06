@@ -100,7 +100,7 @@ public class PromotionContextImpl implements PromotionContext {
 
         final List<List<PromoTriplet>> itemPromoBuckets = promotionBuckets.get(Promotion.TYPE_ITEM);
 
-        if (CollectionUtils.isEmpty(itemPromoBuckets)) {
+        if (CollectionUtils.isEmpty(itemPromoBuckets) || cart.isPromotionsDisabled()) {
             return;
         }
 
@@ -125,7 +125,7 @@ public class PromotionContextImpl implements PromotionContext {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_ORDER);
 
-        if (CollectionUtils.isEmpty(orderPromoBuckets)) {
+        if (CollectionUtils.isEmpty(orderPromoBuckets) || cart.isPromotionsDisabled()) {
             return new TotalImpl().add(itemTotal);
         }
 
@@ -148,7 +148,7 @@ public class PromotionContextImpl implements PromotionContext {
 
         final List<List<PromoTriplet>> orderPromoBuckets = promotionBuckets.get(Promotion.TYPE_SHIPPING);
 
-        if (CollectionUtils.isEmpty(orderPromoBuckets)) {
+        if (CollectionUtils.isEmpty(orderPromoBuckets) || cart.isPromotionsDisabled()) {
             return;
         }
 

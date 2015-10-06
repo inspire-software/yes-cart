@@ -27,7 +27,6 @@ import static org.junit.Assert.*;
  * Date: Jan 15, 2011
  * Time: 11:47:04 PM
  */
-//TODO: YC-64 refactor to param tests
 public class MoneyUtilsTest {
 
     @Test
@@ -172,7 +171,7 @@ public class MoneyUtilsTest {
 
     @Test
     public void testMinimalPositiveIsSecondMinimalFromTenAndNull() {
-        assertTrue("ten is equal to ten", MoneyUtils.minPositive(null, BigDecimal.TEN ).equals(BigDecimal.TEN));
+        assertTrue("ten is equal to ten", MoneyUtils.minPositive(null, BigDecimal.TEN).equals(BigDecimal.TEN));
     }
 
     @Test
@@ -187,14 +186,99 @@ public class MoneyUtilsTest {
     @Test
     public void testGetDiscountDisplayValue() throws Exception {
 
-        assertTrue(new BigDecimal("20")
-                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.00"))) == 0);
-        assertTrue(new BigDecimal("0")
-                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("100.00"))) == 0);
-        assertTrue(new BigDecimal("-20")
-                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("120.00"))) == 0);
-        assertTrue(new BigDecimal("19")
-                .compareTo(MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.99"))) == 0);
+        assertEquals("20", MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.00")).toPlainString());
+        assertEquals("0", MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("100.00")).toPlainString());
+        assertEquals("-20", MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("120.00")).toPlainString());
+        assertEquals("19", MoneyUtils.getDiscountDisplayValue(new BigDecimal("100.00"), new BigDecimal("80.99")).toPlainString());
 
     }
+
+    @Test
+    public void testGetTaxAmount() throws Exception {
+
+        assertEquals("0.00", MoneyUtils.getTaxAmount(null, null, true).toPlainString());
+        assertEquals("0.00", MoneyUtils.getTaxAmount(null, new BigDecimal("20.00"), true).toPlainString());
+        assertEquals("0.00", MoneyUtils.getTaxAmount(new BigDecimal("100.00"), null, true).toPlainString());
+        assertEquals("0.00", MoneyUtils.getTaxAmount(new BigDecimal("0.00"), new BigDecimal("20.00"), true).toPlainString());
+        assertEquals("0.00", MoneyUtils.getTaxAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), true).toPlainString());
+        assertEquals("16.67", MoneyUtils.getTaxAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), true).toPlainString());
+        assertEquals("20.00", MoneyUtils.getTaxAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), false).toPlainString());
+
+    }
+
+    @Test
+    public void testGetNetAmount() throws Exception {
+
+        assertEquals("100.00", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), true).toPlainString());
+        assertEquals("100.00", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), false).toPlainString());
+        assertEquals("83.33", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), true).toPlainString());
+        assertEquals("100.00", MoneyUtils.getNetAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), false).toPlainString());
+
+    }
+
+    @Test
+    public void testGetGrossAmount() throws Exception {
+
+        assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), true).toPlainString());
+        assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("0.00"), false).toPlainString());
+        assertEquals("100.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), true).toPlainString());
+        assertEquals("120.00", MoneyUtils.getGrossAmount(new BigDecimal("100.00"), new BigDecimal("20.00"), false).toPlainString());
+
+    }
+
+    @Test
+    public void testGetMoney() throws Exception {
+
+        final MoneyUtils.Money moneyIncl = MoneyUtils.getMoney(new BigDecimal("100.00"), new BigDecimal("20.00"), true);
+        assertEquals("100.00", moneyIncl.getMoney().toPlainString());
+        assertEquals("83.33", moneyIncl.getNet().toPlainString());
+        assertEquals("100.00", moneyIncl.getGross().toPlainString());
+        assertEquals("16.67", moneyIncl.getTax().toPlainString());
+        assertEquals("20.00", moneyIncl.getRate().toPlainString());
+        assertTrue(moneyIncl.isIncluded());
+
+        final MoneyUtils.Money moneyExcl = MoneyUtils.getMoney(new BigDecimal("100.00"), new BigDecimal("20.00"), false);
+        assertEquals("100.00", moneyExcl.getMoney().toPlainString());
+        assertEquals("100.00", moneyExcl.getNet().toPlainString());
+        assertEquals("120.00", moneyExcl.getGross().toPlainString());
+        assertEquals("20.00", moneyExcl.getTax().toPlainString());
+        assertEquals("20.00", moneyExcl.getRate().toPlainString());
+        assertFalse(moneyExcl.isIncluded());
+
+
+        final MoneyUtils.Money moneyNullIncl = MoneyUtils.getMoney(null, BigDecimal.ZERO, true);
+        assertEquals("0.00", moneyNullIncl.getMoney().toPlainString());
+        assertEquals("0.00", moneyNullIncl.getNet().toPlainString());
+        assertEquals("0.00", moneyNullIncl.getGross().toPlainString());
+        assertEquals("0.00", moneyNullIncl.getTax().toPlainString());
+        assertEquals("0", moneyNullIncl.getRate().toPlainString());
+        assertTrue(moneyNullIncl.isIncluded());
+
+        final MoneyUtils.Money moneyNullExcl = MoneyUtils.getMoney(null, BigDecimal.ZERO, false);
+        assertEquals("0.00", moneyNullExcl.getMoney().toPlainString());
+        assertEquals("0.00", moneyNullExcl.getNet().toPlainString());
+        assertEquals("0.00", moneyNullExcl.getGross().toPlainString());
+        assertEquals("0.00", moneyNullExcl.getTax().toPlainString());
+        assertEquals("0", moneyNullExcl.getRate().toPlainString());
+        assertFalse(moneyNullExcl.isIncluded());
+
+        final MoneyUtils.Money moneyZeroIncl = MoneyUtils.getMoney(new BigDecimal("100.00"), BigDecimal.ZERO, true);
+        assertEquals("100.00", moneyZeroIncl.getMoney().toPlainString());
+        assertEquals("100.00", moneyZeroIncl.getNet().toPlainString());
+        assertEquals("100.00", moneyZeroIncl.getGross().toPlainString());
+        assertEquals("0.00", moneyZeroIncl.getTax().toPlainString());
+        assertEquals("0", moneyZeroIncl.getRate().toPlainString());
+        assertTrue(moneyZeroIncl.isIncluded());
+
+        final MoneyUtils.Money moneyZeroExcl = MoneyUtils.getMoney(new BigDecimal("100.00"), BigDecimal.ZERO, false);
+        assertEquals("100.00", moneyZeroExcl.getMoney().toPlainString());
+        assertEquals("100.00", moneyZeroExcl.getNet().toPlainString());
+        assertEquals("100.00", moneyZeroExcl.getGross().toPlainString());
+        assertEquals("0.00", moneyZeroExcl.getTax().toPlainString());
+        assertEquals("0", moneyZeroExcl.getRate().toPlainString());
+        assertFalse(moneyZeroExcl.isIncluded());
+
+
+    }
+
 }

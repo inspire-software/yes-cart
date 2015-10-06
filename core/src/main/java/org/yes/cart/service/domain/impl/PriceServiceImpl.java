@@ -36,7 +36,6 @@ import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.impl.FilteredNavigationRecordImpl;
 import org.yes.cart.service.domain.PriceService;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -125,6 +124,8 @@ public class PriceServiceImpl
         return rez.getSecond();
     }
 
+    private static final Comparator<SkuPrice> SORT_PRICE_BY_QUANTITY = new SkuPriceQuantityComparatorImpl();
+
     /**
      * {@inheritDoc}
      */
@@ -150,7 +151,7 @@ public class PriceServiceImpl
             prices.add(price.getSecond());
         }
 
-        Collections.sort(prices, new SkuPriceQuantityComparatorImpl());
+        Collections.sort(prices, SORT_PRICE_BY_QUANTITY);
 
         return prices;
     }
