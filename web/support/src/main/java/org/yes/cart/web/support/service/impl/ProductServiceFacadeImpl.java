@@ -26,6 +26,8 @@ import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
+import org.yes.cart.domain.entity.impl.ProductPromotionModelImpl;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -56,6 +58,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final ProductQuantityStrategy productQuantityStrategy;
     private final PriceService priceService;
     private final ShoppingCartCalculator shoppingCartCalculator;
+    private final PromotionService promotionService;
     private final CategoryServiceFacade categoryServiceFacade;
     private final ShopService shopService;
 
@@ -67,6 +70,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                     final ProductQuantityStrategy productQuantityStrategy,
                                     final PriceService priceService,
                                     final ShoppingCartCalculator shoppingCartCalculator,
+                                    final PromotionService promotionService,
                                     final CategoryServiceFacade categoryServiceFacade,
                                     final ShopService shopService) {
         this.productService = productService;
@@ -78,6 +82,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.priceService = priceService;
         this.shoppingCartCalculator = shoppingCartCalculator;
         this.categoryServiceFacade = categoryServiceFacade;
+        this.promotionService = promotionService;
         this.shopService = shopService;
     }
 
@@ -678,4 +683,71 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, ProductPromotionModel> getPromotionModel(final String appliedPromo) {
+
+        if (StringUtils.isBlank(appliedPromo)) {
+            return Collections.emptyMap();
+        }
+
+        final String[] promoCodes = StringUtils.split(appliedPromo, ',');
+        final Map<String, ProductPromotionModel> result = new LinkedHashMap<String, ProductPromotionModel>(promoCodes.length * 2);
+
+        for (final String code : promoCodes) {
+
+            final int pos = code.indexOf(':');
+            if (pos == -1) {
+                // simple promo
+                final List<Promotion> promotions = promotionService.findByParameters(code, null, null, null, null, null, Boolean.TRUE);
+                if (promotions.isEmpty()) {
+                    continue;
+                }
+
+                final Promotion data = promotions.get(0);
+
+                result.put(code, new ProductPromotionModelImpl(
+                        code,
+                        null,
+                        data.getPromoType(),
+                        data.getPromoAction(),
+                        data.getPromoActionContext(),
+                        new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
+                        new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
+                        data.getEnabledFrom(),
+                        data.getEnabledTo()
+                ));
+            } else {
+                // coupon triggered
+
+                final String realCode = code.substring(0, pos);
+                final String coupon = code.substring(pos + 1);
+
+                final List<Promotion> promotions = promotionService.findByParameters(realCode, null, null, null, null, null, Boolean.TRUE);
+                if (promotions.isEmpty()) {
+                    continue;
+                }
+
+                final Promotion data = promotions.get(0);
+
+                result.put(code, new ProductPromotionModelImpl(
+                        realCode,
+                        coupon,
+                        data.getPromoType(),
+                        data.getPromoAction(),
+                        data.getPromoActionContext(),
+                        new FailoverStringI18NModel(data.getDisplayName(), data.getName()),
+                        new FailoverStringI18NModel(data.getDisplayDescription(), data.getDescription()),
+                        data.getEnabledFrom(),
+                        data.getEnabledTo()
+                ));
+
+            }
+
+        }
+
+        return result;
+    }
 }

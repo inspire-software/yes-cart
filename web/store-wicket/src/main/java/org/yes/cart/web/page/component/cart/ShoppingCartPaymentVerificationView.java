@@ -240,7 +240,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                     DELIVERY_GRAND_AMOUNT,
                     new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
                     customerOrder.getCurrency(),
-                    StringUtils.join(allPromos, ", "), true, true)
+                    StringUtils.join(allPromos, ','), true, true)
             );
 
     }

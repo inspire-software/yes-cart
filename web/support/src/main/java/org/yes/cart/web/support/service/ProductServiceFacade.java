@@ -318,5 +318,11 @@ public interface ProductServiceFacade {
      */
     ProductPriceModel getCartItemsTotal(ShoppingCart cart);
 
+    /**
+     * Generate promotion model map from given applied promotion codes.
+     *
+     * @return map code to model in order specified by applied promo
+     */
+    Map<String, ProductPromotionModel> getPromotionModel(String appliedPromo);
 
 }

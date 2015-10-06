@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.ProductPromotionModel;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
@@ -29,6 +30,7 @@ import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
@@ -78,6 +80,8 @@ public class PriceView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     /**
      * Create price view.
@@ -156,6 +160,7 @@ public class PriceView extends BaseComponent {
 
         boolean showSave = false;
         String savePercent = "";
+        final String lang = getLocale().getLanguage();
 
         BigDecimal priceToFormat = productPriceModel.getRegularPrice();
         String cssModificator = "regular";
@@ -222,11 +227,28 @@ public class PriceView extends BaseComponent {
         discount.setVisible(showSave);
         discount.add(new AttributeModifier(HTML_CLASS, "sale-price-save"));
 
-        if (StringUtils.isNotBlank(promos)) {
+        if (showSave && StringUtils.isNotBlank(promos)) {
 
-            final String[] promoCodes = StringUtils.split(promos, ',');
+            final Map<String, ProductPromotionModel> promoModels = productServiceFacade.getPromotionModel(promos);
 
-            discount.add(new AttributeModifier("title", promos));
+            final StringBuilder details = new StringBuilder();
+            for (final ProductPromotionModel model : promoModels.values()) {
+
+                final String name = model.getName().getValue(lang);
+                final String desc = model.getDescription().getValue(lang);
+
+                details.append(name);
+                if (model.getCouponCode() != null) {
+                    details.append(" (").append(model.getCouponCode()).append(")");
+                }
+
+                if (StringUtils.isNotBlank(desc)) {
+                    details.append(": ").append(desc);
+                }
+                details.append("\n");
+            }
+
+            discount.add(new AttributeModifier("title", details.toString()));
         } else {
             discount.add(new AttributeModifier("title", WicketUtil.createStringResourceModel(this, "savePercentTitle")));
         }

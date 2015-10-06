@@ -58,6 +58,8 @@
                 <entry key="org.yes.cart.domain.ro.CartTotalRO"  value="org.yes.cart.domain.ro.CartTotalRO"/>
                 <entry key="org.yes.cart.domain.ro.CartRO"  value="org.yes.cart.domain.ro.CartRO"/>
 
+                <entry key="org.yes.cart.domain.ro.PromotionRO"  value="org.yes.cart.domain.ro.PromotionRO"/>
+
             </map>
         </constructor-arg>
     </bean>
