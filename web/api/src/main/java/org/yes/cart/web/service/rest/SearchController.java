@@ -245,14 +245,21 @@ public class SearchController {
      *         }
      *       },
      *       "price" : {
-     *         "symbol" : "€",
-     *         "quantity" : 1,
-     *         "regularPrice" : 387.56,
-     *         "salePrice" : null,
-     *         "discount" : null,
-     *         "currency" : "EUR",
-     *         "symbolPosition" : "before"
-     *       },
+     *                     "quantity" : 1,
+     *                     "symbolPosition" : "before",
+     *                     "taxInfoUseNet" : true,
+     *                     "discount" : null,
+     *                     "symbol" : "€",
+     *                     "taxInfoShowAmount" : true,
+     *                     "priceTaxCode" : "VAT",
+     *                     "salePrice" : null,
+     *                     "priceTax" : 64.6,
+     *                     "taxInfoEnabled" : true,
+     *                     "regularPrice" : 322.96,
+     *                     "priceTaxExclusive" : false,
+     *                     "priceTaxRate" : 20,
+     *                     "currency" : "EUR"
+     *                },
      *       "featured" : false,
      *       "defaultImage" : "Logitech-M187_910-002-742_a.png",
      *       "multisku" : true,
@@ -711,15 +718,14 @@ public class SearchController {
                 final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                 ro.setProductAvailabilityModel(amRo);
 
-                final SkuPrice price = productServiceFacade.getSkuPrice(
+                final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                        cart,
                         null,
                         skuPam.getFirstAvailableSkuCode(),
-                        BigDecimal.ONE,
-                        cart.getCurrencyCode(),
-                        context.getShopId()
+                        BigDecimal.ONE
                 );
 
-                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
                 priceRo.setSymbol(symbol.getFirst());
                 priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 

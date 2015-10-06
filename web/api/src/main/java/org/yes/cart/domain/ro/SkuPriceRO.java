@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.util.MoneyUtils;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -44,8 +45,24 @@ public class SkuPriceRO implements Serializable {
     private BigDecimal quantity;
     @DtoField(readOnly = true)
     private BigDecimal regularPrice;
-    @DtoField(value = "salePriceForCalculation", readOnly = true)
+    @DtoField(readOnly = true)
     private BigDecimal salePrice;
+
+    @DtoField(readOnly = true)
+    private boolean taxInfoEnabled;
+    @DtoField(readOnly = true)
+    private boolean taxInfoUseNet;
+    @DtoField(readOnly = true)
+    private boolean taxInfoShowAmount;
+
+    @DtoField(readOnly = true)
+    private String priceTaxCode;
+    @DtoField(readOnly = true)
+    private BigDecimal priceTaxRate;
+    @DtoField(readOnly = true)
+    private boolean priceTaxExclusive;
+    @DtoField(readOnly = true)
+    private BigDecimal priceTax;
 
     public String getCurrency() {
         return currency;
@@ -105,4 +122,66 @@ public class SkuPriceRO implements Serializable {
         return null;
     }
 
+    @XmlAttribute(name = "tax-info-enabled")
+    public boolean isTaxInfoEnabled() {
+        return taxInfoEnabled;
+    }
+
+    public void setTaxInfoEnabled(final boolean taxInfoEnabled) {
+        this.taxInfoEnabled = taxInfoEnabled;
+    }
+
+    @XmlAttribute(name = "tax-info-use-net")
+    public boolean isTaxInfoUseNet() {
+        return taxInfoUseNet;
+    }
+
+    public void setTaxInfoUseNet(final boolean taxInfoUseNet) {
+        this.taxInfoUseNet = taxInfoUseNet;
+    }
+
+    @XmlAttribute(name = "tax-info-show-amount")
+    public boolean isTaxInfoShowAmount() {
+        return taxInfoShowAmount;
+    }
+
+    public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
+        this.taxInfoShowAmount = taxInfoShowAmount;
+    }
+
+    @XmlElement(name = "price-tax-code")
+    public String getPriceTaxCode() {
+        return priceTaxCode;
+    }
+
+    public void setPriceTaxCode(final String priceTaxCode) {
+        this.priceTaxCode = priceTaxCode;
+    }
+
+    @XmlElement(name = "price-tax-rate")
+    public BigDecimal getPriceTaxRate() {
+        return priceTaxRate;
+    }
+
+    public void setPriceTaxRate(final BigDecimal priceTaxRate) {
+        this.priceTaxRate = priceTaxRate;
+    }
+
+    @XmlElement(name = "price-tax-exclusive")
+    public boolean isPriceTaxExclusive() {
+        return priceTaxExclusive;
+    }
+
+    public void setPriceTaxExclusive(final boolean priceTaxExclusive) {
+        this.priceTaxExclusive = priceTaxExclusive;
+    }
+
+    @XmlElement(name = "price-tax")
+    public BigDecimal getPriceTax() {
+        return priceTax;
+    }
+
+    public void setPriceTax(final BigDecimal priceTax) {
+        this.priceTax = priceTax;
+    }
 }

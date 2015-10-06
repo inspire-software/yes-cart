@@ -70,6 +70,9 @@ public class CartTotalRO implements Serializable {
     @DtoField(readOnly = true)
     private BigDecimal totalAmount;
 
+    private SkuPriceRO itemPricing;
+    private SkuPriceRO deliveryPricing;
+
 
     public CartTotalRO() {
     }
@@ -169,6 +172,16 @@ public class CartTotalRO implements Serializable {
         return totalAmount;
     }
 
+    @XmlElement(name = "item-pricing")
+    public SkuPriceRO getItemPricing() {
+        return itemPricing;
+    }
+
+    @XmlElement(name = "delivery-pricing")
+    public SkuPriceRO getDeliveryPricing() {
+        return deliveryPricing;
+    }
+
     public void setListSubTotal(final BigDecimal listSubTotal) {
         this.listSubTotal = listSubTotal;
     }
@@ -243,5 +256,13 @@ public class CartTotalRO implements Serializable {
 
     public void setTotalAmount(final BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
+    }
+
+    public void setItemPricing(final SkuPriceRO itemPricing) {
+        this.itemPricing = itemPricing;
+    }
+
+    public void setDeliveryPricing(final SkuPriceRO deliveryPricing) {
+        this.deliveryPricing = deliveryPricing;
     }
 }

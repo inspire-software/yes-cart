@@ -65,6 +65,9 @@ public class CartItemRO implements Serializable {
     @DtoField(readOnly = true)
     private String appliedPromo;
 
+    private SkuPriceRO unitPricing;
+    private SkuPriceRO totalPricing;
+
     @XmlAttribute(name = "product-sku-code")
     public String getProductSkuCode() {
         return productSkuCode;
@@ -180,6 +183,24 @@ public class CartItemRO implements Serializable {
 
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+    @XmlElement(name = "unit-pricing")
+    public SkuPriceRO getUnitPricing() {
+        return unitPricing;
+    }
+
+    public void setUnitPricing(final SkuPriceRO unitPricing) {
+        this.unitPricing = unitPricing;
+    }
+
+    @XmlElement(name = "total-pricing")
+    public SkuPriceRO getTotalPricing() {
+        return totalPricing;
+    }
+
+    public void setTotalPricing(final SkuPriceRO totalPricing) {
+        this.totalPricing = totalPricing;
     }
 
     @Override

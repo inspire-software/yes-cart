@@ -1152,15 +1152,14 @@ public class CustomerController {
                         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                         wl.setProductAvailabilityModel(amRo);
 
-                        final SkuPrice price = productServiceFacade.getSkuPrice(
+                        final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                                cart,
                                 null,
                                 skuPam.getFirstAvailableSkuCode(),
-                                BigDecimal.ONE,
-                                cart.getCurrencyCode(),
-                                shopId
+                                BigDecimal.ONE
                         );
 
-                        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+                        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
                         priceRo.setSymbol(symbol.getFirst());
                         priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -1629,15 +1628,14 @@ public class CustomerController {
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             rv.setProductAvailabilityModel(amRo);
 
-            final SkuPrice price = productServiceFacade.getSkuPrice(
+            final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                    cart,
                     null,
                     skuPam.getFirstAvailableSkuCode(),
-                    BigDecimal.ONE,
-                    cart.getCurrencyCode(),
-                    shopId
+                    BigDecimal.ONE
             );
 
-            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
             priceRo.setSymbol(symbol.getFirst());
             priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -2268,9 +2266,15 @@ public class CustomerController {
             final List<OrderRO> ros = new ArrayList<OrderRO>();
             for (final CustomerOrder order : orders) {
 
+                final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+                final String cartCurrencySymbol = symbol.getFirst();
+                final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
+
                 final Total total = checkoutServiceFacade.getOrderTotal(order);
                 final OrderRO ro = mappingMixin.map(order, OrderRO.class, CustomerOrder.class);
                 ro.setTotal(mappingMixin.map(total, CartTotalRO.class, Total.class));
+                ro.setSymbol(cartCurrencySymbol);
+                ro.setSymbolPosition(cartCurrencySymbolPosition);
 
                 for (final CustomerOrderDelivery delivery : order.getDelivery()) {
                     final DeliveryRO dro = mappingMixin.map(delivery, DeliveryRO.class, CustomerOrderDelivery.class);
