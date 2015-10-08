@@ -39,6 +39,14 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10995,  'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL', 'SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL',  0,  NULL,  'Active payment modules',  'Active payment modules',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10966,  'SHOP_PG_ALLOWED_IPS_REGEX', 'SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX',  0,  NULL,  'Payment Gateway: Allowed IPs regular expression',
+'Regular expression to determine if PG callback is allowed from IP.
+Blank means that all IPs are allowed.
+If not blank allowed IP should match "regex.matcher(ip).matches()"
+E.g. "^((192.168.0.)([0-9]){1,3})$" will match all IPs starting with "192.168.0."
+WARNING: be careful with IPv4 vs IPv6',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10997,  'COUNTRY_SHIP', 'COUNTRY_SHIP',  0,  NULL,  'Countries (Shipping)',  'Supported shipping countries by shop.',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)

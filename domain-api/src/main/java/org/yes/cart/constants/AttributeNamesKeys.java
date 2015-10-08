@@ -271,6 +271,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";
 
+        /**
+         * Regular expression for allowed IPs.
+         */
+        String SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX = "SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX";
+
 
         /**
          * Shop image attribute name prefix.

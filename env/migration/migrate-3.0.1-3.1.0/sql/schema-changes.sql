@@ -48,3 +48,15 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (22, 'fa
 --
 
 update TPAYMENTGATEWAYPARAMETER set P_LABEL = 'RELAY_RESPONSE_URL' where P_LABEL = 'RELAY_RESPONCE_URL';
+
+--
+-- YC-585 Add setting for shop to list allowed IP addresses for payment gateways
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10966,  'SHOP_PG_ALLOWED_IPS_REGEX', 'SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX',  0,  NULL,  'Payment Gateway: Allowed IPs regular expression',
+'Regular expression to determine if PG callback is allowed from IP.
+Blank means that all IPs are allowed.
+If not blank allowed IP should match "regex.matcher(ip).matches()"
+E.g. "^((192.168.0.)([0-9]){1,3})$" will match all IPs starting with "192.168.0."
+WARNING: be careful with IPv4 vs IPv6',  1000, 1001);
