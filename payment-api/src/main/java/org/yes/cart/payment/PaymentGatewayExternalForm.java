@@ -16,8 +16,6 @@
 
 package org.yes.cart.payment;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
@@ -61,7 +59,10 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * @param currencyCode currency
      * @return map with auth token
      * @throws java.io.IOException in case of errors
+     *
+     * @deprecated refactor this
      */
+    @Deprecated
     Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode)
             throws IOException;
     
@@ -76,7 +77,10 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * @param currencyCode currency
      * @return map of parsed key - values with detail information
      * @throws java.io.IOException in case of errors
+     *
+     * @deprecated refactor this
      */
+    @Deprecated
     Map<String, String> doDoExpressCheckoutPayment(String token, String payerId, BigDecimal amount, String currencyCode)
             throws IOException;
 
@@ -88,7 +92,10 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * @param token the token obtained via   SetExpressCheckout method
      * @return map of parsed key - values with detail information
      * @throws java.io.IOException in case of errors
+     *
+     * @deprecated refactor this
      */
+    @Deprecated
     Map<String, String> getExpressCheckoutDetails(String token)
             throws IOException;
 
@@ -99,26 +106,6 @@ public interface PaymentGatewayExternalForm extends PaymentGateway {
      * @return  true in case of success
      */
     CallbackResult getExternalCallbackResult(Map<String, String> callbackResult);
-
-
-    /**
-     * Handle raw request. Call to this method will be delegated from particular filter if
-     * gateway support several commands / notification via single call back filter. Like google checkout.
-     * @param request http request
-     * @param response http response.
-     */
-    void handleNotification(final HttpServletRequest request, final HttpServletResponse response);
-
-    /**
-     * Process public call back request from payment gateway.
-     *
-     * Warning !!! Implementation of this method MUST NOT perform any order/payment state modification.
-     * I.e. do not use this  as successful payment determination method
-     *
-     * @param publicCallBackParameters get/post parameters
-     * @return true in case in payment was ok, false in case if payment failed
-     */
-    // boolean processPublicResponce(Map publicCallBackParameters);
 
 
 }

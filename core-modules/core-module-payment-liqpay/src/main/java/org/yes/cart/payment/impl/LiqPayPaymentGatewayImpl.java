@@ -202,14 +202,6 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
-
-    }
-
-
     private LiqPay getLiqPayAPI() {
         return new LiqPay(getParameterValue(LP_MERCHANT_ID), getParameterValue(LP_MERCHANT_KEY), getParameterValue(LP_POST_URL));
     }

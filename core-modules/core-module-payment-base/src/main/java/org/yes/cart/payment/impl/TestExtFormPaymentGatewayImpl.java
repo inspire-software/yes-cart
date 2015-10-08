@@ -152,13 +152,6 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     /**
      * {@inheritDoc}
      */
-    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
-        //nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Payment createPaymentPrototype(final String operation, final Map privateCallBackParameters) {
         final Payment payment = new PaymentImpl();
 

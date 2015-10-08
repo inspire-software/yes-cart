@@ -62,7 +62,7 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
     /**
      * SIM/DPM relay response URL
      */
-    protected static final String AN_RELAY_RESPONCE_URL = "RELAY_RESPONCE_URL";
+    protected static final String AN_RELAY_RESPONSE_URL = "RELAY_RESPONSE_URL";
     /**
      * SIM/DPM order receipt URL
      */

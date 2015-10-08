@@ -119,13 +119,6 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
-        ;
-    }
-
 
     /**
      * {@inheritDoc}

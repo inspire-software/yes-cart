@@ -199,7 +199,7 @@
         PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="MERCHANT_HOST" P_VALUE="----"  P_NAME="Host"  P_DESCRIPTION="Host. SIM only"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "125"
-        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="RELAY_RESPONCE_URL" P_VALUE="----"  P_NAME="Releay responce url"  P_DESCRIPTION="Releay responce url. SIM only"/>
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="RELAY_RESPONSE_URL" P_VALUE="----"  P_NAME="Releay responce url"  P_DESCRIPTION="Releay responce url. SIM only"/>
 
     <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "126"
         PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="ORDER_RECEIPT_URL" P_VALUE="----"  P_NAME="SIM/DPM order receipt url"  P_DESCRIPTION="SIM/DPM order receipt url. SIM only"/>

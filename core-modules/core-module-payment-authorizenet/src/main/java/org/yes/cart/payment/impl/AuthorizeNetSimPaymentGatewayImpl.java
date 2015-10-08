@@ -207,11 +207,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         }
     }
 
-    /** {@inheritDoc} */
-    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
-        //nothing to do
-    }
-
 
     /**
      * {@inheritDoc}
