@@ -233,6 +233,11 @@
                     <artifactId>core-module-payment-paypal</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-postfinance</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
             </dependencies>
         </profile>
 
@@ -275,6 +280,17 @@
                 <dependency>
                     <groupId>org.yes</groupId>
                     <artifactId>core-module-payment-paypal</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>paymentPostFinance</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-payment-postfinance</artifactId>
                     <version>${project.parent.version}</version>
                 </dependency>
             </dependencies>
@@ -336,6 +352,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
         </filters>
 
         <finalName>yes-shop</finalName>

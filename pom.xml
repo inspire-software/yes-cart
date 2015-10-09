@@ -46,6 +46,7 @@
         <payment.cybersource.module>off</payment.cybersource.module>
         <payment.authorizenet.module>off</payment.authorizenet.module>
         <payment.paypal.module>off</payment.paypal.module>
+        <payment.postfinance.module>off</payment.postfinance.module>
 
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
@@ -432,6 +433,7 @@
                                 <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll) : ${payment.cybersource.module} </echo>
                                 <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
                                 <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)           : ${payment.paypal.module} </echo>
+                                <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll) : ${payment.postfinance.module} </echo>
                                 <echo> </echo>
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>
@@ -573,6 +575,7 @@
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>
                 <payment.paypal.module>off</payment.paypal.module>
+                <payment.postfinance.module>off</payment.postfinance.module>
             </properties>
             <modules>
                 <module>payment-api</module>
@@ -603,6 +606,7 @@
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>
                 <payment.paypal.module>off</payment.paypal.module>
+                <payment.postfinance.module>off</payment.postfinance.module>
             </properties>
         </profile>
 
@@ -618,6 +622,7 @@
                 <payment.cybersource.module>off</payment.cybersource.module>
                 <payment.authorizenet.module>off</payment.authorizenet.module>
                 <payment.paypal.module>off</payment.paypal.module>
+                <payment.postfinance.module>off</payment.postfinance.module>
             </properties>
         </profile>
 
@@ -628,6 +633,7 @@
                 <payment.cybersource.module>on</payment.cybersource.module>
                 <payment.authorizenet.module>on</payment.authorizenet.module>
                 <payment.paypal.module>on</payment.paypal.module>
+                <payment.postfinance.module>on</payment.postfinance.module>
             </properties>
         </profile>
 
@@ -684,6 +690,20 @@
             <id>paymentPaypalOff</id>
             <properties>
                 <payment.paypal.module>off</payment.paypal.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPostFinance</id>
+            <properties>
+                <payment.postfinance.module>on</payment.postfinance.module>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>paymentPostFinanceOff</id>
+            <properties>
+                <payment.postfinance.module>off</payment.postfinance.module>
             </properties>
         </profile>
 
