@@ -16,7 +16,7 @@ VALUES (15105, 'postFinancePaymentGateway', 'name_de', 'PostFinance', 'Gateway-N
 
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (15150, 'postFinancePaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard.asp"', 'Form action',
+VALUES (15150, 'postFinancePaymentGateway', 'PF_POST_URL', 'https://e-payment.postfinance.ch/ncol/test/orderstandard.asp', 'Form action',
 'In the production (PROD) environment, the URL for the action will be https://e- payment.postfinance.ch/ncol/prod/orderstandard.asp.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

@@ -45,6 +45,7 @@
             ${payment.liqpay.context}
             ${payment.authorizenet.context}
             ${payment.paypal.context}
+            ${payment.postfinance.context}
         </param-value>
     </context-param>
 

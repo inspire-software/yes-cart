@@ -165,7 +165,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * {@inheritDoc}
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid, final Payment payment) {
+                              final String currencyCode, final String orderReference, final Payment payment) {
 
 
         // Parameters must be in apha order for hash
@@ -177,7 +177,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         params.put("PSPID", getParameterValue(PF_PSPID));
         // Your unique order number (merchant reference). The system checks that a payment has not been requested twice
         // for the same order. The ORDERID has to be assigned dynamically.
-        params.put("ORDERID", orderGuid);
+        params.put("ORDERID", orderReference);
         // Amount to be paid MULTIPLIED BY 100 since the format of the amount must not contain any decimals or other separators.
         // The amount must be assigned dynamically.
         params.put("AMOUNT", amount.multiply(MoneyUtils.HUNDRED).setScale(0, RoundingMode.HALF_UP).toPlainString());
@@ -433,35 +433,39 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     public Payment createPaymentPrototype(final String operation, final Map map) {
 
         final Payment payment = new PaymentImpl();
-        final Map<String, String> singleParamMap = HttpParamsUtils.createSingleValueMap(map);
-
-        payment.setPaymentAmount(new BigDecimal(singleParamMap.get("AMOUNT")));
-        payment.setOrderCurrency(singleParamMap.get("URRENC"));
-        payment.setTransactionReferenceId(singleParamMap.get("PAYID"));
-        payment.setTransactionAuthorizationCode(singleParamMap.get("ORDERID")); // this is order guid - we need it for refunds
-        payment.setCardNumber(singleParamMap.get("CARDNO"));
-        payment.setCardType(singleParamMap.get("BRAND"));
-        payment.setCardHolderName(singleParamMap.get("CN"));
-        payment.setCardHolderName(singleParamMap.get("CN"));
-        if (StringUtils.isNotBlank(singleParamMap.get("ED"))) {
-            payment.setCardExpireMonth(singleParamMap.get("ED").substring(0, 2));
-            payment.setCardExpireYear(singleParamMap.get("ED").substring(2, 4));
+        final Map<String, String> raw = HttpParamsUtils.createSingleValueMap(map);
+        final Map<String, String> sorted = new TreeMap<String, String>();
+        copyHttpParamsAndRemoveSignature(raw, sorted);
+        final String amount = sorted.get("AMOUNT");
+        if (amount != null) {
+            payment.setPaymentAmount(new BigDecimal(amount));
+        }
+        payment.setOrderCurrency(sorted.get("CURRENCY"));
+        payment.setTransactionReferenceId(sorted.get("PAYID"));
+        payment.setTransactionAuthorizationCode(sorted.get("ORDERID")); // this is order guid - we need it for refunds
+        payment.setCardNumber(sorted.get("CARDNO"));
+        payment.setCardType(sorted.get("BRAND"));
+        payment.setCardHolderName(sorted.get("CN"));
+        payment.setCardHolderName(sorted.get("CN"));
+        if (StringUtils.isNotBlank(sorted.get("ED"))) {
+            payment.setCardExpireMonth(sorted.get("ED").substring(0, 2));
+            payment.setCardExpireYear(sorted.get("ED").substring(2, 4));
         }
 
-        final CallbackResult res = getExternalCallbackResult(singleParamMap);
+        final CallbackResult res = getExternalCallbackResult(raw);
         payment.setPaymentProcessorResult(res.getStatus());
         payment.setPaymentProcessorBatchSettlement(res.isSettled());
         final StringBuilder msg = new StringBuilder();
-        msg.append(singleParamMap.get("STATUS"));
-        if (StringUtils.isNotBlank(singleParamMap.get("ACCEPTANCE"))) {
-            msg.append(" ").append(singleParamMap.get("ACCEPTANCE"));
+        msg.append(sorted.get("STATUS"));
+        if (StringUtils.isNotBlank(sorted.get("ACCEPTANCE"))) {
+            msg.append(" ").append(sorted.get("ACCEPTANCE"));
         }
-        if (StringUtils.isNotBlank(singleParamMap.get("NCERROR"))) {
-            msg.append(" ").append(singleParamMap.get("NCERROR"));
+        if (StringUtils.isNotBlank(sorted.get("NCERROR"))) {
+            msg.append(" ").append(sorted.get("NCERROR"));
         }
         payment.setTransactionOperationResultMessage(msg.toString());
 
-        payment.setShopperIpAddress(singleParamMap.get(PaymentMiscParam.CLIENT_IP));
+        payment.setShopperIpAddress(sorted.get(PaymentMiscParam.CLIENT_IP));
 
         return payment;
 
