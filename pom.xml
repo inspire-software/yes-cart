@@ -314,10 +314,10 @@
                     <artifactId>maven-install-plugin</artifactId>
                     <version>2.3.1</version>
                 </plugin>
-                <plugin>
+                <!--<plugin>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.3.2</version>
-                </plugin>
+                </plugin>-->
                 <plugin>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.2.1</version>
