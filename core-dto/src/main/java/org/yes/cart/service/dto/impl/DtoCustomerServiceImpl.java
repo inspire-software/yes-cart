@@ -218,10 +218,10 @@ public class DtoCustomerServiceImpl
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
-            final AttrValue av = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+            final String av = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
             String authToken = "invalid";
-            if (av != null && StringUtils.isNotBlank(av.getVal())) {
-                authToken = av.getVal();
+            if (StringUtils.isNotBlank(av)) {
+                authToken = av;
             }
             ((CustomerService)service).resetPassword(cust, shop, authToken);
         }

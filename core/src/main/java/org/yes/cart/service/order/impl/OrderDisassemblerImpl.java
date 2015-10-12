@@ -135,11 +135,8 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
     private String formatNameFor(final Customer customer, final Shop shop) {
 
-        final AttrValue format = shop.getAttributeByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
-        if (format != null) {
-            return customerNameFormatter.formatName(customer, format.getVal());
-        }
-        return customerNameFormatter.formatName(customer);
+        final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
+        return customerNameFormatter.formatName(customer, format);
 
     }
 

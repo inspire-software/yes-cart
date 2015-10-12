@@ -181,6 +181,7 @@ public class LiqPayPaymentGatewayImplTest {
 
 
         assertEquals(expectedStatus, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
+        assertEquals(order_id, gatewayImpl.restoreOrderGuid(callBackresult));
     }
 
 

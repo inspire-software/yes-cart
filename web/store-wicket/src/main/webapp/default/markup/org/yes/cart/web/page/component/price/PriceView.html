@@ -18,7 +18,8 @@
 <body>
 <wicket:panel>
     <span wicket:id="currency">[currency if symbol is before]</span> <span wicket:id="whole">[00]</span><span wicket:id="dot">[.]</span><span wicket:id="decimal">[00]</span> <span wicket:id="currency2">[currency if symbol is after]</span>
-    <wicket:enclosure><div class="clearfix"/> <span wicket:id="save">[Save 10%]</span></wicket:enclosure>
+    <wicket:enclosure><div class="clearfix"/> <span wicket:id="tax">[inc. 10% VAT]</span></wicket:enclosure>
+    <wicket:enclosure><div class="clearfix"/> <a wicket:id="save" href="#" data-toggle="tooltip" data-placement="top">[Save 10%]</a></wicket:enclosure>
     <wicket:enclosure><div class="clearfix"/> <span wicket:id="promo">[ABC10P,DEF50F]</span></wicket:enclosure>
     <div class="clearfix"/>
 </wicket:panel>

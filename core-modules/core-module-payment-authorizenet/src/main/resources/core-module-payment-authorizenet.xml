@@ -76,6 +76,10 @@
 
     <bean id="anetPaymentCallBackFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
     </bean>
 
 </beans>

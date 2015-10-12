@@ -271,6 +271,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL = "SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL";
 
+        /**
+         * Regular expression for allowed IPs.
+         */
+        String SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX = "SHOP_PAYMENT_GATEWAYS_ALLOWED_IPS_REGEX";
+
 
         /**
          * Shop image attribute name prefix.
@@ -286,6 +291,21 @@ public interface AttributeNamesKeys {
          * Setting for whether to show quantity picker or not
          */
         String CART_ADD_ENABLE_QTY_PICKER = "CART_ADD_ENABLE_QTY_PICKER";
+
+        /**
+         * Setting for whether to show prices with tax information
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO";
+
+        /**
+         * Setting for whether to show prices with tax information using NET price or GROSS price
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET";
+
+        /**
+         * Setting for whether to show prices with tax information using tax amount or tax percent
+         */
+        String SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT = "SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT";
 
         /**
          * Flag whether to include subcategories in search

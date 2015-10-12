@@ -73,6 +73,9 @@ public class DefaultCustomerNameFormatterImpl implements CustomerNameFormatter {
 
     @Override
     public String formatName(final Customer customer, final String format) {
+        if (StringUtils.isBlank(format)) {
+            return formatNameInternal(customer, nameTemplate);
+        }
         return formatNameInternal(customer, format);
     }
 

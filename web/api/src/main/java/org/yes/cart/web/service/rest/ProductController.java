@@ -110,15 +110,14 @@ public class ProductController {
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             prodRO.setProductAvailabilityModel(amRo);
 
-            final SkuPrice price = productServiceFacade.getSkuPrice(
+            final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                    cart,
                     productEntity.getProductId(),
                     null,
-                    BigDecimal.ONE,
-                    cart.getCurrencyCode(),
-                    cart.getShoppingContext().getShopId()
+                    BigDecimal.ONE
             );
 
-            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+            final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
             priceRo.setSymbol(symbol.getFirst());
             priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -127,7 +126,7 @@ public class ProductController {
             final List<ProductSkuRO> skuRo = new ArrayList<ProductSkuRO>();
             if (CollectionUtils.isNotEmpty(productEntity.getSku())) {
                 for (final ProductSku sku : productEntity.getSku()) {
-                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
+                    final ProductSkuRO skuRoItem = viewSkuInternal(sku, cart, symbol);
                     if (skuRoItem != null) {
                         skuRo.add(skuRoItem);
                     }
@@ -903,15 +902,14 @@ public class ProductController {
                 final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                 ro.setProductAvailabilityModel(amRo);
 
-                final SkuPrice price = productServiceFacade.getSkuPrice(
+                final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                        cart,
                         null,
                         skuPam.getFirstAvailableSkuCode(),
-                        BigDecimal.ONE,
-                        cart.getCurrencyCode(),
-                        cart.getShoppingContext().getShopId()
+                        BigDecimal.ONE
                 );
 
-                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+                final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
                 priceRo.setSymbol(symbol.getFirst());
                 priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -1129,7 +1127,7 @@ public class ProductController {
 
     }
 
-    private ProductSkuRO viewSkuInternal(final ProductSku productSku, final long shopId, final String currencyCode, final Pair<String, Boolean> symbol) {
+    private ProductSkuRO viewSkuInternal(final ProductSku productSku, final ShoppingCart cart, final Pair<String, Boolean> symbol) {
 
         final ProductSkuRO skuRO = mappingMixin.map(productSku, ProductSkuRO.class, ProductSku.class);
 
@@ -1139,20 +1137,19 @@ public class ProductController {
             skuRO.setUitemplateFallback(templates.getSecond());
         }
 
-        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, shopId);
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, cart.getShoppingContext().getShopId());
 
         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
         skuRO.setProductAvailabilityModel(amRo);
 
-        final SkuPrice price = productServiceFacade.getSkuPrice(
+        final ProductPriceModel price = productServiceFacade.getSkuPrice(
+                cart,
                 null,
                 skuPam.getFirstAvailableSkuCode(),
-                BigDecimal.ONE,
-                currencyCode,
-                shopId
+                BigDecimal.ONE
         );
 
-        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, SkuPrice.class);
+        final SkuPriceRO priceRo = mappingMixin.map(price, SkuPriceRO.class, ProductPriceModel.class);
         priceRo.setSymbol(symbol.getFirst());
         priceRo.setSymbolPosition(symbol.getSecond() != null && symbol.getSecond() ? "after" : "before");
 
@@ -1189,7 +1186,7 @@ public class ProductController {
                 executeViewProductCommand(skuEntity.getProduct());
             }
 
-            return viewSkuInternal(skuEntity, cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), symbol);
+            return viewSkuInternal(skuEntity, cart, symbol);
 
         }
 

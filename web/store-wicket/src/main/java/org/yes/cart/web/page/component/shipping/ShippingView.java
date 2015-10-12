@@ -23,10 +23,7 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Carrier;
-import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -42,7 +39,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -246,6 +242,8 @@ public class ShippingView extends BaseComponent {
         final Total total = cart.getTotal();
         final Long slaId = cart.getCarrierSlaId();
 
+        final ProductPriceModel model = shippingServiceFacade.getCartShippingTotal(cart);
+
         if (slaId == null) {
             form.addOrReplace(new Label(PRICE_LABEL));
             form.addOrReplace(new Label(PRICE_VIEW));
@@ -254,9 +252,9 @@ public class ShippingView extends BaseComponent {
             form.addOrReplace(
                     new PriceView(
                             PRICE_VIEW,
-                            new Pair<BigDecimal, BigDecimal>(total.getDeliveryListCost(), total.getDeliveryCost()),
-                            cart.getCurrencyCode(),
-                            total.getAppliedDeliveryPromo(), true, true
+                            model,
+                            total.getAppliedDeliveryPromo(), true, true,
+                            model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount()
                     )
             );
 

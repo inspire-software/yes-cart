@@ -36,21 +36,14 @@ import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.payment.PaymentProcessFacade;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
 import org.yes.cart.web.shoppingcart.CommandConfig;
-import org.yes.cart.web.shoppingcart.impl.CommandConfigImpl;
-import org.yes.cart.web.support.service.AddressBookFacade;
-import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.web.support.service.CustomerServiceFacade;
-import org.yes.cart.web.support.service.ShippingServiceFacade;
+import org.yes.cart.web.support.service.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,6 +69,9 @@ public class CartController {
     private CustomerServiceFacade customerServiceFacade;
 
     @Autowired
+    private ProductServiceFacade productServiceFacade;
+
+    @Autowired
     private CheckoutServiceFacade checkoutServiceFacade;
 
     @Autowired
@@ -83,6 +79,9 @@ public class CartController {
 
     @Autowired
     private PaymentProcessFacade paymentProcessFacade;
+
+    @Autowired
+    private CurrencySymbolService currencySymbolService;
 
     @Autowired
     private CommandConfig commandConfig;
@@ -296,7 +295,69 @@ public class CartController {
 
         cartMixin.persistShoppingCart(request, response);
 
-        final CartRO cartRO = mappingMixin.map(cartMixin.getCurrentCart(), CartRO.class, ShoppingCart.class);
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+        final String cartCurrencySymbol = symbol.getFirst();
+        final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
+
+        // Basic mapping
+        final CartRO cartRO = mappingMixin.map(cart, CartRO.class, ShoppingCart.class);
+        cartRO.setSymbol(cartCurrencySymbol);
+        cartRO.setSymbolPosition(cartCurrencySymbolPosition);
+
+        // Item pricing
+        final List<CartItem> items = cart.getCartItemList();
+        for (int i = 0; i < items.size(); i++) {
+            final CartItem item = items.get(i);
+            final CartItemRO itemRO = cartRO.getCartItems().get(i);
+
+            final ProductPriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
+            final ProductPriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
+
+            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, ProductPriceModel.class);
+            unitPricingRo.setSymbol(cartCurrencySymbol);
+            unitPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+            itemRO.setUnitPricing(unitPricingRo);
+
+            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, ProductPriceModel.class);
+            totalPricingRo.setSymbol(cartCurrencySymbol);
+            totalPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+            itemRO.setTotalPricing(totalPricingRo);
+        }
+
+        // Shipping pricing
+        final List<CartItem> shipping = cart.getShippingList();
+        for (int i = 0; i < shipping.size(); i++) {
+            final CartItem item = shipping.get(i);
+            final CartItemRO itemRO = cartRO.getShipping().get(i);
+
+            final ProductPriceModel modelUnit = productServiceFacade.getSkuPrice(cart, item, false);
+            final ProductPriceModel modelTotal = productServiceFacade.getSkuPrice(cart, item, true);
+
+            final SkuPriceRO unitPricingRo = mappingMixin.map(modelUnit, SkuPriceRO.class, ProductPriceModel.class);
+            unitPricingRo.setSymbol(cartCurrencySymbol);
+            unitPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+            itemRO.setUnitPricing(unitPricingRo);
+
+            final SkuPriceRO totalPricingRo = mappingMixin.map(modelTotal, SkuPriceRO.class, ProductPriceModel.class);
+            totalPricingRo.setSymbol(cartCurrencySymbol);
+            totalPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+            itemRO.setTotalPricing(totalPricingRo);
+        }
+
+        // Items pricing
+        final ProductPriceModel itemsPricing = productServiceFacade.getCartItemsTotal(cart);
+        final SkuPriceRO itemsPricingRo = mappingMixin.map(itemsPricing, SkuPriceRO.class, ProductPriceModel.class);
+        itemsPricingRo.setSymbol(cartCurrencySymbol);
+        itemsPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+        cartRO.getTotal().setItemPricing(itemsPricingRo);
+
+        // Delivery pricing
+        final ProductPriceModel deliveryPricing = shippingServiceFacade.getCartShippingTotal(cart);
+        final SkuPriceRO deliveryPricingRo = mappingMixin.map(deliveryPricing, SkuPriceRO.class, ProductPriceModel.class);
+        deliveryPricingRo.setSymbol(cartCurrencySymbol);
+        deliveryPricingRo.setSymbolPosition(cartCurrencySymbolPosition);
+        cartRO.getTotal().setDeliveryPricing(deliveryPricingRo);
 
         return cartRO;
 
@@ -2255,8 +2316,14 @@ public class CartController {
             checkoutServiceFacade.update(order);
 
             final Total total = checkoutServiceFacade.getOrderTotal(order);
+            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+            final String cartCurrencySymbol = symbol.getFirst();
+            final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
+
             final OrderRO ro = mappingMixin.map(order, OrderRO.class, CustomerOrder.class);
             ro.setTotal(mappingMixin.map(total, CartTotalRO.class, Total.class));
+            ro.setSymbol(cartCurrencySymbol);
+            ro.setSymbolPosition(cartCurrencySymbolPosition);
 
             for (final CustomerOrderDelivery delivery : order.getDelivery()) {
                 final DeliveryRO dro = mappingMixin.map(delivery, DeliveryRO.class, CustomerOrderDelivery.class);
@@ -2605,9 +2672,15 @@ public class CartController {
                     boolean result = paymentProcessFacade.pay(cart, mparam);
                     if (result) {
 
+                        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+                        final String cartCurrencySymbol = symbol.getFirst();
+                        final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
+
                         final Total total = checkoutServiceFacade.getOrderTotal(order);
                         final OrderRO ro = mappingMixin.map(order, OrderRO.class, CustomerOrder.class);
                         ro.setTotal(mappingMixin.map(total, CartTotalRO.class, Total.class));
+                        ro.setSymbol(cartCurrencySymbol);
+                        ro.setSymbolPosition(cartCurrencySymbolPosition);
 
                         for (final CustomerOrderDelivery delivery : order.getDelivery()) {
                             final DeliveryRO dro = mappingMixin.map(delivery, DeliveryRO.class, CustomerOrderDelivery.class);

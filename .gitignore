@@ -52,6 +52,10 @@ core-modules/core-module-payment-paypal/core-module-payment-paypal.iml
 
 core-modules/core-module-payment-paypal/target/**
 
+core-modules/core-module-payment-postfinance/core-module-payment-postfinance.iml
+
+core-modules/core-module-payment-postfinance/target/**
+
 core-modules/core-module-payment-robokassa/core-module-payment-robokassa.iml
 
 core-modules/core-module-payment-robokassa/target/**

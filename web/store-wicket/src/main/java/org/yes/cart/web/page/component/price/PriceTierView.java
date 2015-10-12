@@ -19,13 +19,11 @@ package org.yes.cart.web.page.component.price;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.yes.cart.domain.entity.SkuPrice;
-import org.yes.cart.domain.misc.SkuPriceQuantityComparatorImpl;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +43,7 @@ public class PriceTierView extends BaseComponent {
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
 
-    private List<SkuPrice> skuPrices;
+    private List<ProductPriceModel> skuPrices;
 
     /**
      * Construct price tiers view.
@@ -53,23 +51,25 @@ public class PriceTierView extends BaseComponent {
      * @param id        component id
      * @param rawPrices list of prices
      */
-    public PriceTierView(final String id, final Collection<SkuPrice> rawPrices) {
+    public PriceTierView(final String id, final Collection<ProductPriceModel> rawPrices) {
         super(id);
-        skuPrices = new ArrayList<SkuPrice>(rawPrices);
-        Collections.sort(skuPrices, new SkuPriceQuantityComparatorImpl());
+        skuPrices = new ArrayList<ProductPriceModel>(rawPrices);
     }
 
     /** {@inheritDoc} */
     @Override
     protected void onBeforeRender() {
+
         add(
-            new ListView<SkuPrice>(PRICE_TIERS_LIST, skuPrices) {
-                protected void populateItem(ListItem<SkuPrice> listItem) {
+            new ListView<ProductPriceModel>(PRICE_TIERS_LIST, skuPrices) {
+                protected void populateItem(ListItem<ProductPriceModel> listItem) {
                     listItem.add(
                             new Label(QUANTITY_LABEL, String.valueOf(listItem.getModelObject().getQuantity().intValue()))
                     );
+
+                    final ProductPriceModel price = listItem.getModel().getObject();
                     listItem.add(
-                            new PriceView(PRICE_VIEW, listItem.getModel(), true, false)
+                            new PriceView(PRICE_VIEW, price, null, true, false, price.isTaxInfoEnabled(), price.isTaxInfoUseNet(), price.isTaxInfoShowAmount())
                     );
                 }
             }

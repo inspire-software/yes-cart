@@ -33,14 +33,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.CustomerWishList;
-import org.yes.cart.domain.entity.ProductAvailabilityModel;
-import org.yes.cart.domain.entity.ProductQuantityModel;
-import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -144,28 +143,25 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
         final boolean notGift = !cartItem.isGift();
         final boolean available = skuPam.isAvailable();
 
+        cartItemListItem.add(createAddOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderMore()));
+        cartItemListItem.add(createRemoveAllSkuLink(skuCode).setVisible(notGift));
+        cartItemListItem.add(createRemoveOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderLess()));
+        cartItemListItem.add(new Label(SKU_NUM_LABEL, skuCode));
+        cartItemListItem.add(getProductLink(productSkuDecorator));
+
+        final PriceView priceView = getPriceView(cartItem, available);
+
+        cartItemListItem.add(priceView);
+
+        final PriceView totalView = getTotalView(cartItem, available);
+        cartItemListItem.add(totalView);
+
+
         cartItemListItem.add(
-                createAddOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderMore())
-        ).add(
-                createRemoveAllSkuLink(skuCode).setVisible(notGift)
-        ).add(
-                createRemoveOneSkuLink(skuCode).setVisible(available && notGift && pqm.canOrderLess())
-        ).add(
-                new Label(SKU_NUM_LABEL, skuCode)
-        ).add(
-                getProductLink(productSkuDecorator)
-        ).add(
-                new PriceView(PRICE_VIEW, new Pair<BigDecimal, BigDecimal>(
-                        cartItem.getListPrice(), cartItem.getPrice()), null, cartItem.getAppliedPromo(), false, true)
-                            .setVisible(available)
-        ).add(
-                new PriceView(LINE_TOTAL_VIEW, new Pair<BigDecimal, BigDecimal>(
-                        cartItem.getPrice().multiply(cartItem.getQty()), null), null, null, false, false)
-                            .setVisible(available)
-        ).add(
                 wicketSupportFacade.links().newAddToWishListLink(ADD_TO_WISHLIST_LINK, sku.getCode(), null, null, null, params)
                         .add(new Label(ADD_TO_WISHLIST_LINK_LABEL, getLocalizer().getString("addToWishlist", this)))
-        ).add(
+        );
+        cartItemListItem.add(
                 wicketSupportFacade.links().newAddToWishListLink(SAVE_FOR_LATER_LINK, sku.getCode(), cartItem.getQty().toPlainString(), CustomerWishList.CART_SAVE_FOR_LATER, null, params)
                         .add(new Label(SAVE_FOR_LATER_LINK_LABEL, getLocalizer().getString("saveForLater", this)))
         );
@@ -234,6 +230,33 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
     }
 
+    private PriceView getPriceView(final CartItem cartItem, final boolean available) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
+
+        final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+
+        priceView.setVisible(available);
+
+        return priceView;
+    }
+
+
+    private PriceView getTotalView(final CartItem cartItem, final boolean available) {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
+
+        final PriceView priceView = new PriceView(LINE_TOTAL_VIEW, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+
+        priceView.setVisible(available);
+
+        return priceView;
+
+    }
 
     /**
      * Adjust quantity.

@@ -19,20 +19,25 @@ package org.yes.cart.web.page.component.price;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.ProductPromotionModel;
+import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -47,6 +52,7 @@ public class PriceView extends BaseComponent {
     private static final String WHOLE_LABEL = "whole";
     private static final String DOT_LABEL = "dot";
     private static final String DECIMAL_LABEL = "decimal";
+    private static final String TAX_LABEL = "tax";
     private static final String SAVE_LABEL = "save";
     private static final String PROMO_LABEL = "promo";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
@@ -57,43 +63,57 @@ public class PriceView extends BaseComponent {
     private static final String CSS_SUFFIX_DOT = "-price-dot";
     private static final String CSS_SUFFIX_DECIMAL = "-price-decimal";
     private static final String CSS_SUFFIX_CURRENCY = "-price-currency";
+    private static final String CSS_SUFFIX_TAX = "-price-tax";
 
 
     private final String promos;
-    private final Pair<BigDecimal, BigDecimal> pricePair;
-    private final String currencySymbol;
+    private final ProductPriceModel productPriceModel;
     private final boolean showCurrencySymbol;
     private final boolean showSavings;
+    private final boolean showTax;
+    private final boolean showTaxNet;
+    private final boolean showTaxAmount;
 
+    private static final Pair<BigDecimal, BigDecimal> NULL = new Pair<BigDecimal, BigDecimal>(null, null);
     private static final String[] EMPTY_FORMATED_PRICE = new String[] { StringUtils.EMPTY, StringUtils.EMPTY };
 
     @SpringBean(name = StorefrontServiceSpringKeys.CURRENCY_SYMBOL_SERVICE)
     private CurrencySymbolService currencySymbolService;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    protected ProductServiceFacade productServiceFacade;
 
     /**
      * Create price view.
      * @param id component id.
-     * @param model model.
+     * @param productPriceModel price model.
+     * @param appliedPromos applied promotions
      * @param showCurrencySymbol currency symbol.
      * @param showSavings show user friendly percentage savings
+     * @param showTax show tax information
+     * @param showTaxNet prices are net (without tax)
+     * @param showTaxAmount show amount of tax (rather than percent)
      */
     public PriceView(final String id,
-                     final IModel<SkuPrice> model,
+                     final ProductPriceModel productPriceModel,
+                     final String appliedPromos,
                      final boolean showCurrencySymbol,
-                     final boolean showSavings) {
-        super(id, model);
-        final SkuPrice skuPrice = model.getObject();
-        this.pricePair = new Pair<BigDecimal, BigDecimal>(
-                skuPrice == null ? null : skuPrice.getRegularPrice(),
-                skuPrice == null ? null : skuPrice.getSalePriceForCalculation()
-        );
-        this.currencySymbol = skuPrice == null ? null : skuPrice.getCurrency();
+                     final boolean showSavings,
+                     final boolean showTax,
+                     final boolean showTaxNet,
+                     final boolean showTaxAmount
+    ) {
+        super(id);
+        this.productPriceModel = productPriceModel;
         this.showCurrencySymbol = showCurrencySymbol;
         this.showSavings = showSavings;
-        this.promos = null;
+        this.promos = appliedPromos;
+        this.showTax = showTax && productPriceModel != null && productPriceModel.getPriceTax() != null;
+        this.showTaxNet = showTaxNet;
+        this.showTaxAmount = showTaxAmount;
 
     }
+
 
     /**
      * Create price view.
@@ -110,32 +130,14 @@ public class PriceView extends BaseComponent {
                      final String appliedPromos,
                      final boolean showCurrencySymbol,
                      final boolean showSavings) {
-        super(id);
-        this.pricePair = pricePair != null ? pricePair : new Pair<BigDecimal, BigDecimal>(null, null);
-        this.showCurrencySymbol = showCurrencySymbol;
-        this.currencySymbol = currencySymbol;
-        this.showSavings = showSavings;
-        this.promos = appliedPromos;
+        this(
+                id,
+                new ProductPriceModelImpl("", currencySymbol, BigDecimal.ONE,
+                        pricePair != null ? pricePair.getFirst() : null,
+                        pricePair != null ? pricePair.getSecond() : null
+                ), appliedPromos, showCurrencySymbol, showSavings, false, false, false);
     }
 
-    /**
-     * Create price view.
-     * @param id component id.
-     * @param price regular price.
-     * @param showCurrencySymbol currency symbol.
-     * @param currencySymbol currency symbol
-     */
-    public PriceView(final String id,
-                     BigDecimal price,
-                     final String currencySymbol,
-                     final boolean showCurrencySymbol) {
-        super(id);
-        this.pricePair = new Pair<BigDecimal, BigDecimal> (price, null);
-        this.showCurrencySymbol = showCurrencySymbol;
-        this.currencySymbol = currencySymbol;
-        this.showSavings = false;
-        this.promos = null;
-    }
 
     /**
      * Get whole and decimal part of money to render.
@@ -158,15 +160,16 @@ public class PriceView extends BaseComponent {
 
         boolean showSave = false;
         String savePercent = "";
+        final String lang = getLocale().getLanguage();
 
-        BigDecimal priceToFormat = pricePair.getFirst();
+        BigDecimal priceToFormat = productPriceModel.getRegularPrice();
         String cssModificator = "regular";
-        if (pricePair.getSecond() != null && MoneyUtils.isFirstBiggerThanSecond(pricePair.getFirst(), pricePair.getSecond())) {
-            priceToFormat = pricePair.getSecond();
+        if (productPriceModel.getSalePrice() != null && MoneyUtils.isFirstBiggerThanSecond(productPriceModel.getRegularPrice(), productPriceModel.getSalePrice())) {
+            priceToFormat = productPriceModel.getSalePrice();
             cssModificator = "sale";
             showSave = this.showSavings;
             if (showSave) {
-                final BigDecimal save = MoneyUtils.getDiscountDisplayValue(pricePair.getFirst(), pricePair.getSecond());
+                final BigDecimal save = MoneyUtils.getDiscountDisplayValue(productPriceModel.getRegularPrice(), productPriceModel.getSalePrice());
                 savePercent = save.toString();
             }
         }
@@ -184,7 +187,7 @@ public class PriceView extends BaseComponent {
                         .setVisible(StringUtils.isNotBlank(formatted[0]) || StringUtils.isNotBlank(formatted[1]))
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_DECIMAL)));
 
-        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(currencySymbol);
+        final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(productPriceModel.getCurrency());
 
         addOrReplace(
                 new Label(CURRENCY_LABEL, symbol.getFirst())
@@ -199,18 +202,63 @@ public class PriceView extends BaseComponent {
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_CURRENCY)));
 
 
+        final Map<String, Object> tax = new HashMap<String, Object>();
+        if (this.showTaxAmount) {
+            tax.put("tax", this.productPriceModel.getPriceTax() != null ? this.productPriceModel.getPriceTax().toPlainString() : Total.ZERO.toPlainString());
+        } else {
+            tax.put("tax", this.productPriceModel.getPriceTaxRate() != null ? this.productPriceModel.getPriceTaxRate().stripTrailingZeros().toPlainString() + "%" : "0%");
+        }
+        tax.put("code", this.productPriceModel.getPriceTaxCode());
+
+        final String taxNote = this.showTaxNet ? "taxNoteNet" : "taxNoteGross";
+
         addOrReplace(
-                new Label(SAVE_LABEL,
-                        WicketUtil.createStringResourceModel(this, "savePercent",
-                                Collections.<String, Object>singletonMap("discount", savePercent)))
-                        .setVisible(showSave)
-                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
+                new Label(TAX_LABEL,
+                        WicketUtil.createStringResourceModel(this, taxNote, tax))
+                        .setVisible(this.showTax)
+                        .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX))
         );
+
+
+        final Label discount = new Label(SAVE_LABEL,
+                WicketUtil.createStringResourceModel(this, "savePercent",
+                        Collections.<String, Object>singletonMap("discount", savePercent)));
+
+        discount.setVisible(showSave);
+        discount.add(new AttributeModifier(HTML_CLASS, "sale-price-save"));
+
+        if (showSave && StringUtils.isNotBlank(promos)) {
+
+            final Map<String, ProductPromotionModel> promoModels = productServiceFacade.getPromotionModel(promos);
+
+            final StringBuilder details = new StringBuilder();
+            for (final ProductPromotionModel model : promoModels.values()) {
+
+                final String name = model.getName().getValue(lang);
+                final String desc = model.getDescription().getValue(lang);
+
+                details.append(name);
+                if (model.getCouponCode() != null) {
+                    details.append(" (").append(model.getCouponCode()).append(")");
+                }
+
+                if (StringUtils.isNotBlank(desc)) {
+                    details.append(": ").append(desc);
+                }
+                details.append("\n");
+            }
+
+            discount.add(new AttributeModifier("title", details.toString()));
+        } else {
+            discount.add(new AttributeModifier("title", WicketUtil.createStringResourceModel(this, "savePercentTitle")));
+        }
+
+        addOrReplace(discount);
 
         addOrReplace(
                 new Label(PROMO_LABEL, promos)
                         .setVisible(StringUtils.isNotBlank(promos))
-                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save"))
+                        .add(new AttributeModifier(HTML_CLASS, "sale-price-save sale-price-save-details"))
         );
 
         super.onBeforeRender();
@@ -221,11 +269,11 @@ public class PriceView extends BaseComponent {
     public boolean isVisible() {
         return super.isVisible()
                 &&
-                pricePair.getFirst() != null
+                productPriceModel.getRegularPrice() != null
                 &&
                 !MoneyUtils.isFirstEqualToSecond(
-                        BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP),
-                        MoneyUtils.notNull(pricePair.getFirst().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP)),
+                        Total.ZERO,
+                        productPriceModel.getRegularPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP),
                         2);
     }
 }

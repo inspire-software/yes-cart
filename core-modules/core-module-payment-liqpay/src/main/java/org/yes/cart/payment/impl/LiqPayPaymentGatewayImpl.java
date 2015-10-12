@@ -29,8 +29,6 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -173,7 +171,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     transaction_id +
                     sender_phone);
 
-            if (signature.equals(validSignature)) {
+            if (validSignature.equals(signature)) {
                 statusRes = status;
             }
 
@@ -202,14 +200,6 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
-    public void handleNotification(HttpServletRequest request, HttpServletResponse response) {
-
-    }
-
-
     private LiqPay getLiqPayAPI() {
         return new LiqPay(getParameterValue(LP_MERCHANT_ID), getParameterValue(LP_MERCHANT_KEY), getParameterValue(LP_POST_URL));
     }
@@ -218,7 +208,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
      * {@inheritDoc}
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid, final Payment payment) {
+                              final String currencyCode, final String orderReference, final Payment payment) {
 
         final LiqPay api = getLiqPayAPI();
 
@@ -230,7 +220,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         params.put("result_url", getParameterValue(LP_RESULT_URL));
 
         params.put("type", "buy");
-        params.put("order_id", orderGuid);
+        params.put("order_id", orderReference);
 
         params.put("currency", currencyCode);
         params.put("formDataOnly", "formDataOnly"); // YC specific
@@ -357,7 +347,10 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
         final Payment payment = new PaymentImpl();
         final Map<String, String> singleParamMap = HttpParamsUtils.createSingleValueMap(map);
 
-        payment.setPaymentAmount(new BigDecimal(singleParamMap.get("amount")));
+        final String amount = singleParamMap.get("amount");
+        if (amount != null) {
+            payment.setPaymentAmount(new BigDecimal(amount));
+        }
         payment.setOrderCurrency(singleParamMap.get("currency"));
         payment.setTransactionReferenceId(singleParamMap.get("transaction_id"));
         payment.setTransactionAuthorizationCode(singleParamMap.get("order_id")); // this is order guid - we need it for refunds

@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -23,7 +24,7 @@ import java.math.BigDecimal;
  * Date: 25/10/2014
  * Time: 11:42
  */
-public interface ProductQuantityModel {
+public interface ProductQuantityModel extends Serializable {
 
     /**
      * Returns true if we can order less one step of this item

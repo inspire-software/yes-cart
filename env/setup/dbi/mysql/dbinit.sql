@@ -24,6 +24,7 @@ SOURCE core-modules/core-module-payment-liqpay/src/main/resources/sql/payinitdat
 SOURCE core-modules/core-module-payment-cybersource/src/main/resources/sql/payinitdata.sql;
 SOURCE core-modules/core-module-payment-authorizenet/src/main/resources/sql/payinitdata.sql;
 SOURCE core-modules/core-module-payment-paypal/src/main/resources/sql/payinitdata.sql;
+SOURCE core-modules/core-module-payment-postfinance/src/main/resources/sql/payinitdata.sql;
 
 USE yes;
 

@@ -63,6 +63,8 @@ public class OrderRO implements Serializable {
 
     @DtoField(value = "currency", readOnly = true)
     private String currency;
+    private String symbol;
+    private String symbolPosition;
 
     @DtoField(value = "orderMessage", readOnly = true)
     private String orderMessage;
@@ -174,6 +176,24 @@ public class OrderRO implements Serializable {
 
     public void setCurrency(final String currency) {
         this.currency = currency;
+    }
+
+    @XmlAttribute(name = "symbol")
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(final String symbol) {
+        this.symbol = symbol;
+    }
+
+    @XmlAttribute(name = "symbol-position")
+    public String getSymbolPosition() {
+        return symbolPosition;
+    }
+
+    public void setSymbolPosition(final String symbolPosition) {
+        this.symbolPosition = symbolPosition;
     }
 
     @XmlElement(name = "order-message")

@@ -22,7 +22,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
@@ -208,11 +207,11 @@ public class PaymentAspect extends BaseNotificationAspect {
 
         // We notify admin with all PG results for audit purposes
         if (StringUtils.isNotBlank(adminTemplate)) {
-            final AttrValueShop attrVal = order.getShop().getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-            if (attrVal != null && StringUtils.isNotBlank(attrVal.getVal())) {
+            final String adminEmail = order.getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+            if (StringUtils.isNotBlank(adminEmail)) {
                 final HashMap<String, Object> adminMap = new HashMap<String, Object>(map);
                 adminMap.put(StandardMessageListener.TEMPLATE_NAME, adminTemplate);
-                adminMap.put(StandardMessageListener.CUSTOMER_EMAIL, attrVal.getVal());
+                adminMap.put(StandardMessageListener.CUSTOMER_EMAIL, adminEmail);
                 List<CustomerOrderPayment> payments = customerOrderPaymentService.findBy(order.getOrdernum(), null, (String) null, (String) null);
                 adminMap.put(StandardMessageListener.PAYMENTS, payments);
                 sendNotification(adminMap);

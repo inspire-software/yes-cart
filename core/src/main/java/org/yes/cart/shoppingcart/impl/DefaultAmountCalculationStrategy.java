@@ -294,16 +294,12 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 if (!item.isGift() && !MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, item.getQty()) && item.getPrice() != null) {
                     final TaxProvider.Tax tax = taxProvider.determineTax(ctx.getShopCode(), currency, ctx.getCountryCode(), ctx.getStateCode(), item.getProductSkuCode());
                     final BigDecimal price = item.getPrice();
-                    final BigDecimal netPrice;
-                    final BigDecimal grossPrice;
-                    final BigDecimal priceTax = calculateTax(price, tax.getRate(), !tax.isExcluded());
-                    if (tax.isExcluded()) {
-                        netPrice = price;
-                        grossPrice = price.add(priceTax);
-                    } else {
-                        netPrice = price.subtract(priceTax);
-                        grossPrice = price;
-                    }
+
+                    final MoneyUtils.Money money = calculateMoney(price, tax.getRate(), !tax.isExcluded());
+
+                    final BigDecimal netPrice = money.getNet();
+                    final BigDecimal grossPrice = money.getGross();
+
                     cart.setProductSkuTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
 
                 }
@@ -405,16 +401,12 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
                 final TaxProvider.Tax tax = taxProvider.determineTax(ctx.getShopCode(), currency, ctx.getCountryCode(), ctx.getStateCode(), item.getProductSkuCode());
                 final BigDecimal price = item.getPrice();
-                final BigDecimal netPrice;
-                final BigDecimal grossPrice;
-                final BigDecimal priceTax = calculateTax(price, tax.getRate(), !tax.isExcluded());
-                if (tax.isExcluded()) {
-                    netPrice = price;
-                    grossPrice = price.add(priceTax);
-                } else {
-                    netPrice = price.subtract(priceTax);
-                    grossPrice = price;
-                }
+
+                final MoneyUtils.Money money = calculateMoney(price, tax.getRate(), !tax.isExcluded());
+
+                final BigDecimal netPrice = money.getNet();
+                final BigDecimal grossPrice = money.getGross();
+
                 cart.setShippingTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
 
                 prices.add(new CartItemPrices(item));
@@ -504,19 +496,10 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      *
      * @return tax.
      */
-    BigDecimal calculateTax(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
-        if (money == null) {
-            return Total.ZERO;
-        }
-        if (taxIncluded) {
-            // vat = item * vatRate / (vat + 100). Round CEILING to make sure we are not underpaying tax
-            return money.multiply(taxRate)
-                    .divide(taxRate.add(HUNDRED), Constants.DEFAULT_SCALE)
-                    .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
-        }
-        // tax = item * taxRate / 100. Round CEILING to make sure we are not underpaying tax
-        return money.multiply(taxRate).divide(HUNDRED, Constants.DEFAULT_SCALE)
-                .setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_CEILING);
+    MoneyUtils.Money calculateMoney(final BigDecimal money, final BigDecimal taxRate, final boolean taxIncluded) {
+
+        return MoneyUtils.getMoney(money, taxRate, taxIncluded);
+
     }
 
     /**
@@ -566,12 +549,9 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                     this.grossFinalPrice = multiply(cartItem.getGrossPrice(), cartItem.getQty());
                     this.finalTax = this.grossFinalPrice.subtract(this.netFinalPrice);
 
-                    this.listTax = calculateTax(this.listPrice, cartItem.getTaxRate(), !cartItem.isTaxExclusiveOfPrice());
-                    if (cartItem.isTaxExclusiveOfPrice()) {
-                        this.grossListPrice = this.listPrice.add(this.listTax).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-                    } else {
-                        this.grossListPrice = this.listPrice;
-                    }
+                    final MoneyUtils.Money money = calculateMoney(this.listPrice, cartItem.getTaxRate(), !cartItem.isTaxExclusiveOfPrice());
+                    this.listTax = money.getTax();
+                    this.grossListPrice = money.getGross();
                 }
             }
         }

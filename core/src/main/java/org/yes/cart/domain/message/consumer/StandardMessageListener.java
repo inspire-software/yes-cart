@@ -16,8 +16,8 @@
 
 package org.yes.cart.domain.message.consumer;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
@@ -171,10 +171,10 @@ public class StandardMessageListener implements Runnable {
 
                 final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
 
-                final AttrValueShop attrVal = ((Shop)map.get(SHOP)).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+                final String attrVal = ((Shop)map.get(SHOP)).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
                 String fromEmail = null;
-                if (attrVal != null) {
-                    fromEmail = attrVal.getVal();
+                if (StringUtils.isNotBlank(attrVal)) {
+                    fromEmail = attrVal;
                 }
 
                 mailComposer.composeMessage(

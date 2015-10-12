@@ -336,9 +336,14 @@
 
     <!-- PriceView -->
     <entry key="savePercent">Discount ${discount}%</entry>
+    <entry key="savePercentTitle">On sale now</entry>
+    <entry key="taxNoteNet">excl. ${tax} ${code}</entry>
+    <entry key="taxNoteGross">inc. ${tax} ${code}</entry>
 
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Viewed</entry>
+    <entry key="taxNoteNet">excl. ${tax} ${code}</entry>
+    <entry key="taxNoteGross">inc. ${tax} ${code}</entry>
 
     <!-- SearchView -->
     <entry key="search">Search</entry>

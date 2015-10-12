@@ -397,12 +397,6 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         return  CallbackResult.FAILED;
     }
 
-    /** {@inheritDoc} */
-    public void handleNotification(final HttpServletRequest request, final HttpServletResponse response) {
-        //nothing to do
-    }
-
-
 
     /**
      * ******************************************************************************

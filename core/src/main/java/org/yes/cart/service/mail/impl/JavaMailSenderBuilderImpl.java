@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.JavaMailSenderBuilder;
@@ -83,14 +82,13 @@ public class JavaMailSenderBuilderImpl implements JavaMailSenderBuilder {
     }
 
     private boolean getBooleanCfg(final Shop shop, final String attrKey) {
-        final AttrValue av = shop.getAttributeByCode(attrKey);
-        return av != null && Boolean.valueOf(av.getVal());
+        return Boolean.valueOf(shop.getAttributeValueByCode(attrKey));
     }
 
     private String getStringCfg(final Shop shop, final String attrKey) {
-        final AttrValue av = shop.getAttributeByCode(attrKey);
-        if (av != null && StringUtils.isNotBlank(av.getVal())) {
-            return av.getVal();
+        final String av = shop.getAttributeValueByCode(attrKey);
+        if (StringUtils.isNotBlank(av)) {
+            return av;
         }
         return null;
     }

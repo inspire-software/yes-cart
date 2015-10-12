@@ -70,6 +70,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     private Total total = new TotalImpl();
 
+    private boolean promotionsDisabled = false;
+
     private transient AmountCalculationStrategy calculationStrategy;
 
 
@@ -604,6 +606,17 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     @JsonIgnore
     public boolean isModified() {
         return processingStartTimestamp < modifiedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isPromotionsDisabled() {
+        return promotionsDisabled;
+    }
+
+    /** {@inheritDoc} */
+    public void setPromotionsDisabled(final boolean promotionsDisabled) {
+        this.promotionsDisabled = promotionsDisabled;
     }
 
     /** {@inheritDoc} */

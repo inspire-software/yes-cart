@@ -30,6 +30,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.CustomerWishList;
+import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -41,6 +42,7 @@ import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -87,6 +89,9 @@ public class ShoppingCartView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.PRODUCT_SERVICE_FACADE)
+    private ProductServiceFacade productServiceFacade;
+
     /**
      * Construct shopping cart view.
      *
@@ -105,6 +110,7 @@ public class ShoppingCartView extends BaseComponent {
 
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
         final Total total = cart.getTotal();
 
         final Form cartForm = new StatelessForm(CART_FORM);
@@ -115,9 +121,9 @@ public class ShoppingCartView extends BaseComponent {
         cartForm.addOrReplace(
                 new PriceView(
                         SUB_TOTAL_VIEW,
-                        new Pair<BigDecimal, BigDecimal>(total.getListSubTotal(), total.getSubTotal()),
-                        cart.getCurrencyCode(),
-                        total.getAppliedOrderPromo(), true, true)
+                        model,
+                        total.getAppliedOrderPromo(), true, true,
+                        model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount())
         );
 
         final ShoppingCartCouponsList couponsList = new ShoppingCartCouponsList(COUPON_LIST, cart.getCoupons(), cart.getAppliedCoupons());

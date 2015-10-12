@@ -254,4 +254,18 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      */
     MutableOrderInfo getOrderInfo();
 
+    /**
+     * Get promotion disabled flag.
+     *
+     * @return true if this cart should ignore promotions
+     */
+    boolean isPromotionsDisabled();
+
+    /**
+     * Set promotions disabled flag on this cart
+     *
+     * @param promotionsDisabled true if this cart should ignore promotions
+     */
+    void setPromotionsDisabled(boolean promotionsDisabled);
+
 }

@@ -21,6 +21,10 @@ import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.service.domain.ShoppingCartCalculator;
+import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.domain.entity.ProductPriceModel;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -228,8 +232,53 @@ public interface ProductServiceFacade {
      * @param shopId    current shop
      *
      * @return active product/SKU price (or blank object)
+     *
+     * @deprecated use {@link #getSkuPrice(ShoppingCart, Long, String, BigDecimal)}
      */
-    SkuPrice getSkuPrice(final Long productId, final String skuCode, final BigDecimal quantity, String currency, long shopId);
+    @Deprecated
+    SkuPrice getSkuPrice(Long productId, String skuCode, BigDecimal quantity, String currency, long shopId);
+
+    /**
+     * Get currently active SKU price (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param cart      current cart
+     * @param productId product id (optional)
+     * @param skuCode   selected SKU (optional)
+     * @param quantity  quantity tier
+     *
+     * @return active product/SKU price (or blank object)
+     */
+    ProductPriceModel getSkuPrice(ShoppingCart cart, Long productId, String skuCode, BigDecimal quantity);
+
+    /**
+     * Get price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param cart      current cart
+     * @param ref       reference (selected SKU, shipping or label)
+     * @param quantity  quantity tier
+     * @param listPrice base list price
+     * @param salePrice base sale price
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getSkuPrice(ShoppingCart cart, String ref, BigDecimal quantity, BigDecimal listPrice, BigDecimal salePrice);
+
+    /**
+     * Get price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param cart      current cart
+     * @param item      item to create price model for
+     * @param total     true indicates that we what total amount, false indicates list and sale price
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getSkuPrice(ShoppingCart cart, CartItem item, boolean total);
 
     /**
      * Get prices for all SKU quantity tiers.
@@ -240,7 +289,40 @@ public interface ProductServiceFacade {
      * @param shopId    current shop
      *
      * @return active product/SKU prices (or blank object)
+     *
+     * @deprecated use {@link #getSkuPrices(ShoppingCart, Long, String)}
      */
-    Collection<SkuPrice> getSkuPrices(final Long productId, final String skuCode, String currency, long shopId);
+    @Deprecated
+    Collection<SkuPrice> getSkuPrices(Long productId, String skuCode, String currency, long shopId);
+
+    /**
+     * Get prices for all SKU quantity tiers sorted by tier.
+     *
+     * @param cart      current cart
+     * @param productId product id (optional)
+     * @param skuCode   selected SKU (optional)
+     *
+     * @return active product/SKU prices (or blank object)
+     */
+    List<ProductPriceModel> getSkuPrices(ShoppingCart cart, Long productId, String skuCode);
+
+
+    /**
+     * Get cart total price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can be shown as net or gross.
+     *
+     * @param cart      current cart
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getCartItemsTotal(ShoppingCart cart);
+
+    /**
+     * Generate promotion model map from given applied promotion codes.
+     *
+     * @return map code to model in order specified by applied promo
+     */
+    Map<String, ProductPromotionModel> getPromotionModel(String appliedPromo);
 
 }

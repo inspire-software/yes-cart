@@ -87,6 +87,8 @@ public class CartRO implements Serializable {
 
     @DtoField(readOnly = true)
     private String currencyCode;
+    private String symbol;
+    private String symbolPosition;
 
     @DtoField(readOnly = true)
     private long modifiedTimestamp;
@@ -172,6 +174,25 @@ public class CartRO implements Serializable {
     public void setCurrencyCode(final String currencyCode) {
         this.currencyCode = currencyCode;
     }
+
+    @XmlAttribute(name = "symbol")
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(final String symbol) {
+        this.symbol = symbol;
+    }
+
+    @XmlAttribute(name = "symbol-position")
+    public String getSymbolPosition() {
+        return symbolPosition;
+    }
+
+    public void setSymbolPosition(final String symbolPosition) {
+        this.symbolPosition = symbolPosition;
+    }
+
 
     @XmlAttribute(name = "modified-timestamp")
     public long getModifiedTimestamp() {

@@ -45,6 +45,7 @@
             ${payment.liqpay.context}
             ${payment.authorizenet.context}
             ${payment.paypal.context}
+            ${payment.postfinance.context}
         </param-value>
     </context-param>
 
@@ -123,6 +124,8 @@
 
     ${payment.paypal.filter}
 
+    ${payment.postfinance.filter}
+
     <!-- EoF Payment modules filters -->
 
 
@@ -162,6 +165,8 @@
     ${payment.authorizenet.filter-mapping}
 
     ${payment.paypal.filter-mapping}
+
+    ${payment.postfinance.filter-mapping}
 
     <!-- EoF Payment modules filters -->
 

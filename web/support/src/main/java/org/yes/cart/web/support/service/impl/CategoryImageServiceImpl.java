@@ -56,7 +56,7 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
         if (attributableOrStrategy instanceof String) {
             strategyKey = (String) attributableOrStrategy;
         } else if (attributableOrStrategy instanceof Category) {
-            final AttrValue imgStrategy = ((Category) attributableOrStrategy).getAttributeByCode("CATEGORY_IMAGE_RETRIEVE_STRATEGY");
+            final AttrValue imgStrategy = ((Category) attributableOrStrategy).getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY);
             if (imgStrategy != null) {
                 strategyKey = imgStrategy.getVal();
             }
