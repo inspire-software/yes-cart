@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -175,7 +176,7 @@ public class LiqPayPaymentGatewayImplTest {
         }};
 
         assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-
+        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
 
         callBackresult.put("signature", validSignature);
 
