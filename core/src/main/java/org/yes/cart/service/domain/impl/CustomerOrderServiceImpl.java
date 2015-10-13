@@ -37,10 +37,7 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -210,9 +207,14 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                 Restrictions.eq("cartGuid", shoppingCart.getGuid())
         );
         if (customerOrderToDelete != null) {
-            //CPOINT Two ways - delete or not delete existing order with not NONE status
+
             if (!CustomerOrder.ORDER_STATUS_NONE.equals(customerOrderToDelete.getOrderStatus())) {
-                ShopCodeContext.getLog(this).error(
+
+                // Order is not in ORDER_STATUS_NONE but the cart had not been cleaned
+                // This can only happen if they did not click come back to site from the external payment site
+                // Meanwhile the callback happened and updated the order
+
+                ShopCodeContext.getLog(this).warn(
                         MessageFormat.format(
                                 "Order {0} with {1} cart guid has {2} order status instead of 1 - ORDER_STATUS_NONE",
                                 customerOrderToDelete.getCustomerorderId(),
@@ -220,19 +222,44 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
                                 customerOrderToDelete.getOrderStatus()
                         )
                 );
+
+                // detach order as it is being processed (rehash the GUID and reset cartGuid)
+                customerOrderToDelete.setGuid(UUID.randomUUID().toString());
+                customerOrderToDelete.setCartGuid(customerOrderToDelete.getOrdernum());
+
+                getGenericDao().saveOrUpdate(customerOrderToDelete);
+
+                getGenericDao().flushClear();
+
+                getGenericDao().evict(customerOrderToDelete);
+
+            } else {
+
+                // This is ORDER_STATUS_NONE so probably customer made some changes and came back
+                // we no longer need this order
+
+                getGenericDao().delete(customerOrderToDelete);
+                getGenericDao().flushClear();
+                getGenericDao().evict(customerOrderToDelete);
+
             }
-
-            getGenericDao().delete(customerOrderToDelete);
-
-            getGenericDao().flushClear();
-
-            getGenericDao().evict(customerOrderToDelete);
 
         }
         final CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, onePhysicalDelivery);
         return create(customerOrder);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerOrder findByReference(final String reference) {
+        final CustomerOrder order = findByGuid(reference);
+        if (order == null) {
+            return findByOrderNumber(reference);
+        }
+        return order;
     }
 
     /**

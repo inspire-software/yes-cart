@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -46,6 +45,21 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
             <FileNamePattern>${catalina.base}/logs/yc-shop10.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+    <appender name="SHOP10PAY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <Append>true</Append>
+        <File>${catalina.base}/logs/yc-shop10pay.log</File>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-shop10pay.log.%i</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -121,6 +135,12 @@
     </logger>
     <logger name="SHOP10" level="INFO">
         <appender-ref ref="SHOP10"/>
+    </logger>
+    <logger name="SHOP10.org.yes.cart.web.filter.payment" level="DEBUG">
+        <appender-ref ref="SHOP10PAY"/>
+    </logger>
+    <logger name="SHOP10.org.yes.cart.payment.impl" level="DEBUG">
+        <appender-ref ref="SHOP10PAY"/>
     </logger>
     <logger name="AUDIT" level="INFO">
         <appender-ref ref="AUDIT"/>

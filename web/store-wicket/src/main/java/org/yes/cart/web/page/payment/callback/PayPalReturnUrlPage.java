@@ -105,7 +105,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
 
         final String orderGuid = ApplicationDirector.getShoppingCart().getGuid();
 
-        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
 
         final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(customerOrder.getPgLabel(), customerOrder.getShop().getCode());
 
@@ -155,7 +155,7 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                                         ApplicationDirector.getShoppingCart().getOrderInfo().getPaymentGatewayLabel()
                                 );
 
-                                final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(ApplicationDirector.getShoppingCart().getGuid());
+                                final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(ApplicationDirector.getShoppingCart().getGuid());
 
                                 if (checkoutServiceFacade.isOrderPaymentSuccessful(customerOrder)) {
 

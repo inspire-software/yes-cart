@@ -69,11 +69,12 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
         final Logger log = ShopCodeContext.getLog(this);
-        log.info("Order guid to handle at call back handler is {}", orderGuid);
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
-            final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+            log.info("Order guid to handle at call back handler is {}", orderGuid);
+
+            final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
             if (order == null) {
 
@@ -114,15 +115,18 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
             }
 
-
-
+        } else {
+            log.warn("Order guid to handle at call back handler is NULL or blank. " +
+                    "This is abnormal behaviour and it is recommended to enable DEBUG log for " +
+                    "SHOPXX.org.yes.cart.web.filter.payment and SHOPXX.org.yes.cart.payment.impl and review " +
+                    "allowed IPs for PG for shop. Also check that hash signatures are correctly configured.");
         }
     }
 
     private void handleNewOrderToCancelWithRefund(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
         // Need to get fresh order instance from db so that we have a clean object
-        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
         if (order == null) {
 
@@ -158,7 +162,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
     private void handleNewOrderToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
-        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
         if (order == null) {
 
@@ -197,7 +201,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
     private void handleWaitingPaymentToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
-        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
         if (order == null) {
 
@@ -236,7 +240,7 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
     private void handleWaitingRefundToPending(final Map parameters, final String orderGuid, final Logger log) throws OrderException {
 
-        final CustomerOrder order = customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
         if (order == null) {
 

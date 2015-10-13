@@ -26,8 +26,6 @@ import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -124,11 +122,11 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
      * {@inheritDoc}
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid, final Payment payment) {
+                              final String currencyCode, final String orderReference, final Payment payment) {
 
         final String toSign = "" + amount + ":0:"
                 + getParameterValue(RB_MERCHANT_PASS2) + ":"
-                + SHP_ORDER_ID + "=" + orderGuid;
+                + SHP_ORDER_ID + "=" + orderReference;
 
         final String operationJS = MessageFormat.format(
                 "<script \n" +
@@ -153,7 +151,7 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
                 DigestUtils.md5Hex(toSign),
                 locale,
                 payment.getOrderCurrency(),
-                orderGuid
+                orderReference
         );
 
 

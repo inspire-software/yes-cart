@@ -83,7 +83,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         customerOrderService.update(order);
 
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
@@ -96,7 +96,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouseService.create(skuWarehouse);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 0", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             assertEquals("One item not enough to continue order processing. Must still waiting for inventory 0", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
@@ -106,7 +106,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouseService.update(skuWarehouse);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 1", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             assertEquals("One item not enough to continue order processing. Must still waiting for inventory 1", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
@@ -119,7 +119,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
         skuWarehouseService.create(skuWarehouse);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals("One item not enough to continue order processing . Must still in progress 2", CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
             assertEquals("Delivery can be started", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());

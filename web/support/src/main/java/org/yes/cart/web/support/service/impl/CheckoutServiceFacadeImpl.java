@@ -73,8 +73,14 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     /** {@inheritDoc} */
     @Override
+    public CustomerOrder findByReference(final String reference) {
+        return customerOrderService.findByReference(reference);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public CustomerOrder findByGuid(final String shoppingCartGuid) {
-        return customerOrderService.findByGuid(shoppingCartGuid);
+        return customerOrderService.findByReference(shoppingCartGuid);
     }
 
     /** {@inheritDoc} */

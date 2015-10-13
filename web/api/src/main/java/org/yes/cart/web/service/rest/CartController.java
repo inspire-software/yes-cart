@@ -2379,7 +2379,7 @@ public class CartController {
                     cart.getCurrentLocale(),
                     grandTotal,
                     cart.getCurrencyCode(),
-                    cart.getGuid(),
+                    StringUtils.isNotBlank(order.getOrdernum()) ? order.getOrdernum() : cart.getGuid(),
                     payment);
 
             final String fullFormHtml = MessageFormat.format(
@@ -2658,7 +2658,7 @@ public class CartController {
 
             if (cart.getCartItemsCount() > 0) {
 
-                final CustomerOrder order = checkoutServiceFacade.findByGuid(guid);
+                final CustomerOrder order = checkoutServiceFacade.findByReference(guid);
 
                 if (order == null) {
 

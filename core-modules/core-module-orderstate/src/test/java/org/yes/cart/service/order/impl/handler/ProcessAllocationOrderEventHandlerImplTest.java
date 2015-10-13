@@ -259,7 +259,7 @@ public class ProcessAllocationOrderEventHandlerImplTest extends AbstractEventHan
 
         // Need to check everything has rolled back!
 
-        final CustomerOrder orderAfterException = orderService.findByOrderNumber(customerOrder.getOrdernum());
+        final CustomerOrder orderAfterException = orderService.findByReference(customerOrder.getOrdernum());
 
         // check reserved quantity
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");

@@ -119,11 +119,23 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     CustomerOrder createFromCart(ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
 
     /**
+     * Find order by reference (cart guid or order number).
+     *
+     * @param reference reference
+     *
+     * @return customer order
+     */
+    CustomerOrder findByReference(String reference);
+
+    /**
      * Find created order by cart guid.
      *
      * @param shoppingCartGuid shopping cart  guid
      * @return created order.
+     *
+     * @deprecated use {@link #findByReference(String)}
      */
+    @Deprecated
     CustomerOrder findByGuid(String shoppingCartGuid);
 
     /**
@@ -131,7 +143,10 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      *
      * @param orderNumber order number
      * @return created order.
+     *
+     * @deprecated use {@link #findByReference(String)}
      */
+    @Deprecated
     CustomerOrder findByOrderNumber(String orderNumber);
 
     /**

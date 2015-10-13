@@ -31,8 +31,6 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -431,9 +429,9 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * All fields are hidden, hence not need to localize and etc.
      */
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid, final Payment payment) {
+                              final String currencyCode, final String orderReference, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getHiddenField(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
+        stringBuilder.append(getHiddenField(ORDER_GUID, orderReference));  // this will be bypassed via payment gateway to restore it latter
         return stringBuilder.toString();
     }
 

@@ -62,7 +62,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade, Applicati
 
         final OrderEvent orderEvent = new OrderEventImpl(
                 OrderStateManager.EVT_PENDING,
-                customerOrderService.findByGuid(shoppingCart.getGuid()),
+                customerOrderService.findByReference(shoppingCart.getGuid()),
                 null,
                 paymentParameter
         );

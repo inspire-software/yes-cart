@@ -108,7 +108,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                final boolean enableProductLinks) {
         super(id);
 
-        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderGuid);
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
         final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
 
         final String selectedLocale = getLocale().getLanguage();

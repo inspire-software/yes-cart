@@ -17,20 +17,21 @@
 package org.yes.cart.payment.impl;
 
 import net.authorize.sim.Fingerprint;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.PaymentGatewayFeature;
-import org.yes.cart.payment.dto.PaymentMiscParam;
+import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.util.ShopCodeContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -41,12 +42,66 @@ import java.util.*;
 public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPaymentGatewayImpl implements PaymentGatewayExternalForm {
 
 
+    /**
+     * merchant defined MD5 Hash key
+     */
+    protected static final String AN_MD5_HASH_KEY = "MD5_HASH_KEY";
+
+    /**
+     * Merchant host
+     */
+    //protected static final String AN_MERCHANT_HOST = "MERCHANT_HOST";
+
+    /**
+     * SIM/DPM relay response URL
+     */
+    protected static final String AN_RELAY_RESPONSE_URL = "RELAY_RESPONSE_URL";
+    /**
+     * SIM/DPM order receipt URL
+     */
+    protected static final String AN_ORDER_RECEIPT_URL = "ORDER_RECEIPT_URL";
+
+    /**
+     * SIM post URL
+     */
+    protected static final String AN_POST_URL = "POST_URL";
+    /**
+     * SIM Cancel URL
+     */
+    protected static final String AN_CANCEL_URL = "CANCEL_URL";
+    /**
+     * SIM Cancel URL
+     */
+    protected static final String AN_RETURN_POLICY_URL = "RETURN_POLICY_URL";
+
+    /**
+     * SIM test request. Used on production env, if need to send test request.
+     */
+    protected static final String AN_TEST_REQUEST = "TEST_REQUEST";
+
+    // Styling
+    protected static final String AN_STYLE_HEADER_HTML = "STYLE_HEADER_HTML";
+    protected static final String AN_STYLE_HEADER2_HTML = "STYLE_HEADER2_HTML";
+    protected static final String AN_STYLE_FOOTER_HTML = "STYLE_FOOTER_HTML";
+    protected static final String AN_STYLE_FOOTER2_HTML = "STYLE_FOOTER2_HTML";
+    protected static final String AN_STYLE_BGCOLOR = "STYLE_BGCOLOR";
+    protected static final String AN_STYLE_LINKCOLOR = "STYLE_LINKCOLOR";
+    protected static final String AN_STYLE_TEXTCOLOR = "STYLE_TEXTCOLOR";
+    protected static final String AN_STYLE_LOGOURL = "STYLE_LOGOURL";
+    protected static final String AN_STYLE_BGURL = "STYLE_BGURL";
+    protected static final String AN_STYLE_FONTFAMILY = "STYLE_FONTFAMILY";
+    protected static final String AN_STYLE_FONTSIZE = "STYLE_FONTSIZE";
+    protected static final String AN_STYLE_SECTION1COLOR = "STYLE_SECTION1COLOR";
+    protected static final String AN_STYLE_SECTION1FONTFAMILY = "STYLE_SECTION1FONTFAMILY";
+    protected static final String AN_STYLE_SECTION1FONTSIZE = "STYLE_SECTION1FONTSIZE";
+
+
     private static final String ORDER_GUID = "orderGuid";
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
             false, false, false,
-            true, true, false,
+            true, true, true,
             null ,
             false, false
     );
@@ -155,11 +210,54 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         return payment;
     }
 
+    protected boolean isValid(final Map privateCallBackParameters) {
+
+        final Map<String, String[]> params = new HashMap<String, String[]>();
+        for (final Map.Entry param : (Set<Map.Entry>) privateCallBackParameters.entrySet()) {
+            if (param.getValue() instanceof String[]) {
+                params.put(String.valueOf(param.getKey()), (String[]) param.getValue());
+            } else {
+                params.put(String.valueOf(param.getKey()), new String[] { String.valueOf(param.getValue()) });
+            }
+        }
+
+        net.authorize.sim.Result txResult = net.authorize.sim.Result.createResult(
+                getParameterValue(AN_API_LOGIN_ID),
+                getParameterValue(AN_MD5_HASH_KEY),
+                params);
+
+        return txResult.isAuthorizeNet();
+
+    }
+
+    protected String md5sign(final String txId, final String amount) {
+
+        final StringBuilder sign = new StringBuilder();
+        sign.append(getParameterValue(AN_MD5_HASH_KEY));
+        sign.append(getParameterValue(AN_API_LOGIN_ID));
+        sign.append(txId);
+        sign.append(amount);
+        sign.append("EUR");
+
+        try {
+            final Charset charset = Charset.forName("UTF-8");
+            final MessageDigest digest = MessageDigest.getInstance("MD5");
+            return new String(Hex.encodeHex(digest.digest(sign.toString().getBytes(charset)))).toUpperCase();
+        } catch (NoSuchAlgorithmException e) {
+            ShopCodeContext.getLog(this).error("MD5 not available", e);
+            return "MD5 not available";
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+
+        if (isValid(privateCallBackParameters)) {
+            return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+        }
+        return null;
     }
 
     /**
@@ -189,6 +287,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      * {@inheritDoc}
      */
     public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
+
         /*
            See http://developer.authorize.net/guides/SIM/wwhelp/wwhimpl/js/html/wwhelp.htm#href=SIM_Trans_response.09.2.html
 
@@ -197,7 +296,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
            3—Error
            4—Held for Review
         */
-        String responseCode = callbackResult.get("x_response_code");
+        String responseCode = null;
+        if (isValid(callbackResult)) {
+            responseCode = callbackResult.get("x_response_code");
+        }
         if ("1".equals(responseCode)) {
             return CallbackResult.OK;
         } else if ("4".equals(responseCode)) {
@@ -214,19 +316,13 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
      */
     @Override
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
-                              final String currencyCode, final String orderGuid, final Payment payment) {
+                              final String currencyCode, final String orderReference, final Payment payment) {
 
         final String apiLoginId = getParameterValue(AN_API_LOGIN_ID);
+        final String key = getParameterValue(AN_TRANSACTION_KEY);
         final String amountString = "" + amount;
 
-
-        final Random rnd = new Random(new Date().getTime());
-        final Fingerprint fingerprint = Fingerprint.createFingerprint(
-                apiLoginId,
-                getParameterValue(AN_TRANSACTION_KEY),
-                rnd.nextInt(99999999),
-                amountString
-        );
+        final Fingerprint fingerprint = getFingerprint(orderReference, apiLoginId, key, amountString, currencyCode);
         final long x_fp_sequence = fingerprint.getSequence();
         final long x_fp_timestamp = fingerprint.getTimeStamp();
         final String x_fp_hash = fingerprint.getFingerprintHash();
@@ -241,23 +337,141 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         stringBuilder.append(getHiddenField("x_method", "CC"));
         stringBuilder.append(getHiddenField("x_type", "AUTH_CAPTURE"));
         stringBuilder.append(getHiddenField("x_amount", amountString));
+        stringBuilder.append(getHiddenField("x_currency_code", currencyCode));
         stringBuilder.append(getHiddenField("x_show_form", "payment_form"));
-        stringBuilder.append(getHiddenField("x_test_request", getParameterValue(AN_TEST_REQUEST)));
+        setParameterIfNotNull(stringBuilder, "x_test_request", AN_TEST_REQUEST);
 
+        // TODO: tax and duty
+        // <INPUT TYPE="HIDDEN" name="x_tax" VALUE="Tax1<|>state tax<|>0.0625">
+        // <INPUT TYPE="HIDDEN" name="x_freight" VALUE="Freight1<|>ground overnight<|>12.95>
+        // <INPUT TYPE="HIDDEN" name="x_duty" VALUE="Duty1<|>export<|> 15.00>
+        // x_tax_exempt
+
+        final PaymentAddress address = payment.getBillingAddress();
+        if (address != null) {
+            stringBuilder.append(getHiddenField("x_first_name", address.getFirstname()));
+            stringBuilder.append(getHiddenField("x_last_name", address.getLastname()));
+            stringBuilder.append(getHiddenField("x_address", getAddressLines(address)));
+            stringBuilder.append(getHiddenField("x_city", address.getCity()));
+            stringBuilder.append(getHiddenField("x_state", address.getStateCode()));
+            stringBuilder.append(getHiddenField("x_zip", address.getPostcode()));
+            stringBuilder.append(getHiddenField("x_country", address.getCountryCode()));
+            stringBuilder.append(getHiddenField("x_phone", address.getPhone1()));
+            stringBuilder.append(getHiddenField("x_email", payment.getBillingEmail()));
+        }
+        stringBuilder.append(getHiddenField("x_cust_id", payment.getBillingEmail()));
+
+        final PaymentAddress shipTo = payment.getShippingAddress();
+        if (shipTo != null) {
+            stringBuilder.append(getHiddenField("x_ship_to_first_name", shipTo.getFirstname()));
+            stringBuilder.append(getHiddenField("x_ship_to_last_name", shipTo.getLastname()));
+            stringBuilder.append(getHiddenField("x_ship_to_address", getAddressLines(shipTo)));
+            stringBuilder.append(getHiddenField("x_ship_to_city", shipTo.getCity()));
+            stringBuilder.append(getHiddenField("x_ship_to_state", shipTo.getStateCode()));
+            stringBuilder.append(getHiddenField("x_ship_to_zip", shipTo.getPostcode()));
+            stringBuilder.append(getHiddenField("x_ship_to_country", shipTo.getCountryCode()));
+        }
 
         //not mandatory parameters
-        stringBuilder.append(getHiddenField("x_invoice_num", StringUtils.substring(orderGuid.replace("-", ""), 20))); // limit to 20 chast lenght
-        stringBuilder.append(getHiddenField("x_description", StringUtils.defaultString(getParameterValue(AN_DESCRIPTION))));
+        stringBuilder.append(getHiddenField("x_invoice_num", StringUtils.substring(orderReference.replace("-", ""), 0, 20))); // limit to 20 chars length
+        stringBuilder.append(getHiddenField("x_po_num", orderReference));
+        stringBuilder.append(getHiddenField("x_description", getDescription(payment)));
 
+        final String relayUrl = getParameterValue(AN_RELAY_RESPONSE_URL);
+        if (StringUtils.isNotBlank(relayUrl)) {
+            stringBuilder.append(getHiddenField("x_relay_url", relayUrl));
+            stringBuilder.append(getHiddenField("x_relay_response", "TRUE"));
+        } else {
+            setParameterIfNotNull(stringBuilder, "x_receipt_link_url", AN_ORDER_RECEIPT_URL);
+        }
 
-        stringBuilder.append(getHiddenField("x_relay_response", "TRUE"));
+        // payment form configuration
+        setParameterIfNotNull(stringBuilder, "x_cancel_url", AN_CANCEL_URL);
+        setParameterIfNotNull(stringBuilder, "x_return_policy_url", AN_RETURN_POLICY_URL);
 
+        stringBuilder.append(getHiddenField(ORDER_GUID, orderReference));  // this will be bypassed via payment gateway to restore it latter
 
-        stringBuilder.append(getHiddenField(ORDER_GUID, orderGuid));  // this will be bypassed via payment gateway to restore it latter
-
+        // styling
+        setParameterIfNotNull(stringBuilder, "x_return_policy_url", AN_RETURN_POLICY_URL);
+        setParameterIfNotNull(stringBuilder, "x_header_html_payment_form", AN_STYLE_HEADER_HTML);
+        setParameterIfNotNull(stringBuilder, "x_header2_html_payment_form", AN_STYLE_HEADER2_HTML);
+        setParameterIfNotNull(stringBuilder, "x_footer_html_payment_form", AN_STYLE_FOOTER_HTML);
+        setParameterIfNotNull(stringBuilder, "x_footer2_html_payment_form", AN_STYLE_FOOTER2_HTML);
+        setParameterIfNotNull(stringBuilder, "x_color_background", AN_STYLE_BGCOLOR);
+        setParameterIfNotNull(stringBuilder, "x_color_link", AN_STYLE_LINKCOLOR);
+        setParameterIfNotNull(stringBuilder, "x_color_text", AN_STYLE_TEXTCOLOR);
+        setParameterIfNotNull(stringBuilder, "x_logo_url", AN_STYLE_LOGOURL);
+        setParameterIfNotNull(stringBuilder, "x_background_url", AN_STYLE_BGURL);
+        setParameterIfNotNull(stringBuilder, "x_font_family", AN_STYLE_FONTFAMILY);
+        setParameterIfNotNull(stringBuilder, "x_font_size", AN_STYLE_FONTSIZE);
+        setParameterIfNotNull(stringBuilder, "x_sectionhead1_color_text", AN_STYLE_SECTION1COLOR);
+        setParameterIfNotNull(stringBuilder, "x_sectionhead1_font_family", AN_STYLE_SECTION1FONTFAMILY);
+        setParameterIfNotNull(stringBuilder, "x_sectionhead1_font_size", AN_STYLE_SECTION1FONTSIZE);
 
         return stringBuilder.toString();
     }
+
+    protected Fingerprint getFingerprint(final String orderReference,
+                                         final String apiLoginId,
+                                         final String txKey,
+                                         final String amountString,
+                                         final String currency) {
+        final Random rnd = new Random(System.currentTimeMillis());
+        return Fingerprint.createFingerprint(
+                    apiLoginId,
+                    txKey,
+                    rnd.nextInt(99999999),
+                    amountString,
+                    currency
+            );
+    }
+
+    private void setParameterIfNotNull(final StringBuilder params, final String key, final String valueKey) {
+        final String value = getParameterValue(valueKey);
+        if (StringUtils.isNotBlank(value)) {
+            params.append(getHiddenField(key, value));
+        }
+    }
+
+    private String getAddressLines(final PaymentAddress address) {
+        final StringBuilder address1 = new StringBuilder();
+        if (StringUtils.isNotBlank(address.getAddrline1())) {
+            address1.append(address.getAddrline1());
+        }
+        if (StringUtils.isNotBlank(address.getAddrline2())) {
+            if (address1.length() > 0) {
+                address1.append(", ");
+            }
+            address1.append(address.getAddrline2());
+        }
+        return address1.toString();
+    }
+
+
+    /**
+     * Get order description.
+     *
+     * @param payment payment
+     * @return order description.
+     */
+    private String getDescription(final Payment payment) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for (PaymentLine line : payment.getOrderItems()) {
+            if (line.isShipment()) {
+                stringBuilder.append(line.getSkuName().replace("\"","")).append(", ");
+            } else {
+                stringBuilder.append(line.getSkuCode().replace("\"",""));
+                stringBuilder.append(" x ");
+                stringBuilder.append(line.getQuantity());
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(payment.getBillingEmail());
+        stringBuilder.append(", ");
+        stringBuilder.append(payment.getOrderNumber());
+        return stringBuilder.toString();
+    }
+
 
 
     /**

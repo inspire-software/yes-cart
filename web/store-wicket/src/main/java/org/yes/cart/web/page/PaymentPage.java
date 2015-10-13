@@ -272,7 +272,7 @@ public class PaymentPage extends AbstractWebPage {
      */
     private String getOrderNumber() {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(cart.getGuid());
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(cart.getGuid());
         return customerOrder.getOrdernum();
     }
 

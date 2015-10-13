@@ -427,7 +427,7 @@ public class CheckoutPage extends AbstractWebPage {
                     setResponsePage(this.getPage().getClass(), parameters);
                 }
 
-                final CustomerOrder order = checkoutServiceFacade.findByGuid(cart.getGuid());
+                final CustomerOrder order = checkoutServiceFacade.findByReference(cart.getGuid());
                 final Total total = checkoutServiceFacade.getOrderTotal(order);
                 final BigDecimal grandTotal = total.getTotalAmount();
 
@@ -507,7 +507,7 @@ public class CheckoutPage extends AbstractWebPage {
                 cart.getCurrentLocale(),
                 grandTotal,
                 cart.getCurrencyCode(),
-                cart.getGuid(),
+                StringUtils.isNotBlank(order.getOrdernum()) ? order.getOrdernum() : cart.getGuid(),
                 payment);
 
 

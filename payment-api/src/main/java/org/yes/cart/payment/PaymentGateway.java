@@ -62,12 +62,12 @@ public interface PaymentGateway extends Serializable {
      * @param locale         to get localized html
      * @param currencyCode   shopping cart currency code
      * @param amount         amount payment , used for external payment processing
-     * @param orderGuid order guid to restore real order after jumping of payment gateway sites.
+     * @param orderReference order number or cart guid to restore real order after jumping of payment gateway sites.
      * @param payment payment details , only a few gateways require this parameter
      *
      * @return html.
      */
-    String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String currencyCode, String orderGuid, Payment payment);
+    String getHtmlForm(String cardHolderName, String locale, BigDecimal amount, String currencyCode, String orderReference, Payment payment);
 
     /**
      * Authorize and capture payment. Not all gateways allow to capture payment without order delivery.

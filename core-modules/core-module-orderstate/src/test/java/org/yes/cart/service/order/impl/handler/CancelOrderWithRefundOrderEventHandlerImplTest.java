@@ -971,7 +971,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         }
 
         // refresh after exception
-        customerOrder = orderService.findByOrderNumber(customerOrder.getOrdernum());
+        customerOrder = orderService.findByReference(customerOrder.getOrdernum());
 
         // check reserved quantity
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
@@ -1535,7 +1535,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         }
 
         // refresh after exception
-        customerOrder = orderService.findByOrderNumber(customerOrder.getOrdernum());
+        customerOrder = orderService.findByReference(customerOrder.getOrdernum());
 
         // check reserved quantity
         assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");

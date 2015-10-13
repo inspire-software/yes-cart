@@ -83,7 +83,7 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
 
         final String orderGuid = cart.getGuid();
 
-        final CustomerOrder customerOrder =  customerOrderService.findByGuid(orderGuid);
+        final CustomerOrder customerOrder =  customerOrderService.findByReference(orderGuid);
 
 
         final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");

@@ -68,12 +68,12 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
         CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
-        CustomerOrder order2 = customerOrderService.findByGuid(shoppingCart.getGuid());
+        CustomerOrder order2 = customerOrderService.findByReference(shoppingCart.getGuid());
         assertNotNull(order2);
         customerOrderService.delete(order);
         assertNull(customerOrderService.findById(pk));
-        assertNull(customerOrderService.findByGuid(shoppingCart.getGuid()));
-        assertNull(customerOrderService.findByGuid(null));
+        assertNull(customerOrderService.findByReference(shoppingCart.getGuid()));
+        assertNull(customerOrderService.findByReference(null));
     }
 
     @Test

@@ -16,14 +16,15 @@
 
 package org.yes.cart.web.page.payment.callback;
 
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.StringResourceModel;
+import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -32,7 +33,10 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.util.HttpUtil;
+import org.yes.cart.web.util.WicketUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 
 /**
@@ -61,45 +65,66 @@ public class ResultPage extends AbstractWebPage {
 
         super(params);
 
-        add(
-                new StandardFooter(FOOTER)
-        ).add(
-                new StandardHeader(HEADER)
-        );
-
-        final String orderNum = params.get("orderNum").toString();
-
-        final CustomerOrder customerOrder = checkoutServiceFacade.findByGuid(orderNum);
-
-        final boolean isPaymentSuccessful = checkoutServiceFacade.isOrderPaymentSuccessful(customerOrder);
-
-        if (isPaymentSuccessful) {
-            cleanCart();
-        }
-
-        add(
-                new Label(
-                        "paymentResult",
-                        new StringResourceModel(isPaymentSuccessful ? "paymentWasOk" : "paymentWasFailed", this, null)
-                )
-        );
-
-        add(
-                new ServerSideJs("serverSideJs")
-        );
-
-        add(
-                new HeaderMetaInclude("headerInclude")
-        );
+        add(new StandardFooter(FOOTER));
+        add(new StandardHeader(HEADER));
+        add(new FeedbackPanel(FEEDBACK));
+        add(new ServerSideJs("serverSideJs"));
+        add(new HeaderMetaInclude("headerInclude"));
 
     }
 
     @Override
-    protected void onRender() {
+    protected void onBeforeRender() {
 
         executeHttpPostedCommands();
 
-        super.onRender();
+        final PageParameters params = getPageParameters();
+
+        ShopCodeContext.getLog(this).error(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
+
+        // Status gives preliminary result from return URL, which can be sent as "status" or "hint"
+        final String status = params.get("status").toString(params.get("hint").toString());
+        // Order number can be sent as "orderNum" or "orderGuid" or we use current cart to recover
+        final String orderNum = params.get("orderNum").toString(params.get("orderGuid").toString(ApplicationDirector.getShoppingCart().getGuid()));
+
+        final boolean doCleanCart;
+
+        if (StringUtils.isNotBlank(status)) {
+            // Trust the return page as chances are the actual payment callback has not yet happened
+            if ("ok".equals(status)) {
+                doCleanCart = true;
+                info(getLocalizer().getString("orderSuccess", this));
+            } else if ("cancel".equals(status)) {
+                doCleanCart = true;
+                error(getLocalizer().getString("orderErrorCancelled", this));
+            } else {
+                doCleanCart = false; // no payment so leave the cart to re-try
+                error(getLocalizer().getString("paymentWasFailed", this));
+            }
+        } else {
+            // Try to get info from the order
+            final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderNum);
+            if (customerOrder != null) {
+                if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(customerOrder.getOrderStatus())
+                        || CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(customerOrder.getOrderStatus())) {
+                    doCleanCart = true;
+                    error(getLocalizer().getString("orderErrorCancelled", this));
+                } else {
+                    // Could be paid or pending callback, so just display success
+                    doCleanCart = true;
+                    info(getLocalizer().getString("orderSuccess", this));
+                }
+            } else {
+                doCleanCart = false; // no order for cart so don't clean
+                error(getLocalizer().getString("orderErrorNotFound", this));
+            }
+        }
+
+        if (doCleanCart) {
+            cleanCart();
+        }
+
+        super.onBeforeRender();
 
         persistCartIfNecessary();
     }

@@ -95,7 +95,7 @@ public class CancelNewOrderWithRefundOrderEventHandlerImplTest extends AbstractE
         }
 
         // Need to get fresh order from DB after rollback, same as in handler filter
-        return orderService.findByGuid(customerOrder.getGuid());
+        return orderService.findByReference(customerOrder.getGuid());
 
     }
 

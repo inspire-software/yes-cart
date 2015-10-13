@@ -42,13 +42,24 @@ import java.util.Set;
  */
 public interface CheckoutServiceFacade {
 
+    /**
+     * Find order by reference (cart guid or order number).
+     *
+     * @param reference reference
+     *
+     * @return customer order
+     */
+    CustomerOrder findByReference(String reference);
 
     /**
      * Find created order by cart guid.
      *
      * @param shoppingCartGuid shopping cart  guid
      * @return created order.
+     *
+     * @deprecated use {@link #findByReference(String)}
      */
+    @Deprecated
     CustomerOrder findByGuid(String shoppingCartGuid);
 
     /**

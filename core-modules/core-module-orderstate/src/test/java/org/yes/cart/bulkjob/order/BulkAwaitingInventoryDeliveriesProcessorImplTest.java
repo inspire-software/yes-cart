@@ -93,7 +93,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
 
         customerOrderService.update(order);
 
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
@@ -102,7 +102,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         //No changes
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
@@ -113,7 +113,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         //wait for inventory
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
@@ -135,7 +135,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImplTest extends BaseCoreDB
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         // inventory allocated
-        order = customerOrderService.findByGuid(order.getCartGuid());
+        order = customerOrderService.findByReference(order.getCartGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
         for (CustomerOrderDelivery delivery: order.getDelivery()) {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_ALLOCATED, delivery.getDeliveryStatus());

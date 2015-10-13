@@ -166,7 +166,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                         null,
                         Collections.EMPTY_MAP)));
         customerOrderService.update(order);
-        order = customerOrderService.findByGuid(shoppingCart.getGuid());
+        order = customerOrderService.findByReference(shoppingCart.getGuid());
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, order.getOrderStatus());
 
         final List<Long> expected = new ArrayList<Long>();

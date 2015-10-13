@@ -106,7 +106,7 @@ public class AbstractRobokassaPaymentGatewayImplTest {
             }
 
             @Override
-            public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderGuid, final Payment payment) {
+            public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderReference, final Payment payment) {
                 return null;
             }
 
