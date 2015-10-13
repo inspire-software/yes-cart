@@ -243,6 +243,59 @@ public class ShippingServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testGetCartItemsTotalFreeNoTaxInfo() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping = context.mock(CartItem.class, "shipping");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("1", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
 
 
     @Test
@@ -381,6 +434,74 @@ public class ShippingServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxExclInfoGross() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+        final CartItem shipping3 = context.mock(CartItem.class, "shipping3");
+        final CartItem shipping4 = context.mock(CartItem.class, "shipping4");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2, shipping3, shipping4)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping3).getTaxCode(); will(returnValue("")); // no tax
+            allowing(shipping3).getTaxRate(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shipping4).getTaxCode(); will(returnValue("GROSS-2"));
+            allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("4", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
 
     @Test
     public void testGetCartShippingTotalWithTaxExclInfoGrossSameTax() throws Exception {
@@ -503,6 +624,69 @@ public class ShippingServiceFacadeImplTest {
         assertEquals("20.00", model.getPriceTaxRate().toPlainString());
         assertTrue(model.isPriceTaxExclusive());
         assertEquals("16.00", model.getPriceTax().toPlainString());
+
+        context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxExclInfoGrossSameTax() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("2", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
 
         context.assertIsSatisfied();
 
@@ -646,6 +830,75 @@ public class ShippingServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxExclInfoNet() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+        final CartItem shipping3 = context.mock(CartItem.class, "shipping3");
+        final CartItem shipping4 = context.mock(CartItem.class, "shipping4");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2, shipping3, shipping4)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping3).getTaxCode(); will(returnValue("")); // no tax
+            allowing(shipping3).getTaxRate(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shipping4).getTaxCode(); will(returnValue("GROSS-2"));
+            allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("4", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+
+        context.assertIsSatisfied();
+
+    }
+
 
 
     @Test
@@ -770,6 +1023,68 @@ public class ShippingServiceFacadeImplTest {
         assertEquals("20.00", model.getPriceTaxRate().toPlainString());
         assertTrue(model.isPriceTaxExclusive());
         assertEquals("16.00", model.getPriceTax().toPlainString());
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxExclInfoNetSameTax() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("GROSS"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("2", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
 
         context.assertIsSatisfied();
 
@@ -913,6 +1228,74 @@ public class ShippingServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxInclInfoGross() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+        final CartItem shipping3 = context.mock(CartItem.class, "shipping3");
+        final CartItem shipping4 = context.mock(CartItem.class, "shipping4");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2, shipping3, shipping4)));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping3).getTaxCode(); will(returnValue("")); // no tax
+            allowing(shipping3).getTaxRate(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shipping4).getTaxCode(); will(returnValue("NET-2"));
+            allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("4", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
 
     @Test
     public void testGetCartShippingTotalWithTaxInclInfoGrossSameTax() throws Exception {
@@ -1040,6 +1423,68 @@ public class ShippingServiceFacadeImplTest {
 
     }
 
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxInclInfoGrossSameTax() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2)));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("2", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
 
 
     @Test
@@ -1109,6 +1554,75 @@ public class ShippingServiceFacadeImplTest {
         context.assertIsSatisfied();
 
     }
+
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxInclInfoNet() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+        final CartItem shipping3 = context.mock(CartItem.class, "shipping3");
+        final CartItem shipping4 = context.mock(CartItem.class, "shipping4");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2, shipping3, shipping4)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping3).getTaxCode(); will(returnValue("")); // no tax
+            allowing(shipping3).getTaxRate(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shipping4).getTaxCode(); will(returnValue("NET-2"));
+            allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("4", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
 
     @Test
     public void testGetCartShippingTotalWithSaleWithTaxInclInfoNet() throws Exception {
@@ -1243,6 +1757,7 @@ public class ShippingServiceFacadeImplTest {
     }
 
 
+
     @Test
     public void testGetCartShippingTotalWithSaleWithTaxInclInfoNetSameTax() throws Exception {
 
@@ -1306,5 +1821,66 @@ public class ShippingServiceFacadeImplTest {
     }
 
 
+    @Test
+    public void testGetCartShippingTotalFreeShipWithTaxInclInfoNetSameTax() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final Total cartTotal = context.mock(Total.class, "cartTotal");
+
+        final Shop shop = context.mock(Shop.class, "shop");
+
+        final CartItem shipping1 = context.mock(CartItem.class, "shipping1");
+        final CartItem shipping2 = context.mock(CartItem.class, "shipping2");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(cart).getShippingList(); will(returnValue(Arrays.asList(shipping1, shipping2)));
+            allowing(cart).getTotal(); will(returnValue(cartTotal));
+            allowing(cartTotal).getDeliveryListCost(); will(returnValue(new BigDecimal("100.00")));
+            allowing(cartTotal).getDeliveryCost(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryCostAmount(); will(returnValue(new BigDecimal("0.00")));
+            allowing(cartTotal).getDeliveryTax(); will(returnValue(new BigDecimal("0.00")));
+            allowing(shopService).getById(234L); will(returnValue(shop));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
+            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(shipping1).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(shipping2).getTaxCode(); will(returnValue("NET"));
+            allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+        }});
+
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+
+
+        final ProductPriceModel model = facade.getCartShippingTotal(cart);
+
+        assertNotNull(model);
+
+        assertEquals(ShippingServiceFacadeImpl.CART_SHIPPING_TOTAL_REF, model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertEquals("2", model.getQuantity().toPlainString());
+
+        assertEquals("100.00", model.getRegularPrice().toPlainString());
+        assertEquals("0.00", model.getSalePrice().toPlainString());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
 
 }

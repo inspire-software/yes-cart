@@ -614,7 +614,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 }
 
                 final BigDecimal taxRate;
-                if (rates.size() > 1) {
+                if (MoneyUtils.isFirstBiggerThanSecond(totalTax, Total.ZERO) && rates.size() > 1) {
                     // mixed rates in cart we use average with round up so that tax is not reduced by rounding
                     taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
                 } else {

@@ -132,6 +132,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             final BigDecimal costInclTax = cart.getTotal().getDeliveryCostAmount();
 
             if (MoneyUtils.isFirstBiggerThanSecond(costInclTax, Total.ZERO)) {
+
                 final BigDecimal totalTax = cart.getTotal().getDeliveryTax();
                 final BigDecimal net = costInclTax.subtract(totalTax);
                 final BigDecimal gross = costInclTax;
@@ -148,7 +149,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 }
 
                 final BigDecimal taxRate;
-                if (rates.size() > 1) {
+                if (MoneyUtils.isFirstBiggerThanSecond(totalTax, Total.ZERO) && rates.size() > 1) {
                     // mixed rates in cart we use average with round up so that tax is not reduced by rounding
                     taxRate = totalTax.multiply(MoneyUtils.HUNDRED).divide(net, Constants.DEFAULT_SCALE, BigDecimal.ROUND_UP);
                 } else {
@@ -197,8 +198,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
 
         // standard "as is" prices
 
-        if (MoneyUtils.isFirstBiggerThanSecond(sale, Total.ZERO)
-                && MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
+        if (MoneyUtils.isFirstBiggerThanSecond(list, sale)) {
             // if we have discounts
             return new ProductPriceModelImpl(
                     CART_SHIPPING_TOTAL_REF,
