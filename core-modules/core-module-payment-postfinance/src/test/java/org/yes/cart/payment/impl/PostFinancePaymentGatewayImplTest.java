@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: denispavlov
@@ -204,6 +205,7 @@ public class PostFinancePaymentGatewayImplTest {
         }};
 
         assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
+        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
 
         final Map<String, String> sorted = new TreeMap<String, String>();
         gatewayImpl.copyHttpParamsAndRemoveSignature(callBackresult, sorted);

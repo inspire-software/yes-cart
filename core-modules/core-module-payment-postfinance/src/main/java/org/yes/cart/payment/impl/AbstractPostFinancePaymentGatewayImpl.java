@@ -6,6 +6,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 import org.yes.cart.payment.service.PaymentGatewayParameterService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -156,6 +157,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
             final MessageDigest digest = MessageDigest.getInstance("SHA-1");
             return new String(Hex.encodeHex(digest.digest(all.toString().getBytes(charset)))).toUpperCase();
         } catch (NoSuchAlgorithmException e) {
+            ShopCodeContext.getLog(this).error("SHA-1 not available", e);
             return "SHA-1 not available";
         }
 
