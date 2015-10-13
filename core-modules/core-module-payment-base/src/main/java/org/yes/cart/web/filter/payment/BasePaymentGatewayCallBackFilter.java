@@ -47,9 +47,9 @@ import java.util.regex.Pattern;
  */
 public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements Filter {
 
-    private final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
-    private final ShopService shopService;
-    private final IPResolver ipResolver;
+    protected final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade;
+    protected final ShopService shopService;
+    protected final IPResolver ipResolver;
 
     // Use Weak map to prevent memory leaks, Shop is kept in cache, so once it expires the pattern will expire too.
     private final Map<Shop, Pattern> patternCache = new WeakHashMap<Shop, Pattern>();
@@ -110,8 +110,8 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
         } else {
 
             if (log.isWarnEnabled()) {
-                log.warn("Received payment gateway callback from unauthorised IP",
-                        HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+                log.warn("Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
+                log.warn(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
             }
             // Send forbidden to notify PG that this is a security issue and not error of any kind
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);

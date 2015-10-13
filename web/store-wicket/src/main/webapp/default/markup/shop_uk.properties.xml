@@ -389,9 +389,6 @@
     <entry key="resultPageTitle">Результат оплати</entry>
     <entry key="paymentWasFailed">Оплата не відбулася</entry>
     <entry key="paymentResult">Результат оплати</entry>
-
-    <!-- LiqPayReturnUrlPage -->
-    <entry key="liqPayPageTitle">Результат платежу</entry>
     <entry key="orderErrorCancelled">Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</entry>
     <entry key="orderErrorNotFound">Замовлення не знайдене</entry>
     <entry key="orderSuccess">Замовлення успішно оформлене</entry>

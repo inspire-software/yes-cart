@@ -16,26 +16,61 @@
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<wicket:head>
 
+<wicket:head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
+    <meta name="robots" content="noindex" />
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../../../js/html5.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="../../../../../style/fonts.css"/>
+        <link rel="stylesheet" href="../../../../../style/yc.css"/>
+
+        <script type="text/javascript" src="../../../../../../../js/yc.js"></script>
+    </wicket:link>
+    <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
+    <wicket:container wicket:id="headerInclude">
+        [Shop specific header_include]
+    </wicket:container>
     <title wicket:id="pageTitle">[page title]</title>
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
     <meta wicket:id="created" name="date" content=""/>
-    <meta name="robots" content="noindex" />
 
-    <script wicket:id="redirectJavaScript" type="text/javascript">
-        [redirectJs]
-    </script>
-    <noscript>
-        <meta wicket:id="metaRefresh" http-equiv="refresh" content=""> <!-- Without JavaScript -->  </meta>
-    </noscript>
 </wicket:head>
+
 <body>
-<a wicket:id="redirectLink">
-    <span>
-        <wicket:message key="paymentWasOk">[payment was ok , redirect to home page]</wicket:message>
-    </span>
-</a>
+
+    <wicket:container wicket:id="header">
+        [header]
+    </wicket:container>
+
+    <div class="container">
+
+        <div class="col-xs-12">
+            <h2><wicket:message key="orderPayment">[Order payment]</wicket:message></h2>
+        </div>
+
+        <div class="col-xs-12" wicket:id="feedback">[feedback panel]</div>
+
+        <div class="col-xs-12">
+            <wicket:link>
+                <a href="HomePage.html" class="btn btn-primary" rel="bookmark">
+                    <wicket:message key="home">[Home Page]</wicket:message>
+                </a>
+            </wicket:link>
+        </div>
+
+    </div>
+
+    <span wicket:id="footer">[footer]</span>
+
 </body>
 </html>

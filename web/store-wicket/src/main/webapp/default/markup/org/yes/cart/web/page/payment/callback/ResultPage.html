@@ -55,25 +55,17 @@
     <div class="container">
 
         <div class="col-xs-12">
-                <h2>
-                    <wicket:message key="resultPageTitle">[page title]</wicket:message>
-                </h2>
+            <h2><wicket:message key="orderPayment">[Order payment]</wicket:message></h2>
         </div>
 
-        <div class="col-xs-12">
-            <p>
-                <span wicket:id="paymentResult">[payment was ok , redirect to home page]</span>
-            </p>
-        </div>
+        <div class="col-xs-12" wicket:id="feedback">[feedback panel]</div>
 
         <div class="col-xs-12">
-            <p>
-                <wicket:link>
-                    <a href="HomePage.html" class="btn btn-primary" rel="bookmark">
-                        <wicket:message key="home">[Home Page]</wicket:message>
-                    </a>
-                </wicket:link>
-            </p>
+            <wicket:link>
+                <a href="HomePage.html" class="btn btn-primary" rel="bookmark">
+                    <wicket:message key="home">[Home Page]</wicket:message>
+                </a>
+            </wicket:link>
         </div>
 
     </div>

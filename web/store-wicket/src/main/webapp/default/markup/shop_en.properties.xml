@@ -391,9 +391,6 @@
     <entry key="resultPageTitle">Payment result</entry>
     <entry key="paymentWasFailed">Payment was failed</entry>
     <entry key="paymentResult">Payment result</entry>
-
-    <!-- LiqPayReturnUrlPage -->
-    <entry key="liqPayPageTitle">Payment result</entry>
     <entry key="orderErrorCancelled">Order was cancelled. This maybe due to payment failure or insufficient stock</entry>
     <entry key="orderErrorNotFound">Order not found</entry>
     <entry key="orderSuccess">Order successfully placed</entry>

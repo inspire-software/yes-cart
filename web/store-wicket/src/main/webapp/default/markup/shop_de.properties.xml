@@ -389,9 +389,6 @@
     <entry key="resultPageTitle">Abschluss der Zahlung</entry>
     <entry key="paymentWasFailed">Fehler bei der Zahlung</entry>
     <entry key="paymentResult">Resultat der Zahlung</entry>
-
-    <!-- LiqPayReturnUrlPage -->
-    <entry key="liqPayPageTitle">Abschluss der Zahlung</entry>
     <entry key="orderErrorCancelled">Die Bestellung wurde annuliert oder Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</entry>
     <entry key="orderErrorNotFound">Bestellung nicht gefunden</entry>
     <entry key="orderSuccess">Bestellung erfolgreich getätigt</entry>

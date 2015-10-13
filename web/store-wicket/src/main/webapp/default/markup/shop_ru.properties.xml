@@ -392,9 +392,6 @@
     <entry key="resultPageTitle">Результат оплаты</entry>
     <entry key="paymentWasFailed">Оплата не состоялась</entry>
     <entry key="paymentResult">Результат оплаты</entry>
-
-    <!-- LiqPayReturnUrlPage -->
-    <entry key="liqPayPageTitle">Результат платежа</entry>
     <entry key="orderErrorCancelled">Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</entry>
     <entry key="orderErrorNotFound">Заказ не найден</entry>
     <entry key="orderSuccess">Заказ успешно оформлен</entry>
