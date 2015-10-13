@@ -197,8 +197,35 @@
         </profile>
 
         <profile>
+            <id>buildDemo</id>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derby</artifactId>
+                    <version>10.8.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derbyclient</artifactId>
+                    <version>10.8.1.2</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>buildInstaller</id>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.derby</groupId>
