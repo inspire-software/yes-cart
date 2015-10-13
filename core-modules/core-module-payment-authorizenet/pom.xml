@@ -140,8 +140,8 @@
         <!-- ANET BEGIN -->
         <dependency>
             <groupId>net.authorize</groupId>
-            <artifactId>authorize-client</artifactId>
-            <version>1.4.2</version>
+            <artifactId>anet-java-sdk</artifactId>
+            <version>1.8.5</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

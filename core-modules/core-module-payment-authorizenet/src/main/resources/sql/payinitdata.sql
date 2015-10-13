@@ -432,14 +432,16 @@ VALUES (11253, 'authorizeNetSimPaymentGateway',
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11254, 'authorizeNetSimPaymentGateway',
 'RELAY_RESPONSE_URL',
-'http://testdevshop.yes-cart.org:8080/yes-shop/response/page'
-, 'Relay response url', 'Releay response url. SIM only');
+'http://@domain@/yes-shop/anetsimresult'
+, 'Relay response url', 'Relay response url. SIM only.
+Must be configured in Authorize.Net > Settings > Transaction Format Settings > Transaction Response Settings > Response/Receipt URL');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11255, 'authorizeNetSimPaymentGateway',
 'ORDER_RECEIPT_URL',
-'http://@domain@/yes-shop/receipt/page'
-, 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only');
+'http://@domain@/yes-shop/paymentresult/hint/ok'
+, 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only.
+Must be configured in Authorize.Net > Settings > Transaction Format Settings > Transaction Response Settings > Response/Receipt URL');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11256, 'authorizeNetSimPaymentGateway',
@@ -449,4 +451,108 @@ VALUES (11256, 'authorizeNetSimPaymentGateway',
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11257, 'authorizeNetSimPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11258, 'authorizeNetSimPaymentGateway',
+'CANCEL_URL',
+'http://@domain@/yes-shop/paymentresult/hint/cancel'
+, 'Payment form: SIM/DPM order cancel url. SIM only', 'Payment form: SIM/DPM order cancel url. SIM only');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11259, 'authorizeNetSimPaymentGateway',
+'RETURN_POLICY_URL',
+'http://@domain@/yes-shop/returnspolicy'
+, 'Payment form: SIM/DPM returns policy url. SIM only', 'Payment form: SIM/DPM returns policy url. SIM only');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11260, 'authorizeNetSimPaymentGateway',
+'STYLE_HEADER_HTML',
+''
+, 'Payment form style: The hosted payment form header.', 'Payment form style: The hosted payment form header.
+The text submitted in this field is displayed as the header on the hosted payment form.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11261, 'authorizeNetSimPaymentGateway',
+'STYLE_HEADER2_HTML',
+''
+, 'Payment form style: The hosted payment form header2.', 'Payment form style: The hosted payment form header2.
+Same as header except that it appears at the very top of the page, above the box. It is an API parameter only; it is not available as a setting in the Merchant Interface.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11262, 'authorizeNetSimPaymentGateway',
+'STYLE_FOOTER_HTML',
+''
+, 'Payment form style: The hosted payment form footer.', 'Payment form style: The hosted payment form footer.
+The text submitted in this field is displayed as the header on the hosted payment form.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11263, 'authorizeNetSimPaymentGateway',
+'STYLE_FOOTER2_HTML',
+''
+, 'Payment form style: The hosted payment form footer2.', 'Payment form style: The hosted payment form footer2.
+Same as footer, except that it appears at the very top of the page, above the box. It is an API parameter only; it is not available as a setting in the Merchant Interface.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11264, 'authorizeNetSimPaymentGateway',
+'STYLE_BGCOLOR',
+''
+, 'Payment form style: The background color.', 'Payment form style: The background color.
+The value in this field sets the background color for the hosted payment form and receipt page.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11265, 'authorizeNetSimPaymentGateway',
+'STYLE_LINKCOLOR',
+''
+, 'Payment form style: The text color.', 'Payment form style: The text color.
+The value in this field sets the color of the text on the hosted payment form and the receipt page.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11266, 'authorizeNetSimPaymentGateway',
+'STYLE_LOGOURL',
+''
+, 'Payment form style: The URL of the merchant’s logo.', 'Payment form style: The URL of the merchant’s logo.
+The image referenced by this URL is displayed in the header of the hosted payment form and the receipt page.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11267, 'authorizeNetSimPaymentGateway',
+'STYLE_BGURL',
+''
+, 'Payment form style: The URL of the merchant’s background image.', 'Payment form style: The URL of the merchant’s background image.
+The image referenced by this URL is displayed as the background on the hosted payment form and the receipt page.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11268, 'authorizeNetSimPaymentGateway',
+'STYLE_FONTFAMILY',
+''
+, 'Payment form style: Default font family.', 'Payment form style: Default font family for the Hosted Payment Form.
+Follows the CSS ‘font-family’ standard.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11268, 'authorizeNetSimPaymentGateway',
+'STYLE_FONTSIZE',
+''
+, 'Payment form style: Default font size.', 'Payment form style: Default font size for the Hosted Payment Form.
+Expressed in points, suffixed with “px.”');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11269, 'authorizeNetSimPaymentGateway',
+'STYLE_SECTION1COLOR',
+''
+, 'Payment form style: The text color for the header.', 'Payment form style: The text color for the header.
+Any valid HTML color name or color hex code.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11270, 'authorizeNetSimPaymentGateway',
+'STYLE_SECTION1FONTFAMILY',
+''
+, 'Payment form style: Font family for the header.', 'Payment form style: Font family for the header.
+Follows the CSS ‘font-family’ standard.');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (11271, 'authorizeNetSimPaymentGateway',
+'STYLE_SECTION1FONTSIZE',
+''
+, 'Payment form style: Font size for the header .', 'Payment form style: Font size for the header.
+Expressed in points, suffixed with “px.”');
+
 

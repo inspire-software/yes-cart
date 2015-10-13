@@ -50,42 +50,6 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
 
 
     /**
-     * merchant defined MD5 Hash key
-     */
-    protected static final String AN_MD5_HASH_KEY = "MD5_HASH_KEY";
-
-    /**
-     * Merchant host
-     */
-    //protected static final String AN_MERCHANT_HOST = "MERCHANT_HOST";
-
-    /**
-     * SIM/DPM relay response URL
-     */
-    protected static final String AN_RELAY_RESPONSE_URL = "RELAY_RESPONSE_URL";
-    /**
-     * SIM/DPM order receipt URL
-     */
-    protected static final String AN_ORDER_RECEIPT_URL = "ORDER_RECEIPT_URL";
-
-    /**
-     * SIM post URL
-     */
-    protected static final String AN_POST_URL = "POST_URL";
-
-    /**
-     * SIM test request. Used on production env, if need to send test request.
-     */
-    protected static final String AN_TEST_REQUEST = "TEST_REQUEST";
-
-    /**
-     * Description at Sim payment form.
-     */
-    protected static final String AN_DESCRIPTION = "DESCRIPTION";
-
-
-
-    /**
      * Get the Environment for merchant.
      *
      * @return {@link net.authorize.Environment}
@@ -94,12 +58,8 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
         final String envName = getParameterValue(AN_MERCHANT_ENVIRONMENT);
         if ("SANDBOX".equalsIgnoreCase(envName)) {
             return net.authorize.Environment.SANDBOX;
-        } else if ("SANDBOX_TESTMODE".equalsIgnoreCase(envName)) {
-            return net.authorize.Environment.SANDBOX_TESTMODE;
         } else if ("PRODUCTION".equalsIgnoreCase(envName)) {
             return net.authorize.Environment.PRODUCTION;
-        } else if ("PRODUCTION_TESTMODE".equalsIgnoreCase(envName)) {
-            return net.authorize.Environment.PRODUCTION_TESTMODE;
         }
         return net.authorize.Environment.CUSTOM;
     }

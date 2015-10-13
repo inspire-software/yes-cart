@@ -177,7 +177,7 @@ public class AuthorizeNetAimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         );
         transaction.setCreditCard(createAnetCreditCard(payment)); //need 4 last digits from credit card
         transaction.setTransactionId(payment.getTransactionReferenceId()); // prev auth
-
+        transaction.setAuthorizationCode(payment.getTransactionAuthorizationCode());
 
         return runTransaction(merchant, transaction, payment);
 

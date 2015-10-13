@@ -62,9 +62,6 @@ add_mvn_extra_dep() {
 
     cd $YC_HOME/env/setup/lib3rdparty
 
-    LIBFILE=$YC_HOME/env/setup/lib3rdparty/authorize.net/anet-java-sdk-1.4.2.jar
-    $MVN install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=$LIBFILE
-
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/cybersource/cybssecurity.jar
     $MVN install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
 

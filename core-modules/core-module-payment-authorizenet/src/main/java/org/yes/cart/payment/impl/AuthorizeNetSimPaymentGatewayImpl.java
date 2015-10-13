@@ -349,27 +349,27 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
 
         final PaymentAddress address = payment.getBillingAddress();
         if (address != null) {
-            stringBuilder.append(getHiddenField("x_first_name", address.getFirstname()));
-            stringBuilder.append(getHiddenField("x_last_name", address.getLastname()));
-            stringBuilder.append(getHiddenField("x_address", getAddressLines(address)));
-            stringBuilder.append(getHiddenField("x_city", address.getCity()));
-            stringBuilder.append(getHiddenField("x_state", address.getStateCode()));
-            stringBuilder.append(getHiddenField("x_zip", address.getPostcode()));
-            stringBuilder.append(getHiddenField("x_country", address.getCountryCode()));
-            stringBuilder.append(getHiddenField("x_phone", address.getPhone1()));
-            stringBuilder.append(getHiddenField("x_email", payment.getBillingEmail()));
+            setValueIfNotNull(stringBuilder, "x_first_name", address.getFirstname());
+            setValueIfNotNull(stringBuilder, "x_last_name", address.getLastname());
+            setValueIfNotNull(stringBuilder, "x_address", getAddressLines(address));
+            setValueIfNotNull(stringBuilder, "x_city", address.getCity());
+            setValueIfNotNull(stringBuilder, "x_state", address.getStateCode());
+            setValueIfNotNull(stringBuilder, "x_zip", address.getPostcode());
+            setValueIfNotNull(stringBuilder, "x_country", address.getCountryCode());
+            setValueIfNotNull(stringBuilder, "x_phone", address.getPhone1());
+            setValueIfNotNull(stringBuilder, "x_email", payment.getBillingEmail());
         }
         stringBuilder.append(getHiddenField("x_cust_id", payment.getBillingEmail()));
 
         final PaymentAddress shipTo = payment.getShippingAddress();
         if (shipTo != null) {
-            stringBuilder.append(getHiddenField("x_ship_to_first_name", shipTo.getFirstname()));
-            stringBuilder.append(getHiddenField("x_ship_to_last_name", shipTo.getLastname()));
-            stringBuilder.append(getHiddenField("x_ship_to_address", getAddressLines(shipTo)));
-            stringBuilder.append(getHiddenField("x_ship_to_city", shipTo.getCity()));
-            stringBuilder.append(getHiddenField("x_ship_to_state", shipTo.getStateCode()));
-            stringBuilder.append(getHiddenField("x_ship_to_zip", shipTo.getPostcode()));
-            stringBuilder.append(getHiddenField("x_ship_to_country", shipTo.getCountryCode()));
+            setValueIfNotNull(stringBuilder, "x_ship_to_first_name", shipTo.getFirstname());
+            setValueIfNotNull(stringBuilder, "x_ship_to_last_name", shipTo.getLastname());
+            setValueIfNotNull(stringBuilder, "x_ship_to_address", getAddressLines(shipTo));
+            setValueIfNotNull(stringBuilder, "x_ship_to_city", shipTo.getCity());
+            setValueIfNotNull(stringBuilder, "x_ship_to_state", shipTo.getStateCode());
+            setValueIfNotNull(stringBuilder, "x_ship_to_zip", shipTo.getPostcode());
+            setValueIfNotNull(stringBuilder, "x_ship_to_country", shipTo.getCountryCode());
         }
 
         //not mandatory parameters
@@ -424,6 +424,12 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
                     amountString,
                     currency
             );
+    }
+
+    private void setValueIfNotNull(final StringBuilder params, final String key, final String value) {
+        if (StringUtils.isNotBlank(value)) {
+            params.append(getHiddenField(key, value));
+        }
     }
 
     private void setParameterIfNotNull(final StringBuilder params, final String key, final String valueKey) {

@@ -170,9 +170,6 @@ rem Sub routines below this comment
 
     call cd %YC_HOME%\env\setup\lib3rdparty
 
-    set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\authorize.net\anet-java-sdk-1.4.2.jar
-    call %MVN% install:install-file -DgroupId=net.authorize -DartifactId=authorize-client -Dversion=1.4.2 -Dpackaging=jar -Dfile=%LIBFILE%
-
     set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\cybersource\cybssecurity.jar
     call %MVN% install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=%LIBFILE%
 

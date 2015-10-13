@@ -16,11 +16,20 @@
 
 package org.yes.cart.payment.impl;
 
+import net.authorize.sim.Fingerprint;
 import org.junit.Test;
+import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.payment.dto.PaymentAddress;
+import org.yes.cart.payment.dto.PaymentLine;
+import org.yes.cart.payment.dto.impl.PaymentAddressImpl;
+import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.payment.dto.impl.PaymentLineImpl;
 
 import java.math.BigDecimal;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -39,4 +48,258 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         assertEquals("<input type='hidden' name='qwerty' value='922337203685477.58'>\n",
                 gateway.getHiddenField("qwerty", new BigDecimal("922337203685477.58")));
     }
+
+
+    @Test
+    public void testGetHtmlForm() throws Exception {
+
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_POST_URL, "http://www.authorize.com/pay");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_CANCEL_URL, "http://mydomain.com/result/hint/cancel");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_RETURN_POLICY_URL, "http://mydomain.com/retunrpolicy");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_TEST_REQUEST, "FALSE");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "login1");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_TRANSACTION_KEY, "key1");
+
+        final Fingerprint[] fingerprint = new Fingerprint[1];
+
+        final AuthorizeNetSimPaymentGatewayImpl gatewayImpl = new AuthorizeNetSimPaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
+                }
+                return "";
+            }
+
+            @Override
+            protected Fingerprint getFingerprint(final String orderReference,
+                                                 final String apiLoginId,
+                                                 final String txKey,
+                                                 final String amountString,
+                                                 final String currency) {
+                if (fingerprint[0] == null) {
+                    fingerprint[0] = super.getFingerprint(orderReference, apiLoginId, txKey, amountString, currency);
+                }
+                return fingerprint[0];
+            }
+        };
+
+        String htmlFormPart = gatewayImpl.getHtmlForm(
+                "holder  name",
+                "en",
+                BigDecimal.TEN.setScale(2),
+                "USD",
+                "234-1324-1324-1324sdf-sdf",
+                createTestPayment(false)
+
+        );
+
+        assertEquals("<input type='hidden' name='x_login' value='login1'>\n" +
+                        "<input type='hidden' name='x_fp_sequence' value='" + fingerprint[0].getSequence() + "'>\n" +
+                        "<input type='hidden' name='x_fp_timestamp' value='" + fingerprint[0].getTimeStamp() + "'>\n" +
+                        "<input type='hidden' name='x_fp_hash' value='" + fingerprint[0].getFingerprintHash() + "'>\n" +
+                        "<input type='hidden' name='x_version' value='3.1'>\n" +
+                        "<input type='hidden' name='x_method' value='CC'>\n" +
+                        "<input type='hidden' name='x_type' value='AUTH_CAPTURE'>\n" +
+                        "<input type='hidden' name='x_amount' value='10.00'>\n" +
+                        "<input type='hidden' name='x_currency_code' value='USD'>\n" +
+                        "<input type='hidden' name='x_show_form' value='payment_form'>\n" +
+                        "<input type='hidden' name='x_test_request' value='FALSE'>\n" +
+                        "<input type='hidden' name='x_cust_id' value='bob@doe.com'>\n" +
+                        "<input type='hidden' name='x_invoice_num' value='234132413241324sdfsd'>\n" +
+                        "<input type='hidden' name='x_po_num' value='234-1324-1324-1324sdf-sdf'>\n" +
+                        "<input type='hidden' name='x_description' value='code2 x 1, bob@doe.com, 1234'>\n" +
+                        "<input type='hidden' name='x_cancel_url' value='http://mydomain.com/result/hint/cancel'>\n" +
+                        "<input type='hidden' name='x_return_policy_url' value='http://mydomain.com/retunrpolicy'>\n" +
+                        "<input type='hidden' name='orderGuid' value='234-1324-1324-1324sdf-sdf'>\n" +
+                        "<input type='hidden' name='x_return_policy_url' value='http://mydomain.com/retunrpolicy'>\n",
+                htmlFormPart);
+
+
+        htmlFormPart = gatewayImpl.getHtmlForm(
+                "holder  name",
+                "en",
+                BigDecimal.TEN.setScale(2),
+                "EUR",
+                "234-1324-1324-1324abc-abc",
+                createTestPayment(true)
+        );
+
+        assertEquals("<input type='hidden' name='x_login' value='login1'>\n" +
+                        "<input type='hidden' name='x_fp_sequence' value='" + fingerprint[0].getSequence() + "'>\n" +
+                        "<input type='hidden' name='x_fp_timestamp' value='" + fingerprint[0].getTimeStamp() + "'>\n" +
+                        "<input type='hidden' name='x_fp_hash' value='" + fingerprint[0].getFingerprintHash() + "'>\n" +
+                        "<input type='hidden' name='x_version' value='3.1'>\n" +
+                        "<input type='hidden' name='x_method' value='CC'>\n" +
+                        "<input type='hidden' name='x_type' value='AUTH_CAPTURE'>\n" +
+                        "<input type='hidden' name='x_amount' value='10.00'>\n" +
+                        "<input type='hidden' name='x_currency_code' value='EUR'>\n" +
+                        "<input type='hidden' name='x_show_form' value='payment_form'>\n" +
+                        "<input type='hidden' name='x_test_request' value='FALSE'>\n" +
+                        "<input type='hidden' name='x_address' value='123, In the middle of'>\n" +
+                        "<input type='hidden' name='x_city' value='Nowhere'>\n" +
+                        "<input type='hidden' name='x_state' value='NA'>\n" +
+                        "<input type='hidden' name='x_zip' value='NA1 NA1'>\n" +
+                        "<input type='hidden' name='x_country' value='NA'>\n" +
+                        "<input type='hidden' name='x_phone' value='123412341234'>\n" +
+                        "<input type='hidden' name='x_email' value='bob@doe.com'>\n" +
+                        "<input type='hidden' name='x_cust_id' value='bob@doe.com'>\n" +
+                        "<input type='hidden' name='x_ship_to_address' value='324, In the middle of'>\n" +
+                        "<input type='hidden' name='x_ship_to_city' value='Nowhere'>\n" +
+                        "<input type='hidden' name='x_ship_to_state' value='NA'>\n" +
+                        "<input type='hidden' name='x_ship_to_zip' value='NA2 NA2'>\n" +
+                        "<input type='hidden' name='x_ship_to_country' value='NA'>\n" +
+                        "<input type='hidden' name='x_invoice_num' value='234132413241324abcab'>\n" +
+                        "<input type='hidden' name='x_po_num' value='234-1324-1324-1324abc-abc'>\n" +
+                        "<input type='hidden' name='x_description' value='code2 x 1, bob@doe.com, 1234'>\n" +
+                        "<input type='hidden' name='x_cancel_url' value='http://mydomain.com/result/hint/cancel'>\n" +
+                        "<input type='hidden' name='x_return_policy_url' value='http://mydomain.com/retunrpolicy'>\n" +
+                        "<input type='hidden' name='orderGuid' value='234-1324-1324-1324abc-abc'>\n" +
+                        "<input type='hidden' name='x_return_policy_url' value='http://mydomain.com/retunrpolicy'>\n",
+                htmlFormPart);
+
+    }
+
+
+    private Payment createTestPayment(boolean withAddress) {
+
+        final List<PaymentLine> orderItems = new ArrayList<PaymentLine>() {{
+            add(new PaymentLineImpl("code2", "name2", BigDecimal.ONE, BigDecimal.TEN, BigDecimal.ZERO, false));
+        }};
+
+
+        final Payment payment = new PaymentImpl();
+
+        payment.setOrderNumber("1234");
+        payment.setOrderItems(orderItems);
+        payment.setOrderCurrency("USD");
+        payment.setOrderLocale("en");
+        payment.setBillingEmail("bob@doe.com");
+
+        if (withAddress) {
+            final PaymentAddress address = new PaymentAddressImpl();
+            address.setAddrline1("123");
+            address.setAddrline2("In the middle of");
+            address.setCity("Nowhere");
+            address.setStateCode("NA");
+            address.setCountryCode("NA");
+            address.setPostcode("NA1 NA1");
+            address.setPhone1("123412341234");
+            payment.setBillingAddress(address);
+            final PaymentAddress shipTo = new PaymentAddressImpl();
+            shipTo.setAddrline1("324");
+            shipTo.setAddrline2("In the middle of");
+            shipTo.setCity("Nowhere");
+            shipTo.setStateCode("NA");
+            shipTo.setCountryCode("NA");
+            shipTo.setPostcode("NA2 NA2");
+            shipTo.setPhone1("4324324324523");
+            payment.setShippingAddress(shipTo);
+        }
+
+        return payment;
+
+    }
+
+
+
+    @Test
+    public void testIsSuccess() {
+
+
+        testIsSuccessWithStatus("1", Payment.PAYMENT_STATUS_OK);
+        testIsSuccessWithStatus("2", Payment.PAYMENT_STATUS_FAILED);
+        testIsSuccessWithStatus("3", Payment.PAYMENT_STATUS_FAILED);
+        testIsSuccessWithStatus("4", Payment.PAYMENT_STATUS_PROCESSING);
+        testIsSuccessWithStatus("zxcvzxcvzxcv", Payment.PAYMENT_STATUS_FAILED);
+
+
+    }
+
+
+    private void testIsSuccessWithStatus(final String status, final String expectedStatus) {
+
+
+
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "Login1");
+
+        final AuthorizeNetSimPaymentGatewayImpl gatewayImpl = new AuthorizeNetSimPaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
+                }
+                return "";
+            }
+        };
+
+        Map<String, String> callBackresult = new HashMap<String, String>() {{
+
+            put("x_amount", "15.00");
+            put("x_trans_id", "32100123");
+            put("x_response_code", status);
+            put("x_MD5_Hash", "TESTINVALID");
+            put("orderGuid", "12");
+
+        }};
+
+        assertEquals(Payment.PAYMENT_STATUS_FAILED, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
+        assertNull(gatewayImpl.restoreOrderGuid(callBackresult));
+
+        final AuthorizeNetSimPaymentGatewayImpl gatewayImpl2 = new AuthorizeNetSimPaymentGatewayImpl() {
+            @Override
+            protected boolean isValid(final Map privateCallBackParameters) {
+                return true;
+            }
+        };
+
+        assertEquals(expectedStatus, gatewayImpl2.getExternalCallbackResult(callBackresult).getStatus());
+        assertEquals("12", gatewayImpl2.restoreOrderGuid(callBackresult));
+    }
+
+
+
+    @Test
+    public void testIsSuccessWithStatus2() {
+
+
+
+        final Map<String, String> params = new HashMap<String, String>();
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
+//        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "yescartauthorise1");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "5yaqwaA8Uk5X");
+
+        final AuthorizeNetSimPaymentGatewayImpl gatewayImpl = new AuthorizeNetSimPaymentGatewayImpl() {
+
+            @Override
+            public String getParameterValue(String valueLabel) {
+                if (params.containsKey(valueLabel)) {
+                    return params.get(valueLabel);
+                }
+                return "";
+            }
+        };
+
+        Map<String, String> callBackresult = new HashMap<String, String>() {{
+
+            put("x_amount", "1035.10");
+            put("x_trans_id", "2242023261");
+            put("x_response_code", "1");
+            put("x_MD5_Hash", "E7184C27CDCF2AF604AA50C2174C244C");
+            put("orderGuid", "151013162426-26");
+
+        }};
+
+
+        assertEquals(null, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
+        assertEquals("151013150221-25", gatewayImpl.restoreOrderGuid(callBackresult));
+    }
+
+
 }
