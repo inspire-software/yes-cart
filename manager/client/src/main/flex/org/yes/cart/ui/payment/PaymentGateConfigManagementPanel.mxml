@@ -153,6 +153,7 @@
                                                         DisplayObject(FlexGlobals.topLevelApplication), clz, true));
                                                 popUp.windowTitle = data.name;
                                                 popUp.value = data.value;
+                                                popUp.valueTypeName = 'Any'; // Allow blanks
                                                 popUp.setInformation(data.description);
 
                                                 if (clz == SimpleTextDialog)  {   //not localizable

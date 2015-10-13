@@ -62,6 +62,7 @@
         private var _windowTitle:String;
         private var _code:String;
         private var _attributeGroup:String;
+        private var _allowBlank:Boolean;
 
 
         private function init():void {
@@ -81,20 +82,20 @@
             var _valType:String = _valueTypeName;
 
             /*
-                The following types are OOTB provided in initial.sql
+             The following types are OOTB provided in initial.sql
 
-                    String              - .
-                    URI                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
-                    URL                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
-                    Image               - handled by ImageDialog.mxml
-                    CommaSeparatedList  - handled by SimpleTextAreaDialog.mxml
-                    Float               - ^(([\-][0-9]+)|([0-9]*))[\.]?[0-9]+$
-                    Integer             - ^[\-]?[0-9]+$
-                    Phone               - ^[\+]?[\(\)0-9\- ]+$
-                    Boolean             - handled by SimpleBooleanDialog.mxml
-                    Date                - ^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$
-                    Email               - ^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$
-                    HTML                - handled by HTMLEditorDialog.mxml
+             String              - .
+             URI                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+             URL                 - . (no validation as we may have relative urls and complex use of numbers and letters as well as parameters)
+             Image               - handled by ImageDialog.mxml
+             CommaSeparatedList  - handled by SimpleTextAreaDialog.mxml
+             Float               - ^(([\-][0-9]+)|([0-9]*))[\.]?[0-9]+$
+             Integer             - ^[\-]?[0-9]+$
+             Phone               - ^[\+]?[\(\)0-9\- ]+$
+             Boolean             - handled by SimpleBooleanDialog.mxml
+             Date                - ^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$
+             Email               - ^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$
+             HTML                - handled by HTMLEditorDialog.mxml
 
              */
 
@@ -109,6 +110,8 @@
                     validationRegExp = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$';
                 } else if (_valType.indexOf('Date') > -1) {
                     validationRegExp = '^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$';
+                } else if (_valType == 'Any') {
+                    _allowBlank = true;
                 }
             }
         }
@@ -187,7 +190,12 @@
         }
 
         private function onInputChange(event:Event):void {
-            saveEnabled = validator.validate().type == ValidationResultEvent.VALID;
+            if (_allowBlank && (valueTextInput.text == null || valueTextInput.text == '')) {
+                saveEnabled = true;
+                valueTextInput.errorString = '';
+            } else {
+                saveEnabled = validator.validate().type == ValidationResultEvent.VALID;
+            }
         }
         ]]>
     </mx:Script>
