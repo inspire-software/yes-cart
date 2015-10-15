@@ -439,7 +439,7 @@ Must be configured in Authorize.Net > Settings > Transaction Format Settings > T
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11255, 'authorizeNetSimPaymentGateway',
 'ORDER_RECEIPT_URL',
-'http://@domain@/yes-shop/paymentresult/hint/ok'
+'http://@domain@/yes-shop/paymentresult?hint=ok'
 , 'SIM/DPM order receipt url', 'SIM/DPM order receipt url. SIM only.
 Must be configured in Authorize.Net > Settings > Transaction Format Settings > Transaction Response Settings > Response/Receipt URL');
 
@@ -455,7 +455,7 @@ VALUES (11257, 'authorizeNetSimPaymentGateway', 'priority', '100', 'Gateway prio
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (11258, 'authorizeNetSimPaymentGateway',
 'CANCEL_URL',
-'http://@domain@/yes-shop/paymentresult/hint/cancel'
+'http://@domain@/yes-shop/paymentresult?hint=cancel'
 , 'Payment form: SIM/DPM order cancel url. SIM only', 'Payment form: SIM/DPM order cancel url. SIM only');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)

@@ -158,7 +158,6 @@
                 <value>/ajaxatb</value>
                 <value>/ajaxwl</value>
                 <value>/cart</value>
-                <value>/paymentresult</value>
             </list>
         </constructor-arg>
     </bean>
