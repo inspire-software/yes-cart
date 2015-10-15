@@ -106,7 +106,6 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final HttpServletRequest httpServletRequest = wicketUtil.getHttpServletRequest();
 
-        log.error(HttpUtil.dumpRequest(httpServletRequest));
         if (log.isDebugEnabled()) {
             log.debug(HttpUtil.dumpRequest(httpServletRequest));
         }
