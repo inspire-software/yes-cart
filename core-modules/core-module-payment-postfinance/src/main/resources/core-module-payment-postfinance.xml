@@ -38,12 +38,21 @@
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
+    <bean id="postFinanceManualPaymentGateway" class="org.yes.cart.payment.impl.PostFinanceManualPaymentGatewayImpl" scope="prototype">
+        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
+    </bean>
 
 
     <bean id="postFinancePaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="postFinancePaymentGatewayLabel"/>
         <property name="url" value="postFinancePaymentGateway"/>
-        <property name="description" value="PostFinance payment pateway"/>
+        <property name="description" value="PostFinance payment gateway"/>
+    </bean>
+
+    <bean id="postFinanceManualPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="postFinanceManualPaymentGatewayLabel"/>
+        <property name="url" value="postFinanceManualPaymentGateway"/>
+        <property name="description" value="PostFinance payment gateway (Manual Capture)"/>
     </bean>
 
     <bean id="postFinancePaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
@@ -57,6 +66,7 @@
         <property name="gateways">
             <map>
                 <entry key="postFinancePaymentGateway" value-ref="postFinancePaymentGatewayDescriptor"/>
+                <entry key="postFinanceManualPaymentGateway" value-ref="postFinanceManualPaymentGatewayDescriptor"/>
             </map>
         </property>
         <property name="paymentModulesManager" ref="paymentModulesManager"/>
@@ -65,6 +75,14 @@
     <!-- ##### WEB CALLBACKS ################################################################## -->
 
     <bean id="postFinanceCheckoutFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="postFinanceManualCheckoutFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
         <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2">

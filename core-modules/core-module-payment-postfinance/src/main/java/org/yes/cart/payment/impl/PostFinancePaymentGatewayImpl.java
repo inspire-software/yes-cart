@@ -275,7 +275,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         // NOTE: for now we shall support only SAL (AUTH_CAPTURE) because PostFinance does not have CAPTURE API and merchants
         //       need to login to their system to CAPTURE payments, which is a bit inconvenient and does nothave integration
         //       with YC.
-        params.put("OPERATION", "SAL");
+        params.put("OPERATION", getExternalFormOperation());
 
         // 11. optional extra login detail field: see User field
         setValueIfNotNull(params, "USERID", payment.getBillingEmail());
@@ -297,6 +297,17 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
         return form.toString();
 
+    }
+
+    /**
+     * Supported operations are:
+     * SAL: AUTH_CAPTURE
+     * RES: AUTH (Capture is configured in PostFinance and thus only manual marker should be supported in YC)
+     *
+     * @return operation
+     */
+    protected String getExternalFormOperation() {
+        return "SAL";
     }
 
     private void setValueIfNotNull(final Map<String, String> params, final String key, final String value) {
@@ -348,6 +359,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         stringBuilder.append(payment.getBillingEmail());
         stringBuilder.append(", ");
         stringBuilder.append(payment.getOrderNumber());
+        if (stringBuilder.length() > 100) {
+            // Only 100 chars allowed
+            return stringBuilder.substring(0, 100).toString();
+        }
         return stringBuilder.toString();
     }
 
