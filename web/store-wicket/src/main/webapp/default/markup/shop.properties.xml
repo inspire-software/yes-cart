@@ -250,7 +250,9 @@
     <entry key="os.waiting.payment">Awaiting payment</entry>
     <entry key="os.in.progress">In progress</entry>
     <entry key="os.cancelled">Cancelled</entry>
+    <entry key="os.cancelled.waiting.payment">Cancelled</entry>
     <entry key="os.returned">Returned</entry>
+    <entry key="os.returned.waiting.payment">Returned</entry>
     <entry key="os.partially.shipped">Shipped partially</entry>
     <entry key="os.completed">Completed</entry>
 

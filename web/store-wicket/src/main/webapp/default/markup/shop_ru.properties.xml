@@ -250,7 +250,9 @@
     <entry key="os.waiting.payment">Ожидает оплаты</entry>
     <entry key="os.in.progress">Выполняется</entry>
     <entry key="os.cancelled">Отменен</entry>
+    <entry key="os.cancelled.waiting.payment">Отменен</entry>
     <entry key="os.returned">Возвращен</entry>
+    <entry key="os.returned.waiting.payment">Возвращен</entry>
     <entry key="os.partially.shipped">Частично выполнен</entry>
     <entry key="os.completed">Выполнен</entry>
 
