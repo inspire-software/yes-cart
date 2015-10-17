@@ -48,10 +48,6 @@
 
 <body>
 
-    <wicket:container wicket:id="header">
-        [header]
-    </wicket:container>
-
     <div class="container">
 
         <div class="col-xs-12">
@@ -61,16 +57,12 @@
         <div class="col-xs-12" wicket:id="feedback">[feedback panel]</div>
 
         <div class="col-xs-12">
-            <wicket:link>
-                <a href="HomePage.html" class="btn btn-primary" rel="bookmark">
-                    <wicket:message key="home">[Home Page]</wicket:message>
-                </a>
-            </wicket:link>
+            <a wicket:id="continueButton" class="btn btn-primary" rel="bookmark">
+                <wicket:message key="home">[Home Page]</wicket:message>
+            </a>
         </div>
 
     </div>
-
-    <span wicket:id="footer">[footer]</span>
 
 </body>
 </html>

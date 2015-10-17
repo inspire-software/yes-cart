@@ -480,7 +480,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         }
         payment.setTransactionOperationResultMessage(msg.toString());
 
-        payment.setShopperIpAddress(sorted.get(PaymentMiscParam.CLIENT_IP));
+        payment.setShopperIpAddress(sorted.get("IP"));
 
         return payment;
 

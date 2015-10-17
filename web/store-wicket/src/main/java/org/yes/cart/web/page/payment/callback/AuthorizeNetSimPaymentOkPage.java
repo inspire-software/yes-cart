@@ -16,28 +16,29 @@
 
 package org.yes.cart.web.page.payment.callback;
 
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
-import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -79,6 +80,9 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     protected ShoppingCartCommandFactory shoppingCartCommandFactory;
 
+    @SpringBean(name = "cartRepository")
+    protected CartRepository cartRepository;
+
 
     /**
      * Construct page.
@@ -89,8 +93,6 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         super(params);
 
-        add(new StandardFooter(FOOTER));
-        add(new StandardHeader(HEADER));
         add(new FeedbackPanel(FEEDBACK));
         add(new ServerSideJs("serverSideJs"));
         add(new HeaderMetaInclude("headerInclude"));
@@ -127,10 +129,13 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
         final String orderNum = HttpUtil.getSingleValue(httpServletRequest.getParameter(ORDER_GUID));
 
         final boolean doCleanCart;
+        final String cartGuid;
+        final String continueButton;
 
         // Try to get info from the order
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderNum);
         if (customerOrder != null) {
+            cartGuid = customerOrder.getCartGuid();
             if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(customerOrder.getOrderStatus())
                     || CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(customerOrder.getOrderStatus())) {
                 doCleanCart = true;
@@ -140,14 +145,20 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
                 doCleanCart = true;
                 info(getLocalizer().getString("orderSuccess", this));
             }
+            final PaymentGateway pg = checkoutServiceFacade.getOrderPaymentGateway(customerOrder);
+            continueButton = pg.getParameterValue("ORDER_RECEIPT_URL");
         } else {
             doCleanCart = false; // no order for cart so don't clean
+            cartGuid = null;
             error(getLocalizer().getString("orderErrorNotFound", this));
+            continueButton = "";
         }
 
         if (doCleanCart) {
-            cleanCart();
+            cleanCart(cartGuid);
         }
+
+        addOrReplace(new ExternalLink("continueButton", continueButton));
 
         super.onBeforeRender();
 
@@ -155,15 +166,20 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
     }
 
     /**
-     * Clean shopping cart end prepare it to reusing.
+     * Clean shopping cart.
+     * Note that this is a replay call so there will be no cookies for cart and we need
+     * Cart guid from the order to clean the cart
      */
-    private void cleanCart() {
-        shoppingCartCommandFactory.execute(
-                ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
-                Collections.singletonMap(
-                        ShoppingCartCommand.CMD_CLEAN,
-                        null)
-        );
+    private void cleanCart(final String cartGuid) {
+        final ShoppingCart cart = cartRepository.getShoppingCart(cartGuid);
+        if (cart != null) {
+            shoppingCartCommandFactory.execute(
+                    ShoppingCartCommand.CMD_CLEAN, cart,
+                    Collections.singletonMap(
+                            ShoppingCartCommand.CMD_CLEAN,
+                            null)
+            );
+        }
     }
 
 }
