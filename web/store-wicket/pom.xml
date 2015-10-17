@@ -389,7 +389,19 @@
                             </resource>
                             <resource>
                                 <filtering>false</filtering>
+                                <directory>src/main/webapp</directory>
+                                <excludes>
+                                    <exclude>**/context.xml</exclude>
+                                    <exclude>**/web.xml</exclude>
+                                    <exclude>**/shop*.properties.xml</exclude>
+                                </excludes>
+                            </resource>
+                            <resource>
+                                <filtering>false</filtering>
                                 <directory>../../theme/mail/src/main/resources</directory>
+                            </resource>
+                            <resource>
+                                <filtering>false</filtering>
                                 <directory>../../theme/imagevault/src/main/resources</directory>
                             </resource>
                         </webResources>
