@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -80,7 +81,10 @@ public class ResultPage extends AbstractWebPage {
 
         final PageParameters params = getPageParameters();
 
-        ShopCodeContext.getLog(this).error(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
+        final Logger log = ShopCodeContext.getLog(this);
+        if (log.isDebugEnabled()) {
+            log.debug(HttpUtil.dumpRequest((HttpServletRequest) getRequest().getContainerRequest()));
+        }
 
         // Status gives preliminary result from return URL, which can be sent as "status" or "hint"
         final String status = params.get("status").toString(params.get("hint").toString());
