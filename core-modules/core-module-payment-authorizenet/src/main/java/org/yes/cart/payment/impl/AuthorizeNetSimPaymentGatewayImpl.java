@@ -18,6 +18,7 @@ package org.yes.cart.payment.impl;
 
 import net.authorize.sim.Fingerprint;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
@@ -341,9 +342,24 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         stringBuilder.append(getHiddenField("x_show_form", "payment_form"));
         setParameterIfNotNull(stringBuilder, "x_test_request", AN_TEST_REQUEST);
 
-        // TODO: tax and duty
-        // <INPUT TYPE="HIDDEN" name="x_tax" VALUE="Tax1<|>state tax<|>0.0625">
-        // <INPUT TYPE="HIDDEN" name="x_freight" VALUE="Freight1<|>ground overnight<|>12.95>
+        if (CollectionUtils.isNotEmpty(payment.getOrderItems())) {
+            for (final PaymentLine line : payment.getOrderItems()) {
+                if (line.isShipment()) {
+                    // <INPUT TYPE="HIDDEN" name="x_freight" VALUE="Freight1<|>ground overnight<|>12.95>
+                    setValueIfNotNull(stringBuilder, "x_freight",
+                            line.getSkuName() + "<|>" + line.getSkuName() + "<|>" +  line.getUnitPrice().toPlainString());
+                }
+            }
+        }
+
+        // TODO: tax exempt and duty
+        //
+// x_tax seems to be relating to shipping only
+//        if (MoneyUtils.isFirstBiggerThanSecond(payment.getTaxAmount(), Total.ZERO)) {
+//            // <INPUT TYPE="HIDDEN" name="x_tax" VALUE="Tax1<|>state tax<|>0.0625">
+//            setValueIfNotNull(stringBuilder, "x_tax",
+//                    "Tax<|>tax amount<|>" +  payment.getTaxAmount().toPlainString());
+//        }
         // <INPUT TYPE="HIDDEN" name="x_duty" VALUE="Duty1<|>export<|> 15.00>
         // x_tax_exempt
 

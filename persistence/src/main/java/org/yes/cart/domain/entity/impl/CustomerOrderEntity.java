@@ -226,12 +226,21 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     }
 
     public BigDecimal getOrderTotal() {
-        BigDecimal total = getPrice();
+        BigDecimal total = getGrossPrice();
         // deliveries are eagerly fetched so there should not be a lazy init issue
         for (final CustomerOrderDelivery delivery : getDelivery()) {
-            total = total.add(delivery.getPrice());
+            total = total.add(delivery.getGrossPrice());
         }
         return total;
+    }
+
+    public BigDecimal getOrderTotalTax() {
+        BigDecimal totalTax = getGrossPrice().subtract(getNetPrice());
+        // deliveries are eagerly fetched so there should not be a lazy init issue
+        for (final CustomerOrderDelivery delivery : getDelivery()) {
+            totalTax = totalTax.add(delivery.getGrossPrice().subtract(delivery.getNetPrice()));
+        }
+        return totalTax;
     }
 
     public BigDecimal getPrice() {

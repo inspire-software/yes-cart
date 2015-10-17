@@ -16,6 +16,7 @@
 
 package org.yes.cart.payment.impl;
 
+import net.authorize.data.ShippingCharges;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentLine;
@@ -140,18 +141,26 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
 
         final List<net.authorize.data.OrderItem> itemsInDelivery = new ArrayList<net.authorize.data.OrderItem>(payment.getOrderItems().size());
         for (PaymentLine paymentLine : payment.getOrderItems()) {
-            net.authorize.data.OrderItem item = net.authorize.data.OrderItem.createOrderItem();
-            item.setItemId(paymentLine.getSkuCode());
-            item.setItemName(paymentLine.getSkuName());
-            item.setItemPrice(paymentLine.getUnitPrice());
-            item.setItemQuantity(paymentLine.getQuantity());
-            //item.setItemTaxable(); // CPOINT
-            itemsInDelivery.add(
-                    item
-            );
+            if (paymentLine.isShipment()) {
+                final ShippingCharges shipping = ShippingCharges.createShippingCharges();
+                shipping.setFreightAmount(paymentLine.getUnitPrice());
+                shipping.setFreightItemName(paymentLine.getSkuName());
+                shipping.setFreightDescription(paymentLine.getSkuName());
+                order.setShippingCharges(shipping);
+            } else {
+                net.authorize.data.OrderItem item = net.authorize.data.OrderItem.createOrderItem();
+                item.setItemId(paymentLine.getSkuCode());
+                item.setItemName(paymentLine.getSkuName());
+                item.setItemPrice(paymentLine.getUnitPrice());
+                item.setItemQuantity(paymentLine.getQuantity());
+                //item.setItemTaxable(); // CPOINT
+                itemsInDelivery.add(
+                        item
+                );
+            }
         }
         order.setOrderItems(itemsInDelivery);
-
+        // TODO: tax exempt and duty
         return order;
     }
 

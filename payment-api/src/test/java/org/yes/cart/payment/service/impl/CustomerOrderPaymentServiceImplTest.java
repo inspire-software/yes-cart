@@ -169,6 +169,7 @@ public class CustomerOrderPaymentServiceImplTest extends BasePaymentModuleDBTest
         payment.setOrderCurrency("EUR");
         payment.setOrderDate(new Date());
         payment.setPaymentAmount(amount);
+        payment.setTaxAmount(amount.divide(new BigDecimal("1.2"), 10, BigDecimal.ROUND_UP).multiply(new BigDecimal("1.2")).setScale(2, BigDecimal.ROUND_UP));
         payment.setOrderNumber(orderNum);
         payment.setShopCode("SHOIP1");
         payment.setOrderShipment(shipmentNum);

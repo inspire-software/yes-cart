@@ -60,3 +60,10 @@ Blank means that all IPs are allowed.
 If not blank allowed IP should match "regex.matcher(ip).matches()"
 E.g. "^((192.168.0.)([0-9]){1,3})$" will match all IPs starting with "192.168.0."
 WARNING: be careful with IPv4 vs IPv6',  1000, 1001);
+
+--
+--  YC-593 Improve payment domain model to include taxAmount field
+--
+
+alter table TCUSTOMERORDERPAYMENT add column ORDER_DELIVERY_TAX decimal(19,2) NOT NULL default 0;
+

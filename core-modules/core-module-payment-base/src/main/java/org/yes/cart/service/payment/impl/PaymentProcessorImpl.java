@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
@@ -34,6 +35,7 @@ import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.impl.CustomerOrderPaymentEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.payment.PaymentProcessor;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -453,11 +455,14 @@ public class PaymentProcessorImpl implements PaymentProcessor {
             if (existing.isEmpty()) {
 
                 Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-                BigDecimal runningTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                BigDecimal runningTotal = Total.ZERO;
+                BigDecimal runningTotalTax = Total.ZERO;
                 final Iterator<CustomerOrderDelivery> deliveryIt = order.getDelivery().iterator();
                 while (deliveryIt.hasNext()) {
                     final CustomerOrderDelivery delivery = deliveryIt.next();
-                    runningTotal = runningTotal.add(fillPayment(order, delivery, payment, true, runningTotal, !deliveryIt.hasNext()));
+                    final Pair<BigDecimal, BigDecimal> amountAndTax = fillPayment(order, delivery, payment, true, runningTotal, runningTotalTax, !deliveryIt.hasNext());
+                    runningTotal = runningTotal.add(amountAndTax.getFirst());
+                    runningTotalTax = runningTotalTax.add(amountAndTax.getSecond());
                 }
                 rez.add(payment);
 
@@ -465,14 +470,17 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         } else {
 
-            BigDecimal runningTotal = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            BigDecimal runningTotal = Total.ZERO;
+            BigDecimal runningTotalTax = Total.ZERO;
             final Iterator<CustomerOrderDelivery> deliveryIt = order.getDelivery().iterator();
             while (deliveryIt.hasNext()) {
                 final CustomerOrderDelivery delivery = deliveryIt.next();
                 final List<CustomerOrderPayment> existing = customerOrderPaymentService.findBy(order.getOrdernum(), delivery.getDeliveryNum(), Payment.PAYMENT_STATUS_OK, transactionOperation);
                 if (existing.isEmpty()) {
                     Payment payment = (Payment) SerializationUtils.clone(templatePayment);
-                    runningTotal = runningTotal.add(fillPayment(order, delivery, payment, false, runningTotal, !deliveryIt.hasNext()));
+                    final Pair<BigDecimal, BigDecimal> amountAndTax = fillPayment(order, delivery, payment, false, runningTotal, runningTotalTax, !deliveryIt.hasNext());
+                    runningTotal = runningTotal.add(amountAndTax.getFirst());
+                    runningTotalTax = runningTotalTax.add(amountAndTax.getSecond());
                     rez.add(payment);
                 }
             }
@@ -488,16 +496,18 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * @param payment   payment to fill
      * @param singlePay is it single pay for whole order
      * @param runningTotal total amount for created payments so far
+     * @param runningTotalTax total tax amount for created payments so far
      * @param lastDelivery last delivery in this order
      *
      * @return amount for current payment
      */
-    private BigDecimal fillPayment(final CustomerOrder order,
-                                   final CustomerOrderDelivery delivery,
-                                   final Payment payment,
-                                   final boolean singlePay,
-                                   final BigDecimal runningTotal,
-                                   final boolean lastDelivery) {
+    private Pair<BigDecimal, BigDecimal> fillPayment(final CustomerOrder order,
+                                                     final CustomerOrderDelivery delivery,
+                                                     final Payment payment,
+                                                     final boolean singlePay,
+                                                     final BigDecimal runningTotal,
+                                                     final BigDecimal runningTotalTax,
+                                                     final boolean lastDelivery) {
 
         if (payment.getTransactionReferenceId() == null) {
             // can be set by external payment gateway
@@ -509,7 +519,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
 
         fillPaymentItems(delivery, payment);
         fillPaymentShipment(order, delivery, payment);
-        return fillPaymentAmount(order, delivery, payment, singlePay, runningTotal, lastDelivery);
+        return fillPaymentAmount(order, delivery, payment, singlePay, runningTotal, runningTotalTax, lastDelivery);
     }
 
     /**
@@ -520,38 +530,49 @@ public class PaymentProcessorImpl implements PaymentProcessor {
      * @param payment  payment
      * @param singlePay is it single pay for whole order
      * @param runningTotal total amount for created payments so far
+     * @param runningTotalTax total amount tax for created payments so far
      * @param lastDelivery last delivery in this order
      *
      * @return amount for current payment
      */
-    private BigDecimal fillPaymentAmount(final CustomerOrder order,
-                                         final CustomerOrderDelivery delivery,
-                                         final Payment payment,
-                                         final boolean singlePay,
-                                         final BigDecimal runningTotal,
-                                         final boolean lastDelivery) {
-        BigDecimal itemsAndShipping = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+    private Pair<BigDecimal, BigDecimal> fillPaymentAmount(final CustomerOrder order,
+                                                           final CustomerOrderDelivery delivery,
+                                                           final Payment payment,
+                                                           final boolean singlePay,
+                                                           final BigDecimal runningTotal,
+                                                           final BigDecimal runningTotalTax,
+                                                           final boolean lastDelivery) {
+        BigDecimal itemsAndShipping = Total.ZERO;
+        BigDecimal itemsAndShippingTax = Total.ZERO;
         if (singlePay) {
             // Single pay is just the total
             itemsAndShipping = order.getOrderTotal();
+            itemsAndShippingTax = order.getOrderTotalTax();
         } else if (lastDelivery) {
             // For last delivery we apply the remainder to avoid rounding errors
-            itemsAndShipping = itemsAndShipping.add(order.getOrderTotal()).subtract(runningTotal);
+            itemsAndShipping = order.getOrderTotal().subtract(runningTotal);
+            itemsAndShippingTax = order.getOrderTotalTax().subtract(runningTotalTax);
         } else {
-            BigDecimal itemsOnly = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
-            BigDecimal shippingOnly = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+            BigDecimal itemsOnly = Total.ZERO;
+            BigDecimal itemsOnlyTax = Total.ZERO;
+            BigDecimal shippingOnly = Total.ZERO;
+            BigDecimal shippingOnlyTax = Total.ZERO;
             // Calculate sum of all payment lines (which include shipping as well)
             for (PaymentLine paymentLine : payment.getOrderItems()) {
                 if (paymentLine.isShipment()) {
                     // shipping price already includes shipping level promotions
                     final BigDecimal shipping = paymentLine.getUnitPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal shippingTax = paymentLine.getTaxAmount().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
                     itemsAndShipping = itemsAndShipping.add(shipping);
                     shippingOnly = shippingOnly.add(shipping);
+                    shippingOnlyTax = shippingOnlyTax.add(shippingTax);
                 } else {
                     // unit price already includes item level promotions
                     final BigDecimal item = paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal itemTax = paymentLine.getQuantity().multiply(paymentLine.getTaxAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
                     itemsAndShipping = itemsAndShipping.add(item);
                     itemsOnly = itemsOnly.add(item);
+                    itemsOnlyTax = itemsOnlyTax.add(itemTax);
                 }
             }
             // Order promotions are applied to all items in all deliveries so we scale the amounts equally
@@ -571,15 +592,18 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                 final BigDecimal discount = orderTotalList.subtract(orderTotal).divide(orderTotalList, 10, RoundingMode.HALF_UP);
                 // scale delivery items without shipping total in accordance with order level discount percentage
                 itemsAndShipping = itemsOnly.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                itemsAndShippingTax = itemsOnlyTax.multiply(BigDecimal.ONE.subtract(discount)).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
                 // add unscaled shipping
                 itemsAndShipping = itemsAndShipping.add(shippingOnly);
+                itemsAndShippingTax = itemsAndShippingTax.add(shippingOnlyTax);
             }
         }
         payment.setPaymentAmount(itemsAndShipping);
+        payment.setTaxAmount(itemsAndShippingTax);
         payment.setOrderCurrency(order.getCurrency());
         payment.setOrderLocale(order.getLocale());
 
-        return itemsAndShipping;
+        return new Pair<BigDecimal, BigDecimal>(itemsAndShipping, itemsAndShippingTax);
     }
 
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {

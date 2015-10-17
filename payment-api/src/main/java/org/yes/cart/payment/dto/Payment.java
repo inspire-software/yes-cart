@@ -61,6 +61,20 @@ public interface Payment extends Serializable {
      */
     void setPaymentAmount(BigDecimal paymentAmount);
 
+    /**
+     * Get delivery tax amount, including delivery taxes.
+     *
+     * @return delivery amount.
+     */
+    BigDecimal getTaxAmount();
+
+    /**
+     * Set delivery tax amount.
+     *
+     * @param taxAmount delivery tax amount.
+     */
+    void setTaxAmount(BigDecimal taxAmount);
+
 
     /**
      * Get adapted from payment gateway result.

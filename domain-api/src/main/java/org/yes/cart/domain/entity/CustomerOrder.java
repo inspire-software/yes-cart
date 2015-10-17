@@ -388,9 +388,17 @@ public interface CustomerOrder extends Auditable {
      * Get sum of order details prices less promotion discounts applied
      * (included delivery).
      *
-     * @return order price.
+     * @return order total (including tax).
      */
     BigDecimal getOrderTotal();
+
+    /**
+     * Get total tax
+     * (included delivery).
+     *
+     * @return order total tax.
+     */
+    BigDecimal getOrderTotalTax();
 
     /**
      * Get sum of order details prices less promotion discounts applied

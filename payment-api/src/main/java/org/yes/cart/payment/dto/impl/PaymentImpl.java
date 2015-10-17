@@ -46,6 +46,7 @@ public class PaymentImpl implements Payment {
     // when order was created
     private Date orderDate;
     private BigDecimal paymentAmount;
+    private BigDecimal taxAmount;
     private String orderCurrency;
     private String orderLocale;
     private List<PaymentLine> orderItems;
@@ -84,6 +85,7 @@ public class PaymentImpl implements Payment {
     public PaymentImpl() {
         orderItems = new ArrayList<PaymentLine>();
         paymentAmount = BigDecimal.ZERO;
+        taxAmount = BigDecimal.ZERO;
     }
 
     /**
@@ -112,6 +114,20 @@ public class PaymentImpl implements Payment {
      */
     public void setPaymentAmount(final BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTaxAmount(final BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
     }
 
     /**

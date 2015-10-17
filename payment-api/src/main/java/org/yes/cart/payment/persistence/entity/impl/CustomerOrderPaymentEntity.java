@@ -39,6 +39,7 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
     private Date cardStartDate;
     private Date orderDate;
     private BigDecimal paymentAmount;
+    private BigDecimal taxAmount;
     private String orderCurrency;
     private String orderNumber;
     private String orderShipment;
@@ -172,6 +173,20 @@ public class CustomerOrderPaymentEntity implements CustomerOrderPayment, Seriali
      */
     public void setPaymentAmount(final BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTaxAmount(final BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
     }
 
     /**
