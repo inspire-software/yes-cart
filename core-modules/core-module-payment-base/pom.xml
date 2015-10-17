@@ -136,6 +136,12 @@
     <build>
         <testResources>
             <testResource>
+                <directory>../../core/src/test/resources</directory>
+                <includes>
+                    <include>ehcache.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
                 <directory>../../payment-api/src/test/resources</directory>
                 <includes>
                     <include>**/test-payment-api.xml</include>

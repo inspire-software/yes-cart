@@ -427,6 +427,12 @@
 
         <testResources>
             <testResource>
+                <directory>../core/src/test/resources</directory>
+                <includes>
+                    <include>ehcache.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
                 <directory>../../payment-api/src/test/resources</directory>
                 <includes>
                     <include>**/test-payment-api.xml</include>
@@ -445,6 +451,20 @@
                 </includes>
             </testResource>
         </testResources>
+
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}</directory>
+                <includes>
+                    <include>ehcache.xml</include>
+                </includes>
+            </resource>
+        </resources>
 
         <finalName>yes-manager</finalName>
 

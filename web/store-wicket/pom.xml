@@ -407,6 +407,13 @@
                     <exclude>**/logback.xml</exclude>
                 </excludes>
             </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}</directory>
+                <includes>
+                    <include>ehcache.xml</include>
+                </includes>
+            </resource>
         </resources>
 
         <pluginManagement>

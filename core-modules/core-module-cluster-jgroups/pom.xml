@@ -82,27 +82,6 @@
             <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
         </filters>
 
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </testResource>
-        </testResources>
-
         <resources>
 
             <resource>

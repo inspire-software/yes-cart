@@ -159,6 +159,12 @@
 
         <testResources>
             <testResource>
+                <directory>../../core/src/test/resources</directory>
+                <includes>
+                    <include>ehcache.xml</include>
+                </includes>
+            </testResource>
+            <testResource>
                 <directory>src/test/resources</directory>
                 <includes>
                     <include>**/*.xml</include>
