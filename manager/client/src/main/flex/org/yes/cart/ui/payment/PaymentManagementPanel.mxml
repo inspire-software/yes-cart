@@ -233,7 +233,7 @@
                                        headerText="@Resource(bundle='PaymentManagementPanel',key='cardHolderName')"
                                        dataField="cardHolderName"/>
 
-                    <mx:DataGridColumn showDataTips="true"
+                    <mx:DataGridColumn showDataTips="true" dataField="orderDate"
                                        headerText="@Resource(bundle='PaymentManagementPanel',key='orderDate')"
                                        editable="false" width="120">
                         <mx:itemRenderer>
