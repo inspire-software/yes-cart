@@ -8,9 +8,7 @@ env/derby/lib/yes/**
 
 env/derby/lib/yespay/**
 
-.idea/flexmojos/fonts.ser
-
-.idea/flexmojos/yes-manager-client-org.yes.xml
+.idea/**
 
 core-dto/core-dto.iml
 
