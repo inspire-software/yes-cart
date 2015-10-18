@@ -45,11 +45,12 @@
                         [sorter]
                     </wicket:container>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-4 product-items">
-                    <span><wicket:message key="items">[items]</wicket:message></span>
-                    <wicket:container wicket:id="itemsPerPageList">
-                        <a wicket:id="itemsPerPage" rel="search"><span wicket:id="items"/></a>
-                    </wicket:container>
+                <div class="col-xs-12 col-sm-12 col-md-4 product-items ">
+                    <ul class="pagination pagination-sm">
+                        <li wicket:id="itemsPerPageList">
+                            <a wicket:id="itemsPerPage" rel="search" wicket:message="title:items"><span wicket:id="items"/></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 

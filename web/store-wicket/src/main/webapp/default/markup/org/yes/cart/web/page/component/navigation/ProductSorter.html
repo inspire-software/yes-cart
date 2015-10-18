@@ -17,13 +17,16 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <span><wicket:message key="sort">[sort]</wicket:message></span>
-    <wicket:container wicket:id="pageSort">
-        &nbsp;
-        <span wicket:id="sortLabel">[by name]</span>
-        <a wicket:id="sortA" rel="search"><span class="glyphicon glyphicon-arrow-up"></span></a>
-        <a wicket:id="sortD" rel="search"><span class="glyphicon glyphicon-arrow-down"></span></a>
-    </wicket:container>
+    <ul class="pagination pagination-sm">
+        <li><span><wicket:message key="sort">[sort]</wicket:message></span></li>
+        <li wicket:id="pageSort">
+            <span>
+                <span wicket:id="sortLabel">[by name]</span>
+                <a wicket:id="sortA" rel="search"><span class="glyphicon glyphicon-arrow-up"></span></a>
+                <a wicket:id="sortD" rel="search"><span class="glyphicon glyphicon-arrow-down"></span></a>
+            </span>
+        </li>
+    </ul>
 </wicket:panel>
 </body>
 </html>

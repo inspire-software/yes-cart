@@ -201,6 +201,7 @@
                  width="100%" height="100%">
         <mx:columns>
             <mx:DataGridColumn headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='StoreSummaryPanel',key='themeLocation')" dataField="themeChain"/>
         </mx:columns>
     </mx:DataGrid>
 </mx:VBox>

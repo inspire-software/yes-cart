@@ -50,8 +50,8 @@ public interface PaginationSupport {
      * @param sortField sorting field
      * @param sortOrder order of sorting (asc / desc)
      */
-    void markSelectedSortLink(Link link,
-                              PageParameters pageParameters, String sortField, String sortOrder);
+    boolean markSelectedSortLink(Link link,
+                                 PageParameters pageParameters, String sortField, String sortOrder);
 
     /**
      * Checks if current page is selected.
@@ -70,8 +70,8 @@ public interface PaginationSupport {
      * @param pageParameters current page parameters
      * @param pageIndex index to check
      */
-    void markSelectedPageLink(Link link,
-                              PageParameters pageParameters, int pageIndex);
+    boolean markSelectedPageLink(Link link,
+                                 PageParameters pageParameters, int pageIndex);
 
     /**
      * Checks if current page is selected.
@@ -93,8 +93,8 @@ public interface PaginationSupport {
      * @param itemsPerPageOptions allowed page sizes
      * @param pageSize index to check
      */
-    void markSelectedPageSizeLink(Link link,
-                                  PageParameters pageParameters, List<String> itemsPerPageOptions, int pageSize);
+    boolean markSelectedPageSizeLink(Link link,
+                                     PageParameters pageParameters, List<String> itemsPerPageOptions, int pageSize);
 
 
 

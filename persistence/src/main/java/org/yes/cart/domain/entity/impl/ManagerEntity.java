@@ -41,6 +41,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private String middlename;
     private String password;
     private String authToken;
+    private boolean enabled;
     private Date authTokenExpiry;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -107,6 +108,14 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
     public void setAuthTokenExpiry(final Date authTokenExpiry) {
         this.authTokenExpiry = authTokenExpiry;
+    }
+
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Date getCreatedTimestamp() {

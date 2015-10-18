@@ -80,6 +80,7 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
             return null;
         }
 
+        ApplicationDirector.setCurrentDomain(serverDomainName);
         ApplicationDirector.setCurrentShop(shop);
         ApplicationDirector.setShopperIPAddress(getRemoteIpAddr(servletRequest));
         ShopCodeContext.setShopCode(shop.getCode());

@@ -40,6 +40,13 @@ public interface ShopUrl extends Auditable {
     void setUrl(String url);
 
     /**
+     * @return theme chain for shop url.
+     */
+    String getThemeChain();
+
+    void setThemeChain(String themeChain);
+
+    /**
      * @return {@link Shop}
      */
     Shop getShop();

@@ -16,11 +16,15 @@
 
 package org.yes.cart.web.page.component.navigation;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.LoopItem;
 import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -52,9 +56,23 @@ public class URLPagingNavigation extends PagingNavigation {
         pageParameters.set(WebParametersKeys.PAGE, pageIndex);
 
         final Link rez = links.newLink(id, pageParameters);
-        pagination.markSelectedPageLink(rez, getPage().getPageParameters(), pageIndex);
+        if (pagination.markSelectedPageLink(rez, getPage().getPageParameters(), pageIndex)) {
+            rez.setModel(new Model(Boolean.TRUE));
+        }
 
         return  rez;
     }
 
+    @Override
+    protected void populateItem(final LoopItem loopItem) {
+        super.populateItem(loopItem);
+
+        Link pageLink = (Link) loopItem.get(0);
+        IModel model = pageLink.getModel();
+
+        if (model instanceof Model && model.getObject() instanceof Boolean) {
+            loopItem.add(new AttributeModifier("class", "active"));
+        }
+
+    }
 }

@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.navigation;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -70,9 +71,11 @@ public class ProductPerPageListView extends ListView<String> {
 
         final Link pageSizeLink = links.newLink(ITEMS_PER_PAGE, params);
         pageSizeLink.add(label);
-        pagination.markSelectedPageSizeLink(pageSizeLink, pageParameters, getModelObject(), NumberUtils.toInt(pageSize));
-
         stringListItem.add(pageSizeLink);
+
+        if (pagination.markSelectedPageSizeLink(pageSizeLink, pageParameters, getModelObject(), NumberUtils.toInt(pageSize))) {
+            stringListItem.add(new AttributeModifier("class", "active"));
+        }
 
     }
 

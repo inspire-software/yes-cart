@@ -19,6 +19,7 @@ package org.yes.cart.service.theme.impl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.ShopUrl;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.theme.ThemeService;
 
@@ -50,12 +51,26 @@ public class ThemeServiceImpl implements ThemeService {
      * {@inheritDoc}
      */
     @Cacheable(value = "themeService-themeChainByShopId")
-    public List<String> getThemeChainByShopId(final Long shopId) {
+    public List<String> getThemeChainByShopId(final Long shopId, final String domain) {
         if (shopId != null) {
             final Shop shop = shopService.getById(shopId);
             if (shop != null) {
 
-                final String themeCfg = shop.getFspointer();
+                String themeCfg = null;
+
+                if (StringUtils.isNotBlank(domain) && shop.getShopUrl() != null) {
+                    for (final ShopUrl url : shop.getShopUrl()) {
+                        if (domain.equalsIgnoreCase(url.getUrl()) &&
+                                StringUtils.isNotBlank(url.getThemeChain())) {
+                            themeCfg = url.getThemeChain();
+                            break;
+                        }
+                    }
+                }
+
+                if (StringUtils.isBlank(themeCfg)) {
+                    themeCfg = shop.getFspointer();
+                }
 
                 if (StringUtils.isNotBlank(themeCfg)) {
 
@@ -66,7 +81,7 @@ public class ThemeServiceImpl implements ThemeService {
                         }
                         return Collections.unmodifiableList(tmpChain);
                     }
-                    final List<String> tmpChain = new ArrayList<String>(Arrays.asList(StringUtils.split(shop.getFspointer(), ';')));
+                    final List<String> tmpChain = new ArrayList<String>(Arrays.asList(StringUtils.split(themeCfg, ';')));
                     if (!tmpChain.contains(DEFAULT_THEME)) {
                         tmpChain.add(DEFAULT_THEME);
                     }
@@ -81,8 +96,8 @@ public class ThemeServiceImpl implements ThemeService {
      * {@inheritDoc}
      */
     @Cacheable(value = "themeService-markupChainByShopId")
-    public List<String> getMarkupChainByShopId(final Long shopId) {
-        final List<String> themes = getThemeChainByShopId(shopId);
+    public List<String> getMarkupChainByShopId(final Long shopId, final String domain) {
+        final List<String> themes = getThemeChainByShopId(shopId, domain);
         final List<String> markups = new ArrayList<String>(themes.size());
         for (final String theme : themes) {
             markups.add(theme + MARKUP_ROOT);
@@ -95,7 +110,7 @@ public class ThemeServiceImpl implements ThemeService {
      */
     @Cacheable(value = "themeService-mailTemplateChainByShopId")
     public List<String> getMailTemplateChainByShopId(final Long shopId) {
-        final List<String> themes = getThemeChainByShopId(shopId);
+        final List<String> themes = getThemeChainByShopId(shopId, null);
         final List<String> mailtemplates = new ArrayList<String>(themes.size());
         for (final String theme : themes) {
             mailtemplates.add(theme + MAILTEMPLATE_ROOT);

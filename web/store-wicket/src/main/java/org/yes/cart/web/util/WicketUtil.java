@@ -250,8 +250,15 @@ public class WicketUtil {
      * @return true in case if given sorting order and field present in page parameters.
      */
     public boolean isSelectedPageActive(final PageParameters pageParameters, final String pageParameterName, final int page) {
-        return ((StringUtils.isNotBlank(pageParameterName)))
-                && page == pageParameters.get(pageParameterName).toInt(0);
+        if ((StringUtils.isNotBlank(pageParameterName))) {
+            int param = pageParameters.get(pageParameterName).toInt(0);
+            if (param < 0) {
+                param = 0;
+            }
+            return page == param;
+
+        }
+        return false;
     }
 
 

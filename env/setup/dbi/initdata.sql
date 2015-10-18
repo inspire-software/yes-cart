@@ -499,8 +499,17 @@ INSERT INTO TSHOPWAREHOUSE (SHOPWAREHOUSE_ID, SHOP_ID, WAREHOUSE_ID, RANK, GUID 
   VALUES (10, 10, 1, 10, 'SHOP10_Main' );
 
 INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, GUID )  VALUES (10, 10, 'testdevshop.yes-cart.org', 'SHOP10_10');
-INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, GUID )  VALUES (11, 10, 'demo.yes-cart.org', 'SHOP10_11');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (11, 10, 'demo.yes-cart.org', 'ycdemolive;ycdemo', 'SHOP10_11');
 INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, GUID )  VALUES (12, 10, 'localhost', 'SHOP10_12');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (13, 10, 'demo-journal.yes-cart.org', 'journal;ycdemolive;ycdemo', 'SHOP10_13');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (14, 10, 'demo-yeti.yes-cart.org', 'yeti;ycdemolive;ycdemo', 'SHOP10_14');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (15, 10, 'demo-united.yes-cart.org', 'united;ycdemolive;ycdemo', 'SHOP10_15');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (16, 10, 'demo-superhero.yes-cart.org', 'superhero;ycdemolive;ycdemo', 'SHOP10_16');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (17, 10, 'demo-simplex.yes-cart.org', 'simplex;ycdemolive;ycdemo', 'SHOP10_17');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (18, 10, 'demo-slate.yes-cart.org', 'slate;ycdemolive;ycdemo', 'SHOP10_18');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (19, 10, 'demo-sandstone.yes-cart.org', 'sandstone;ycdemolive;ycdemo', 'SHOP10_19');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (20, 10, 'demo-darkly.yes-cart.org', 'darkly;ycdemolive;ycdemo', 'SHOP10_20');
+INSERT INTO TSHOPURL (STOREURL_ID, SHOP_ID, URL, THEME_CHAIN, GUID )  VALUES (21, 10, 'demo-cyborg.yes-cart.org', 'cyborg;ycdemolive;ycdemo', 'SHOP10_21');
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (100, 100, 0, 'root', 'Master category','default', '100');
 
@@ -735,19 +744,19 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10005, 10201, 0, 'header_search_include', 'Header search include for SHOP10','include', 'SHOP10_header_search_include','SHOP10_header_search_include');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12042,'CONTENT_BODY_en_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Contact form</a>
 ',10005,'12042_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12043,'CONTENT_BODY_ru_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/index-ru.html#contact" target="_blank">Контактная форма</a>
 ',10005,'12043_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12045,'CONTENT_BODY_uk_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/index-uk.html#contact" target="_blank">Контактна форма</a>
 ',10005,'12045_CAV');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12046,'CONTENT_BODY_de_1','
-<span class="glyphicon glyphicon-envelope blue"></span>
+<span class="glyphicon glyphicon-envelope themecolor"></span>
 <a href="http://www.yes-cart.org/#contact" target="_blank">Kontaktformular</a>
 ',10005,'12046_CAV');
 
@@ -907,7 +916,7 @@ INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (6, 'ROLE_SMMARKETIN
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (7, 'ROLE_SMSHIPPINGADMIN',  'ROLE_SMSHIPPINGADMIN', 'Shipping manager');
 
 -- default admin password 1234567
-INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7');
+INSERT INTO TMANAGER (GUID, MANAGER_ID, EMAIL, FIRSTNAME, LASTNAME, PASSWORD, ENABLED) VALUES ('YCADMIN', 1, 'admin@yes-cart.com', 'Yes', 'Admin', 'd89c77010dedf89c10d1293bd02b53c7', 1);
 
 INSERT INTO TMANAGERROLE (MANAGERROLE_ID, EMAIL, CODE, GUID) VALUES (1, 'admin@yes-cart.com', 'ROLE_SMADMIN', 'YCADMIN_ROLE');
 

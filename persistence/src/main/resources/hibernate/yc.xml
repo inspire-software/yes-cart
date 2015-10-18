@@ -39,6 +39,12 @@
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
 
+        <property name="enabled" length="1" type="boolean" not-null="true">
+            <column name="ENABLED" length="1" not-null="true">
+                <comment>Flag to denote if this account is enabled</comment>
+            </column>
+        </property>
+
         <bag name="shops" inverse="true" lazy="true" cascade="all,delete-orphan" >
             <key column="MANAGER_ID" on-delete="cascade"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ManagerShopEntity"/>
@@ -1640,6 +1646,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
+        <property name="themeChain" column="THEME_CHAIN" type="string" length="512" not-null="false" lazy="false"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPURL_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>

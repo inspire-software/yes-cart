@@ -29,22 +29,27 @@ public interface ThemeService {
      * Get current shop theme chain.
      *
      * @param shopId shop PK
+     * @param domain theme chain
      *
      * @return chain of themes names
      */
-    List<String> getThemeChainByShopId(Long shopId);
+    List<String> getThemeChainByShopId(Long shopId, String domain);
 
     /**
      * Get current shop markup chain.
      *
      * @param shopId shop PK
+     * @param domain theme chain
      *
      * @return chain of themes names
      */
-    List<String> getMarkupChainByShopId(Long shopId);
+    List<String> getMarkupChainByShopId(Long shopId, String domain);
 
     /**
      * Get current shop markup chain.
+     *
+     * Note that mail templates do not use current domain as in most cases email are generated in
+     * batch job and have no current domain.
      *
      * @param shopId shop PK
      *

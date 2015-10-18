@@ -50,4 +50,11 @@ public interface ShopUrlDTO extends Identifiable {
     void setUrl(String url);
 
 
+    /**
+     * @return theme chain for shop url.
+     */
+    String getThemeChain();
+
+    void setThemeChain(String themeChain);
+
 }

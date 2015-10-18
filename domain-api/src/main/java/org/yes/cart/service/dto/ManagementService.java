@@ -213,4 +213,19 @@ public interface ManagementService {
      */
     void revokeShop(String userId, String shopCode);
 
+    /**
+     * Enable user account.
+     *
+     * @param userId user id
+     */
+    void enableAccount(String userId);
+
+    /**
+     * Disable user account.
+     *
+     * @param userId user id
+     */
+    void disableAccount(String userId);
+
+
 }

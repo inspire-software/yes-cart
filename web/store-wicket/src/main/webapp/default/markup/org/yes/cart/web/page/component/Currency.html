@@ -17,22 +17,16 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
-    <span>
-        <wicket:message key="currency">[Currency]</wicket:message>
-    </span>
-
     <a class="dropdown-toggle" id="currencyMenu" data-toggle="dropdown" href="#">
         <span wicket:id="activeCurrencyName"/>
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="currencyMenu">
-        <span wicket:id="supportedCurrencies">
-            <li role="presentation">
-                <a wicket:id="switchCurrencyLink" rel="nofollow">
-                    <span wicket:id="currencyName"/>
-                </a>
-            </li>
-        </span>
+        <li wicket:id="supportedCurrencies" role="presentation">
+            <a wicket:id="switchCurrencyLink" rel="nofollow">
+                <span wicket:id="currencyName"/>
+            </a>
+        </li>
     </ul>
 
 </wicket:panel>

@@ -85,4 +85,18 @@ public interface ManagerDTO extends Identifiable {
      */
     void setLastName(String lastName);
 
+    /**
+     * Get enabled flag
+     *
+     * @return true if account is enabled
+     */
+    boolean getEnabled();
+
+    /**
+     * Set enabled flag
+     *
+     * @param enabled true if account is enabled
+     */
+    void setEnabled(boolean enabled);
+
 }

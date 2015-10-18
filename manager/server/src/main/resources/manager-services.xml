@@ -54,6 +54,8 @@
             <security:protect method="getAvailableManagerShops" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="updateUser" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="resetPassword" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="enableAccount" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
+            <security:protect method="disableAccount" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN"/>
             <security:protect method="deleteUser" access="ROLE_SMADMIN"/>
             <security:protect method="addRole" access="ROLE_SMADMIN"/>
             <security:protect method="updateRole" access="ROLE_SMADMIN"/>
