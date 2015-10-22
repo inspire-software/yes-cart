@@ -528,28 +528,28 @@ VALUES (11268, 'authorizeNetSimPaymentGateway',
 Follows the CSS ‘font-family’ standard.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (11268, 'authorizeNetSimPaymentGateway',
+VALUES (11269, 'authorizeNetSimPaymentGateway',
 'STYLE_FONTSIZE',
 ''
 , 'Payment form style: Default font size.', 'Payment form style: Default font size for the Hosted Payment Form.
 Expressed in points, suffixed with “px.”');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (11269, 'authorizeNetSimPaymentGateway',
+VALUES (11270, 'authorizeNetSimPaymentGateway',
 'STYLE_SECTION1COLOR',
 ''
 , 'Payment form style: The text color for the header.', 'Payment form style: The text color for the header.
 Any valid HTML color name or color hex code.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (11270, 'authorizeNetSimPaymentGateway',
+VALUES (11271, 'authorizeNetSimPaymentGateway',
 'STYLE_SECTION1FONTFAMILY',
 ''
 , 'Payment form style: Font family for the header.', 'Payment form style: Font family for the header.
 Follows the CSS ‘font-family’ standard.');
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
-VALUES (11271, 'authorizeNetSimPaymentGateway',
+VALUES (11272, 'authorizeNetSimPaymentGateway',
 'STYLE_SECTION1FONTSIZE',
 ''
 , 'Payment form style: Font size for the header .', 'Payment form style: Font size for the header.
