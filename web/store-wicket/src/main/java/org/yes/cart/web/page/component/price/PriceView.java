@@ -225,7 +225,7 @@ public class PriceView extends BaseComponent {
                         Collections.<String, Object>singletonMap("discount", savePercent)));
 
         discount.setVisible(showSave);
-        discount.add(new AttributeModifier(HTML_CLASS, "sale-price-save"));
+        discount.add(new AttributeModifier(HTML_CLASS, "label label-success sale-price-save"));
 
         if (showSave && StringUtils.isNotBlank(promos)) {
 

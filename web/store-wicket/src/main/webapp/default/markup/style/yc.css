@@ -91,6 +91,10 @@ a {
     margin-top: 10px;
 }
 
+.margin-top5 {
+    margin-top: 5px;
+}
+
 .tooltip-inner {
     white-space:pre-wrap;
 }

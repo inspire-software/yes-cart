@@ -93,6 +93,14 @@ a {
     margin-top: 10px;
 }
 
+.margin-top5 {
+    margin-top: 5px;
+}
+
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
 /*===================================================================================*/
 /*	TOP NAVIGATION MENU, CHECKOUT TOP MENU
 /*===================================================================================*/
@@ -170,7 +178,7 @@ a {
 }
 
 /*===================================================================================*/
-/*	HEADER (LOGO, SEARCH BAR, MINI CART)
+/*	HEADER (LOGO, SEARCH BAR)
 /*===================================================================================*/
 
 .page-header {
@@ -210,46 +218,6 @@ a {
 
 .search-bar-holder .contact-line a:hover {
     color: #ffffff;
-}
-
-.page-header .mini-cart-holder {
-    padding: 25px 0 0 55px;
-}
-
-.page-header .mini-cart-holder .mini-cart-line {
-    position: relative;
-    display: inline-block;
-    vertical-align: top;
-    text-align: center;
-}
-
-.mini-cart-line a > .default,
-.mini-cart-line a > .orange {
-    font-size: 21px;
-}
-
-.mini-cart-line a > .orange {
-    color: #f0ad4e;
-}
-
-.mini-cart-line a > sup {
-    font-size: 1em;
-    top: -1em;
-    color: #808080;
-    margin-right: 5px;
-}
-
-.mini-cart-line .regular-price-currency,
-.mini-cart-line .regular-price-whole {
-    font-size: 30px;
-}
-
-.mini-cart-line .regular-price-decimal {
-    font-size: 16px;
-}
-
-#mini-cart.loading {
-    background: url('../image/loading.gif') left center no-repeat
 }
 
 .btn-primary2 {
@@ -563,6 +531,11 @@ fieldset[disabled] .btn-primary2.active {
     font-weight: 500;
 }
 
+.regular-price-tax,
+.sale-price-tax {
+    font-size: 75%;
+}
+
 .regular-price-whole {
     font-size: 22px;
     font-weight: 600;
@@ -785,27 +758,6 @@ fieldset[disabled] .btn-primary2.active {
     margin: 14px;
 }
 
-/*
-.product-detail-tabs .nav-tabs {
-    border-bottom: 1px solid #282828;
-}
-
-.nav-tabs>li>a,
-.nav-tabs>li>a:hover,
-.nav-tabs>li>a:focus {
-    color:#ffffff;
-    border:1px solid #282828;
-    border-bottom-color:transparent;
-}
-
-.nav-tabs>li.active>a,
-.nav-tabs>li.active>a:hover,
-.nav-tabs>li.active>a:focus {
-    color:#ffffff;
-    border:1px solid #282828;
-    border-bottom-color:transparent;
-}
-*/
 .sub-categories-holder .thumbnail,
 .bottom-tabs-holder .thumbnail,
 .association .thumbnail {
@@ -1339,6 +1291,75 @@ fieldset[disabled] .btn-primary2.active {
 }
 
 /*===================================================================================*/
+/*	MINI CART & CART PAGE
+/*===================================================================================*/
+
+.page-header .mini-cart-holder {
+    padding: 25px 0 0 55px;
+}
+
+.page-header .mini-cart-holder-checkout .mini-cart-line,
+.page-header .mini-cart-holder .mini-cart-line {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+}
+
+.mini-cart-line a > .default,
+.mini-cart-line a > .orange {
+    font-size: 21px;
+}
+
+.mini-cart-line a > .orange {
+    color: #f0ad4e;
+}
+
+.mini-cart-line a > sup {
+    font-size: 1em;
+    top: -1em;
+    color: #808080;
+    margin-right: 5px;
+}
+
+.mini-cart-line .regular-price-currency,
+.mini-cart-line .regular-price-whole,
+.mini-cart-line .sale-price-currency,
+.mini-cart-line .sale-price-whole {
+    font-size: 30px;
+}
+
+.mini-cart-line .regular-price-decimal,
+.mini-cart-line .sale-price-decimal {
+    font-size: 16px;
+}
+
+#mini-cart.loading {
+    background: url('../image/loading.gif') left center no-repeat
+}
+
+.mini-cart-line .sale-price-whole,
+.mini-cart-line .sale-price-decimal,
+.mini-cart-line .sale-price-dot,
+.mini-cart-line .sale-price-currency {
+    color: #2a9fd6;
+}
+
+.mini-cart-line > a,
+.mini-cart-line .sale-price-tax,
+.mini-cart-line .regular-price-tax {
+    float: right;
+}
+
+.order-grand-total .sale-price-save-details,
+.shipping-form .sale-price-save-details,
+.shopping-cart-details .cart-item .sale-price-save-details,
+.shopping-cart-sidebar .sale-price-save-details {
+    visibility: hidden;
+    display: none;
+}
+
+/*===================================================================================*/
 /*	MANAGE ADDRESS, EDIT ADDRESS
 /*===================================================================================*/
 
@@ -1668,6 +1689,10 @@ ul.feedbackPanel > li {
 
     .page-header .mini-cart-holder {
         padding: 15px 0 0 15px;
+        text-align: center;
+    }
+
+    .page-header .mini-cart-holder-checkout {
         text-align: center;
     }
 
