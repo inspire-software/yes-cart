@@ -77,9 +77,8 @@
 
                 <prop key="hibernate.search.default.directory_provider">${db.config.yes.hibernate.search.default.directory_provider}</prop>
 
-                <prop key="hibernate.search.default.indexBase">
-                    #{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'}
-                </prop>
+                <prop key="hibernate.search.default.indexBase">${db.config.yes.hibernate.search.default.indexBase}</prop>
+
                 <prop key="hibernate.search.worker.execution">async</prop>
                 <prop key="hibernate.search.worker.thread_pool.size">10</prop>
                 <prop key="hibernate.search.default.exclusive_index_use">false</prop>
