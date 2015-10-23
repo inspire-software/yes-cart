@@ -108,6 +108,35 @@
         <property name="cronExpression" value="0 0/10 * * * ?" />
     </bean>
 
+    <!-- ################################ Auto Import  ###################################################### -->
+
+    <bean id="autoImportListener" class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="bulkImportService"/>
+        <constructor-arg index="2" ref="reindexService"/>
+        <constructor-arg index="3" ref="remoteDevService"/>
+        <constructor-arg index="4" ref="systemService"/>
+        <constructor-arg index="5" ref="runtimeAttributeService"/>
+        <constructor-arg index="6" ref="authenticationManager"/>
+    </bean>
+
+    <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Auto Import" />
+                <entry key="job" value-ref="autoImportListener" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="autoImportJob" />
+        <!-- at 3:00 am -->
+        <property name="cronExpression" value="0 0 3 * * ?" />
+    </bean>
+
     <!-- ################################ Scheduler  ####################################################### -->
 
 
@@ -141,6 +170,7 @@
                 <ref bean="abandonedShoppingCartJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
                 <ref bean="sendMailJobCronTrigger" />
+                <ref bean="autoImportJobCronTrigger" />
             </list>
         </property>
         <property name="quartzProperties">

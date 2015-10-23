@@ -33,6 +33,9 @@ import java.util.Map;
 public interface ImportDirectorService {
 
     /**
+     * List of import groups. Each group is represented by a map and contains the following
+     * keys: "name", "label".
+     *
      * @param language language
      *
      * @return configured import groups

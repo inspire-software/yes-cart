@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -107,7 +108,13 @@ public class RemoteDevServiceImpl implements RemoteDevService {
     }
 
     private AsyncContext createCtx(final Map<String, Object> param) {
-        return new AsyncFlexContextImpl(param);
+        try {
+            // This is manual access via YUM
+            return new AsyncFlexContextImpl(param);
+        } catch (IllegalStateException exp) {
+            // This is auto access with thread local
+            return new BulkJobAutoContextImpl(param);
+        }
     }
 
 

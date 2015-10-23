@@ -67,3 +67,32 @@ WARNING: be careful with IPv4 vs IPv6',  1000, 1001);
 
 alter table TCUSTOMERORDERPAYMENT add column ORDER_DELIVERY_TAX decimal(19,2) NOT NULL default 0;
 
+--
+-- YC-604 Add standard listener for local FS auto import
+--
+
+delete from TSYSTEMATTRVALUE where CODE = 'JOB_SEND_MAIL_PAUSE';
+delete from TATTRIBUTE where CODE = 'JOB_SEND_MAIL_PAUSE';
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11104,  'JOB_SEND_MAIL_PAUSE', 'JOB_SEND_MAIL_PAUSE',  0,  NULL,  'Job\Mail: pause mail processing',
+    'Pause email sending job',  1008, 1000);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11106,  'JOB_LOCAL_FILE_IMPORT_PAUSE', 'JOB_LOCAL_FILE_IMPORT_PAUSE',  0,  NULL,  'Job\Auto Import: pause import listener',
+    'Pause local file system import listener',  1008, 1000);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11107,  'JOB_LOCAL_FILE_IMPORT_FS_ROOT', 'JOB_LOCAL_FILE_IMPORT_FS_ROOT',  0,  NULL,  'Job\Auto Import: listener directory root',
+    'Directory root for listener to check for updates',  1001, 1000);
+
+delete from TSYSTEMATTRVALUE where CODE = 'JOB_DEL_WAITING_INV_LAST_RUN';
+delete from TATTRIBUTE where CODE = 'JOB_DEL_WAITING_INV_LAST_RUN';
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11108,  'JOB_DEL_WAITING_INV_LAST_RUN', 'JOB_DEL_WAITING_INV_LAST_RUN',  0,  NULL,  'Job\Inventory Reservation: Last run timestamp',
+    'Timestamp of last run of the inventory job. Used to check inventory changes.',  1009, 1000);
+
+
+
+

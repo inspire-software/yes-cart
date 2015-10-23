@@ -27,6 +27,8 @@ import org.yes.cart.bulkimport.service.DataDescriptorResolver;
 import org.yes.cart.bulkimport.service.ImportDirectorService;
 import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
+import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
+import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.DataGroup;
@@ -46,7 +48,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
-import org.yes.cart.cluster.node.NodeService;
 
 import java.io.File;
 import java.io.IOException;
@@ -133,9 +134,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /** {@inheritDoc} */
     public String doImport(final String descriptorGroup, final String fileName, final boolean async) {
 
-        final Map<String, Object> param = new HashMap<String, Object>();
-
-        final AsyncContext flex = new AsyncFlexContextImpl(param);
+        final AsyncContext ctx = getAsyncContext();
 
         final String imgVault = systemService.getImageRepositoryDirectory();
 
@@ -153,8 +152,18 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     put(JobContextKeys.IMPORT_FILE_SET, new HashSet<String>());
                     put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
                     put(JobContextKeys.IMPORT_DIRECTORY_ROOT, rootPath);
-                    putAll(flex.getAttributes());
+                    putAll(ctx.getAttributes());
                 }}));
+    }
+
+    private AsyncContext getAsyncContext() {
+        try {
+            // This is manual access via YUM
+            return new AsyncFlexContextImpl(new HashMap<String, Object>());
+        } catch (IllegalStateException exp) {
+            // This is auto access with thread local
+            return new BulkJobAutoContextImpl(new HashMap<String, Object>());
+        }
     }
 
     protected Runnable createJobRunnable(final JobContext ctx) {
@@ -165,7 +174,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
             public void run() {
                 try {
-                    ThreadLocalAsyncContextUtils.init(ctx);
+                    ThreadLocalAsyncContextUtils.init(context);
 
                     final String file = context.getAttribute(JobContextKeys.IMPORT_FILE);
                     final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);

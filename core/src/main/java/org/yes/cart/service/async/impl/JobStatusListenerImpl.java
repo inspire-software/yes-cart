@@ -19,6 +19,7 @@ package org.yes.cart.service.async.impl;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.UUID;
 
@@ -114,6 +115,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "INFO: ", message, "\n");
+        ShopCodeContext.getLog(this).info(message);
         notifyPing();
     }
 
@@ -123,6 +125,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "WARNING: ", warning, "\n");
+        ShopCodeContext.getLog(this).warn(warning);
         notifyPing();
         warn++;
     }
@@ -133,6 +136,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
             throw new IllegalArgumentException("Job " + token.toString() + " has finished and cannot be updated");
         }
         append(report, "ERROR: ", error, "\n");
+        ShopCodeContext.getLog(this).error(error);
         notifyPing();
         err++;
     }
@@ -144,6 +148,7 @@ public class JobStatusListenerImpl implements JobStatusListener {
         }
         this.result = err > 0 ? JobStatus.Completion.ERROR : JobStatus.Completion.OK;
         this.pingMsg = null; // we have completed the job, clear ping message
+        ShopCodeContext.getLog(this).info(result.name());
         notifyPing();
     }
 

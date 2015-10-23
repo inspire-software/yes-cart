@@ -33,7 +33,7 @@
     <bean id="entryPoint"
           class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
-    <security:authentication-manager>
+    <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider>
             <security:password-encoder ref="passwordHashHelper"/>
             <security:jdbc-user-service

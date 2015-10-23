@@ -62,6 +62,11 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
         final ContextRspMessage wsMessage = (ContextRspMessage) message;
         final AsyncContext context = wsMessage.getAsyncContext();
 
+        if (AsyncContext.NO_BROADCAST.equals(context.getAttribute(AsyncContext.NO_BROADCAST))) {
+            LOG.debug("Broadcasting switched off for context of message {}", message.getSubject());
+            return;
+        }
+
         final List<String> targets = message.getTargets();
 
         final List<Node> cluster = new ArrayList<Node>(getYesNodes());

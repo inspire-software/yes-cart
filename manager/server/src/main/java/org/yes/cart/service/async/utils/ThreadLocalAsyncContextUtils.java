@@ -19,6 +19,7 @@ package org.yes.cart.service.async.utils;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.async.model.JobContext;
 
 /**
  * Thread local security allows to set security context for current thread.
@@ -45,7 +46,10 @@ public final class ThreadLocalAsyncContextUtils {
      */
     public static void init(final AsyncContext context) {
         final SecurityContext security = (SecurityContext) context.getAttribute(AsyncContext.SECURITY_CTX);
-        SecurityContextHolder.setContext(security);
+        final boolean forceSetSecurity = forceSetSecurityContext(context);
+        if (forceSetSecurity) {
+            SecurityContextHolder.setContext(security);
+        }
         ctx.set(context);
     }
 
@@ -53,7 +57,12 @@ public final class ThreadLocalAsyncContextUtils {
      * Clear security context.
      */
     public static void clear() {
-        SecurityContextHolder.clearContext();
+
+        final AsyncContext context = getContext();
+        final boolean forceSetSecurity = forceSetSecurityContext(context);
+        if (forceSetSecurity) {
+            SecurityContextHolder.clearContext();
+        }
         ctx.set(null);
     }
 
@@ -62,6 +71,12 @@ public final class ThreadLocalAsyncContextUtils {
      */
     public static AsyncContext getContext() {
         return ctx.get();
+    }
+
+
+    private static boolean forceSetSecurityContext(final AsyncContext context) {
+        // If this is asynchronous job then we need to set security context in thread
+        return context instanceof JobContext && ((JobContext) context).isAsync();
     }
 
 }
