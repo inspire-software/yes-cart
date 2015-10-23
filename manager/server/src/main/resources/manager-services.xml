@@ -715,8 +715,8 @@
             It is recommended to craft these sets according to business model of the company
             to maximise performance.
         </description>
-        <constructor-arg index="0" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'archive'}"/>
-        <constructor-arg index="1" value="#{systemProperties['java.io.tmpdir']+systemProperties['file.separator']+'yes-cart'+systemProperties['file.separator']+'import'}"/>
+        <constructor-arg index="0" value="${fs.config.bulkimport.absolute.archive.root}"/>
+        <constructor-arg index="1" value="${fs.config.bulkimport.absolute.import.root}"/>
         <constructor-arg index="2" ref="productService"/>
         <constructor-arg index="3" ref="importDataDescriptorResolver"/>
         <constructor-arg index="4" ref="bulkImportExecutor"/>

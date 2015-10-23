@@ -188,7 +188,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
                     this.getClass().getClassLoader().getResource("fop-userconfig.xml");
             if (configFileUrl == null) {
                 LOG.error("FOP config file not  found, " +
-                        "please put the fop-userconfig.xml file into the classpath of the  server, UTF - 8characters won't be displayed correctly");
+                        "please put the fop-userconfig.xml file into the classpath of the  server, UTF-8 characters won't be displayed correctly");
             } else {
                 File userConfigXml = new
                         File(configFileUrl.getFile());

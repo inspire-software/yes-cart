@@ -25,7 +25,7 @@
                 <fo:static-content flow-name="xsl-region-before">
                     <fo:block text-align="left" font-weight="bold" font-size="16pt">
                         <fo:inline>
-                            <fo:external-graphic  src="report/yes-logo.png" width="35mm" vertical-align="middle"/>
+                            <fo:external-graphic  src="src/test/resources/xslfo/yes-logo.png" width="35mm" vertical-align="middle"/>
                         </fo:inline>
                         Payments
                     </fo:block>
