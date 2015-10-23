@@ -95,7 +95,7 @@ public class SystemServiceImpl implements SystemService {
             "systemService-attributeValue",
             "systemService-attributeValues"
     }, allEntries = true)
-    public void updateAttributeValue(final String key, final String value) {
+    public synchronized void updateAttributeValue(final String key, final String value) {
 
         AttrValueSystem attrVal = getSystem().getAttributes().get(key);
 
@@ -114,6 +114,9 @@ public class SystemServiceImpl implements SystemService {
             attrVal.setVal(value);
         }
         systemDao.saveOrUpdate(system);
+        // Must force attribute to be persisted to avoid optimistic locking
+        // Note this method should be synchronised to ensure that save in time
+        systemDao.flush();
     }
 
 
