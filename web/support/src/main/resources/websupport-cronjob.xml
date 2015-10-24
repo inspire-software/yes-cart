@@ -45,8 +45,7 @@
 
     <bean id="productsGlobalIndexProcessorTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="productsGlobalIndexProcessorJob" />
-        <!-- at 5:00 am -->
-        <property name="cronExpression" value="0 0 5 * * ?" />
+        <property name="cronExpression" value="${ws.cron.productsGlobalIndexProcessorJob}" />
     </bean>
 
 
@@ -73,8 +72,7 @@
 
     <bean id="reindexDiscontinuedProductsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="reindexDiscontinuedProductsJob" />
-        <!-- at 5:00 am -->
-        <property name="cronExpression" value="0 0 5 * * ?" />
+        <property name="cronExpression" value="${ws.cron.reindexDiscontinuedProductsJob}" />
     </bean>
 
     <!-- ################################ Inventory updates products indexing  ############################# -->
@@ -105,8 +103,7 @@
 
     <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
-        <!-- each 5 minute 0,5,10 ... 55 -->
-        <property name="cronExpression" value="0 0/5 * * * ?" />
+        <property name="cronExpression" value="${ws.cron.productInventoryChangedProcessorJob}" />
     </bean>
 
 

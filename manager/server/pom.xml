@@ -418,6 +418,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>

@@ -36,8 +36,7 @@
 
     <bean id="preOrderJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="preorderJob" />
-        <!-- each 10 minute 0,10,20,30,40 and 50 -->
-        <property name="cronExpression" value="0 0/10 * * * ?" />
+        <property name="cronExpression" value="${yum.cron.preorderJob}" />
     </bean>
 
     <!-- ################################ Abandon shopping cart clean up  ################################### -->
@@ -55,8 +54,7 @@
 
     <bean id="abandonedShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="abandonedShoppingCartJob" />
-        <!-- at 2:30 am -->
-        <property name="cronExpression" value="0 30 2 * * ?" />
+        <property name="cronExpression" value="${yum.cron.abandonedShoppingCartJob}" />
     </bean>
 
 
@@ -75,8 +73,7 @@
 
     <bean id="customerTagJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="customerTagJob" />
-        <!-- at 3:00 am -->
-        <property name="cronExpression" value="0 0 3 * * ?" />
+        <property name="cronExpression" value="${yum.cron.customerTagJob}" />
     </bean>
 
     <!-- ################################ Bulk email  ###################################################### -->
@@ -104,8 +101,7 @@
 
     <bean id="sendMailJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="sendMailJob" />
-        <!-- each 10 minute 0,10,20,30,40,50 -->
-        <property name="cronExpression" value="0 0/10 * * * ?" />
+        <property name="cronExpression" value="${yum.cron.sendMailJob}" />
     </bean>
 
     <!-- ################################ Auto Import  ###################################################### -->
@@ -133,8 +129,7 @@
 
     <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="autoImportJob" />
-        <!-- at 3:00 am -->
-        <property name="cronExpression" value="0 0 3 * * ?" />
+        <property name="cronExpression" value="${yum.cron.autoImportJob}" />
     </bean>
 
     <!-- ################################ Scheduler  ####################################################### -->
