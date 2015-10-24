@@ -479,7 +479,7 @@ fieldset[disabled] .btn-primary2.active {
 .products-holder .thumbnail .product-price-holder {
     margin: 5px 9px;
     text-align: right;
-    min-height: 51px;
+    min-height: 67px;
 }
 
 .regular-price-currency,
@@ -1683,6 +1683,10 @@ ul.feedbackPanel > li {
 
     .sku-attributes-holder .single-attr-block > ul {
         padding-left: 0;
+    }
+
+    .cart-item .quantity-block {
+        margin-top: 10px;
     }
 
 }
