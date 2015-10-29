@@ -40,6 +40,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     private static final String MARKUP_ROOT         = "/markup/";
     private static final String MAILTEMPLATE_ROOT   = "/mail/";
+    private static final String REPORTSTEMPLATE_ROOT   = "/reports/";
 
     private final ShopService shopService;
 
@@ -114,6 +115,19 @@ public class ThemeServiceImpl implements ThemeService {
         final List<String> mailtemplates = new ArrayList<String>(themes.size());
         for (final String theme : themes) {
             mailtemplates.add(theme + MAILTEMPLATE_ROOT);
+        }
+        return Collections.unmodifiableList(mailtemplates);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "themeService-reportsTemplateChainByShopId")
+    public List<String> getReportsTemplateChainByShopId(final Long shopId) {
+        final List<String> themes = getThemeChainByShopId(shopId, null);
+        final List<String> mailtemplates = new ArrayList<String>(themes.size());
+        for (final String theme : themes) {
+            mailtemplates.add(theme + REPORTSTEMPLATE_ROOT);
         }
         return Collections.unmodifiableList(mailtemplates);
     }

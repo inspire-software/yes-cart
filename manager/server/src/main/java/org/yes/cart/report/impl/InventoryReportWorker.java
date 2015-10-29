@@ -21,6 +21,7 @@ import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.remote.service.RemoteInventoryService;
 import org.yes.cart.remote.service.RemoteWarehouseService;
+import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 import org.yes.cart.service.dto.support.impl.InventoryFilterImpl;
 
@@ -97,4 +98,12 @@ public class InventoryReportWorker implements ReportWorker {
         }
         return Collections.emptyList();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
+        return new HashMap<String, Object>(currentSelection);
+    }
+
 }

@@ -17,12 +17,10 @@
 package org.yes.cart.report.impl;
 
 import org.yes.cart.remote.service.RemotePaymentModulesManagementService;
+import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -53,5 +51,12 @@ public class PaymentReportWorker implements ReportWorker {
         final Date tillDate = (Date) currentSelection.get("tillDate");
 
         return (List) remotePaymentModulesManagementService.findPayments(orderNumber, fromDate, tillDate, null, null, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
+        return new HashMap<String, Object>(currentSelection);
     }
 }

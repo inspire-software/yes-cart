@@ -360,6 +360,9 @@
     <cache name="themeService-markupChainByShopId" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="themeService-reportsTemplateChainByShopId" maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="themeService-mailTemplateChainByShopId" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

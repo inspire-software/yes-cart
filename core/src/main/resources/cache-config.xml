@@ -637,6 +637,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="themeService-reportsTemplateChainByShopId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="mailSenderBuilder-buildJavaMailSender"/>
             <constructor-arg index="1" value="all"/>
         </bean>

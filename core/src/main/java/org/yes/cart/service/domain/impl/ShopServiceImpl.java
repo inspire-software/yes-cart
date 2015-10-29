@@ -249,6 +249,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",
             "themeService-mailTemplateChainByShopId",
+            "themeService-reportsTemplateChainByShopId",
             "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public Shop update(Shop instance) {
@@ -269,6 +270,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",
             "themeService-mailTemplateChainByShopId",
+            "themeService-reportsTemplateChainByShopId",
             "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public void delete(Shop instance) {

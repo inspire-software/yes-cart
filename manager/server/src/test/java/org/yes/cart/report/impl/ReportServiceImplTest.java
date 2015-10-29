@@ -1,9 +1,23 @@
 package org.yes.cart.report.impl;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.yes.cart.report.ReportDescriptor;
+import org.yes.cart.report.ReportGenerator;
+import org.yes.cart.service.domain.ContentService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.theme.ThemeService;
+import org.yes.cart.util.ShopCodeContext;
 
+import javax.servlet.ServletContext;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -18,6 +32,8 @@ import static org.junit.Assert.fail;
  */
 public class ReportServiceImplTest  {
 
+    private final Mockery context = new JUnit4Mockery();
+
     private final List<ReportDescriptor> allReportToTestCreation = new ArrayList<ReportDescriptor>();
 
     private static final String ROOT_DIR = "src/test/resources/";
@@ -27,19 +43,19 @@ public class ReportServiceImplTest  {
 
 
         ReportDescriptor reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/payments");
+        reportDescriptor.setXslfoBase("xslfo/payments");
         reportDescriptor.setReportId("payments");
 
         allReportToTestCreation.add(reportDescriptor);
 
         reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/delivery");
+        reportDescriptor.setXslfoBase("xslfo/delivery");
         reportDescriptor.setReportId("reportDelivery");
 
         allReportToTestCreation.add(reportDescriptor);
 
         reportDescriptor = new ReportDescriptor();
-        reportDescriptor.setXslfoBase(ROOT_DIR + "xslfo/available-stock");
+        reportDescriptor.setXslfoBase("xslfo/available-stock");
         reportDescriptor.setReportId("reportAvailableStock");
 
         allReportToTestCreation.add(reportDescriptor);
@@ -47,26 +63,60 @@ public class ReportServiceImplTest  {
 
     @Test
     public void testGetReportAvailableStock() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
-            /** {@inheritDoc} */
-            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
-                return Collections.EMPTY_LIST;
-            }
-            /** {@inheritDoc} */
-            byte[] getXml(final List<Object> rez) {
 
+        final ThemeService themeService = context.mock(ThemeService.class, "themeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ServletContext servletContext = context.mock(ServletContext.class, "servletContext");
+
+        context.checking(new Expectations() {{
+            allowing(themeService).getReportsTemplateChainByShopId(null);
+            will(returnValue(Arrays.asList("default/reports/")));
+            one(servletContext).getResourceAsStream("default/reports/fop-userconfig.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fop-userconfig.xml")));
+            one(servletContext).getResourceAsStream("default/reports/xslfo/available-stock.xslfo");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/xslfo/available-stock.xslfo")));
+            one(servletContext).getResourceAsStream("default/reports/yes-logo.png");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/yes-logo.png")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.ttf")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.ttf")));
+        }});
+
+
+        final AdminReportGeneratorImpl reportGenerator = new AdminReportGeneratorImpl(themeService, shopService, contentService) {
+
+            @Override
+            protected Source convertToSource(final ReportDescriptor descriptor, final Map<String, Object> parameters, final Object data, final String lang) {
                 try {
-                    return new Scanner(new File(ROOT_DIR + "xslfo/available-stock-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
-                } catch (FileNotFoundException e) {
+                    return new StreamSource(
+                            new InputStreamReader(new FileInputStream(ROOT_DIR + "default/reports/xslfo/available-stock-report.xml"), "UTF-8")
+                    );
+                } catch (Exception e) {
                     fail(e.getMessage());
                     return null;
                 }
+            }
 
+        };
+        reportGenerator.setServletContext(servletContext);
+
+        final ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, Collections.EMPTY_MAP, reportGenerator) {
+            /** {@inheritDoc} */
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
+                return Collections.singletonList(new Object());
             }
         };
 
 
         byte[] report = reportService.downloadReport(null, "reportAvailableStock", null);
+
+        context.assertIsSatisfied();
 
         assertNotNull(report);
         assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
@@ -77,21 +127,53 @@ public class ReportServiceImplTest  {
 
     @Test
     public void testGetReportPayments() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
-            /** {@inheritDoc} */
-            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
-                return Collections.EMPTY_LIST;
-            }
-            /** {@inheritDoc} */
-            byte[] getXml(final List<Object> rez) {
 
+        final ThemeService themeService = context.mock(ThemeService.class, "themeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ServletContext servletContext = context.mock(ServletContext.class, "servletContext");
+
+        context.checking(new Expectations() {{
+            allowing(themeService).getReportsTemplateChainByShopId(null);
+            will(returnValue(Arrays.asList("default/reports/")));
+            one(servletContext).getResourceAsStream("default/reports/fop-userconfig.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fop-userconfig.xml")));
+            one(servletContext).getResourceAsStream("default/reports/xslfo/payments.xslfo");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/xslfo/payments.xslfo")));
+            one(servletContext).getResourceAsStream("default/reports/yes-logo.png");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/yes-logo.png")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.ttf")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.ttf")));
+        }});
+
+
+        final AdminReportGeneratorImpl reportGenerator = new AdminReportGeneratorImpl(themeService, shopService, contentService) {
+
+            @Override
+            protected Source convertToSource(final ReportDescriptor descriptor, final Map<String, Object> parameters, final Object data, final String lang) {
                 try {
-                    return new Scanner(new File(ROOT_DIR + "xslfo/payment-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
-                } catch (FileNotFoundException e) {
+                    return new StreamSource(
+                            new InputStreamReader(new FileInputStream(ROOT_DIR + "default/reports/xslfo/payment-report.xml"), "UTF-8")
+                    );
+                } catch (Exception e) {
                     fail(e.getMessage());
                     return null;
                 }
+            }
 
+        };
+        reportGenerator.setServletContext(servletContext);
+
+        final ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, Collections.EMPTY_MAP, reportGenerator) {
+            /** {@inheritDoc} */
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
+                return Collections.singletonList(new Object());
             }
         };
 
@@ -106,21 +188,53 @@ public class ReportServiceImplTest  {
 
     @Test
     public void testGetReportDelivery() throws Exception {
-        ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, null, null) {
-            /** {@inheritDoc} */
-            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
-                return Collections.EMPTY_LIST;
-            }
-            /** {@inheritDoc} */
-            byte[] getXml(final List<Object> rez) {
 
+        final ThemeService themeService = context.mock(ThemeService.class, "themeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ContentService contentService = context.mock(ContentService.class, "contentService");
+        final ServletContext servletContext = context.mock(ServletContext.class, "servletContext");
+
+        context.checking(new Expectations() {{
+            allowing(themeService).getReportsTemplateChainByShopId(null);
+            will(returnValue(Arrays.asList("default/reports/")));
+            one(servletContext).getResourceAsStream("default/reports/fop-userconfig.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fop-userconfig.xml")));
+            one(servletContext).getResourceAsStream("default/reports/xslfo/delivery.xslfo");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/xslfo/delivery.xslfo")));
+            one(servletContext).getResourceAsStream("default/reports/yes-logo.png");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/yes-logo.png")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/times.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/times.ttf")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.xml");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.xml")));
+            one(servletContext).getResourceAsStream("default/reports/fonts/timesbd.ttf");
+            will(returnValue(new FileInputStream(ROOT_DIR + "default/reports/fonts/timesbd.ttf")));
+        }});
+
+
+        final AdminReportGeneratorImpl reportGenerator = new AdminReportGeneratorImpl(themeService, shopService, contentService) {
+
+            @Override
+            protected Source convertToSource(final ReportDescriptor descriptor, final Map<String, Object> parameters, final Object data, final String lang) {
                 try {
-                    return new Scanner(new File(ROOT_DIR + "xslfo/delivery-report.xml")).useDelimiter("\\Z").next().getBytes(Charset.forName("UTF-8"));
-                } catch (FileNotFoundException e) {
+                    return new StreamSource(
+                            new InputStreamReader(new FileInputStream(ROOT_DIR + "default/reports/xslfo/delivery-report.xml"), "UTF-8")
+                    );
+                } catch (Exception e) {
                     fail(e.getMessage());
                     return null;
                 }
+            }
 
+        };
+        reportGenerator.setServletContext(servletContext);
+
+        final ReportServiceImpl reportService = new ReportServiceImpl(allReportToTestCreation, Collections.EMPTY_MAP, reportGenerator) {
+            /** {@inheritDoc} */
+            List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
+                return Collections.singletonList(new Object());
             }
         };
 

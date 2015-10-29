@@ -23,7 +23,7 @@
 package org.yes.cart.report.impl {
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.report.impl.ReportPair")]
+[RemoteClass(alias="org.yes.cart.report.ReportPair")]
 public class ReportPair {
 
     public var label:String;

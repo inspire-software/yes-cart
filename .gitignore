@@ -32,6 +32,8 @@ core-modules/core-module-orderstate/target/**
 
 core-modules/core-module-payment-authorizenet/core-module-payment-authorizenet.iml
 
+core-modules/core-module-payment-authorizenet/logs/net.authorize.aim.log
+
 core-modules/core-module-payment-authorizenet/target/**
 
 core-modules/core-module-payment-base/core-module-payment-base.iml
@@ -58,6 +60,10 @@ core-modules/core-module-payment-robokassa/core-module-payment-robokassa.iml
 
 core-modules/core-module-payment-robokassa/target/**
 
+core-modules/core-module-reports/core-module-reports.iml
+
+core-modules/core-module-reports/target/**
+
 core-modules/core-modules.iml
 
 core-modules/target/**
@@ -82,6 +88,8 @@ manager/target/**
 
 manager/server/yes-manager.iml
 
+manager/server/logs/net.authorize.aim.log
+
 manager/server/target/**
 
 payment-api/payment-api.iml
@@ -89,6 +97,8 @@ payment-api/payment-api.iml
 payment-api/target/**
 
 persistence/persistence.iml
+
+persistence/logs/net.authorize.aim.log
 
 persistence/target/**
 
@@ -100,15 +110,23 @@ theme/mail/mail.iml
 
 theme/mail/target/**
 
+theme/reports/reports.iml
+
+theme/reports/target/**
+
 theme/theme.iml
 
 theme/target/**
 
 web/api/yes-api.iml
 
+web/api/logs/net.authorize.aim.log
+
 web/api/target/**
 
 web/store-wicket/yes-shop-wicket.iml
+
+web/store-wicket/yes-cart-default.log
 
 web/store-wicket/target/**
 
@@ -129,4 +147,3 @@ yes-cart.ipr
 yes-cart.iws
 
 target/**
-web/store-wicket/yes-cart-default.log

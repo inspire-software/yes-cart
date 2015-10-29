@@ -23,12 +23,12 @@
     <!-- #################################  reporting configuration ######################################-->
 
 
-    <bean id="reportDelivery" class="org.yes.cart.report.impl.ReportDescriptor">
+    <bean id="reportDelivery" class="org.yes.cart.report.ReportDescriptor">
         <property name="reportId" value="reportDelivery"/>
-        <property name="xslfoBase" value="delivery"/>
+        <property name="xslfoBase" value="client/order/delivery"/>
         <property name="parameters">
             <list>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="orderNumber"/>
                     <property name="businesstype" value="String"/>
                     <property name="mandatory" value="true"/>
@@ -38,47 +38,47 @@
     </bean>
 
 
-    <bean id="reportAvailableStock" class="org.yes.cart.report.impl.ReportDescriptor">
+    <bean id="reportAvailableStock" class="org.yes.cart.report.ReportDescriptor">
         <property name="reportId" value="reportAvailableStock"/>
+        <property name="xslfoBase" value="admin/inventory/available-stock"/>
         <property name="parameters">
             <list>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="warehouse"/>
                     <property name="businesstype" value="org.yes.cart.domain.dto.WarehouseDTO"/>
                     <property name="mandatory" value="true"/>
                 </bean>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="skuCode"/>
                     <property name="businesstype" value="String"/>
                     <property name="mandatory" value="false"/>
                 </bean>
             </list>
         </property>
-        <property name="xslfoBase" value="available-stock"/>
     </bean>
 
-    <bean id="reportPayments" class="org.yes.cart.report.impl.ReportDescriptor">
+    <bean id="reportPayments" class="org.yes.cart.report.ReportDescriptor">
         <property name="reportId" value="reportPayments"/>
+        <property name="xslfoBase" value="admin/payment/payments"/>
         <property name="parameters">
             <list>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="orderNumber"/>
                     <property name="businesstype" value="String"/>
                     <property name="mandatory" value="false"/>
                 </bean>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="fromDate"/>
                     <property name="businesstype" value="Date"/>
                     <property name="mandatory" value="true"/>
                 </bean>
-                <bean class="org.yes.cart.report.impl.ReportParameter">
+                <bean class="org.yes.cart.report.ReportParameter">
                     <property name="parameterId" value="tillDate"/>
                     <property name="businesstype" value="Date"/>
                     <property name="mandatory" value="true"/>
                 </bean>
             </list>
         </property>
-        <property name="xslfoBase" value="payments"/>
     </bean>
 
     <util:list id="reportDescriptors">
@@ -96,6 +96,7 @@
         <entry key="reportDelivery">
             <bean class="org.yes.cart.report.impl.DeliveryReportWorker">
                 <constructor-arg index="0" ref="remoteCustomerOrderService"/>
+                <constructor-arg index="1" ref="shopService"/>
             </bean>
         </entry>
         <entry key="reportAvailableStock">

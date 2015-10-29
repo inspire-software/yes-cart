@@ -18,29 +18,15 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.lang.StringUtils;
-import org.apache.fop.apps.FOUserAgent;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
-import org.apache.fop.apps.MimeConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.web.context.ServletContextAware;
 import org.xml.sax.SAXException;
-import org.yes.cart.report.ReportService;
-import org.yes.cart.report.ReportWorker;
+import org.yes.cart.report.*;
 
-import javax.servlet.ServletContext;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.URL;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,37 +39,26 @@ import java.util.Map;
  * Date: 7/2/12
  * Time: 2:46 PM
  */
-public class ReportServiceImpl implements ReportService, ServletContextAware {
-
-    private final Logger LOG = LoggerFactory.getLogger(ReportServiceImpl.class);
+public class ReportServiceImpl implements ReportService {
 
     private final List<ReportDescriptor> reportDescriptors;
-
     private final Map<String, ReportWorker> reportWorkers;
-
-    private final String reportFolder;
-
-    private ServletContext servletContext;
+    private final ReportGenerator reportGenerator;
 
     /**
      * Construct report service.
      *
      * @param reportDescriptors list of configured reports.
      * @param reportWorkers     report workers
-     * @param reportFolder      report folder
+     * @param reportGenerator   report generator
      */
     public ReportServiceImpl(final List<ReportDescriptor> reportDescriptors,
                              final Map<String, ReportWorker> reportWorkers,
-                             final String reportFolder) {
+                             final ReportGenerator reportGenerator) {
 
         this.reportDescriptors = reportDescriptors;
         this.reportWorkers = reportWorkers;
-
-        if (StringUtils.isNotBlank(reportFolder)) {
-            this.reportFolder = "WEB-INF" + File.separator + reportFolder + File.separator;
-        } else {
-            this.reportFolder = StringUtils.EMPTY;
-        }
+        this.reportGenerator = reportGenerator;
 
     }
 
@@ -112,7 +87,7 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
                 reportDescriptors,
                 new Predicate() {
                     public boolean evaluate(Object object) {
-                        return ((ReportDescriptor)object).isVisible();
+                        return ((ReportDescriptor) object).isVisible();
                     }
                 }
 
@@ -145,109 +120,28 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
     }
 
 
-    private boolean createReport(final String lang, final String reportId, final OutputStream reportStream, final Map<String, Object> currentSelection) throws Exception {
+    private boolean createReport(final String lang,
+                                 final String reportId,
+                                 final OutputStream reportStream,
+                                 final Map<String, Object> currentSelection) throws Exception {
 
         final List<Object> rez = getQueryResult(lang, reportId, currentSelection);
-
-        return createReport(lang, reportId, reportStream, rez);
+        final Map<String, Object> enhancedSelection = getEnhancedParameterValues(reportId, rez, currentSelection);
+        return createReport(lang, reportId, reportStream, rez, enhancedSelection);
 
     }
 
-    /*
-     * @param reportId report descriptor.
-     * @param reportStream report filename
-     * @param lang     given lang to produce report.
-     * @param rez      list of object for report
-     * @return true in case if report was generated
-     * @throws SAXException
-     * @throws IOException
-     */
-    private boolean createReport(String lang, String reportId, OutputStream reportStream, List<Object> rez) throws SAXException, IOException {
+    private boolean createReport(final String lang,
+                                 final String reportId,
+                                 final OutputStream reportStream,
+                                 final List<Object> rez,
+                                 final Map<String, Object> currentSelection) throws SAXException, IOException {
 
-        final byte[] xmlfile = getXml(rez);
+        final ReportDescriptor descriptor = getReportDescriptorbyId(reportId);
 
-        if (LOG.isDebugEnabled()) {
-//            System.out.println(new String(xmlfile));
-            LOG.debug(new String(xmlfile));
-        }
+        if (CollectionUtils.isNotEmpty(rez)) {
 
-        final String xslFoFile = getReportDescriptorbyId(reportId).getLangXslfo(lang);
-
-        if (xmlfile != null && xmlfile.length > 0) {
-
-            final File xsltfile;
-
-            // configure fopFactory as desired
-            final FopFactory fopFactory = FopFactory.newInstance();
-
-            final FOUserAgent foUserAgent = fopFactory.newFOUserAgent();
-            // configure foUserAgent as desired
-
-
-            final URL configFileUrl =
-                    this.getClass().getClassLoader().getResource("fop-userconfig.xml");
-            if (configFileUrl == null) {
-                LOG.error("FOP config file not  found, " +
-                        "please put the fop-userconfig.xml file into the classpath of the  server, UTF-8 characters won't be displayed correctly");
-            } else {
-                File userConfigXml = new
-                        File(configFileUrl.getFile());
-                fopFactory.setUserConfig(userConfigXml);
-            }
-
-
-            if (servletContext == null) {
-                xsltfile = new File(reportFolder + xslFoFile);
-            } else {
-                xsltfile = new File(servletContext.getRealPath(reportFolder + xslFoFile));
-                fopFactory.getFontManager().setFontBaseURL(servletContext.getRealPath("WEB-INF"));
-                foUserAgent.setBaseURL("file:///" + servletContext.getRealPath("WEB-INF/report/"));
-            }
-
-            if (!xsltfile.exists()) {
-                LOG.error("XSLT file does not exist: " + xsltfile.getAbsolutePath());
-                return false;
-            }
-
-            // Setup output
-            OutputStream out = new BufferedOutputStream(reportStream);
-
-            try {
-                // Construct fop with desired output format
-                final Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, foUserAgent, out);
-
-                // Setup XSLT 2.0
-                final TransformerFactory factory = TransformerFactory.newInstance("net.sf.saxon.TransformerFactoryImpl", null);
-                final Transformer transformer = factory.newTransformer(new StreamSource(xsltfile));
-
-                // Set the value of a <param> in the stylesheet
-                transformer.setParameter("versionParam", "2.0");
-                transformer.setOutputProperty("encoding", "UTF-8");
-
-
-                // Setup input for XSLT transformation
-                final Source src = new StreamSource(
-                        new InputStreamReader(new ByteArrayInputStream(xmlfile), "UTF-8"));
-
-                // Resulting SAX events (the generated FO) must be piped through to FOP
-                final Result res = new SAXResult(fop.getDefaultHandler());
-
-                // Start XSLT transformation and FOP processing
-                transformer.transform(src, res);
-
-            } catch (Exception ex) {
-
-                LOG.error("Cannot create pdf " + ex.getMessage(), ex);
-
-                return false;
-
-            } finally {
-
-                out.close();
-
-            }
-
-
+            this.reportGenerator.generateReport(descriptor, currentSelection, rez, lang, reportStream);
             return true;
 
         }
@@ -256,47 +150,12 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
     }
 
     /**
-     * Write into given file name xml result.
-     *
-     * @param rez list of objects.
-     * @return tmp xml file name
-     */
-    byte[] getXml(final List<Object> rez) {
-
-        final ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-        ObjectOutputStream os = null;
-
-        try {
-
-            os = ReportObjectStreamFactory.getObjectOutputStream(new OutputStreamWriter(bytesOut));
-
-            for (Object obj : rez) {
-                os.writeObject(obj);
-            }
-
-        } catch (Exception e) {
-            LOG.error("Cannot create xml ", e);
-
-        } finally {
-            if (os != null) {
-                try {
-                    os.close();
-                } catch (IOException e) {
-                    LOG.error("Cannot close file", e);
-                }
-            }
-
-        }
-
-        return bytesOut.toByteArray();
-    }
-
-    /**
      * Get query result as object list.
      *
      * @param lang language
      * @param reportId reportId
      * @param currentSelection parameters.
+     *
      * @return list of objects.
      */
     List<Object> getQueryResult(final String lang, final String reportId, final Map<String, Object> currentSelection) {
@@ -309,10 +168,25 @@ public class ReportServiceImpl implements ReportService, ServletContextAware {
     }
 
     /**
-     * {@inheritDoc}
+     * Enhance parameters by adding inferred values.
+     *
+     * @param reportId reportId
+     * @param result restls
+     * @param currentSelection parameters
+     *
+     * @return enhanced paramteres
      */
-    public void setServletContext(final ServletContext servletContext) {
-        this.servletContext = servletContext;
+    Map<String, Object> getEnhancedParameterValues(final String reportId, final List<Object> result, final Map<String, Object> currentSelection) {
+
+        if (reportWorkers.containsKey(reportId)) {
+            return reportWorkers.get(reportId).getEnhancedParameterValues(result, currentSelection);
+        }
+        final Map<String, Object> params = new HashMap<String, Object>();
+        if (currentSelection != null) {
+            params.putAll(currentSelection);
+        }
+        return params;
+
     }
 
 }

@@ -24,7 +24,7 @@ package org.yes.cart.report.impl {
 import mx.collections.ArrayCollection;
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.report.impl.ReportDescriptor")]
+[RemoteClass(alias="org.yes.cart.report.ReportDescriptor")]
 public class ReportDescriptor {
 
     public var reportId:String;

@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!--
+  fop-userconfig.xml
+  ==================
+
+  Copy this file to your language subdirectory and edit it.
+  Consult "Using non-Western fonts" for detailed instructions.
+  See http://www.firebirdsql.org/manual (or /pdfmanual).
+
+  Copypasted :(
+-->
+
+<fop version="1.0">
+
+    <!-- Base for resolving relative font URLs -->
+    <font-base>.</font-base>
+
+    <!-- Information for specific renderers -->
+    <!-- Uses renderer mime type for renderers -->
+    <renderers>
+
+        <renderer mime="application/pdf">
+
+            <fonts>
+                <!-- embedded fonts -->
+                <!--
+                  This information must exactly match the font specified
+                  in the fo file. Otherwise it will use a default font.
+                -->
+
+                <font metrics-url="fonts/times.xml" kerning="yes"
+                      embed-url="fonts/times.ttf">
+                    <font-triplet name="Times" style="normal" weight="normal"/>
+                </font>
+                <font metrics-url="fonts/timesbd.xml" kerning="yes"
+                      embed-url="fonts/timesbd.ttf">
+                    <font-triplet name="Times" style="normal" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/timesbi.xml" kerning="yes"
+                      embed-url="fonts/timesbi.ttf">
+                    <font-triplet name="Times" style="italic" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/timesi.xml" kerning="yes"
+                      embed-url="fonts/timesi.ttf">
+                    <font-triplet name="Times" style="italic" weight="normal"/>
+                </font>
+
+                <font metrics-url="fonts/verdana.xml" kerning="yes"
+                      embed-url="fonts/verdana.ttf">
+                    <font-triplet name="Verdana" style="normal" weight="normal"/>
+                </font>
+                <font metrics-url="fonts/verdanab.xml" kerning="yes"
+                      embed-url="fonts/verdanab.ttf">
+                    <font-triplet name="Verdana" style="normal" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/verdanaz.xml" kerning="yes"
+                      embed-url="fonts/verdanaz.ttf">
+                    <font-triplet name="Verdana" style="italic" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/verdanai.xml" kerning="yes"
+                      embed-url="fonts/verdanai.ttf">
+                    <font-triplet name="Verdana" style="italic" weight="normal"/>
+                </font>
+
+                <font metrics-url="fonts/cour.xml" kerning="yes"
+                      embed-url="fonts/cour.ttf">
+                    <font-triplet name="Courier" style="normal" weight="normal"/>
+                </font>
+                <font metrics-url="fonts/courbd.xml" kerning="yes"
+                      embed-url="fonts/courbd.ttf">
+                    <font-triplet name="Courier" style="normal" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/courbi.xml" kerning="yes"
+                      embed-url="fonts/courbi.ttf">
+                    <font-triplet name="Courier" style="italic" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/couri.xml" kerning="yes"
+                      embed-url="fonts/couri.ttf">
+                    <font-triplet name="Courier" style="italic" weight="normal"/>
+                </font>
+
+
+                <font metrics-url="fonts/LiberationMono-Regular.xml" kerning="yes"
+                      embed-url="fonts/LiberationMono-Regular.ttf">
+                    <font-triplet name="LiberationMono" style="normal" weight="normal"/>
+                </font>
+                <font metrics-url="fonts/LiberationMono-Bold.xml" kerning="yes"
+                      embed-url="fonts/LiberationMono-Bold.ttf">
+                    <font-triplet name="LiberationMono" style="normal" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/LiberationMono-BoldItalic.xml" kerning="yes"
+                      embed-url="fonts/LiberationMono-BoldItalic.ttf">
+                    <font-triplet name="LiberationMono" style="italic" weight="bold"/>
+                </font>
+                <font metrics-url="fonts/LiberationMono-Italic.xml" kerning="yes"
+                      embed-url="fonts/LiberationMono-Italic.ttf">
+                    <font-triplet name="LiberationMono" style="italic" weight="normal"/>
+                </font>
+
+
+            </fonts>
+
+        </renderer>
+
+    </renderers>
+
+</fop>

@@ -16,9 +16,6 @@
 
 package org.yes.cart.report;
 
-import org.yes.cart.report.impl.ReportDescriptor;
-import org.yes.cart.report.impl.ReportPair;
-
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +30,8 @@ public interface ReportService {
      * Get parameter option values for param in lang.
      *
      * @param lang language
-     * @param reportId report id for {@link org.yes.cart.report.impl.ReportDescriptor}
-     * @param param parameter to get options for {@link org.yes.cart.report.impl.ReportParameter}
+     * @param reportId report id for {@link ReportDescriptor}
+     * @param param parameter to get options for {@link ReportParameter}
      * @param currentSelection optional param value map for complex selectors
      *
      * @return options

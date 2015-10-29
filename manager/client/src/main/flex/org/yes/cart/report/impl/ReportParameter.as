@@ -24,7 +24,7 @@ package org.yes.cart.report.impl {
 
 
 [Bindable]
-[RemoteClass(alias="org.yes.cart.report.impl.ReportParameter")]
+[RemoteClass(alias="org.yes.cart.report.ReportParameter")]
 public class ReportParameter {
 
     public var parameterId:String;

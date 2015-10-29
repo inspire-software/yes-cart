@@ -33,6 +33,7 @@
 
     <modules>
         <module>mail</module>
+        <module>reports</module>
         <module>imagevault</module>
     </modules>
     

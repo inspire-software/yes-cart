@@ -179,9 +179,9 @@
             registerClassAlias("org.yes.cart.service.dto.support.impl.InventoryFilterImpl", InventoryFilter);
             registerClassAlias("org.yes.cart.service.dto.support.impl.PriceListFilterImpl", PriceListFilter);
 
-            registerClassAlias("org.yes.cart.report.impl.ReportDescriptor", ReportDescriptor);
-            registerClassAlias("org.yes.cart.report.impl.ReportParameter", ReportParameter);
-            registerClassAlias("org.yes.cart.report.impl.ReportPair", ReportPair);
+            registerClassAlias("org.yes.cart.report.ReportDescriptor", ReportDescriptor);
+            registerClassAlias("org.yes.cart.report.ReportParameter", ReportParameter);
+            registerClassAlias("org.yes.cart.report.ReportPair", ReportPair);
 
 
             channelSet.removeChannel(myamf);

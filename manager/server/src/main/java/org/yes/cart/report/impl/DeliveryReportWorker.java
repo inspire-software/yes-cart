@@ -16,13 +16,18 @@
 
 package org.yes.cart.report.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.remote.service.RemoteCustomerOrderService;
+import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
+import org.yes.cart.service.domain.ShopService;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +39,12 @@ import java.util.Map;
 public class DeliveryReportWorker implements ReportWorker {
 
     private final RemoteCustomerOrderService remoteCustomerOrderService;
+    private final ShopService shopService;
 
-    public DeliveryReportWorker(final RemoteCustomerOrderService remoteCustomerOrderService) {
+    public DeliveryReportWorker(final RemoteCustomerOrderService remoteCustomerOrderService,
+                                final ShopService shopService) {
         this.remoteCustomerOrderService = remoteCustomerOrderService;
+        this.shopService = shopService;
     }
 
     /**
@@ -66,4 +74,22 @@ public class DeliveryReportWorker implements ReportWorker {
         }
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
+        if (CollectionUtils.isNotEmpty(result)) {
+            final long shopId = ((CustomerOrderDTO) ((Pair) result.get(0)).getFirst()).getShopId();
+            final Shop shop = shopService.getById(shopId);
+            if (shop != null) {
+                final Map<String, Object> enhanced = new HashMap<String, Object>(currentSelection);
+                enhanced.put("shop", shop);
+                return enhanced;
+            }
+        }
+        return new HashMap<String, Object>(currentSelection);
+    }
+
 }
