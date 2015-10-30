@@ -86,8 +86,8 @@
                                             <fo:table-cell>
                                                 <fo:block-container>
                                                     <fo:block><fo:inline space-end="3mm"><xsl:value-of
-                                                            select="first/firstname"/></fo:inline><fo:inline><xsl:value-of
-                                                            select="first/lastname"/></fo:inline>
+                                                            select="first/customer/firstname"/></fo:inline><fo:inline><xsl:value-of
+                                                            select="first/customer/lastname"/></fo:inline>
                                                     </fo:block>
                                                 </fo:block-container>
                                             </fo:table-cell>
@@ -98,7 +98,7 @@
                                             </fo:table-cell>
                                             <fo:table-cell>
                                                 <fo:block><xsl:value-of
-                                                        select="first/email"/>
+                                                        select="first/customer/email"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                         </fo:table-row>
