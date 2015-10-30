@@ -59,6 +59,7 @@ public class OrderPage extends AbstractWebPage {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String ORDER_NUM = "orderNum";
+    private final static String ORDER_STATE = "orderStatus";
     private final static String ORDER_PANEL = "orderView";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -101,12 +102,15 @@ public class OrderPage extends AbstractWebPage {
             add(new Label(ORDER_NUM,
                     WicketUtil.createStringResourceModel(this, "orderNoTitle",
                             Collections.<String, Object>singletonMap("ordernum", customerOrder.getOrdernum()))));
+            add(new Label(ORDER_STATE,
+                    WicketUtil.createStringResourceModel(this, customerOrder.getOrderStatus())));
             add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
             add(new ExternalLink("receipt",
                     getWicketUtil().getHttpServletRequest().getContextPath() +
                             "/orderreceipt.pdf?ordernum=" + customerOrder.getOrdernum()));
         } else {
             add(new Label(ORDER_NUM, ""));
+            add(new Label(ORDER_STATE, ""));
             add(new Label(ORDER_PANEL, ""));
             add(new ExternalLink("receipt", "#").setVisible(false));
             error(getLocalizer().getString("orderNotFound", this));
