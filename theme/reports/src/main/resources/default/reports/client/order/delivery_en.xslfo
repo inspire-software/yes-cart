@@ -224,22 +224,22 @@
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block>
-                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(sum(second/orderDelivery/listPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block>
-                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/price) - sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(sum(second/orderDelivery/price) - sum(second/orderDelivery/listPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block>
-                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/price), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(sum(second/orderDelivery/price), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block>
-                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/grossPrice) - sum(second/orderDeliveryDto/netPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(sum(second/orderDelivery/grossPrice) - sum(second/orderDelivery/netPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
@@ -247,7 +247,7 @@
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
                                                 <fo:block>
-                                                    <xsl:value-of select="format-number(sum(second/orderDeliveryDto/grossPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(sum(second/orderDelivery/grossPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                         </fo:table-row>
@@ -262,22 +262,22 @@
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block font-weight="bold">
-                                                    <xsl:value-of select="format-number(first/listPrice + sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(first/listPrice + sum(second/orderDelivery/listPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block font-weight="bold">
-                                                    <xsl:value-of select="format-number(first/price - first/listPrice + sum(second/orderDeliveryDto/price) - sum(second/orderDeliveryDto/listPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(first/price - first/listPrice + sum(second/orderDelivery/price) - sum(second/orderDelivery/listPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block font-weight="bold">
-                                                    <xsl:value-of select="format-number(first/price + sum(second/orderDeliveryDto/price), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(first/price + sum(second/orderDelivery/price), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
                                                 <fo:block font-weight="bold">
-                                                    <xsl:value-of select="format-number(first/grossPrice - first/netPrice + sum(second/orderDeliveryDto/grossPrice) - sum(second/orderDeliveryDto/netPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(first/grossPrice - first/netPrice + sum(second/orderDelivery/grossPrice) - sum(second/orderDelivery/netPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
@@ -285,7 +285,7 @@
                                             </fo:table-cell>
                                             <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
                                                 <fo:block font-weight="bold">
-                                                    <xsl:value-of select="format-number(first/grossPrice + sum(second/orderDeliveryDto/grossPrice), '##0.00')"/>
+                                                    <xsl:value-of select="format-number(first/grossPrice + sum(second/orderDelivery/grossPrice), '##0.00')"/>
                                                 </fo:block>
                                             </fo:table-cell>
                                         </fo:table-row>
@@ -293,9 +293,9 @@
                                 </fo:table>
                             </fo:block>
 
-                            <xsl:if test="count(second/orderDeliveryDto) > 0">
+                            <xsl:if test="count(second/orderDelivery) > 0">
 
-                                <xsl:for-each select="second/orderDeliveryDto">
+                                <xsl:for-each select="second/orderDelivery">
 
                                     <fo:block>
                                         <fo:leader leader-pattern="rule" leader-length="100%"/>
@@ -322,8 +322,8 @@
                                                     </fo:table-cell>
                                                     <fo:table-cell>
                                                         <fo:block><xsl:value-of
-                                                                select="carrierName"/>, <xsl:value-of
-                                                                select="carrierSlaName"/>
+                                                                select="carrierSla/carrier/name"/>, <xsl:value-of
+                                                                select="carrierSla/name"/>
                                                         </fo:block>
                                                     </fo:table-cell>
                                                 </fo:table-row>
@@ -333,7 +333,7 @@
                                                     </fo:table-cell>
                                                     <fo:table-cell>
                                                         <fo:block><xsl:value-of
-                                                                select="shippingAddress"/>
+                                                                select="../../first/shippingAddress"/>
                                                         </fo:block>
                                                     </fo:table-cell>
                                                 </fo:table-row>
@@ -378,7 +378,7 @@
 
                                             <fo:table-body>
                                                 <xsl:for-each
-                                                        select="detail/orderLineDto">
+                                                        select="detail/deliveryLine">
                                                     <fo:table-row>
                                                         <fo:table-cell border="solid 1px black" width="5mm" text-align="right">
                                                             <fo:block>
@@ -387,12 +387,12 @@
                                                         </fo:table-cell>
                                                         <fo:table-cell border="solid 1px black" width="35mm">
                                                             <fo:block>
-                                                                <xsl:value-of select="skuCode"/>
+                                                                <xsl:value-of select="productSkuCode"/>
                                                             </fo:block>
                                                         </fo:table-cell>
                                                         <fo:table-cell border="solid 1px black" width="40mm">
                                                             <fo:block>
-                                                                <xsl:value-of select="skuName"/>
+                                                                <xsl:value-of select="productName"/>
                                                             </fo:block>
                                                         </fo:table-cell>
                                                         <fo:table-cell border="solid 1px black" width="15mm" text-align="right">
@@ -422,31 +422,35 @@
                                                         </fo:table-cell>
                                                         <fo:table-cell border="solid 1px black" width="20mm" text-align="right">
                                                             <fo:block>
-                                                                <xsl:value-of select="format-number(lineTotal, '##0.00')"/>
+                                                                <xsl:value-of select="format-number(qty * grossPrice, '##0.00')"/>
                                                             </fo:block>
                                                         </fo:table-cell>
                                                     </fo:table-row>
                                                     <xsl:if test="promoApplied = 'true'">
-                                                         <fo:table-row>
-                                                             <fo:table-cell border="solid 1px black">
-                                                                 <fo:block></fo:block>
-                                                             </fo:table-cell>
-                                                             <fo:table-cell border="solid 1px black" number-columns-spanned="8">
-                                                                 <fo:block>
-                                                                     <xsl:choose>
-                                                                         <xsl:when test="gift = 'true'">
-                                                                             This is a gift item (<xsl:value-of select="appliedPromo"/>)
-                                                                         </xsl:when>
-                                                                         <xsl:otherwise>
-                                                                             This item has applied promotions (<xsl:value-of select="appliedPromo"/>)
-                                                                         </xsl:otherwise>
-                                                                     </xsl:choose>
-                                                                 </fo:block>
-                                                             </fo:table-cell>
-                                                         </fo:table-row>
+                                                        <fo:table-row>
+                                                            <fo:table-cell border="solid 1px black">
+                                                                <fo:block></fo:block>
+                                                            </fo:table-cell>
+                                                            <fo:table-cell border="solid 1px black" number-columns-spanned="8">
+                                                                <fo:block>
+                                                                    <xsl:choose>
+                                                                        <xsl:when test="gift = 'true'">
+                                                                            This is a gift item (<xsl:value-of select="appliedPromo"/>)
+                                                                        </xsl:when>
+                                                                        <xsl:otherwise>
+                                                                            This item has applied promotions (<xsl:value-of select="appliedPromo"/>)
+                                                                        </xsl:otherwise>
+                                                                    </xsl:choose>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
                                                     </xsl:if>
                                                 </xsl:for-each>
                                                 <fo:table-row>
+
+                                                    <xsl:variable name="totalGross" select="sum(detail/deliveryLine/(qty * grossPrice))"/>
+                                                    <xsl:variable name="totalNet" select="sum(detail/deliveryLine/(qty * netPrice))"/>
+
                                                     <fo:table-cell border="solid 1px black" number-columns-spanned="6"
                                                                    font-weight="bold">
                                                         <fo:block>Item total</fo:block>
@@ -454,7 +458,7 @@
                                                     <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
                                                         <fo:block>
                                                             <xsl:value-of
-                                                                    select="format-number(sum(detail/orderLineDto/lineTax), '##0.00')"/>
+                                                                    select="format-number($totalGross - $totalNet, '##0.00')"/>
                                                         </fo:block>
                                                     </fo:table-cell>
                                                     <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
@@ -463,7 +467,7 @@
                                                     <fo:table-cell border="solid 1px black" text-align="right" font-weight="bold">
                                                         <fo:block>
                                                             <xsl:value-of
-                                                                    select="format-number(sum(detail/orderLineDto/lineTotal), '##0.00')"/>
+                                                                    select="format-number($totalGross, '##0.00')"/>
                                                         </fo:block>
                                                     </fo:table-cell>
                                                 </fo:table-row>

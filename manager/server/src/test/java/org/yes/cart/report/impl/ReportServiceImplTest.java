@@ -1,5 +1,6 @@
 package org.yes.cart.report.impl;
 
+import org.apache.commons.io.IOUtils;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -121,6 +122,12 @@ public class ReportServiceImplTest  {
         assertNotNull(report);
         assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
 
+        final Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("target/reportAvailableStock.pdf"), Charset.forName("UTF-8")));
+        IOUtils.copy(new ByteArrayInputStream(report), out);
+
+        out.close();
+
     }
 
 
@@ -183,6 +190,11 @@ public class ReportServiceImplTest  {
         assertNotNull(report);
         assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
 
+        final Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("target/payments.pdf"), Charset.forName("UTF-8")));
+        IOUtils.copy(new ByteArrayInputStream(report), out);
+
+        out.close();
     }
 
 
@@ -244,6 +256,11 @@ public class ReportServiceImplTest  {
         assertNotNull(report);
         assertTrue(report.length > 30720); // more than 30K means it is a valid pdf
 
+        final Writer out = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("target/reportDelivery.pdf"), Charset.forName("UTF-8")));
+        IOUtils.copy(new ByteArrayInputStream(report), out);
+
+        out.close();
     }
 
 

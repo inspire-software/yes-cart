@@ -18,13 +18,16 @@ package org.yes.cart.report.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.remote.service.RemoteCustomerOrderService;
 import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportWorker;
+import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.federation.ShopFederationStrategy;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,13 +41,16 @@ import java.util.Map;
  */
 public class DeliveryReportWorker implements ReportWorker {
 
-    private final RemoteCustomerOrderService remoteCustomerOrderService;
+    private final CustomerOrderService customerOrderService;
     private final ShopService shopService;
+    private final ShopFederationStrategy shopFederationStrategy;
 
-    public DeliveryReportWorker(final RemoteCustomerOrderService remoteCustomerOrderService,
-                                final ShopService shopService) {
-        this.remoteCustomerOrderService = remoteCustomerOrderService;
+    public DeliveryReportWorker(final CustomerOrderService customerOrderService,
+                                final ShopService shopService,
+                                final ShopFederationStrategy shopFederationStrategy) {
+        this.customerOrderService = customerOrderService;
         this.shopService = shopService;
+        this.shopFederationStrategy = shopFederationStrategy;
     }
 
     /**
@@ -66,12 +72,17 @@ public class DeliveryReportWorker implements ReportWorker {
         }
 
         try {
-            final List<CustomerOrderDTO> orders = remoteCustomerOrderService.findCustomerOrdersByCriteria(0, null, null, null, null, null, null, orderNumber);
-            final List rez =  remoteCustomerOrderService.findDeliveryByOrderNumber(orderNumber, null); // All deliveries
-            return (List) Collections.singletonList(new Pair(orders.get(0), rez));
+            final CustomerOrder order = customerOrderService.findByReference(orderNumber);
+            if (order != null) {
+                if (!shopFederationStrategy.isShopAccessibleByCurrentManager(order.getShop().getCode())) {
+                    throw new AccessDeniedException("Access is denied");
+                }
+                return (List) Collections.singletonList(new Pair(order, order.getDelivery()));
+            }
         } catch (Exception e) {
-            return Collections.emptyList();
+            ShopCodeContext.getLog(this).error(e.getMessage(), e);
         }
+        return Collections.emptyList();
 
     }
 
@@ -81,7 +92,7 @@ public class DeliveryReportWorker implements ReportWorker {
      */
     public Map<String, Object> getEnhancedParameterValues(final List<Object> result, final Map<String, Object> currentSelection) {
         if (CollectionUtils.isNotEmpty(result)) {
-            final long shopId = ((CustomerOrderDTO) ((Pair) result.get(0)).getFirst()).getShopId();
+            final long shopId = ((CustomerOrder) ((Pair) result.get(0)).getFirst()).getShop().getShopId();
             final Shop shop = shopService.getById(shopId);
             if (shop != null) {
                 final Map<String, Object> enhanced = new HashMap<String, Object>(currentSelection);

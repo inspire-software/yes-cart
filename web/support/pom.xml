@@ -62,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
-            <artifactId>core-module-cluster-jgroups</artifactId>
+            <artifactId>core-module-reports</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -122,6 +122,19 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>jgroups</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yes</groupId>
+                    <artifactId>core-module-cluster-jgroups</artifactId>
+                    <version>${project.parent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
 

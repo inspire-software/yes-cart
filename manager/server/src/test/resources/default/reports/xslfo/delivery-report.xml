@@ -17,128 +17,370 @@
   -->
 <yes-report>
     <pair>
-        <first class="orderDto">
-            <customerorderId>53</customerorderId>
-            <ordernum>141111142753-15</ordernum>
+        <first class="order">
+            <customerorderId>100000</customerorderId>
+            <version>3</version>
             <pgLabel>courierPaymentGatewayLabel</pgLabel>
-            <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
-            <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
-            <cartGuid>649cf817-5a87-4f18-abc2-b90c3700f81c</cartGuid>
-            <currency>USD</currency>
-            <orderStatus>os.waiting</orderStatus>
-            <multipleShipmentOption>false</multipleShipmentOption>
-            <orderTimestamp class="sql-timestamp">2014-11-11T14:27:53.554Z</orderTimestamp>
-            <email>bob22@bob.com</email>
-            <firstname>bob</firstname>
-            <lastname>doe</lastname>
-            <customerId>3</customerId>
-            <shopId>10</shopId>
-            <code>SHOP10</code>
-            <amount>10492.04</amount>
-            <price>9118.51</price>
-            <netPrice>9118.51</netPrice>
-            <grossPrice>10486.30</grossPrice>
-            <listPrice>11572.36</listPrice>
+            <ordernum>151029160413-1</ordernum>
+            <cartGuid>6cd4d55f-ac1a-4b5f-8544-2620068ce42c</cartGuid>
+            <currency>EUR</currency>
+            <price>2399.36</price>
+            <listPrice>2832.63</listPrice>
+            <netPrice>1999.46</netPrice>
+            <grossPrice>2399.36</grossPrice>
             <promoApplied>true</promoApplied>
-            <appliedPromo>S10C_10:S10C-0001</appliedPromo>
+            <appliedPromo>SHOP10EURORD150F</appliedPromo>
+            <locale>en</locale>
+            <orderStatus>os.in.progress</orderStatus>
+            <customer class="customer">
+                <customerId>100000</customerId>
+                <version>0</version>
+                <email>a@a.com</email>
+                <firstname>Adsfasdfa</firstname>
+                <lastname>Doe</lastname>
+                <password>d89c77010dedf89c10d1293bd02b53c7</password>
+                <wishList class="org.hibernate.collection.internal.PersistentBag"/>
+                <attributes class="org.hibernate.collection.internal.PersistentBag">
+                    <customerAv>
+                        <attrvalueId>100000</attrvalueId>
+                        <version>0</version>
+                        <val>1111111</val>
+                        <attribute class="attribute">
+                            <attributeId>11050</attributeId>
+                            <version>0</version>
+                            <code>CUSTOMER_PHONE</code>
+                            <mandatory>true</mandatory>
+                            <allowduplicate>false</allowduplicate>
+                            <allowfailover>false</allowfailover>
+                            <rank>500</rank>
+                            <name>Phone</name>
+                            <description>Phone</description>
+                            <guid>CUSTOMER_PHONE</guid>
+                        </attribute>
+                        <createdTimestamp class="sql-timestamp">2015-10-29T16:03:37.344Z</createdTimestamp>
+                        <updatedTimestamp class="sql-timestamp">2015-10-29T16:03:37.344Z</updatedTimestamp>
+                        <createdBy>anonymous</createdBy>
+                        <updatedBy>anonymous</updatedBy>
+                        <guid>bab2dc46-fd83-4128-861a-2641b861f206</guid>
+                    </customerAv>
+                </attributes>
+                <createdTimestamp class="sql-timestamp">2015-10-29T16:03:37.051Z</createdTimestamp>
+                <updatedTimestamp class="sql-timestamp">2015-10-29T16:03:37.051Z</updatedTimestamp>
+                <createdBy>anonymous</createdBy>
+                <updatedBy>anonymous</updatedBy>
+                <guid>4a66a003-028f-4b53-80e7-793cb9893bb8</guid>
+            </customer>
+            <orderDetail class="org.hibernate.collection.internal.PersistentBag">
+                <orderLine>
+                    <customerOrderDetId>100000</customerOrderDetId>
+                    <version>2</version>
+                    <qty>1.00</qty>
+                    <price>1542.87</price>
+                    <salePrice>1542.87</salePrice>
+                    <listPrice>1714.30</listPrice>
+                    <netPrice>1285.72</netPrice>
+                    <grossPrice>1542.87</grossPrice>
+                    <taxRate>20.00</taxRate>
+                    <taxCode>VAT</taxCode>
+                    <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                    <gift>false</gift>
+                    <promoApplied>false</promoApplied>
+                    <productSkuCode>RN31200-EUS100-2X4TB</productSkuCode>
+                    <productName>ReadyNAS 312</productName>
+                    <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.323Z</createdTimestamp>
+                    <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.442Z</updatedTimestamp>
+                    <createdBy>anonymous</createdBy>
+                    <updatedBy>anonymous</updatedBy>
+                    <guid>47fba403-8fed-4abe-9e25-1e697f7c1d5d</guid>
+                </orderLine>
+                <orderLine>
+                    <customerOrderDetId>100001</customerOrderDetId>
+                    <version>2</version>
+                    <qty>1.00</qty>
+                    <price>1006.49</price>
+                    <salePrice>1006.49</salePrice>
+                    <listPrice>1118.33</listPrice>
+                    <netPrice>838.74</netPrice>
+                    <grossPrice>1006.49</grossPrice>
+                    <taxRate>20.00</taxRate>
+                    <taxCode>VAT</taxCode>
+                    <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                    <gift>false</gift>
+                    <promoApplied>false</promoApplied>
+                    <productSkuCode>NC00074365</productSkuCode>
+                    <productName>NeatSuite f/SMB v3.x, RNW, GOV, 28m, 5u, ML</productName>
+                    <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.353Z</createdTimestamp>
+                    <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.442Z</updatedTimestamp>
+                    <createdBy>anonymous</createdBy>
+                    <updatedBy>anonymous</updatedBy>
+                    <guid>69ae3010-ba3f-45c5-b5f9-4eb39843d466</guid>
+                </orderLine>
+            </orderDetail>
+            <delivery class="org.hibernate.collection.internal.PersistentBag">
+                <orderDelivery>
+                    <customerOrderDeliveryId>100000</customerOrderDeliveryId>
+                    <version>4</version>
+                    <deliveryNum>151029160413-1-0</deliveryNum>
+                    <price>0.00</price>
+                    <listPrice>0.99</listPrice>
+                    <netPrice>0.00</netPrice>
+                    <grossPrice>0.00</grossPrice>
+                    <taxRate>20.00</taxRate>
+                    <taxCode>VAT</taxCode>
+                    <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                    <promoApplied>true</promoApplied>
+                    <appliedPromo>SHOP10EURSHIPFREE</appliedPromo>
+                    <deliveryStatus>ds.inventory.allocated</deliveryStatus>
+                    <detail class="org.hibernate.collection.internal.PersistentBag">
+                        <deliveryLine>
+                            <customerOrderDeliveryDetId>100000</customerOrderDeliveryDetId>
+                            <version>2</version>
+                            <qty>1.00</qty>
+                            <price>1542.87</price>
+                            <salePrice>1542.87</salePrice>
+                            <listPrice>1714.30</listPrice>
+                            <netPrice>1285.72</netPrice>
+                            <grossPrice>1542.87</grossPrice>
+                            <taxRate>20.00</taxRate>
+                            <taxCode>VAT</taxCode>
+                            <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                            <gift>false</gift>
+                            <promoApplied>false</promoApplied>
+                            <productSkuCode>RN31200-EUS100-2X4TB</productSkuCode>
+                            <productName>ReadyNAS 312</productName>
+                            <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.412Z</createdTimestamp>
+                            <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.443Z</updatedTimestamp>
+                            <createdBy>anonymous</createdBy>
+                            <updatedBy>anonymous</updatedBy>
+                            <guid>899eea0d-1708-4530-975a-13c1a24c65fd</guid>
+                        </deliveryLine>
+                        <deliveryLine>
+                            <customerOrderDeliveryDetId>100001</customerOrderDeliveryDetId>
+                            <version>2</version>
+                            <qty>1.00</qty>
+                            <price>1006.49</price>
+                            <salePrice>1006.49</salePrice>
+                            <listPrice>1118.33</listPrice>
+                            <netPrice>838.74</netPrice>
+                            <grossPrice>1006.49</grossPrice>
+                            <taxRate>20.00</taxRate>
+                            <taxCode>VAT</taxCode>
+                            <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                            <gift>false</gift>
+                            <promoApplied>false</promoApplied>
+                            <productSkuCode>NC00074365</productSkuCode>
+                            <productName>NeatSuite f/SMB v3.x, RNW, GOV, 28m, 5u, ML</productName>
+                            <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.429Z</createdTimestamp>
+                            <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.443Z</updatedTimestamp>
+                            <createdBy>anonymous</createdBy>
+                            <updatedBy>anonymous</updatedBy>
+                            <guid>088d008e-6d67-4100-b0b3-4760eec41e9b</guid>
+                        </deliveryLine>
+                    </detail>
+                    <carrierSla class="carrierSla">
+                        <carrierslaId>100002</carrierslaId>
+                        <version>0</version>
+                        <name>5-12 day EUR</name>
+                        <displayName>ru#~#5-12 дней EUR#~#uk#~#5-12 днів EUR#~#en#~#5-12 day EUR#~#</displayName>
+                        <description>5-12 day delivery</description>
+                        <displayDescription>ru#~#доставка за 5-12 дней#~#uk#~#доставка за 5-12 днів#~#en#~#5-12 day delivery#~#</displayDescription>
+                        <currency>EUR</currency>
+                        <maxDays>12</maxDays>
+                        <slaType>F</slaType>
+                        <price>0.99</price>
+                        <percent>0.00</percent>
+                        <supportedPaymentGateways>testPaymentGatewayLabel,courierPaymentGatewayLabel</supportedPaymentGateways>
+                        <billingAddressNotRequired>false</billingAddressNotRequired>
+                        <deliveryAddressNotRequired>false</deliveryAddressNotRequired>
+                        <carrier class="carrier">
+                            <carrierId>100000</carrierId>
+                            <version>0</version>
+                            <name>Post</name>
+                            <displayName>ru#~#Почта#~#uk#~#Пошта#~#en#~#Post#~#</displayName>
+                            <description>Post Delivery</description>
+                            <displayDescription>ru#~#Доставка по почте#~#uk#~#Доставка поштою#~#en#~#Post Delivery#~#</displayDescription>
+                            <worldwide>false</worldwide>
+                            <country>true</country>
+                            <state>false</state>
+                            <local>false</local>
+                            <createdTimestamp class="sql-timestamp">2015-10-23T00:10:45.371+01:00</createdTimestamp>
+                            <updatedTimestamp class="sql-timestamp">2015-10-23T00:10:45.371+01:00</updatedTimestamp>
+                            <createdBy>admin@yes-cart.com</createdBy>
+                            <updatedBy>admin@yes-cart.com</updatedBy>
+                            <guid>b7ae3b04-b966-4495-a475-534fb2161021</guid>
+                        </carrier>
+                        <createdTimestamp class="sql-timestamp">2015-10-23T00:10:45.769+01:00</createdTimestamp>
+                        <updatedTimestamp class="sql-timestamp">2015-10-23T00:10:45.769+01:00</updatedTimestamp>
+                        <createdBy>admin@yes-cart.com</createdBy>
+                        <updatedBy>admin@yes-cart.com</updatedBy>
+                        <guid>d02c8114-830c-4125-88ff-9d9abf35a175</guid>
+                    </carrierSla>
+                    <deliveryGroup>D1</deliveryGroup>
+                    <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.359Z</createdTimestamp>
+                    <updatedTimestamp class="sql-timestamp">2015-10-29T16:10:00.653Z</updatedTimestamp>
+                    <createdBy>anonymous</createdBy>
+                    <updatedBy>anonymous</updatedBy>
+                    <guid>d83419b2-46ca-4767-abfb-d02e14c75a4c</guid>
+                </orderDelivery>
+            </delivery>
+            <coupons class="org.hibernate.collection.internal.PersistentBag"/>
+            <billingAddress>qertwre wertwretwretasdf wertwertwe wrtwert AU Australia, Adsfasdfa  Doe, 1111111  </billingAddress>
+            <shippingAddress>qertwre wertwretwretasdf wertwertwe wrtwert AU Australia, Adsfasdfa  Doe, 1111111  </shippingAddress>
+            <billingAddressDetails class="address">
+                <addressId>100001</addressId>
+                <version>2</version>
+                <city>wrtwert</city>
+                <postcode>wertwertwe</postcode>
+                <addrline1>qertwre</addrline1>
+                <addrline2>wertwretwretasdf</addrline2>
+                <addressType>S</addressType>
+                <countryCode>AU</countryCode>
+                <stateCode>Australia</stateCode>
+                <phone1>1111111</phone1>
+                <firstname>Adsfasdfa</firstname>
+                <lastname>Doe</lastname>
+                <defaultAddress>false</defaultAddress>
+                <createdTimestamp class="sql-timestamp">2015-10-29T16:04:13.937Z</createdTimestamp>
+                <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.441Z</updatedTimestamp>
+                <createdBy>anonymous</createdBy>
+                <updatedBy>anonymous</updatedBy>
+                <guid>d2f3a4ea-61df-4224-9e90-8cc58775c7a4</guid>
+            </billingAddressDetails>
+            <shippingAddressDetails class="address">
+                <addressId>100001</addressId>
+                <version>2</version>
+                <city>wrtwert</city>
+                <postcode>wertwertwe</postcode>
+                <addrline1>qertwre</addrline1>
+                <addrline2>wertwretwretasdf</addrline2>
+                <addressType>S</addressType>
+                <countryCode>AU</countryCode>
+                <stateCode>Australia</stateCode>
+                <phone1>1111111</phone1>
+                <firstname>Adsfasdfa</firstname>
+                <lastname>Doe</lastname>
+                <defaultAddress>false</defaultAddress>
+                <createdTimestamp class="sql-timestamp">2015-10-29T16:04:13.937Z</createdTimestamp>
+                <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.441Z</updatedTimestamp>
+                <createdBy>anonymous</createdBy>
+                <updatedBy>anonymous</updatedBy>
+                <guid>d2f3a4ea-61df-4224-9e90-8cc58775c7a4</guid>
+            </shippingAddressDetails>
+            <multipleShipmentOption>false</multipleShipmentOption>
+            <orderTimestamp class="sql-timestamp">2015-10-29T16:04:13.727Z</orderTimestamp>
+            <orderIp>0:0:0:0:0:0:0:1</orderIp>
+            <createdTimestamp class="sql-timestamp">2015-10-29T16:04:13.946Z</createdTimestamp>
+            <updatedTimestamp class="sql-timestamp">2015-10-29T16:07:15.368Z</updatedTimestamp>
+            <createdBy>anonymous</createdBy>
+            <updatedBy>admin@yes-cart.com</updatedBy>
+            <guid>6cd4d55f-ac1a-4b5f-8544-2620068ce42c</guid>
         </first>
-        <second class="list">
-            <orderDeliveryDto>
-                <customerOrderDeliveryId>52</customerOrderDeliveryId>
-                <deliveryNum>141111142753-15-0</deliveryNum>
-                <refNo>TRK-0001</refNo>
-                <deliveryStatus>ds.inventory.reserved</deliveryStatus>
-                <carrierSlaName>5-12 day USD</carrierSlaName>
-                <carrierName>Post</carrierName>
-                <ordernum>141111142753-15</ordernum>
-                <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
-                <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
-                <currency>USD</currency>
-                <shopName>YesCart shop</shopName>
-                <pgLabel>courierPaymentGatewayLabel</pgLabel>
-                <supportCaptureMore>true</supportCaptureMore>
-                <supportCaptureLess>true</supportCaptureLess>
-                <deliveryGroup>D3</deliveryGroup>
-                <price>2.49</price>
-                <listPrice>4.99</listPrice>
+        <second class="org.hibernate.collection.internal.PersistentBag">
+            <orderDelivery>
+                <customerOrderDeliveryId>100000</customerOrderDeliveryId>
+                <version>4</version>
+                <deliveryNum>151029160413-1-0</deliveryNum>
+                <price>0.00</price>
+                <listPrice>0.99</listPrice>
+                <netPrice>0.00</netPrice>
+                <grossPrice>0.00</grossPrice>
+                <taxRate>20.00</taxRate>
+                <taxCode>VAT</taxCode>
+                <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
                 <promoApplied>true</promoApplied>
-                <appliedPromo>SHOP10USDSHIP50P</appliedPromo>
-                <netPrice>2.49</netPrice>
-                <grossPrice>2.87</grossPrice>
-                <taxRate>15.00</taxRate>
-                <taxCode>FED</taxCode>
-                <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
-                <detail class="list">
-                    <orderLineDto>
-                        <customerOrderDeliveryDetId>58</customerOrderDeliveryDetId>
-                        <skuCode>H5F58EA</skuCode>
-                        <skuName>900 G1</skuName>
-                        <qty>4.00</qty>
-                        <price>2040.97</price>
-                        <listPrice>2401.14</listPrice>
-                        <salePrice>2401.14</salePrice>
-                        <gift>false</gift>
-                        <promoApplied>true</promoApplied>
-                        <appliedPromo>H5F58EA_15</appliedPromo>
-                        <netPrice>2040.97</netPrice>
-                        <grossPrice>2347.12</grossPrice>
-                        <taxRate>15.00</taxRate>
-                        <taxCode>FED</taxCode>
-                        <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
-                        <lineTotal>9388.48</lineTotal>
-                        <lineTax>1224.60</lineTax>
-                        <deliveryNum>141111142753-15-0</deliveryNum>
-                        <deliveryStatusLabel>ds.inventory.reserved</deliveryStatusLabel>
-                    </orderLineDto>
-                </detail>
-            </orderDeliveryDto>
-            <orderDeliveryDto>
-                <customerOrderDeliveryId>53</customerOrderDeliveryId>
-                <deliveryNum>141111142753-15-1</deliveryNum>
-                <deliveryStatus>ds.inventory.reserved</deliveryStatus>
-                <carrierSlaName>5-12 day USD</carrierSlaName>
-                <carrierName>Post</carrierName>
-                <ordernum>141111142753-15</ordernum>
-                <shippingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</shippingAddress>
-                <billingAddress>1234 `234 123123412 341324124 CN CN Guizhou bob doe 123123123</billingAddress>
-                <currency>USD</currency>
-                <shopName>YesCart shop</shopName>
-                <pgLabel>courierPaymentGatewayLabel</pgLabel>
-                <supportCaptureMore>true</supportCaptureMore>
-                <supportCaptureLess>true</supportCaptureLess>
-                <deliveryGroup>D1</deliveryGroup>
-                <price>2.49</price>
-                <listPrice>4.99</listPrice>
-                <promoApplied>true</promoApplied>
-                <appliedPromo>SHOP10USDSHIP50P</appliedPromo>
-                <netPrice>2.49</netPrice>
-                <grossPrice>2.87</grossPrice>
-                <taxRate>15.00</taxRate>
-                <taxCode>FED</taxCode>
-                <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
-                <detail class="list">
-                    <orderLineDto>
-                        <customerOrderDeliveryDetId>59</customerOrderDeliveryDetId>
-                        <skuCode>D4T10AW-AKD-H4F20AA-ABB</skuCode>
-                        <skuName>900 G1</skuName>
+                <appliedPromo>SHOP10EURSHIPFREE</appliedPromo>
+                <deliveryStatus>ds.inventory.allocated</deliveryStatus>
+                <detail class="org.hibernate.collection.internal.PersistentBag">
+                    <deliveryLine>
+                        <customerOrderDeliveryDetId>100000</customerOrderDeliveryDetId>
+                        <version>2</version>
                         <qty>1.00</qty>
-                        <price>1967.80</price>
-                        <listPrice>1967.80</listPrice>
-                        <salePrice>1967.80</salePrice>
+                        <price>1542.87</price>
+                        <salePrice>1542.87</salePrice>
+                        <listPrice>1714.30</listPrice>
+                        <netPrice>1285.72</netPrice>
+                        <grossPrice>1542.87</grossPrice>
+                        <taxRate>20.00</taxRate>
+                        <taxCode>VAT</taxCode>
+                        <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
                         <gift>false</gift>
                         <promoApplied>false</promoApplied>
-                        <netPrice>1967.80</netPrice>
-                        <grossPrice>2262.97</grossPrice>
-                        <taxRate>15.00</taxRate>
-                        <taxCode>FED</taxCode>
-                        <taxExclusiveOfPrice>true</taxExclusiveOfPrice>
-                        <lineTotal>2262.97</lineTotal>
-                        <lineTax>295.17</lineTax>
-                        <deliveryNum>141111142753-15-1</deliveryNum>
-                        <deliveryStatusLabel>ds.inventory.reserved</deliveryStatusLabel>
-                    </orderLineDto>
+                        <productSkuCode>RN31200-EUS100-2X4TB</productSkuCode>
+                        <productName>ReadyNAS 312</productName>
+                        <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.412Z</createdTimestamp>
+                        <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.443Z</updatedTimestamp>
+                        <createdBy>anonymous</createdBy>
+                        <updatedBy>anonymous</updatedBy>
+                        <guid>899eea0d-1708-4530-975a-13c1a24c65fd</guid>
+                    </deliveryLine>
+                    <deliveryLine>
+                        <customerOrderDeliveryDetId>100001</customerOrderDeliveryDetId>
+                        <version>2</version>
+                        <qty>1.00</qty>
+                        <price>1006.49</price>
+                        <salePrice>1006.49</salePrice>
+                        <listPrice>1118.33</listPrice>
+                        <netPrice>838.74</netPrice>
+                        <grossPrice>1006.49</grossPrice>
+                        <taxRate>20.00</taxRate>
+                        <taxCode>VAT</taxCode>
+                        <taxExclusiveOfPrice>false</taxExclusiveOfPrice>
+                        <gift>false</gift>
+                        <promoApplied>false</promoApplied>
+                        <productSkuCode>NC00074365</productSkuCode>
+                        <productName>NeatSuite f/SMB v3.x, RNW, GOV, 28m, 5u, ML</productName>
+                        <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.429Z</createdTimestamp>
+                        <updatedTimestamp class="sql-timestamp">2015-10-29T16:04:27.443Z</updatedTimestamp>
+                        <createdBy>anonymous</createdBy>
+                        <updatedBy>anonymous</updatedBy>
+                        <guid>088d008e-6d67-4100-b0b3-4760eec41e9b</guid>
+                    </deliveryLine>
                 </detail>
-            </orderDeliveryDto>
+                <carrierSla class="carrierSla">
+                    <carrierslaId>100002</carrierslaId>
+                    <version>0</version>
+                    <name>5-12 day EUR</name>
+                    <displayName>ru#~#5-12 дней EUR#~#uk#~#5-12 днів EUR#~#en#~#5-12 day EUR#~#</displayName>
+                    <description>5-12 day delivery</description>
+                    <displayDescription>ru#~#доставка за 5-12 дней#~#uk#~#доставка за 5-12 днів#~#en#~#5-12 day delivery#~#</displayDescription>
+                    <currency>EUR</currency>
+                    <maxDays>12</maxDays>
+                    <slaType>F</slaType>
+                    <price>0.99</price>
+                    <percent>0.00</percent>
+                    <supportedPaymentGateways>testPaymentGatewayLabel,courierPaymentGatewayLabel</supportedPaymentGateways>
+                    <billingAddressNotRequired>false</billingAddressNotRequired>
+                    <deliveryAddressNotRequired>false</deliveryAddressNotRequired>
+                    <carrier class="carrier">
+                        <carrierId>100000</carrierId>
+                        <version>0</version>
+                        <name>Post</name>
+                        <displayName>ru#~#Почта#~#uk#~#Пошта#~#en#~#Post#~#</displayName>
+                        <description>Post Delivery</description>
+                        <displayDescription>ru#~#Доставка по почте#~#uk#~#Доставка поштою#~#en#~#Post Delivery#~#</displayDescription>
+                        <worldwide>false</worldwide>
+                        <country>true</country>
+                        <state>false</state>
+                        <local>false</local>
+                        <createdTimestamp class="sql-timestamp">2015-10-23T00:10:45.371+01:00</createdTimestamp>
+                        <updatedTimestamp class="sql-timestamp">2015-10-23T00:10:45.371+01:00</updatedTimestamp>
+                        <createdBy>admin@yes-cart.com</createdBy>
+                        <updatedBy>admin@yes-cart.com</updatedBy>
+                        <guid>b7ae3b04-b966-4495-a475-534fb2161021</guid>
+                    </carrier>
+                    <createdTimestamp class="sql-timestamp">2015-10-23T00:10:45.769+01:00</createdTimestamp>
+                    <updatedTimestamp class="sql-timestamp">2015-10-23T00:10:45.769+01:00</updatedTimestamp>
+                    <createdBy>admin@yes-cart.com</createdBy>
+                    <updatedBy>admin@yes-cart.com</updatedBy>
+                    <guid>d02c8114-830c-4125-88ff-9d9abf35a175</guid>
+                </carrierSla>
+                <deliveryGroup>D1</deliveryGroup>
+                <createdTimestamp class="sql-timestamp">2015-10-29T16:04:14.359Z</createdTimestamp>
+                <updatedTimestamp class="sql-timestamp">2015-10-29T16:10:00.653Z</updatedTimestamp>
+                <createdBy>anonymous</createdBy>
+                <updatedBy>anonymous</updatedBy>
+                <guid>d83419b2-46ca-4767-abfb-d02e14c75a4c</guid>
+            </orderDelivery>
         </second>
     </pair>
 </yes-report>

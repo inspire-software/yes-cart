@@ -28,6 +28,10 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
+import org.yes.cart.report.ReportDescriptor;
+import org.yes.cart.report.ReportGenerator;
+import org.yes.cart.report.ReportPair;
+import org.yes.cart.report.ReportParameter;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderAssemblyException;
@@ -40,6 +44,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -56,19 +61,22 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     private final CarrierSlaService carrierSlaService;
     private final PaymentProcessorFactory paymentProcessorFactory;
     private final PaymentModulesManager paymentModulesManager;
+    private final ReportGenerator reportGenerator;
 
     public CheckoutServiceFacadeImpl(final CustomerOrderService customerOrderService,
                                      final AmountCalculationStrategy amountCalculationStrategy,
                                      final CustomerOrderPaymentService customerOrderPaymentService,
                                      final CarrierSlaService carrierSlaService,
                                      final PaymentProcessorFactory paymentProcessorFactory,
-                                     final PaymentModulesManager paymentModulesManager) {
+                                     final PaymentModulesManager paymentModulesManager,
+                                     final ReportGenerator reportGenerator) {
         this.customerOrderService = customerOrderService;
         this.amountCalculationStrategy = amountCalculationStrategy;
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.carrierSlaService = carrierSlaService;
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.paymentModulesManager = paymentModulesManager;
+        this.reportGenerator = reportGenerator;
     }
 
     /** {@inheritDoc} */
@@ -254,5 +262,40 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public CustomerOrder update(final CustomerOrder customerOrder) {
         return customerOrderService.update(customerOrder);
+    }
+
+    private ReportDescriptor createReceiptDescriptor() {
+        final ReportDescriptor receipt = new ReportDescriptor();
+        receipt.setReportId("reportDelivery");
+        receipt.setXslfoBase("client/order/delivery");
+        final ReportParameter param1 = new ReportParameter();
+        param1.setParameterId("orderNumber");
+        param1.setBusinesstype("String");
+        param1.setMandatory(true);
+        receipt.setParameters(Collections.singletonList(param1));
+        return receipt;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void printOrderByReference(final String reference, final OutputStream outputStream) {
+
+        final CustomerOrder order = customerOrderService.findByReference(reference);
+        if (order != null) {
+            final Pair data = new Pair(order, order.getDelivery());
+
+            final Map<String, Object> values = new HashMap<String, Object>();
+            values.put("orderNumber", order.getOrdernum());
+            values.put("shop", order.getShop());
+
+            reportGenerator.generateReport(
+                    createReceiptDescriptor(),
+                    values,
+                    data,
+                    order.getLocale(),
+                    outputStream
+            );
+
+        }
     }
 }

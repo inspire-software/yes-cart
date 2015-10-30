@@ -23,6 +23,10 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.collection.internal.PersistentBag;
+import org.hibernate.collection.internal.PersistentList;
+import org.hibernate.collection.internal.PersistentSet;
 import org.yes.cart.domain.dto.impl.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
@@ -33,6 +37,8 @@ import javax.xml.datatype.DatatypeFactory;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -50,21 +56,45 @@ public class ReportObjectStreamFactory {
     
     private static final String ROOT_NODE = "yes-report";
 
+    private static final XStream X_STREAM = getXStream();
+
     /**
      * Get configured xstream object.
      * @return {@link XStream}
      */
-    public static XStream getXStream() {
+    private static XStream getXStream() {
 
         final XStream xStream = new XStream(new DomDriver());
 
         xStream.alias("customer", CustomerEntity.class);
-        xStream.alias("order", CustomerOrderEntity.class);
+        xStream.omitField(CustomerEntity.class, "orders");
+        xStream.omitField(CustomerEntity.class, "address");
+        xStream.omitField(CustomerEntity.class, "shops");
+        xStream.omitField(CustomerEntity.class, "coupons");
         xStream.alias("wishlist", CustomerWishListEntity.class);
         xStream.alias("customerAv", AttrValueEntityCustomer.class);
+        xStream.omitField(AttrValueEntityCustomer.class, "customer");
+        xStream.alias("attribute", AttributeEntity.class);
+        xStream.omitField(AttributeEntity.class, "etype");
+        xStream.omitField(AttributeEntity.class, "attributeGroup");
         xStream.alias("address", AddressEntity.class);
         xStream.alias("customerShop", CustomerShopEntity.class);
+
         xStream.alias("payment", CustomerOrderPaymentEntity.class);
+
+        xStream.alias("carrier", CarrierEntity.class);
+        xStream.omitField(CarrierEntity.class, "carrierSla");
+        xStream.omitField(CarrierEntity.class, "shops");
+        xStream.alias("carrierSla", CarrierSlaEntity.class);
+
+        xStream.alias("order", CustomerOrderEntity.class);
+        xStream.omitField(CustomerOrderEntity.class, "shop");
+        xStream.alias("orderLine", CustomerOrderDetEntity.class);
+        xStream.omitField(CustomerOrderDetEntity.class, "customerOrder");
+        xStream.alias("orderDelivery", CustomerOrderDeliveryEntity.class);
+        xStream.omitField(CustomerOrderDeliveryEntity.class, "customerOrder");
+        xStream.alias("deliveryLine", CustomerOrderDeliveryDetEntity.class);
+        xStream.omitField(CustomerOrderDeliveryDetEntity.class, "delivery");
 
         xStream.alias("shop", ShopEntity.class);
         xStream.alias("shopurl", ShopUrlEntity.class);
@@ -80,7 +110,6 @@ public class ReportObjectStreamFactory {
         xStream.alias("inventoryDto", InventoryDTOImpl.class);
 
         xStream.registerConverter(new Converter() {
-
 
 
             @Override
@@ -110,6 +139,27 @@ public class ReportObjectStreamFactory {
             }
         });
 
+        xStream.registerConverter(new Converter() {
+            @Override
+            public void marshal(final Object source, final HierarchicalStreamWriter writer, final MarshallingContext context) {
+                if (((AbstractPersistentCollection) source).wasInitialized()) {
+                    context.convertAnother(new ArrayList((Collection) source));
+                }
+            }
+
+            @Override
+            public Object unmarshal(final HierarchicalStreamReader reader, final UnmarshallingContext context) {
+                return null; // not needed
+            }
+
+            @Override
+            public boolean canConvert(final Class type) {
+                return PersistentBag.class == type || PersistentList.class == type || PersistentSet.class == type;
+            }
+        });
+
+        xStream.setMode(XStream.NO_REFERENCES);
+
         return xStream;
 
     }
@@ -121,8 +171,8 @@ public class ReportObjectStreamFactory {
      * @return {@link ObjectOutputStream}
      */
     public static ObjectOutputStream getObjectOutputStream(final Writer writer) throws IOException {
-        
-        return getXStream().createObjectOutputStream(writer, ROOT_NODE);
+
+        return X_STREAM.createObjectOutputStream(writer, ROOT_NODE);
         
     }
 

@@ -20,11 +20,11 @@ import java.util.Map;
  * Date: 26/10/2015
  * Time: 21:13
  */
-public class AdminReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
+public class WebReportGeneratorImpl extends AbstractThemeAwareFopReportGenerator {
 
-    public AdminReportGeneratorImpl(final ThemeService themeService,
-                                    final ShopService shopService,
-                                    final ContentService contentService) {
+    public WebReportGeneratorImpl(final ThemeService themeService,
+                                  final ShopService shopService,
+                                  final ContentService contentService) {
         super(themeService, shopService, contentService);
     }
 

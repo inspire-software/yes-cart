@@ -210,6 +210,12 @@
 
     </target>
 
+    <target name="noop">
+
+        <echo message="Skipping Flex build (note that this option will not work with 'mvn clean')"/>
+
+    </target>
+
     <target name="maven_bridge">
 
         <taskdef resource="net/sf/antcontrib/antlib.xml" classpath="${basedir}/../../env/setup/lib3rdparty/ant/ant-contrib-1.0b3.jar"/>

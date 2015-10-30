@@ -36,6 +36,7 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
     private final List<String> enabledPatterns = new ArrayList<String>();
 
     private IResource sitemapXml;
+    private IResource orderPdf;
 
     /**
      * Wicket resource via Spring IoC.
@@ -44,6 +45,15 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
      */
     public void setSitemapXml(final IResource sitemapXml) {
         this.sitemapXml = sitemapXml;
+    }
+
+    /**
+     * Wicket resource via Spring IoC.
+     *
+     * @param orderPdf order receipt resource
+     */
+    public void setOrderPdf(final IResource orderPdf) {
+        this.orderPdf = orderPdf;
     }
 
     /**
@@ -79,6 +89,13 @@ public class WicketResourceMounterImpl implements WicketResourceMounter {
             @Override
             public IResource getResource() {
                 return sitemapXml;
+            }
+        });
+
+        webApplication.mountResource("/orderreceipt.pdf", new ResourceReference("orderreceipt.pdf"){
+            @Override
+            public IResource getResource() {
+                return orderPdf;
             }
         });
 

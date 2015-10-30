@@ -30,6 +30,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -189,4 +190,12 @@ public interface CheckoutServiceFacade {
      * @return updated entity
      */
     CustomerOrder update(CustomerOrder customerOrder);
+
+    /**
+     * Generate order receipt by reference.
+     *
+     * @param reference order reference
+     * @param outputStream stream to print to
+     */
+    void printOrderByReference(String reference, OutputStream outputStream);
 }

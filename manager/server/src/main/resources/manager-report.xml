@@ -95,8 +95,9 @@
         </entry>
         <entry key="reportDelivery">
             <bean class="org.yes.cart.report.impl.DeliveryReportWorker">
-                <constructor-arg index="0" ref="remoteCustomerOrderService"/>
+                <constructor-arg index="0" ref="customerOrderService"/>
                 <constructor-arg index="1" ref="shopService"/>
+                <constructor-arg index="2" ref="shopFederationStrategy"/>
             </bean>
         </entry>
         <entry key="reportAvailableStock">

@@ -77,6 +77,16 @@
 
     <!-- ############################ Category , Product and Sku image services end ############################### -->
 
+    <!-- ############################ Reports for web start ####################################################### -->
+
+    <bean id="reportGenerator" class="org.yes.cart.report.impl.WebReportGeneratorImpl">
+        <constructor-arg index="0" ref="themeService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="contentService"/>
+    </bean>
+
+    <!-- ############################ Reports for web start end ################################################### -->
+
     <!-- ############################ Facades for web start ####################################################### -->
 
     <bean id="addressBookFacade" class="org.yes.cart.web.support.service.impl.AddressBookFacadeImpl">
@@ -111,6 +121,7 @@
         <constructor-arg index="3" ref="carrierSlaService"/>
         <constructor-arg index="4" ref="paymentProcessorFactory"/>
         <constructor-arg index="5" ref="paymentModulesManager"/>
+        <constructor-arg index="6" ref="reportGenerator"/>
     </bean>
 
     <bean id="categoryServiceFacade"  class="org.yes.cart.web.support.service.impl.CategoryServiceFacadeImpl">

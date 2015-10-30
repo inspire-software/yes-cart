@@ -20,6 +20,7 @@ import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -101,9 +102,13 @@ public class OrderPage extends AbstractWebPage {
                     WicketUtil.createStringResourceModel(this, "orderNoTitle",
                             Collections.<String, Object>singletonMap("ordernum", customerOrder.getOrdernum()))));
             add(new ShoppingCartPaymentVerificationView(ORDER_PANEL, orderGuid, true));
+            add(new ExternalLink("receipt",
+                    getWicketUtil().getHttpServletRequest().getContextPath() +
+                            "/orderreceipt.pdf?ordernum=" + customerOrder.getOrdernum()));
         } else {
             add(new Label(ORDER_NUM, ""));
             add(new Label(ORDER_PANEL, ""));
+            add(new ExternalLink("receipt", "#").setVisible(false));
             error(getLocalizer().getString("orderNotFound", this));
         }
         add(new StandardFooter(FOOTER));
