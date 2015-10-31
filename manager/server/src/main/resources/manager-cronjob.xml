@@ -57,6 +57,22 @@
         <property name="cronExpression" value="${yum.cron.abandonedShoppingCartJob}" />
     </bean>
 
+    <bean name="emptyAnonymousShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Empty Anonymous Shopping Cart State Clean Up" />
+                <entry key="job" value-ref="bulkEmptyAnonymousShoppingCartProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="emptyAnonymousShoppingCartJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="emptyAnonymousShoppingCartJob" />
+        <property name="cronExpression" value="${yum.cron.emptyAnonymousShoppingCartJob}" />
+    </bean>
+
 
     <!-- ################################ Customer tagging  ################################################# -->
 
@@ -163,6 +179,7 @@
             <list>
                 <ref bean="preOrderJobCronTrigger" />
                 <ref bean="abandonedShoppingCartJobCronTrigger" />
+                <ref bean="emptyAnonymousShoppingCartJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
                 <ref bean="sendMailJobCronTrigger" />
                 <ref bean="autoImportJobCronTrigger" />

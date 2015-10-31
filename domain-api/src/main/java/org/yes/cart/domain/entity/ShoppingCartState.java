@@ -52,6 +52,20 @@ public interface ShoppingCartState extends Auditable {
     void setCustomerEmail(String customerEmail);
 
     /**
+     * Get empty flag. Indicates if cart is blank or not.
+     *
+     * @return flag indicating empty
+     */
+    Boolean getEmpty();
+
+    /**
+     * Set empty flag. Indicates if cart is blank or not.
+     *
+     * @param empty flag indicating empty
+     */
+    void setEmpty(Boolean empty);
+
+    /**
      * Get pk value.
      *
      * @return pk value.

@@ -56,5 +56,17 @@
         </property>
     </bean>
 
+    <bean id="bulkEmptyAnonymousShoppingCartProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
+                <constructor-arg index="0" ref="shoppingCartStateService"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <property name="abandonedTimeoutDays" value="1"/> <!-- CPOINT -->
+                <property name="batchSize" value="20"/> <!-- CPOINT -->
+            </bean>
+        </property>
+    </bean>
+
 </beans>
         

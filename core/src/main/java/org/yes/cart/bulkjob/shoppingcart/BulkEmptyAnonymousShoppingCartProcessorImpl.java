@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -39,19 +38,19 @@ import java.util.List;
  * Date: 22/08/2014
  * Time: 12:47
  */
-public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
+public class BulkEmptyAnonymousShoppingCartProcessorImpl implements Runnable {
 
     private static final long MS_IN_DAY = 86400000L;
 
     private final ShoppingCartStateService shoppingCartStateService;
     private final CustomerOrderService customerOrderService;
     private final SystemService systemService;
-    private long abandonedTimeoutMs = 30 * MS_IN_DAY;
+    private long abandonedTimeoutMs = 1 * MS_IN_DAY;
     private int batchSize = 20;
 
-    public BulkAbandonedShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
-                                                  final CustomerOrderService customerOrderService,
-                                                  final SystemService systemService) {
+    public BulkEmptyAnonymousShoppingCartProcessorImpl(final ShoppingCartStateService shoppingCartStateService,
+                                                       final CustomerOrderService customerOrderService,
+                                                       final SystemService systemService) {
         this.shoppingCartStateService = shoppingCartStateService;
         this.customerOrderService = customerOrderService;
         this.systemService = systemService;
@@ -70,7 +69,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
         log.info("Look up all ShoppingCartStates not modified since {}", lastModification);
 
-        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification);
+        final ResultsIterator<ShoppingCartState> abandoned = this.shoppingCartStateService.findByModificationPrior(lastModification, true);
 
         try {
             int count = 0;
@@ -81,9 +80,9 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
                 final String guid = scs.getGuid();
 
-                log.debug("Removing abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                log.debug("Removing empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
                 this.shoppingCartStateService.delete(scs);
-                log.debug("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
+                log.debug("Removed empty anonymous cart for {}, guid {}", scs.getCustomerEmail(), guid);
 
                 final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
                 if (CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
@@ -107,7 +106,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
             try {
                 abandoned.close();
             } catch (Exception exp) {
-                log.error("Processing abandoned baskets exception, error closing iterator: " + exp.getMessage(), exp);
+                log.error("Processing empty anonymous baskets exception, error closing iterator: " + exp.getMessage(), exp);
             }
         }
 
@@ -115,14 +114,14 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
 
         final long ms = (finish - start);
 
-        log.info("Processing abandoned baskets ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Processing empty anonymous baskets ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
     }
 
 
     private long determineExpiryInMs() {
 
-        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_ABANDONED_TIMEOUT_SECONDS);
+        final String av = systemService.getAttributeValue(AttributeNamesKeys.System.CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS);
 
         if (av != null && StringUtils.isNotBlank(av)) {
             long expiry = NumberUtils.toInt(av) * 1000L;

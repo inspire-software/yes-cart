@@ -122,6 +122,11 @@ public interface AttributeNamesKeys {
          */
         String CART_ABANDONED_TIMEOUT_SECONDS = "CART_ABANDONED_TIMEOUT_SECONDS";
 
+        /**
+         * Time in seconds for abandoned carts
+         */
+        String CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS = "CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS";
+
     }
 
 

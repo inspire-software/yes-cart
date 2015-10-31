@@ -2385,6 +2385,7 @@
 
         <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPPINGCARTSTATE_GUID" not-null="true"/>
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
+        <property name="empty" column="EMPTY" type="boolean" />
         <property name="state" column="CART_STATE" type="byte[]" length="16384" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2527,7 +2528,16 @@
 
     <query name="SHOPPINGCARTSTATE.BY.LASTMODIFIED">
         <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL
+       select scs from ShoppingCartStateEntity scs where
+             scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL
+       ]]>
+    </query>
+
+    <query name="SHOPPINGCARTSTATE.EMPTY.ANONYMOUS.BY.LASTMODIFIED">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where
+            scs.empty = ?2 AND scs.customerEmail IS NULL AND
+            (scs.updatedTimestamp < ?1 OR scs.updatedTimestamp IS NULL)
        ]]>
     </query>
 

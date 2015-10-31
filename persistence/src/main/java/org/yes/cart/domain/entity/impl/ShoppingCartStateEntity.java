@@ -26,6 +26,7 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
     private long shoppingCartStateId;
     private long version;
 
+    private Boolean empty = Boolean.TRUE;
     private String customerEmail;
     private byte[] state;
 
@@ -44,6 +45,14 @@ public class ShoppingCartStateEntity implements ShoppingCartState, java.io.Seria
 
     public void setCustomerEmail(final String customerEmail) {
         this.customerEmail = customerEmail;
+    }
+
+    public Boolean getEmpty() {
+        return empty;
+    }
+
+    public void setEmpty(final Boolean empty) {
+        this.empty = empty;
     }
 
     public byte[] getState() {

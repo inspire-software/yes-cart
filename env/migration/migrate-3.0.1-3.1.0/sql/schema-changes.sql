@@ -93,6 +93,15 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11108,  'JOB_DEL_WAITING_INV_LAST_RUN', 'JOB_DEL_WAITING_INV_LAST_RUN',  0,  NULL,  'Job\Inventory Reservation: Last run timestamp',
     'Timestamp of last run of the inventory job. Used to check inventory changes.',  1009, 1000);
 
+--
+-- YC-596 Empty carts clean up
+--
 
+alter table TSHOPPINGCARTSTATE add column EMPTY bit not null default 0;
+-- alter table TSHOPPINGCARTSTATE add column EMPTY smallint not null default 0;
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11109,  'CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS', 'CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS',  0,  NULL,  'Cart: empty anonymous in seconds',
+    'Cart empty anonymous seconds. All empty anonymous carts are deleted by bulk job. Default: 86400s (1 days)',  1006, 1000);
 
 

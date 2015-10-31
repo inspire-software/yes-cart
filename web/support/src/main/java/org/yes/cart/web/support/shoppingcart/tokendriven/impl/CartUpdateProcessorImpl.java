@@ -96,6 +96,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         }
 
         // 5. Store new state
+        dbState.setEmpty(shoppingCart.getCartItemsCount() == 0);
         dbState.setState(saveState(shoppingCart));
 
         // 6. Persist

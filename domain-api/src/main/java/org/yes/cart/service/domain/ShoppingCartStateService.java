@@ -56,4 +56,14 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
      */
     ResultsIterator<ShoppingCartState> findByModificationPrior(Date lastModification);
 
+    /**
+     * Get all states that were modified before given date.
+     *
+     * @param lastModification last modification date
+     * @param emptyAnonymous flag to indicate whether to select only empty anonymous carts
+     *
+     * @return all saved states that were not modified since given date
+     */
+    ResultsIterator<ShoppingCartState> findByModificationPrior(Date lastModification, boolean emptyAnonymous);
+
 }

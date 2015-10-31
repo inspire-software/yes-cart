@@ -81,6 +81,7 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
         final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
         scs.setGuid("CART-001");
         scs.setCustomerEmail("bob@doe.com");
+        scs.setEmpty(false);
         scs.setState("State".getBytes());
         shoppingCartStateService.create(scs);
 
@@ -102,6 +103,83 @@ public class TestShoppingCartStateServiceImpl extends BaseCoreDBTestCase {
             @Override
             public Object doInTransaction(final TransactionStatus status) {
                 ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation);
+                assertNotNull(carts);
+                assertTrue(carts.hasNext()); // one
+                assertFalse(carts.hasNext()); // no second
+                carts.close();
+                return null;
+            }
+        });
+
+        shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
+
+    }
+
+    @Test
+    public void testFindByModificationPriorEmptyAnonymousFalse() {
+
+        final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
+        scs.setGuid("CART-001");
+        scs.setCustomerEmail("bob@doe.com");
+        scs.setEmpty(true);
+        scs.setState("State".getBytes());
+        shoppingCartStateService.create(scs);
+
+        final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
+        final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
+
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+                assertNotNull(carts);
+                assertFalse(carts.hasNext());
+                carts.close();
+                return null;
+            }
+        });
+
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
+                assertNotNull(carts);
+                assertFalse(carts.hasNext());
+                carts.close();
+                return null;
+            }
+        });
+
+        shoppingCartStateService.delete(shoppingCartStateService.findByGuid("CART-001"));
+
+    }
+
+    @Test
+    public void testFindByModificationPriorEmptyAnonymousTrue() {
+
+        final ShoppingCartState scs = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
+        scs.setGuid("CART-001");
+        scs.setState("State".getBytes());
+        shoppingCartStateService.create(scs);
+
+        final Date tenSecondsAfterCreation = new Date(System.currentTimeMillis() + 10000L);
+        final Date tenSecondsBeforeCreation = new Date(tenSecondsAfterCreation.getTime() - 20000L);
+
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsBeforeCreation, true);
+                assertNotNull(carts);
+                assertFalse(carts.hasNext());
+                carts.close();
+                return null;
+            }
+        });
+
+        getTx().execute(new TransactionCallback<Object>() {
+            @Override
+            public Object doInTransaction(final TransactionStatus status) {
+                ResultsIterator<ShoppingCartState> carts = shoppingCartStateService.findByModificationPrior(tenSecondsAfterCreation, true);
                 assertNotNull(carts);
                 assertTrue(carts.hasNext()); // one
                 assertFalse(carts.hasNext()); // no second
