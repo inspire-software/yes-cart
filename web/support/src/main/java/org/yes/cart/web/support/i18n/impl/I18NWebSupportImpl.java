@@ -32,13 +32,13 @@ public class I18NWebSupportImpl implements I18NWebSupport {
      * {@inheritDoc}
      */
     public I18NModel getDefaultModel(final Object i18nObject) {
-        return new StringI18NModel(String.valueOf(i18nObject));
+        return new StringI18NModel(i18nObject != null ? String.valueOf(i18nObject) : null);
     }
 
     /**
      * {@inheritDoc}
      */
     public I18NModel getFailoverModel(final Object i18nObject, final String failover) {
-        return new FailoverStringI18NModel(String.valueOf(i18nObject), failover);
+        return new FailoverStringI18NModel(i18nObject != null ? String.valueOf(i18nObject) : null, failover);
     }
 }

@@ -34,6 +34,9 @@ public class CsvPlainStringValueAdapter implements ValueAdapter {
      * @return string value
      */
     public Object fromRaw(final Object rawValue, final DataTypeEnum requiredType) {
-        return String.valueOf(rawValue);
+        if (rawValue != null) {
+            return String.valueOf(rawValue);
+        }
+        return null;
     }
 }

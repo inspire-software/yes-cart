@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.i18n.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.HashMap;
@@ -87,7 +88,9 @@ public class StringI18NModel implements I18NModel {
     public String toString() {
         final StringBuilder out = new StringBuilder();
         for (final Map.Entry<String, String> entry : values.entrySet()) {
-            out.append(entry.getKey()).append(SEPARATOR).append(entry.getValue()).append(SEPARATOR);
+            if (StringUtils.isNotBlank(entry.getValue())) {
+                out.append(entry.getKey()).append(SEPARATOR).append(entry.getValue()).append(SEPARATOR);
+            }
         }
         return out.toString();
     }

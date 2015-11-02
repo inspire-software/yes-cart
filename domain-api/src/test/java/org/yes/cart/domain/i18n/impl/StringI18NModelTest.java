@@ -70,4 +70,19 @@ public class StringI18NModelTest {
         assertNull(model.getValue("UK"));
         assertNull(model.getValue("CA"));
     }
+
+    @Test
+    public void testStringBlankValues() throws Exception {
+        final I18NModel model = new StringI18NModel((String) null);
+        assertNotNull(model.getAllValues());
+        assertEquals(0, model.getAllValues().size());
+        model.putValue("EN", "Some text");
+        model.putValue("RU", null);
+        model.putValue("UK", "");
+        final I18NModel restored = new StringI18NModel(model.toString());
+        assertNotNull(restored.getAllValues());
+        assertEquals(1, restored.getAllValues().size());
+        assertEquals("Some text", model.getValue("EN"));
+        assertNull(model.getValue("RU"));
+    }
 }

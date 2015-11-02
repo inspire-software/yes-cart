@@ -507,7 +507,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     Object singleObjectValue = tuple.getColumnValue(importColumn, valueDataAdapter);
                     if (importColumn.getLanguage() != null) {
                         final I18NModel model = new StringI18NModel((String) propertyDescriptor.getReadMethod().invoke(object));
-                        model.putValue(importColumn.getLanguage(), String.valueOf(singleObjectValue));
+                        model.putValue(importColumn.getLanguage(), singleObjectValue != null ? String.valueOf(singleObjectValue) : null);
                         singleObjectValue = model.toString();
                     }
                     if (singleObjectValue != null && !singleObjectValue.getClass().equals(propertyDescriptor.getPropertyType())) {

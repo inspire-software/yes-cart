@@ -137,8 +137,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
 
-            if (attrVal.getValue() != null ||
-                    (attrVal.getValue() instanceof String && StringUtils.isNotBlank((String) attrVal.getValue()))) {
+            if (attrVal.getValue() != null &&
+                    attrVal.getValue() instanceof String && StringUtils.isNotBlank((String) attrVal.getValue())) {
 
                 if (allowedFull.contains(attrVal.getKey())) {
 
