@@ -86,7 +86,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
                 log.debug("Removed abandoned cart for {}, guid {}", scs.getCustomerEmail(), guid);
 
                 final CustomerOrder tempOrder = this.customerOrderService.findByReference(guid);
-                if (CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
+                if (tempOrder != null && CustomerOrder.ORDER_STATUS_NONE.equals(tempOrder.getOrderStatus())) {
                     log.debug("Removing temporary order for cart guid {}", guid);
                     this.customerOrderService.delete(tempOrder);
                     removedOrders++;
