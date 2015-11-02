@@ -173,7 +173,16 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             }
         }
 
-        return Constants.RECOMMENDATION_SIZE;
+        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
+                shopId, AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_NEW_ARRIVAL);
+        final int limit;
+        if (value != null && value.size() > 0) {
+            limit = NumberUtils.toInt((String) value.get(0), Constants.RECOMMENDATION_SIZE);
+        } else {
+            limit = Constants.RECOMMENDATION_SIZE;
+        }
+
+        return limit;
     }
 
     /**

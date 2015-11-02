@@ -352,6 +352,24 @@ public interface AttributeNamesKeys {
         /** Product image height in category.  */
         String SHOP_PRODUCT_IMAGE_THUMB_HEIGHT = "SHOP_PRODUCT_IMAGE_THUMB_HEIGHT";
 
+        /** Product columns in grid */
+        String SHOP_CATEGORY_PRODUCTS_COLUMNS = "SHOP_CATEGORY_PRODUCTS_COLUMNS";
+
+        /**
+         * Number of categories to be displayed in one row for grid view
+         */
+        String SHOP_CATEGORY_SUBCATEGORIES_COLUMNS = "SHOP_CATEGORY_SUBCATEGORIES_COLUMNS";
+
+        /**
+         * Max count of featured products to be shown for category
+         */
+        String SHOP_CATEGORY_ITEMS_FEATURED = "SHOP_CATEGORY_ITEMS_FEATURED";
+
+        /**
+         * Max count of new arrival products for category
+         */
+        String SHOP_CATEGORY_ITEMS_NEW_ARRIVAL = "SHOP_CATEGORY_ITEMS_NEW_ARRIVAL";
+
         /**
          * Setting for whether to show coupons or not
          */

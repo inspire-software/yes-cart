@@ -181,7 +181,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public int getFeaturedListSizeConfig(final long categoryId, final long shopId) {
 
-        return getLimitSizeConfig(categoryId, shopId, AttributeNamesKeys.Category.CATEGORY_ITEMS_FEATURED, Constants.FEATURED_LIST_SIZE);
+        return getLimitSizeConfig(categoryId, shopId,
+                AttributeNamesKeys.Category.CATEGORY_ITEMS_FEATURED,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_FEATURED,
+                Constants.FEATURED_LIST_SIZE);
 
     }
 
@@ -226,7 +229,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public int getProductListColumnOptionsConfig(final long categoryId, final long shopId) {
 
-        return getLimitSizeConfig(categoryId, shopId, AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS, Constants.PRODUCT_COLUMNS_SIZE);
+        return getLimitSizeConfig(categoryId, shopId,
+                AttributeNamesKeys.Category.CATEGORY_PRODUCTS_COLUMNS,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_PRODUCTS_COLUMNS,
+                Constants.PRODUCT_COLUMNS_SIZE);
 
     }
 
@@ -236,7 +242,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public int getCategoryListColumnOptionsConfig(final long categoryId, final long shopId) {
 
-        return getLimitSizeConfig(categoryId, shopId, AttributeNamesKeys.Category.CATEGORY_SUBCATEGORIES_COLUMNS, Constants.SUBCATEGORIES_COLUMNS_SIZE);
+        return getLimitSizeConfig(categoryId, shopId,
+                AttributeNamesKeys.Category.CATEGORY_SUBCATEGORIES_COLUMNS,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_SUBCATEGORIES_COLUMNS,
+                Constants.SUBCATEGORIES_COLUMNS_SIZE);
 
     }
 
@@ -271,18 +280,30 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
     private int getLimitSizeConfig(final long categoryId,
                                    final long shopId,
-                                   final String limitAttribute,
+                                   final String categoryLimitAttribute,
+                                   final String shopLimitAttribute,
                                    final int defaultLimit) {
 
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
             final String size = categoryService.getCategoryAttributeRecursive(
-                    null, categoryId, limitAttribute, null
+                    null, categoryId, categoryLimitAttribute, null
             );
             if (size != null) {
-                return NumberUtils.toInt(size, defaultLimit);
+                final int limit = NumberUtils.toInt(size, 0);
+                if (limit > 0) {
+                    return limit;
+                }
             }
 
+        }
+
+        final Shop shop = shopService.getById(shopId);
+        if (shop != null) {
+            final String val = shop.getAttributeValueByCode(shopLimitAttribute);
+            if (val != null) {
+                return NumberUtils.toInt(val, defaultLimit);
+            }
         }
 
         return defaultLimit;
