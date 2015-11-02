@@ -51,9 +51,17 @@ public class YcCronJob extends QuartzJobBean implements StatefulJob {
 
         log.info("Starting job {} on {}", jobName, nodeId);
 
-        job.run();
+        try {
+            job.run();
 
-        log.info("Finished job {} on {}, next run {}", new Object[] { jobName, nodeId, context.getNextFireTime() });
+            log.info("Finished job {} on {}, next run {}", new Object[]{jobName, nodeId, context.getNextFireTime()});
+
+        } catch (Throwable thw) {
+
+            log.error("Finished job {} on {}, next run {}", new Object[] { jobName, nodeId, context.getNextFireTime() });
+            log.error(thw.getMessage(), thw);
+
+        }
 
     }
 }
