@@ -1,0 +1,1 @@
+Запит <%out.print(additionalData.email)%> на підписку на розсилку у <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%> магазині.

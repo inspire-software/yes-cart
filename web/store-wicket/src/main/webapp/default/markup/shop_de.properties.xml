@@ -242,6 +242,9 @@
     <entry key="logoffLabel">Abmelden</entry>
     <entry key="logoffTitle">${customer} klicken Sie hier um sich von Ihrem Konto abzumelden</entry>
 
+    <!-- NewsletterPanel -->
+    <entry key="newsletterEmailSent">Vielen Dank für unseren Newsletter Anmeldung</entry>
+
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>

@@ -57,7 +57,7 @@
                             </iframe>
                         </div>
                 </div>
-                <div class="col-xs-12 col-md-8 no-margin">
+                <div class="col-xs-12 col-md-5 no-margin">
                     <div class="links-col">
                         <wicket:link>
                             <a href="ProfilePage.html" rel="nofollow"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
@@ -68,19 +68,21 @@
                         <wicket:message key="orderGuide">[Order Guide]</wicket:message><br>
                         <wicket:link>
                             <a href="OrdersPage.html" rel="nofollow"><span><wicket:message key="orderHistory">[Order history]</wicket:message></span></a>
-                        </wicket:link>
+                        </wicket:link><br>
+                        <wicket:message key="returnPolicy">[Return policy]</wicket:message><br>
                     </div>
                     <div class="links-col">
                         <wicket:link><a href="FaqPage.html" rel="bookmark"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link><br>
-                        <wicket:message key="returnPolicy">[Return policy]</wicket:message><br>
-                        <wicket:message key="siteMap">[Site map]</wicket:message><br>
+                        <a href="/yes-shop/content/sitemap" rel="bookmark"><span><wicket:message key="sitemapInfo">[sitemap info]</wicket:message></span></a><br>
                         <wicket:message key="callCenter">[Call center]</wicket:message><br>
-                    </div>
-                    <div class="links-col">
                         <wicket:link><a href="ContactPage.html" rel="bookmark"><span><wicket:message key="contacts">[Contacts]</wicket:message></span></a></wicket:link><br>
                         <a href="/yes-shop/content/license" rel="bookmark"><span><wicket:message key="licenceInfo">[licence info]</wicket:message></span></a><br>
-                        <a href="/yes-shop/content/sitemap" rel="bookmark"><span><wicket:message key="sitemapInfo">[sitemap info]</wicket:message></span></a><br>
                     </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <wicket:container wicket:id="newsletterForm">
+                        [newsletterForm]
+                    </wicket:container>
                 </div>
             </div>
         </div>

@@ -242,6 +242,9 @@
     <entry key="logoffLabel">Вийти</entry>
     <entry key="logoffTitle">${customer} натисніть тут, щоб вийти з Вашої особистої сторінки</entry>
 
+    <!-- NewsletterPanel -->
+    <entry key="newsletterEmailSent">Дякуємо за реєстрацію на нашу розсилку</entry>
+
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>

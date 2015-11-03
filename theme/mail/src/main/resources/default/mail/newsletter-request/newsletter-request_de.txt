@@ -1,0 +1,1 @@
+Ein Newsletter reguest für <%out.print(additionalData.email)%> für <% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>

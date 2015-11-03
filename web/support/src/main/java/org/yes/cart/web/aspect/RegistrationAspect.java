@@ -73,15 +73,16 @@ public class RegistrationAspect extends BaseNotificationAspect {
      * @param taskExecutor    {@link org.springframework.core.task.TaskExecutor} to execute task.
      * @param phrazeGenerator {@link org.yes.cart.service.domain.PassPhrazeGenerator}
      * @param passwordHashHelper      {@link org.yes.cart.service.domain.HashHelper}
+     * @param mailService     persists mail object to be picked up by bulk email job
+     * @param mailComposer    mail composer generates message to be sent
      * @param themeService    theme service
      */
-    public RegistrationAspect(
-            final TaskExecutor taskExecutor,
-            final PassPhrazeGenerator phrazeGenerator,
-            final HashHelper passwordHashHelper,
-            final MailService mailService,
-            final MailComposer mailComposer,
-            final ThemeService themeService) {
+    public RegistrationAspect(final TaskExecutor taskExecutor,
+                              final PassPhrazeGenerator phrazeGenerator,
+                              final HashHelper passwordHashHelper,
+                              final MailService mailService,
+                              final MailComposer mailComposer,
+                              final ThemeService themeService) {
         super(taskExecutor);
 
         this.passwordHashHelper = passwordHashHelper;
@@ -221,7 +222,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
         return new CustomerRegistrationMessageListener(
                 mailService,
                 mailComposer,
-                serializableMessage
+                (RegistrationMessage) serializableMessage
         );
     }
 

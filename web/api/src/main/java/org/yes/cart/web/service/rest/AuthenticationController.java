@@ -720,7 +720,7 @@ public class AuthenticationController {
      *         with authToken.
      *     </td></tr>
      *     <tr><td>authToken</td><td>
-     *         E-mail of a registered customer.  Supplying this parameter will trigger an
+     *         Authentication token of a registered customer.  Supplying this parameter will trigger an
      *         email with new password.
      *     </td></tr>
      * </table>
@@ -798,6 +798,98 @@ public class AuthenticationController {
         }
         return new AuthenticationResultRO("INVALID_PARAMETERS");
     }
+
+
+
+    /**
+     * Interface: POST /yes-api/rest/auth/signupnewsletter
+     * <p>
+     * <p>
+     * Sign up for newsletter interface sends email request to shop administrator with provided
+     * email.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>email</td><td>
+     *         E-mail to be used for newsletters.
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <p>
+     * Output that does not have error code indicates successful processing.
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : false,
+     *    "greeting" : null,
+     *    "token" : null,
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting/&gt;
+     *    &lt;success&gt;false&lt;/success&gt;
+     *    &lt;token/&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>INVALID_EMAIL</td><td>Supplied email is invalidr</td></tr>
+     * </table>
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/signupnewsletter",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO signUpNewsletter(@RequestParam(value = "email", required = false) final String email,
+                                                                 final HttpServletRequest request,
+                                                                 final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+
+        if (StringUtils.isBlank(email)
+                || email.length() < 6
+                || email.length() > 256
+                || !EMAIL.matcher(email).matches()) {
+
+            return new AuthenticationResultRO("EMAIL_FAILED");
+
+        }
+
+        final Shop shop = cartMixin.getCurrentShop();
+        customerServiceFacade.registerNewsletter(shop, email, new HashMap<String, Object>());
+
+        return new AuthenticationResultRO();
+
+    }
+
+
 
     /**
      * Execute login command.

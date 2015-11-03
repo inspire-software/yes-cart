@@ -171,7 +171,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         customerService.create(customer, registrationShop);
 
-        return password;
+        return password; // email is sent via RegistrationAspect
+    }
+
+    /** {@inheritDoc} */
+    public String registerNewsletter(final Shop registrationShop,
+                                     final String email,
+                                     final Map<String, Object> registrationData) {
+        return email; // do nothing, email is sent via NewsletterAspect
     }
 
     /** {@inheritDoc} */

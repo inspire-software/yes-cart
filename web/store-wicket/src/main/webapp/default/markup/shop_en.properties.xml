@@ -242,6 +242,9 @@
     <entry key="logoffLabel">Logoff</entry>
     <entry key="logoffTitle">${customer} click here to logoff from your account</entry>
 
+    <!-- NewsletterPanel -->
+    <entry key="newsletterEmailSent">Thank you for signing up to our newsletter</entry>
+
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>

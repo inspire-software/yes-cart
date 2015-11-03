@@ -29,8 +29,8 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
  */
 public class BaseAuthForm extends Form {
 
-    protected static final int MIN_LEN = 6;
-    protected static final int MAX_LEN = 256;
+    public static final int MIN_LEN = 6;
+    public static final int MAX_LEN = 256;
 
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)

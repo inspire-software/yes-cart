@@ -43,18 +43,18 @@ public class CustomerRegistrationMessageListener implements Runnable {
 
     private final MailComposer mailComposer;
 
-    private final Object objectMessage;
+    private final RegistrationMessage objectMessage;
 
     /**
      * Construct jms listener.
      *
-     * @param mailService mail service.
+     * @param mailService    mail service.
      * @param mailComposer   mail composer
+     * @param objectMessage  message
      */
-    public CustomerRegistrationMessageListener(
-            final MailService mailService,
-            final MailComposer mailComposer,
-            final Object objectMessage) {
+    public CustomerRegistrationMessageListener(final MailService mailService,
+                                               final MailComposer mailComposer,
+                                               final RegistrationMessage objectMessage) {
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.objectMessage = objectMessage;
@@ -66,12 +66,10 @@ public class CustomerRegistrationMessageListener implements Runnable {
     public void run() {
 
         try {
-            final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
+            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage response :" + objectMessage);
 
-            ShopCodeContext.getLog(this).info("CustomerRegistrationMessageListener#onMessage response :" + registrationMessage);
-
-            if (registrationMessage.getMailTemplatePathChain() != null) {
-                processMessage(registrationMessage);
+            if (objectMessage.getMailTemplatePathChain() != null) {
+                processMessage(objectMessage);
             }
 
         } catch (Exception e) {
@@ -95,6 +93,7 @@ public class CustomerRegistrationMessageListener implements Runnable {
         model.put("lastName", registrationMessage.getLastname());
         model.put("shopUrl", registrationMessage.getShopUrl());
         model.put("shopName", registrationMessage.getShopName());
+        model.put("additionalData", registrationMessage.getAdditionalData());
 
         final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
         mailComposer.composeMessage(

@@ -20,6 +20,7 @@ package org.yes.cart.domain.message.impl;
 import org.yes.cart.domain.message.RegistrationMessage;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,6 +47,8 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     private String authToken;
     private List<String> mailTemplatePathChain;
     private String templateName;
+
+    private Map<String, Object> additionalData;
 
 
     /** {@inheritDoc} */
@@ -176,6 +179,16 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setLastname(final String lastname) {
         this.lastname = lastname;
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Object> getAdditionalData() {
+        return additionalData;
+    }
+
+    /** {@inheritDoc} */
+    public void setAdditionalData(final Map<String, Object> additionalData) {
+        this.additionalData = additionalData;
     }
 
     @Override

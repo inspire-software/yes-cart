@@ -52,6 +52,19 @@ public interface CustomerServiceFacade {
                             Map<String, Object> registrationData);
 
     /**
+     * Register given email in given shop for newsletter list.
+     *
+     * @param registrationShop shop where registration takes place
+     * @param email            customer email
+     * @param registrationData registration data
+     *
+     * @return password to login user
+     */
+    String registerNewsletter(Shop registrationShop,
+                              String email,
+                              Map<String, Object> registrationData);
+
+    /**
      * Find customer by email.
      *
      * @param email email

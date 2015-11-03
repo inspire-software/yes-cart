@@ -18,6 +18,7 @@ package org.yes.cart.domain.message;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -213,5 +214,19 @@ public interface RegistrationMessage extends Serializable {
      * @param lastname value to set
      */
     void setLastname(String lastname);
+
+    /**
+     * Additional data for registration message.
+     *
+     * @return additional data
+     */
+    Map<String, Object> getAdditionalData();
+
+    /**
+     * Additional data for registration message.
+     *
+     * @param additionalData additional data
+     */
+    void setAdditionalData(Map<String, Object> additionalData);
 
 }

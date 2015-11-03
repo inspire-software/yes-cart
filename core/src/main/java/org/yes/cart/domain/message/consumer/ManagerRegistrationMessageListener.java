@@ -36,15 +36,18 @@ public class ManagerRegistrationMessageListener implements Runnable {
 
     private final MailComposer mailComposer;
 
-    private final Object objectMessage;
+    private final RegistrationMessage objectMessage;
 
     /**
      * Construct listener.
+     *
+     * @param mailService    mail service.
+     * @param mailComposer   mail composer
+     * @param objectMessage  message
      */
-    public ManagerRegistrationMessageListener(
-            final MailService mailService,
-            final MailComposer mailComposer,
-            final Object objectMessage) {
+    public ManagerRegistrationMessageListener(final MailService mailService,
+                                              final MailComposer mailComposer,
+                                              final RegistrationMessage objectMessage) {
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.objectMessage = objectMessage;
@@ -57,8 +60,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
     public void run() {
 
         try {
-            final RegistrationMessage registrationMessage = (RegistrationMessage) objectMessage;
-            processMessage(registrationMessage);
+            processMessage(objectMessage);
         } catch (Exception e) {
             ShopCodeContext.getLog(this).error("Can not process " + objectMessage, e);
             throw new RuntimeException(e); //rollback message
@@ -78,6 +80,7 @@ public class ManagerRegistrationMessageListener implements Runnable {
         model.put("password", registrationMessage.getPassword());
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
+        model.put("additionalData", registrationMessage.getAdditionalData());
 
         final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
         mailComposer.composeMessage(

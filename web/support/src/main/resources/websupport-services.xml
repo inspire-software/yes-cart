@@ -155,6 +155,13 @@
 
     <bean id="aspectExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"/>
 
+    <bean id="customerNewsletterAspect" class="org.yes.cart.web.aspect.NewsletterAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="mailService"/>
+        <constructor-arg index="2" ref="mailComposer"/>
+        <constructor-arg index="3" ref="themeService"/>
+    </bean>
+
     <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>
         <constructor-arg index="1" ref="passPhraseGenerator"/>
@@ -162,7 +169,6 @@
         <constructor-arg index="3" ref="mailService"/>
         <constructor-arg index="4" ref="mailComposer"/>
         <constructor-arg index="5" ref="themeService"/>
-
     </bean>
 
     <bean id="paymentNotificationAspect" class="org.yes.cart.service.domain.aspect.impl.PaymentAspect">

@@ -20,6 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
+import org.yes.cart.web.page.component.customer.newsletter.NewsletterPanel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
@@ -53,6 +54,8 @@ public class StandardFooter extends BaseComponent {
         addOrReplace(new Label("footerNav", footerNav).setEscapeModelStrings(false));
         String footerCopyright = getContentInclude(shopId, "footer_copy_include", lang);
         addOrReplace(new Label("footerCopyright", footerCopyright).setEscapeModelStrings(false));
+
+        addOrReplace(new NewsletterPanel("newsletterForm"));
 
         super.onBeforeRender();
     }

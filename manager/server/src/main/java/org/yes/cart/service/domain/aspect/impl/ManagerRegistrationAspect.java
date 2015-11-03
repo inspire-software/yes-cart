@@ -145,7 +145,7 @@ public class ManagerRegistrationAspect extends BaseNotificationAspect {
         return new ManagerRegistrationMessageListener(
                 mailService,
                 mailComposer,
-                serializableMessage
+                (RegistrationMessage) serializableMessage
         );
     }
 

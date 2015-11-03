@@ -949,6 +949,20 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 ',10011,'12098_CAV');
 
 
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10012, 10202, 0, 'newsletter_newsletterform_content_include', 'Newsletter form include for SHOP10','include', 'SHOP10_newsletter_newsletter_include','SHOP10_newsletter_newsletterform_content_include');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12102,'CONTENT_BODY_en_1','
+<div><h3>Newsletter</h3><div>Sign up for newsletter</div></div>
+',10012,'12102_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12103,'CONTENT_BODY_ru_1','
+<div><h3>Рассылка новостей</h3><div>Подпишитесь на рассылку новостей</div></div>
+',10012,'12103_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12104,'CONTENT_BODY_uk_1','
+<div><h3>Розсилка новин</h3><div>Підписатися на розсилку новин</div></div>
+',10012,'12104_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12105,'CONTENT_BODY_de_1','
+<div><h3>Newsletter</h3><div>Anmeldung für Newsletter</div></div>
+',10007,'12105_CAV');
+
 
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (1, 'ROLE_SMADMIN',         'ROLE_SMADMIN', 'System admin');
 INSERT INTO TROLE (ROLE_ID, GUID, CODE, DESCRIPTION) VALUES (2, 'ROLE_SMSHOPADMIN',     'ROLE_SMSHOPADMIN', 'Shop manager');
