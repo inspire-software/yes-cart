@@ -78,4 +78,112 @@ public class CsvDescriptorNativeInsertStrategyTest {
         mockery.assertIsSatisfied();
 
     }
+
+    @Test
+    public void testGetQueryNullInQuotes() throws Exception {
+
+        final CsvDescriptorNativeInsertStrategy strategy = new CsvDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId(); will(returnValue(10L));
+            one(descriptor).getImportColumn("code"); will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = '{code}' ");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = '' ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 0);
+
+        mockery.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetQueryNullInI18N() throws Exception {
+
+        final CsvDescriptorNativeInsertStrategy strategy = new CsvDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId(); will(returnValue(10L));
+            one(descriptor).getImportColumn("code"); will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = 'en#~#{code}' ");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = 'en#~#' ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 0);
+
+        mockery.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetQueryNullValue() throws Exception {
+
+        final CsvDescriptorNativeInsertStrategy strategy = new CsvDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId(); will(returnValue(10L));
+            one(descriptor).getImportColumn("code"); will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = {code} ");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = NULL ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 0);
+
+        mockery.assertIsSatisfied();
+
+    }
 }

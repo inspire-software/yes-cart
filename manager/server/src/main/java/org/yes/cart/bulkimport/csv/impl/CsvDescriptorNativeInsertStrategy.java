@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
 import org.yes.cart.bulkimport.model.ValueAdapter;
@@ -41,9 +40,9 @@ public class CsvDescriptorNativeInsertStrategy extends AbstractByParameterByColu
     protected void addParameter(final int index, final Object param, final StringBuilder query, final List<Object> params) {
         if (param == null) {
             final char character = query.charAt(query.length() - 1);
-            if (character != '\'' && character != '"') {
+            if (character != '\'' && character != '"' && character != '#') {
                 query.append("NULL");
-            } // else it is enclosed by quotes so just leave empty
+            } // else it is enclosed by quotes or part of I18N so just leave empty
         } else {
             query.append(param);
         }
