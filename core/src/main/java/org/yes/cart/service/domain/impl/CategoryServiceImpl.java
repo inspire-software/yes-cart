@@ -263,8 +263,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
         final Category category = proxy().getById(categoryId);
 
-        if (category == null || attributeName == null) {
-            return null;
+        if (category == null || attributeName == null || category.isRoot()) {
+            return defaultValue;
         }
 
         final AttrValue attrValue = category.getAttributeByCode(attributeName);
@@ -278,10 +278,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             if (!StringUtils.isBlank(val)) {
                 return val;
             }
-        }
-
-        if (category.isRoot()) {
-            return defaultValue; //root of hierarchy
         }
 
         return proxy().getCategoryAttributeRecursive(locale, category.getParentId(), attributeName, defaultValue);

@@ -68,19 +68,19 @@ public class ContentServiceImplTest extends BaseCoreDBTestCase {
         String val = contentService.getContentAttributeRecursive(null, 10105L, "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
         val = contentService.getContentAttributeRecursive(null, 10105L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
-        assertEquals("10,20,50", val);
+        assertNull(val); // This is root, not editable in YUM, so must not use
         val = contentService.getContentAttributeRecursive(null, 10107L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
     }
 
     @Test
     public void testGetCategoryAttributeRecursiveMulti() {
-        String[] val = contentService.getContentAttributeRecursive(null, 10105L, new String[] { "SOME_NOT_EXISTING_ATTR",  "SOME_NOT_EXISTING_ATTR_2" });
+        String[] val = contentService.getContentAttributeRecursive(null, 10107L, new String[] { "SOME_NOT_EXISTING_ATTR",  "SOME_NOT_EXISTING_ATTR_2" });
         assertNull(val);
-        val = contentService.getContentAttributeRecursive(null, 10105L, new String[] { "SOME_NOT_EXISTING_ATTR", AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE });
+        val = contentService.getContentAttributeRecursive(null, 10107L, new String[] { "SOME_NOT_EXISTING_ATTR", AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE });
         assertNotNull(val);
         assertNull(val[0]);
-        assertEquals("10,20,50", val[1]);
+        assertEquals("6,12,24", val[1]);
     }
 
     @Test

@@ -230,12 +230,13 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
         clearCache();
-        final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
+        final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(105L);
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
-                dto.setVal("5,15,35"); // default value in test data is 6,12,24
+                assertEquals("10,20,50", dto.getVal());
+                dto.setVal("5,25,35");
                 AttrValueDTO dtoUpdated = dtoService.updateEntityAttributeValue(dto);
-                assertEquals("5,15,35", dtoUpdated.getVal());
+                assertEquals("5,25,35", dtoUpdated.getVal());
                 break;
             }
         }
@@ -247,7 +248,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testDeleteAttributeValue() throws Exception {
 
-        final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(100L);
+        final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(105L);
         final int totalSize = list.size();
 
         getTx().execute(new TransactionCallbackWithoutResult() {
@@ -265,7 +266,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    assertTrue(e.getMessage(), false);
+                    fail(e.getMessage());
 
                 }
 
@@ -276,7 +277,7 @@ public class DtoCategoryServiceImplTezt extends BaseCoreDBTestCase {
         //clearCache();
         getCacheMap().get("categoryService-byId").clear();
 
-        final List<? extends AttrValueDTO> list2 = dtoService.getEntityAttributes(100L);
+        final List<? extends AttrValueDTO> list2 = dtoService.getEntityAttributes(105L);
         //assertEquals(totalSize, list2.size());
         for (AttrValueDTO dto : list2) {
             assertNull(dto.getVal());

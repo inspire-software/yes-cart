@@ -124,6 +124,8 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         assertEquals("10,20,50", val);
         val = categoryService.getCategoryAttributeRecursive(null, 139L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
         assertEquals("6,12,24", val);
+        val = categoryService.getCategoryAttributeRecursive(null, 132L, AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE, null);
+        assertNull(val);  // Must not failover to root, we use shop level attributes for this
     }
 
     @Test

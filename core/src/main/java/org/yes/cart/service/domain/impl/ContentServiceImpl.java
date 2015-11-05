@@ -217,8 +217,8 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
         final Category content = proxy().getById(contentId);
 
-        if (content == null || attributeName == null) {
-            return null;
+        if (content == null || attributeName == null || content.isRoot()) {
+            return defaultValue;
         }
 
         final AttrValue attrValue = content.getAttributeByCode(attributeName);
@@ -232,10 +232,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             if (!StringUtils.isBlank(val)) {
                 return val;
             }
-        }
-
-        if (content.isRoot()) {
-            return defaultValue; //root of hierarchy
         }
 
         return proxy().getContentAttributeRecursive(locale, content.getParentId(), attributeName, defaultValue);
