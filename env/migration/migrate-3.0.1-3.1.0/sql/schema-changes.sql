@@ -161,3 +161,14 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
 <div><h3>Newsletter</h3><div>Anmeldung für Newsletter</div></div>
 ',10012,'12105_CAV');
 
+
+
+--
+-- YC-616 Allows to configure 'storable' product type attributes
+--
+
+alter table TPRODUCTTYPEATTR add column STORE bit default 0;
+-- alter table TPRODUCTTYPEATTR add column STORE smallint default 0;
+update TPRODUCTTYPEATTR set STORE = 0;
+
+

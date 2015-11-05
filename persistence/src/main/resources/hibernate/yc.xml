@@ -768,6 +768,11 @@
                 <comment>Will attribute be used for calculate products similarity</comment>
             </column>
         </property>
+        <property name="store" type="boolean">
+            <column name="STORE">
+                <comment>Will attribute be stored in FT index</comment>
+            </column>
+        </property>
         <property name="search" type="boolean">
             <column name="SEARCH">
                 <comment>Will attribute be used for searching</comment>
@@ -2906,6 +2911,12 @@
     <query name="ATTRIBUTE.CODES.SEARCH.UNIQUE">
         <![CDATA[
        select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.navigation = ?2
+       ]]>
+    </query>
+
+    <query name="ATTRIBUTE.CODES.STORE.UNIQUE">
+        <![CDATA[
+       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.store = ?1
        ]]>
     </query>
 

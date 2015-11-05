@@ -37,6 +37,7 @@ import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
 import org.yes.cart.domain.entityindexer.IndexFilter;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.i18n.impl.NonI18NModel;
@@ -431,7 +432,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_MAX_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_MULTISKU,
-                ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD
+                ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD,
+                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD
                 );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
@@ -455,6 +457,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setStepOrderQuantity((BigDecimal) obj[15]);
             dto.setMultisku(obj[16] != null && Boolean.valueOf((String) obj[16]));
             dto.setManufacturerCode((String) obj[17]);
+            dto.setAttributes(new StoredAttributesImpl((String) obj[18]));
             rez.add(dto);
         }
 

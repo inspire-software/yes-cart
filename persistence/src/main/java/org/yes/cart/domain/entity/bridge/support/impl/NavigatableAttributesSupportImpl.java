@@ -60,4 +60,13 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
         return new HashSet<String>(allowedAttributeNames);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-allStorableAttributeCodes")
+    public Set<String> getAllStorableAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
+        return new HashSet<String>(allowedAttributeNames);
+    }
 }

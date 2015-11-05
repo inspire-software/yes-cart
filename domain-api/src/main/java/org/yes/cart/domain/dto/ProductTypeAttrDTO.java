@@ -113,6 +113,20 @@ public interface ProductTypeAttrDTO extends Identifiable {
     void setSimilarity(boolean similarity);
 
     /**
+     * Store data in the FT index.
+     *
+     * @return store in FT index.
+     */
+    boolean isStore();
+
+    /**
+     * Store data in the FT index.
+     *
+     * @param store store in FT index.
+     */
+    void setStore(boolean store);
+
+    /**
      * Use for attribute searching.
      *
      * @return true if attribute used for attribute search.

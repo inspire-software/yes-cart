@@ -21,8 +21,6 @@ import org.yes.cart.domain.i18n.I18NModel;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -32,7 +30,6 @@ import java.util.regex.Pattern;
 public class StringI18NModel implements I18NModel {
 
     public static final String SEPARATOR = "#~#";
-    private static final Pattern PATTERN = Pattern.compile(SEPARATOR);
 
     private final Map<String, String> values = new HashMap<String, String>();
 
@@ -44,28 +41,18 @@ public class StringI18NModel implements I18NModel {
 
     public StringI18NModel(final String raw) {
         if (raw != null && raw.length() > 0) {
-            final Matcher matcher = PATTERN.matcher(raw);
-            int lastPosition = 0;
-            int beforeSep;
-            while (matcher.find()) {
-                beforeSep = matcher.start();
-                final String key = raw.substring(lastPosition, beforeSep);
-                lastPosition = matcher.end();
-                if (matcher.find()) {
-                    beforeSep = matcher.start();
-                    final String value = raw.substring(lastPosition, beforeSep);
-                    lastPosition = matcher.end();
-                    if (value != null && value.length() > 0) {
-                        values.put(key, value);
-                    }
-                } else if (raw.length() - 1 != lastPosition) {
-                    final String value = raw.substring(lastPosition);
-                    if (value != null && value.length() > 0) {
-                        values.put(key, value);
-                    }
+            final String[] valuePairs = StringUtils.splitByWholeSeparatorPreserveAllTokens(raw, SEPARATOR);
+            for (int i = 0; i < valuePairs.length - 1; i+=2)  {
+                final String key = valuePairs[i];
+                final String value = valuePairs[i + 1];
+                if (value != null && value.length() > 0) {
+                    values.put(key, value);
                 }
             }
         }
+    }
+
+    public StringI18NModel() {
     }
 
     /** {@inheritDoc} */

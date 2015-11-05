@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="440" height="320"
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="440" height="370"
                 title="@Resource(bundle='ProductTypeManagementPanel',key='productTypeAttr')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
@@ -42,6 +42,12 @@
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='similarity')">
             <mx:CheckBox id="similarityCheckBox"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='similarityHint')"
+                    />
+        </mx:FormItem>
+
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='store')">
+            <mx:CheckBox id="storeCheckBox"
+                         toolTip="@Resource(bundle='ProductTypeManagementPanel',key='storeHint')"
                     />
         </mx:FormItem>
 
@@ -120,12 +126,14 @@
             BindingUtils.bindProperty(rankTextInput, "text", productTypeAttr, "rank");
             BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
             BindingUtils.bindProperty(similarityCheckBox, "selected", productTypeAttr, "similarity");
+            BindingUtils.bindProperty(storeCheckBox, "selected", productTypeAttr, "store");
             BindingUtils.bindProperty(searchCheckBox, "selected", productTypeAttr, "search");
             BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
 
             BindingUtils.bindProperty(productTypeAttr, "rank", rankTextInput, "text");
             BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "similarity", similarityCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "store", storeCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "search", searchCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 

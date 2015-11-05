@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto.impl;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -38,6 +40,7 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
 
     private I18NModel i18NModelName;
 
+    private StoredAttributes attributes;
 
     /** {@inheritDoc} */
     public String getDefaultImage() {
@@ -120,6 +123,15 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         this.name = name;
     }
 
+    /** {@inheritDoc} */
+    public StoredAttributes getAttributes() {
+        return attributes;
+    }
+
+    /** {@inheritDoc} */
+    public void setAttributes(final StoredAttributes attributes) {
+        this.attributes = attributes;
+    }
 
     /** {@inheritDoc} */
     public ProductSkuSearchResultDTO copy() {
@@ -131,6 +143,9 @@ public class ProductSkuSearchResultDTOImpl implements ProductSkuSearchResultDTO 
         copy.setName(this.name);
         copy.setDisplayName(this.displayName);
         copy.setDefaultImage(this.defaultImage);
+        if (this.attributes != null) {
+            copy.setAttributes(new StoredAttributesImpl(this.attributes.toString()));
+        }
         return copy;
     }
 

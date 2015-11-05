@@ -53,6 +53,13 @@ public interface AttributeService extends GenericService<Attribute> {
     Set<String> getAllSearchableAttributeCodes();
 
     /**
+     * Get all storable attribute codes.
+     *
+     * @return set of attribute codes.
+     */
+    Set<String> getAllStorableAttributeCodes();
+
+    /**
      * Get navigatable attribute display value from given value.
      *
      *

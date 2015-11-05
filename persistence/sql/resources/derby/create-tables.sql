@@ -672,6 +672,7 @@
         RANK integer default 500,
         VISIBLE smallint,
         SIMILARITY smallint,
+        STORE smallint,
         SEARCH smallint,
         NAV smallint,
         NAV_TYPE varchar(1) default 'S',

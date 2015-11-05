@@ -731,6 +731,15 @@
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
+                                <mx:DataGridColumn
+                                        headerText="@Resource(bundle='ProductTypeManagementPanel',key='store')"
+                                        dataField="store" textAlign="center">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.store}"/></mx:HBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
                             </mx:columns>
 
 

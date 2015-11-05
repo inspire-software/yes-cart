@@ -30,7 +30,7 @@ public class StringI18NModelTest {
 
     @Test
     public void testStringNull() throws Exception {
-        final I18NModel model = new StringI18NModel((String) null);
+        final I18NModel model = new StringI18NModel();
         assertNotNull(model.getAllValues());
         assertTrue(model.getAllValues().isEmpty());
     }
@@ -73,7 +73,7 @@ public class StringI18NModelTest {
 
     @Test
     public void testStringBlankValues() throws Exception {
-        final I18NModel model = new StringI18NModel((String) null);
+        final I18NModel model = new StringI18NModel();
         assertNotNull(model.getAllValues());
         assertEquals(0, model.getAllValues().size());
         model.putValue("EN", "Some text");
@@ -82,7 +82,7 @@ public class StringI18NModelTest {
         final I18NModel restored = new StringI18NModel(model.toString());
         assertNotNull(restored.getAllValues());
         assertEquals(1, restored.getAllValues().size());
-        assertEquals("Some text", model.getValue("EN"));
-        assertNull(model.getValue("RU"));
+        assertEquals("Some text", restored.getValue("EN"));
+        assertNull(restored.getValue("RU"));
     }
 }

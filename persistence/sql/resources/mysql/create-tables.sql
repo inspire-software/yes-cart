@@ -650,6 +650,7 @@
         RANK integer default 500 comment 'What order for filtered navigation',
         VISIBLE bit comment 'Is attribute visible on storefront',
         SIMILARITY bit comment 'Will attribute be used for calculate products similarity',
+        STORE bit comment 'Will attribute be stored in FT index',
         SEARCH bit comment 'Will attribute be used for searching',
         NAV bit comment 'Will be used in filtered navigation',
         NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',

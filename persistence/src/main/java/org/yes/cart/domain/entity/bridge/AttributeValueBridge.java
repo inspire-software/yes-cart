@@ -23,6 +23,8 @@ import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
+import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
@@ -47,6 +49,9 @@ public class AttributeValueBridge implements FieldBridge {
             final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
             final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
             final Set<String> searchAttrs = support.getAllSearchableAttributeCodes();
+            final Set<String> storeAttrs = support.getAllStorableAttributeCodes();
+
+            StoredAttributes storedAttributes = null;
 
             for (Object obj : (Collection) value) {
                 final AttrValue attrValue = (AttrValue) obj;
@@ -55,8 +60,10 @@ public class AttributeValueBridge implements FieldBridge {
                     continue; // skip invalid ones
                 }
 
-                final boolean navigation = navAttrs.contains(attrValue.getAttribute().getCode());
-                final boolean search = searchAttrs.contains(attrValue.getAttribute().getCode());
+                final String code = attrValue.getAttribute().getCode();
+
+                final boolean navigation = navAttrs.contains(code);
+                final boolean search = searchAttrs.contains(code);
 
                 // Only keep navigatable attributes in index
                 if (search || navigation) {
@@ -85,7 +92,7 @@ public class AttributeValueBridge implements FieldBridge {
                     if (navigation) {
                         // strict attribute navigation only for filtered navigation
                         document.add(new Field(
-                                "facet_" + attrValue.getAttribute().getCode(),
+                                "facet_" + code,
                                 attrValue.getVal(),
                                 Field.Store.NO,
                                 Field.Index.NOT_ANALYZED,
@@ -95,7 +102,27 @@ public class AttributeValueBridge implements FieldBridge {
 
                 }
 
+                final boolean stored = storeAttrs.contains(code);
+
+                if (stored) {
+                    if (storedAttributes == null) {
+                        storedAttributes = new StoredAttributesImpl();
+                    }
+                    storedAttributes.putValue(code, attrValue.getVal(), attrValue.getDisplayVal());
+                }
+
             }
+
+            if (storedAttributes != null && !storedAttributes.getAllValues().isEmpty()) {
+                document.add(new Field(
+                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD,
+                        storedAttributes.toString(),
+                        Field.Store.YES,
+                        Field.Index.NOT_ANALYZED,
+                        Field.TermVector.NO
+                ));
+            }
+
         }
 
     }

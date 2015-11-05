@@ -187,6 +187,14 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return new HashSet<String>(allowedAttributeNames);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "attributeService-allStorableAttributeCodes")
+    public Set<String> getAllStorableAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
+        return new HashSet<String>(allowedAttributeNames);
+    }
 
     /**
      * {@inheritDoc}
@@ -270,6 +278,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
@@ -286,6 +295,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",
@@ -302,6 +312,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
             "attributeService-attributeNamesByCodes",

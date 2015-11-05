@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductSkuService;
@@ -105,7 +106,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
                 ProductSearchQueryBuilder.PRODUCT_DEFAULTIMAGE_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
-                ProductSearchQueryBuilder.SKU_PRODUCT_MANUFACTURER_CODE_FIELD
+                ProductSearchQueryBuilder.SKU_PRODUCT_MANUFACTURER_CODE_FIELD,
+                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD
         );
 
         final List<ProductSkuSearchResultDTO> rez = new ArrayList<ProductSkuSearchResultDTO>(searchRez.getFirst().size());
@@ -118,6 +120,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
             dto.setDisplayName((String) obj[4]);
             dto.setProductId((Long) obj[5]);
             dto.setManufacturerCode((String) obj[6]);
+            dto.setAttributes(new StoredAttributesImpl((String) obj[7]));
             rez.add(dto);
         }
 

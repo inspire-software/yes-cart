@@ -19,6 +19,8 @@ package org.yes.cart.domain.dto.impl;
 import org.apache.commons.lang.ObjectUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
+import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -59,6 +61,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
 
     private I18NModel i18NModelName;
     private I18NModel i18NModelDescription;
+
+    private StoredAttributes attributes;
 
 
     /** {@inheritDoc} */
@@ -285,6 +289,16 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
+    public StoredAttributes getAttributes() {
+        return attributes;
+    }
+
+    /** {@inheritDoc} */
+    public void setAttributes(final StoredAttributes attributes) {
+        this.attributes = attributes;
+    }
+
+    /** {@inheritDoc} */
     public ProductSearchResultDTO copy() {
         /*
             DO NOT copy skus as this must be set through FT search - we need them to be
@@ -309,6 +323,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setMaxOrderQuantity(this.maxOrderQuantity);
         copy.setMinOrderQuantity(this.minOrderQuantity);
         copy.setStepOrderQuantity(this.stepOrderQuantity);
+        if (this.attributes != null) {
+            copy.setAttributes(new StoredAttributesImpl(this.attributes.toString()));
+        }
         return copy;
     }
 }
