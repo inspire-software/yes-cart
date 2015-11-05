@@ -55,6 +55,7 @@ public class PriceView extends BaseComponent {
     private static final String TAX_LABEL = "tax";
     private static final String SAVE_LABEL = "save";
     private static final String PROMO_LABEL = "promo";
+    private static final String LIST_PRICE_LABEL = "listPrice";
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
     
@@ -160,6 +161,7 @@ public class PriceView extends BaseComponent {
 
         boolean showSave = false;
         String savePercent = "";
+        String listPrice = "";
         final String lang = getLocale().getLanguage();
 
         BigDecimal priceToFormat = productPriceModel.getRegularPrice();
@@ -171,6 +173,7 @@ public class PriceView extends BaseComponent {
             if (showSave) {
                 final BigDecimal save = MoneyUtils.getDiscountDisplayValue(productPriceModel.getRegularPrice(), productPriceModel.getSalePrice());
                 savePercent = save.toString();
+                listPrice = productPriceModel.getRegularPrice().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP).toPlainString();
             }
         }
         final String[] formatted = getFormattedPrice(priceToFormat);
@@ -217,6 +220,12 @@ public class PriceView extends BaseComponent {
                         WicketUtil.createStringResourceModel(this, taxNote, tax))
                         .setVisible(this.showTax)
                         .add(new AttributeModifier(HTML_CLASS, cssModificator + CSS_SUFFIX_TAX))
+        );
+
+        addOrReplace(
+                new Label(LIST_PRICE_LABEL, listPrice)
+                        .setVisible(showSave)
+                        .add(new AttributeModifier(HTML_CLASS, "list-price"))
         );
 
 

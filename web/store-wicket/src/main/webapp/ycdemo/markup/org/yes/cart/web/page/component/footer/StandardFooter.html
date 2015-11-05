@@ -58,7 +58,7 @@
                         </div>
                 </div>
                 <div class="col-xs-12 col-md-5 no-margin">
-                    <div class="links-col">
+                    <div class="col-xs-6">
                         <wicket:link>
                             <a href="ProfilePage.html" rel="nofollow"><span><wicket:message key="profile">[Profile]</wicket:message></span></a>
                         </wicket:link><br>
@@ -71,7 +71,7 @@
                         </wicket:link><br>
                         <wicket:message key="returnPolicy">[Return policy]</wicket:message><br>
                     </div>
-                    <div class="links-col">
+                    <div class="col-xs-6">
                         <wicket:link><a href="FaqPage.html" rel="bookmark"><span><wicket:message key="faq">[FAQ]</wicket:message></span></a></wicket:link><br>
                         <a href="/yes-shop/content/sitemap" rel="bookmark"><span><wicket:message key="sitemapInfo">[sitemap info]</wicket:message></span></a><br>
                         <wicket:message key="callCenter">[Call center]</wicket:message><br>
@@ -80,9 +80,11 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-3">
-                    <wicket:container wicket:id="newsletterForm">
-                        [newsletterForm]
-                    </wicket:container>
+                    <div>
+                        <wicket:container wicket:id="newsletterForm">
+                            [newsletterForm]
+                        </wicket:container>
+                    </div>
                 </div>
             </div>
         </div>
