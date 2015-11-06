@@ -152,6 +152,10 @@ public class HttpUtil {
     public static Map<String, List<String>> getParameters(final HttpServletRequest request,
                                                           final Set<String> pathVariables) {
 
+        final String query = request.getQueryString();
+        if (StringUtils.isNotBlank(query)) {
+            getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables);
+        }
         return getParameters(request.getRequestURL().toString(), pathVariables);
     }
 
