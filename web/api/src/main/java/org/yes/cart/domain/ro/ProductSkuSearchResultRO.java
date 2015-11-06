@@ -21,9 +21,11 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.ro.xml.impl.I18nMapAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -52,6 +54,8 @@ public class ProductSkuSearchResultRO implements Serializable {
     @DtoField(readOnly = true)
     private String defaultImage;
 
+    @DtoField(readOnly = true, converter = "storedAttributesConverter")
+    private List<ProductSearchResultAttributeRO> attributes;
 
     @XmlElement(name = "default-image")
     public String getDefaultImage() {
@@ -113,6 +117,16 @@ public class ProductSkuSearchResultRO implements Serializable {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    @XmlElementWrapper(name = "attributes")
+    @XmlElement(name = "attribute")
+    public List<ProductSearchResultAttributeRO> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(final List<ProductSearchResultAttributeRO> attributes) {
+        this.attributes = attributes;
     }
 
 }

@@ -93,6 +93,8 @@ public class ProductSearchResultRO implements Serializable {
     )
     private List<ProductSkuSearchResultRO> skus;
 
+    @DtoField(readOnly = true, converter = "storedAttributesConverter")
+    private List<ProductSearchResultAttributeRO> attributes;
 
     @XmlElement(name = "default-image")
     public String getDefaultImage() {
@@ -278,5 +280,15 @@ public class ProductSearchResultRO implements Serializable {
 
     public void setPrice(final SkuPriceRO price) {
         this.price = price;
+    }
+
+    @XmlElementWrapper(name = "attributes")
+    @XmlElement(name = "attribute")
+    public List<ProductSearchResultAttributeRO> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(final List<ProductSearchResultAttributeRO> attributes) {
+        this.attributes = attributes;
     }
 }

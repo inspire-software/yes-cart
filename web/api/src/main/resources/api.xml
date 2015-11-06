@@ -72,6 +72,7 @@
 
                 <entry key="i18nStringConverter" value-ref="i18nStringConverter"/>
                 <entry key="productAvailabilityModelATSConverter" value-ref="productAvailabilityModelATSConverter"/>
+                <entry key="storedAttributesConverter" value-ref="storedAttributesConverter"/>
 
             </map>
         </constructor-arg>
@@ -80,6 +81,8 @@
     <bean id="i18nStringConverter" class="org.yes.cart.domain.dto.adapter.impl.I18NStringConverter"/>
 
     <bean id="productAvailabilityModelATSConverter" class="org.yes.cart.domain.dto.adapter.impl.ProductAvailabilityModelATSConverter"/>
+
+    <bean id="storedAttributesConverter" class="org.yes.cart.domain.dto.adapter.impl.StoredAttributesConverter"/>
 
     <bean id="apiSupportFacade" class="org.yes.cart.web.service.apisupport.impl.ApiSupportFacadeImpl">
         <constructor-arg index="0" ref="groovyContentServiceTemplateSupport"/>
