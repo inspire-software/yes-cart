@@ -154,7 +154,7 @@ public class HttpUtil {
 
         final String query = request.getQueryString();
         if (StringUtils.isNotBlank(query)) {
-            getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables);
+            return getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables);
         }
         return getParameters(request.getRequestURL().toString(), pathVariables);
     }
