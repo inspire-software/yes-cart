@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
  * Time: 08:01
  */
 @XmlRootElement(name = "product-result-attribute")
-public class ProductSearchResultAttributeRO {
+public class ProductSearchResultAttributeRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
