@@ -109,7 +109,7 @@ public class CentralViewResolverContentImplTest {
 
         assertNotNull(resolved);
         assertEquals(CentralViewLabel.DYNOCONTENT, resolved.getFirst());
-        assertEquals(CentralViewLabel.CONTENT, resolved.getSecond());
+        assertEquals(CentralViewLabel.DYNOCONTENT, resolved.getSecond());
 
         context.assertIsSatisfied();
 
