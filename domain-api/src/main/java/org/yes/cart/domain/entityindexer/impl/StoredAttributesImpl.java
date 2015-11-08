@@ -6,6 +6,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * Date: 04/11/2015
  * Time: 17:44
  */
-public class StoredAttributesImpl implements StoredAttributes {
+public class StoredAttributesImpl implements StoredAttributes, Serializable {
 
     public static final String SEPARATOR = "#$#";
 
