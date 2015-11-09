@@ -174,4 +174,12 @@ alter table TPRODUCTTYPEATTR add column STORE bit default 0;
 -- alter table TPRODUCTTYPEATTR add column STORE smallint default 0;
 update TPRODUCTTYPEATTR set STORE = 0;
 
+--
+-- YC-620 Allows to configure 'exact match' product type attributes
+--
+
+alter table TPRODUCTTYPEATTR add column SEARCHPRIMARY bit default 0;
+-- alter table TPRODUCTTYPEATTR add column SEARCHPRIMARY smallint default 0;
+update TPRODUCTTYPEATTR set SEARCHPRIMARY = 0;
+
 

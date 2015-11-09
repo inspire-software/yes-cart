@@ -51,6 +51,12 @@
                     />
         </mx:FormItem>
 
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='primary')">
+            <mx:CheckBox id="primaryCheckBox"
+                         toolTip="@Resource(bundle='ProductTypeManagementPanel',key='primaryHint')"
+                    />
+        </mx:FormItem>
+
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='search')">
             <mx:CheckBox id="searchCheckBox"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='searchHint')"
@@ -127,6 +133,7 @@
             BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
             BindingUtils.bindProperty(similarityCheckBox, "selected", productTypeAttr, "similarity");
             BindingUtils.bindProperty(storeCheckBox, "selected", productTypeAttr, "store");
+            BindingUtils.bindProperty(primaryCheckBox, "selected", productTypeAttr, "primary");
             BindingUtils.bindProperty(searchCheckBox, "selected", productTypeAttr, "search");
             BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
 
@@ -134,6 +141,7 @@
             BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "similarity", similarityCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "store", storeCheckBox, "selected");
+            BindingUtils.bindProperty(productTypeAttr, "primary", primaryCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "search", searchCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 

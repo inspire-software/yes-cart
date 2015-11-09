@@ -149,6 +149,15 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testAllSearchablePrimaryAttributeCodes() {
+        Set<String> codes = attributeService.getAllSearchablePrimaryAttributeCodes();
+        assertNotNull(codes);
+        assertFalse(codes.isEmpty());
+        Map<String, I18NModel> map = attributeService.getAttributeNamesByCodes(codes);
+        assertNotNull(map);
+    }
+
+    @Test
     public void testAllStorableAttributeCodes() {
         Set<String> codes = attributeService.getAllStorableAttributeCodes();
         assertNotNull(codes);

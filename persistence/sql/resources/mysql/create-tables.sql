@@ -652,6 +652,7 @@
         SIMILARITY bit comment 'Will attribute be used for calculate products similarity',
         STORE bit comment 'Will attribute be stored in FT index',
         SEARCH bit comment 'Will attribute be used for searching',
+        SEARCHPRIMARY bit comment 'Will attribute be used for exact searching',
         NAV bit comment 'Will be used in filtered navigation',
         NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',
         RANGE_NAV longtext comment 'In case of range navigation hold the ranges values',

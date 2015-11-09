@@ -136,11 +136,25 @@ public interface ProductTypeAttr extends Auditable, Rankable {
     boolean isSearch();
 
     /**
-     * Set to true if attribute will be indexed.
+     * Set to true if attribute will be used for attribute search.
      *
-     * @param search true if attribute will be indexed.
+     * @param search true if attribute used for attribute search.
      */
     void setSearch(boolean search);
+
+    /**
+     * Use for attribute searching as primary key, forcing exact matches.
+     *
+     * @return true if attribute used for attribute exact search.
+     */
+    boolean isPrimary();
+
+    /**
+     * Set to true if attribute will be used for attribute exact search.
+     *
+     * @param primary true if attribute used for attribute exact search.
+     */
+    void setPrimary(boolean primary);
 
     /**
      * Use for attribute navigation.

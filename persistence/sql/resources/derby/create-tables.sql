@@ -674,6 +674,7 @@
         SIMILARITY smallint,
         STORE smallint,
         SEARCH smallint,
+        SEARCHPRIMARY smallint,
         NAV smallint,
         NAV_TYPE varchar(1) default 'S',
         RANGE_NAV varchar(4000),

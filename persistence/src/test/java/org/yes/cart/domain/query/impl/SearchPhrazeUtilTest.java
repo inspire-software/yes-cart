@@ -32,23 +32,35 @@ public class SearchPhrazeUtilTest {
     @Test
     public void testSplit() {
 
-        List<String> rez = SearchPhrazeUtil.splitForSearch(" | just, phraze--to split;for.test,,hehe++wow");
-        assertEquals(8, rez.size());
+        List<String> rez = SearchPhrazeUtil.splitForSearch(" | just, phraze--to split;for.test,,hehe++wow", 0);
+        assertEquals(6, rez.size());
         assertEquals("just", rez.get(0));
-        assertEquals("phraze", rez.get(1));
-        assertEquals("to", rez.get(2));
-        assertEquals("split", rez.get(3));
-        assertEquals("for", rez.get(4));
-        assertEquals("test", rez.get(5));
-        assertEquals("hehe", rez.get(6));
-        assertEquals("wow", rez.get(7));
+        assertEquals("phraze--to", rez.get(1));
+        assertEquals("split", rez.get(2));
+        assertEquals("for", rez.get(3));
+        assertEquals("test", rez.get(4));
+        assertEquals("hehe++wow", rez.get(5));
+
+    }
+
+    @Test
+    public void testSplit2() {
+
+        List<String> rez = SearchPhrazeUtil.splitForSearch("1y SecureDoc WinEntr Supp 5K+ E-LTU", 2);
+        assertEquals(6, rez.size());
+        assertEquals("1y", rez.get(0));
+        assertEquals("SecureDoc", rez.get(1));
+        assertEquals("WinEntr", rez.get(2));
+        assertEquals("Supp", rez.get(3));
+        assertEquals("5K+", rez.get(4));
+        assertEquals("E-LTU", rez.get(5));
 
     }
 
     @Test
     public void testSplitNullValue() {
 
-        List<String> rez = SearchPhrazeUtil.splitForSearch(null);
+        List<String> rez = SearchPhrazeUtil.splitForSearch(null, 0);
         assertEquals(0, rez.size());
 
     }
@@ -56,10 +68,15 @@ public class SearchPhrazeUtilTest {
     @Test
     public void testSplitEmptyValue() {
 
-        List<String> rez = SearchPhrazeUtil.splitForSearch("");
+        List<String> rez = SearchPhrazeUtil.splitForSearch("", 0);
         assertEquals(0, rez.size());
-        rez = SearchPhrazeUtil.splitForSearch("  ,,++||-- + - ");
+        rez = SearchPhrazeUtil.splitForSearch("  ,,++||-- + - ", 3);
         assertEquals(0, rez.size());
-
+        rez = SearchPhrazeUtil.splitForSearch("  ,,++||-- + - ", 0);
+        assertEquals(4, rez.size());
+        assertEquals("++", rez.get(0));
+        assertEquals("--", rez.get(1));
+        assertEquals("+", rez.get(2));
+        assertEquals("-", rez.get(3));
     }
 }

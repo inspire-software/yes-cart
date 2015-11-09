@@ -65,6 +65,9 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "search")
     private boolean search;
 
+    @DtoField(value = "primary")
+    private boolean primary;
+
     @DtoField(value = "navigation")
     private boolean navigation;
 
@@ -152,14 +155,25 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
         this.store = store;
     }
 
+    /** {@inheritDoc} */
     public boolean isSearch() {
         return search;
     }
 
+    /** {@inheritDoc} */
     public void setSearch(final boolean search) {
         this.search = search;
     }
 
+    /** {@inheritDoc} */
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    /** {@inheritDoc} */
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
+    }
 
     /** {@inheritDoc} */
     public boolean isNavigation() {
@@ -200,6 +214,9 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
                 ", rank=" + rank +
                 ", visible=" + visible +
                 ", similarity=" + similarity +
+                ", store=" + store +
+                ", search=" + search +
+                ", primary=" + primary +
                 ", navigation=" + navigation +
                 ", navigationType='" + navigationType + '\'' +
                 ", rangeNavigation='" + rangeNavigation + '\'' +

@@ -96,7 +96,7 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
     @Fields({
-            @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES,
+            @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.YES, store = Store.YES,
                     bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class)),
             @Field(name = "displayNameAsIs", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
                     bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.DisplayNameBridge.class))

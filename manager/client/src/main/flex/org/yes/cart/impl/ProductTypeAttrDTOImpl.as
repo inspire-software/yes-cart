@@ -34,6 +34,8 @@ public class ProductTypeAttrDTOImpl {
 
     public var store:Boolean;
 
+    public var primary:Boolean;
+
     public var search:Boolean;
 
     public var navigation:Boolean;
@@ -55,6 +57,7 @@ public class ProductTypeAttrDTOImpl {
                ",visible=" + String(visible) +
                ",similarity=" + String(similarity) +
                ",store=" + String(store) +
+               ",primary=" + String(primary) +
                ",search=" + String(search) +
                ",navigation=" + String(navigation) +
                ",navigationType=" + String(navigationType) + "}";

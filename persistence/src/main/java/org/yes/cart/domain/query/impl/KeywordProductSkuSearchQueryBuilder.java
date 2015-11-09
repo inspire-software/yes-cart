@@ -40,6 +40,7 @@ import java.util.List;
  * Name:             3.0/ 2.0
  * Display name:     3.0/ 2.0
  * CODE:            10.0/10.0 (ensure sku match)
+ * Primary attr:    15.0/     (ensure exact match)
  * Attributes:       4.0/ 4.0 (variation attributes are more important than name)
  *
  * In order to provide better matches we use the following relaxed boosts:
@@ -55,6 +56,8 @@ import java.util.List;
  */
 public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuilderImpl implements ProductSearchQueryBuilder {
 
+    private int minWordLength = 2;
+
     /**
      * {@inheritDoc}
      */
@@ -62,7 +65,7 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
         if (!isEmptyValue(value)) {
 
-            final List<String> words = SearchPhrazeUtil.splitForSearch(String.valueOf(value));
+            final List<String> words = SearchPhrazeUtil.splitForSearch(String.valueOf(value), minWordLength);
             if (CollectionUtils.isEmpty(words)) {
                 return null;
             }
@@ -79,7 +82,8 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
             phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_CODE_FIELD, escapedSearchValue, 0.8f, 10f), BooleanClause.Occur.SHOULD);
             phrazeQuery.add(createFuzzyQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValue, 0.8f, 10f), BooleanClause.Occur.SHOULD);
 
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCH_FIELD, escapedSearchValue, 0.65f, 4f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedSearchValue, 15f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValue.toLowerCase(), 0.65f, 4f), BooleanClause.Occur.SHOULD);
 
             aggregateQuery.add(phrazeQuery, BooleanClause.Occur.SHOULD);
 
@@ -116,7 +120,7 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
         if (value != null) {
 
-            final List<String> words = SearchPhrazeUtil.splitForSearch(String.valueOf(value));
+            final List<String> words = SearchPhrazeUtil.splitForSearch(String.valueOf(value), minWordLength);
             if (CollectionUtils.isEmpty(words)) {
                 return null;
             }
@@ -149,4 +153,16 @@ public class KeywordProductSkuSearchQueryBuilder extends AbstractSearchQueryBuil
 
         return null;
     }
+
+
+    /**
+     * Set minimum length of a searchable word.
+     *
+     * @param minWordLength min char length
+     */
+    public void setMinWordLength(final int minWordLength) {
+        this.minWordLength = minWordLength;
+    }
+
+
 }

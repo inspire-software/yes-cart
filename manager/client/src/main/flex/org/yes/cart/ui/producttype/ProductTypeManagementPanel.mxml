@@ -740,6 +740,15 @@
                                         </mx:Component>
                                     </mx:itemRenderer>
                                 </mx:DataGridColumn>
+                                <mx:DataGridColumn
+                                        headerText="@Resource(bundle='ProductTypeManagementPanel',key='primary')"
+                                        dataField="primary" textAlign="center">
+                                    <mx:itemRenderer>
+                                        <mx:Component>
+                                            <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.primary}"/></mx:HBox>
+                                        </mx:Component>
+                                    </mx:itemRenderer>
+                                </mx:DataGridColumn>
                             </mx:columns>
 
 

@@ -94,6 +94,9 @@
     <cache name="attributeService-allSearchableAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="attributeService-allSearchablePrimaryAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="attributeService-allStorableAttributeCodes" maxElementsInMemory="1" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

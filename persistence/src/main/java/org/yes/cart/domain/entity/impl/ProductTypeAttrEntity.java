@@ -42,6 +42,7 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private boolean similarity;
     private boolean store;
     private boolean search;
+    private boolean primary;
     private boolean navigation;
     private String navigationType;
     private String rangeNavigation;
@@ -109,6 +110,14 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
 
     public void setSearch(final boolean search) {
         this.search = search;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
     }
 
     public boolean isNavigation() {

@@ -115,6 +115,7 @@ public class WarmUpServiceImpl implements WarmUpService {
         // Load all attribute data
         attributeService.getAllNavigatableAttributeCodes();
         attributeService.getAllSearchableAttributeCodes();
+        attributeService.getAllSearchablePrimaryAttributeCodes();
         attributeService.getAllStorableAttributeCodes();
         attributeService.getAllAttributeCodes();
         attributeService.getAllAttributeNames();

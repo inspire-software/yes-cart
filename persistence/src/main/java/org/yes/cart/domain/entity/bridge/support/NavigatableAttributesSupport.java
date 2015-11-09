@@ -40,6 +40,13 @@ public interface NavigatableAttributesSupport {
     Set<String> getAllSearchableAttributeCodes();
 
     /**
+     * Get all searchable primary attribute codes.
+     *
+     * @return set of attribute codes.
+     */
+    Set<String> getAllSearchablePrimaryAttributeCodes();
+
+    /**
      * Get all storable attribute codes.
      *
      * @return set of attribute codes.

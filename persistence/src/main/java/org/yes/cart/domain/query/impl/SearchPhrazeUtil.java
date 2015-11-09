@@ -21,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
 * User: Igor Azarny iazarny@yahoo.com
@@ -31,22 +30,24 @@ import java.util.regex.Pattern;
  */
 public class SearchPhrazeUtil {
 
-    private final static Pattern splitPattern = Pattern.compile("\\s+|,+|;+|-+|\\++|\\.+|\\|+");
-
     /**
      * Tokenize search phraze and clean from empty strings.
      *
      * @param phraze optional phraze
+     * @param charThreshold character threshold. e.g. if set to 3 will skip words less than 3 characters
      *
      * @return list of tokens, that found in phraze.
      */
-    public static List<String> splitForSearch(final String phraze) {
+    public static List<String> splitForSearch(final String phraze, final int charThreshold) {
         if (phraze != null) {
-            String [] token = splitPattern.split(phraze);
+            String [] token = StringUtils.splitPreserveAllTokens(phraze, "| ;,.");
             List<String> words = new ArrayList<String>(token.length);
             for (final String aToken : token) {
                 if (StringUtils.isNotBlank(aToken)) {
-                    words.add(aToken.trim());
+                    final String clean = aToken.trim();
+                    if (clean.length() >= charThreshold) {
+                        words.add(clean);
+                    }
                 }
             }
             return words;

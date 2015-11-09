@@ -778,6 +778,11 @@
                 <comment>Will attribute be used for searching</comment>
             </column>
         </property>
+        <property name="primary" type="boolean">
+            <column name="SEARCHPRIMARY">
+                <comment>Will attribute be used for exact searching</comment>
+            </column>
+        </property>
 
         <property name="navigation" type="boolean">
             <column name="NAV">
@@ -2917,6 +2922,12 @@
     <query name="ATTRIBUTE.CODES.STORE.UNIQUE">
         <![CDATA[
        select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.store = ?1
+       ]]>
+    </query>
+
+    <query name="ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE">
+        <![CDATA[
+       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.primary = ?2
        ]]>
     </query>
 

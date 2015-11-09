@@ -59,6 +59,8 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String ATTRIBUTE_CODE_FIELD = "attribute.attribute";
     public final static String ATTRIBUTE_VALUE_FIELD = "attribute.val";
     public final static String ATTRIBUTE_VALUE_SEARCH_FIELD = "attribute.attrvalsearch";
+    public final static String ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD = "attribute.attrvalsearchphrase";
+    public final static String ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD = "attribute.attrvalsearchprimary";
     public final static String ATTRIBUTE_VALUE_STORE_FIELD = "attribute.attrvalstore";
 
     public final static String PRODUCT_CATEGORY_FIELD = "productCategory.category";

@@ -190,6 +190,15 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "attributeService-allSearchablePrimaryAttributeCodes")
+    public Set<String> getAllSearchablePrimaryAttributeCodes() {
+        final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE", Boolean.TRUE, Boolean.TRUE);
+        return new HashSet<String>(allowedAttributeNames);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "attributeService-allStorableAttributeCodes")
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
@@ -278,6 +287,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allSearchablePrimaryAttributeCodes",
             "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
@@ -295,6 +305,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allSearchablePrimaryAttributeCodes",
             "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",
@@ -312,6 +323,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
             "attributeService-allAttributeCodes",
             "attributeService-allNavigatableAttributeCodes",
             "attributeService-allSearchableAttributeCodes",
+            "attributeService-allSearchablePrimaryAttributeCodes",
             "attributeService-allStorableAttributeCodes",
             "attributeService-singleNavigatableAttributeCodesByProductType",
             "attributeService-navigatableAttributeDisplayValue",

@@ -25,11 +25,11 @@ import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
 import org.yes.cart.domain.entityindexer.StoredAttributes;
 import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -49,6 +49,7 @@ public class AttributeValueBridge implements FieldBridge {
             final NavigatableAttributesSupport support = getNavigatableAttributesSupport();
             final Set<String> navAttrs = support.getAllNavigatableAttributeCodes();
             final Set<String> searchAttrs = support.getAllSearchableAttributeCodes();
+            final Set<String> searchPrimaryAttrs = support.getAllSearchablePrimaryAttributeCodes();
             final Set<String> storeAttrs = support.getAllStorableAttributeCodes();
 
             StoredAttributes storedAttributes = null;
@@ -63,43 +64,67 @@ public class AttributeValueBridge implements FieldBridge {
                 final String code = attrValue.getAttribute().getCode();
 
                 final boolean navigation = navAttrs.contains(code);
-                final boolean search = searchAttrs.contains(code);
+                final boolean search = navigation || searchAttrs.contains(code);
+                final boolean searchPrimary = searchPrimaryAttrs.contains(code);
 
-                // Only keep navigatable attributes in index
-                if (search || navigation) {
-
+                // Only keep searcheable and navigatable attributes in index
+                if (search) {
                     if (StringUtils.isNotBlank(attrValue.getVal())) {
-                        // searchable and navigatable terms for global search tokenised
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
-                                getSearchValue(attrValue),
-                                Field.Store.NO,
-                                Field.Index.ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
 
-                        // searchable and navigatable terms for global search full phrase
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
-                                getSearchValue(attrValue),
-                                Field.Store.NO,
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
+                        if (searchPrimary) {
+
+                            final List<String> searchValues = getSearchValue(attrValue);
+
+                            // primary search should only exist in primary search exact match
+                            for (final String searchValue : searchValues) {
+                                document.add(new Field(
+                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD,
+                                        searchValue,
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED,
+                                        luceneOptions.getTermVector()
+                                ));
+                            }
+
+                        } else {
+
+                            final List<String> searchValues = getSearchValue(attrValue);
+
+                            for (final String searchValue : searchValues) {
+
+                                // searchable and navigatable terms for global search tokenised
+                                document.add(new Field(
+                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
+                                        searchValue,
+                                        Field.Store.NO,
+                                        Field.Index.ANALYZED,
+                                        luceneOptions.getTermVector()
+                                ));
+
+                                // searchable and navigatable terms for global search full phrase
+                                document.add(new Field(
+                                        ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD,
+                                        searchValue,
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED,
+                                        luceneOptions.getTermVector()
+                                ));
+                            }
+
+                        }
 
                     }
+                }
 
-                    if (navigation) {
-                        // strict attribute navigation only for filtered navigation
-                        document.add(new Field(
-                                "facet_" + code,
-                                attrValue.getVal(),
-                                Field.Store.NO,
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
-                    }
-
+                if (navigation) {
+                    // strict attribute navigation only for filtered navigation
+                    document.add(new Field(
+                            "facet_" + code,
+                            attrValue.getVal(),
+                            Field.Store.NO,
+                            Field.Index.NOT_ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
                 }
 
                 final boolean stored = storeAttrs.contains(code);
@@ -127,11 +152,16 @@ public class AttributeValueBridge implements FieldBridge {
 
     }
 
-    private String getSearchValue(final AttrValue attrValue) {
+    private List<String> getSearchValue(final AttrValue attrValue) {
+        final List<String> values = new ArrayList<String>();
         if (StringUtils.isNotBlank(attrValue.getDisplayVal())) {
-            return attrValue.getDisplayVal().replace(StringI18NModel.SEPARATOR, " ").concat(" ").concat(attrValue.getVal());
+            final I18NModel model = new StringI18NModel(attrValue.getDisplayVal());
+            for (final String value : model.getAllValues().values()) {
+                values.add(value.toLowerCase());
+            }
         }
-        return attrValue.getVal();
+        values.add(attrValue.getVal().toLowerCase());
+        return values;
     }
 
     private NavigatableAttributesSupport getNavigatableAttributesSupport() {
