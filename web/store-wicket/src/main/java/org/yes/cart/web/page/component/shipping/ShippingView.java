@@ -255,7 +255,12 @@ public class ShippingView extends BaseComponent {
                             model,
                             total.getAppliedDeliveryPromo(), true, true,
                             model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount()
-                    )
+                    ) {
+                        @Override
+                        public boolean isVisible() {
+                            return true; // Always visible to show free shipping!
+                        }
+                    }
             );
 
         }
