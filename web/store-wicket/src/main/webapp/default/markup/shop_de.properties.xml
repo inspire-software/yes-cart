@@ -372,7 +372,7 @@
     <entry key="wishListItemAddedW">Produkt ${sku} der Wunschliste zugefügt. Sie können die Liste in Ihrer Profilseite ändern.</entry>
     <entry key="wishListItemAddedC">Produkt ${sku} gespeichert für spätere Nutzung. Sie sehen die gespeicherten Artikel in Ihrem Warenkorb.</entry>
     <entry key="description">Beschreibung</entry>
-    <entry key="details">Specifikation</entry>
+    <entry key="details">Spezifikation</entry>
     <entry key="accessories">Zubehör</entry>
     <entry key="expendable">Ersatz</entry>
     <entry key="upcrosssell">Alternativen</entry>
