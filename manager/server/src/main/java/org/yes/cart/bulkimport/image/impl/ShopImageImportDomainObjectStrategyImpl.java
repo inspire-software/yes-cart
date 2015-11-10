@@ -107,6 +107,8 @@ public class ShopImageImportDomainObjectStrategyImpl extends AbstractImageImport
             imageAttributeValue.setShop(shop);
             imageAttributeValue.setAttribute(attribute);
             shop.getAttributes().add(imageAttributeValue);
+        } else if (isInsertOnly()) {
+            return false;
         }
         imageAttributeValue.setVal(fileName);
         final String info = MessageFormat.format("file {0} attached as {1} to shop {2}", fileName, attributeCode, shop.getName());

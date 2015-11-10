@@ -107,6 +107,8 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
             imageAttributeValue.setBrand(brand);
             imageAttributeValue.setAttribute(attribute);
             brand.getAttributes().add(imageAttributeValue);
+        }  else if (isInsertOnly()) {
+            return false;
         }
         imageAttributeValue.setVal(fileName);
         final String info = MessageFormat.format("file {0} attached as {1} to brand {2}", fileName, attributeCode, brand.getName());

@@ -16,8 +16,10 @@
 
 package org.yes.cart.stream.io.impl;
 
+import org.yes.cart.stream.io.FileSystemIOProvider;
 import org.yes.cart.stream.io.IOProvider;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ import java.util.Map;
  * Date: 30/08/2014
  * Time: 15:32
  */
-public class IOProviderFactoryImpl implements IOProvider {
+public class IOProviderFactoryImpl implements IOProvider, FileSystemIOProvider {
 
     private final IOProvider[] ioProviders;
 
@@ -104,4 +106,16 @@ public class IOProviderFactoryImpl implements IOProvider {
         throw new IOException("Unsupported uri " + uri);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public File resolveFileFromUri(final String uri, final Map<String, Object> context) {
+        for (final IOProvider ioProvider : ioProviders) {
+            if (ioProvider.supports(uri)) {
+                if (ioProvider instanceof FileSystemIOProvider) {
+                    return ((FileSystemIOProvider) ioProvider).resolveFileFromUri(uri, context);
+                }
+            }
+        }
+        return null;
+    }
 }

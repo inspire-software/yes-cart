@@ -98,6 +98,8 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
             imageAttibute.setProductSku(productSku);
             imageAttibute.setAttribute(attribute);
             productSku.getAttributes().add(imageAttibute);
+        } else if (isInsertOnly()) {
+            return false;
         }
         imageAttibute.setVal(fileName);
         final String info = MessageFormat.format("file {0} attached as {1} to product sku {2}",

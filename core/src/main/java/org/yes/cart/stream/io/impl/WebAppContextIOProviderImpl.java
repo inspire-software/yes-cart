@@ -38,7 +38,7 @@ public class WebAppContextIOProviderImpl extends AbstractFileSystemIOProviderImp
 
     /** {@inheritDoc} */
     @Override
-    protected File resolveFileFromUri(final String uri, final Map<String, Object> context) {
+    public File resolveFileFromUri(final String uri, final Map<String, Object> context) {
 
         final String absolutePath;
         if (uri.startsWith(PROTOCOL1)) {

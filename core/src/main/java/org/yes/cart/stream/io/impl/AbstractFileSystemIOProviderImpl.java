@@ -17,7 +17,7 @@
 package org.yes.cart.stream.io.impl;
 
 import org.apache.commons.io.FileUtils;
-import org.yes.cart.stream.io.IOProvider;
+import org.yes.cart.stream.io.FileSystemIOProvider;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.File;
@@ -29,7 +29,7 @@ import java.util.Map;
  * Date: 30/08/2014
  * Time: 19:50
  */
-public abstract class AbstractFileSystemIOProviderImpl implements IOProvider {
+public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOProvider {
 
     /**
      * Resolve file system path by given uri.
@@ -39,7 +39,7 @@ public abstract class AbstractFileSystemIOProviderImpl implements IOProvider {
      *
      * @return file object
      */
-    protected abstract File resolveFileFromUri(final String uri, final Map<String, Object> context);
+    public abstract File resolveFileFromUri(final String uri, final Map<String, Object> context);
 
     /**
      * Utility method to set the file separators correctly.

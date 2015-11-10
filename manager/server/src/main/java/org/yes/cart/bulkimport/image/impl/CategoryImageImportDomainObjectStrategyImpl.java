@@ -96,6 +96,8 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
             imageAttributeValue.setCategory(category);
             imageAttributeValue.setAttribute(attribute);
             category.getAttributes().add(imageAttributeValue);
+        } else if (isInsertOnly()) {
+            return false;
         }
         imageAttributeValue.setVal(fileName);
         final String info = MessageFormat.format("file {0} attached as {1} to category {2}", fileName, attributeCode, category.getName());

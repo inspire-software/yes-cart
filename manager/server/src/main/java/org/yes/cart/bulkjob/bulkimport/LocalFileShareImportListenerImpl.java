@@ -95,6 +95,9 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
     private static final String PAUSE_PREF = "JOB_LOCAL_FILE_IMPORT_PAUSE";
     private static final String FS_PREF = "JOB_LOCAL_FILE_IMPORT_FS_ROOT";
+    public static final long INDEX_GET_READY_TIMEOUT = 5000L;
+    public static final long INDEX_PING_INTERVAL = 15000L;
+    public static final long WARMUP_GET_READY_TIMEOUT = 15000L;
 
     private final ShopService shopService;
     private final ImportDirectorService importDirectorService;
@@ -303,17 +306,20 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                                 final boolean reindex = Boolean.valueOf(groupData.get("reindex"));
                                 if (reindex) {
-                                    Thread.sleep(5000L); // let cache invalidation run before index
+                                    Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
                                     final String indexToken = reindexService.reindexShopProducts(ShopCodeContext.getShopId());
                                     while (true) {
-                                        Thread.sleep(15000L);
+                                        Thread.sleep(INDEX_PING_INTERVAL);
                                         JobStatus reindexStatus = reindexService.getIndexAllStatus(indexToken);
                                         if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                            defaultLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, importStatus.getCompletion() });
-                                            shopLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, importStatus.getCompletion() });
+                                            defaultLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion() });
+                                            shopLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion() });
 
                                             remoteDevService.evictAllCache();
+                                            Thread.sleep(WARMUP_GET_READY_TIMEOUT);
+                                            remoteDevService.warmUp();
+
                                             break;
                                         }
                                     }

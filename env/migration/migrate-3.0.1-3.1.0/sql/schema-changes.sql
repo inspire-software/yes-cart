@@ -182,4 +182,12 @@ alter table TPRODUCTTYPEATTR add column SEARCHPRIMARY bit default 0;
 -- alter table TPRODUCTTYPEATTR add column SEARCHPRIMARY smallint default 0;
 update TPRODUCTTYPEATTR set SEARCHPRIMARY = 0;
 
+--
+-- YC-47 Image scanner for imagevault
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11114,  'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE', 'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE',  0,  NULL,  'Job\Image vault scan: pause image vault scanning',
+    'Pause local file system image vault scanner',  1008, 1000);
+
 

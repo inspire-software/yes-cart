@@ -29,6 +29,8 @@ public abstract class AbstractImageImportDomainObjectStrategyImpl implements Ima
 
     private final FederationFacade federationFacade;
 
+    private boolean insertOnly;
+
     protected AbstractImageImportDomainObjectStrategyImpl(final FederationFacade federationFacade) {
         this.federationFacade = federationFacade;
     }
@@ -46,4 +48,17 @@ public abstract class AbstractImageImportDomainObjectStrategyImpl implements Ima
         }
     }
 
+    /**
+     * @return returns true if only new images should be added (i.e. skip existing)
+     */
+    protected boolean isInsertOnly() {
+        return insertOnly;
+    }
+
+    /**
+     * @param insertOnly true if we should not replace existing images
+     */
+    public void setInsertOnly(final boolean insertOnly) {
+        this.insertOnly = insertOnly;
+    }
 }
