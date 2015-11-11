@@ -62,7 +62,7 @@
                    label="@Resource(bundle='AttributesManagementPanel',key='loadImage')"
                    toolTip="@Resource(bundle='AttributesManagementPanel',key='loadImageHint')"
                    click="onLoadImageDialogButtonClick()"/>
-        <mx:Button id="btnSave"
+        <mx:Button id="btnSave" enabled="{hasCode}"
                    label="@Resource(bundle='AttributesManagementPanel',key='save')" click="onSaveImageClick(event)"/>
         <mx:Button id="btnCancel"
                    label="@Resource(bundle='AttributesManagementPanel',key='cancel')"
@@ -95,6 +95,8 @@
                    fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
+
+    <mx:Boolean id="hasCode">false</mx:Boolean>
 
     <mx:Script><![CDATA[
         import com.hexagonstar.util.debug.Debug;
@@ -414,6 +416,7 @@
 
         public function set code(value:String):void {
             _code = value;
+            hasCode = _code != null && _code.length > 0;
         }
 
         public function get attributeGroup():String {
