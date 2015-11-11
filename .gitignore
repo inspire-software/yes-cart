@@ -2,7 +2,7 @@ derby.log
 
 derbyinit.log
 
-imagevault
+/imagevault/**
 
 env/derby/lib/yes/**
 
