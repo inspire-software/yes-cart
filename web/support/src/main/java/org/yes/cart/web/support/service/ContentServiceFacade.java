@@ -41,6 +41,31 @@ public interface ContentServiceFacade {
     Category getContent(long contentId, long shopId);
 
 
+    /**
+     * Get content with given URI. The contentUri is either suffix or full URI.
+     * This method will attempt first to find shop specific content for given URI by prefixing
+     * URI with shop code. Then if content is not found failover will try to find content using
+     * URI as is.
+     *
+     * For example we have content include "terms-and-conditions" in our theme. The to include
+     * terms and conditions text we need to invoke getContentBody("terms-and-conditions", shopId, locale).
+     * In multi shop storefront this presents a problem since no two content object can have same URI.
+     * Therefore this method with first try to resolve the shop code, say "SHOP10". Then if will try to
+     * resolve content body "SHOP10_terms-and-conditions". If this content does not exist or does not
+     * belong to given shop the method with continue to resolve body of "terms-and-conditions".
+     *
+     * This way each shop can specify own terms and conditions content and still use the same theme.
+     *
+     * See CONTENT_BODY setting.
+     *
+     * @param contentUri content URI
+     * @param shopId     shop id
+     *
+     * @return category or null
+     */
+    Category getContent(String contentUri, long shopId);
+
+
 
     /**
      * Get content body for a specific content. If the content belong to given shop then the body is

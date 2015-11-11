@@ -60,6 +60,38 @@ public class ContentServiceFacadeImpl implements ContentServiceFacade {
     /**
      * {@inheritDoc}
      */
+    public Category getContent(final String contentUri, final long shopId) {
+
+        if (StringUtils.isBlank(contentUri)) {
+            return null;
+        }
+
+        final Shop shop = shopService.getById(shopId);
+
+        if (shop == null) {
+            return null;
+        }
+
+        final String shopContentUri = shop.getCode().concat("_").concat(contentUri);
+
+        final Long shopSpecificContentId = contentService.findContentIdBySeoUri(shopContentUri);
+
+        if (shopSpecificContentId != null && shopService.getShopContentIds(shopId).contains(shopSpecificContentId)) {
+            return contentService.getById(shopSpecificContentId);
+        }
+
+        final Long contentId = contentService.findContentIdBySeoUri(contentUri);
+        if (contentId != null && shopService.getShopContentIds(shopId).contains(contentId)) {
+            return contentService.getById(contentId);
+        }
+
+        return null;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getContentBody(final long contentId, final long shopId, final String locale) {
         if (contentId > 0L && shopService.getShopContentIds(shopId).contains(contentId)) {
             return contentService.getContentBody(contentId, locale);
