@@ -81,7 +81,10 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
         doRun(lastRun);
 
         lastRun = now;
-        systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
+
+        synchronized (SystemService.class) {
+            systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
+        }
 
     }
 

@@ -131,8 +131,10 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
         if (!pauseInitialised) {
             if (!systemService.getAttributeValues().keySet().contains(PAUSE_PREF)) {
-                runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
-                systemService.updateAttributeValue(PAUSE_PREF, Boolean.TRUE.toString());
+                synchronized (SystemService.class) {
+                    runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
+                    systemService.updateAttributeValue(PAUSE_PREF, Boolean.TRUE.toString());
+                }
             }
             pauseInitialised = true;
         }

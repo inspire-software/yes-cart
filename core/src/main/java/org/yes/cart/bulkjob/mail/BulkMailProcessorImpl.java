@@ -68,8 +68,10 @@ public class BulkMailProcessorImpl implements Runnable {
 
         if (!pauseInitialised) {
             if (!systemService.getAttributeValues().keySet().contains(PAUSE_PREF)) {
-                runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
-                systemService.updateAttributeValue(PAUSE_PREF, Boolean.FALSE.toString());
+                synchronized (SystemService.class) {
+                    runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
+                    systemService.updateAttributeValue(PAUSE_PREF, Boolean.FALSE.toString());
+                }
             }
             pauseInitialised = true;
         }
