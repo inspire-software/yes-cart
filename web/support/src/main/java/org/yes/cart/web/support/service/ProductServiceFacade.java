@@ -232,7 +232,7 @@ public interface ProductServiceFacade {
      *
      * @return quantity model
      */
-    ProductQuantityModel getQuantityModel(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+    ProductQuantityModel getProductQuantity(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
 
 
     /**
