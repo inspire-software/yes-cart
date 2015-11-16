@@ -317,6 +317,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final BigDecimal min, final BigDecimal max, final BigDecimal step) {
+
+        return productQuantityStrategy.getQuantityModel(cartQty, min, max, step);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public SkuPrice getSkuPrice(final Long productId,
                                 final String skuCode,
                                 final BigDecimal quantity,

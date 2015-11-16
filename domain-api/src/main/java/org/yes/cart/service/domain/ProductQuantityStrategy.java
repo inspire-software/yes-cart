@@ -68,4 +68,16 @@ public interface ProductQuantityStrategy {
      */
     ProductQuantityModel getQuantityModel(BigDecimal cartQty, ProductSku productSku);
 
+    /**
+     * Quantity model.
+     *
+     * @param cartQty quantity of given sku in cart
+     * @param min min order quantity
+     * @param max max order quantity
+     * @param step step order quantity
+     *
+     * @return quantity model
+     */
+    ProductQuantityModel getQuantityModel(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
+
 }

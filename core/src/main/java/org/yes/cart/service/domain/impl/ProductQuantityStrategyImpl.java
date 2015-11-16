@@ -54,4 +54,16 @@ public class ProductQuantityStrategyImpl implements ProductQuantityStrategy {
     public ProductQuantityModel getQuantityModel(final BigDecimal cartQty, final ProductSku productSku) {
         return getQuantityModel(cartQty, productSku.getProduct());
     }
+
+    /** {@inheritDoc} */
+    public ProductQuantityModel getQuantityModel(final BigDecimal cartQty,
+                                                 final BigDecimal min,
+                                                 final BigDecimal max,
+                                                 final BigDecimal step) {
+        return new ProductQuantityModelImpl(
+                min,
+                max,
+                step,
+                cartQty);
+    }
 }
