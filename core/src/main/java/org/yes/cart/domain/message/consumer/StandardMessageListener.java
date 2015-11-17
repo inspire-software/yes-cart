@@ -162,11 +162,11 @@ public class StandardMessageListener implements Runnable {
 
         try {
             try {
-                if (map.get(CUSTOMER) == null) {
-                    enrichMapWithCustomer(map);
-                }
                 if (map.get(SHOP) == null) {
                     enrichMapWithShop(map);
+                }
+                if (map.get(CUSTOMER) == null) {
+                    enrichMapWithCustomer(map);
                 }
 
                 final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
@@ -219,7 +219,7 @@ public class StandardMessageListener implements Runnable {
      */
     private void enrichMapWithCustomer(final Map<String, Object> map) {
         map.put(CUSTOMER,
-                customerService.getCustomerByEmail((String) map.get(CUSTOMER_EMAIL)));
+                customerService.getCustomerByEmail((String) map.get(CUSTOMER_EMAIL), (Shop) map.get(SHOP)));
 
 
     }

@@ -47,10 +47,25 @@ public class TestCustomerServiceImpl extends BaseCoreDBTestCase {
 
     @Test
     public void testCreate() {
-        Customer customer = getCustomer(getTestName());
-        customer = customerService.create(customer, shopService.getById(10L));
-        assertTrue(customer.getCustomerId() > 0);
-        assertFalse(customer.getShops().isEmpty());
+
+        Customer customer10 = getCustomer(getTestName());
+        customer10 = customerService.create(customer10, shopService.getById(10L));
+        assertTrue(customer10.getCustomerId() > 0);
+        assertFalse(customer10.getShops().isEmpty());
+        Customer customer10check = customerService.getCustomerByEmail(customer10.getEmail(), shopService.getById(10L));
+        assertNotNull(customer10check);
+        assertEquals(customer10check.getCustomerId(), customer10.getCustomerId());
+
+        // Same details but for SHOP20
+        Customer customer20 = getCustomer(getTestName());
+        customer20 = customerService.create(customer20, shopService.getById(20L));
+        assertTrue(customer20.getCustomerId() > 0);
+        assertFalse(customer20.getShops().isEmpty());
+        assertEquals(customer10.getEmail(), customer20.getEmail());
+        assertFalse(customer10.getCustomerId() == customer20.getCustomerId());
+        Customer customer20check = customerService.getCustomerByEmail(customer20.getEmail(), shopService.getById(20L));
+        assertNotNull(customer20check);
+        assertEquals(customer20check.getCustomerId(), customer20.getCustomerId());
     }
 
     // TODO: YC-64 fix to not depend on order of running

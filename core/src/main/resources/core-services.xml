@@ -781,6 +781,7 @@
         <constructor-arg index="1" ref="deliveryCostCalculationStrategy"/>
         <constructor-arg index="2" ref="promotionContextFactory"/>
         <constructor-arg index="3" ref="customerService"/>
+        <constructor-arg index="4" ref="shopService"/>
     </bean>
 
     <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy"> <!-- CPOINT delivery calculation strategy -->

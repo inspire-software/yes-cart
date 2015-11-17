@@ -200,7 +200,7 @@ public class LoginPanel extends BaseComponent {
                 @Override
                 public void onSubmit() {
                     final String email = getEmail();
-                    final Customer customer = getCustomerServiceFacade().getCustomerByEmail(email);
+                    final Customer customer = getCustomerServiceFacade().getCustomerByEmail(ApplicationDirector.getCurrentShop(), email);
                     if (customer != null) {
                         getCustomerServiceFacade().resetPassword(ApplicationDirector.getCurrentShop(), customer);
                         ((AbstractWebPage) getPage()).executeHttpPostedCommands();

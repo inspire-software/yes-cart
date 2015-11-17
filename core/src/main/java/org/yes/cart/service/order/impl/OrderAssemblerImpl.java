@@ -181,7 +181,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
      */
     private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) {
 
-        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail());
+        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), customerOrder.getShop());
 
         if (customer != null) {
             long selectedBillingAddressId = shoppingCart.getOrderInfo().getBillingAddressId() != null ? shoppingCart.getOrderInfo().getBillingAddressId() : 0L;

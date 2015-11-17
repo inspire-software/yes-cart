@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
@@ -40,12 +39,6 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     }
 
     /** {@inheritDoc} */
-    public boolean customerHasAtLeastOneAddress(String email) {
-        final List pks = (List) getGenericDao().findQueryObjectByNamedQuery("ADDRESSES.BY.CUSTOMER.EMAIL", email);
-        return CollectionUtils.isNotEmpty(pks);
-    }
-
-    /** {@inheritDoc} */
     public List<Address> getAddressesByCustomerId(final long customerId) {
         return getGenericDao().findByNamedQuery("ADDRESSES.BY.CUSTOMER", customerId);
     }
@@ -61,7 +54,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, condition = "#instance.customer != null", key = "#instance.customer.email")
+    }, allEntries = true)
     public Address create(final Address instance) {
         setDefault(instance);
         return super.create(instance);
@@ -73,7 +66,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.customer.email")
+    }, allEntries = true)
     public Address updateSetDefault(final Address instance) {
         setDefault(instance);
         return super.update(instance);
@@ -84,7 +77,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.customer.email")
+    }, allEntries = true)
     public Address update(final Address instance) {
         return super.update(instance);
     }
@@ -94,7 +87,7 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.customer.email")
+    }, allEntries = true)
     public void delete(final Address instance) {
         super.delete(instance);
     }

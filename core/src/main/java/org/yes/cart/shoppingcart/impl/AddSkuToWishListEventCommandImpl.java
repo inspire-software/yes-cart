@@ -168,7 +168,8 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                                     final String visibility,
                                     final Map<String, Object> parameters) {
 
-        final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(shoppingCart.getCustomerEmail());
+        final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(
+                shoppingCart.getCustomerEmail(), shoppingCart.getShoppingContext().getShopId());
 
         for (final CustomerWishList item : wishList) {
 
@@ -227,7 +228,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         final BigDecimal price = MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());
 
         final CustomerWishList customerWishList = customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
-        customerWishList.setCustomer(customerService.getCustomerByEmail(shoppingCart.getCustomerEmail()));
+        customerWishList.setCustomer(customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop));
         customerWishList.setSkus(productSku);
         customerWishList.setWlType(type);
         customerWishList.setTag(tags);

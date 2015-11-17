@@ -280,10 +280,6 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
 
-    <cache name="customerWishListService-wishListByCustomerEmail" maxElementsInMemory="50" overflowToDisk="false"
-           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
-
-
     <cache name="shopService-shopByCode" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -531,13 +527,6 @@
 
     <cache name="web.imageService-objectImages"
            maxElementsInMemory="500"
-           overflowToDisk="false"
-           eternal="false"
-           timeToLiveSeconds="86400"
-           timeToIdleSeconds="7200"/>
-
-    <cache name="web.addressBookFacade-customerHasAtLeastOneAddress"
-           maxElementsInMemory="50"
            overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="86400"

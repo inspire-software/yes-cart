@@ -83,9 +83,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "customerService-customerByEmail")
-    public Customer getCustomerByEmail(final String email) {
-        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+    @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code")
+    public Customer getCustomerByEmail(final String email, Shop shop) {
+        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId());
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
             for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
@@ -126,14 +126,16 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public List<Shop> getCustomerShopsByEmail(final String email) {
-        Customer customer = getGenericDao().findSingleByCriteria(Restrictions.eq("email", email));
+    public List<Shop> getCustomerShops(final Customer customer) {
         final List<Shop> shops = new ArrayList<Shop>();
         if (customer != null) {
-            for (CustomerShop customerShop : customer.getShops()) {
-                final Shop shop = shopService.getById(customerShop.getShop().getShopId());
-                if (shop != null) {
-                    shops.add(shop);
+            Customer cust = getGenericDao().findById(customer.getCustomerId());
+            if (cust != null) {
+                for (CustomerShop customerShop : cust.getShops()) {
+                    final Shop shop = shopService.getById(customerShop.getShop().getShopId());
+                    if (shop != null) {
+                        shops.add(shop);
+                    }
                 }
             }
         }
@@ -197,8 +199,8 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public boolean isCustomerExists(final String email) {
-        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email);
+    public boolean isCustomerExists(final String email, final Shop shop) {
+        final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("EMAIL.CHECK", email, shop.getShopId());
         if (CollectionUtils.isNotEmpty(counts)) {
             return ((Number) counts.get(0)).intValue() > 0;
         }
@@ -208,8 +210,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public boolean isPasswordValid(final String email, final String password) {
+    public boolean isPasswordValid(final String email, final Shop shop, final String password) {
         try {
+
             final List<Criterion> criterionList = new ArrayList<Criterion>();
 
             final String hash = passwordHashHelper.getHash(password);
@@ -217,11 +220,13 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             criterionList.add(Restrictions.eq("email", email));
             criterionList.add(Restrictions.eq("password", hash));
 
-            final List<Customer> customer = getGenericDao().findByCriteria(
-                    criterionList.toArray(new Criterion[criterionList.size()])
-            );
+            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email, shop.getShopId(), hash);
 
-            return (customer != null && customer.size() == 1);
+            if (CollectionUtils.isNotEmpty(counts)) {
+                return ((Number) counts.get(0)).intValue() == 1;
+            }
+            return false;
+
         } catch (Exception e) {
             return false;
         }
@@ -238,7 +243,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
+    }, allEntries = true)
     public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
         if (StringUtils.isNotBlank(attributeValue)) {
             AttrValueCustomer attrVal = customer.getAttributeByCode(attributeCode);
@@ -294,7 +299,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
         "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
+    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
@@ -318,11 +323,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#email")
+    }, allEntries = false, key = "#email + #shopCode")
     public Customer update(final String email, final String shopCode) {
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
-            final Customer customer = getCustomerByEmail(email);
+            final Customer customer = getCustomerByEmail(email, shop);
             for (final CustomerShop customerShop : customer.getShops()) {
                 if (shop.getShopId() == customerShop.getShop().getShopId()) {
                     return customer;
@@ -342,7 +347,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#customer.email")
+    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
         super.update(customer);
     }
@@ -352,7 +357,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.email")
+    }, allEntries = true)
     public Customer update(final Customer instance) {
         return super.update(instance);
     }
@@ -362,7 +367,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @CacheEvict(value = {
             "customerService-customerByEmail"
-    }, allEntries = false, key = "#instance.email")
+    }, allEntries = true)
     public void delete(final Customer instance) {
         for(CustomerShop cshop : instance.getShops()) {
             customerShopDao.delete(cshop);

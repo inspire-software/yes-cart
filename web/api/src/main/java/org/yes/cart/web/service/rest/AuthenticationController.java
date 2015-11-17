@@ -254,7 +254,7 @@ public class AuthenticationController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(loginRO.getUsername());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), loginRO.getUsername());
 
         if (customer != null) {
 
@@ -640,7 +640,7 @@ public class AuthenticationController {
 
         }
 
-        if (customerServiceFacade.isCustomerRegistered(registerRO.getEmail())) {
+        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())) {
 
             return new AuthenticationResultRO("USER_FAILED");
 
@@ -788,7 +788,7 @@ public class AuthenticationController {
         } else if (StringUtils.isNotBlank(email)) {
 
             final Shop shop = cartMixin.getCurrentShop();
-            final Customer customer = customerServiceFacade.getCustomerByEmail(email);
+            final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), email);
             if (customer == null) {
                 return new AuthenticationResultRO("INVALID_EMAIL");
             }

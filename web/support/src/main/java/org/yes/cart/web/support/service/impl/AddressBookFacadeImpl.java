@@ -57,11 +57,16 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "web.addressBookFacade-customerHasAtLeastOneAddress")
-    public boolean customerHasAtLeastOneAddress(final String email) {
+    public boolean customerHasAtLeastOneAddress(final String email, final Shop shop) {
 
         if (StringUtils.isNotBlank(email)) {
-            return addressService.customerHasAtLeastOneAddress(email);
+
+            final Customer customer = customerService.getCustomerByEmail(email, shop);
+            if (customer != null) {
+                return
+                        !getAddresses(customer, shop, Address.ADDR_TYPE_BILLING).isEmpty() ||
+                        !getAddresses(customer, shop, Address.ADDR_TYPE_SHIPPING).isEmpty();
+            }
         }
         return false;
     }
@@ -138,9 +143,6 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-        "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, key = "#address.customer.email")
     public void createOrUpdate(final Address address) {
         if (address.getAddressId() == 0) {
             // Need to add address to customer only just before the creation
@@ -152,9 +154,6 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, key = "#address.customer.email")
     public void remove(Address address) {
 
         final boolean isDefault = address.isDefaultAddress();
@@ -173,9 +172,6 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, key = "#address.customer.email")
     public Address useAsDefault(Address address) {
         return addressService.updateSetDefault(address);
     }

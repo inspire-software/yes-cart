@@ -21,9 +21,11 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 
@@ -64,6 +66,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     private final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy;
     private final PromotionContextFactory promotionContextFactory;
     private final CustomerService customerService;
+    private final ShopService shopService;
 
     /**
      * Construct default amount calculator with included tax.
@@ -72,16 +75,19 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
      * @param deliveryCostCalculationStrategy delivery cost calculation strategy
      * @param promotionContextFactory promotion context
      * @param customerService customer service
+     * @param shopService shop service
      */
     public DefaultAmountCalculationStrategy(final TaxProvider taxProvider,
                                             final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy,
                                             final PromotionContextFactory promotionContextFactory,
-                                            final CustomerService customerService) {
+                                            final CustomerService customerService,
+                                            final ShopService shopService) {
 
         this.taxProvider = taxProvider;
         this.deliveryCostCalculationStrategy = deliveryCostCalculationStrategy;
         this.promotionContextFactory = promotionContextFactory;
         this.customerService = customerService;
+        this.shopService = shopService;
     }
 
     /** {@inheritDoc} */
@@ -89,7 +95,12 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
         final Customer customer;
         if (StringUtils.isNotBlank(cart.getCustomerEmail())) {
-            customer = customerService.getCustomerByEmail(cart.getCustomerEmail());
+            final Shop shop = shopService.getById(cart.getShoppingContext().getShopId());
+            if (shop != null) {
+                customer = customerService.getCustomerByEmail(cart.getCustomerEmail(), shop);
+            } else {
+                customer = null;
+            }
         } else {
             customer = null;
         }

@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -65,7 +66,7 @@ public class SummaryPanel extends BaseComponent {
 
                     @Override
                     protected void onSubmit() {
-                        customerServiceFacade.updateCustomer(getModelObject());
+                        customerServiceFacade.updateCustomer(ApplicationDirector.getCurrentShop(), getModelObject());
                         info(getLocalizer().getString("profileUpdated", this));
                         super.onSubmit();
                     }

@@ -18,8 +18,10 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -39,17 +41,20 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
     private static final long serialVersionUID = 20101026L;
 
     private final CustomerService customerService;
+    private final ShopService shopService;
 
     /**
      * Construct command.
-     *
      * @param registry shopping cart command registry
      * @param customerService customer service
+     * @param shopService shop service
      */
     public LoginCommandImpl(final ShoppingCartCommandRegistry registry,
-                            final CustomerService customerService) {
+                            final CustomerService customerService,
+                            final ShopService shopService) {
         super(registry);
         this.customerService = customerService;
+        this.shopService = shopService;
     }
 
     /**
@@ -67,20 +72,15 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         if (parameters.containsKey(getCmdKey())) {
             final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
-            final boolean activate = shoppingCart.getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP;
-            if (authenticate(email, passw)) {
-                final Customer customer = customerService.getCustomerByEmail(email);
-                final String shopCode = shoppingCart.getShoppingContext().getShopCode();
-                if (activate) {
-                    customerService.update(email, shopCode);
-                }
+
+            final String shopCode = shoppingCart.getShoppingContext().getShopCode();
+            final Shop current = shopService.getShopByCode(shopCode);
+
+            if (current != null && authenticate(email, current, passw)) {
+                final Customer customer = customerService.getCustomerByEmail(email, current);
                 final List<String> customerShops = new ArrayList<String>();
-                Shop current = null;
-                for (final Shop shop : customerService.getCustomerShopsByEmail(email)) {
+                for (final Shop shop : customerService.getCustomerShops(customer)) {
                     customerShops.add(shop.getCode());
-                    if (shopCode != null && shopCode.equals(shop.getCode())) {
-                        current = shop;
-                    }
                 }
                 shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
                 shoppingCart.getShoppingContext().setCustomerName(customerService.formatNameFor(customer, current));
@@ -121,9 +121,9 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
         }
     }
 
-    private boolean authenticate(final String username, final String password) {
-        return customerService.isCustomerExists(username) &&
-                customerService.isPasswordValid(username, password);
+    private boolean authenticate(final String username, final Shop shop, final String password) {
+        return customerService.isCustomerExists(username, shop) &&
+                customerService.isPasswordValid(username, shop, password);
     }
 
 }

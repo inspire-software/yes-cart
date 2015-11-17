@@ -123,6 +123,7 @@ public class WishListView extends AbstractProductSearchResultList {
         if (products == null) {
 
             final List<CustomerWishList> wishList = new ArrayList<CustomerWishList>(customerServiceFacade.getCustomerWishListByEmail(
+                    ApplicationDirector.getCurrentShop(),
                     this.wishListType.getObject(), this.customerEmail.getObject(),
                     ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null));
 

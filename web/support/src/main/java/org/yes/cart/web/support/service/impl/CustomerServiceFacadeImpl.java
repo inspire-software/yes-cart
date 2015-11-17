@@ -54,19 +54,19 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    public boolean isCustomerRegistered(String email) {
-        return customerService.isCustomerExists(email);
+    public boolean isCustomerRegistered(final Shop shop, final String email) {
+        return customerService.isCustomerExists(email, shop);
     }
 
     /** {@inheritDoc} */
-    public Customer getCustomerByEmail(final String email) {
-        return customerService.getCustomerByEmail(email);
+    public Customer getCustomerByEmail(final Shop shop, final String email) {
+        return customerService.getCustomerByEmail(email, shop);
     }
 
     /** {@inheritDoc} */
-    public List<CustomerWishList> getCustomerWishListByEmail(final String type, final String email, final String visibility, final String... tags) {
+    public List<CustomerWishList> getCustomerWishListByEmail(final Shop shop, final String type, final String email,final String visibility, final String... tags) {
 
-        final List<CustomerWishList> allItems = customerWishListService.getWishListByCustomerEmail(email);
+        final List<CustomerWishList> allItems = customerWishListService.getWishListByCustomerEmail(email, shop.getShopId());
 
         final List<CustomerWishList> filtered = new ArrayList<CustomerWishList>();
         for (final CustomerWishList item : allItems) {
@@ -111,9 +111,6 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, key = "#email")
     public String registerCustomer(Shop registrationShop, String email, Map<String, Object> registrationData) {
 
         final String password = phrazeGenerator.getNextPassPhrase();
@@ -123,11 +120,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setEmail(email);
         customer.setFirstname((String) registrationData.get("firstname"));
         customer.setLastname((String) registrationData.get("lastname"));
+        customer.setMiddlename((String) registrationData.get("middlename"));
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
         final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
         attrData.remove("firstname");
         attrData.remove("lastname");
+        attrData.remove("middlename");
         attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
 
         final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList();
@@ -244,10 +243,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "web.addressBookFacade-customerHasAtLeastOneAddress"
-    }, key = "#customer.email")
-    public void updateCustomer(final Customer customer) {
+    public void updateCustomer(final Shop shop, final Customer customer) {
         customerService.update(customer);
     }
 
@@ -284,12 +280,6 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         }
 
         customerService.update(customer);
-    }
-
-    /** {@inheritDoc} */
-    public boolean authenticate(final String username, final String password) {
-        return customerService.isCustomerExists(username) &&
-                customerService.isPasswordValid(username, password);
     }
 
     /** {@inheritDoc} */

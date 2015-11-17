@@ -49,7 +49,7 @@ public interface CustomerService extends GenericService<Customer> {
      *
      * @return {@link Customer} or null if customer not found
      */
-    Customer getCustomerByEmail(String email);
+    Customer getCustomerByEmail(String email, Shop shop);
 
     /**
      * Get customer by auth token.
@@ -73,10 +73,10 @@ public interface CustomerService extends GenericService<Customer> {
     /**
      * Get customer shops by email.
      *
-     * @param email email
+     * @param customer customer
      * @return List of {@link Shop} or null if customer not found
      */
-    List<Shop> getCustomerShopsByEmail(String email);
+    List<Shop> getCustomerShops(Customer customer);
 
     /**
      * Get name as specified by shop name formatting.
@@ -92,18 +92,21 @@ public interface CustomerService extends GenericService<Customer> {
      * Check is customer already registered.
      *
      * @param email email to check
+     * @param shop shop
+     *
      * @return true in case if email unique.
      */
-    boolean isCustomerExists(String email);
+    boolean isCustomerExists(String email, Shop shop);
 
     /**
      * Check is provided password for customer valid.
      *
      * @param email    email to check
+     * @param shop     shop
      * @param password password
      * @return true in case if email unique.
      */
-    boolean isPasswordValid(String email, String password);
+    boolean isPasswordValid(String email, Shop shop, String password);
 
     /**
      * Reset password to given user and send generated password via email.
@@ -126,7 +129,7 @@ public interface CustomerService extends GenericService<Customer> {
 
 
     /**
-     * Update customer and assign it to particular shop
+     * Update customer and assign to particular shop
      *
      * @param email customer to update
      * @param shopCode shop to assign

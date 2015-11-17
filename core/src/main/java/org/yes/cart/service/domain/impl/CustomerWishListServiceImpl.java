@@ -46,9 +46,8 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "customerWishListService-wishListByCustomerEmail")
-    public List<CustomerWishList> getWishListByCustomerEmail(final String email) {
-        final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER.EMAIL", email);
+    public List<CustomerWishList> getWishListByCustomerEmail(final String email, final long shopId) {
+        final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER.EMAIL", email, shopId);
         for (final CustomerWishList item : wishList) {
             // Need to load the sku information, so that it is available without session
             Hibernate.initialize(item.getSkus());
@@ -57,25 +56,16 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "customerWishListService-wishListByCustomerEmail"
-    }, allEntries = false, key = "#instance.customer.email")
     public CustomerWishList create(final CustomerWishList instance) {
         return super.create(instance);
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "customerWishListService-wishListByCustomerEmail"
-    }, allEntries = false, key = "#instance.customer.email")
     public CustomerWishList update(final CustomerWishList instance) {
         return super.update(instance);
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "customerWishListService-wishListByCustomerEmail"
-    }, allEntries = false, key = "#instance.customer.email")
     public void delete(final CustomerWishList instance) {
         super.delete(instance);
     }

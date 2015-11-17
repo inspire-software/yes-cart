@@ -39,7 +39,6 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
 
     private static final long serialVersionUID = 20100122L;
 
-    private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
 
     /**
@@ -49,17 +48,14 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
      * @param priceService price service
      * @param productService product service
      * @param shopService shop service
-     * @param customerService customer service
      * @param customerWishListService customer wish list service
      */
     public RemoveSkuFromWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                                  final PriceService priceService,
                                                  final ProductService productService,
                                                  final ShopService shopService,
-                                                 final CustomerService customerService,
                                                  final CustomerWishListService customerWishListService) {
         super(registry, priceService, productService, shopService);
-        this.customerService = customerService;
         this.customerWishListService = customerWishListService;
     }
 
@@ -118,7 +114,8 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
 
     private void removeWishListItem(final ShoppingCart shoppingCart, final ProductSku productSku, final long pk) {
 
-        final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(shoppingCart.getCustomerEmail());
+        final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(
+                shoppingCart.getCustomerEmail(), shoppingCart.getShoppingContext().getShopId());
 
         for (final CustomerWishList item : wishList) {
 

@@ -32,10 +32,11 @@ public interface AddressBookFacade {
      * has at least one address in the address book.
      *
      * @param email customer email
+     * @param shop shop
      *
      * @return true if at least one address exists
      */
-    boolean customerHasAtLeastOneAddress(String email);
+    boolean customerHasAtLeastOneAddress(String email, Shop shop);
 
 
     /**

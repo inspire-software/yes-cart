@@ -74,7 +74,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getCustomerEmail());
 
         final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
 

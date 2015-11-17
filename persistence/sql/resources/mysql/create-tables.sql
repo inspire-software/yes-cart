@@ -237,7 +237,7 @@
     create table TCUSTOMER (
         CUSTOMER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
-        EMAIL varchar(255) not null unique,
+        EMAIL varchar(255) not null,
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),

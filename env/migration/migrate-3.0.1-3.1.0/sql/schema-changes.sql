@@ -191,3 +191,18 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
     'Pause local file system image vault scanner',  1008, 1000);
 
 
+--
+--  YC-625 Allow use of same email to create multiple accounts on one server instance
+--
+
+-- MySQL
+-- ## Lookup unique index name and drop it
+show index from TCUSTOMER;
+drop index EMAIL on TCUSTOMER;
+
+-- ## Derby
+-- ## Select unique constrain names for EMAIL
+-- select CONSTRAINTID, CONSTRAINTNAME, REFERENCECOUNT from SYS.SYSCONSTRAINTS c join SYS.SYSTABLES t on c.TABLEID = t.TABLEID where t.TABLENAME = 'TCUSTOMER' and c.TYPE = 'U';
+-- ## Drop them
+-- alter table TCUSTOMER drop constraint SQL151023000042970;
+-- alter table TCUSTOMER drop constraint SQL151023000042971;

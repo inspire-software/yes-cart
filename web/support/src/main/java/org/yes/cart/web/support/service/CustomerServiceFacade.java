@@ -32,11 +32,12 @@ public interface CustomerServiceFacade {
     /**
      * Check if this email is already registered.
      *
+     * @param shop shop
      * @param email email
      *
      * @return true if there is already an account with this email
      */
-    boolean isCustomerRegistered(String email);
+    boolean isCustomerRegistered(Shop shop, String email);
 
     /**
      * Register new account for given email in given shop.
@@ -67,23 +68,25 @@ public interface CustomerServiceFacade {
     /**
      * Find customer by email.
      *
+     * @param shop shop
      * @param email email
      *
      * @return customer object or null
      */
-    Customer getCustomerByEmail(String email);
+    Customer getCustomerByEmail(Shop shop, String email);
 
     /**
      * Find customer wish list by email.
      *
-     *
+     * @param shop shop
      * @param type wish list items type (optional)
      * @param email customer email
      * @param visibility visibility (optional)
      * @param tags tags (optional)
-     *  @return wish list for customer that contains items of specified type with specified tags
+     *
+     * @return wish list for customer that contains items of specified type with specified tags
      */
-    List<CustomerWishList> getCustomerWishListByEmail(String type, String email, String visibility, String... tags);
+    List<CustomerWishList> getCustomerWishListByEmail(Shop shop, String type, String email, String visibility, String... tags);
 
     /**
      * Reset password to given user and send generated password via email.
@@ -123,9 +126,10 @@ public interface CustomerServiceFacade {
     /**
      * Update customer entry.
      *
+     * @param shop shop
      * @param customer customer
      */
-    void updateCustomer(Customer customer);
+    void updateCustomer(Shop shop, Customer customer);
 
     /**
      * Update customer entry.
@@ -135,16 +139,6 @@ public interface CustomerServiceFacade {
      * @param values attribute values
      */
     void updateCustomerAttributes(Shop profileShop, Customer customer, Map<String, String> values);
-
-    /**
-     * Authenticate customer using username and password.
-     *
-     * @param username username
-     * @param password raw password
-     *
-     * @return true if both username and password match
-     */
-    boolean authenticate(final String username, final String password);
 
 
     /**

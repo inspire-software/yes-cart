@@ -161,7 +161,7 @@ public class CustomerController {
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
         final CustomerRO ro = mappingMixin.map(customer, CustomerRO.class, Customer.class);
 
@@ -366,7 +366,7 @@ public class CustomerController {
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
         final CustomerUpdatedRO result = new CustomerUpdatedRO();
         result.setSuccess(true);
@@ -858,8 +858,9 @@ public class CustomerController {
 
         cartMixin.throwSecurityExceptionIfNotLoggedIn();
 
+        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
         final Address addressEntity = addressBookFacade.getAddress(customer, String.valueOf(address.getAddressId()), type);
 
@@ -1115,10 +1116,12 @@ public class CustomerController {
     private List<ProductWishlistRO> viewWishlistInternal(final String type, final String tag) {
 
 
+        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final long shopId = cartMixin.getCurrentShopId();
 
         final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
+                shop,
                 type, cart.getCustomerEmail(), null,
                 tag != null ? new String[] { tag } : null);
 
@@ -2240,9 +2243,10 @@ public class CustomerController {
         }
 
         cartMixin.persistShoppingCart(request, response);
+        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
         final OrderHistoryRO history = new OrderHistoryRO();
         history.setSince(since);
 

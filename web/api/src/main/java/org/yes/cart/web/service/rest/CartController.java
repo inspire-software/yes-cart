@@ -1222,7 +1222,7 @@ public class CartController {
 
                 if ((billingAddressId > 0L || deliveryAddressId > 0L) && cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-                    final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+                    final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), cart.getCustomerEmail());
 
                     for (final Address address : customer.getAddress()) {
                         if (address.getAddressId() == billingAddressId) {
@@ -1632,7 +1632,7 @@ public class CartController {
             for (final AddressRO address : addresses) {
                 if (address.getAddressId() == addressId) {
 
-                    final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+                    final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
                     final Address optionAddress = addressBookFacade.getAddress(customer, option.getAddressId(), type);
 
@@ -2275,7 +2275,7 @@ public class CartController {
         }
 
         if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail())) {
+                && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail(), cartMixin.getCurrentShop())) {
             // Must have an address if it is required
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

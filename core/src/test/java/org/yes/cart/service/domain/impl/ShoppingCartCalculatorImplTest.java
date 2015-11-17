@@ -5,9 +5,11 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.ShoppingCartCalculator;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy;
@@ -35,9 +37,12 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
 
         final Customer customer = context.mock(Customer.class, "customer");
         final PromotionContext promotionContext = context.mock(PromotionContext.class, "promotionContext");
@@ -65,7 +70,8 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com"); will(returnValue(customer));
+            allowing(shopService).getById(123L); will(returnValue(shop));
+            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -86,7 +92,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
@@ -109,6 +115,7 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
@@ -157,7 +164,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
@@ -181,9 +188,12 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
 
         final Customer customer = context.mock(Customer.class, "customer");
         final PromotionContext promotionContext = context.mock(PromotionContext.class, "promotionContext");
@@ -211,7 +221,8 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com"); will(returnValue(customer));
+            allowing(shopService).getById(123L); will(returnValue(shop));
+            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -231,7 +242,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
@@ -255,6 +266,7 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
@@ -302,7 +314,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
@@ -328,9 +340,12 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
+
+        final Shop shop = context.mock(Shop.class, "shop");
 
         final Customer customer = context.mock(Customer.class, "customer");
         final PromotionContext promotionContext = context.mock(PromotionContext.class, "promotionContext");
@@ -358,7 +373,8 @@ public class ShoppingCartCalculatorImplTest {
             allowing(currentCartCtx).getLatestViewedCategories(); will(returnValue(null));
             allowing(currentCartCtx).getResolvedIp(); will(returnValue("127.0.0.1"));
 
-            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com"); will(returnValue(customer));
+            allowing(shopService).getById(123L); will(returnValue(shop));
+            allowing(customerService).getCustomerByEmail("bob.doe@somewhere.com", shop); will(returnValue(customer));
 
             allowing(promotionContextFactory).getInstance("SHOP10", "EUR"); will(returnValue(promotionContext));
 
@@ -378,7 +394,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));
@@ -402,6 +418,7 @@ public class ShoppingCartCalculatorImplTest {
         final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCostCalculationStrategy");
         final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotionContextFactory");
         final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
         final ShoppingCart currentCart = context.mock(ShoppingCart.class, "currentCart");
         final ShoppingContext currentCartCtx = context.mock(ShoppingContext.class, "currentCartCtx");
@@ -449,7 +466,7 @@ public class ShoppingCartCalculatorImplTest {
         }});
 
         // Need to use real one to "see" how each dependency behaves
-        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService);
+        final AmountCalculationStrategy strategy = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService);
         final ShoppingCartCalculator calculator = new ShoppingCartCalculatorImpl(strategy);
 
         final ShoppingCartCalculator.PriceModel model = calculator.calculatePrice(currentCart, "SKU0001", new BigDecimal("9.99"));

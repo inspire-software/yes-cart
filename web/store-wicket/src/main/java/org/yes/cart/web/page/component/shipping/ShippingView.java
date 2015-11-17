@@ -112,7 +112,7 @@ public class ShippingView extends BaseComponent {
                 super.onSelectionChanged(carrierSla);
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getShoppingContext().getCustomerEmail());
+                final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getShoppingContext().getCustomerEmail());
                 final Address billingAddress;
                 final Address shippingAddress;
                 if (customer != null &&

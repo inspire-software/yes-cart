@@ -28,6 +28,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
@@ -249,7 +250,8 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         customer.setLastname(prefix + "Doe");
         customer.setPassword("rawpassword");
         customerService.addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, "555-55-51");
-        customer = customerService.create(customer, shopService.getById(10L));
+        final Shop shop = shopService.getById(10L);
+        customer = customerService.create(customer, shop);
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);
         address.setFirstname("John");
         address.setLastname("Doe");
@@ -274,7 +276,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         addressService.create(address);
 //        customer = customerService.getCustomerByEmail("jd@domain.com");
         //customer = customerDao.findSingleByCriteria(Restrictions.eq("email", prefix + "jd@domain.com"));
-        customer = customerService.getCustomerByEmail(prefix + "jd@domain.com");
+        customer = customerService.getCustomerByEmail(prefix + "jd@domain.com", shop);
         return customer;
     }
 

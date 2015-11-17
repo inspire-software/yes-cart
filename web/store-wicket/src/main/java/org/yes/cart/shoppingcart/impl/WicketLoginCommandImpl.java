@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.wicket.Application;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -49,12 +50,14 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
      *
      * @param registry shopping cart command registry
      * @param customerService customer service
+     * @param shopService shop service
      * @param cartRepository cart repository
      */
     public WicketLoginCommandImpl(final ShoppingCartCommandRegistry registry,
                                   final CustomerService customerService,
+                                  final ShopService shopService,
                                   final CartRepository cartRepository) {
-        super(registry, customerService);
+        super(registry, customerService, shopService);
         this.cartRepository = cartRepository;
     }
 

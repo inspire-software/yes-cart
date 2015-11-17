@@ -59,7 +59,7 @@ public class AddressSupportMixin extends RoMappingMixin {
         final List<AddressRO> ros = new ArrayList<AddressRO>();
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-            final Customer customer = customerServiceFacade.getCustomerByEmail(cart.getCustomerEmail());
+            final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
             if (customer != null) {
 

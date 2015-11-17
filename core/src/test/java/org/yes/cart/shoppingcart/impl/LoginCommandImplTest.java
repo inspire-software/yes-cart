@@ -40,7 +40,8 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
     public void testExecute() {
 
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        Shop shop = shopService.getById(10L);
+        Shop shop10 = shopService.getById(10L);
+        Shop shop20 = shopService.getById(20L);
 
         final Customer customer = createCustomer();
 
@@ -54,10 +55,15 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
         params.put(ShoppingCartCommand.CMD_LOGIN, "1");
         commands.execute(shoppingCart, (Map) params);
-        assertEquals(ShoppingCart.INACTIVE_FOR_SHOP, shoppingCart.getLogonState());
+        assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
 
-        shoppingCart.getShoppingContext().setShopCode(shop.getCode());
-        shoppingCart.getShoppingContext().setShopId(shop.getShopId());
+        shoppingCart.getShoppingContext().setShopCode(shop20.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop20.getShopId());
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
+
+        shoppingCart.getShoppingContext().setShopCode(shop10.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
 

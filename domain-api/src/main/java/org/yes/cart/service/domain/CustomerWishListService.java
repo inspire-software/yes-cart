@@ -39,9 +39,11 @@ public interface CustomerWishListService extends GenericService<CustomerWishList
      * Get customer wish list items.
      *
      * @param email customer email
+     * @param shopId shop PK
+     *
      * @return wish list
      */
-    List<CustomerWishList> getWishListByCustomerEmail(String email);
+    List<CustomerWishList> getWishListByCustomerEmail(String email, long shopId);
 
 
 }

@@ -1737,7 +1737,7 @@
         </id>
         <version name="version" column="VERSION" type="long"/>
 
-        <property name="email" type="string" column="EMAIL" length="255" unique-key="CUSTOMER_EMAIL" not-null="true"/>
+        <property name="email" type="string" column="EMAIL" length="255" not-null="true"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -3317,13 +3317,6 @@
         ]]>
     </query>
 
-    <query name="ADDRESSES.BY.CUSTOMER.EMAIL">
-        <![CDATA[
-            select a.addressId from AddressEntity a
-                where a.customer.email = ?1
-        ]]>
-    </query>
-
     <query name="ADDRESSES.BY.CUSTOMER.TYPE">
         <![CDATA[
             select a from AddressEntity a
@@ -3340,9 +3333,22 @@
         ]]>
     </query>
 
+
+    <query name="CUSTOMER.BY.EMAIL.SHOP">
+        <![CDATA[
+            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2
+        ]]>
+    </query>
+
     <query name="EMAIL.CHECK">
         <![CDATA[
-            select count(email) from CustomerEntity where email = ?1
+            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2
+        ]]>
+    </query>
+
+    <query name="PASS.CHECK">
+        <![CDATA[
+            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.customer.password = ?3
         ]]>
     </query>
 
@@ -3356,7 +3362,8 @@
     <query name="WISHLIST.BY.CUSTOMER.EMAIL">
         <![CDATA[
             select w from CustomerWishListEntity w
-                where w.customer.email = ?1
+                where w.customer.customerId =
+                    (select cse.customer.customerId from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2)
         ]]>
     </query>
 

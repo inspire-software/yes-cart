@@ -81,7 +81,7 @@ public class OrderPage extends AbstractWebPage {
         final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(email);
+            customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), email);
         } else {
             customer = null;
             // Redirect away from profile!

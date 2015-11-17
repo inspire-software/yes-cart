@@ -38,6 +38,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
@@ -247,7 +248,7 @@ public class CheckoutPage extends AbstractWebPage {
             executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail())) {
+                    && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail(), ApplicationDirector.getCurrentShop())) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);
@@ -585,12 +586,12 @@ public class CheckoutPage extends AbstractWebPage {
 
         MarkupContainer rez;
 
+        final Shop shop = ApplicationDirector.getCurrentShop();
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
         boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(
-                ApplicationDirector.getShoppingCart().getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
 

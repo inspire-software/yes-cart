@@ -19,6 +19,8 @@ package org.yes.cart.web.page.component.customer.auth;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
@@ -48,7 +50,7 @@ public class BaseAuthForm extends Form {
      * @return true in case if email unique.
      */
     protected boolean isCustomerExists(final String customerEmail) {
-        return customerServiceFacade.isCustomerRegistered(customerEmail);
+        return customerServiceFacade.isCustomerRegistered(ApplicationDirector.getCurrentShop(), customerEmail);
     }
 
     /**
