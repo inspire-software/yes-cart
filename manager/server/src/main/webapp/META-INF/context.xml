@@ -21,34 +21,27 @@
     <Resource name="jdbc/yespayjndi"
               auth="Container"
               scope="Shareable"
-              type="javax.sql.DataSource"
-              maxActive="100"
-              maxIdle="30"
-              maxWait="10000"
-              removeAbandoned="true"
-              username="${db.config.yespay.login}"
+              type="com.mchange.v2.c3p0.ComboPooledDataSource"
+              factory="org.apache.naming.factory.BeanFactory"
+              user="${db.config.yespay.login}"
               password="${db.config.yespay.password}"
-              driverClassName="${db.config.yespay.driver}"
-              url="${db.config.yespay.url}"
-              minEvictableIdleTimeMillis="864000000"
-              ${db.config.yespay.custom}/>
-
+              driverClass="${db.config.yespay.driver}"
+              jdbcUrl="${db.config.yespay.url}"
+              ${db.config.yespay.custom}
+            />
 
 
     <Resource name="jdbc/yesjndi"
               auth="Container"
               scope="Shareable"
-              type="javax.sql.DataSource"
-              maxActive="100"
-              maxIdle="30"
-              maxWait="10000"
-              removeAbandoned="true"
-              username="${db.config.yes.login}"
+              type="com.mchange.v2.c3p0.ComboPooledDataSource"
+              factory="org.apache.naming.factory.BeanFactory"
+              user="${db.config.yes.login}"
               password="${db.config.yes.password}"
-              driverClassName="${db.config.yes.driver}"
-              url="${db.config.yes.url}"
-              minEvictableIdleTimeMillis="864000000"
-              ${db.config.yes.custom}/>
+              driverClass="${db.config.yes.driver}"
+              jdbcUrl="${db.config.yes.url}"
+              ${db.config.yes.custom}
+            />
 
 
     <!--
