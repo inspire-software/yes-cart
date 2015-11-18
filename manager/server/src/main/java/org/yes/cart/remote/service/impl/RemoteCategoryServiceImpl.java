@@ -16,6 +16,7 @@
 
 package org.yes.cart.remote.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -25,10 +26,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.federation.FederationFacade;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -82,10 +80,32 @@ public class RemoteCategoryServiceImpl
     public List<CategoryDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<CategoryDTO> all = new ArrayList<CategoryDTO>(super.getAll());
         for (final CategoryDTO root : all) {
-            root.setChildren(new ArrayList<CategoryDTO>(root.getChildren()));
-            federationFacade.applyFederationFilter(root.getChildren(), CategoryDTO.class);
+            applyFilterToCategoryTree(root);
         }
         return all;
+    }
+
+    private boolean applyFilterToCategoryTree(final CategoryDTO root) {
+        if (!federationFacade.isManageable(root.getCategoryId(), CategoryDTO.class)) {
+            // This is not a manageable directory (but maybe children are)
+            if (CollectionUtils.isNotEmpty(root.getChildren())) {
+                final List<CategoryDTO> all = new ArrayList<CategoryDTO>(root.getChildren());
+                final Iterator<CategoryDTO> catIt = all.iterator();
+                while (catIt.hasNext()) {
+                    final CategoryDTO cat = catIt.next();
+                    if (applyFilterToCategoryTree(cat)) {
+                        catIt.remove();
+                    }
+                }
+                root.setChildren(all);
+                return all.isEmpty(); // Id we have at least one accessible descendant, we should see it
+
+            }
+            // This is not manageable
+            return true;
+        }
+        // Manageable
+        return false;
     }
 
     /**
