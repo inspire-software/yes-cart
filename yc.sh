@@ -62,12 +62,6 @@ add_mvn_extra_dep() {
 
     cd $YC_HOME/env/setup/lib3rdparty
 
-    LIBFILE=$YC_HOME/env/setup/lib3rdparty/cybersource/cybssecurity.jar
-    $MVN install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
-
-    LIBFILE=$YC_HOME/env/setup/lib3rdparty/cybersource/cybsclients15.jar
-    $MVN install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=$LIBFILE
-
     LIBFILE=$YC_HOME/env/setup/lib3rdparty/payflow/payflow.jar
     $MVN install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=$LIBFILE
 

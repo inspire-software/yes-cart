@@ -170,12 +170,6 @@ rem Sub routines below this comment
 
     call cd %YC_HOME%\env\setup\lib3rdparty
 
-    set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\cybersource\cybssecurity.jar
-    call %MVN% install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-security -Dversion=1.5 -Dpackaging=jar -Dfile=%LIBFILE%
-
-    set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\cybersource\cybsclients15.jar
-    call %MVN% install:install-file -DgroupId=com.cybersource -DartifactId=cybersource-client -Dversion=1.5 -Dpackaging=jar -Dfile=%LIBFILE%
-
     set LIBFILE=%YC_HOME%\env\setup\lib3rdparty\payflow\payflow.jar
     call %MVN% install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=%LIBFILE%
 

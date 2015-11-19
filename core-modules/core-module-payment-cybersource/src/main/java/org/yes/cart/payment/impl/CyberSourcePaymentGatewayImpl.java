@@ -383,7 +383,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
                 log.debug(HttpParamsUtils.stringify("Cybersource request:", request));
             }
 
-            HashMap<String, String> reply = Client.runTransaction(request, getProperties());
+            final Map<String, String> reply = Client.runTransaction(request, getProperties());
 
             if (log.isDebugEnabled()) {
                 log.debug(HttpParamsUtils.stringify("Cybersource response:", reply));
@@ -426,7 +426,7 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
     /**
      * Create properties for cs client.
      *
-     * @return propersties.
+     * @return properties.
      */
     Properties getProperties() {
         final Properties props = new Properties();
@@ -441,8 +441,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
                 props.put(paramLabel, value);
             }
         }
-
-
 
         return props;
     }

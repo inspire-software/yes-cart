@@ -140,14 +140,25 @@
 	    <!-- cybersource -->
         <dependency>
             <groupId>com.cybersource</groupId>
-            <artifactId>cybersource-client</artifactId>
-            <version>1.5</version>
+            <artifactId>cybersource-sdk-java</artifactId>
+            <version>6.0.1</version>
         </dependency>
         <dependency>
-            <groupId>com.cybersource</groupId>
-            <artifactId>cybersource-security</artifactId>
-            <version>1.5</version>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>1.46</version>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.cybersource</groupId>-->
+            <!--<artifactId>cybersource-client</artifactId>-->
+            <!--<version>1.5</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.cybersource</groupId>-->
+            <!--<artifactId>cybersource-security</artifactId>-->
+            <!--<version>1.5</version>-->
+        <!--</dependency>-->
 
     </dependencies>
     <build>
