@@ -545,8 +545,15 @@ public class DtoCustomerOrderServiceImpl
         );
         final List<CustomerOrderDTO> ordersDtos = new ArrayList<CustomerOrderDTO>(orders.size());
         fillDTOs(orders, ordersDtos);
+        Collections.sort(ordersDtos, ORDERS_REV_CHRONOLOGICAL);
         return ordersDtos;
     }
+
+    private static final Comparator<CustomerOrderDTO> ORDERS_REV_CHRONOLOGICAL = new Comparator<CustomerOrderDTO>() {
+        public int compare(final CustomerOrderDTO o1, final CustomerOrderDTO o2) {
+            return -o1.getOrderTimestamp().compareTo(o2.getOrderTimestamp());
+        }
+    };
 
 
     @Override
