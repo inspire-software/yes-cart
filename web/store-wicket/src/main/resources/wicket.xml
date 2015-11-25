@@ -142,11 +142,6 @@
                         <entry key="default" value="org.yes.cart.web.page.payment.callback.AuthorizeNetSimPaymentOkPage"/>
                     </map>
                 </entry>
-                <entry key="/paypallreturn">
-                    <map>
-                        <entry key="default" value="org.yes.cart.web.page.payment.callback.PayPalReturnUrlPage"/>
-                    </map>
-                </entry>
             </map>
         </constructor-arg>
         <constructor-arg index="2">
