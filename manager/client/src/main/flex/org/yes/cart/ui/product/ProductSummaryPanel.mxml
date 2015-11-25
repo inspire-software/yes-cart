@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%">
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:yci18n="org.yes.cart.ui.i18n.*" width="100%" height="100%" xmlns:georg="com.georg.*">
 
 
     <mx:ArrayCollection id="productAvailability"/>
@@ -62,7 +62,7 @@
             <mx:FormItem width="100%"
                          label="@Resource(bundle='ProductManagementPanel',key='availableFrom')">
                 <mx:HBox>
-                    <mx:DateField id="productAvailableFromDateField" width="125"/>
+                    <georg:DateTimeField id="productAvailableFromDateField" width="125"/>
                     <mx:Button
                             visible="{productAvailableFromDateField.selectedDate != null}"
                             label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
@@ -73,7 +73,7 @@
             <mx:FormItem width="100%"
                          label="@Resource(bundle='ProductManagementPanel',key='availableTo')">
                 <mx:HBox>
-                    <mx:DateField id="productAvailableToDateField" width="125"/>
+                    <georg:DateTimeField id="productAvailableToDateField" width="125"/>
                     <mx:Button
                             visible="{productAvailableToDateField.selectedDate != null}"
                             label="@Resource(bundle='ProductManagementPanel',key='clearDate')"
