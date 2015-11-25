@@ -44,10 +44,10 @@ public class HttpUtilTest {
 
         final String value = HttpUtil.dumpRequest(request);
 
-        assertTrue(value.contains("Parameter choice=expanded"));
-        assertTrue(value.contains("Parameter contextMenu=left"));
-        assertTrue(value.contains("Header header=headerValue"));
-        assertTrue(value.contains("Cookie cookie=yankee dudle"));
+        assertTrue(value.contains("choice=expanded"));
+        assertTrue(value.contains("contextMenu=left"));
+        assertTrue(value.contains("header=headerValue"));
+        assertTrue(value.contains("cookie=yankee dudle"));
 
         assertEquals("#dumpRequest request is null", HttpUtil.dumpRequest(null));
 

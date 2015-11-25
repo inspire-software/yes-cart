@@ -122,12 +122,12 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
                 .get(0);
         // TODO: YC-156 exception handling
 
-        try {
+//        try {
 
             // we are on step 4 according
             // to https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted
-            final Map<String, String> nvpCallResult = paymentGatewayExternalForm
-                    .getExpressCheckoutDetails(getPageParameters().get("token").toString());
+            final Map<String, String> nvpCallResult = null; // paymentGatewayExternalForm
+//                    .getExpressCheckoutDetails(getPageParameters().get("token").toString());
 
             //Add out information to perform order transition when user click pay
             nvpCallResult.put("orderGuid", ApplicationDirector.getShoppingCart().getGuid());
@@ -219,9 +219,9 @@ public class PayPalReturnUrlPage extends AbstractWebPage {
             add(new ServerSideJs("serverSideJs"));
             add(new HeaderMetaInclude("headerInclude"));
 
-        } catch (IOException e) {
-            ShopCodeContext.getLog(this).error("Cant call paypal gateway ", e);
-        }
+//        } catch (IOException e) {
+//            ShopCodeContext.getLog(this).error("Cant call paypal gateway ", e);
+//        }
     }
 
     /**

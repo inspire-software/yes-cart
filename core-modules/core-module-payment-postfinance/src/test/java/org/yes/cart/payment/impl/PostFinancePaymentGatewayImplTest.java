@@ -64,7 +64,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='CANCELURL' value='http://mydomain.com/result?hint=ca'>\n" +
                         "<input type='hidden' name='CATALOGURL' value='http://mydomain.com/result'>\n" +
                         "<input type='hidden' name='CN' value='holder  name'>\n" +
-                        "<input type='hidden' name='COM' value='code2 x 1, bob@doe.com, 1234'>\n" +
+                        "<input type='hidden' name='COM' value='code2x1, bob@doe.com, 1234'>\n" +
                         "<input type='hidden' name='CURRENCY' value='USD'>\n" +
                         "<input type='hidden' name='DECLINEURL' value='http://mydomain.com/result?hint=de'>\n" +
                         "<input type='hidden' name='EMAIL' value='bob@doe.com'>\n" +
@@ -74,7 +74,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='OPERATION' value='SAL'>\n" +
                         "<input type='hidden' name='ORDERID' value='234-1324-1324-1324sdf-sdf'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='CA5496F4B876254DD07A2A52A74DE7FD6896088D'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='3E8661D1CCD6B78D4EE0801C9F014B9D4010DAFD'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n" +
                         "<input type='hidden' name='SUBMIT2' value=''>\n",
                 htmlFormPart);
@@ -95,7 +95,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='CANCELURL' value='http://mydomain.com/result?hint=ca'>\n" +
                         "<input type='hidden' name='CATALOGURL' value='http://mydomain.com/result'>\n" +
                         "<input type='hidden' name='CN' value='holder  name'>\n" +
-                        "<input type='hidden' name='COM' value='code2 x 1, bob@doe.com, 1234'>\n" +
+                        "<input type='hidden' name='COM' value='code2x1, bob@doe.com, 1234'>\n" +
                         "<input type='hidden' name='CURRENCY' value='EUR'>\n" +
                         "<input type='hidden' name='DECLINEURL' value='http://mydomain.com/result?hint=de'>\n" +
                         "<input type='hidden' name='EMAIL' value='bob@doe.com'>\n" +
@@ -110,7 +110,7 @@ public class PostFinancePaymentGatewayImplTest {
                         "<input type='hidden' name='OWNERTOWN' value='Nowhere'>\n" +
                         "<input type='hidden' name='OWNERZIP' value='NA1 NA1'>\n" +
                         "<input type='hidden' name='PSPID' value='ID0001'>\n" +
-                        "<input type='hidden' name='SHASIGN' value='9305E284F08275AF2FFAF9E420853520B1EF4A56'>\n" +
+                        "<input type='hidden' name='SHASIGN' value='85FFDCC3257ABBA193753D38B223E9511F6CC781'>\n" +
                         "<input type='hidden' name='USERID' value='bob@doe.com'>\n" +
                         "<input type='hidden' name='SUBMIT2' value=''>\n",
                 htmlFormPart);

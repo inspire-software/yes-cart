@@ -16,18 +16,22 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -41,11 +45,35 @@ import static org.junit.Assume.assumeTrue;
 public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     private PaymentProcessorSurrogate paymentProcessor;
-    private CyberSourcePaymentGatewayImpl cyberSourcePaymentGateway;
+    private PaymentGatewayInternalForm cyberSourcePaymentGateway;
     private CustomerOrderPaymentService customerOrderPaymentService;
 
+    private Boolean enabled;
+    private String organisation;
+    private String absPathToP12;
+
     private boolean isTestAllowed() {
-        return "true".equals(System.getProperty("testPgCyberSource"));
+
+        enabled = Boolean.valueOf(System.getProperty("testPgCyberSource"));
+
+        organisation = System.getProperty("testPgCyberSourceOrg");
+        absPathToP12 = System.getProperty("testPgCyberSourceKeys");
+
+
+        boolean testConfigured = StringUtils.isNotBlank(organisation) && StringUtils.isNotBlank(absPathToP12);
+
+        if (enabled && !testConfigured) {
+            System.out.println("To run CyberSource test please enter configuration for your test account " +
+                    "(testPgCyberSourceOrg, testPgCyberSourceKeys)");
+            enabled = false;
+        }
+
+        if (enabled) {
+            System.out.println("Running CyberSource using: " + organisation);
+        }
+
+        return enabled;
+
     }
 
     protected String testContextName() {
@@ -57,8 +85,24 @@ public class CyberSourcePaymentGatewayImplTest extends PaymentModuleDBTestCase {
         assumeTrue(isTestAllowed());
         if (isTestAllowed()) {
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
-            cyberSourcePaymentGateway = (CyberSourcePaymentGatewayImpl) ctx().getBean("cyberSourcePaymentGateway");
+            cyberSourcePaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("cyberSourcePaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, cyberSourcePaymentGateway);
+
+
+            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            for (final PaymentGatewayParameter param : cyberSourcePaymentGateway.getPaymentGatewayParameters()) {
+                params.put(param.getLabel(), param);
+            }
+
+            final PaymentGatewayParameter user = params.get("merchantID");
+            final PaymentGatewayParameter key = params.get("keysDirectory");
+
+            user.setValue(this.organisation);
+            key.setValue(this.absPathToP12);
+
+            cyberSourcePaymentGateway.updateParameter(user);
+            cyberSourcePaymentGateway.updateParameter(key);
+
         }
     }
 

@@ -30,30 +30,10 @@
 
     <context:annotation-config/>
 
-
-    
     <import resource="classpath:test-payment-api.xml"/>
-
-
-    <bean id="cyberSourcePaymentGateway" class="org.yes.cart.payment.impl.CyberSourcePaymentGatewayImpl" scope="prototype">
-        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
-    </bean>
 
     <bean id="authorizeNetAimPaymentGateway" class="org.yes.cart.payment.impl.AuthorizeNetAimPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
-
-    <bean id="payflowPaymentGateway" class="org.yes.cart.payment.impl.PayflowPaymentGatewayImpl" scope="prototype">
-        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
-    </bean>
-
-    <bean id="payPalNvpPaymentGateway" class="org.yes.cart.payment.impl.PayPalNvpPaymentGatewayImpl" scope="prototype">
-        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
-    </bean>
-
-    <bean id="payPalExpressPaymentGateway" class="org.yes.cart.payment.impl.PayPalExpressCheckoutPaymentGatewayImpl" scope="prototype">
-        <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
-    </bean>
-
 
 </beans>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<dataset>
+
+<!-- ################################################## Cybersource ################################################################# -->
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "100"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="merchantID" P_VALUE="!!!SetValue:testPgCyberSourceOrg!!!"
+        P_NAME="Merchand Id"  P_DESCRIPTION="Test merchant id"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "101"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="keysDirectory" P_VALUE="!!!SetValue:testPgCyberSourceKeys!!!"
+        P_NAME="Keys directory"  P_DESCRIPTION="Directory with keys"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "102"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="targetAPIVersion" P_VALUE="1.28"
+        P_NAME="API version"  P_DESCRIPTION="Cyber source API Version"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "103"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="sendToProduction" P_VALUE="false"
+        P_NAME="Send to production"  P_DESCRIPTION="false for test"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "104"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="useHttpClient" P_VALUE="true"
+        P_NAME="Use apache http client for communication"  P_DESCRIPTION="Use apache http client for communication. false for test"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "105"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="enableLog" P_VALUE="false"
+        P_NAME="Enable log"  P_DESCRIPTION="Enable log. true for test"/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "106"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="logDirectory" P_VALUE="target"
+        P_NAME="Log directory"  P_DESCRIPTION="Log directory."/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "107"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="logMaximumSize" P_VALUE="10"
+        P_NAME="Max size of log file"  P_DESCRIPTION="Value in MB"/>
+
+
+    <!--TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "109"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyHost" P_VALUE="127.0.0.1"  P_NAME="Proxy host"  P_DESCRIPTION="Proxy host"/>
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "110"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPort" P_VALUE="3128"  P_NAME="Proxy port"  P_DESCRIPTION="Proxy port"/>
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "111"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyUser" P_VALUE="userName"  P_NAME="Proxy user"  P_DESCRIPTION="Proxy user"/>
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "112"
+        PG_LABEL="cyberSourcePaymentGateway" P_LABEL="proxyPassword" P_VALUE="password"  P_NAME="Proxy pasword"  P_DESCRIPTION="Proxy password"/-->
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "113"
+        PG_LABEL="cyberSourcePaymentGateway"
+        P_LABEL="htmlForm"
+        P_VALUE="&lt;table&gt;
+&lt;tr&gt;
+	&lt;td&gt;Name on card&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccHolderName&quot; value=&quot;@CARDHOLDERNAME@&quot;/&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card type&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccType&quot;&gt;
+		&lt;option value=&quot;Visa&quot;&gt;Visa&lt;/option&gt;
+		&lt;option value=&quot;MasterCard&quot;&gt;MasterCard&lt;/option&gt;
+		&lt;option value=&quot;Eurocard&quot;&gt;Eurocard&lt;/option&gt;
+		&lt;option value=&quot;American Express&quot;&gt;American Express&lt;/option&gt;
+		&lt;option value=&quot;Discover&quot;&gt;Discover&lt;/option&gt;
+		&lt;option value=&quot;Diners Club&quot;&gt;Diners Club&lt;/option&gt;
+		&lt;option value=&quot;Carte Blanche&quot;&gt;Carte Blanche&lt;/option&gt;
+		&lt;option value=&quot;JCB&quot;&gt;JCB&lt;/option&gt;
+		&lt;option value=&quot;EnRoute&quot;&gt;EnRoute&lt;/option&gt;
+		&lt;option value=&quot;Maestro (UK Domestic), Solo&quot;&gt;Maestro (UK Domestic), Solo&lt;/option&gt;
+		&lt;option value=&quot;Delta&quot;&gt;Delta&lt;/option&gt;
+		&lt;option value=&quot;Visa Electron&quot;&gt;Visa Electron&lt;/option&gt;
+		&lt;option value=&quot;Dankort&quot;&gt;Dankort&lt;/option&gt;
+		&lt;option value=&quot;JAL&quot;&gt;JAL&lt;/option&gt;
+		&lt;option value=&quot;Laser&quot;&gt;Laser&lt;/option&gt;
+		&lt;option value=&quot;Carte Bleue&quot;&gt;Carte Bleue&lt;/option&gt;
+		&lt;option value=&quot;Carta Si&quot;&gt;Carta Si&lt;/option&gt;
+		&lt;option value=&quot;UATP&quot;&gt;UATP&lt;/option&gt;
+	&lt;/select&gt;
+        &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card number&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccNumber&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Expiration date&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccExpireMonth&quot;&gt;
+		&lt;option value=&quot;01&quot;&gt;01 - January&lt;/option&gt;
+		&lt;option value=&quot;02&quot;&gt;02 - February&lt;/option&gt;
+		&lt;option value=&quot;03&quot;&gt;03 - March&lt;/option&gt;
+		&lt;option value=&quot;04&quot;&gt;04 - April&lt;/option&gt;
+		&lt;option value=&quot;05&quot;&gt;05 - May&lt;/option&gt;
+		&lt;option value=&quot;06&quot;&gt;06 - June&lt;/option&gt;
+		&lt;option value=&quot;07&quot;&gt;07 - July&lt;/option&gt;
+		&lt;option value=&quot;08&quot;&gt;08 - August&lt;/option&gt;
+		&lt;option value=&quot;09&quot;&gt;09 - September&lt;/option&gt;
+		&lt;option value=&quot;10&quot;&gt;10 - October&lt;/option&gt;
+		&lt;option value=&quot;11&quot;&gt;11 - November&lt;/option&gt;
+		&lt;option value=&quot;12&quot;&gt;12 - December&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;select name=&quot;ccExpireYear&quot;&gt;
+		&lt;option value=&quot;2011&quot;&gt;2011&lt;/option&gt;
+		&lt;option value=&quot;2012&quot;&gt;2012&lt;/option&gt;
+		&lt;option value=&quot;2013&quot;&gt;2013&lt;/option&gt;
+		&lt;option value=&quot;2014&quot;&gt;2014&lt;/option&gt;
+		&lt;option value=&quot;2015&quot;&gt;2015&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;"
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+
+
+</dataset>

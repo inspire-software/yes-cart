@@ -144,18 +144,6 @@ public abstract class AbstractLiqPayPaymentGatewayImpl implements ConfigurablePa
         return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
     }
 
-    public Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode) throws IOException {
-        return null;  //nothing
-    }
-
-    public Map<String, String> doDoExpressCheckoutPayment(String token, String payerId, BigDecimal amount, String currencyCode) throws IOException {
-        return null;  //nothing
-    }
-
-    public Map<String, String> getExpressCheckoutDetails(String token) throws IOException {
-        return null;  //nothing
-    }
-
     /**
      * Dump map value into String.
      *

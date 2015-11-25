@@ -95,7 +95,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
                 paymentCallBackHandlerFacade.handlePaymentCallback(parameters, paymentGatewayLabel);
 
-                ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_OK);
+                ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
 
             } catch (OrderException e) {
 
@@ -129,6 +129,13 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
         //nothing
     }
 
+    /**
+     * Verify that IP caller is allowed.
+     *
+     * @param servletRequest request
+     *
+     * @return true if call is allowed from this IP
+     */
     protected boolean isCallerIpAllowed(final ServletRequest servletRequest) {
 
         final Shop shop = shopService.getById(ShopCodeContext.getShopId());
@@ -155,4 +162,12 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
         return allowedIps.matcher(ip).matches();
     }
 
+    /**
+     * This filter payment gateway label.
+     *
+     * @return PG label
+     */
+    protected String getPaymentGatewayLabel() {
+        return paymentGatewayLabel;
+    }
 }

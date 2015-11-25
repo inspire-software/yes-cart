@@ -34,11 +34,11 @@
     <import resource="classpath:core-payments.xml"/>
 
 
-    <bean id="payflowPaymentGateway" class="org.yes.cart.payment.impl.PayflowPaymentGatewayImpl" scope="prototype">
+    <bean id="payPalButtonPaymentGateway" class="org.yes.cart.payment.impl.PayPalButtonPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
-    <bean id="payPalNvpPaymentGateway" class="org.yes.cart.payment.impl.PayPalNvpPaymentGatewayImpl" scope="prototype">
+    <bean id="payPalProPaymentGateway" class="org.yes.cart.payment.impl.PayPalProPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
@@ -48,22 +48,22 @@
 
 
 
-    <bean id="payflowPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
-        <property name="label" value="payflowPaymentGatewayLabel"/>
-        <property name="url" value="payflowPaymentGateway"/>
-        <property name="description" value="Payflow payment pateway"/>
+    <bean id="payPalButtonPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalButtonPaymentGatewayLabel"/>
+        <property name="url" value="payPalButtonPaymentGateway"/>
+        <property name="description" value="PayPal Button payment gateway"/>
     </bean>
 
-    <bean id="payPalNvpPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
-        <property name="label" value="payPalNvpPaymentGatewayLabel"/>
-        <property name="url" value="payPalNvpPaymentGateway"/>
-        <property name="description" value="Paypal nvp payment gateway"/>
+    <bean id="payPalProPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
+        <property name="label" value="payPalProPaymentGatewayLabel"/>
+        <property name="url" value="payPalProPaymentGateway"/>
+        <property name="description" value="PayPal Pro payment gateway"/>
     </bean>
 
     <bean id="payPalExpressPaymentGatewayDescriptor" class="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayDescriptorImpl">
         <property name="label" value="payPalExpressPaymentGatewayLabel"/>
         <property name="url" value="payPalExpressPaymentGateway"/>
-        <property name="description" value="Paypal express checkout payment gateway"/>
+        <property name="description" value="PayPal Express checkout payment gateway"/>
     </bean>
 
     <bean id="paypalPaymentModule" class="org.yes.cart.payment.impl.PaymentModuleImpl">
@@ -71,13 +71,13 @@
             <bean class="org.yes.cart.payment.persistence.entity.impl.DescriptorImpl">
                 <property name="label" value="paypalPaymentModule"/>
                 <property name="description"
-                          value="Paypal, payflow and express payment module"/>
+                          value="PayPal button, express and pro payment module"/>
             </bean>
         </property>
         <property name="gateways">
             <map>
-                <entry key="payflowPaymentGateway" value-ref="payflowPaymentGatewayDescriptor"/>
-                <entry key="payPalNvpPaymentGateway" value-ref="payPalNvpPaymentGatewayDescriptor"/>
+                <entry key="payPalButtonPaymentGateway" value-ref="payPalButtonPaymentGatewayDescriptor"/>
+                <entry key="payPalProPaymentGateway" value-ref="payPalProPaymentGatewayDescriptor"/>
                 <entry key="payPalExpressPaymentGateway" value-ref="payPalExpressPaymentGatewayDescriptor"/>
             </map>
         </property>
@@ -86,11 +86,22 @@
 
     <!-- ##### WEB CALLBACKS ################################################################## -->
 
-    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
-        <constructor-arg index="0" ref="paymentProcessorFactory"/>
-        <constructor-arg index="1" ref="customerOrderService"/>
-        <constructor-arg index="2" ref="paymentCallBackHandlerFacade"/>
+    <bean id="payPalButtonCheckoutFilter" class="org.yes.cart.web.filter.payment.BasePaymentGatewayCallBackFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
     </bean>
 
+    <bean id="payPalExpressCheckoutFilter" class="org.yes.cart.web.filter.payment.PayPalExpressCheckoutFilter">
+        <constructor-arg index="0" ref="paymentCallBackHandlerFacade"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2">
+            <bean class="org.yes.cart.web.support.request.impl.HeaderOrientedIPResolverImpl"/>
+        </constructor-arg>
+        <constructor-arg index="3" ref="paymentProcessorFactory"/>
+        <constructor-arg index="4" ref="customerOrderService"/>
+    </bean>
 
 </beans>

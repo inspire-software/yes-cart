@@ -28,9 +28,12 @@ import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
@@ -175,7 +178,6 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
 
         final HashMap<String, String> request = new HashMap<String, String>();
         request.put("ccAuthService_run", "true");
-        request.put("businessRules_ignoreAVSResult", "true"); //CP
         request.put("merchantReferenceCode",
                 StringUtils.isBlank(payment.getTransactionReferenceId()) ?
                         UUID.randomUUID().toString() : payment.getTransactionReferenceId()
@@ -198,25 +200,71 @@ public class CyberSourcePaymentGatewayImpl extends AbstractCyberSourcePaymentGat
             request.put("card_cvNumber", payment.getCardCvv2Code());
         }
 
-        request.put("purchaseTotals_currency", payment.getOrderCurrency());
-        request.put("purchaseTotals_grandTotalAmount",
-                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
-
-        if (payment.getOrderItems() != null) {
-            for (int index = 0; index < payment.getOrderItems().size(); index++) {
-                final PaymentLine paymentLine = payment.getOrderItems().get(index);
-                request.put("item_" + index + "_productName", paymentLine.getSkuName());
-                request.put("item_" + index + "_productSKU", paymentLine.getSkuCode());
-                request.put("item_" + index + "_unitPrice", paymentLine.getUnitPrice().setScale(2, RoundingMode.HALF_UP).toString());
-                if (paymentLine.getTaxAmount() != null) {
-                    request.put("item_" + index + "_taxAmount", paymentLine.getTaxAmount().setScale(2, RoundingMode.HALF_UP).toString());
-                }
-            }
-        }
-
+        populateItems(payment, request);
 
         return runTransaction(request, payment, AUTH);
     }
+
+    private static final int ITEMID = 12;
+    private static final int ITEMNAME = 26;
+
+    private void populateItems(final Payment payment, final HashMap<String, String> params) {
+
+        params.put("purchaseTotals_currency", payment.getOrderCurrency());
+        params.put("purchaseTotals_grandTotalAmount",
+                payment.getPaymentAmount().setScale(2, RoundingMode.HALF_UP).toString());
+
+        BigDecimal totalItemsGross = Total.ZERO;
+
+        for (final PaymentLine item : payment.getOrderItems()) {
+            totalItemsGross = totalItemsGross.add(item.getQuantity().multiply(item.getUnitPrice()));
+        }
+
+        final BigDecimal payGross = payment.getPaymentAmount();
+        if (MoneyUtils.isFirstBiggerThanSecond(totalItemsGross, payGross)) {
+            params.put("purchaseTotals_discountAmount", totalItemsGross.subtract(payGross).toPlainString());
+        }
+
+        int i = 1;
+        for (final PaymentLine item : payment.getOrderItems()) {
+
+            final BigDecimal itemGrossAmount = item.getUnitPrice().multiply(item.getQuantity()).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP);
+
+            final BigDecimal intQty = item.getQuantity().setScale(0, RoundingMode.CEILING);
+
+            final String skuName;
+            final BigDecimal qty;
+            if (MoneyUtils.isFirstEqualToSecond(intQty, item.getQuantity())) {
+                // integer qty
+                skuName = item.getSkuName();
+                qty = intQty.stripTrailingZeros();
+            } else {
+                // fractional qty
+                skuName = item.getQuantity().toPlainString().concat("x ").concat(item.getSkuName());
+                qty = BigDecimal.ONE;
+            }
+
+            params.put("item_" + i + "_productSKU", item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
+            params.put("item_" + i + "_productName", skuName.length() > ITEMNAME ? skuName.substring(0, ITEMNAME - 1) + "~" : skuName);
+            params.put("item_" + i + "_quantity", qty.toPlainString());
+            final BigDecimal totalAmount = itemGrossAmount.subtract(item.getTaxAmount());
+            final BigDecimal unitPrice = totalAmount.divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_DOWN); // round down to give more apportionment to tax
+            final BigDecimal restoredAmount = unitPrice.multiply(qty).setScale(Total.ZERO.scale(), BigDecimal.ROUND_UP);
+            final BigDecimal taxAmount;
+            // If we get rounding errors on price then change the tax amount to compensate
+            if (MoneyUtils.isFirstEqualToSecond(totalAmount, restoredAmount)) {
+                taxAmount = item.getTaxAmount();
+            } else {
+                taxAmount = itemGrossAmount.subtract(restoredAmount);
+            }
+            params.put("item_" + i + "_unitPrice", unitPrice.toPlainString());
+            params.put("item_" + i + "_totalAmount", restoredAmount.toPlainString());
+            params.put("item_" + i + "_taxAmount", taxAmount.toPlainString());
+
+            i++;
+        }
+    }
+
 
 
     private void addAddress(final HashMap<String, String> request, final String addressPrefix, final PaymentAddress address) {

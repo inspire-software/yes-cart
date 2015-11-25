@@ -21,6 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.payment.service.impl.BasePaymentModuleDBTestCase;
+import org.yes.cart.shoppingcart.Total;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -75,10 +76,10 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         delivery.setPromoApplied(false);
         delivery.setDeliveryNum(orderNum + "-0");
         delivery.getDetail().add(
-                createDeliveryItem("product sku 1. Three items in delivery 0", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
+                createDeliveryItem("product sku 1", "skuCode1", new BigDecimal("12.12"), new BigDecimal("3"))
         );
         delivery.getDetail().add(
-                createDeliveryItem("product sku 2. One item in delivery 0", "skuCode1", new BigDecimal("15.01"), new BigDecimal("1"))
+                createDeliveryItem("product sku 2", "skuCode1", new BigDecimal("15.01"), new BigDecimal("1"))
         );
         return delivery;
     }
@@ -91,7 +92,7 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         delivery.setGrossPrice(delivery.getCarrierSla().getPrice());
         delivery.setDeliveryNum(orderNum + "-1");
         delivery.getDetail().add(
-                createDeliveryItem("product sku 1. Two items in delivery 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
+                createDeliveryItem("product sku 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))
         );
         return delivery;
     }
@@ -100,8 +101,8 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         Map<String, String> params = new HashMap<String, String>();
         params.put("ccHolderName", "JOHN DOU");
         params.put("ccNumber", getVisaCardNumber());
-        params.put("ccExpireMonth", "02");  // paypal test account
-        params.put("ccExpireYear", "2016"); // paypal test account
+        params.put("ccExpireMonth", "12");  // paypal test account
+        params.put("ccExpireYear", "2020"); // paypal test account
         params.put("ccSecCode", "111");
         params.put("ccType", "Visa");
         params.put("ccHolderName", "JOHN DOU");
@@ -120,6 +121,18 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
         customerOrder.setShippingAddress("713 Happy Street Suite 101, Los Angeles, 90555,  CA");
         customerOrder.getDelivery().add(createDelivery0(orderNum));
         customerOrder.getDelivery().add(createDelivery1(orderNum));
+
+        BigDecimal gross = Total.ZERO;
+        BigDecimal net = Total.ZERO;
+        for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+            for (final CustomerOrderDeliveryDet detail : delivery.getDetail()) {
+                gross = gross.add(detail.getGrossPrice().multiply(detail.getQty()));
+                net = net.add(detail.getNetPrice().multiply(detail.getQty()));
+            }
+        }
+        customerOrder.setGrossPrice(gross);
+        customerOrder.setNetPrice(net);
+
         customerOrder.setOrderStatus(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
         return customerOrder;
     }

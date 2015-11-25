@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
@@ -7,12 +23,14 @@ import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -71,6 +89,8 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     static final String PF_EXCLPMLIST = "PF_EXCLPMLIST";
     static final String PF_PMLISTTYPE = "PF_PMLISTTYPE";
 
+    static final String PF_ITEMISED = "PF_ITEMISED";
+
 
     /**
      * {@inheritDoc}
@@ -83,7 +103,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
+    public String getSubmitButton(final String locale) {
         return null;
     }
 
@@ -206,8 +226,14 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             // Customer’s telephone number
             setValueIfNotNull(params, "OWNERTELNO", address.getPhone1());
         }
+
         // Order description
-        params.put("COM", getDescription(payment));
+        final boolean itemised = Boolean.valueOf(getParameterValue(PF_ITEMISED));
+        params.put("COM", getDescription(payment, itemised));
+        if (itemised) {
+            populateItems(payment, params);
+        }
+
 
         // 3. layout information: see Look & Feel of the Payment Page
 
@@ -299,6 +325,67 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
     }
 
+    private static final int ITEMID = 15;
+    private static final int ITEMNAME = 40;
+
+    private void populateItems(final Payment payment, final Map<String, String> params) {
+
+        BigDecimal totalItemsGross = Total.ZERO;
+
+        for (final PaymentLine item : payment.getOrderItems()) {
+            totalItemsGross = totalItemsGross.add(item.getQuantity().multiply(item.getUnitPrice()));
+        }
+
+        final int it = payment.getOrderItems().size();
+
+        BigDecimal orderDiscountRemainder = Total.ZERO;
+        BigDecimal orderDiscountPercent = Total.ZERO;
+        final BigDecimal payGross = payment.getPaymentAmount();
+        if (payGross.compareTo(totalItemsGross) < 0) {
+            orderDiscountRemainder = totalItemsGross.subtract(payGross);
+            orderDiscountPercent = orderDiscountRemainder.divide(totalItemsGross, 10, RoundingMode.HALF_UP);
+        }
+
+
+        int i = 1;
+        boolean hasOrderDiscount = MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, Total.ZERO);
+        for (final PaymentLine item : payment.getOrderItems()) {
+
+            final BigDecimal itemGrossAmount = item.getUnitPrice().multiply(item.getQuantity()).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP);
+            params.put("ITEMID" + i, item.getSkuCode().length() > ITEMID ? item.getSkuCode().substring(0, ITEMID - 1) + "~" : item.getSkuCode());
+            params.put("ITEMNAME" + i, item.getSkuName().length() > ITEMNAME ? item.getSkuName().substring(0, ITEMNAME - 1) + "~" : item.getSkuName());
+            params.put("ITEMQUANT" + i, item.getQuantity().toPlainString());
+            if (hasOrderDiscount
+                    && MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, Total.ZERO)
+                    && MoneyUtils.isFirstBiggerThanSecond(itemGrossAmount, Total.ZERO)) {
+                BigDecimal discount;
+                if (i == it) {
+                    // last item
+                    discount = orderDiscountRemainder;
+                } else {
+                    BigDecimal itemDiscount = itemGrossAmount.multiply(orderDiscountPercent).setScale(Total.ZERO.scale(), RoundingMode.CEILING);
+                    if (MoneyUtils.isFirstBiggerThanSecond(orderDiscountRemainder, itemDiscount)) {
+                        discount = itemDiscount;
+                        orderDiscountRemainder = orderDiscountRemainder.subtract(itemDiscount);
+                    } else {
+                        discount = orderDiscountRemainder;
+                        orderDiscountRemainder = Total.ZERO;
+                    }
+
+                }
+                final BigDecimal scaleRate = discount.divide(itemGrossAmount.subtract(discount), 10, RoundingMode.CEILING);
+                final BigDecimal scaledTax = item.getTaxAmount().multiply(scaleRate).setScale(Total.ZERO.scale(), RoundingMode.FLOOR);
+                params.put("ITEMDISCOUNT" + i, discount.toPlainString());
+                params.put("ITEMPRICE" + i, itemGrossAmount.subtract(discount).subtract(item.getTaxAmount()).add(scaledTax).toPlainString());
+                params.put("ITEMVAT" + i, item.getTaxAmount().subtract(scaledTax).toPlainString());
+            } else {
+                params.put("ITEMPRICE" + i, itemGrossAmount.subtract(item.getTaxAmount()).toPlainString());
+                params.put("ITEMVAT" + i, item.getTaxAmount().toPlainString());
+            }
+            i++;
+        }
+    }
+
     /**
      * Supported operations are:
      * SAL: AUTH_CAPTURE
@@ -344,15 +431,15 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
      * @param payment payment
      * @return order description.
      */
-    private String getDescription(final Payment payment) {
+    private String getDescription(final Payment payment, final boolean itemised) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (PaymentLine line : payment.getOrderItems()) {
             if (line.isShipment()) {
-                stringBuilder.append(line.getSkuName().replace("\"","")).append(", ");
-            } else {
+                stringBuilder.append(line.getSkuName().replace("\"", "")).append(", ");
+            } else if (!itemised) {
                 stringBuilder.append(line.getSkuCode().replace("\"",""));
-                stringBuilder.append(" x ");
-                stringBuilder.append(line.getQuantity());
+                stringBuilder.append("x");
+                stringBuilder.append(line.getQuantity().stripTrailingZeros().toPlainString());
                 stringBuilder.append(", ");
             }
         }
@@ -460,7 +547,6 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         payment.setTransactionAuthorizationCode(sorted.get("ORDERID")); // this is order guid - we need it for refunds
         payment.setCardNumber(sorted.get("CARDNO"));
         payment.setCardType(sorted.get("BRAND"));
-        payment.setCardHolderName(sorted.get("CN"));
         payment.setCardHolderName(sorted.get("CN"));
         if (StringUtils.isNotBlank(sorted.get("ED"))) {
             payment.setCardExpireMonth(sorted.get("ED").substring(0, 2));

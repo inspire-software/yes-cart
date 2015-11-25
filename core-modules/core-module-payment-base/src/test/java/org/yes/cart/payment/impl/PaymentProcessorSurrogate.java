@@ -102,7 +102,7 @@ public class PaymentProcessorSurrogate extends PaymentProcessorImpl {
      * {@inheritDoc}
      */
     public String shipmentComplete(final CustomerOrder order, final String orderShipmentNumber) {
-        return shipmentComplete(order, orderShipmentNumber, (BigDecimal) null);
+        return shipmentComplete(order, orderShipmentNumber, BigDecimal.ZERO);
     }
 
     /**

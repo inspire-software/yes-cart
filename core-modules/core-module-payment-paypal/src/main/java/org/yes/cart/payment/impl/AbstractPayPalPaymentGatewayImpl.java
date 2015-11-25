@@ -16,51 +16,168 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.service.ConfigurablePaymentGateway;
+import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
+import org.yes.cart.payment.service.PaymentGatewayParameterService;
+
+import java.util.Collection;
+import java.util.Map;
+
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 12/14/11
- * Time: 3:10 PM
+ * User: denispavlov
+ * Date: 19/11/2015
+ * Time: 18:13
  */
-public abstract class AbstractPayPalPaymentGatewayImpl extends AbstractPayPalBasePaymentGatewayImpl {
+public abstract class AbstractPayPalPaymentGatewayImpl implements ConfigurablePaymentGateway, PaymentGateway {
 
-    public static final String ORDER_GUID = "orderGuid";  //this id our order guid
-    public static final String PP_EC_TOKEN = "TOKEN";     //this will be return from pay pall ec
-    public static final String PP_EC_PAYERID  = "PAYERID";     // the payer id on paypal  side
+    private PaymentGatewayParameterService paymentGatewayParameterService;
 
-    protected static final String PP_API_USER_NAME = "API_USER_NAME";
-    protected static final String PP_API_USER_PASSWORD = "API_USER_PASSWORD";
-    protected static final String PP_SIGNATURE = "SIGNATURE";
+    private Collection<PaymentGatewayParameter> allParameters = null;
 
-    protected static final String PP_SUBMIT_BTN = "PP_SUBMIT_BTN";
+    private String shopCode;
 
-    protected static final String PP_ENVIRONMENT = "ENVIRONMENT";
-    /*
-    private static final String PP_KEY_PASSWORD = "KEY_PASSWORD";
-    private static final String PP_KEY_PATH = "KEY_PATH";
-    */
+    /**
+     * {@inheritDoc}
+     */
+    public String getShopCode() {
+        return shopCode;
+    }
 
-
-    protected static final String PP_EC_VERSION = "VERSION";
-    protected static final String PP_EC_PAYMENTREQUEST_0_AMT = "AMT";
-    protected static final String PP_EC_PAYMENTREQUEST_0_PAYMENTACTION = "PAYMENTACTION";
-    protected static final String PP_EC_PAYMENTREQUEST_0_CURRENCYCODE = "CURRENCYCODE";
-    protected static final String PP_EC_RETURNURL = "RETURNURL";
-    protected static final String PP_EC_CANCELURL = "CANCELURL";
-    protected static final String PP_EC_METHOD = "METHOD";
-    protected static final String PP_EC_NOSHIPPING = "NOSHIPPING";
+    /**
+     * {@inheritDoc}
+     */
+    public String getName(final String locale) {
+        String pgName = getParameterValue("name_" + locale);
+        if (pgName == null) {
+            pgName = getParameterValue("name");
+        }
+        if (pgName == null) {
+            pgName = getLabel();
+        }
+        return pgName;
+    }
 
 
     /**
-     * "https://api-3t.sandbox.paypal.com/nvp";
-     * "https://api-3t.paypal.com/nvp";
+     * {@inheritDoc}
      */
-    protected static final String PP_EC_API_URL = "PP_EC_API_URL";
 
-    /*
-    https://www.sandbox.paypal.com/webscr   &cmd=_express-checkout&token=XXXX
-    https://www.paypal.com/cgi-bin/webscr   ?cmd=_express-checkout&token=XXXX
-    */
-    protected static final String PP_EC_PAYPAL_URL = "PP_EC_PAYPAL_URL";
+    public Collection<PaymentGatewayParameter> getPaymentGatewayParameters() {
+        if (allParameters == null) {
+            allParameters = paymentGatewayParameterService.findAll(getLabel(), shopCode);
+        }
+        return allParameters;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+
+    public void deleteParameter(final String parameterLabel) {
+        paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
+        paymentGatewayParameterService.create(paymentGatewayParameter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
+        paymentGatewayParameterService.update(paymentGatewayParameter);
+    }
+
+
+    /**
+     * Parameter service for given gateway.
+     *
+     * @param paymentGatewayParameterService service
+     */
+    public void setPaymentGatewayParameterService(
+            final PaymentGatewayParameterService paymentGatewayParameterService) {
+        this.paymentGatewayParameterService = paymentGatewayParameterService;
+    }
+
+
+    /**
+     * Get the parameter value from given collection.
+     *
+     * @param valueLabel key to search
+     * @return value or null if not found
+     */
+    public String getParameterValue(final String valueLabel) {
+        if (valueLabel == null || valueLabel.startsWith("#")) {
+            return null; // Need to prevent direct access to Shop specific attributes
+        }
+        if (shopCode != null && !"DEFAULT".equals(shopCode)) {
+            final String shopSpecific = getParameterValueInternal("#" + shopCode + "_" + valueLabel);
+            if (shopSpecific != null) {
+                return shopSpecific;
+            }
+        }
+        return getParameterValueInternal(valueLabel);
+    }
+
+    private String getParameterValueInternal(final String valueLabel) {
+        final Collection<PaymentGatewayParameter> values = getPaymentGatewayParameters();
+        for (PaymentGatewayParameter keyValue : values) {
+            if (keyValue.getLabel().equals(valueLabel)) {
+                return keyValue.getValue();
+            }
+        }
+        return null;
+    }
+
+
+    protected String getHiddenFieldValue(final String fieldName, final Object value) {
+        if (value == null) {
+            return "";
+        }
+        final String str = value.toString();
+        if (StringUtils.isBlank(str)) {
+            return "";
+        }
+        return "<input type='hidden' name='" + fieldName + "' value='" + value + "'>\n";
+    }
+
+    protected String getHiddenFieldParam(final String fieldName, final String param) {
+        final String value = getParameterValue(param);
+        return getHiddenFieldValue(fieldName, value);
+    }
+
+    /**
+     * Dump map value into String.
+     *
+     * @param map given map
+     * @return dump map as string
+     */
+    public static String dump(Map<?, ?> map) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            stringBuilder.append(entry.getKey());
+            stringBuilder.append(" : ");
+            stringBuilder.append(entry.getValue());
+        }
+
+        return stringBuilder.toString();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void accept(final PaymentGatewayConfigurationVisitor visitor) {
+        this.shopCode = visitor.getConfiguration("shopCode");
+    }
 
 }

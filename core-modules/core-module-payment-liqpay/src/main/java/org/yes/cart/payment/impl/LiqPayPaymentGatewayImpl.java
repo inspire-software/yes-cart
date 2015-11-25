@@ -87,7 +87,7 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
+    public String getSubmitButton(final String locale) {
         return null;
     }
 

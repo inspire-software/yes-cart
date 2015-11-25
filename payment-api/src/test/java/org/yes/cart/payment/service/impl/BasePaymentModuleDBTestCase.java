@@ -92,6 +92,6 @@ public abstract class BasePaymentModuleDBTestCase {
             queryDataSet.addTable(tableName);
         }
         FlatXmlDataSet.write(queryDataSet,
-                new FileOutputStream("target/test-classes/" + prefix + "_dataset.xml"));
+                new FileOutputStream("target/" + prefix + "_dataset.xml"));
     }
 }

@@ -133,9 +133,9 @@ VALUES (15175, 'postFinancePaymentGateway', 'PF_PMLISTTYPE', '', 'Payment: Layou
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15176, 'postFinancePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
-
-
-
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15177, 'postFinancePaymentGateway', 'PF_ITEMISED', 'false', 'Enable itemised data',
+  'Itemised data is sent to PF as individual items, if this is set to false then only total is sent');
 
 
 
@@ -274,6 +274,9 @@ VALUES (15275, 'postFinanceManualPaymentGateway', 'PF_PMLISTTYPE', '', 'Payment:
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15276, 'postFinanceManualPaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15277, 'postFinanceManualPaymentGateway', 'PF_ITEMISED', 'false', 'Enable itemised data',
+  'Itemised data is sent to PF as individual items, if this is set to false then only total is sent');
 
 
 

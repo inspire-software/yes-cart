@@ -2339,7 +2339,7 @@ public class CartController {
 
             String submitBtnValue = null;
             if (gateway instanceof PaymentGatewayExternalForm) {
-                submitBtnValue = ((PaymentGatewayExternalForm) gateway).getSubmitButton();
+                submitBtnValue = ((PaymentGatewayExternalForm) gateway).getSubmitButton(cart.getCurrentLocale());
             }
             if (StringUtils.isBlank(submitBtnValue)) {
                 submitBtnValue = "<input type=\"submit\" value=\"submit\">";

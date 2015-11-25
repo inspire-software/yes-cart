@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<dataset>
+
+
+
+<!-- ################################################## Paypal Pro  ################################################################# -->
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "170"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="!!!SetValue:testPgPayProUser!!!"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "171"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="!!!SetValue:testPgPayProPass!!!"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "172"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="!!!SetValue:testPgPayProSignature!!!"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
+
+<!--
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "173"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="KEY_PATH" P_VALUE="src/test/resources/ppkeys/some.p12"  P_NAME="Path to key"  P_DESCRIPTION="Path to key"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "174"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="KEY_PASSWORD" P_VALUE="password"  P_NAME="Key password"  P_DESCRIPTION="Key password"/>
+
+-->
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "175"
+        PG_LABEL="payPalProPaymentGateway" P_LABEL="ENVIRONMENT" P_VALUE="sandbox"  P_NAME="Environment"  P_DESCRIPTION="Environment allowed 'live' or 'sandbox' "/>
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "176"
+        PG_LABEL="payPalProPaymentGateway"
+        P_LABEL="htmlForm"
+        P_VALUE="&lt;table&gt;
+&lt;tr&gt;
+	&lt;td&gt;Name on card&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccHolderName&quot; value=&quot;@CARDHOLDERNAME@&quot;/&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card type&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccType&quot;&gt;
+		&lt;option value=&quot;Visa&quot;&gt;Visa&lt;/option&gt;
+		&lt;option value=&quot;MasterCard&quot;&gt;MasterCard&lt;/option&gt;
+		&lt;option value=&quot;American Express&quot;&gt;American Express&lt;/option&gt;
+		&lt;option value=&quot;Discover&quot;&gt;Discover&lt;/option&gt;
+	&lt;/select&gt;
+        &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card number&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccNumber&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Expiration date&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccExpireMonth&quot;&gt;
+		&lt;option value=&quot;01&quot;&gt;01 - January&lt;/option&gt;
+		&lt;option value=&quot;02&quot;&gt;02 - February&lt;/option&gt;
+		&lt;option value=&quot;03&quot;&gt;03 - March&lt;/option&gt;
+		&lt;option value=&quot;04&quot;&gt;04 - April&lt;/option&gt;
+		&lt;option value=&quot;05&quot;&gt;05 - May&lt;/option&gt;
+		&lt;option value=&quot;06&quot;&gt;06 - June&lt;/option&gt;
+		&lt;option value=&quot;07&quot;&gt;07 - July&lt;/option&gt;
+		&lt;option value=&quot;08&quot;&gt;08 - August&lt;/option&gt;
+		&lt;option value=&quot;09&quot;&gt;09 - September&lt;/option&gt;
+		&lt;option value=&quot;10&quot;&gt;10 - October&lt;/option&gt;
+		&lt;option value=&quot;11&quot;&gt;11 - November&lt;/option&gt;
+		&lt;option value=&quot;12&quot;&gt;12 - December&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;select name=&quot;ccExpireYear&quot;&gt;
+		&lt;option value=&quot;2011&quot;&gt;2011&lt;/option&gt;
+		&lt;option value=&quot;2012&quot;&gt;2012&lt;/option&gt;
+		&lt;option value=&quot;2013&quot;&gt;2013&lt;/option&gt;
+		&lt;option value=&quot;2014&quot;&gt;2014&lt;/option&gt;
+		&lt;option value=&quot;2015&quot;&gt;2015&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;"
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "176"
+                                PG_LABEL="payPalProPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
+
+
+<!-- ################################################## Paypal Express  ################################################################# -->
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "220"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_NAME" P_VALUE="!!!SetValue:testPgPayPalExpressUser!!!"  P_NAME="Api user name "  P_DESCRIPTION="Api user name"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "221"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="API_USER_PASSWORD" P_VALUE="!!!SetValue:testPgPayPalExpressPass!!!"  P_NAME="Api user password"  P_DESCRIPTION="Api user password"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "222"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="SIGNATURE" P_VALUE="!!!SetValue:testPgPayPalExpressSignature!!!"  P_NAME="Signature"  P_DESCRIPTION="Signature"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "223"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="RETURNURL" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="ret"  P_DESCRIPTION="ret"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "224"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CANCELURL" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="can"  P_DESCRIPTION="can"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "225"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_API_URL" P_VALUE="https://api-3t.sandbox.paypal.com/nvp"  P_NAME="url"  P_DESCRIPTION="url"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "226"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="PP_EC_PAYPAL_URL" P_VALUE="https://www.sandbox.paypal.com/cgi-bin/webscr"  P_NAME="url"  P_DESCRIPTION="url"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "227"
+        PG_LABEL="payPalExpressPaymentGateway" P_LABEL="CALLBACK" P_VALUE="https://demo.yes-cart.org/yes-shop"  P_NAME="call"  P_DESCRIPTION="call"/>
+
+
+</dataset>

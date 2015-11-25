@@ -17,6 +17,7 @@
 package org.yes.cart.web.support.util;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.util.HttpParamsUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
@@ -35,34 +36,39 @@ public class HttpUtil {
 
 
     private static void dumpParamsAndAttrs(final ServletRequest req, final StringBuilder stringBuilder) {
-        final Enumeration parameterNames = req.getParameterNames();
-        while (parameterNames.hasMoreElements()) {
-            final String key = (String) parameterNames.nextElement();
-            stringBuilder.append(MessageFormat.format("\nParameter {0}={1}" , key, req.getParameter(key)));
-        }
+
+        stringBuilder.append(HttpParamsUtils.stringify("\nParameters", req.getParameterMap()));
+
         Enumeration attributeNames = req.getAttributeNames();
+        final Map<String, String> map = new HashMap<String, String>();
         while (attributeNames.hasMoreElements()) {
             final String key = (String) attributeNames.nextElement();
-            stringBuilder.append(MessageFormat.format("\nAttribute {0}={1}" , key, req.getAttribute(key)));
+            map.put(key, String.valueOf(req.getAttribute(key)));
         }
+        stringBuilder.append(HttpParamsUtils.stringify("\nAttributes", map));
+
     }
 
     private static void dumpHeaders(final HttpServletRequest hReq, final StringBuilder stringBuilder) {
         final Enumeration headerNames = hReq.getHeaderNames();
         if (headerNames != null) {
+            final Map<String, String> map = new HashMap<String, String>();
             while (headerNames.hasMoreElements()) {
                 final String key = (String) headerNames.nextElement();
-                stringBuilder.append(MessageFormat.format("\nHeader {0}={1}" , key, hReq.getHeader(key)));
+                map.put(key, String.valueOf(hReq.getHeader(key)));
             }
+            stringBuilder.append(HttpParamsUtils.stringify("\nHeaders", map));
         }
     }
 
     private static void dumpCookies(final HttpServletRequest hReq, final StringBuilder stringBuilder) {
         final Cookie[] cookies = hReq.getCookies();
         if (cookies != null) {
+            final Map<String, String> map = new HashMap<String, String>();
             for (Cookie cookie : cookies) {
-                stringBuilder.append(MessageFormat.format("\nCookie {0}={1}" , cookie.getName(), cookie.getValue()));
+                map.put(cookie.getName(), cookie.getValue());
             }
+            stringBuilder.append(HttpParamsUtils.stringify("\nCookies", map));
         }
     }
 

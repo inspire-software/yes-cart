@@ -16,17 +16,21 @@
 
 package org.yes.cart.payment.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.PaymentGatewayInternalForm;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -40,11 +44,35 @@ import static org.junit.Assume.assumeTrue;
 public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCase {
 
     private PaymentProcessorSurrogate paymentProcessor;
-    private AuthorizeNetAimPaymentGatewayImpl authorizeNetAimPaymentGateway;
+    private PaymentGatewayInternalForm authorizeNetAimPaymentGateway;
     private CustomerOrderPaymentService customerOrderPaymentService;
 
+    private Boolean enabled;
+    private String user;
+    private String txkey;
+    private String md5;
+
     private boolean isTestAllowed() {
-        return "true".equals(System.getProperty("testPgAuthorizeNetAim"));
+
+        enabled = Boolean.valueOf(System.getProperty("testPgAuthorizeNetAim"));
+
+        user = System.getProperty("testPgAuthorizeNetAimUser");
+        txkey = System.getProperty("testPgAuthorizeNetAimTxKey");
+        md5 = System.getProperty("testPgAuthorizeNetAimMD5");
+
+        boolean testConfigured = StringUtils.isNotBlank(user) && StringUtils.isNotBlank(txkey) && StringUtils.isNotBlank(md5);
+
+        if (enabled && !testConfigured) {
+            System.out.println("To run AuthorizeNetAim test please enter configuration for your test account " +
+                    "(testPgAuthorizeNetAimUser, testPgAuthorizeNetAimTxKey and testPgAuthorizeNetAimMD5)");
+            enabled = false;
+        }
+
+        if (enabled) {
+            System.out.println("Running AuthorizeNetAim using: " + user);
+        }
+
+        return enabled;
     }
 
     protected String testContextName() {
@@ -56,8 +84,26 @@ public class AuthorizeNetAimPaymentGatewayImplTest extends PaymentModuleDBTestCa
         assumeTrue(isTestAllowed());
         if (isTestAllowed()) {
             customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
-            authorizeNetAimPaymentGateway = (AuthorizeNetAimPaymentGatewayImpl) ctx().getBean("authorizeNetAimPaymentGateway");
+            authorizeNetAimPaymentGateway = (PaymentGatewayInternalForm) ctx().getBean("authorizeNetAimPaymentGateway");
             paymentProcessor = new PaymentProcessorSurrogate(customerOrderPaymentService, authorizeNetAimPaymentGateway);
+
+            final Map<String, PaymentGatewayParameter> params = new HashMap<String, PaymentGatewayParameter>();
+            for (final PaymentGatewayParameter param : authorizeNetAimPaymentGateway.getPaymentGatewayParameters()) {
+                params.put(param.getLabel(), param);
+            }
+
+            final PaymentGatewayParameter user = params.get("API_LOGIN_ID");
+            final PaymentGatewayParameter key = params.get("TRANSACTION_KEY");
+            final PaymentGatewayParameter md5 = params.get("MD5_HASH_KEY");
+
+            user.setValue(this.user);
+            key.setValue(this.txkey);
+            md5.setValue(this.md5);
+
+            authorizeNetAimPaymentGateway.updateParameter(user);
+            authorizeNetAimPaymentGateway.updateParameter(key);
+            authorizeNetAimPaymentGateway.updateParameter(md5);
+
         }
     }
 

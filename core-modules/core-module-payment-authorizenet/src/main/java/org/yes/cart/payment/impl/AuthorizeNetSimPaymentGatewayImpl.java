@@ -134,7 +134,7 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
+    public String getSubmitButton(final String locale) {
         return null;
     }
 
@@ -264,29 +264,6 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     /**
      * {@inheritDoc}
      */
-    public Map<String, String> setExpressCheckoutMethod(BigDecimal amount, String currencyCode) throws IOException {
-        return Collections.EMPTY_MAP; //nothing to do
-    }
-
-
-     /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> doDoExpressCheckoutPayment(final String token, final String payerId,
-                                                          final BigDecimal amount, final String currencyCode) throws IOException {
-        return null;//nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
-        return null; //nothing to do
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
 
         /*
@@ -310,6 +287,9 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         }
     }
 
+
+    private static final int ITEMSKU = 30;
+    private static final int ITEMNAME = 30;
 
     /**
      * {@inheritDoc}
@@ -346,8 +326,15 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
             for (final PaymentLine line : payment.getOrderItems()) {
                 if (line.isShipment()) {
                     // <INPUT TYPE="HIDDEN" name="x_freight" VALUE="Freight1<|>ground overnight<|>12.95>
+                    String name = line.getSkuName().length() > ITEMNAME ? line.getSkuName().substring(0, ITEMNAME - 1) + "~" : line.getSkuName();
                     setValueIfNotNull(stringBuilder, "x_freight",
-                            line.getSkuName() + "<|>" + line.getSkuName() + "<|>" +  line.getUnitPrice().toPlainString());
+                            name + "<|>" + name + "<|>" +  line.getUnitPrice().toPlainString());
+                } else {
+                    // <INPUT TYPE="HIDDEN" name="x_freight" VALUE="Item ID<|>item name<|>item description<|>item quantity<|>item price (unit cost)<|>item taxable
+                    String name = line.getSkuName().length() > ITEMNAME ? line.getSkuName().substring(0, ITEMNAME - 1) + "~" : line.getSkuName();
+                    String code = line.getSkuCode().length() > ITEMSKU ? line.getSkuCode().substring(0, ITEMSKU - 1) + "~" : line.getSkuCode();
+                    setValueIfNotNull(stringBuilder, "x_line_item",
+                            code + "<|>" + name + "<|><|>" + line.getQuantity().toPlainString() + "<|>" +  line.getUnitPrice().toPlainString() + "<|>0");
                 }
             }
         }

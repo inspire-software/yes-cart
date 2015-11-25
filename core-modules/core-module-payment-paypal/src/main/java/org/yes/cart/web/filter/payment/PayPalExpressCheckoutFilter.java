@@ -16,17 +16,20 @@
 
 package org.yes.cart.web.filter.payment;
 
+import org.slf4j.Logger;
 import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.payment.PaymentGatewayExternalForm;
+import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.filter.AbstractFilter;
+import org.yes.cart.web.support.request.IPResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.servlet.Filter;
@@ -52,7 +55,7 @@ import java.util.Map;
  * Date: 12/18/11
  * Time: 5:50 PM
  */
-public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filter {
+public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilter implements Filter {
 
     private final PaymentProcessorFactory paymentProcessorFactory;
 
@@ -67,9 +70,12 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
      * @param customerOrderService  {@link CustomerOrderService}     to use
      * @param paymentCallBackHandlerFacade handler.
      */
-    public PayPalExpressCheckoutFilter(final PaymentProcessorFactory paymentProcessorFactory,
-                                       final CustomerOrderService customerOrderService,
-                                       final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade) {
+    public PayPalExpressCheckoutFilter(final PaymentCallBackHandlerFacade paymentCallBackHandlerFacade,
+                                       final ShopService shopService,
+                                       final IPResolver ipResolver,
+                                       final PaymentProcessorFactory paymentProcessorFactory,
+                                       final CustomerOrderService customerOrderService) {
+        super(paymentCallBackHandlerFacade, shopService, ipResolver);
         this.paymentProcessorFactory = paymentProcessorFactory;
         this.customerOrderService = customerOrderService;
         this.paymentCallBackHandlerFacade = paymentCallBackHandlerFacade;
@@ -78,69 +84,129 @@ public class PayPalExpressCheckoutFilter extends AbstractFilter implements Filte
     @Override
     public ServletRequest doBefore(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
 
-        // This filter is locally mapped and we still have cart in cookies
-        final ShoppingCart cart = (ShoppingCart) servletRequest.getAttribute("ShoppingCart");
+        final Logger log = ShopCodeContext.getLog(this);
 
-        final String orderGuid = cart.getGuid();
+        if (isCallerIpAllowed(servletRequest)) {
 
-        final CustomerOrder customerOrder =  customerOrderService.findByReference(orderGuid);
+            if (log.isDebugEnabled()) {
+                log.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+            }
 
+            final Map parameters = servletRequest.getParameterMap();
+            final Map<String, String> singleMap = HttpParamsUtils.createSingleValueMap(parameters);
 
-        final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
+            final boolean start = "1".equals(getParameterIgnoreCase(singleMap, "start"));
 
-        final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(paymentGatewayLabel, customerOrder.getShop().getCode());
+            if (start) {
 
-        final PaymentGatewayExternalForm paymentGatewayExternalForm = (PaymentGatewayExternalForm) paymentProcessor.getPaymentGateway();
+                // This filter is locally mapped and we still have cart in cookies
+                final ShoppingCart cart = (ShoppingCart) servletRequest.getAttribute("ShoppingCart");
 
-        final Payment payment = paymentProcessor.createPaymentsToAuthorize(
-                customerOrder,
-                true,
-                servletRequest.getParameterMap(),
-                "tmp")
-                .get(0);
+                final String orderGuid = cart.getGuid();
 
-        final Map<String, String> nvpCallResult = paymentGatewayExternalForm.setExpressCheckoutMethod(
-                payment.getPaymentAmount(), payment.getOrderCurrency());
+                final CustomerOrder customerOrder = customerOrderService.findByReference(orderGuid);
 
-        final String redirectUrl;
-        
-        if (Payment.PAYMENT_STATUS_OK.equals(paymentGatewayExternalForm.getExternalCallbackResult(nvpCallResult))) {
-            /*not encoded answer will be like this
-            TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
-             Redirect url  to paypal for perform login and payment */
-            redirectUrl = paymentGatewayExternalForm.getParameterValue("PP_EC_PAYPAL_URL")
-                    + "?orderGuid="  + orderGuid
-                    + "&token="      + nvpCallResult.get("TOKEN")
-                    + "&cmd=_express-checkout";
+                final PaymentProcessor paymentProcessor = getPaymentProcessor(customerOrder);
+
+                final PaymentGatewayPayPalExpressCheckout paymentGatewayExternalForm = (PaymentGatewayPayPalExpressCheckout) paymentProcessor.getPaymentGateway();
+
+                final Payment payment = paymentProcessor.createPaymentsToAuthorize(
+                        customerOrder,
+                        true,
+                        servletRequest.getParameterMap(),
+                        "tmp")
+                        .get(0);
+
+                // setExpressCheckoutMethod will redirect customer to login to paypal and authorise the payment
+                final String redirectUrl = paymentGatewayExternalForm.setExpressCheckoutMethod(payment, String.valueOf(customerOrder.getId()));
+
+                ShopCodeContext.getLog(this).info("Pay pal filter user will be redirected to {}", redirectUrl);
+
+                // Send redirect to paypal for customer to login and authorise payment
+                ((HttpServletResponse) servletResponse).sendRedirect(
+                        ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)
+                );
+
+            } else {
+
+                // We are attempting to process express checkout callback
+                final String orderGuid = getParameterIgnoreCase(singleMap, "orderGuid");
+                final String verify = getParameterIgnoreCase(singleMap, "verify");
+                final String token = getParameterIgnoreCase(singleMap, "token");
+
+                final CustomerOrder customerOrder = customerOrderService.findByReference(orderGuid);
+                if (customerOrder != null && String.valueOf(customerOrder.getId()).equals(verify)) {
+
+                    final String paymentGatewayLabel = getFilterConfig().getInitParameter("paymentGatewayLabel");
+
+                    try {
+
+                        final PaymentProcessor paymentProcessor = getPaymentProcessor(customerOrder);
+
+                        final PaymentGatewayPayPalExpressCheckout paymentGatewayExternalForm = (PaymentGatewayPayPalExpressCheckout) paymentProcessor.getPaymentGateway();
+
+                        final Payment payment = paymentProcessor.createPaymentsToAuthorize(
+                                customerOrder,
+                                true,
+                                servletRequest.getParameterMap(),
+                                "tmp")
+                                .get(0);
+
+                        final Map<String, String> result = paymentGatewayExternalForm.doExpressCheckoutPayment(payment, token);
+                        result.put("orderGuid", orderGuid); // Must be passed in to parameters
+
+                        paymentCallBackHandlerFacade.handlePaymentCallback(result, paymentGatewayLabel);
+
+                        ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
+
+                    } catch (OrderException e) {
+
+                        log.error("Transition failed during payment call back for " + getPaymentGatewayLabel() + " payment gateway" , e);
+                        log.error(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+
+                        // Send 500, so that PG know that there was an issue and may resend the update
+                        ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                    }
+
+                } else {
+
+                    // Send 500, so that PG know that there was an issue and may resend the update
+                    ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+
+                }
+
+            }
+
 
         } else {
-            redirectUrl = "paymentresult" //mounted page
-                    + "?orderNum="   + orderGuid
-                    + "&errMsg="     + nvpCallResult.get("L_ERRORCODE0")
-                    + '|'   + nvpCallResult.get("L_SHORTMESSAGE0")
-                    + '|'   + nvpCallResult.get("L_LONGMESSAGE0")
-                    + '|'   + nvpCallResult.get("L_SEVERITYCODE0") ;
+
+            if (log.isWarnEnabled()) {
+                log.warn("Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
+                log.warn(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+            }
+            // Send forbidden to notify PG that this is a security issue and not error of any kind
+            ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);
 
         }
 
-        try {
+        return null;  //no forwarding, just return
 
-            paymentCallBackHandlerFacade.handlePaymentCallback(nvpCallResult, paymentGatewayLabel);
+    }
 
-        } catch (OrderException e) {
-
-            ShopCodeContext.getLog(this).error("Transition failed during payment call back for " + paymentGatewayLabel
-                    + " payment gateway. Dump request " + HttpUtil.dumpRequest((HttpServletRequest) servletRequest), e);
-
+    private String getParameterIgnoreCase(final Map<String, String> singleMap, final String key) {
+        for (final String paramKey : singleMap.keySet()) {
+            if (paramKey.equalsIgnoreCase(key)) {
+                return singleMap.get(paramKey);
+            }
         }
-
-        ShopCodeContext.getLog(this).info("Pay pal filter user will be redirected to {}", redirectUrl);
-
-        ((HttpServletResponse) servletResponse).sendRedirect(
-                ((HttpServletResponse) servletResponse).encodeRedirectURL(redirectUrl)
-        );
-
         return null;
+    }
+
+    private PaymentProcessor getPaymentProcessor(final CustomerOrder customerOrder) {
+        final String paymentGatewayLabel = getPaymentGatewayLabel();
+
+        return paymentProcessorFactory.create(paymentGatewayLabel, customerOrder.getShop().getCode());
     }
 
     @Override

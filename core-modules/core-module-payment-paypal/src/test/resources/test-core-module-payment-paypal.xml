@@ -34,11 +34,11 @@
     
     <import resource="classpath:test-payment-api.xml"/>
 
-    <bean id="payflowPaymentGateway" class="org.yes.cart.payment.impl.PayflowPaymentGatewayImpl" scope="prototype">
+    <bean id="payPalButtonPaymentGatewayPayment" class="org.yes.cart.payment.impl.PayPalButtonPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 
-    <bean id="payPalNvpPaymentGateway" class="org.yes.cart.payment.impl.PayPalNvpPaymentGatewayImpl" scope="prototype">
+    <bean id="payPalProPaymentGateway" class="org.yes.cart.payment.impl.PayPalProPaymentGatewayImpl" scope="prototype">
         <property name="paymentGatewayParameterService" ref="paymentGatewayParameterService"/>
     </bean>
 

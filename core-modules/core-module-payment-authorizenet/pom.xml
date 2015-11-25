@@ -202,12 +202,9 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <inherited>true</inherited>
                     <configuration>
-                        <systemProperties>
-                            <property>
-                                <name>testPgAuthorizeNetAim</name>
-                                <value>${testPgAuthorizeNetAim}</value>
-                            </property>
-                        </systemProperties>
+                        <systemPropertiesFile>
+                            ${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties
+                        </systemPropertiesFile>
                     </configuration>
                 </plugin>
             </plugins>

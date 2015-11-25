@@ -137,17 +137,11 @@
             </exclusions>
         </dependency>
 
-        <!-- payflow -->
+        <!-- PayPal -->
         <dependency>
-            <groupId>paypal.payflow</groupId>
-            <artifactId>payflow-client</artifactId>
-            <version>4.31</version>
-        </dependency>
-        <!-- paypal -->
-        <dependency>
-            <groupId>com.paypal</groupId>
-            <artifactId>paypal-client</artifactId>
-            <version>5.1.1</version>
+            <groupId>com.paypal.sdk</groupId>
+            <artifactId>paypal-core</artifactId>
+            <version>1.6.2</version>
         </dependency>
 
         <dependency>
@@ -208,20 +202,9 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <inherited>true</inherited>
                     <configuration>
-                        <systemProperties>
-                            <property>
-                                <name>testPgPayFlow</name>
-                                <value>${testPgPayFlow}</value>
-                            </property>
-                            <property>
-                                <name>testPgPayPal</name>
-                                <value>${testPgPayPal}</value>
-                            </property>
-                            <property>
-                                <name>testPgPayPalExpress</name>
-                                <value>${testPgPayPalExpress}</value>
-                            </property>
-                        </systemProperties>
+                        <systemPropertiesFile>
+                            ${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties
+                        </systemPropertiesFile>
                     </configuration>
                 </plugin>
             </plugins>

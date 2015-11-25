@@ -62,12 +62,6 @@ add_mvn_extra_dep() {
 
     cd $YC_HOME/env/setup/lib3rdparty
 
-    LIBFILE=$YC_HOME/env/setup/lib3rdparty/payflow/payflow.jar
-    $MVN install:install-file -DgroupId=paypal.payflow -DartifactId=payflow-client -Dversion=4.31 -Dpackaging=jar -Dfile=$LIBFILE
-
-    LIBFILE=$YC_HOME/env/setup/lib3rdparty/paypal/paypal_base.jar
-    $MVN install:install-file -DgroupId=com.paypal -DartifactId=paypal-client -Dversion=5.1.1 -Dpackaging=jar -Dfile=$LIBFILE
-
     cd $YC_HOME
 
     echo "================================================";

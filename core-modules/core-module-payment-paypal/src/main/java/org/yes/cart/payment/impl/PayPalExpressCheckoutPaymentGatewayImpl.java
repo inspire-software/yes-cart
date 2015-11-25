@@ -17,46 +17,61 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.lang.SerializationUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
-import org.yes.cart.payment.PaymentGatewayExternalForm;
-import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.payment.dto.PaymentGatewayFeature;
-import org.yes.cart.payment.dto.PaymentMiscParam;
+import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
+import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.HashMap;
+import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 12/14/11
- * Time: 2:33 PM
+ * User: denispavlov
+ * Date: 19/11/2015
+ * Time: 18:13
  */
-public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPaymentGatewayImpl implements PaymentGatewayExternalForm {
+public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalNVPPaymentGatewayImpl implements PaymentGatewayPayPalExpressCheckout {
 
-    private static final String EQ = "=";
-    private static final String AND = "&";
+
+
+    protected static final String PP_SUBMIT_BTN = "PP_SUBMIT_BTN";
+
+
+    protected static final String PP_EC_PAYMENTREQUEST_0_AMT = "PAYMENTREQUEST_0_AMT";
+    protected static final String PP_EC_PAYMENTREQUEST_0_TAXAMT = "PAYMENTREQUEST_0_TAXAMT";
+    protected static final String PP_EC_PAYMENTREQUEST_0_PAYMENTACTION = "PAYMENTREQUEST_0_PAYMENTACTION";
+    protected static final String PP_EC_PAYMENTREQUEST_0_CURRENCYCODE = "PAYMENTREQUEST_0_CURRENCYCODE";
+    protected static final String PP_EC_PAYMENTREQUEST_0_INVNUM = "PAYMENTREQUEST_0_INVNUM";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_NAME = "L_PAYMENTREQUEST_0_NAME";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_AMT = "L_PAYMENTREQUEST_0_AMT";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_NUMBER = "L_PAYMENTREQUEST_0_NUMBER";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_QTY = "L_PAYMENTREQUEST_0_QTY";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_TAXAMT = "L_PAYMENTREQUEST_0_TAXAMT";
+    protected static final String PP_EC_L_PAYMENTREQUEST_0_DESC = "L_PAYMENTREQUEST_0_DESC";
+    protected static final String PP_EC_L_SHIPPINGOPTIONISDEFAULT0 = "L_SHIPPINGOPTIONISDEFAULT0";
+    protected static final String PP_EC_L_SHIPPINGOPTIONNAME0 = "L_SHIPPINGOPTIONNAME0";
+    protected static final String PP_EC_L_SHIPPINGOPTIONAMOUNT0 = "L_SHIPPINGOPTIONAMOUNT0";
+    protected static final String PP_EC_RETURNURL = "RETURNURL";
+    protected static final String PP_EC_CANCELURL = "CANCELURL";
+    protected static final String PP_EC_CALLBACK = "CALLBACK";
+    protected static final String PP_EC_NOSHIPPING = "NOSHIPPING";
+
+
 
     private final static PaymentGatewayFeature paymentGatewayFeature = new PaymentGatewayFeatureImpl(
             false, false, false, true,
-            false, false, false,
-            true, true,  false,
+            false, false, true,
+            true, true,  true,
             null,
             false , false
     );
@@ -71,44 +86,32 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
 
     /**
      * Get the POST url for form
-     * may be vary for sandbox and real payment gateway
-     * possible values are:
      */
     public String getPostActionUrl() {
-        //must be special mounted page in UI
-        return "paymentpaypalexpress";
+        // This is the PayPalExpressCheckoutFilter mapping, which performs setExpressCheckoutMethod
+        // and then redirects to PayPal to login and authorise the payment
+        return "paymentpaypalexpress?start=1";
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
-        return getParameterValue(PP_SUBMIT_BTN);
-    }
+    public String getSubmitButton(final String locale) {
 
-    /**
-     * {@inheritDoc}
-     */
-    public Payment authorizeCapture(final Payment paymentIn) {
-
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-
-        payment.setTransactionOperation(AUTH_CAPTURE);
-
-        try {
-            final Map<String, String> paymentResult = doDoExpressCheckoutPayment(
-                    payment.getTransactionRequestToken(),
-                    payment.getTransactionReferenceId(),
-                    payment.getPaymentAmount(), payment.getOrderCurrency());
-            final CallbackResult res = getExternalCallbackResult(paymentResult);
-            payment.setPaymentProcessorResult(res.getStatus());
-            payment.setPaymentProcessorBatchSettlement(res.isSettled());
-
-        } catch (IOException e) {
-            payment.setPaymentProcessorResult( Payment.PAYMENT_STATUS_FAILED);
-            payment.setPaymentProcessorBatchSettlement(false);
-            ShopCodeContext.getLog(this).error(e.getMessage(), e);
+        String submit = getParameterValue(PP_SUBMIT_BTN + "_" + locale);
+        if (submit == null) {
+            submit = getParameterValue(PP_SUBMIT_BTN);
         }
+        if (StringUtils.isNotBlank(submit)) {
+            return submit;
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Payment authorizeCapture(final Payment payment) {
         return payment;
     }
 
@@ -168,13 +171,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * {@inheritDoc}
      */
     public Payment refund(final Payment paymentIn) {
-        final Payment payment = (Payment) SerializationUtils.clone(paymentIn);
-        payment.setTransactionOperation(REFUND);
-        payment.setTransactionReferenceId(UUID.randomUUID().toString());
-        payment.setTransactionAuthorizationCode(UUID.randomUUID().toString());
-        payment.setPaymentProcessorResult(Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED);
-        payment.setPaymentProcessorBatchSettlement(false);
-        return payment;
+        return super.refund(paymentIn);
     }
 
     /**
@@ -189,52 +186,154 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * Get the express checkout details via GetExpressCheckoutDetails method of
      * pay pal payment gateway
      *
+     * @param payment payment
      * @param token   the token obtained via   SetExpressCheckout method
-     * @param payerId the token obtained via   GetExpressCheckoutDetails method
-     * @param amount  the amount
+     *
      * @return map of parsed key - values with detail information
-     * @throws java.io.IOException in case of errors
      */
-    public Map<String, String> doDoExpressCheckoutPayment(final String token,
-                                                          final String payerId,
-                                                          final BigDecimal amount,
-                                                          final String currencyCode) throws IOException {
+    public Map<String, String> doExpressCheckoutPayment(final Payment payment,
+                                                        final String token) {
 
         Assert.notNull(token, "The pay pal tonek must  be not null");
-        Assert.notNull(payerId, "Payer must be provided");
-        Assert.notNull(amount, "Amount must be provided");
-        Assert.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "Amount must be positive");
-        Assert.notNull(currencyCode, "Currency code must be provided");
+        Assert.notNull(payment, "Payment must be provided");
+        Assert.notNull(payment.getPaymentAmount(), "Amount must be provided");
+        Assert.isTrue(MoneyUtils.isFirstBiggerThanSecond(payment.getPaymentAmount(), BigDecimal.ZERO), "Amount must be positive");
+        Assert.notNull(payment.getOrderCurrency(), "Currency code must be provided");
 
+        try {
 
-        final StringBuilder stringBuilder = new StringBuilder();
+            final Map<String, String> details = getExpressCheckoutDetails(token);
+            if (details.containsKey(PP_EC_PAYERID)) {
 
-        stringBuilder.append(PP_EC_TOKEN);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(token));
-        stringBuilder.append(AND);
+                final NvpBuilder npvs = new NvpBuilder();
 
-        stringBuilder.append(PP_EC_PAYERID);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(payerId));
-        stringBuilder.append(AND);
+                npvs
+                        .addRaw(PP_EC_TOKEN, token)
+                        .addRaw(PP_EC_PAYERID, details.get(PP_EC_PAYERID));
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_AMT);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode("" + amount));
-        stringBuilder.append(AND);
+                appendOrderDetails(payment, npvs);
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_CURRENCYCODE);
-        stringBuilder.append(EQ);
-        stringBuilder.append(currencyCode);
-        stringBuilder.append(AND);
+                return performHttpCall("DoExpressCheckoutPayment", npvs.toMap());
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_PAYMENTACTION);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode("Sale"));
+            }
 
-        return performHttpCall("DoExpressCheckoutPayment", stringBuilder.toString());
+        } catch (Exception exp) {
 
+            ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
+
+        }
+
+        return Collections.EMPTY_MAP;
+
+    }
+
+    private static final int ITEMSKU = 50;
+    private static final int ITEMNAME = 50;
+
+    private void appendOrderDetails(final Payment payment, final NvpBuilder npvs) {
+
+        npvs.addRaw(PP_EC_PAYMENTREQUEST_0_PAYMENTACTION, "Sale");
+        npvs.addEncoded(PP_EC_PAYMENTREQUEST_0_INVNUM, payment.getOrderNumber());
+        npvs.addRaw(PP_EC_NOSHIPPING, "1");
+
+        int i = 0;
+
+        BigDecimal itemsNetTotal = Total.ZERO;
+        BigDecimal ship = Total.ZERO;
+
+        for (final PaymentLine item : payment.getOrderItems()) {
+
+            if (item.isShipment()) {
+
+                npvs.addRaw(PP_EC_L_SHIPPINGOPTIONISDEFAULT0, "true");
+
+                ship = item.getUnitPrice();
+                String shipName = item.getSkuName();
+
+                npvs.addEncoded(PP_EC_L_SHIPPINGOPTIONNAME0,
+                        shipName.length() > ITEMNAME ? shipName.substring(0, ITEMNAME - 1) + "~" : shipName);
+
+                npvs.addRaw(PP_EC_L_SHIPPINGOPTIONAMOUNT0, ship.toPlainString());
+
+            } else {
+
+                final BigDecimal intQty = item.getQuantity().setScale(0, RoundingMode.CEILING);
+
+                final String skuName;
+                final BigDecimal qty;
+                if (MoneyUtils.isFirstEqualToSecond(intQty, item.getQuantity())) {
+                    // integer qty
+                    skuName = item.getSkuName();
+                    qty = intQty.stripTrailingZeros();
+                } else {
+                    // fractional qty
+                    skuName = item.getQuantity().toPlainString().concat("x ").concat(item.getSkuName());
+                    qty = BigDecimal.ONE;
+                }
+
+                npvs.addEncoded(PP_EC_L_PAYMENTREQUEST_0_NUMBER + i,
+                        item.getSkuCode().length() > ITEMSKU ? item.getSkuCode().substring(0, ITEMSKU - 1) + "~" : item.getSkuCode());
+                npvs.addEncoded(PP_EC_L_PAYMENTREQUEST_0_NAME + i,
+                        skuName.length() > ITEMNAME ? skuName.substring(0, ITEMNAME - 1) + "~" : skuName);
+
+                npvs.addRaw(PP_EC_L_PAYMENTREQUEST_0_QTY + i, qty.stripTrailingZeros().toPlainString());
+
+                final BigDecimal itemNetAmount = item.getUnitPrice().multiply(item.getQuantity()).subtract(item.getTaxAmount()).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP);
+                final BigDecimal itemNetPricePerAdjustedQty = itemNetAmount.divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP);
+                // Need to do this to overcome rounding
+                final BigDecimal restoredNetAmount = itemNetPricePerAdjustedQty.multiply(qty).setScale(Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP);
+
+                itemsNetTotal = itemsNetTotal.add(restoredNetAmount);
+//                final BigDecimal taxUnit = MoneyUtils.isFirstBiggerThanSecond(item.getTaxAmount(), Total.ZERO) ? item.getTaxAmount().divide(qty, Total.ZERO.scale(), BigDecimal.ROUND_HALF_UP) : Total.ZERO;
+
+                npvs.addRaw(PP_EC_L_PAYMENTREQUEST_0_AMT + i, itemNetPricePerAdjustedQty.toPlainString());
+
+//                npvs.addRaw(PP_EC_L_PAYMENTREQUEST_0_TAXAMT + i, taxUnit.toPlainString());
+
+                i++;
+            }
+        }
+
+        final BigDecimal itemsAndShipping = itemsNetTotal.add(ship);
+        final BigDecimal paymentNet = payment.getPaymentAmount().subtract(payment.getTaxAmount());
+        if (MoneyUtils.isFirstBiggerThanSecond(itemsAndShipping, paymentNet)) {
+
+            npvs.addRaw("PAYMENTREQUEST_0_SHIPDISCAMT", paymentNet.subtract(itemsAndShipping).toPlainString());
+
+        }
+
+        npvs.addRaw("PAYMENTREQUEST_0_ITEMAMT", itemsNetTotal.toPlainString());
+        npvs.addRaw("PAYMENTREQUEST_0_SHIPPINGAMT", ship.toPlainString());
+
+        npvs.addRaw(PP_EC_PAYMENTREQUEST_0_AMT, payment.getPaymentAmount().toPlainString());
+
+        // PP recommend to set MAXAMT to slightly higher value, so increase by 10%
+        npvs.addRaw("MAXAMT",
+                payment.getPaymentAmount().multiply(new BigDecimal("1.1")).setScale(Total.ZERO.scale(), RoundingMode.HALF_UP).toPlainString());
+
+        npvs.addRaw(PP_EC_PAYMENTREQUEST_0_TAXAMT, payment.getTaxAmount().toPlainString());
+
+        final PaymentAddress addr = payment.getShippingAddress() != null ? payment.getShippingAddress() : payment.getBillingAddress();
+
+        if (addr != null) {
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTONAME", addr.getFirstname() + " " + addr.getLastname());
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOSTREET", addr.getAddrline1());
+            if (StringUtils.isNotBlank(addr.getAddrline2())) {
+                npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOSTREET2", addr.getAddrline2());
+            }
+
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOCITY", addr.getCity());
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOSTATE", addr.getStateCode());
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOZIP", addr.getPostcode());
+            npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE", addr.getCountryCode());
+
+            if (StringUtils.isNotBlank(addr.getPhone1())) {
+                npvs.addEncoded("PAYMENTREQUEST_0_SHIPTOPHONENUM", addr.getPhone1());
+            }
+
+        }
+
+        npvs.addRaw(PP_EC_PAYMENTREQUEST_0_CURRENCYCODE, payment.getOrderCurrency());
 
     }
 
@@ -247,17 +346,15 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * @return map of parsed key - values with detail information
      * @throws java.io.IOException in case of errors
      */
-    public Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
+    protected Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
 
         Assert.notNull(token, "The pay pal token must  be not null");
 
-        final StringBuilder stringBuilder = new StringBuilder();
+        final NvpBuilder npvs = new NvpBuilder();
 
-        stringBuilder.append(PP_EC_TOKEN);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(token));
+        npvs.addRaw(PP_EC_TOKEN, token);
 
-        return performHttpCall("GetExpressCheckoutDetails", stringBuilder.toString());
+        return performHttpCall("GetExpressCheckoutDetails", npvs.toMap());
 
     }
 
@@ -268,160 +365,83 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
      * All info about SetExpressCheckout see here:
      * https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
      *
-     * @param amount       amount
-     * @param currencyCode currecny
-     * @return map with auth token
-     * @throws java.io.IOException in case of errors
+     * @param payment       payment
+     *
+     * @return continue URL
      */
-    public Map<String, String> setExpressCheckoutMethod(final BigDecimal amount, final String currencyCode) throws IOException {
+    public String setExpressCheckoutMethod(final Payment payment, final String verify) {
 
-        Assert.notNull(amount, "Amount must be provided");
-        Assert.isTrue(amount.compareTo(BigDecimal.ZERO) > 0, "Amount must be positive");
-        Assert.notNull(currencyCode, "Currency code must be provided");
-
-
-        final StringBuilder stringBuilder = new StringBuilder();
+        Assert.notNull(payment, "Payment must be provided");
+        Assert.notNull(payment.getPaymentAmount(), "Amount must be provided");
+        Assert.isTrue(MoneyUtils.isFirstBiggerThanSecond(payment.getPaymentAmount(), BigDecimal.ZERO), "Amount must be positive");
+        Assert.notNull(payment.getOrderCurrency(), "Currency code must be provided");
 
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_AMT);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode("" + amount));
-        stringBuilder.append(AND);
+        final NvpBuilder npvs = new NvpBuilder();
 
+        npvs.addEncoded(PP_EC_RETURNURL, getParameterValue(PP_EC_RETURNURL));
+        npvs.addEncoded(PP_EC_CANCELURL, getParameterValue(PP_EC_CANCELURL));
+        npvs.addEncoded(PP_EC_CALLBACK,
+                getParameterValue(PP_EC_CALLBACK) +
+                        "?orderGuid=" + payment.getOrderNumber() +
+                        "&verify=" + verify); // Need verification to validate response
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_PAYMENTACTION);
-        stringBuilder.append(EQ);
-        stringBuilder.append("Sale");
-        stringBuilder.append(AND);
+        npvs.addRaw("CALLBACKTIMEOUT", "3"); // PayPal recommended value
 
-        stringBuilder.append(PP_EC_RETURNURL);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(getParameterValue(PP_EC_RETURNURL)));
-        stringBuilder.append(AND);
+        appendOrderDetails(payment, npvs);
 
-        stringBuilder.append(PP_EC_CANCELURL);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(getParameterValue(PP_EC_CANCELURL)));
-        stringBuilder.append(AND);
+        try {
 
-        stringBuilder.append(PP_EC_NOSHIPPING);
-        stringBuilder.append(EQ);
-        stringBuilder.append("1");
-        stringBuilder.append(AND);
+            final Map<String, String> result = performHttpCall("SetExpressCheckout", npvs.toMap());
 
+            final String redirectUrl;
 
-        stringBuilder.append(PP_EC_PAYMENTREQUEST_0_CURRENCYCODE);
-        stringBuilder.append(EQ);
-        stringBuilder.append(currencyCode);
+            if (CallbackResult.OK == getExternalCallbackResult(result)) {
+                /*not encoded answer will be like this
+                TOKEN=EC%2d8DX631540T256421Y&TIMESTAMP=2011%2d12%2d21T20%3a12%3a37Z&CORRELATIONID=2d2aa98bcd550&ACK=Success&VERSION=2%2e3&BUILD=2271164
+                 Redirect url  to paypal for perform login and payment */
+                redirectUrl = getParameterValue(PP_EC_PAYPAL_URL)
+                        + "?orderGuid="  + payment.getOrderNumber()
+                        + "&token="      + result.get("TOKEN")
+                        + "&cmd=_express-checkout";
 
+            } else {
+                redirectUrl = "paymentresult" //mounted page
+                        + "?orderNum="   + payment.getOrderNumber()
+                        + "&hint=failed"
+                        + "&errMsg="     + result.get("L_ERRORCODE0")
+                        + '|'   + result.get("L_SHORTMESSAGE0")
+                        + '|'   + result.get("L_LONGMESSAGE0")
+                        + '|'   + result.get("L_SEVERITYCODE0") ;
 
-        return performHttpCall("SetExpressCheckout", stringBuilder.toString());
-    }
+            }
 
+            return redirectUrl;
 
-    private Map<String, String> performHttpCall(final String method, final String nvpStr) throws IOException {
+        } catch (IOException e) {
 
-        final StringBuilder stringBuilder = new StringBuilder();
+            ShopCodeContext.getLog(this).error("Payment failed", e);
 
-
-        stringBuilder.append(PP_EC_METHOD);
-        stringBuilder.append(EQ);
-        stringBuilder.append(method);
-        stringBuilder.append(AND);
-
-        stringBuilder.append(PP_EC_VERSION);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode("2.3"));
-        stringBuilder.append(AND);
-
-        stringBuilder.append("PWD");
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(getParameterValue(PP_API_USER_PASSWORD)));
-        stringBuilder.append(AND);
-
-        stringBuilder.append("USER");
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(getParameterValue(PP_API_USER_NAME)));
-        stringBuilder.append(AND);
-
-
-        stringBuilder.append(PP_SIGNATURE);
-        stringBuilder.append(EQ);
-        stringBuilder.append(URLEncoder.encode(getParameterValue(PP_SIGNATURE)));
-        stringBuilder.append(AND);
-
-        stringBuilder.append(nvpStr);
-
-        return deformatNVP(
-                performPayPalApiCall(stringBuilder.toString())
-        );
-
-    }
-
-    private String performPayPalApiCall(final String callParams) throws IOException {
-
-        ShopCodeContext.getLog(this).info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall call parameters : {}", callParams);
-
-        final StringBuilder respBuilder = new StringBuilder();
-
-        final HttpPost httpPost = new HttpPost(getParameterValue(PP_EC_API_URL));
-        httpPost.setEntity(new StringEntity(callParams));
-
-        final DefaultHttpClient client = new DefaultHttpClient();
-
-        final HttpResponse response = client.execute(httpPost);
-        final BufferedReader rd = new BufferedReader(new InputStreamReader(
-                response.getEntity().getContent()));
-
-        String _line;
-        while (((_line = rd.readLine()) != null)) {
-            respBuilder.append(_line);
         }
-        ShopCodeContext.getLog(this).info("PayPalExpressCheckoutPaymentGatewayImpl#performPayPalApiCall response : {}", respBuilder);
-        return respBuilder.toString();
+
+        return "paymentresult" //mounted page
+                + "?orderNum="   + payment.getOrderNumber()
+                + "&hint=failed";
     }
+
 
     /**
      * Check the result for success attributes.
      *
-     *
      * @param callbackResult call result
+     *
      * @return true in case of success
      */
     public CallbackResult getExternalCallbackResult(final Map<String, String> callbackResult) {
-        if ((callbackResult.get("ACK") != null && callbackResult.get("ACK").equalsIgnoreCase("Success"))) {
+        if (isAckSuccess(callbackResult)) {
             return CallbackResult.OK;
         }
         return  CallbackResult.FAILED;
-    }
-
-
-    /**
-     * ******************************************************************************
-     * deformatNVP: Function to break the NVP string into a HashMap
-     * pPayLoad is the NVP string.
-     * returns a HashMap object containing all the name value pairs of the string.
-     * *******************************************************************************
-     *
-     * @param pPayload given string
-     * @return map
-     */
-    public Map<String, String> deformatNVP(final String pPayload) {
-        Map<String, String> nvp = new HashMap<String, String>();
-        StringTokenizer stTok = new StringTokenizer(pPayload, AND);
-        while (stTok.hasMoreTokens()) {
-            StringTokenizer stInternalTokenizer = new StringTokenizer(stTok.nextToken(), EQ);
-            if (stInternalTokenizer.countTokens() == 2) {
-                try {
-                    String key = URLDecoder.decode(stInternalTokenizer.nextToken(), "UTF-8");
-                    String value = URLDecoder.decode(stInternalTokenizer.nextToken(), "UTF-8");
-                    nvp.put(key.toUpperCase(), value);
-                } catch (UnsupportedEncodingException e) {
-                    ShopCodeContext.getLog(this).error("Unable to decode NVP payload " + pPayload, e);
-                }
-            }
-        }
-        return nvp;
     }
 
     /**
@@ -431,7 +451,7 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
     public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount,
                               final String currencyCode, final String orderReference, final Payment payment) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getHiddenField(ORDER_GUID, orderReference));  // this will be bypassed via payment gateway to restore it latter
+        stringBuilder.append(getHiddenFieldValue(ORDER_GUID, orderReference));  // this will be passed via payment gateway to restore it latter
         return stringBuilder.toString();
     }
 
@@ -443,8 +463,8 @@ public class PayPalExpressCheckoutPaymentGatewayImpl extends AbstractPayPalPayme
         final Payment payment = new PaymentImpl();
         final Map<String, String> params = HttpParamsUtils.createSingleValueMap(parametersMap);
         payment.setTransactionRequestToken(params.get("TOKEN"));
-        payment.setTransactionReferenceId(params.get("PAYERID"));
-        payment.setTransactionAuthorizationCode(params.get("CORRELATIONID"));
+        payment.setTransactionReferenceId(params.get("PAYMENTINFO_0_TRANSACTIONID"));
+        payment.setTransactionAuthorizationCode(params.get("PAYERID"));
 
         final CallbackResult res = getExternalCallbackResult(parametersMap);
         payment.setPaymentProcessorResult(res.getStatus());

@@ -500,7 +500,7 @@ public class CheckoutPage extends AbstractWebPage {
         final PaymentGateway gateway = checkoutServiceFacade.getOrderPaymentGateway(order);
         final Payment payment = checkoutServiceFacade.createPaymentToAuthorize(order);
 
-        final String submitBtnValue = getSubmitButton(gateway);
+        final String submitBtnValue = getSubmitButton(gateway, cart.getCurrentLocale());
         final String postActionUrl = getPostActionUrl(gateway);
 
         final String htmlFragment = gateway.getHtmlForm(
@@ -528,13 +528,12 @@ public class CheckoutPage extends AbstractWebPage {
     /**
      * Get submit button html code.
      *
-     * @param gateway selected gateway
      * @return html code for submit button.
      */
-    private String getSubmitButton(PaymentGateway gateway) {
+    private String getSubmitButton(final PaymentGateway gateway, final String locale) {
         String rez = null;
         if (gateway instanceof PaymentGatewayExternalForm) {
-            rez = ((PaymentGatewayExternalForm) gateway).getSubmitButton();
+            rez = ((PaymentGatewayExternalForm) gateway).getSubmitButton(locale);
         }
         if (StringUtils.isBlank(rez)) {
             if (gateway.getPaymentGatewayFeatures().isOnlineGateway()) {

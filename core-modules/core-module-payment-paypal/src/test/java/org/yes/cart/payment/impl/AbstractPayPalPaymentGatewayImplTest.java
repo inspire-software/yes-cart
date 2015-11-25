@@ -25,8 +25,10 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.PaymentGatewayConfigurationVisitor;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -36,7 +38,7 @@ import static org.junit.Assert.assertNull;
  * Date: 28/09/2014
  * Time: 11:57
  */
-public class AbstractPayPalBasePaymentGatewayImplTest {
+public class AbstractPayPalPaymentGatewayImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
 
@@ -57,7 +59,7 @@ public class AbstractPayPalBasePaymentGatewayImplTest {
             allowing(visitor).getConfiguration("shopCode"); will(returnValue("SHOP10"));
         }});
 
-        final AbstractPayPalBasePaymentGatewayImpl pg = new AbstractPayPalBasePaymentGatewayImpl() {
+        final AbstractPayPalPaymentGatewayImpl pg = new AbstractPayPalPaymentGatewayImpl() {
             @Override
             public Payment authorizeCapture(final Payment payment) {
                 return null;
@@ -95,6 +97,16 @@ public class AbstractPayPalBasePaymentGatewayImplTest {
 
             @Override
             public PaymentGatewayFeature getPaymentGatewayFeatures() {
+                return null;
+            }
+
+            @Override
+            public String getHtmlForm(final String cardHolderName, final String locale, final BigDecimal amount, final String currencyCode, final String orderReference, final Payment payment) {
+                return null;
+            }
+
+            @Override
+            public Payment createPaymentPrototype(final String operation, final Map map) {
                 return null;
             }
 

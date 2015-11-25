@@ -92,7 +92,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
+    public String getSubmitButton(final String locale) {
         return null;
     }
 
@@ -101,29 +101,6 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
         return (String) privateCallBackParameters.get(ORDER_GUID_PARAM_KEY);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> setExpressCheckoutMethod(final BigDecimal amount, final String currencyCode) throws IOException {
-        return Collections.EMPTY_MAP;
-    }
-
-
-     /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> doDoExpressCheckoutPayment(final String token, final String payerId,
-                                                          final BigDecimal amount, final String currencyCode) throws IOException {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Map<String, String> getExpressCheckoutDetails(final String token) throws IOException {
-        return null;
     }
 
     /**

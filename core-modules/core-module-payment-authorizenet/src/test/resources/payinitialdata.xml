@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<dataset>
+
+<!-- ################################################## Authorize ################################################################# -->
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "120"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="MERCHANT_ENVIRONMENT" P_VALUE="SANDBOX"  P_NAME="Environment name."  P_DESCRIPTION="Merchant environment name."/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "121"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="API_LOGIN_ID" P_VALUE="!!!SetValue:testPgAuthorizeNetAimUser!!!"  P_NAME="Merchant login"  P_DESCRIPTION="Merchant login."/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "122"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="TRANSACTION_KEY" P_VALUE="!!!SetValue:testPgAuthorizeNetAimTxKey!!!"  P_NAME="Transaction key"  P_DESCRIPTION="Transaction key"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "123"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="MD5_HASH_KEY" P_VALUE="!!!SetValue:testPgAuthorizeNetAimMD5!!!"  P_NAME="MD5 hash key"  P_DESCRIPTION="MD5 hash key. SIM only"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "124"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="MERCHANT_HOST" P_VALUE="----"  P_NAME="Host"  P_DESCRIPTION="Host. SIM only"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "125"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="RELAY_RESPONSE_URL" P_VALUE="----"  P_NAME="Releay responce url"  P_DESCRIPTION="Releay responce url. SIM only"/>
+
+    <TPAYMENTGATEWAYPARAMETER   PAYMENTGATEWAYPARAMETER_ID = "126"
+        PG_LABEL="authorizeNetAimPaymentGateway" P_LABEL="ORDER_RECEIPT_URL" P_VALUE="----"  P_NAME="SIM/DPM order receipt url"  P_DESCRIPTION="SIM/DPM order receipt url. SIM only"/>
+
+
+    <TPAYMENTGATEWAYPARAMETER
+        PAYMENTGATEWAYPARAMETER_ID = "127"
+        PG_LABEL="authorizeNetAimPaymentGateway"
+        P_LABEL="htmlForm"
+        P_VALUE="&lt;table&gt;
+&lt;tr&gt;
+	&lt;td&gt;Name on card&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccHolderName&quot; value=&quot;@CARDHOLDERNAME@&quot;/&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card type&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccType&quot;&gt;
+		&lt;option value=&quot;Visa&quot;&gt;Visa&lt;/option&gt;
+		&lt;option value=&quot;MasterCard&quot;&gt;MasterCard&lt;/option&gt;
+		&lt;option value=&quot;American Express&quot;&gt;American Express&lt;/option&gt;
+		&lt;option value=&quot;Discover&quot;&gt;Discover&lt;/option&gt;
+		&lt;option value=&quot;JCB&quot;&gt;JCB&lt;/option&gt;
+		&lt;option value=&quot;Enroute&quot;&gt;Enroute&lt;/option&gt;
+		&lt;option value=&quot;Diners Club&quot;&gt;Diners Club&lt;/option&gt;
+		&lt;option value=&quot;Optima&quot;&gt;Optima&lt;/option&gt;
+		&lt;option value=&quot;Novus&quot;&gt;Novus&lt;/option&gt;
+	&lt;/select&gt;
+        &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card number&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext2&quot; name=&quot;ccNumber&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Expiration date&lt;/td&gt;&lt;td&gt;
+	&lt;select name=&quot;ccExpireMonth&quot;&gt;
+		&lt;option value=&quot;01&quot;&gt;01 - January&lt;/option&gt;
+		&lt;option value=&quot;02&quot;&gt;02 - February&lt;/option&gt;
+		&lt;option value=&quot;03&quot;&gt;03 - March&lt;/option&gt;
+		&lt;option value=&quot;04&quot;&gt;04 - April&lt;/option&gt;
+		&lt;option value=&quot;05&quot;&gt;05 - May&lt;/option&gt;
+		&lt;option value=&quot;06&quot;&gt;06 - June&lt;/option&gt;
+		&lt;option value=&quot;07&quot;&gt;07 - July&lt;/option&gt;
+		&lt;option value=&quot;08&quot;&gt;08 - August&lt;/option&gt;
+		&lt;option value=&quot;09&quot;&gt;09 - September&lt;/option&gt;
+		&lt;option value=&quot;10&quot;&gt;10 - October&lt;/option&gt;
+		&lt;option value=&quot;11&quot;&gt;11 - November&lt;/option&gt;
+		&lt;option value=&quot;12&quot;&gt;12 - December&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;select name=&quot;ccExpireYear&quot;&gt;
+		&lt;option value=&quot;2011&quot;&gt;2011&lt;/option&gt;
+		&lt;option value=&quot;2012&quot;&gt;2012&lt;/option&gt;
+		&lt;option value=&quot;2013&quot;&gt;2013&lt;/option&gt;
+		&lt;option value=&quot;2014&quot;&gt;2014&lt;/option&gt;
+		&lt;option value=&quot;2015&quot;&gt;2015&lt;/option&gt;
+	&lt;/select&gt;
+	&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+	&lt;td&gt;Card security code&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;text&quot; class=&quot;groovyqtytext&quot; name=&quot;ccSecCode&quot;/&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;"
+        P_NAME="Part of html form"  P_DESCRIPTION="Part of html form, that display when user select this gateway to pay"/>
+
+
+</dataset>

@@ -19,6 +19,7 @@ package org.yes.cart.payment.impl;
 import net.authorize.sim.Fingerprint;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.dto.PaymentAddress;
 import org.yes.cart.payment.dto.PaymentLine;
@@ -109,6 +110,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
                         "<input type='hidden' name='x_currency_code' value='USD'>\n" +
                         "<input type='hidden' name='x_show_form' value='payment_form'>\n" +
                         "<input type='hidden' name='x_test_request' value='FALSE'>\n" +
+                        "<input type='hidden' name='x_line_item' value='code2<|>name2<|><|>1<|>10<|>0'>\n" +
                         "<input type='hidden' name='x_cust_id' value='bob@doe.com'>\n" +
                         "<input type='hidden' name='x_invoice_num' value='234132413241324sdfsd'>\n" +
                         "<input type='hidden' name='x_po_num' value='234-1324-1324-1324sdf-sdf'>\n" +
@@ -140,6 +142,7 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
                         "<input type='hidden' name='x_currency_code' value='EUR'>\n" +
                         "<input type='hidden' name='x_show_form' value='payment_form'>\n" +
                         "<input type='hidden' name='x_test_request' value='FALSE'>\n" +
+                        "<input type='hidden' name='x_line_item' value='code2<|>name2<|><|>1<|>10<|>0'>\n" +
                         "<input type='hidden' name='x_address' value='123, In the middle of'>\n" +
                         "<input type='hidden' name='x_city' value='Nowhere'>\n" +
                         "<input type='hidden' name='x_state' value='NA'>\n" +
@@ -267,14 +270,13 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
 
 
     @Test
-    @Ignore
     public void testIsSuccessWithStatus2() {
 
 
 
         final Map<String, String> params = new HashMap<String, String>();
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_MD5_HASH_KEY, "Simon");
-//        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "yescartauthorise1");
+        params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "yescartauthorise1");
         params.put(AuthorizeNetSimPaymentGatewayImpl.AN_API_LOGIN_ID, "5yaqwaA8Uk5X");
 
         final AuthorizeNetSimPaymentGatewayImpl gatewayImpl = new AuthorizeNetSimPaymentGatewayImpl() {
@@ -285,6 +287,11 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
                     return params.get(valueLabel);
                 }
                 return "";
+            }
+
+            @Override
+            protected boolean isValid(final Map privateCallBackParameters) {
+                return true; // Overwritten, since this is performed by pure AuthNet API
             }
         };
 
@@ -299,8 +306,8 @@ public class AuthorizeNetSimPaymentGatewayImplTest {
         }};
 
 
-        assertEquals(null, gatewayImpl.getExternalCallbackResult(callBackresult).getStatus());
-        assertEquals("151013150221-25", gatewayImpl.restoreOrderGuid(callBackresult));
+        assertEquals(PaymentGateway.CallbackResult.OK, gatewayImpl.getExternalCallbackResult(callBackresult));
+        assertEquals("151013162426-26", gatewayImpl.restoreOrderGuid(callBackresult));
     }
 
 

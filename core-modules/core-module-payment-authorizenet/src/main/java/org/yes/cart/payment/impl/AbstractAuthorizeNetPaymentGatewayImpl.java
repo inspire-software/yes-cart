@@ -127,6 +127,10 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
         return shippingAddress;
     }
 
+    private static final int ITEMSKU = 30;
+    private static final int ITEMNAME = 30;
+
+
     /**
      * Create authorize net order from given {@link Payment}.
      *
@@ -144,13 +148,21 @@ public abstract class AbstractAuthorizeNetPaymentGatewayImpl extends AbstractAut
             if (paymentLine.isShipment()) {
                 final ShippingCharges shipping = ShippingCharges.createShippingCharges();
                 shipping.setFreightAmount(paymentLine.getUnitPrice());
-                shipping.setFreightItemName(paymentLine.getSkuName());
-                shipping.setFreightDescription(paymentLine.getSkuName());
+                shipping.setFreightItemName(
+                        paymentLine.getSkuName().length() > ITEMNAME ? paymentLine.getSkuName().substring(0, ITEMNAME - 1) + "~" : paymentLine.getSkuName()
+                );
+                shipping.setFreightDescription(
+                        paymentLine.getSkuName().length() > ITEMNAME ? paymentLine.getSkuName().substring(0, ITEMNAME - 1) + "~" : paymentLine.getSkuName()
+                );
                 order.setShippingCharges(shipping);
             } else {
                 net.authorize.data.OrderItem item = net.authorize.data.OrderItem.createOrderItem();
-                item.setItemId(paymentLine.getSkuCode());
-                item.setItemName(paymentLine.getSkuName());
+                item.setItemId(
+                        paymentLine.getSkuCode().length() > ITEMSKU ? paymentLine.getSkuCode().substring(0, ITEMSKU - 1) + "~" : paymentLine.getSkuCode()
+                );
+                item.setItemName(
+                        paymentLine.getSkuName().length() > ITEMNAME ? paymentLine.getSkuName().substring(0, ITEMNAME - 1) + "~" : paymentLine.getSkuName()
+                );
                 item.setItemPrice(paymentLine.getUnitPrice());
                 item.setItemQuantity(paymentLine.getQuantity());
                 //item.setItemTaxable(); // CPOINT

@@ -77,7 +77,7 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
     /**
      * {@inheritDoc}
      */
-    public String getSubmitButton() {
+    public String getSubmitButton(final String locale) {
         return null;
     }
 
