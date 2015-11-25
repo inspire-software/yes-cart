@@ -64,6 +64,16 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-module-impex</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-job</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>

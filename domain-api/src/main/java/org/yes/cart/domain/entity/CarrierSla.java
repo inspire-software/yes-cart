@@ -44,7 +44,7 @@ import java.util.List;
  * <p/>
  * This this not represent the actual shipping rates for delivery but price for customer.
  * <p/>
- * Total devilery cost cab be limited as well as price and percent
+ * Total delivery cost can be limited as well as price and percent
  * <p/>
  * When price ant percent are obtained cost calculation
  * will be following:

@@ -1,0 +1,110 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<import-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="file:../../../../../../domain-api/src/main/resources/META-INF/schema/import-descriptor.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.Shop</entity-type>
+
+    <import-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name-mask>shop.csv</file-name-mask>
+        <ignore-first-line>true</ignore-first-line>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </import-file-descriptor>
+
+    <select-sql>select c from ShopEntity c where c.code = {code}</select-sql>
+
+    <import-columns>
+
+        <column-descriptor>
+            <column-index>0</column-index>
+            <field-type>FIELD</field-type>
+            <name>code</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>1</column-index>
+            <field-type>FIELD</field-type>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>2</column-index>
+            <field-type>FIELD</field-type>
+            <name>description</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>3</column-index>
+            <field-type>FIELD</field-type>
+            <name>fspointer</name>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>4</column-index>
+            <field-type>SLAVE_TUPLE_FIELD</field-type>
+            <name>shopUrl</name>
+
+            <import-descriptor>
+                <entity-type>org.yes.cart.domain.entity.ShopUrl</entity-type>
+                <import-file-descriptor>
+                    <file-encoding/>
+                    <file-name-mask/>
+                    <ignore-first-line>false</ignore-first-line>
+                    <column-delimiter>;</column-delimiter>
+                    <text-qualifier>&quot;</text-qualifier>
+                </import-file-descriptor>
+
+                <select-sql>select u from ShopUrlEntity u where u.url = {url} and u.shop = {masterObject}</select-sql>
+
+                <import-columns>
+
+                    <column-descriptor>
+                        <column-index>-1</column-index>
+                        <field-type>FK_FIELD</field-type>
+                        <name>shop</name>
+                        <value-regex>(.{0,255})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                        <use-master-object>true</use-master-object>
+                    </column-descriptor>
+
+                    <column-descriptor>
+                        <column-index>0</column-index>
+                        <field-type>FIELD</field-type>
+                        <name>url</name>
+                        <value-regex>(.{0,512})(.*)</value-regex>
+                        <value-regex-group>1</value-regex-group>
+                    </column-descriptor>
+
+                </import-columns>
+            </import-descriptor>
+
+
+        </column-descriptor>
+
+
+    </import-columns>
+</import-descriptor>

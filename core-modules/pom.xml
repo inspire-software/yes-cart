@@ -39,5 +39,7 @@
         <module>core-module-cluster-jgroups</module>
         <module>core-module-cluster-ws</module>
         <module>core-module-reports</module>
+        <module>core-module-impex</module>
+        <module>core-module-job</module>
     </modules>
 </project>

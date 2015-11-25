@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -17,14 +16,20 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+			               http://www.springframework.org/schema/aop
+			               http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <!-- ########################################## bulk import ########################## -->
 
-    <import resource="core-federation-impex.xml"/>
-    <import resource="classpath:core-import.xml"/>
+    <aop:aspectj-autoproxy/>
+
+    <import resource="persistence.xml"/>
+    <import resource="io.xml"/>
+    <import resource="core-services.xml"/>
+
+    <import resource="core-import.xml"/>
 
 </beans>
-        

@@ -26,6 +26,14 @@ core-modules/core-module-http/core-module-http.iml
 
 core-modules/core-module-http/target/**
 
+core-modules/core-module-impex/core-module-impex.iml
+
+core-modules/core-module-impex/target/**
+
+core-modules/core-module-job/core-module-job.iml
+
+core-modules/core-module-job/target/**
+
 core-modules/core-module-orderstate/core-module-orderstate.iml
 
 core-modules/core-module-orderstate/target/**

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
  * Date: 7/29/12
  * Time: 12:34 PM
  */
-@RunWith(org.jmock.integration.junit4.JMock.class)
 public class RemotePaymentModulesManagementServiceImplTest {
 
     private Mockery mockery = new JUnit4Mockery();
