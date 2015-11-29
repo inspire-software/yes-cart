@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.yes.cart.bulkimport.service.ImportDirectorService;
+import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.remote.service.ReindexService;
 import org.yes.cart.remote.service.RemoteDevService;

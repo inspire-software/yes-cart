@@ -17,10 +17,10 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportContext;
 import org.yes.cart.util.ShopCodeContext;
@@ -37,7 +37,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private CsvImportFile importFileDescriptor;
 
-    private Collection<CsvImportColumn> importColumns;
+    private Collection<CsvImportColumn> columns;
 
     private ImportColumn pkColumn;
     private Map<String, ImportColumn> columnByName;
@@ -61,7 +61,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
      */
     public CsvImportDescriptorImpl() {
         importFileDescriptor = new CsvImportFileImpl();
-        importColumns = new ArrayList<CsvImportColumn>();
+        columns = new ArrayList<CsvImportColumn>();
         mode = ImportMode.MERGE;
         context = new CsvImportContextImpl();
     }
@@ -208,20 +208,20 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
-    public Collection<ImportColumn> getImportColumns() {
+    public Collection<ImportColumn> getColumns() {
         if (!initialised) {
             this.reloadMappings();
         }
-        if (importColumns == null) {
+        if (columns == null) {
             return Collections.emptyList();
         }
-        return Collections.unmodifiableCollection((Collection) importColumns);
+        return Collections.unmodifiableCollection((Collection) columns);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ImportColumn getImportColumn(final String columnName) {
+    public ImportColumn getColumn(final String columnName) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -231,7 +231,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
-    public Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType) {
+    public Collection<ImportColumn> getColumns(FieldTypeEnum fieldType) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -245,11 +245,11 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * Set the collection of import columns.
      *
-     * @param importColumns collection of import columns to set.
+     * @param columns collection of import columns to set.
      */
-    protected void setImportColumns(Collection<CsvImportColumn> importColumns) {
-        this.importColumns = new ArrayList<CsvImportColumn>();
-        this.importColumns.addAll(importColumns);
+    protected void setColumns(Collection<CsvImportColumn> columns) {
+        this.columns = new ArrayList<CsvImportColumn>();
+        this.columns.addAll(columns);
         this.reloadMappings();
     }
 
@@ -276,7 +276,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         columnByName = new HashMap<String, ImportColumn>();
         columnsByType = new HashMap<FieldTypeEnum, List<ImportColumn>>();
 
-        for (ImportColumn importColumn : importColumns) {
+        for (ImportColumn importColumn : columns) {
             List<ImportColumn> byType = columnsByType.get(importColumn.getFieldType());
             if (byType == null) {
                 byType = new ArrayList<ImportColumn>();
@@ -298,7 +298,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     public String toString() {
         return "CsvImportDescriptorImpl{" +
                 "importFileDescriptor=" + importFileDescriptor +
-                ", importColumns=" + importColumns +
+                ", importColumns=" + columns +
                 ", pkColumn=" + pkColumn +
                 ", columnByName=" + columnByName +
                 ", columnsByType=" + columnsByType +
@@ -306,6 +306,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
                 ", entityType='" + entityType + '\'' +
                 ", selectSql='" + selectSql + '\'' +
                 ", insertSql='" + insertSql + '\'' +
+                ", deleteSql='" + deleteSql + '\'' +
                 ", initialised=" + initialised +
                 '}';
     }

@@ -93,6 +93,7 @@
         import org.yes.cart.ui.attributes.AttributesManagementPanel;
         import org.yes.cart.ui.attributes.SystemAttributesPanel;
         import org.yes.cart.ui.brand.BrandManagementPanel;
+        import org.yes.cart.ui.bulkexport.BulkExportPanel;
         import org.yes.cart.ui.bulkimport.BulkImportPanel;
         import org.yes.cart.ui.carrier.CarrierManagementPanel;
         import org.yes.cart.ui.category.CategoryManagementPanel;
@@ -323,6 +324,22 @@
                 mainPanel.addChild(panelCache['BulkImportPanel']);
             }
             showMainPanelSection(panelCache['BulkImportPanel']);
+        }
+
+
+        private function onExportClick(event:MouseEvent):void {
+            setFontWeight(exportBtn);
+            if (!panelCache.hasOwnProperty('BulkExportPanel')) {
+                var panel:BulkExportPanel = new BulkExportPanel();
+                panel.exportCompletedListener = function():void {
+                    // Need to clear all panels to prevent "old" data in panels
+                    panelCache = {};
+                    panelCache['BulkExportPanel'] = panel;
+                };
+                panelCache['BulkExportPanel'] = panel;
+                mainPanel.addChild(panelCache['BulkExportPanel']);
+            }
+            showMainPanelSection(panelCache['BulkExportPanel']);
         }
 
         private function onLocationManagementClick(event:MouseEvent):void {
@@ -959,6 +976,11 @@
                                                        label="@Resource(bundle='ShopManagerApplication',key='import')"
                                                        click="onImportClick(event)"
                                                        toolTip="@Resource(bundle='ShopManagerApplication',key='importHint')"
+                                                />
+                                        <mx:LinkButton width="100%" id="exportBtn"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='export')"
+                                                       click="onExportClick(event)"
+                                                       toolTip="@Resource(bundle='ShopManagerApplication',key='exportHint')"
                                                 />
                                         <mx:LinkButton width="100%" id="reindexBtn"
                                                        label="@Resource(bundle='ShopManagerApplication',key='reindex')"

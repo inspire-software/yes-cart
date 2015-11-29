@@ -24,15 +24,19 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.service.support.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
-import org.yes.cart.bulkimport.model.*;
-import org.yes.cart.bulkimport.service.ImportService;
+import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.model.ImportTuple;
+import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
-import org.yes.cart.bulkimport.service.support.LookUpQuery;
-import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -239,7 +243,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             statusListener.notifyError(msgErr);
 
         } catch (IOException e) {
-            final String msgErr = MessageFormat.format("con not close the csv file : {0} {1}",
+            final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
                     fileToImport.getAbsolutePath(),
                     e.getMessage());
             log.error(msgErr);
@@ -360,8 +364,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 object = getEntity(tuple, null, masterObject, descriptor, entityCache);
 
 
-                fillEntityFields(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FIELD));
-                fillEntityForeignKeys(tuple, object, descriptor.getImportColumns(FieldTypeEnum.FK_FIELD), masterObject, descriptor, entityCache);
+                fillEntityFields(tuple, object, descriptor.getColumns(FieldTypeEnum.FIELD));
+                fillEntityForeignKeys(tuple, object, descriptor.getColumns(FieldTypeEnum.FK_FIELD), masterObject, descriptor, entityCache);
 
                 /*
                     Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
@@ -376,9 +380,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 }
                 genericDAO.saveOrUpdate(object);
                 performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                        descriptor.getImportColumns(FieldTypeEnum.SLAVE_INLINE_FIELD), entityCache);
+                        descriptor.getColumns(FieldTypeEnum.SLAVE_INLINE_FIELD), entityCache);
                 performSubImport(statusListener, tuple, csvImportDescriptorName, descriptor, object,
-                        descriptor.getImportColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD), entityCache);
+                        descriptor.getColumns(FieldTypeEnum.SLAVE_TUPLE_FIELD), entityCache);
 
                 if (masterObject == null) {
                     // No need to validate sub imports
@@ -453,7 +457,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                   final Map<String, Object> entityCache) throws Exception {
         for (ImportColumn slaveTable : slaves) {
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
-            CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getImportDescriptor();
+            CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getDescriptor();
             for (ImportTuple subTuple : subTuples) {
                 doImportMerge(statusListener,
                         subTuple,

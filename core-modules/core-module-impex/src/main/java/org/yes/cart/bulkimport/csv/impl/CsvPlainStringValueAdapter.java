@@ -16,8 +16,8 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkimport.model.DataTypeEnum;
-import org.yes.cart.bulkimport.model.ValueAdapter;
+import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 /**
  * User: denispavlov

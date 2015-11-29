@@ -17,11 +17,12 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
-import org.yes.cart.bulkimport.model.DataTypeEnum;
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
+import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,8 +36,6 @@ import java.util.regex.Pattern;
  * Time: 12:03 PM
  */
 public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
-
-    private boolean table;
 
     private int columnIndex;
 
@@ -60,7 +59,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private String language;
 
-    private ImportDescriptor importDescriptor; //complex fields.
+    private CsvImportDescriptor descriptor; //complex fields.
 
     private transient Pattern pattern = null;
 
@@ -115,21 +114,6 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isTable() {
-        return table;
-    }
-
-    /**
-     * Set table sub import flag .
-     * @param table table sub  import flag.
-     */
-    public void setTable(boolean table) {
-        this.table = table;
-    }
-
 
     /**
      * {@inheritDoc}
@@ -146,6 +130,19 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
             }
         }
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getValue(final Object rawValue, final ValueAdapter adapter) {
+        final String value;
+        if (rawValue == null) {
+            value = null;
+        } else {
+            value = String.valueOf(rawValue);
+        }
+        return getValue(value, adapter);
     }
 
     /**
@@ -308,17 +305,17 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public ImportDescriptor getImportDescriptor() {
-        return importDescriptor;
+    public CsvImportDescriptor getDescriptor() {
+        return descriptor;
     }
 
     /**
      * Set included import descriptor for complex fields.
      *
-     * @param importDescriptor {@link ImportDescriptor}
+     * @param descriptor {@link ImportDescriptor}
      */
-    public void setImportDescriptor(ImportDescriptor importDescriptor) {
-        this.importDescriptor = importDescriptor;
+    public void setDescriptor(CsvImportDescriptor descriptor) {
+        this.descriptor = descriptor;
     }
 
     /**
@@ -392,7 +389,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
                 ", valueRegExTemplate='" + valueRegExTemplate + '\'' +
                 ", lookupQuery='" + lookupQuery + '\'' +
                 ", useMasterObject=" + useMasterObject +
-                ", importDescriptor=" + importDescriptor +
+                ", importDescriptor=" + descriptor +
                 ", pattern=" + pattern +
                 ", valueConstant='" + valueConstant + '\'' +
                 ", language='" + language + '\'' +

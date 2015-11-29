@@ -17,9 +17,8 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkimport.model.DataTypeEnum;
-import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ValueAdapter;
+import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 import java.util.Map;
 import java.util.Properties;

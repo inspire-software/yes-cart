@@ -24,4 +24,10 @@ import org.yes.cart.bulkimport.model.ImportColumn;
  * Time: 11:42 AM
  */
 public interface CsvImportColumn extends ImportColumn {
+
+    /**
+     * {@inheritDoc}
+     */
+    CsvImportDescriptor getDescriptor();
+
 }

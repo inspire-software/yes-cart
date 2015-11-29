@@ -30,7 +30,7 @@ public interface JobContextKeys {
     /** Long shop PK for the shop which products need reindexing */
     String NODE_FULL_PRODUCT_INDEX_SHOP = "nodeIndexShop";
 
-    //-- IMPORT JOBS ----------------------------------//
+    //-- IMPORT/EXPORT JOBS ----------------------------------//
 
     /** file name of the currently imported file */
     String IMPORT_FILE = "fileName";
@@ -46,6 +46,17 @@ public interface JobContextKeys {
     String IMPORT_DIRECTORY_ROOT = "pathToImportDirectoryRoot";
     /** path to image vault. */
     String IMAGE_VAULT_PATH = "pathToImageVault";
+    /** chosen descriptors group */
+    String EXPORT_DESCRIPTOR_GROUP = "descriptorGroup";
+    /** export descriptor object */
+    String EXPORT_DESCRIPTOR = "exportDescriptor";
+    /** export descriptor name */
+    String EXPORT_DESCRIPTOR_NAME = "exportDescriptorName";
+    /** Override file name of the currently exported file */
+    String EXPORT_FILE = "fileToExport";
+    /** path to export directory. */
+    String EXPORT_DIRECTORY_ROOT = "pathToExportDirectoryRoot";
+
 
 
 }

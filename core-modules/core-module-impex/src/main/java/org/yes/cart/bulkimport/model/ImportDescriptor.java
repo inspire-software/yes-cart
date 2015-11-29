@@ -16,14 +16,14 @@
 
 package org.yes.cart.bulkimport.model;
 
-import java.util.Collection;
+import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public interface ImportDescriptor {
+public interface ImportDescriptor extends ImpExDescriptor<ImportContext, ImportColumn> {
 
     enum ImportMode { MERGE, DELETE }
 
@@ -49,9 +49,9 @@ public interface ImportDescriptor {
     String getModeName();
 
     /**
-     * Get full qualified entity interface. For example - org.yes.cart.domain.entity.Brand
+     * Get fully qualified entity interface. For example - org.yes.cart.domain.entity.Brand
      *
-     * @return full qualified entity interface
+     * @return fully qualified entity interface
      */
     String getEntityType();
 
@@ -70,41 +70,18 @@ public interface ImportDescriptor {
     ImportFile getImportFileDescriptor();
 
     /**
-     * Get the collection of import columns.
-     *
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns();
-
-
-    /**
-     * @param columnName column name
-     * @return get column by name
-     */
-    ImportColumn getImportColumn(String columnName);
-
-    /**
-     * Get the collection of import columns filtered by given field type.
-     *
-     * @param fieldType {@link FieldTypeEnum} discriminator.
-     * @return collection of import columns
-     */
-    Collection<ImportColumn> getImportColumns(FieldTypeEnum fieldType);
-
-
-    /**
-     * Get the folder with stored file to import.
+     * Get the directory with stored file to import.
      *
      * @return configured import folder.
      */
     String getImportDirectory();
 
     /**
-     * Set the import folder.
+     * Set the import directory.
      *
-     * @param importFolder import folder to use.
+     * @param importDirectory import directory to use.
      */
-    void setImportDirectory(String importFolder);
+    void setImportDirectory(String importDirectory);
 
     /**
      * Get select sql, which used to look up objects that are to

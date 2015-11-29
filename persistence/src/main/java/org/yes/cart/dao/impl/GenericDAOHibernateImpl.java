@@ -252,6 +252,17 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    public ResultsIterator<Object> findByQueryIterator(final String hsqlQuery, final Object... parameters) {
+        Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
+        if (parameters != null) {
+            setQueryParameters(query, parameters);
+        }
+        return new ResultsIteratorImpl<Object>(query.scroll(ScrollMode.FORWARD_ONLY));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Object findSingleByQuery(final String hsqlQuery, final Object... parameters) {
         Query query = sessionFactory.getCurrentSession().createQuery(hsqlQuery);
         setQueryParameters(query, parameters);

@@ -17,10 +17,10 @@
 package org.yes.cart.bulkimport.stream.xml;
 
 import org.junit.Test;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
@@ -44,7 +44,7 @@ public class CsvImportDescriptorXStreamProviderTest {
         final XStreamProvider<CsvImportDescriptor> provider = new CsvImportDescriptorXStreamProvider();
 
         final InputStream inputStream = new FileInputStream("src/test/resources/import/schematest001.xml");
-        final ImportDescriptor desc = provider.fromXML(inputStream);
+        final CsvImportDescriptor desc = provider.fromXML(inputStream);
 
         assertNotNull(desc);
 
@@ -60,18 +60,18 @@ public class CsvImportDescriptorXStreamProviderTest {
 
         assertEquals("UTF-8", desc.getImportFileDescriptor().getFileEncoding());
         assertEquals("attributenames.csv", desc.getImportFileDescriptor().getFileNameMask());
-        assertTrue(((CsvImportFile) desc.getImportFileDescriptor()).isIgnoreFirstLine());
-        assertEquals(';', ((CsvImportFile) desc.getImportFileDescriptor()).getColumnDelimiter());
-        assertEquals('"', ((CsvImportFile) desc.getImportFileDescriptor()).getTextQualifier());
+        assertTrue(desc.getImportFileDescriptor().isIgnoreFirstLine());
+        assertEquals(';', desc.getImportFileDescriptor().getColumnDelimiter());
+        assertEquals('"', desc.getImportFileDescriptor().getTextQualifier());
 
         assertEquals("select b from AttributeEntity b where b.code = {code}", desc.getSelectSql());
         assertEquals("INSERT INTO TATTRIBUTE (VERSION, GUID, CODE) VALUES (0, {GUID}, {code})", desc.getInsertSql());
         assertEquals("delete from AttributeEntity b where b.code = {code}", desc.getDeleteSql());
 
-        assertNotNull(desc.getImportColumns());
-        assertEquals(11, desc.getImportColumns().size());
+        assertNotNull(desc.getColumns());
+        assertEquals(11, desc.getColumns().size());
 
-        final List<ImportColumn> colums = new ArrayList<ImportColumn>(desc.getImportColumns());
+        final List<ImportColumn> colums = new ArrayList<ImportColumn>(desc.getColumns());
 
         final CsvImportColumn col0 = (CsvImportColumn) colums.get(0);
         assertNotNull(col0);

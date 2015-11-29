@@ -373,11 +373,6 @@ public interface ProductService extends GenericService<Product> {
      */
     String findSeoUriByProductSkuId(Long skuId);
 
-    /**
-     * Clear empty product attributes, that can appear after bulk import.
-     */
-    void clearEmptyAttributes();
-
 
 
     /**

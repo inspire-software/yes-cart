@@ -109,4 +109,11 @@
     </util:map>
 
 
+    <bean id="reportGenerator" class="org.yes.cart.report.impl.AdminReportGeneratorImpl">
+        <constructor-arg index="0" ref="themeService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="contentService"/>
+    </bean>
+
+
 </beans>

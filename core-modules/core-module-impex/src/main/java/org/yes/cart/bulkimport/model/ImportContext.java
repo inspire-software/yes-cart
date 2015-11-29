@@ -16,18 +16,13 @@
 
 package org.yes.cart.bulkimport.model;
 
+import org.yes.cart.bulkcommon.model.ImpExContext;
+
 /**
  * User: denispavlov
  * Date: 11/06/2015
  * Time: 07:53
  */
-public interface ImportContext {
-
-    /**
-     * Get shop context or null if no specific shop is defined.
-     *
-     * @return shop code
-     */
-    String getShopCode();
+public interface ImportContext extends ImpExContext {
 
 }

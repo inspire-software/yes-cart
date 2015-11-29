@@ -18,8 +18,6 @@ package org.yes.cart.service.federation.impl;
 
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.service.federation.FederationFilter;
-import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.*;
 

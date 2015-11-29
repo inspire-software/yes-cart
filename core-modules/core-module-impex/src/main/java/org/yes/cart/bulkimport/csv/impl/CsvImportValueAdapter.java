@@ -18,8 +18,8 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.yes.cart.bulkimport.model.DataTypeEnum;
-import org.yes.cart.bulkimport.model.ValueAdapter;
+import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 import java.math.BigDecimal;
 import java.util.Date;

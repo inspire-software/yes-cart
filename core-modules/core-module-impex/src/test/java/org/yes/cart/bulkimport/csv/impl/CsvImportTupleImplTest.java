@@ -20,8 +20,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.model.ImportColumn;
-import org.yes.cart.bulkimport.model.ValueAdapter;
 
 import static org.junit.Assert.assertEquals;
 

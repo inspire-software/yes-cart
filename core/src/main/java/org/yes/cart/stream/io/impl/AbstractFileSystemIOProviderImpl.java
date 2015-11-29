@@ -89,9 +89,11 @@ public abstract class AbstractFileSystemIOProviderImpl implements FileSystemIOPr
 
         final File file = resolveFileFromUri(uri, context);
 
-        // ensure we create all dirs necessary
-        if (!file.getParentFile().mkdirs()) {
-            ShopCodeContext.getLog(this).error("Unable to create directory {}", file.getParent());
+        if (!file.getParentFile().exists()) {
+            // ensure we create all dirs necessary
+            if (!file.getParentFile().mkdirs()) {
+                ShopCodeContext.getLog(this).error("Unable to create directory {}", file.getParent());
+            }
         }
 
         FileUtils.writeByteArrayToFile(resolveFileFromUri(uri, context), content);

@@ -17,9 +17,9 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.stream.xml.CsvImportDescriptorXStreamProvider;
 
@@ -77,7 +77,7 @@ public class CsvImportDescriptorImplTest {
         importColumn.setValueRegEx(null);
         columns.add(importColumn);
 
-        descriptor.setImportColumns(columns);
+        descriptor.setColumns(columns);
 
         return descriptor;
 
@@ -123,7 +123,7 @@ public class CsvImportDescriptorImplTest {
         importColumn.setValueRegEx(null);
         columns.add(importColumn);
 
-        descriptor.setImportColumns(columns);
+        descriptor.setColumns(columns);
 
         return descriptor;
 
@@ -153,8 +153,8 @@ public class CsvImportDescriptorImplTest {
     @Test
     public void testGetImportColumns() {
         CsvImportDescriptor csvImportDescriptor = new CsvImportDescriptorImpl();
-        assertNotNull(csvImportDescriptor.getImportColumns());
-        assertTrue(csvImportDescriptor.getImportColumns().isEmpty());
+        assertNotNull(csvImportDescriptor.getColumns());
+        assertTrue(csvImportDescriptor.getColumns().isEmpty());
     }
 
     @Test
@@ -175,15 +175,15 @@ public class CsvImportDescriptorImplTest {
         csvImportColumn.setLookupQuery("select a from table a");
         csvImportColumn.setValueRegEx(".*");
         csvImportColumn.setUseMasterObject(true);
-        csvImportDescriptor.setImportColumns((List) Arrays.asList(csvImportColumn));
+        csvImportDescriptor.setColumns((List) Arrays.asList(csvImportColumn));
 
 
         final CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
         descriptor.setEntityType("SomeEntityIntefrace");
-        descriptor.setImportColumns(
+        descriptor.setColumns(
                 (List) Arrays.asList(new CsvImportColumnImpl(0, FieldTypeEnum.FIELD, "code", "re", "lookup query")));
 
-        csvImportColumn.setImportDescriptor(descriptor);
+        csvImportColumn.setDescriptor(descriptor);
 
 
         xmlSerializationResult = new CsvImportDescriptorXStreamProvider().toXML(csvImportDescriptor);
@@ -200,16 +200,16 @@ public class CsvImportDescriptorImplTest {
         assertEquals(csvImportDescriptor.getImportFileDescriptor().getTextQualifier(), csvImportDeserializedDescriptor.getImportFileDescriptor().getTextQualifier());
         assertEquals(csvImportDescriptor.getImportDirectory(), csvImportDeserializedDescriptor.getImportDirectory());
 
-        assertEquals(csvImportDescriptor.getImportColumns().iterator().next().getColumnIndex(),
-                     csvImportDeserializedDescriptor.getImportColumns().iterator().next().getColumnIndex());
-        assertEquals(csvImportDescriptor.getImportColumns().iterator().next().getFieldType(),
-                     csvImportDeserializedDescriptor.getImportColumns().iterator().next().getFieldType());
-        assertEquals(csvImportDescriptor.getImportColumns().iterator().next().getLookupQuery(),
-                     csvImportDeserializedDescriptor.getImportColumns().iterator().next().getLookupQuery());
-        assertEquals(csvImportDescriptor.getImportColumns().iterator().next().getName(),
-                     csvImportDeserializedDescriptor.getImportColumns().iterator().next().getName());
-        assertEquals(csvImportDescriptor.getImportColumns().iterator().next().getValueRegEx(),
-                     csvImportDeserializedDescriptor.getImportColumns().iterator().next().getValueRegEx());
+        assertEquals(csvImportDescriptor.getColumns().iterator().next().getColumnIndex(),
+                     csvImportDeserializedDescriptor.getColumns().iterator().next().getColumnIndex());
+        assertEquals(csvImportDescriptor.getColumns().iterator().next().getFieldType(),
+                     csvImportDeserializedDescriptor.getColumns().iterator().next().getFieldType());
+        assertEquals(csvImportDescriptor.getColumns().iterator().next().getLookupQuery(),
+                     csvImportDeserializedDescriptor.getColumns().iterator().next().getLookupQuery());
+        assertEquals(csvImportDescriptor.getColumns().iterator().next().getName(),
+                     csvImportDeserializedDescriptor.getColumns().iterator().next().getName());
+        assertEquals(csvImportDescriptor.getColumns().iterator().next().getValueRegEx(),
+                     csvImportDeserializedDescriptor.getColumns().iterator().next().getValueRegEx());
 
     }
 

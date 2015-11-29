@@ -138,7 +138,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="skuWarehouseFederationFilter" class="org.yes.cart.service.federation.impl.SkuWarehouseFederationFilterImpl">
+    <bean id="skuWarehouseFederationFilter" class="org.yes.cart.service.federation.impl.SkuWarehouseImpexFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
             <list>
@@ -160,7 +160,37 @@
         </constructor-arg>
     </bean>
 
-    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+    <bean id="customerImpexFederationFilter" class="org.yes.cart.service.federation.impl.CustomerImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="addressImpexFederationFilter" class="org.yes.cart.service.federation.impl.AddressImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="customerOrderImpexFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="impexFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
             <map>
@@ -175,6 +205,9 @@
                 <entry key="org.yes.cart.domain.entity.AttrValueProduct"    value-ref="attrValueProductImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.ProductSku"          value-ref="productSkuImpexFederationFilter"/>
                 <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value-ref="attrValueProductSkuImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Customer"            value-ref="customerImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Address"             value-ref="addressImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.CustomerOrder"       value-ref="customerOrderImpexFederationFilter"/>
             </map>
         </constructor-arg>
     </bean>

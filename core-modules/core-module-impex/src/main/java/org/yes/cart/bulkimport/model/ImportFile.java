@@ -53,23 +53,5 @@ public interface ImportFile {
      */
     void setFileEncoding(String fileEncoding);
 
-    /**
-     * Get the entity interface name. The real entity instance will be
-     * created with {@link org.yes.cart.dao.EntityFactory}
-     *
-     * @return entity interface name
-     */
-    String getEntityName();
-
-    /**
-     * Set the entity interface name.
-     *
-     * @param entityName entity interface name
-     */
-    void setEntityName(String entityName);
-
-
-
-
 
 }

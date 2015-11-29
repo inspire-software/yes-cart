@@ -22,11 +22,11 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
+import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
+import org.yes.cart.bulkcommon.service.ImportDirectorService;
+import org.yes.cart.bulkcommon.service.ImportService;
+import org.yes.cart.bulkcommon.service.model.JobContextDecoratorImpl;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.DataDescriptorResolver;
-import org.yes.cart.bulkimport.service.ImportDirectorService;
-import org.yes.cart.bulkimport.service.ImportService;
-import org.yes.cart.bulkimport.service.model.JobContextDecoratorImpl;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -43,7 +43,6 @@ import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
-import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.utils.impl.ZipUtils;
@@ -67,11 +66,9 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
     private final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
-    private final String pathToArchiveFolder;
+    private final String pathToArchiveDirectory;
 
-    private final String pathToImportFolder;
-
-    private final ProductService productService;
+    private final String pathToImportDirectory;
 
     private final NodeService nodeService;
 
@@ -87,18 +84,17 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     /**
      * Construct the import director
      *
-     * @param pathToArchiveFolder     path to archive folder.
-     * @param pathToImportFolder      path to use.
-     * @param productService          product service
+     * @param pathToArchiveDirectory  path to archive folder.
+     * @param pathToImportDirectory   path to use.
      * @param dataDescriptorResolver  descriptor resolver
      * @param executor                async executor
      * @param nodeService             node service
      * @param systemService           system service
      * @param zipUtils                zip algorithm
+     * @param federationFacade        data federation service
      */
-    public ImportDirectorImplService(final String pathToArchiveFolder,
-                                     final String pathToImportFolder,
-                                     final ProductService productService,
+    public ImportDirectorImplService(final String pathToArchiveDirectory,
+                                     final String pathToImportDirectory,
                                      final DataDescriptorResolver<ImportDescriptor> dataDescriptorResolver,
                                      final TaskExecutor executor,
                                      final NodeService nodeService,
@@ -106,9 +102,8 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                                      final ZipUtils zipUtils,
                                      final FederationFacade federationFacade) {
         super(executor);
-        this.pathToArchiveFolder = pathToArchiveFolder;
-        this.pathToImportFolder = pathToImportFolder;
-        this.productService = productService;
+        this.pathToArchiveDirectory = pathToArchiveDirectory;
+        this.pathToImportDirectory = pathToImportDirectory;
         this.dataDescriptorResolver = dataDescriptorResolver;
         this.nodeService = nodeService;
         this.systemService = systemService;
@@ -189,7 +184,6 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     } else {
                         doImportInternal(context); //single file import
                     }
-                    productService.clearEmptyAttributes();
                     listener.notifyMessage("Import Job completed");
                     listener.notifyCompleted();
                 } catch (IOException ioe) {
@@ -251,7 +245,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
     protected void moveImportFilesToArchive(final Set<String> importedFiles) {
         if (!importedFiles.isEmpty()) {
             final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd-hh-mm-ss");
-            final String fullPathToArchiveFolder = pathToArchiveFolder;
+            final String fullPathToArchiveFolder = pathToArchiveDirectory;
             File dir = new File(fullPathToArchiveFolder + File.separator + dateFormat.format(new Date()) + File.separator);
             dir.mkdirs();
 
@@ -272,17 +266,17 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                 }
             }
 
-            if (!pathToImportFolder.equals(tempRoot)) {
+            if (!pathToImportDirectory.equals(tempRoot)) {
                 new File(tempRoot).delete();
             }
         }
     }
 
     private String resolveImportDirectory(String fileName) {
-        if (fileName.startsWith(pathToImportFolder)) {
+        if (fileName.startsWith(pathToImportDirectory)) {
             return new File(fileName).getParentFile().getAbsolutePath();
         }
-        return pathToImportFolder;
+        return pathToImportDirectory;
     }
 
     /**
@@ -320,14 +314,14 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
      * {@inheritDoc}
      */
     public String getImportDirectory() {
-        return pathToImportFolder;
+        return pathToImportDirectory;
     }
 
     /**
      * {@inheritDoc}
      */
     public String getArchiveDirectory() {
-        return pathToArchiveFolder;
+        return pathToArchiveDirectory;
     }
 
     /**

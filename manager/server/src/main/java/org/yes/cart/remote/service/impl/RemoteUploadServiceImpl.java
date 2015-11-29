@@ -20,8 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.yes.cart.bulkimport.service.ImportDirectorService;
-import org.yes.cart.constants.Constants;
+import org.yes.cart.bulkcommon.service.ImportDirectorService;
 import org.yes.cart.remote.service.RemoteUploadService;
 
 import java.io.File;
@@ -52,7 +51,7 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
      */
     public String upload(final byte[] bytes, final String fileName) throws IOException {
 
-        final String folderPath = importDirectorService.getImportDirectory();
+        final String importRoot = importDirectorService.getImportDirectory();
 
         final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd-hh-mm-ss");
         final String timestamp = format.format(new Date());
@@ -60,9 +59,9 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
 
         final File folder;
         if (sc != null && sc.getAuthentication() != null && sc.getAuthentication().getName() != null) {
-            folder = new File(folderPath + File.separator + sc.getAuthentication().getName() + timestamp);
+            folder = new File(importRoot + File.separator + sc.getAuthentication().getName() + timestamp);
         } else {
-            folder = new File(folderPath + File.separator + "anonymous" + timestamp);
+            folder = new File(importRoot + File.separator + "anonymous" + timestamp);
         }
 
         folder.mkdirs();
@@ -91,7 +90,7 @@ public class RemoteUploadServiceImpl implements RemoteUploadService {
                 }
             }
         } else {
-            throw new IOException("Unable to create directory: " + folderPath);
+            throw new IOException("Unable to create directory: " + importRoot);
         }
     }
 

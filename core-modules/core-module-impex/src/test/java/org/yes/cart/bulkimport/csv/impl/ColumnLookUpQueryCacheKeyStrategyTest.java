@@ -20,13 +20,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.service.support.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
-import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
-import org.yes.cart.bulkimport.service.support.LookUpQuery;
-import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
 

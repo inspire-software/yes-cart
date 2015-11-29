@@ -16,16 +16,19 @@
 
 package org.yes.cart.bulkimport.model;
 
+import org.yes.cart.bulkcommon.model.ImpExColumn;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
+
 import java.util.List;
 
 /**
- * Single import line description.
+ * Single import column description.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 08-May-2011
  * Time: 11:12:54
  */
-public interface ImportColumn {
+public interface ImportColumn extends ImpExColumn {
 
     /**
      * Get the field value. Regular expression will be used for obtain value if reg exp is set.
@@ -46,93 +49,12 @@ public interface ImportColumn {
      */
     List getValues(String rawValue, ValueAdapter adapter);
 
-
     /**
-     * Is sub import field shall be treated as table. The | used for row delimiter
-     * @return  true in case if  perform import as table subimport
-     */
-    boolean isTable();
-
-
-    /**
-     * In case if column has reg exp.
-     *
-     * @param rawValue the whole value from cell
-     * @return matched groups or 0 if column has not reg exp.
-     */
-    int getGroupCount(String rawValue);
-
-    /**
-     * Column index from csv file, 1 based
+     * Column index from csv file
      *
      * @return column index
      */
     int getColumnIndex();
-
-    /**
-     * Get the {@link FieldTypeEnum}.
-     *
-     * @return filed type
-     */
-    FieldTypeEnum getFieldType();
-
-    /**
-     * Get the {@link DataTypeEnum}.
-     *
-     * @return data type (used for converting data correctly)
-     */
-    DataTypeEnum getDataType();
-
-    /**
-     * Field name in object in java beans notation.
-     *
-     * @return field name.
-     */
-    String getName();
-
-    /**
-     * Regular expression for get value for specified field name
-     * in case if csv field contains more than one object field.
-     *
-     * Example value: "gold,855"
-     * Example pattern to capture number: ".*,([0-9]*)"
-     * Group 1 matches: "855"
-     *
-     * @return regular expression to get the value from csv field
-     */
-    String getValueRegEx();
-
-    /**
-     * Return matching group as the value for given field.
-     *
-     * Example value: "gold,855"
-     * Example pattern to capture number: ".*,([0-9]*)"
-     * Example group number to extract value: 1
-     * Group 1 matches: "855"
-     *
-     * @return group that defines the value in regex specified
-     */
-    Integer getValueRegExGroup();
-
-    /**
-     * Transform value matched by regex using this template.
-     *
-     * Example value: "gold,855"
-     * Example pattern to capture number: ".*,([0-9]*)"
-     * Example regex template: "Number is $1"
-     * Resulting template value: "Number is 855"
-     *
-     * @return regex template.
-     */
-    String getValueRegExTemplate();
-
-    /**
-     * Get the HQL lookup query to get the foreign key object within csv filed value
-     * or value from csv gathered via regexp.
-     *
-     * @return HQL lookup query.
-     */
-    String getLookupQuery();
 
 
     /**
@@ -140,38 +62,6 @@ public interface ImportColumn {
      *
      * @return {@link ImportDescriptor}
      */
-    ImportDescriptor getImportDescriptor();
-
-
-    /**
-     * Boolean flag needed to use master object for fk in case of subimport.
-     *
-     * @return true if need to use master object.
-     */
-    boolean isUseMasterObject();
-
-    /**
-     * Set use master object in case of fk subimport.
-     *
-     * @param useMasterObject use master object flag.
-     */
-    void setUseMasterObject(boolean useMasterObject);
-
-    /**
-     * Get the constant for field. Some fields can be field with constants
-     *
-     * @return filed constant
-     */
-    String getValueConstant();
-
-    /**
-     * @return entity type for FK's
-     */
-    String getEntityType();
-
-    /**
-     * @return language of the localisable value (or null if this is not localisable)
-     */
-    String getLanguage();
+    ImportDescriptor getDescriptor();
 
 }

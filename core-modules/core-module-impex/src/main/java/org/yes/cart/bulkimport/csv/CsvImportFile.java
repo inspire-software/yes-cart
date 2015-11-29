@@ -19,7 +19,7 @@ package org.yes.cart.bulkimport.csv;
 import org.yes.cart.bulkimport.model.ImportFile;
 
 /**
- * Csv specific import file decriptor with additional information about
+ * Csv specific import file descriptor with additional information about
  * delimiter, qualifier.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
@@ -52,9 +52,9 @@ public interface CsvImportFile extends ImportFile {
     /**
      * Set column delimiter.
      *
-     * @param columnDelimeter column delimiter
+     * @param columnDelimiter column delimiter
      */
-    void setColumnDelimiter(char columnDelimeter);
+    void setColumnDelimiter(char columnDelimiter);
 
     /**
      * Get text qualifier.

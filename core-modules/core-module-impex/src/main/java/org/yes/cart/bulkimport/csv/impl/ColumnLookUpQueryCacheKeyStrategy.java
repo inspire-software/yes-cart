@@ -16,13 +16,13 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
+import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.service.support.LookUpQuery;
+import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
-import org.yes.cart.bulkimport.model.ValueAdapter;
 import org.yes.cart.bulkimport.service.support.EntityCacheKeyStrategy;
-import org.yes.cart.bulkimport.service.support.LookUpQuery;
-import org.yes.cart.bulkimport.service.support.LookUpQueryParameterStrategy;
 import org.yes.cart.dao.GenericDAO;
 
 /**

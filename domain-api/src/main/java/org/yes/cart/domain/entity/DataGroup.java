@@ -24,6 +24,7 @@ package org.yes.cart.domain.entity;
 public interface DataGroup extends Auditable {
 
     String TYPE_IMPORT = "IMPORT";
+    String TYPE_EXPORT = "EXPORT";
 
     /**
      * Get data group pk.

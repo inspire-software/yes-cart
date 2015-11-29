@@ -25,6 +25,6 @@
 
     <import resource="core-federation.xml"/>
 
-    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.TestImpexFederationFacadeImpl"/>
+    <bean id="impexFederationFacade" class="org.yes.cart.service.federation.impl.TestImpexFederationFacadeImpl"/>
 
 </beans>

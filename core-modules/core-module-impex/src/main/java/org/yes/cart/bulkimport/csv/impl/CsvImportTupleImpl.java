@@ -17,9 +17,13 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
-import org.yes.cart.bulkimport.model.*;
+import org.yes.cart.bulkimport.model.ImportColumn;
+import org.yes.cart.bulkimport.model.ImportDescriptor;
+import org.yes.cart.bulkimport.model.ImportTuple;
 
 import java.util.ArrayList;
 import java.util.Arrays;

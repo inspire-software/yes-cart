@@ -16,10 +16,10 @@
 
 package org.yes.cart.bulkimport.service.support;
 
+import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportTuple;
-import org.yes.cart.bulkimport.model.ValueAdapter;
 
 /**
  * Cache key generation strategy to improve performance of bulk import

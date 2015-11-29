@@ -933,14 +933,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void clearEmptyAttributes() {
-        //productDao.executeHsqlUpdate("delete from AttrValueEntityProduct a where a.val is null or a.val=''");
-        //NativeUpdate("DELETE FROM TPRODUCTATTRVALUE WHERE VAL IS NULL OR VAL =''");
-    }
-
 
     /**
      * {@inheritDoc}

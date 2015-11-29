@@ -18,10 +18,9 @@ package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
@@ -29,6 +28,7 @@ import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.image.ImageNameStrategy;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,14 +42,12 @@ import java.util.Set;
  */
 public class ImagesBulkImportServiceImpl extends AbstractImportService implements ImportService {
 
-    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
-
     private final ImageService imageService;
 
     private final ImageImportDomainObjectStrategy[] strategies;
 
     /**
-     * Construct bilk import service.
+     * Construct bulk import service.
      *
      * @param federationFacade federation facade
      * @param imageService image service
@@ -68,6 +66,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
      */
     public BulkImportResult doImport(final JobContext context) {
 
+        final Logger log = ShopCodeContext.getLog(this);
         final JobStatusListener statusListener = context.getListener();
         final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
         final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
@@ -83,14 +82,14 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                 imageImportDescriptorName,
                 regExp);
         statusListener.notifyMessage(info);
-        LOG.info(info);
+        log.info(info);
         File[] files = getFilesToImport(importDescriptor, fileName);
         if (files != null) {
             info = MessageFormat.format(
                     "\nINFO found {0} images to import",
                     files.length);
             statusListener.notifyMessage(info);
-            LOG.info(info);
+            log.info(info);
             int count = 0;
             int total = files.length;
             for (File file : files) {
@@ -121,6 +120,7 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                           final Set<String> importedFiles,
                           final String imageVaultRootDirectory) {
 
+        final Logger log = ShopCodeContext.getLog(this);
         final ImageNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
 
         final String fileName = file.getName();
@@ -147,12 +147,12 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
                 final String info = MessageFormat.format(
                         "image {0} {1} added to image repository", file.getAbsolutePath(), newFileName);
                 statusListener.notifyMessage(info);
-                LOG.info(info);
+                log.info(info);
 
             } catch (IOException e) {
                 final String err = MessageFormat.format(
                         "can not add {0} to image repository. Try to add it manually. Error is {1}", file.getAbsolutePath(), e.getMessage());
-                LOG.error(err, e);
+                log.error(err, e);
                 statusListener.notifyError(err);
             }
         }

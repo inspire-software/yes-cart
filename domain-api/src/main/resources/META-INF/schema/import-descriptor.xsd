@@ -51,7 +51,7 @@
                     SQL : insert into TCATEGORY (GUID) values ('{guid}')
                 Note the difference that '' are necessary for native SQL but not for HSQL.
                 There are special placeholders in addition to {column} placeholders:
-                1. {masterObjectId} PK of the maste object
+                1. {masterObjectId} PK of the master object
                 2. {masterObject} master instance (for use with HSQL)
                 3. {GUID} auto generated guid (for use with native SQL inserts)
 
@@ -128,11 +128,11 @@
                 column-index = 0 and name = code means that 0th column in import tuple is mapped
                 to code property on the entity to be imported.
 
-                If language is defined the values will be attempted to be inserted as a i18n.
+                If language defines the values will be attempted to be inserted as a i18n.
                 The language specified must be exactly the same configuration as Locale used by
                 YeS (Yes Shop).
 
-                Field type defined what type of field this is and will define the import strategy
+                Field type defines what type of field this is and will define the import strategy
                 for that field (e.g. FK_FIELD would fetch a parent entity using lookup-query).
                 For FK field entity-type must be specified to auto generate parent dependencies.
 
@@ -143,7 +143,7 @@
                 Constants just mean that some columns will be prepopulated with values. This is
                 useful in some case, as for example setting default online properties for products.
 
-                Lookup query is used to check is the entity exists for normal fields or to retrieve
+                Lookup query is used to check if the entity exists for normal fields or to retrieve
                 parent entities for FK fields. The query syntax follows HSQL (Hibernate) syntax
             </xs:documentation>
         </xs:annotation>
@@ -152,7 +152,7 @@
             <xs:element name="field-type">
                 <xs:annotation>
                     <xs:documentation>
-                        This constraint corresponds to org.yes.cart.bulkimport.model.FieldTypeEnum.
+                        This constraint corresponds to org.yes.cart.bulkcommon.model.FieldTypeEnum.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>
@@ -167,7 +167,7 @@
             <xs:element name="data-type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        This constraint corresponds to org.yes.cart.bulkimport.model.DataTypeEnum.
+                        This constraint corresponds to org.yes.cart.bulkcommon.model.DataTypeEnum.
                     </xs:documentation>
                 </xs:annotation>
                 <xs:simpleType>

@@ -32,25 +32,6 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
     private boolean ignoreFirstLine;
     private String fileNameMask;
     private String fileEncoding;
-    private String entityName;
-
-    /**
-     * Get the entity interface name.
-     *
-     * @return entity interface name
-     */
-    public String getEntityName() {
-        return entityName;
-    }
-
-    /**
-     * Set the entity interface name.
-     *
-     * @param entityName entity interface name
-     */
-    public void setEntityName(final String entityName) {
-        this.entityName = entityName;
-    }
 
     /**
      * {@inheritDoc}
@@ -132,7 +113,6 @@ public class CsvImportFileImpl implements CsvImportFile, Serializable {
                 ", ignoreFirstLine=" + ignoreFirstLine +
                 ", fileNameMask='" + fileNameMask + '\'' +
                 ", fileEncoding='" + fileEncoding + '\'' +
-                ", entityName='" + entityName + '\'' +
                 '}';
     }
 }

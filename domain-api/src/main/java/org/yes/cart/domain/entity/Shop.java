@@ -90,7 +90,7 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
 
     /**
      * Get the path to shop theme. Default failover path will be used,
-     * if some resource con not be found in shop theme.
+     * if some resource can not be found in shop theme.
      *
      * @return path to shop theme.
      */

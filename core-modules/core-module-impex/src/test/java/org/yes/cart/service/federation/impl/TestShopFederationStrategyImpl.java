@@ -16,12 +16,7 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.service.dto.ManagementService;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.*;

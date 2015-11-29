@@ -125,6 +125,16 @@ public interface GenericDAO<T, PK extends Serializable> {
      */
     List<Object> findByQuery(String hsqlQuery, Object... parameters);
 
+    /**
+     * Find by hsql query.
+     *
+     * @param hsqlQuery  query
+     * @param parameters parameters
+     *
+     * @return list of objects.
+     */
+    ResultsIterator<Object> findByQueryIterator(String hsqlQuery, Object... parameters);
+
 
     /**
      * Find single entity, that returned by named query.

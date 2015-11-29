@@ -16,7 +16,7 @@
 
 package org.yes.cart.bulkimport.model;
 
-import java.util.List;
+import org.yes.cart.bulkcommon.model.ImpExTuple;
 
 /**
  * Single tuple of data from import source.
@@ -25,31 +25,6 @@ import java.util.List;
  * Date: 12-07-31
  * Time: 7:59 AM
  */
-public interface ImportTuple<S, T> {
-
-    /**
-     * @return id to trace back to the import source.
-     */
-    S getSourceId();
-
-    /**
-     * @return data to be imported
-     */
-    T getData();
-
-    /**
-     * @param column column descriptor
-     * @param adapter value adapter
-     * @return column value (or values) depending on data
-     */
-    Object getColumnValue(ImportColumn column, ValueAdapter adapter);
-
-    /**
-     * @param importDescriptor import descriptor
-     * @param column column descriptor
-     * @param adapter value adapter
-     * @return sub tuple from a column
-     */
-    List<ImportTuple<S, T>> getSubTuples(ImportDescriptor importDescriptor, ImportColumn column, ValueAdapter adapter);
+public interface ImportTuple<S, T> extends ImpExTuple<S, T, ImportDescriptor, ImportColumn> {
 
 }

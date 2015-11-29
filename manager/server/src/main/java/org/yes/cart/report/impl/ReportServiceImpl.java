@@ -171,10 +171,10 @@ public class ReportServiceImpl implements ReportService {
      * Enhance parameters by adding inferred values.
      *
      * @param reportId reportId
-     * @param result restls
+     * @param result results
      * @param currentSelection parameters
      *
-     * @return enhanced paramteres
+     * @return enhanced parameteres
      */
     Map<String, Object> getEnhancedParameterValues(final String reportId, final List<Object> result, final Map<String, Object> currentSelection) {
 

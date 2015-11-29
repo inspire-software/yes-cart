@@ -206,3 +206,23 @@ drop index EMAIL on TCUSTOMER;
 -- ## Drop them
 -- alter table TCUSTOMER drop constraint SQL151023000042970;
 -- alter table TCUSTOMER drop constraint SQL151023000042971;
+
+--
+-- YC-630 Add ability to run export jobs from YUM
+--
+
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2000, 'Customer Addresses', 'EXPORT', 'customeraddresses.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2001, 'Customer Profiles', 'EXPORT', 'customers.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2002, 'Customer Orders', 'EXPORT', 'orders.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2003, 'Customer Payments', 'EXPORT', 'payments.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2004, 'Export Images: Products and SKU', 'EXPORT', 'productimagesout.xml');
+INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2005, 'Export Images: Category and Content', 'EXPORT', 'categoryimagesout.xml');
+
+
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2000, 'customeraddresses.xml', 'WEBINF_XML', 'customeraddresses.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2001, 'customers.xml', 'WEBINF_XML', 'customers.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2002, 'orders.xml', 'WEBINF_XML', 'orders.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2003, 'payments.xml', 'WEBINF_XML', 'payments.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2004, 'productimagesout.xml', 'WEBINF_XML', 'productimagesout.xml');
+INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2005, 'categoryimagesout.xml', 'WEBINF_XML', 'categoryimagesout.xml');
+

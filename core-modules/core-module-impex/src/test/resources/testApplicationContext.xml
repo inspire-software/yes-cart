@@ -31,5 +31,6 @@
     <import resource="core-services.xml"/>
 
     <import resource="core-import.xml"/>
+    <import resource="core-export.xml"/>
 
 </beans>

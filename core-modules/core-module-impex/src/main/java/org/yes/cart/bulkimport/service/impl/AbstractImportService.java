@@ -17,6 +17,7 @@
 package org.yes.cart.bulkimport.service.impl;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.service.federation.FederationFacade;
 
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
  * Date: 12/12/11
  * Time: 10:43 AM
  */
-public class AbstractImportService {
+public abstract class AbstractImportService implements ImportService {
 
     protected final FederationFacade federationFacade;
 

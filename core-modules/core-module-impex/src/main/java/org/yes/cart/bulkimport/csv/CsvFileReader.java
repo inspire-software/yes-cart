@@ -33,8 +33,8 @@ public interface CsvFileReader {
      * Open a csv file for import.
      *
      * @param csvFileName     the csv file name
-     * @param columnDelimeter the column delimeter
-     * @param textQualifier   the text qualifer
+     * @param columnDelimiter the column delimiter
+     * @param textQualifier   the text qualifier
      * @param encoding        csv file encoding
      * @param ignoreFirstLine ignore first line flag.
      * @throws java.io.FileNotFoundException if give file can not be found.
@@ -42,7 +42,7 @@ public interface CsvFileReader {
      *                                       in case if given encoding not supported.
      */
     void open(String csvFileName,
-              char columnDelimeter,
+              char columnDelimiter,
               char textQualifier,
               String encoding,
               boolean ignoreFirstLine) throws FileNotFoundException, UnsupportedEncodingException;
@@ -63,7 +63,7 @@ public interface CsvFileReader {
     void close() throws IOException;
 
     /**
-     * Get the quantity of readed rows, ignoreFirstLine parameter not affect the read rows counter.
+     * Get the quantity of read rows, ignoreFirstLine parameter not affect the read rows counter.
      *
      * @return rows quantity.
      */

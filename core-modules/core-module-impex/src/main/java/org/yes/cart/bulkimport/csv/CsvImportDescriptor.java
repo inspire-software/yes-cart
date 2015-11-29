@@ -16,11 +16,7 @@
 
 package org.yes.cart.bulkimport.csv;
 
-import org.yes.cart.bulkimport.model.FieldTypeEnum;
-import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-
-import java.util.Collection;
 
 /**
  * Csv Import descriptor.

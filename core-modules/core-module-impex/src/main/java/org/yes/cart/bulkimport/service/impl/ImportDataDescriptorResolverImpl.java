@@ -18,8 +18,8 @@ package org.yes.cart.bulkimport.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.DataDescriptorResolver;
-import org.yes.cart.bulkimport.service.DataDescriptorTuplizer;
+import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
+import org.yes.cart.bulkcommon.service.DataDescriptorTuplizer;
 import org.yes.cart.domain.entity.DataDescriptor;
 import org.yes.cart.domain.entity.DataGroup;
 import org.yes.cart.service.domain.DataDescriptorService;

@@ -17,14 +17,32 @@
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-                           http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- ########################################## bulk import ########################## -->
 
     <import resource="core-federation-impex.xml"/>
     <import resource="classpath:core-import.xml"/>
+
+    <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1, max int) for bulk imports since they may be slow.
+        </description>
+    </bean>
+
+    <bean id="importDataDescriptorResolver" class="org.yes.cart.bulkimport.service.impl.ImportDataDescriptorResolverImpl">
+        <constructor-arg index="0" ref="dataGroupService"/>
+        <constructor-arg index="1" ref="dataDescriptorService"/>
+    </bean>
+
+    <bean id="webInfXmlImportDataDescriptorTuplizer" class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataDescriptorTuplizerImpl">
+        <constructor-arg index="0" value="import-descriptor"/>
+        <property name="dataDescriptorResolver" ref="importDataDescriptorResolver"/>
+        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+    </bean>
+
 
 </beans>
         

@@ -27,9 +27,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.csv.CsvFileReader;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
-import org.yes.cart.bulkimport.service.ImportService;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
@@ -133,10 +133,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testDoProductImportWithSimpleSlaveFiled() throws Exception {
+    public void testDoImport() throws Exception {
         try {
-
-            getConnection().getConnection().createStatement().execute("CREATE index pav_code on TPRODUCTATTRVALUE(code)") ;
 
             final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
 

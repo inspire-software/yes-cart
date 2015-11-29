@@ -23,54 +23,54 @@
 
     <import resource="classpath:core-federation.xml"/>
 
-    <bean id="managerFederationFilter" class="org.yes.cart.service.federation.impl.ManagerFederationFilterImpl">
+    <bean id="managerFederationFilter" class="org.yes.cart.service.federation.impl.ManagerUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="userManagementService"/>
     </bean>
 
-    <bean id="customerFederationFilter" class="org.yes.cart.service.federation.impl.CustomerFederationFilterImpl">
+    <bean id="customerFederationFilter" class="org.yes.cart.service.federation.impl.CustomerUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="dtoCustomerService"/>
     </bean>
 
-    <bean id="customerOrderFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderFederationFilterImpl">
+    <bean id="customerOrderFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="dtoCustomerOrderService"/>
     </bean>
 
-    <bean id="customerOrderPaymentFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderPaymentFederationFilterImpl">
+    <bean id="customerOrderPaymentFederationFilter" class="org.yes.cart.service.federation.impl.CustomerOrderPaymentUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
     </bean>
 
-    <bean id="shopFederationFilter" class="org.yes.cart.service.federation.impl.ShopFederationFilterImpl">
+    <bean id="shopFederationFilter" class="org.yes.cart.service.federation.impl.ShopUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
     </bean>
 
-    <bean id="categoryFederationFilter" class="org.yes.cart.service.federation.impl.CategoryFederationFilterImpl">
+    <bean id="categoryFederationFilter" class="org.yes.cart.service.federation.impl.CategoryUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
-    <bean id="promotionFederationFilter" class="org.yes.cart.service.federation.impl.PromotionFederationFilterImpl">
+    <bean id="promotionFederationFilter" class="org.yes.cart.service.federation.impl.PromotionUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
     </bean>
 
-    <bean id="taxFederationFilter" class="org.yes.cart.service.federation.impl.TaxFederationFilterImpl">
+    <bean id="taxFederationFilter" class="org.yes.cart.service.federation.impl.TaxUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
     </bean>
 
-    <bean id="warehouseFederationFilter" class="org.yes.cart.service.federation.impl.WarehouseFederationFilterImpl">
+    <bean id="warehouseFederationFilter" class="org.yes.cart.service.federation.impl.WarehouseUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="dtoWarehouseService"/>
     </bean>
 
-    <bean id="productFederationFilter" class="org.yes.cart.service.federation.impl.ProductFederationFilterImpl">
+    <bean id="productFederationFilter" class="org.yes.cart.service.federation.impl.ProductUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="dtoProductService"/>
     </bean>
 
-    <bean id="carrierFederationFilter" class="org.yes.cart.service.federation.impl.CarrierFederationFilterImpl">
+    <bean id="carrierFederationFilter" class="org.yes.cart.service.federation.impl.CarrierUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1" ref="dtoCarrierService"/>
     </bean>

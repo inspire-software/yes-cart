@@ -62,6 +62,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
 
             xStream.alias("import-descriptor", CsvImportDescriptorImpl.class);
             xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, ImportDescriptor.class);
+            xStream.addDefaultImplementation(CsvImportDescriptorImpl.class, CsvImportDescriptor.class);
             xStream.aliasField("mode", CsvImportDescriptorImpl.class, "mode");
             xStream.aliasField("entity-type", CsvImportDescriptorImpl.class, "entityType");
 
@@ -87,7 +88,7 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.aliasField("file-encoding", CsvImportFileImpl.class, "fileEncoding");
             xStream.aliasField("file-name-mask", CsvImportFileImpl.class, "fileNameMask");
 
-            xStream.aliasField("import-columns", CsvImportDescriptorImpl.class, "importColumns");
+            xStream.aliasField("import-columns", CsvImportDescriptorImpl.class, "columns");
             xStream.addDefaultImplementation(ArrayList.class, Collection.class);
 
             xStream.alias("column-descriptor", CsvImportColumnImpl.class);
@@ -100,9 +101,8 @@ public class CsvImportDescriptorXStreamProvider implements XStreamProvider<CsvIm
             xStream.aliasField("value-regex-template", CsvImportColumnImpl.class, "valueRegExTemplate");
             xStream.aliasField("lookup-query", CsvImportColumnImpl.class, "lookupQuery");
             xStream.aliasField("value-constant", CsvImportColumnImpl.class, "valueConstant");
-            xStream.aliasField("import-descriptor", CsvImportColumnImpl.class, "importDescriptor");
             xStream.aliasField("use-master-object", CsvImportColumnImpl.class, "useMasterObject");
-            xStream.aliasField("import-descriptor", CsvImportColumnImpl.class, "importDescriptor");
+            xStream.aliasField("import-descriptor", CsvImportColumnImpl.class, "descriptor");
             xStream.aliasField("entity-type", CsvImportColumnImpl.class, "entityType");
 
             this.xStream = xStream;
