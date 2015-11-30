@@ -16,6 +16,7 @@
 
 package org.yes.cart.bulkexport.csv;
 
+import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkexport.model.ExportColumn;
 
 /**
@@ -29,5 +30,17 @@ public interface CsvExportColumn extends ExportColumn {
      * {@inheritDoc}
      */
     CsvExportDescriptor getDescriptor();
+
+    /**
+     * {@inheritDoc}
+     */
+    CsvExportDescriptor getParentDescriptor();
+
+    /**
+     * Set parent descriptor.
+     *
+     * @param parentDescriptor parent
+     */
+    void setParentDescriptor(final CsvExportDescriptor parentDescriptor);
 
 }

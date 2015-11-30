@@ -1,7 +1,7 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class CsvExportColumnImplTest {
     public void testGetValue() {
 
         final ValueAdapter adapter = new ValueAdapter() {
-            public Object fromRaw(final Object rawValue, final DataTypeEnum requiredType) {
+            public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn) {
                 return rawValue;
             }
         };

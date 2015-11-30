@@ -87,6 +87,7 @@ public class CsvExportDescriptorXStreamProvider implements XStreamProvider<CsvEx
             xStream.aliasField("field-type", CsvExportColumnImpl.class, "fieldType");
             xStream.aliasField("data-type", CsvExportColumnImpl.class, "dataType");
             xStream.aliasField("language", CsvExportColumnImpl.class, "language");
+            xStream.aliasField("context", CsvExportColumnImpl.class, "context");
             xStream.aliasField("value-regex", CsvExportColumnImpl.class, "valueRegEx");
             xStream.aliasField("value-regex-group", CsvExportColumnImpl.class, "valueRegExGroup");
             xStream.aliasField("value-regex-template", CsvExportColumnImpl.class, "valueRegExTemplate");

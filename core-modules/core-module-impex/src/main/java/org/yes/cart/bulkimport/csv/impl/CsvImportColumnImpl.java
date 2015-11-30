@@ -17,9 +17,9 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.DataTypeEnum;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
@@ -39,9 +39,9 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private int columnIndex;
 
-    private FieldTypeEnum fieldType;
+    private String fieldType;
 
-    private DataTypeEnum dataType;
+    private String dataType;
 
     private String entityType;
 
@@ -59,7 +59,10 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
 
     private String language;
 
+    private String context;
+
     private CsvImportDescriptor descriptor; //complex fields.
+    private CsvImportDescriptor parentDescriptor;
 
     private transient Pattern pattern = null;
 
@@ -72,13 +75,13 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      * Construct import column.
      *
      * @param columnIndex 0 based index
-     * @param fieldType   {@link FieldTypeEnum} filed type
+     * @param fieldType   field type
      * @param name        name
      * @param valueRegEx      regular expression to extract data
      * @param lookupQuery lookup query to determinate duplication, in this case the update
      *                    or insert strategy will be selected
      */
-    public CsvImportColumnImpl(final int columnIndex, final FieldTypeEnum fieldType,
+    public CsvImportColumnImpl(final int columnIndex, final String fieldType,
                                final String name, final String valueRegEx, final String lookupQuery) {
         super();
         this.columnIndex = columnIndex;
@@ -125,7 +128,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
             if (matcher.find()) {
                 int groupCount = getGroupCount(rawValue);
                 for (int i = 0; i < groupCount; i++) {
-                    result.add(adapter.fromRaw(matcher.group(i + 1).trim(), getDataType()));
+                    result.add(adapter.fromRaw(matcher.group(i + 1).trim(), getDataType(), this));
                 }
             }
         }
@@ -150,25 +153,25 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
      */
     public Object getValue(final String rawValue, final ValueAdapter adapter) {
         if (getValueConstant() != null) {
-            return adapter.fromRaw(getValueConstant(), getDataType());
+            return adapter.fromRaw(getValueConstant(), getDataType(), this);
         } else if (rawValue != null) {
             if (getPattern() != null) {
                 Matcher matcher = getPattern().matcher(rawValue);
                 if (StringUtils.isBlank(getValueRegExTemplate())) {
                     if (matcher.find()) {
-                        return adapter.fromRaw(matcher.group(getValueRegExGroup()).trim(), getDataType());
+                        return adapter.fromRaw(matcher.group(getValueRegExGroup()).trim(), getDataType(), this);
                     } else {
                         return null;
                     }
                 } else {
                     if (matcher.matches()) {
-                        return adapter.fromRaw(matcher.replaceFirst(getValueRegExTemplate()).trim(), getDataType());
+                        return adapter.fromRaw(matcher.replaceFirst(getValueRegExTemplate()).trim(), getDataType(), this);
                     } else {
                         return null;
                     }
                 }
             }
-            return adapter.fromRaw(rawValue, getDataType());
+            return adapter.fromRaw(rawValue, getDataType(), this);
         }
         return null;
 
@@ -193,32 +196,32 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public FieldTypeEnum getFieldType() {
+    public String getFieldType() {
         return fieldType;
     }
 
     /**
-     * Set the {@link FieldTypeEnum}
+     * Set the field type
      *
      * @param fieldType to set.
      */
-    public void setFieldType(final FieldTypeEnum fieldType) {
+    public void setFieldType(final String fieldType) {
         this.fieldType = fieldType;
     }
 
     /**
      * {@inheritDoc}
      */
-    public DataTypeEnum getDataType() {
+    public String getDataType() {
         return dataType;
     }
 
     /**
-     * Set the {@link DataTypeEnum}
+     * Set the data type
      *
      * @param dataType to set.
      */
-    public void setDataType(final DataTypeEnum dataType) {
+    public void setDataType(final String dataType) {
         this.dataType = dataType;
     }
 
@@ -318,6 +321,24 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.descriptor = descriptor;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public CsvImportDescriptor getParentDescriptor() {
+        return parentDescriptor;
+    }
+
+    /**
+     * Set parent descriptor.
+     *
+     * @param parentDescriptor parent
+     */
+    public void setParentDescriptor(final CsvImportDescriptor parentDescriptor) {
+        this.parentDescriptor = parentDescriptor;
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -378,6 +399,20 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.language = language;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * @param context additional column context
+     */
+    public void setContext(final String context) {
+        this.context = context;
+    }
+
     @Override
     public String toString() {
         return "CsvImportColumnImpl{" +
@@ -393,6 +428,7 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
                 ", pattern=" + pattern +
                 ", valueConstant='" + valueConstant + '\'' +
                 ", language='" + language + '\'' +
+                ", context='" + context + '\'' +
                 '}';
     }
 }

@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.model.ImportColumn;
@@ -47,7 +47,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
-        importColumn.setFieldType(FieldTypeEnum.FK_FIELD);
+        importColumn.setFieldType(ImpExColumn.FK_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("productType");
         importColumn.setValueRegEx(null);
@@ -55,7 +55,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
+        importColumn.setFieldType(ImpExColumn.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("attributes");
         importColumn.setValueRegEx(".*");
@@ -63,7 +63,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(3);
-        importColumn.setFieldType(FieldTypeEnum.FIELD);
+        importColumn.setFieldType(ImpExColumn.FIELD);
         importColumn.setLookupQuery(null);
         importColumn.setName("code");
         importColumn.setValueRegEx(".*");
@@ -71,7 +71,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
+        importColumn.setFieldType(ImpExColumn.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("someOtherFiled");
         importColumn.setValueRegEx(null);
@@ -93,7 +93,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(1);
-        importColumn.setFieldType(FieldTypeEnum.FK_FIELD);
+        importColumn.setFieldType(ImpExColumn.FK_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("productType");
         importColumn.setValueRegEx(null);
@@ -101,7 +101,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
+        importColumn.setFieldType(ImpExColumn.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("attributes");
         importColumn.setValueRegEx(".*");
@@ -109,7 +109,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(3);
-        importColumn.setFieldType(FieldTypeEnum.FIELD);
+        importColumn.setFieldType(ImpExColumn.FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("code");
         importColumn.setValueRegEx(".*");
@@ -117,7 +117,7 @@ public class CsvImportDescriptorImplTest {
 
         importColumn = new CsvImportColumnImpl();
         importColumn.setColumnIndex(2);
-        importColumn.setFieldType(FieldTypeEnum.SLAVE_TUPLE_FIELD);
+        importColumn.setFieldType(ImpExColumn.SLAVE_TUPLE_FIELD);
         importColumn.setLookupQuery("not important");
         importColumn.setName("someOtherFiled");
         importColumn.setValueRegEx(null);
@@ -171,7 +171,7 @@ public class CsvImportDescriptorImplTest {
         csvImportDescriptor.getImportFileDescriptor().setTextQualifier('"');
         csvImportDescriptor.setImportDirectory("/yescart/import");
 
-        CsvImportColumnImpl csvImportColumn = new CsvImportColumnImpl(1, FieldTypeEnum.FIELD, "code", null, null);
+        CsvImportColumnImpl csvImportColumn = new CsvImportColumnImpl(1, ImpExColumn.FIELD, "code", null, null);
         csvImportColumn.setLookupQuery("select a from table a");
         csvImportColumn.setValueRegEx(".*");
         csvImportColumn.setUseMasterObject(true);
@@ -181,7 +181,7 @@ public class CsvImportDescriptorImplTest {
         final CsvImportDescriptorImpl descriptor = new CsvImportDescriptorImpl();
         descriptor.setEntityType("SomeEntityIntefrace");
         descriptor.setColumns(
-                (List) Arrays.asList(new CsvImportColumnImpl(0, FieldTypeEnum.FIELD, "code", "re", "lookup query")));
+                (List) Arrays.asList(new CsvImportColumnImpl(0, ImpExColumn.FIELD, "code", "re", "lookup query")));
 
         csvImportColumn.setDescriptor(descriptor);
 

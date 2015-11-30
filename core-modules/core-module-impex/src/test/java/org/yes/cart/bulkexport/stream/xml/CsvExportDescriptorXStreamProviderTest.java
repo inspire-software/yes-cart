@@ -17,7 +17,7 @@
 package org.yes.cart.bulkexport.stream.xml;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.model.ExportColumn;
@@ -68,16 +68,17 @@ public class CsvExportDescriptorXStreamProviderTest {
         final CsvExportColumn col0 = (CsvExportColumn) colums.get(0);
         assertNotNull(col0);
         assertEquals("Group", col0.getColumnHeader());
-        assertEquals(FieldTypeEnum.FK_FIELD, col0.getFieldType());
+        assertEquals(ImpExColumn.FK_FIELD, col0.getFieldType());
         assertEquals("attributeGroup", col0.getName());
         assertNull(col0.getValueRegEx());
         assertEquals(Integer.valueOf(1), col0.getValueRegExGroup());
         assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
+        assertEquals("CTX001", col0.getContext());
 
         final CsvExportColumn col5 = (CsvExportColumn) colums.get(5);
         assertNotNull(col5);
         assertEquals("Display Name Ru", col5.getColumnHeader());
-        assertEquals(FieldTypeEnum.FIELD, col5.getFieldType());
+        assertEquals(ImpExColumn.FIELD, col5.getFieldType());
         assertEquals("displayName", col5.getName());
         assertEquals("(.{0,255})(.*)", col5.getValueRegEx());
         assertEquals(Integer.valueOf(1), col5.getValueRegExGroup());

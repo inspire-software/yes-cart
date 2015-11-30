@@ -17,6 +17,10 @@
 <export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:noNamespaceSchemaLocation="file:../../../../../../domain-api/src/main/resources/META-INF/schema/export-descriptor.xsd">
 
+    <context>
+        <shop-code>SHOIP1</shop-code>
+    </context>
+
     <entity-type>org.yes.cart.domain.entity.Product</entity-type>
 
     <export-file-descriptor>
@@ -154,6 +158,30 @@
                     </column-descriptor>
                 </export-columns>
             </export-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Attribute by Code</column-header>
+            <field-type>FIELD</field-type>
+            <data-type>AVC</data-type>
+            <name>attributes</name>
+            <context>IMAGE0</context>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Price by Product ID Currency</column-header>
+            <field-type>FIELD</field-type>
+            <data-type>PRICE</data-type>
+            <name>productId</name>
+            <context>USD</context>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Price by SKU Currency</column-header>
+            <field-type>FIELD</field-type>
+            <data-type>PRICE</data-type>
+            <name>code</name>
+            <context>USD</context>
         </column-descriptor>
 
     </export-columns>

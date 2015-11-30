@@ -17,35 +17,18 @@
 package org.yes.cart.bulkcommon.model;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 08-May-2011
- * Time: 11:12:54
+ * User: denispavlov
+ * Date: 30/11/2015
+ * Time: 21:41
  */
-public enum DataTypeEnum {
+public interface ExtensibleValueAdapter extends ValueAdapter {
 
     /**
-     * String value (default for all import data).
+     * Extend basic value adapter.
+     *
+     * @param extension specific custom data type adapter
+     * @param customDataType custom data type
      */
-    STRING,
-    /**
-     * Boolean value (e.g. for PK's).
-     */
-    BOOLEAN,
-    /**
-     * Long value (e.g. for PK's).
-     */
-    LONG,
-    /**
-     * Integer value.
-     */
-    INT,
-    /**
-     * BigDecimal value.
-     */
-    DECIMAL,
-    /**
-     * Date value. For date format see {@link org.yes.cart.constants.Constants#DEFAULT_IMPORT_DATE_TIME_FORMAT}
-     */
-    DATETIME,
+    void extend(ValueAdapter extension, String customDataType);
 
 }

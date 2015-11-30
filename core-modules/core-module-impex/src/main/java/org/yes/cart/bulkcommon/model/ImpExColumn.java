@@ -26,6 +26,58 @@ package org.yes.cart.bulkcommon.model;
 public interface ImpExColumn {
 
     /**
+     * Single Value field (Also used as PK if has lookup query to check for update
+     * entities).
+     */
+    String FIELD = "FIELD";
+    /**
+     * Foreign key field. (Uses look up queries to look up parent objects).
+     */
+    String FK_FIELD = "FK_FIELD";
+    /**
+     * Defines sub tuple which uses various column to populate its object.
+     * This kind of field uses sub descriptor to define sub tuple columns.
+     */
+    String SLAVE_INLINE_FIELD = "SLAVE_INLINE_FIELD";
+    /**
+     * Defines sub tuple which is encoded fully inside current field and has
+     * no access to other fields.
+     * This kind of field uses sub descriptor to define sub tuple columns.
+     */
+    String SLAVE_TUPLE_FIELD = "SLAVE_TUPLE_FIELD";
+
+
+
+
+    /**
+     * String value (default for all import data).
+     */
+    String STRING = "STRING";
+    /**
+     * Boolean value (e.g. for flags).
+     */
+    String BOOLEAN = "BOOLEAN";
+    /**
+     * Long value (e.g. for PK's).
+     */
+    String LONG = "LONG";
+    /**
+     * Integer value.
+     */
+    String INT = "INT";
+    /**
+     * BigDecimal value.
+     */
+    String DECIMAL = "DECIMAL";
+    /**
+     * Date value. For date format see {@link org.yes.cart.constants.Constants#DEFAULT_IMPORT_DATE_TIME_FORMAT}
+     */
+    String DATETIME = "DATETIME";
+
+
+
+
+    /**
      * Get the field value. Regular expression will be used for obtain value if reg exp is set.
      *
      * @param rawValue the whole value from property
@@ -43,18 +95,18 @@ public interface ImpExColumn {
     int getGroupCount(String value);
 
     /**
-     * Get the {@link FieldTypeEnum}.
+     * Get the filed type constant.
      *
      * @return filed type
      */
-    FieldTypeEnum getFieldType();
+    String getFieldType();
 
     /**
-     * Get the {@link DataTypeEnum}.
+     * Get the data type.
      *
      * @return data type (used for converting data correctly)
      */
-    DataTypeEnum getDataType();
+    String getDataType();
 
     /**
      * Field name in object in java beans notation.
@@ -117,6 +169,14 @@ public interface ImpExColumn {
 
 
     /**
+     * Get parent descriptor for given column.
+     *
+     * @return {@link ImpExDescriptor}
+     */
+    ImpExDescriptor getParentDescriptor();
+
+
+    /**
      * Boolean flag needed to use master object for fk in case of subimport.
      *
      * @return true if need to use master object.
@@ -146,5 +206,12 @@ public interface ImpExColumn {
      * @return language of the localisable value (or null if this is not localisable)
      */
     String getLanguage();
+
+    /**
+     * Column context, additional data that can help with data conversion or retrieval.
+     *
+     * @return context
+     */
+    String getContext();
 
 }

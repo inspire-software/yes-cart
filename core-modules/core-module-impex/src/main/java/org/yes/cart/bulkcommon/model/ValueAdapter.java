@@ -25,10 +25,13 @@ public interface ValueAdapter {
 
     /**
      * Transform raw values from source tuples to value in correct type.
+     *
      * @param rawValue raw value
      * @param requiredType required data type
+     * @param impExColumn impex column
+     *
      * @return value in correct type
      */
-    Object fromRaw(Object rawValue, DataTypeEnum requiredType);
+    Object fromRaw(Object rawValue, String requiredType, ImpExColumn impExColumn);
 
 }

@@ -17,8 +17,7 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.DataTypeEnum;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
@@ -37,9 +36,9 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
 
     private String columnHeader;
 
-    private FieldTypeEnum fieldType;
+    private String fieldType;
 
-    private DataTypeEnum dataType;
+    private String dataType;
 
     private String entityType;
 
@@ -56,8 +55,10 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     private boolean useMasterObject;
 
     private String language;
+    private String context;
 
     private CsvExportDescriptor descriptor; //complex fields.
+    private CsvExportDescriptor parentDescriptor;
 
     private transient Pattern pattern = null;
 
@@ -70,13 +71,13 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
      * Construct import column.
      *
      * @param columnHeader header
-     * @param fieldType   {@link FieldTypeEnum} filed type
+     * @param fieldType   field type
      * @param name        name
      * @param valueRegEx      regular expression to extract data
      * @param lookupQuery lookup query to determinate duplication, in this case the update
      *                    or insert strategy will be selected
      */
-    public CsvExportColumnImpl(final String columnHeader, final FieldTypeEnum fieldType,
+    public CsvExportColumnImpl(final String columnHeader, final String fieldType,
                                final String name, final String valueRegEx, final String lookupQuery) {
         super();
         this.columnHeader = columnHeader;
@@ -120,7 +121,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
             return getValueConstant();
         } else if (rawValue != null) {
 
-            final String strValue = (String) adapter.fromRaw(rawValue, DataTypeEnum.STRING);
+            final String strValue = (String) adapter.fromRaw(rawValue, ImpExColumn.STRING, this);
 
             if (getPattern() != null) {
 
@@ -164,32 +165,32 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
-    public FieldTypeEnum getFieldType() {
+    public String getFieldType() {
         return fieldType;
     }
 
     /**
-     * Set the {@link FieldTypeEnum}
+     * Set the field type
      *
      * @param fieldType to set.
      */
-    public void setFieldType(final FieldTypeEnum fieldType) {
+    public void setFieldType(final String fieldType) {
         this.fieldType = fieldType;
     }
 
     /**
      * {@inheritDoc}
      */
-    public DataTypeEnum getDataType() {
+    public String getDataType() {
         return dataType;
     }
 
     /**
-     * Set the {@link DataTypeEnum}
+     * Set the data type
      *
      * @param dataType to set.
      */
-    public void setDataType(final DataTypeEnum dataType) {
+    public void setDataType(final String dataType) {
         this.dataType = dataType;
     }
 
@@ -292,6 +293,22 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
     /**
      * {@inheritDoc}
      */
+    public CsvExportDescriptor getParentDescriptor() {
+        return parentDescriptor;
+    }
+
+    /**
+     * Set parent descriptor.
+     *
+     * @param parentDescriptor parent
+     */
+    public void setParentDescriptor(final CsvExportDescriptor parentDescriptor) {
+        this.parentDescriptor = parentDescriptor;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUseMasterObject() {
         return useMasterObject;
     }
@@ -349,6 +366,20 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
         this.language = language;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getContext() {
+        return context;
+    }
+
+    /**
+     * @param context additional column context
+     */
+    public void setContext(final String context) {
+        this.context = context;
+    }
+
     @Override
     public String toString() {
         return "CsvImportColumnImpl{" +
@@ -364,6 +395,7 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
                 ", pattern=" + pattern +
                 ", valueConstant='" + valueConstant + '\'' +
                 ", language='" + language + '\'' +
+                ", context='" + context + '\'' +
                 '}';
     }
 }

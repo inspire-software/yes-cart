@@ -17,7 +17,7 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkexport.csv.CsvExportTuple;
@@ -74,8 +74,8 @@ public class CsvExportTupleImpl implements CsvExportTuple {
 
     /** {@inheritDoc} */
     public <I extends ImpExTuple<String, Object, ExportDescriptor, ExportColumn>> List<I> getSubTuples(final ExportDescriptor importDescriptor, final ExportColumn column, final ValueAdapter adapter) {
-        if (column.getFieldType() == FieldTypeEnum.SLAVE_TUPLE_FIELD
-                || column.getFieldType() == FieldTypeEnum.SLAVE_INLINE_FIELD) {
+        if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())
+                || ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
             final Object rawValue = getObjectValue(column);
 
             if (rawValue instanceof Collection) {

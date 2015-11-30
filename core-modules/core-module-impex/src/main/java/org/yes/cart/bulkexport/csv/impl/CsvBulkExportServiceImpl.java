@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.service.ExportService;
 import org.yes.cart.bulkcommon.service.support.LookUpQuery;
@@ -233,7 +233,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             int i = 0;
             for (final ExportColumn column : descriptor.getColumns()) {
 
-                if (column.getFieldType() == FieldTypeEnum.FIELD || column.getFieldType() == FieldTypeEnum.FK_FIELD) {
+                if (ImpExColumn.FIELD.equals(column.getFieldType()) || ImpExColumn.FK_FIELD.equals(column.getFieldType())) {
 
                     if (column.getLanguage() != null) {
                         final String data = (String) tuple.getColumnValue(column, valueLanguageAdapter);

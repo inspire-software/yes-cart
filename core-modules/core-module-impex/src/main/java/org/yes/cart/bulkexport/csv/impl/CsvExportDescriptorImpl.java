@@ -17,7 +17,6 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
 import org.yes.cart.bulkexport.csv.CsvExportColumn;
 import org.yes.cart.bulkexport.csv.CsvExportDescriptor;
 import org.yes.cart.bulkexport.csv.CsvExportFile;
@@ -41,7 +40,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     private Collection<CsvExportColumn> columns;
 
     private Map<String, ExportColumn> columnByName;
-    private Map<FieldTypeEnum, List<ExportColumn>> columnsByType;
+    private Map<String, List<ExportColumn>> columnsByType;
 
     private ExportContext context;
     private String entityType;
@@ -160,7 +159,7 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
-    public Collection<ExportColumn> getColumns(FieldTypeEnum fieldType) {
+    public Collection<ExportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -185,9 +184,10 @@ public class CsvExportDescriptorImpl implements CsvExportDescriptor, Serializabl
     private void reloadMappings() {
         initialised = true;
         columnByName = new HashMap<String, ExportColumn>();
-        columnsByType = new HashMap<FieldTypeEnum, List<ExportColumn>>();
+        columnsByType = new HashMap<String, List<ExportColumn>>();
 
-        for (ExportColumn exportColumn : columns) {
+        for (CsvExportColumn exportColumn : columns) {
+            exportColumn.setParentDescriptor(this);
             List<ExportColumn> byType = columnsByType.get(exportColumn.getFieldType());
             if (byType == null) {
                 byType = new ArrayList<ExportColumn>();

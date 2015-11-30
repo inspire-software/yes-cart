@@ -16,7 +16,7 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 
 /**
@@ -33,7 +33,7 @@ public class CsvPlainStringValueAdapter implements ValueAdapter {
      * @param requiredType required data type
      * @return string value
      */
-    public Object fromRaw(final Object rawValue, final DataTypeEnum requiredType) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn) {
         if (rawValue != null) {
             return String.valueOf(rawValue);
         }

@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportFile;
@@ -41,7 +41,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
 
     private ImportColumn pkColumn;
     private Map<String, ImportColumn> columnByName;
-    private Map<FieldTypeEnum, List<ImportColumn>> columnsByType;
+    private Map<String, List<ImportColumn>> columnsByType;
 
     private String importDirectory;
 
@@ -231,7 +231,7 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
     /**
      * {@inheritDoc}
      */
-    public Collection<ImportColumn> getColumns(FieldTypeEnum fieldType) {
+    public Collection<ImportColumn> getColumns(String fieldType) {
         if (!initialised) {
             this.reloadMappings();
         }
@@ -274,16 +274,17 @@ public class CsvImportDescriptorImpl implements CsvImportDescriptor, Serializabl
         initialised = true;
         pkColumn = null;
         columnByName = new HashMap<String, ImportColumn>();
-        columnsByType = new HashMap<FieldTypeEnum, List<ImportColumn>>();
+        columnsByType = new HashMap<String, List<ImportColumn>>();
 
-        for (ImportColumn importColumn : columns) {
+        for (CsvImportColumn importColumn : columns) {
+            importColumn.setParentDescriptor(this);
             List<ImportColumn> byType = columnsByType.get(importColumn.getFieldType());
             if (byType == null) {
                 byType = new ArrayList<ImportColumn>();
                 columnsByType.put(importColumn.getFieldType(), byType);
             }
             byType.add(importColumn);
-            if (pkColumn == null && importColumn.getLookupQuery() != null && importColumn.getFieldType() == FieldTypeEnum.FIELD) {
+            if (pkColumn == null && importColumn.getLookupQuery() != null && ImpExColumn.FIELD.equals(importColumn.getFieldType())) {
                 pkColumn = importColumn;
             }
             if (importColumn.getName() != null && importColumn.getName().length() > 0) {

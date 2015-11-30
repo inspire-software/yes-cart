@@ -44,6 +44,7 @@
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.AttributeGroup</entity-type>
             <name>attributeGroup</name>
+            <context>CTX001</context>
             <lookup-query>select b from AttributeGroupEntity b where b.code = {attributeGroup}</lookup-query>
         </column-descriptor>
 

@@ -149,41 +149,28 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="column-index" type="xs:int"/>
-            <xs:element name="field-type">
+            <xs:element name="field-type" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>
-                        This constraint corresponds to org.yes.cart.bulkcommon.model.FieldTypeEnum.
+                        This field must correspond to org.yes.cart.bulkcommon.model.ImpExColumn constants.
+                        I.e. FIELD, FK_FIELD, SLAVE_INLINE_FIELD, SLAVE_TUPLE_FIELD
+                        This field is not restricted to allow more flexibility in custom implementations
                     </xs:documentation>
                 </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="FIELD"/>
-                        <xs:enumeration value="FK_FIELD"/>
-                        <xs:enumeration value="SLAVE_INLINE_FIELD"/>
-                        <xs:enumeration value="SLAVE_TUPLE_FIELD"/>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:element>
-            <xs:element name="data-type" minOccurs="0">
+            <xs:element name="data-type" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        This constraint corresponds to org.yes.cart.bulkcommon.model.DataTypeEnum.
+                        This field must correspond to org.yes.cart.bulkcommon.model.ImpExColumn constants.
+                        I.e. STRING, BOOLEAN, LONG, INT, DECIMAL, DATETIME
+                        This field is not restricted to allow more flexibility in custom implementations
                     </xs:documentation>
                 </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="STRING"/>
-                        <xs:enumeration value="BOOLEAN"/>
-                        <xs:enumeration value="LONG"/>
-                        <xs:enumeration value="INT"/>
-                        <xs:enumeration value="DECIMAL"/>
-                        <xs:enumeration value="DATETIME"/>
-                    </xs:restriction>
-                </xs:simpleType>
             </xs:element>
             <xs:element name="entity-type" type="xs:string" minOccurs="0"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="language" type="xs:string" minOccurs="0"/>
+            <xs:element name="context" type="xs:string" minOccurs="0"/>
             <xs:element name="value-regex" type="xs:string" minOccurs="0"/>
             <xs:choice minOccurs="0" maxOccurs="1">
                 <xs:element name="value-regex-group" type="xs:string" minOccurs="0"/>

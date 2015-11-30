@@ -17,7 +17,7 @@
 package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
 import org.yes.cart.bulkimport.csv.CsvImportTuple;
@@ -74,7 +74,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
 
     /** {@inheritDoc} */
     public List<ImportTuple<String, String[]>> getSubTuples(final ImportDescriptor importDescriptor, final ImportColumn column, final ValueAdapter valueAdapter) {
-        if (column.getFieldType() == FieldTypeEnum.SLAVE_TUPLE_FIELD) {
+        if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType())) {
             final String rawValue = (String) getColumnValue(column, SUB_TUPLE);
             final String[] rows = rawValue.split(",");
             final List<ImportTuple<String, String[]>> subTuples = new ArrayList<ImportTuple<String, String[]>>(rows.length);
@@ -84,7 +84,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
                         row.split(String.valueOf(((CsvImportDescriptor) importDescriptor).getImportFileDescriptor().getColumnDelimiter()))));
             }
             return subTuples;
-        } else if (column.getFieldType() == FieldTypeEnum.SLAVE_INLINE_FIELD) {
+        } else if (ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
             return (List) Arrays.asList(this);
         }
         return Collections.emptyList();

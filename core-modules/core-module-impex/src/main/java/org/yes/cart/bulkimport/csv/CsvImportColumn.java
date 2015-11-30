@@ -30,4 +30,16 @@ public interface CsvImportColumn extends ImportColumn {
      */
     CsvImportDescriptor getDescriptor();
 
+    /**
+     * {@inheritDoc}
+     */
+    CsvImportDescriptor getParentDescriptor();
+
+    /**
+     * Set parent descriptor.
+     *
+     * @param parentDescriptor parent
+     */
+    void setParentDescriptor(final CsvImportDescriptor parentDescriptor);
+
 }

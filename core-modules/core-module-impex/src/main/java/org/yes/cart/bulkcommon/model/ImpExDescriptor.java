@@ -63,10 +63,10 @@ public interface ImpExDescriptor<C extends ImpExContext, T extends ImpExColumn> 
     /**
      * Get the collection of export columns filtered by given field type.
      *
-     * @param fieldType {@link FieldTypeEnum} discriminator.
+     * @param fieldType Field type constant discriminator.
      * @return collection of export columns
      */
-    Collection<T> getColumns(FieldTypeEnum fieldType);
+    Collection<T> getColumns(String fieldType);
 
 
 }

@@ -17,10 +17,9 @@
 package org.yes.cart.bulkimport.stream.xml;
 
 import org.junit.Test;
-import org.yes.cart.bulkcommon.model.FieldTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkimport.csv.CsvImportColumn;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
-import org.yes.cart.bulkimport.csv.CsvImportFile;
 import org.yes.cart.bulkimport.model.ImportColumn;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.stream.xml.XStreamProvider;
@@ -76,16 +75,17 @@ public class CsvImportDescriptorXStreamProviderTest {
         final CsvImportColumn col0 = (CsvImportColumn) colums.get(0);
         assertNotNull(col0);
         assertEquals(0, col0.getColumnIndex());
-        assertEquals(FieldTypeEnum.FK_FIELD, col0.getFieldType());
+        assertEquals(ImpExColumn.FK_FIELD, col0.getFieldType());
         assertEquals("attributeGroup", col0.getName());
         assertNull(col0.getValueRegEx());
         assertEquals(Integer.valueOf(1), col0.getValueRegExGroup());
         assertEquals("select b from AttributeGroupEntity b where b.code = {attributeGroup}", col0.getLookupQuery());
+        assertEquals("CTX001", col0.getContext());
 
         final CsvImportColumn col5 = (CsvImportColumn) colums.get(5);
         assertNotNull(col5);
         assertEquals(4, col5.getColumnIndex());
-        assertEquals(FieldTypeEnum.FIELD, col5.getFieldType());
+        assertEquals(ImpExColumn.FIELD, col5.getFieldType());
         assertEquals("displayName", col5.getName());
         assertEquals("(.{0,255})(.*)", col5.getValueRegEx());
         assertEquals(Integer.valueOf(1), col5.getValueRegExGroup());

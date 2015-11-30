@@ -18,8 +18,9 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
-import org.yes.cart.bulkcommon.model.DataTypeEnum;
+import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
+import org.yes.cart.bulkcommon.model.impl.AbstractExtensibleValueAdapter;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -31,25 +32,33 @@ import java.util.Map;
  * Date: 12-08-11
  * Time: 1:04 PM
  */
-public class CsvImportValueAdapter implements ValueAdapter {
+public class CsvImportValueAdapter extends AbstractExtensibleValueAdapter implements ValueAdapter {
 
     private final GenericConversionService extendedConversionService;
 
-    private static final Map<DataTypeEnum, Class> MAPPING = new HashMap<DataTypeEnum, Class>() {{
-        put(DataTypeEnum.STRING,    String.class);
-        put(DataTypeEnum.BOOLEAN,   Boolean.class);
-        put(DataTypeEnum.INT,       Integer.class);
-        put(DataTypeEnum.LONG,      Long.class);
-        put(DataTypeEnum.DECIMAL,   BigDecimal.class);
-        put(DataTypeEnum.DATETIME,  Date.class);
+    private static final Map<String, Class> MAPPING = new HashMap<String, Class>() {{
+        put(ImpExColumn.STRING,    String.class);
+        put(ImpExColumn.BOOLEAN,   Boolean.class);
+        put(ImpExColumn.INT,       Integer.class);
+        put(ImpExColumn.LONG,      Long.class);
+        put(ImpExColumn.DECIMAL,   BigDecimal.class);
+        put(ImpExColumn.DATETIME,  Date.class);
     }};
 
     public CsvImportValueAdapter(final GenericConversionService extendedConversionService) {
         this.extendedConversionService = extendedConversionService;
     }
 
-    public Object fromRaw(final Object rawValue, final DataTypeEnum requiredType) {
-        if (requiredType == null || !MAPPING.containsKey(requiredType)) {
+    public Object fromRaw(final Object rawValue, final String requiredType, final ImpExColumn impExColumn) {
+        if (requiredType == null) {
+            return rawValue;
+        }
+
+        final ValueAdapter specific = getTypeSpecific(impExColumn.getDataType());
+        if (specific != null) {
+            return specific.fromRaw(rawValue, requiredType, impExColumn);
+        }
+        if (!MAPPING.containsKey(requiredType)) {
             return rawValue;
         }
         return this.extendedConversionService.convert(rawValue,
