@@ -94,9 +94,9 @@
                 </mx:GroupingCollection2>
             </mx:dataProvider>
             <mx:columns>
-                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='clusterId')"-->
+                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='CachePanel',key='clusterId')"-->
                                    <!--dataField="clusterId"/>-->
-                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeGroup')"-->
+                <!--<mx:AdvancedDataGridColumn headerText="@Resource(bundle='CachePanel',key='nodeGroup')"-->
                                    <!--dataField="nodeGroup"/>-->
                 <mx:AdvancedDataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeId')"
                                    dataField="nodeId"/>

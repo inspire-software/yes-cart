@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           width="100%"
+           height="100%"
+           creationComplete="initPanel()">
+
+    <mx:Script>
+		<![CDATA[
+        import com.hexagonstar.util.debug.Debug;
+
+        import mx.collections.ArrayCollection;
+        import mx.events.ListEvent;
+        import mx.rpc.events.FaultEvent;
+        import mx.rpc.events.ResultEvent;
+
+        import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+
+        private function initPanel():void {
+            remoteDevService.getCacheInfo();
+        }
+
+        /**
+         * Perform evict all objects from all caches.
+         * @param event
+         */
+        private function onClearCacheClick(event:MouseEvent):void {
+            remoteDevService.evictAllCache();
+        }
+
+        private function onSingleCacheSelected(event:ListEvent):void {
+            var _item:Object = cacheInfoDataGrid.selectedItem;
+            cacheItemSelected = _item != null;
+            cacheItemStatsEnable = cacheItemSelected && _item['stats'] == false;
+            cacheItemStatsDisable = cacheItemSelected && _item['stats'] == true;
+        }
+
+        private function onClearSingleCacheClick(event:MouseEvent):void {
+            var _selectedCache:Object = cacheInfoDataGrid.selectedItem;
+            if (_selectedCache != null) {
+                remoteDevService.evictCache(_selectedCache['cacheName']);
+            }
+        }
+
+        private function onEnableStatsClick(event:MouseEvent):void {
+            var _selectedCache:Object = cacheInfoDataGrid.selectedItem;
+            if (_selectedCache != null) {
+                remoteDevService.enableStats(_selectedCache['cacheName']);
+            }
+        }
+
+        private function onDisableStatsClick(event:MouseEvent):void {
+            var _selectedCache:Object = cacheInfoDataGrid.selectedItem;
+            if (_selectedCache != null) {
+                remoteDevService.disableStats(_selectedCache['cacheName']);
+            }
+        }
+
+        private function onRefreshCacheClick(event:MouseEvent):void {
+            remoteDevService.getCacheInfo();
+        }
+
+        private function onWarmUpClick(event:MouseEvent):void {
+            remoteDevService.warmUp();
+        }
+
+        protected function onRpcMethodFault(event:FaultEvent):void {
+            ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+        }
+
+        private function onGetCacheInfoResult(event:ResultEvent):void {
+            var _caches:Object = event.result;
+            var _all:ArrayCollection = new ArrayCollection();
+            for (var prop:String in _caches) {
+                if (_caches[prop] is ArrayCollection) {
+                    _all.addAll(_caches[prop] as ArrayCollection);
+                }
+            }
+            cacheInfoDataGrid.dataProvider = _all;
+            cacheItemSelected = false;
+            cacheItemStatsEnable = false;
+            cacheItemStatsDisable = false;
+        }
+
+        private function onEvictCacheResult(event:ResultEvent):void {
+            remoteDevService.getCacheInfo();
+        }
+
+        private function onWarmUpResult(event:ResultEvent):void {
+            remoteDevService.getCacheInfo();
+        }
+
+
+        private function sizeInBytesLabelFunction(item:Object, column:DataGridColumn):String {
+
+            var _kb:Number = 1024;
+            var _mb:Number = 1024 * _kb;
+            var _gb:Number = 1024 * _mb;
+
+            var _bytes:Number = item[column.dataField];
+            var _out:String = '' + _bytes;
+            if (_bytes >= _gb) {
+                _out = '' + Math.round(_bytes / _gb) + '.' + Math.round((_bytes % _gb) / _mb / 100) + 'GB';
+                Debug.trace("Size in bytes is :" + _bytes + ", out is: " + _out);
+            } else if (_bytes >= _mb) {
+                _out = '' + Math.round(_bytes / _mb) + '.' + Math.round((_bytes % _mb) / _kb / 100) + 'MB';
+                Debug.trace("Size in bytes is :" + _bytes + ", out is: " + _out);
+            } else if (_bytes >= _kb) {
+                _out = '' + Math.round(_bytes / _kb) + '.' + Math.round((_bytes % _kb) / 100) + 'Kb';
+                Debug.trace("Size in bytes is :" + _bytes + ", out is: " + _out);
+            }
+
+            return _out;
+
+        }
+        ]]>
+	</mx:Script>
+
+
+    <mx:RemoteObject showBusyCursor="true" id="remoteDevService"
+                     fault="onRpcMethodFault(event)"
+                     destination="remoteDevService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="getCacheInfo" name="getCacheInfo"
+                   result="onGetCacheInfoResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="evictAllCache" name="evictAllCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="evictCache" name="evictCache"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="enableStats" name="enableStats"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="disableStats" name="disableStats"
+                   result="onEvictCacheResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="warmUp" name="warmUp"
+                   result="onWarmUpResult(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
+    <mx:Boolean id="cacheItemSelected">false</mx:Boolean>
+    <mx:Boolean id="cacheItemStatsEnable">false</mx:Boolean>
+    <mx:Boolean id="cacheItemStatsDisable">false</mx:Boolean>
+
+    <mx:VBox width="100%" height="100%">
+
+        <mx:ControlBar>
+            <mx:Button id="refreshCacheBtn" label="@Resource(bundle='MonitoringPanel',key='refreshInfo')"
+                       click="onRefreshCacheClick(event)"/>
+            <mx:Button id="clearCacheBtn" label="@Resource(bundle='MonitoringPanel',key='clearCache')"
+                       click="onClearCacheClick(event)"/>
+            <mx:Button id="clearSingleCacheBtn" label="@Resource(bundle='MonitoringPanel',key='clearSingleCache')"
+                       click="onClearSingleCacheClick(event)" enabled="{cacheItemSelected}"/>
+            <mx:Button id="enableStatsBtn" label="@Resource(bundle='MonitoringPanel',key='enableStatsCache')"
+                       click="onEnableStatsClick(event)" enabled="{cacheItemStatsEnable}"/>
+            <mx:Button id="disableStatsBtn" label="@Resource(bundle='MonitoringPanel',key='disableStatsCache')"
+                       click="onDisableStatsClick(event)" enabled="{cacheItemStatsDisable}"/>
+            <mx:Button id="warmUpBtn" label="@Resource(bundle='MonitoringPanel',key='warmUp')"
+                       click="onWarmUpClick(event)"/>
+
+        </mx:ControlBar>
+
+        <mx:DataGrid id="cacheInfoDataGrid" width="100%" height="100%" itemClick="onSingleCacheSelected(event)">
+            <mx:columns>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeId')"
+                                   dataField="nodeId" width="60"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='name')"
+                                   dataField="cacheName"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='size')"
+                                   dataField="cacheSize" width="80"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='sizeInMem')"
+                                   dataField="inMemorySize" width="80"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='sizeonDisk')"
+                                   dataField="diskStoreSize" width="80"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='hits')"
+                                   dataField="hits" width="80"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='misses')"
+                                   dataField="misses" width="80"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='calculateInMemorySize')"
+                                   dataField="calculateInMemorySize" width="80" labelFunction="sizeInBytesLabelFunction"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='calculateOnDiskSize')"
+                                   dataField="calculateOnDiskSize" width="80" labelFunction="sizeInBytesLabelFunction"/>
+                <mx:DataGridColumn headerText="@Resource(bundle='MonitoringPanel',key='nodeUri')"
+                                   dataField="nodeUri" width="200"/>
+            </mx:columns>
+        </mx:DataGrid>
+
+
+
+    </mx:VBox>
+
+</mx:Canvas>

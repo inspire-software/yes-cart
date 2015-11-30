@@ -101,7 +101,7 @@
         import org.yes.cart.ui.customer.CustomerManagementPanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
         import org.yes.cart.ui.monitoring.ClusterPanel;
-        import org.yes.cart.ui.monitoring.MonitoringPanel;
+        import org.yes.cart.ui.monitoring.CachePanel;
         import org.yes.cart.ui.order.OrdersManagementPanel;
         import org.yes.cart.ui.payment.PaymentGateConfigManagementPanel;
         import org.yes.cart.ui.payment.PaymentManagementPanel;
@@ -253,7 +253,7 @@
             invalidLogin = true;
             currentState = "loginState";
             var msg:String = resourceManager.getString('ShopManagerApplication', 'loginFailedMsg',
-                    [ ShopManagerGlobal.instance.url, ShopManagerGlobal.instance.username, event.fault.message ]);
+                    [ShopManagerGlobal.instance.url, ShopManagerGlobal.instance.username, event.fault.message]);
             var title:String = resourceManager.getString('ShopManagerApplication', 'loginFailedTitle');
             Debug.trace(msg);
             Alert.show(msg, title);
@@ -315,7 +315,7 @@
             setFontWeight(importBtn);
             if (!panelCache.hasOwnProperty('BulkImportPanel')) {
                 var panel:BulkImportPanel = new BulkImportPanel();
-                panel.importCompletedListener = function():void {
+                panel.importCompletedListener = function ():void {
                     // Need to clear all panels to prevent "old" data in panels
                     panelCache = {};
                     panelCache['BulkImportPanel'] = panel;
@@ -331,7 +331,7 @@
             setFontWeight(exportBtn);
             if (!panelCache.hasOwnProperty('BulkExportPanel')) {
                 var panel:BulkExportPanel = new BulkExportPanel();
-                panel.exportCompletedListener = function():void {
+                panel.exportCompletedListener = function ():void {
                     // Need to clear all panels to prevent "old" data in panels
                     panelCache = {};
                     panelCache['BulkExportPanel'] = panel;
@@ -424,7 +424,7 @@
             var newShop:ShopDTOImpl = new ShopDTOImpl();
             var panel:StoresManagementPanel = new StoresManagementPanel();
             panel.shopDTOImpl = newShop;
-            panel.newShopCallBack = function(shop:ShopDTOImpl):void {
+            panel.newShopCallBack = function (shop:ShopDTOImpl):void {
                 shops['shop_' + shop.shopId] = shop;
                 onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
             };
@@ -477,13 +477,13 @@
             showMainPanelSection(panelCache['QueryPanel']);
         }
 
-        private function onMonitoringClick(event:MouseEvent):void {
-            setFontWeight(monitoringBtn);
-            if (!panelCache.hasOwnProperty('MonitoringPanel')) {
-                panelCache['MonitoringPanel'] = new MonitoringPanel();
-                mainPanel.addChild(panelCache['MonitoringPanel']);
+        private function onCacheClick(event:MouseEvent):void {
+            setFontWeight(cacheBtn);
+            if (!panelCache.hasOwnProperty('CachePanel')) {
+                panelCache['CachePanel'] = new CachePanel();
+                mainPanel.addChild(panelCache['CachePanel']);
             }
-            showMainPanelSection(panelCache['MonitoringPanel']);
+            showMainPanelSection(panelCache['CachePanel']);
         }
 
         private function onClusterClick(event:MouseEvent):void {
@@ -653,7 +653,7 @@
             dataSortField.numeric = false;
 
             var dataSort:Sort = new Sort();
-            dataSort.fields = [ dataSortField ];
+            dataSort.fields = [dataSortField];
 
             shopCodes.sort = dataSort;
             shopCodes.refresh();
@@ -1006,9 +1006,9 @@
                                                        click="onQueryDataClick(event)"/>
 
                                         <mx:Spacer height="10"/>
-                                        <mx:LinkButton id="monitoringBtn" width="100%"
-                                                       label="@Resource(bundle='ShopManagerApplication',key='monitoring')"
-                                                       click="onMonitoringClick(event)"/>
+                                        <mx:LinkButton id="cacheBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='cache')"
+                                                       click="onCacheClick(event)"/>
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton id="clusterBtn" width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='cluster')"
