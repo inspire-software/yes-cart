@@ -266,6 +266,7 @@
                 <prop key="org.terracotta.quartz.skipUpdateCheck">true</prop>
             </props>
         </property>
+        <property name="startupDelay" value="10"/><!-- Give context 10sec to stabilise before starting quartz -->
     </bean>
 
 
