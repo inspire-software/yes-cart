@@ -181,6 +181,12 @@
                 } else if (fileToExport.text.lastIndexOf('\\') != -1) {
                     _file = fileToExport.text.substr(fileToExport.text.lastIndexOf('\\') + 1);
                 }
+
+                var _ext:String = '.zip';
+                if (_file.indexOf(_ext, _file.length - _ext.length) === -1) {
+                    _file = _file + _ext;
+                }
+
                 new FileReference().save(
                         csv,
                         _file

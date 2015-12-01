@@ -23,11 +23,12 @@ import org.slf4j.LoggerFactory;
 import org.yes.cart.bulkcommon.service.ExportDirectorService;
 import org.yes.cart.remote.service.RemoteDownloadService;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * User: denispavlov
@@ -57,6 +58,7 @@ public class RemoteDownloadServiceImpl implements RemoteDownloadService {
 
         final String exportRoot = this.exportDirectorService.getExportDirectory();
 
+        final File fileToDownload;
         if (fileName.startsWith("/")) {
 
             boolean allowed = false;
@@ -72,10 +74,44 @@ public class RemoteDownloadServiceImpl implements RemoteDownloadService {
                 throw new AccessDeniedException("Downloading files from specified location is prohibited");
             }
 
-            return FileUtils.readFileToByteArray(new File(fileName));
+            fileToDownload = new File(fileName);
+
+        } else {
+
+            fileToDownload = new File(exportRoot  + File.separator + fileName);
 
         }
-        return FileUtils.readFileToByteArray(new File(exportRoot  + File.separator + fileName));
+
+        if (fileToDownload.exists()) {
+
+            if (fileToDownload.getName().endsWith(".zip")) {
+                // Zip's just download
+                return FileUtils.readFileToByteArray(fileToDownload);
+            } else {
+                // Non zip's, zip first
+                final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                final ZipOutputStream zos = new ZipOutputStream(baos);
+                final InputStream is = new BufferedInputStream(new FileInputStream(fileToDownload));
+
+                byte[] buff = new byte[1024];
+                final ZipEntry entry = new ZipEntry(fileToDownload.getName());
+                zos.putNextEntry(entry);
+
+                int len;
+                while ((len = is.read(buff)) > 0) {
+                    zos.write(buff, 0, len);
+                }
+
+                is.close();
+                zos.closeEntry();
+                zos.close();
+
+                return baos.toByteArray();
+            }
+
+        }
+
+        throw new IOException("File " + fileToDownload.getAbsolutePath() + " not found");
 
     }
 }
