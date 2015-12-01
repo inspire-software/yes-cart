@@ -123,24 +123,26 @@ public class CsvExportColumnImpl implements CsvExportColumn, Serializable {
 
             final String strValue = (String) adapter.fromRaw(rawValue, ImpExColumn.STRING, this);
 
-            if (getPattern() != null) {
+            if (strValue != null) {
+                if (getPattern() != null) {
 
-                Matcher matcher = getPattern().matcher(strValue);
-                if (StringUtils.isBlank(getValueRegExTemplate())) {
-                    if (matcher.find()) {
-                        return matcher.group(getValueRegExGroup()).trim();
+                    Matcher matcher = getPattern().matcher(strValue);
+                    if (StringUtils.isBlank(getValueRegExTemplate())) {
+                        if (matcher.find()) {
+                            return matcher.group(getValueRegExGroup()).trim();
+                        } else {
+                            return null;
+                        }
                     } else {
-                        return null;
-                    }
-                } else {
-                    if (matcher.matches()) {
-                        return matcher.replaceFirst(getValueRegExTemplate()).trim();
-                    } else {
-                        return null;
+                        if (matcher.matches()) {
+                            return matcher.replaceFirst(getValueRegExTemplate()).trim();
+                        } else {
+                            return null;
+                        }
                     }
                 }
+                return strValue;
             }
-            return strValue;
         }
         return null;
 
