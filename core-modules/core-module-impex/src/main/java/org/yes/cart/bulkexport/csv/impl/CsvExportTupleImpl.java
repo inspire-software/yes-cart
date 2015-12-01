@@ -90,4 +90,16 @@ public class CsvExportTupleImpl implements CsvExportTuple {
         }
         return Collections.emptyList();
     }
+
+    @Override
+    public String toString() {
+        if (data != null) {
+            return "CsvExportTupleImpl{data="
+                    + data.getClass().getSimpleName() + ":"
+                    + (data instanceof Identifiable ? ((Identifiable) data).getId() : data)
+                    + "}";
+
+        }
+        return "CsvExportTupleImpl{data=NULL}";
+    }
 }

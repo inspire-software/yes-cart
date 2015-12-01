@@ -233,18 +233,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             int i = 0;
             for (final ExportColumn column : descriptor.getColumns()) {
 
-                if (ImpExColumn.FIELD.equals(column.getFieldType()) || ImpExColumn.FK_FIELD.equals(column.getFieldType())) {
-
-                    if (column.getLanguage() != null) {
-                        final String data = (String) tuple.getColumnValue(column, valueLanguageAdapter);
-                        final I18NModel model = new StringI18NModel(data);
-                        csv[i] = model.getValue(column.getLanguage());
-                    } else {
-                        final String data = (String) tuple.getColumnValue(column, valueDataAdapter);
-                        csv[i] = data;
-                    }
-
-                } else {
+                if (ImpExColumn.SLAVE_TUPLE_FIELD.equals(column.getFieldType()) || ImpExColumn.SLAVE_INLINE_FIELD.equals(column.getFieldType())) {
 
                     final CsvStringWriter subWriter = new CsvStringWriterImpl();
                     subWriter.open(
@@ -275,6 +264,16 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
                     csv[i] = subWriter.close().trim();
 
+                } else {
+
+                    if (column.getLanguage() != null) {
+                        final String data = (String) tuple.getColumnValue(column, valueLanguageAdapter);
+                        final I18NModel model = new StringI18NModel(data);
+                        csv[i] = model.getValue(column.getLanguage());
+                    } else {
+                        final String data = (String) tuple.getColumnValue(column, valueDataAdapter);
+                        csv[i] = data;
+                    }
                 }
                 i++;
             }
