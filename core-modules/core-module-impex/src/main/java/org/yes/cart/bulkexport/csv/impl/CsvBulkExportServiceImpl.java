@@ -212,7 +212,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
         try {
 
             if (masterObject == null) {
-                // No need to validate sub imports
+                // No need to validate sub exports
                 // Preliminary validation - not always applicable for transient object (e.g. products need category assignments)
                 try {
                     validateAccessBeforeExport(tuple.getData(), descriptor.getEntityTypeClass());
@@ -278,7 +278,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                 i++;
             }
 
-            statusListener.notifyPing("Importing tuple: " + tuple.getSourceId()); // make sure we do not time out
+            statusListener.notifyPing("Exporting tuple: " + tuple.getSourceId()); // make sure we do not time out
 
             return csv;
 
@@ -286,7 +286,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
             String additionalInfo = e.getMessage();
             String message = MessageFormat.format(
-                    "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
+                    "during export row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
                     tuple,
                     csvExportDescriptorName,
                     e.getMessage(),
@@ -309,19 +309,19 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
      * Try to get existing entity for update. In case of sub import master object will be used in parameters if
      * {@link ImportColumn#isUseMasterObject()} set to true.
      *
-     * @param importDescriptor descriptor
+     * @param exportDescriptor descriptor
      * @param queryTemplate    template to use with tuple columns as parameter values
      * @param masterObject in case of subexport will be not null, but will be used with flag only
      * @param tuple       data row to get the parameter value for lookup query.
      *
      * @return existing entity or null if not found
      */
-    private ResultsIterator<Object> getExistingEntities(final ExportDescriptor importDescriptor,
+    private ResultsIterator<Object> getExistingEntities(final ExportDescriptor exportDescriptor,
                                                         final String queryTemplate,
                                                         final Object masterObject,
                                                         final ExportTuple tuple) {
 
-        final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(importDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
+        final LookUpQuery query = columnLookUpQueryParameterStrategy.getQuery(exportDescriptor, masterObject, tuple, valueDataAdapter, queryTemplate);
         final ResultsIterator<Object> object = genericDAO.findByQueryIterator(query.getQueryString(), query.getParameters());
         return object;
 
