@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+package org.yes.cart.bulkjob.images;
+
 import org.slf4j.Logger;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
