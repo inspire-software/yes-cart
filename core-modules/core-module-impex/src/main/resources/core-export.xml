@@ -65,18 +65,18 @@
         </property>
     </bean>
 
-    <bean id="exportCsvImportValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvExportValueAdapter">
+    <bean id="exportCsvExportValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvExportValueAdapter">
         <constructor-arg index="0" ref="extendedConversionService"/>
     </bean>
 
     <bean id="exportCsvAttributeValueByCodeValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvAttributeValueByCodeValueAdapterImpl">
-        <property name="extensibleValueAdapter" ref="exportCsvImportValueAdapter"/>
+        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
     </bean>
 
     <bean id="exportCsvProductPriceValueAdapter" class="org.yes.cart.bulkexport.csv.impl.CsvProductPriceValueAdapterImpl">
         <constructor-arg index="0" ref="priceService"/>
         <constructor-arg index="1" ref="shopService"/>
-        <property name="extensibleValueAdapter" ref="exportCsvImportValueAdapter"/>
+        <property name="extensibleValueAdapter" ref="exportCsvExportValueAdapter"/>
     </bean>
 
     <bean id="exportCsvLanguageValueAdapter"  class="org.yes.cart.bulkexport.csv.impl.CsvAsIsValueAdapter"/>
@@ -87,7 +87,7 @@
                 <constructor-arg index="0" ref="impexFederationFacade"/>
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="columnLookUpQueryParameterStrategy" ref="exportCsvColumnLookUpQueryStrategy"/>
-                <property name="valueDataAdapter" ref="exportCsvImportValueAdapter"/>
+                <property name="valueDataAdapter" ref="exportCsvExportValueAdapter"/>
                 <property name="valueLanguageAdapter" ref="exportCsvLanguageValueAdapter"/>
             </bean>
         </property>
