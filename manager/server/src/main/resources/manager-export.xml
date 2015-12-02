@@ -76,7 +76,7 @@
                 <constructor-arg index="0" ref="impexPaymentFederationFacade"/>
                 <property name="genericDAO" ref="paymentGenericDao"/>
                 <property name="columnLookUpQueryParameterStrategy" ref="exportCsvColumnLookUpQueryStrategy"/>
-                <property name="valueDataAdapter" ref="exportCsvImportValueAdapter"/>
+                <property name="valueDataAdapter" ref="exportCsvExportValueAdapter"/>
                 <property name="valueLanguageAdapter" ref="exportCsvLanguageValueAdapter"/>
             </bean>
         </property>
