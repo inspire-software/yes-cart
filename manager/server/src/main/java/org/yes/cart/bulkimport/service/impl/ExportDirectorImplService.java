@@ -124,6 +124,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         // Timeout - just in case runnable crashes and we need to unlock through timeout.
         final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS), 100);
 
+        final String rootPath = resolveExportDirectory();
         final String absFile = resolveExportFile(fileName);
 
         return doJob(new JobContextImpl(async, new JobStatusListenerImpl(logSize, timeout),
@@ -131,6 +132,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                     put(JobContextKeys.EXPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.EXPORT_FILE, absFile);
                     put(JobContextKeys.IMAGE_VAULT_PATH, imgVault);
+                    put(JobContextKeys.EXPORT_DIRECTORY_ROOT, rootPath);
                     putAll(ctx.getAttributes());
                 }}));
     }
@@ -209,6 +211,10 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         }
     }
 
+
+    private String resolveExportDirectory() {
+        return pathToExportDirectory;
+    }
 
     private String resolveExportFile(String fileName) {
         if (StringUtils.isNotBlank(fileName)) {

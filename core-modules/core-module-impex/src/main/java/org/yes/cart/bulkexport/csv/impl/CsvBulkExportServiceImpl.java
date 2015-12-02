@@ -64,6 +64,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
 
         final CsvExportDescriptor csvExportDescriptor = context.getAttribute(JobContextKeys.EXPORT_DESCRIPTOR);
         final String csvExportDescriptorName = context.getAttribute(JobContextKeys.EXPORT_DESCRIPTOR_NAME);
+        final String csvExportRoot = context.getAttribute(JobContextKeys.EXPORT_DIRECTORY_ROOT);
         final String csvExportOverrideFile = context.getAttribute(JobContextKeys.EXPORT_FILE);
 
         try {
@@ -72,10 +73,14 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             if (StringUtils.isNotBlank(csvExportOverrideFile)) {
                 fileToExport = csvExportOverrideFile;
             } else {
+                if (fileToExport.contains(ROOT_PLACEHOLDER)) {
+                    fileToExport = fileToExport.replace(ROOT_PLACEHOLDER, csvExportRoot);
+                }
                 if (fileToExport.contains(TIMESTAMP_PLACEHOLDER)) {
                     final SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
                     fileToExport = fileToExport.replace(TIMESTAMP_PLACEHOLDER, format.format(new Date()));
                     if (new File(fileToExport).exists()) {
+                        // Only do this for timestamped files, otherwise we assume that files are re-writable
                         final String msgErr = MessageFormat.format(
                                 "export file already exists: {0}",
                                 fileToExport);
@@ -121,6 +126,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
         return ExportService.BulkExportResult.OK;
     }
 
+    private static final String ROOT_PLACEHOLDER = "{root}";
     private static final String TIMESTAMP_PLACEHOLDER = "{timestamp}";
 
     /**
