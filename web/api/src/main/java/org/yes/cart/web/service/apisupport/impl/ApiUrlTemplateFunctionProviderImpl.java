@@ -27,13 +27,15 @@ import org.yes.cart.web.application.ApplicationDirector;
  */
 public class ApiUrlTemplateFunctionProviderImpl implements ContentServiceTemplateSupport.FunctionProvider {
 
+    private final String contextPath;
     private final String paramName;
 
     public ApiUrlTemplateFunctionProviderImpl() {
-        this.paramName = "";
+        this("", "/");
     }
 
-    public ApiUrlTemplateFunctionProviderImpl(final String paramName) {
+    public ApiUrlTemplateFunctionProviderImpl(final String contextPath, final String paramName) {
+        this.contextPath = contextPath;
         this.paramName = "/" + paramName;
     }
 
@@ -44,9 +46,9 @@ public class ApiUrlTemplateFunctionProviderImpl implements ContentServiceTemplat
         final String defaultUrl = shop.getDefaultShopUrl();
         final StringBuilder url = new StringBuilder(defaultUrl);
         if (defaultUrl.endsWith("/")) {
-            url.append("yes-shop"); // TODO: add attribute to SHOP to store this
+            url.append(contextPath.substring(1));
         } else {
-            url.append("/yes-shop");
+            url.append(contextPath);
         }
         if (params != null && params.length >= 1) {
 

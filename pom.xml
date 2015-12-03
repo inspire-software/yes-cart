@@ -48,6 +48,14 @@
         <payment.paypal.module>off</payment.paypal.module>
         <payment.postfinance.module>off</payment.postfinance.module>
 
+        <!--
+            Webapps config META-INF context.xml path are specified in config-cluster.properties
+            These are finalNames defaults. Must be here as finalNames does not support filters files.
+         -->
+        <webapp.yes.war.name>yes-shop</webapp.yes.war.name>
+        <webapp.api.war.name>yes-api</webapp.api.war.name>
+        <webapp.yum.war.name>yes-manager</webapp.yum.war.name>
+
         <!-- Core frameworks globals versions -->
         <hibernate.core.version>4.2.0.Final</hibernate.core.version>
         <hibernate.search.version>4.2.0.Final</hibernate.search.version>
@@ -439,6 +447,11 @@
                                 <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
                                 <echo>PayPal payments (use -PpaymentPaypal or -PpaymentAll)           : ${payment.paypal.module} </echo>
                                 <echo>PostFinance payments (use -PpaymentPostFinance or -PpaymentAll) : ${payment.postfinance.module} </echo>
+                                <echo> </echo>
+                                <echo>Web Apps</echo>
+                                <echo>Storefront: ${webapp.yes.war.name}.war</echo>
+                                <echo>REST API  : ${webapp.api.war.name}.war</echo>
+                                <echo>YUM       : ${webapp.yum.war.name}.war</echo>
                                 <echo> </echo>
                                 <echo>Tips:</echo>
                                 <echo>* use mvn help:all-profiles or help:active-profiles to list profiles available</echo>

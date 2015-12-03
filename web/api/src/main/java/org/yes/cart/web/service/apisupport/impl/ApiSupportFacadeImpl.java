@@ -17,6 +17,7 @@
 package org.yes.cart.web.service.apisupport.impl;
 
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
+import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.service.apisupport.ApiSupportFacade;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -29,13 +30,17 @@ public class ApiSupportFacadeImpl implements ApiSupportFacade {
 
     private final ContentServiceTemplateSupport templateSupport;
 
-    public ApiSupportFacadeImpl(final ContentServiceTemplateSupport templateSupport) {
+    public ApiSupportFacadeImpl(final ContentServiceTemplateSupport templateSupport,
+                                final RuntimeConstants runtimeConstants) {
         this.templateSupport = templateSupport;
 
-        this.templateSupport.registerFunction("contentURL", new ApiUrlTemplateFunctionProviderImpl(WebParametersKeys.CONTENT_ID));
-        this.templateSupport.registerFunction("categoryURL", new ApiUrlTemplateFunctionProviderImpl(WebParametersKeys.CATEGORY_ID));
-        this.templateSupport.registerFunction("productURL", new ApiUrlTemplateFunctionProviderImpl(WebParametersKeys.PRODUCT_ID));
-        this.templateSupport.registerFunction("skuURL", new ApiUrlTemplateFunctionProviderImpl(WebParametersKeys.SKU_ID));
+        // YC shop context path, since API is not meant to be linked to
+        final String contextPath = runtimeConstants.getConstant(RuntimeConstants.WEBAPP_SF_CONTEXT_PATH);
+
+        this.templateSupport.registerFunction("contentURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.CONTENT_ID));
+        this.templateSupport.registerFunction("categoryURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.CATEGORY_ID));
+        this.templateSupport.registerFunction("productURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.PRODUCT_ID));
+        this.templateSupport.registerFunction("skuURL", new ApiUrlTemplateFunctionProviderImpl(contextPath, WebParametersKeys.SKU_ID));
         this.templateSupport.registerFunction("URL", new ApiUrlTemplateFunctionProviderImpl());
 
     }

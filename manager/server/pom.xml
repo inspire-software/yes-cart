@@ -485,7 +485,7 @@
             </resource>
         </resources>
 
-        <finalName>yes-manager</finalName>
+        <finalName>${webapp.yum.war.name}</finalName>
 
         <pluginManagement>
             <plugins>

@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="/yes-manager" crossContext="true">
+<Context path="${webapp.yum.context.path}" crossContext="true">
 
 <!--    <Resource auth="Container" name="mail/Session" type="javax.mail.Session"/>-->
 

@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="/yes-api" crossContext="true" >
+<Context path="${webapp.api.context.path}" crossContext="true" >
 
     <Resource name="jdbc/yespayjndi"
               auth="Container"

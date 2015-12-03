@@ -396,7 +396,7 @@
             <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
         </filters>
 
-        <finalName>yes-api</finalName>
+        <finalName>${webapp.api.war.name}</finalName>
 
         <resources>
             <resource>

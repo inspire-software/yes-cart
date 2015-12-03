@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.utils.RuntimeConstants;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.seo.SitemapXmlService;
@@ -45,17 +46,20 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     private final ContentService contentService;
     private final ProductService productService;
     private final LanguageService languageService;
+    private final String contextPath;
 
     public SitemapXmlServiceImpl(final ShopService shopService,
                                  final CategoryService categoryService,
                                  final ContentService contentService,
                                  final ProductService productService,
-                                 final LanguageService languageService) {
+                                 final LanguageService languageService,
+                                 final RuntimeConstants runtimeConstants) {
         this.shopService = shopService;
         this.categoryService = categoryService;
         this.contentService = contentService;
         this.productService = productService;
         this.languageService = languageService;
+        this.contextPath = runtimeConstants.getConstant(RuntimeConstants.WEBAPP_SF_CONTEXT_PATH);
     }
 
     /** {@inheritDoc} */
@@ -245,8 +249,8 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
     private String getShopBaseUrl(final Shop shop) {
         final String urlBase = shop.getDefaultShopUrl();
         if (urlBase.endsWith("/")) {
-            return urlBase + "yes-shop/";
+            return urlBase + contextPath.substring(1) + "/";
         }
-        return urlBase + "/yes-shop/";
+        return urlBase + this.contextPath + "/";
     }
 }

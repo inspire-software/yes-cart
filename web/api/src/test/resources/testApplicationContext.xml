@@ -53,4 +53,16 @@
     <import resource="api.xml"/>
     <import resource="rest-mvc.xml"/>
 
+
+    <bean id="runtimeConstants" class="org.yes.cart.utils.impl.RuntimeConstantsImpl">
+        <constructor-arg>
+            <map>
+                <entry key="webapp.yes.context.path" value="/yes-shop"/>
+                <entry key="webapp.api.context.path" value="/ys-api"/>
+                <entry key="webapp.yum.context.path" value="/yes-manager"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+
 </beans>
