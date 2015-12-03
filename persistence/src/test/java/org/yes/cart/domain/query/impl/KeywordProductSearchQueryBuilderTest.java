@@ -51,7 +51,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createStrictQuery(10L, "query", "SearchWord");
         assertNotNull(query);
-        assertEquals("(name:SearchWord~0.95^2.5 displayName:SearchWord~0.9^4.0 brand:searchword~0.8^5.0 code:SearchWord^10.0 manufacturerCode:SearchWord^10.0 sku.code:SearchWord^10.0 sku.manufacturerCode:SearchWord^10.0 attribute.attrvalsearchprimary:searchword^15.0 attribute.attrvalsearchphrase:searchword~0.65^3.5)", query.toString());
+        assertEquals("(name:SearchWord~0.95^2.5 displayName:SearchWord~0.9^4.0 brand:searchword^5.0 code:SearchWord^10.0 manufacturerCode:SearchWord^10.0 sku.code:SearchWord^10.0 sku.manufacturerCode:SearchWord^10.0 attribute.attrvalsearchprimary:searchword^15.0 attribute.attrvalsearchphrase:searchword~0.65^3.5)", query.toString());
 
     }
 
@@ -60,7 +60,7 @@ public class KeywordProductSearchQueryBuilderTest {
 
         final Query query = new KeywordProductSearchQueryBuilder().createStrictQuery(10L, "query", "Search, Word");
         assertNotNull(query);
-        assertEquals("(name:Search, Word~0.95^2.5 displayName:Search, Word~0.9^4.0 brand:search, word~0.8^5.0 code:Search, Word^10.0 manufacturerCode:Search, Word^10.0 sku.code:Search, Word^10.0 sku.manufacturerCode:Search, Word^10.0 attribute.attrvalsearchprimary:search, word^15.0 attribute.attrvalsearchphrase:search, word~0.65^3.5) (brand:search~0.8^5.0 code:search^4.0 manufacturerCode:search^4.0 sku.code:search^4.0 sku.manufacturerCode:search^4.0 attribute.attrvalsearchphrase:search~0.65^2.75) (brand:word~0.8^5.0 code:word^4.0 manufacturerCode:word^4.0 sku.code:word^4.0 sku.manufacturerCode:word^4.0 attribute.attrvalsearchphrase:word~0.65^2.75)", query.toString());
+        assertEquals("(name:Search, Word~0.95^2.5 displayName:Search, Word~0.9^4.0 brand:search, word^5.0 code:Search, Word^10.0 manufacturerCode:Search, Word^10.0 sku.code:Search, Word^10.0 sku.manufacturerCode:Search, Word^10.0 attribute.attrvalsearchprimary:search, word^15.0 attribute.attrvalsearchphrase:search, word~0.65^3.5) (brand:search~0.8^5.0 code:search^4.0 manufacturerCode:search^4.0 sku.code:search^4.0 sku.manufacturerCode:search^4.0 attribute.attrvalsearchphrase:search~0.65^2.75) (brand:word~0.8^5.0 code:word^4.0 manufacturerCode:word^4.0 sku.code:word^4.0 sku.manufacturerCode:word^4.0 attribute.attrvalsearchphrase:word~0.65^2.75)", query.toString());
 
     }
 

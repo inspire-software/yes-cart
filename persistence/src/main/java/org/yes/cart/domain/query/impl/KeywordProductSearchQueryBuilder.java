@@ -82,7 +82,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractSearchQueryBuilder
 
             phrazeQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedSearchValue, 0.95f, 2.5f), BooleanClause.Occur.SHOULD);
             phrazeQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedSearchValue, 0.9f, 4f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(BRAND_FIELD, escapedSearchValueLower, 0.8f, 5f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createTermQuery(BRAND_FIELD, escapedSearchValueLower, 5f), BooleanClause.Occur.SHOULD);
 
             phrazeQuery.add(createTermQuery(PRODUCT_CODE_FIELD, escapedSearchValue, 10f), BooleanClause.Occur.SHOULD);
             phrazeQuery.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValue, 10f), BooleanClause.Occur.SHOULD);
