@@ -100,6 +100,11 @@
 
     <!-- ContactPage -->
     <entry key="contact">Контактна інформація</entry>
+    <entry key="name">Iм'я</entry>
+    <entry key="subject">Тема</entry>
+    <entry key="message">Повідомлення</entry>
+    <entry key="send">Відправити</entry>
+    <entry key="emailSend">Ваше повідомлення було відправлено</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Ваш профіль</entry>

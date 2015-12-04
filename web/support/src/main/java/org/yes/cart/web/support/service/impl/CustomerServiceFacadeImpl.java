@@ -181,6 +181,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     }
 
     /** {@inheritDoc} */
+    public String registerEmailRequest(final Shop registrationShop,
+                                       final String email,
+                                       final Map<String, Object> registrationData) {
+        return email; // do nothing, email is sent via ContactUsAspect
+    }
+
+    /** {@inheritDoc} */
     public List<AttrValueCustomer> getShopRegistrationAttributes(final Shop shop) {
 
         final List<String> allowed = shop.getSupportedRegistrationFormAttributesAsList();

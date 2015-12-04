@@ -45,7 +45,7 @@ import java.util.Set;
  * Time: 09:09
  */
 @Aspect
-public class NewsletterAspect extends BaseNotificationAspect {
+public class ContactFormAspect extends BaseNotificationAspect {
 
     private final MailService mailService;
 
@@ -56,15 +56,15 @@ public class NewsletterAspect extends BaseNotificationAspect {
     /**
      * Construct customer aspect.
      *
-     * @param taskExecutor    {@link org.springframework.core.task.TaskExecutor} to execute task.
+     * @param taskExecutor    {@link TaskExecutor} to execute task.
      * @param mailService     persists mail object to be picked up by bulk email job
      * @param mailComposer    mail composer generates message to be sent
      * @param themeService    theme service
      */
-    public NewsletterAspect(final TaskExecutor taskExecutor,
-                            final MailService mailService,
-                            final MailComposer mailComposer,
-                            final ThemeService themeService) {
+    public ContactFormAspect(final TaskExecutor taskExecutor,
+                             final MailService mailService,
+                             final MailComposer mailComposer,
+                             final ThemeService themeService) {
         super(taskExecutor);
         this.mailService = mailService;
         this.mailComposer = mailComposer;
@@ -73,7 +73,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
 
 
     /**
-     * Perform notification about newsletter registration.
+     * Perform notification about contact us message.
      *
      * @param pjp join point
      *
@@ -98,9 +98,9 @@ public class NewsletterAspect extends BaseNotificationAspect {
 
         registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
 
-        registrationMessage.setTemplateName("adm-newsletter-request");
+        registrationMessage.setTemplateName("adm-contactform-request");
 
-        final String emailTo = determineFromEmail(shop); // newsletter request to admin
+        final String emailTo = determineFromEmail(shop); // contact request to admin
         registrationMessage.setEmail(emailTo);
         registrationMessage.setShopMailFrom(emailTo);
 
@@ -113,7 +113,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
 
         sendNotification(registrationMessage);
 
-        ShopCodeContext.getLog(this).info("Newsletter message was send to queue {}", registrationMessage);
+        ShopCodeContext.getLog(this).info("ContactUs message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
     }
@@ -152,7 +152,7 @@ public class NewsletterAspect extends BaseNotificationAspect {
      * @return Object
      * @throws Throwable in case of target method errors
      */
-    @Around("execution(* org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl.registerNewsletter(..))")
+    @Around("execution(* org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl.registerEmailRequest(..))")
     public Object doSignupNewsletter(final ProceedingJoinPoint pjp) throws Throwable {
         return notifyInternal(pjp);
     }

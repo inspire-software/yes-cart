@@ -100,6 +100,11 @@
 
     <!-- ContactPage -->
     <entry key="contact">Contact information</entry>
+    <entry key="name">Name</entry>
+    <entry key="subject">Subject</entry>
+    <entry key="message">Message</entry>
+    <entry key="send">Send</entry>
+    <entry key="emailSend">You message has been sent</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Your profile</entry>

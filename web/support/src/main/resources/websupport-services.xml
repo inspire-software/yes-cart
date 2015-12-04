@@ -162,6 +162,13 @@
         <constructor-arg index="3" ref="themeService"/>
     </bean>
 
+    <bean id="customerContactFormAspect" class="org.yes.cart.web.aspect.ContactFormAspect">
+        <constructor-arg index="0" ref="aspectExecutor"/>
+        <constructor-arg index="1" ref="mailService"/>
+        <constructor-arg index="2" ref="mailComposer"/>
+        <constructor-arg index="3" ref="themeService"/>
+    </bean>
+
     <bean id="customerRegistrationAspect" class="org.yes.cart.web.aspect.RegistrationAspect">
         <constructor-arg index="0" ref="aspectExecutor"/>
         <constructor-arg index="1" ref="passPhraseGenerator"/>
