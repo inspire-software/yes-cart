@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
@@ -42,6 +44,25 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
                                          final LanguageService languageService) {
         super(Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, relativeInternalRootDirectory, languageService);
         this.attrValueEntityCategoryDao = attrValueCategoryDao;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "imageNameStrategy-resolveObjectCode")
+    public String resolveObjectCode(final String url) {
+
+        if (StringUtils.isNotBlank(url)) {
+            // Categories codes are used from URI which may have multiple undescores so always need to resolve the code
+            // from the domain object
+            final String code = resolveObjectCodeInternal(url);
+            if (code != null) {
+                return code;
+            }
+
+        }
+
+        return Constants.NO_IMAGE;
     }
 
     /**
