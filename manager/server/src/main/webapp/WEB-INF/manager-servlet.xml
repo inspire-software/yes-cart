@@ -21,5 +21,6 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:manager-services.xml"/>
+    <import resource="classpath:jaum-manager-services.xml"/>
 
 </beans>

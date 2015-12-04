@@ -5,8 +5,26 @@ App.factory('ShopService', ['$http', '$q', function($http, $q){
     return {
 
         fetchAll: function() {
+
+            return $http.get('jaum/service/shop/all')
+                .then(
+                function(response){
+                    return response.data;
+                },
+                function(errResponse){
+                    console.error('Error while fetching users');
+                    return $q.reject(errResponse);
+                }
+            );
+
+        },
+
+
+/*
+        fetchAll: function() {
             return $q.when(eval('[{ "id" : 1, "name" : "Ivn" }, { "id" : 2, "name" : "QWqwdsfddfdsaf" }]'));
         },
+*/
 
 
         /*
