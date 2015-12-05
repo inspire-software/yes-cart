@@ -83,7 +83,7 @@ public class ContactPage  extends AbstractWebPage {
         final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
         String contactInfo = getContentInclude(shopId, "contacts_content_include", lang);
-        addOrReplace(new Label("contactInfo", contactInfo));
+        addOrReplace(new Label("contactInfo", contactInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
         persistCartIfNecessary();
