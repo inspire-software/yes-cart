@@ -88,11 +88,11 @@
     </util:list>
 
     <util:map id="reportWorkers">
-        <entry key="reportPayments">
+        <!--<entry key="reportPayments">
             <bean class="org.yes.cart.report.impl.PaymentReportWorker">
                 <constructor-arg index="0" ref="remotePaymentModulesManagementService"/>
             </bean>
-        </entry>
+        </entry>-->
         <entry key="reportDelivery">
             <bean class="org.yes.cart.report.impl.DeliveryReportWorker">
                 <constructor-arg index="0" ref="customerOrderService"/>
@@ -100,12 +100,12 @@
                 <constructor-arg index="2" ref="shopFederationStrategy"/>
             </bean>
         </entry>
-        <entry key="reportAvailableStock">
+       <!-- <entry key="reportAvailableStock">
             <bean class="org.yes.cart.report.impl.InventoryReportWorker">
                 <constructor-arg index="0" ref="remoteWarehouseService"/>
                 <constructor-arg index="1" ref="remoteInventoryService"/>
             </bean>
-        </entry>
+        </entry>-->
     </util:map>
 
 

@@ -57,7 +57,7 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <filter>
+    <!--<filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
@@ -65,7 +65,7 @@
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 
     <servlet>
         <servlet-name>Spring MVC despatcher</servlet-name>
@@ -79,14 +79,25 @@
 
     <servlet-mapping>
         <servlet-name>Spring MVC despatcher</servlet-name>
-        <url-pattern>/spring/*</url-pattern>
+        <url-pattern>/jaum/service/*</url-pattern>
     </servlet-mapping>
 
+    <servlet-mapping>
+        <servlet-name>Spring MVC despatcher</servlet-name>
+        <url-pattern>/manage/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Spring MVC despatcher</servlet-name>
+        <url-pattern>/manage/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Spring MVC despatcher</servlet-name>
+        <url-pattern>/manage</url-pattern>
+    </servlet-mapping>
 
-    <welcome-file-list>
+   <!-- <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+    </welcome-file-list>-->
 
     <!-- Datasource Configuration -->
 	<resource-ref>
@@ -102,6 +113,8 @@
 		<res-type>javax.sql.DataSource</res-type>
 		<res-auth>Container</res-auth>
 	</resource-ref>
+
+
     
     <security-constraint>
         <!-- YUM should only be accessible via https -->

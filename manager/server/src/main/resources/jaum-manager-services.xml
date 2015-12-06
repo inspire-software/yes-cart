@@ -33,7 +33,7 @@
 
   <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
   <mvc:annotation-driven />
-  <context:component-scan base-package="org.yes.cart.remote.service.impl.**" />
+  <context:component-scan base-package="org.yes.cart.remote.service.impl.**,org.yes.cart" />
 
   <!--<bean id="remoteShopService" class="org.yes.cart.remote.service.impl.WsRemoteShopServiceImpl">
     <constructor-arg index="0" ref="dtoShopService"/>

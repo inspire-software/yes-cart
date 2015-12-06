@@ -19,7 +19,7 @@
 <head>
     <meta charset="UTF-8">
     <title>YUM Yes cart update manager</title>
-    <link rel="stylesheet" href="style/style.css" type="text/css"/>
+    <link rel="stylesheet" href="../style/style.css" type="text/css"/>
 </head>
 <body>
 <div class="container">

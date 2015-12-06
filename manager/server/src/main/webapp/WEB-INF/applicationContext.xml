@@ -23,15 +23,29 @@
                            http://www.springframework.org/schema/security
                            http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
 
-
-
-    <security:http entry-point-ref="entryPoint">
+   <!-- <security:http entry-point-ref="entryPoint">
         <security:anonymous enabled="false"/>
-    </security:http>
+        <security:intercept-url pattern="/WEB-INF/pages/index.jsp" access="ROLE_USER" />
+        <security:form-login
+                login-page="/WEB-INF/pages/login.jsp"
+                default-target-url="/WEB-INF/pages/index.jsp"
+                authentication-failure-url="/login?error"
+                username-parameter="j_username"
+                password-parameter="j_password" />
+    </security:http>-->
 
     <bean id="entryPoint"
           class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+
+   <!-- <security:global-method-security pre-post-annotations="enabled"/>
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider>
@@ -42,7 +56,7 @@
                     users-by-username-query="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"
                     authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
         </security:authentication-provider>
-    </security:authentication-manager>
+    </security:authentication-manager>-->
 
 
     <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">

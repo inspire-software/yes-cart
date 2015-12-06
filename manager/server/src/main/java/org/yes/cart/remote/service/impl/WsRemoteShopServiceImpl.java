@@ -18,7 +18,9 @@ package org.yes.cart.remote.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +45,7 @@ import java.util.List;
  * Time: 17:22:15
  */
 @Controller
-@RequestMapping("jaum/service/shop/")
+@RequestMapping("/shop")
 public class WsRemoteShopServiceImpl
         extends AbstractRemoteService<ShopDTO>
         implements RemoteShopService {
@@ -68,7 +70,8 @@ public class WsRemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
-    @RequestMapping(value = "all", method = RequestMethod.GET, produces = "application/json")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody List<ShopDTO> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<ShopDTO> all = new ArrayList<ShopDTO>(super.getAll());
         federationFacade.applyFederationFilter(all, ShopDTO.class);
@@ -78,7 +81,8 @@ public class WsRemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
-    @RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody ShopDTO getById(@PathVariable final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(id, ShopDTO.class)) {
             return super.getById(id);
