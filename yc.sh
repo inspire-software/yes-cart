@@ -10,7 +10,7 @@ RUNDIR=`pwd`
 
 YC_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-MVN=$M2_HOME/bin/mvn
+MVN="$M2_HOME/bin/mvn"
 
 show_env() {
     echo "================================================";
@@ -58,12 +58,13 @@ add_mvn_extra_dep() {
     echo "================================================";
     echo " Setup environment           ";
     echo "================================================";
-    echo "Adding extra dependencies...";
+    echo " Adding extra dependencies...";
 
-    cd $YC_HOME/env/setup/lib3rdparty
+#    cd "$YC_HOME/env/setup/lib3rdparty"
 
-    cd $YC_HOME
+#    cd "$YC_HOME"
 
+    echo " All dependencies are setup"
     echo "================================================";
 
 }
@@ -75,16 +76,16 @@ cp_resources_to_webapp() {
     echo "================================================";
 
     echo " copying resources... manager/server";
-    cd $YC_HOME/manager/server
-    $MVN validate -Ptemplates
+    cd "$YC_HOME/manager/server"
+    "$MVN" validate -Ptemplates
 
     echo " copying resources... web/store";
-    cd $YC_HOME/web/store
-    $MVN validate -Ptemplates
+    cd "$YC_HOME/web/store"
+    "$MVN" validate -Ptemplates
 
     echo " copying resources... web/api";
-    cd $YC_HOME/web/api
-    $MVN validate -Ptemplates
+    cd "$YC_HOME/web/api"
+    "$MVN" validate -Ptemplates
 
 }
 
@@ -94,9 +95,9 @@ init_db_mysql() {
     echo " Initialise MySQL database                      ";
     echo "================================================";
 
-    DBINITSCRIPT=$YC_HOME/env/setup/dbi/mysql/dbinit.sql
+    DBINITSCRIPT="$YC_HOME/env/setup/dbi/mysql/dbinit.sql"
     echo "Running init script as root user $DBINITSCRIPT"
-    mysql -uroot -p < $DBINITSCRIPT
+    mysql -uroot -p < "$DBINITSCRIPT"
 
     echo "Initialisation complete."
 
@@ -108,9 +109,9 @@ db_derby_go() {
     echo " Starting Derby database                        ";
     echo "================================================";
 
-    export DERBY_INSTALL=$YC_HOME/env/derby
-    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
-    cd $DERBY_INSTALL/lib
+    export DERBY_INSTALL="$YC_HOME/env/derby"
+    export CLASSPATH="$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:."
+    cd "$DERBY_INSTALL/lib"
 
     java -jar derbyrun.jar server start
 
@@ -122,9 +123,9 @@ db_derby_gob() {
     echo " Starting Derby database (background mode)      ";
     echo "================================================";
 
-    export DERBY_INSTALL=$YC_HOME/env/derby
-    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
-    cd $DERBY_INSTALL/lib
+    export DERBY_INSTALL="$YC_HOME/env/derby"
+    export CLASSPATH="$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:."
+    cd "$DERBY_INSTALL/lib"
 
     java -jar derbyrun.jar server start &
 
@@ -143,9 +144,9 @@ db_derby_end() {
     echo " Stopping Derby database                        ";
     echo "================================================";
 
-    export DERBY_INSTALL=$YC_HOME/env/derby
-    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
-    cd $DERBY_INSTALL/lib
+    export DERBY_INSTALL="$YC_HOME/env/derby"
+    export CLASSPATH="$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:."
+    cd "$DERBY_INSTALL/lib"
 
     java -jar derbyrun.jar server shutdown
 
@@ -160,17 +161,17 @@ init_db_derby() {
     echo "================================================";
     
     echo "Setting Derby environment variables";
-    export DERBY_INSTALL=$YC_HOME/env/derby
-    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
-    cd $DERBY_INSTALL/lib
+    export DERBY_INSTALL="$YC_HOME/env/derby"
+    export CLASSPATH="$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:."
+    cd "$DERBY_INSTALL/lib"
 
     #java org.apache.derby.tools.sysinfo
-    DBINITSCRIPT=$YC_HOME/env/setup/dbi/derby/dbinit.sql
+    DBINITSCRIPT="$YC_HOME/env/setup/dbi/derby/dbinit.sql"
     echo "Running init script $DBINITSCRIPT"
-    java -Dderby.system.home=$YC_HOME -Dij.outfile=$YC_HOME/derbyinit.log -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij $DBINITSCRIPT
+    java -Dderby.system.home="$YC_HOME" -Dij.outfile="$YC_HOME/derbyinit.log" -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij "$DBINITSCRIPT"
 #    java -Dderby.system.home=$YC_HOME org.apache.derby.tools.ij $DBINITSCRIPT
     
-    cd $YC_HOME;
+    cd "$YC_HOME";
     echo "Initialisation complete. See log: $YC_HOME/derbyinit.log"
 
 }
@@ -181,9 +182,9 @@ db_derby_connect() {
     echo " Starting Derby client                          ";
     echo "================================================";
 
-    export DERBY_INSTALL=$YC_HOME/env/derby
-    export CLASSPATH=$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:.
-    cd $DERBY_INSTALL/lib
+    export DERBY_INSTALL="$YC_HOME/env/derby"
+    export CLASSPATH="$DERBY_INSTALL/lib/derby.jar:$DERBY_INSTALL/lib/derbytools.jar:$DERBY_INSTALL/lib/derbyclient.jar:$DERBY_INSTALL/lib/derbynet.jar:."
+    cd "$DERBY_INSTALL/lib"
 
     echo "Working directory is"
     pwd
@@ -203,7 +204,7 @@ start_luke() {
     echo " Starting Luke (lucene index browser)           ";
     echo "================================================";
 
-    java -jar $YC_HOME/env/luke/lukeall-3.5.0.jar &
+    java -jar "$YC_HOME/env/luke/lukeall-3.5.0.jar" &
 
 }
 
@@ -213,7 +214,7 @@ start_nullsmtp() {
     echo " Starting DevNullSmtp (dummy SMTP server)       ";
     echo "================================================";
 
-    java -jar $YC_HOME/env/devnullsmtp/DevNullSmtp.jar
+    java -jar "$YC_HOME/env/devnullsmtp/DevNullSmtp.jar" &
 
 }
 
@@ -226,69 +227,69 @@ then
         exit 0;
     elif [ $1 = "i3rd" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         add_mvn_extra_dep;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "cpres" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         cp_resources_to_webapp;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "dbimysql" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         init_db_mysql;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "dbiderby" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         init_db_derby;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "derbygo" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         db_derby_go;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "derbygob" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         db_derby_gob;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "derbyend" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         db_derby_end;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "derbycon" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         db_derby_connect;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "env" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         show_env;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "luke" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         start_luke;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     elif [ $1 = "nullsmtp" ];
     then
-        cd $YC_HOME
+        cd "$YC_HOME"
         start_nullsmtp;
-        cd $RUNDIR
+        cd "$RUNDIR"
         exit 0;
     else
         echo "Provide a command..."; show_help; exit 100;
