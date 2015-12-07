@@ -204,7 +204,7 @@ rem Sub routines below this comment
     echo  Initialise MySQL database                      
     echo ================================================
 
-    set DBINITSCRIPT="%YC_HOME%\env\setup\dbi\mysql\dbinit.sql"
+    set "DBINITSCRIPT=%YC_HOME%\env\setup\dbi\mysql\dbinit.sql"
     echo Running init script as root user %DBINITSCRIPT%
     call mysql -uroot -p < "%DBINITSCRIPT%"
 
@@ -221,8 +221,8 @@ rem Sub routines below this comment
     echo ================================================
 
 	echo %YC_HOME%
-    set DERBY_INSTALL="%YC_HOME%\env\derby"
-    set CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;."
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
     call cd "%DERBY_INSTALL%\lib"
 
     call java -jar derbyrun.jar server start
@@ -236,8 +236,8 @@ rem Sub routines below this comment
     echo  Starting Derby database (background mode)      
     echo ================================================
 
-    set DERBY_INSTALL="%YC_HOME%\env\derby"
-    set CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;."
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
     call cd "%DERBY_INSTALL%\lib"
 
     start java -jar derbyrun.jar server start
@@ -258,8 +258,8 @@ rem Sub routines below this comment
     echo  Stopping Derby database                        
     echo ================================================
 
-    set DERBY_INSTALL="%YC_HOME%\env\derby"
-    set CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;."
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
     call cd "%DERBY_INSTALL%\lib"
 
     call java -jar derbyrun.jar server shutdown
@@ -276,12 +276,12 @@ rem Sub routines below this comment
     echo ================================================
     
     echo Setting Derby environment variables
-    set DERBY_INSTALL="%YC_HOME%\env\derby"
-    set CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;."
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
     call cd "%DERBY_INSTALL%\lib"
 
 rem   call java org.apache.derby.tools.sysinfo
-    set DBINITSCRIPT="%YC_HOME%\env\setup\dbi\derby\dbinit.sql"
+    set "DBINITSCRIPT=%YC_HOME%\env\setup\dbi\derby\dbinit.sql"
     echo Running init script %DBINITSCRIPT%
     call java -Dderby.system.home="%YC_HOME%" -Dij.outfile="%YC_HOME%\derbyinit.log" -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij "%DBINITSCRIPT%"
 rem   call java -Dderby.system.home="%YC_HOME%" org.apache.derby.tools.ij "%DBINITSCRIPT%"
@@ -298,8 +298,8 @@ rem   call java -Dderby.system.home="%YC_HOME%" org.apache.derby.tools.ij "%DBIN
     echo  Starting Derby client                          
     echo ================================================
 
-    set DERBY_INSTALL="%YC_HOME%\env\derby"
-    set CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;."
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
     call cd "%DERBY_INSTALL%\lib"
 
     echo Working directory is
