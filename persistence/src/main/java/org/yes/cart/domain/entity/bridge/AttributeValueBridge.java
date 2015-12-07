@@ -120,7 +120,7 @@ public class AttributeValueBridge implements FieldBridge {
                     // strict attribute navigation only for filtered navigation
                     document.add(new Field(
                             "facet_" + code,
-                            attrValue.getVal(),
+                            cleanFacetValue(attrValue.getVal()),
                             Field.Store.NO,
                             Field.Index.NOT_ANALYZED,
                             luceneOptions.getTermVector()
@@ -166,6 +166,10 @@ public class AttributeValueBridge implements FieldBridge {
 
     private NavigatableAttributesSupport getNavigatableAttributesSupport() {
         return HibernateSearchBridgeStaticLocator.getNavigatableAttributesSupport();
+    }
+
+    private String cleanFacetValue(final String val) {
+        return val.replace('/', ' '); // replace all forward slashes since they get decoded into paths
     }
 
 
