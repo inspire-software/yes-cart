@@ -28,22 +28,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class JaumController {
 
-    @RequestMapping(value = { "/" }, method = RequestMethod.GET)
+
+    @RequestMapping(value = { "/manage", "/manage/" }, method = RequestMethod.GET)
     public String homePage(ModelMap model) {
-        return "zzzz";
-    }
-
-
-    @RequestMapping(value = { "/manage", "/manage/", "/manage/index.jsp" }, method = RequestMethod.GET)
-    public String homePage2(ModelMap model) {
         return "index";
     }
 
-
-   /* @RequestMapping(value = "/login", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";
-    }
+    }*/
+
+
+   /*
 
     @RequestMapping(value="/loginError", method = RequestMethod.GET)
     public String loginerror(ModelMap model) {
