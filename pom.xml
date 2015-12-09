@@ -21,7 +21,7 @@
     <groupId>org.yes</groupId>
     <artifactId>yes-cart</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.0</version>
+    <version>3.2.0-SNAPSHOT</version>
     <name>Yes Cart</name>
     <url>https://github.com/inspire-software/yes-cart</url>
     <modules>
@@ -68,7 +68,7 @@
         <ehcache.version>2.6.6</ehcache.version>
         <!--<ehcache.version>1.6.2</ehcache.version>-->
         <jackson.version>1.9.13</jackson.version>
-        <GeDA.version>3.1.0</GeDA.version>
+        <GeDA.version>3.2.0-SNAPSHOT</GeDA.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
         <servlet-api.version>2.5</servlet-api.version>
 
