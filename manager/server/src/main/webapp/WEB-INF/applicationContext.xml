@@ -31,38 +31,31 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <security:http entry-point-ref="entryPoint">
+
+    <security:http auto-config="true">
         <security:anonymous enabled="false"/>
-        <security:intercept-url pattern="/manage" access="ROLE_USER" />
-        <security:intercept-url pattern="/manage/" access="ROLE_USER" />
-        <security:intercept-url pattern="/manage/*" access="ROLE_USER" />
-        <!--<security:intercept-url pattern="/login" access="permitAll()" />-->
-        <security:http-basic />
-       <!-- <security:form-login
-                login-page="/WEB-INF/pages/login.jsp"
-                default-target-url="/WEB-INF/pages/index.jsp"
-                authentication-failure-url="/login?error"
-                username-parameter="j_username"
-                password-parameter="j_password" />-->
+        <security:intercept-url pattern="/app/pages/onemore" access="ROLE_SMADMIN" />
+        <!--<security:http-basic />-->
+        <security:form-login
+                 login-page="/app/pages/login"
+                 default-target-url="/app/pages/onemore"
+                 authentication-failure-url="/login?error"
+                 username-parameter="j_username"
+                 password-parameter="j_password" />
+        <!-- <security:form-login
+                 login-page="/WEB-INF/pages/login.jsp"
+                 default-target-url="/WEB-INF/pages/index.jsp"
+                 authentication-failure-url="/login?error"
+                 username-parameter="j_username"
+                 password-parameter="j_password" />-->
     </security:http>
 
-    <!--<security:http entry-point-ref="entryPoint">
-        <security:anonymous enabled="false"/>
-        <security:intercept-url pattern="/manage" access="ROLE_USER" />
-        <security:intercept-url pattern="/manage/" access="ROLE_USER" />
-        <security:intercept-url pattern="/manage/*" access="ROLE_USER" />
-        <security:form-login
-                login-page="/WEB-INF/pages/login.jsp"
-                default-target-url="/WEB-INF/pages/index.jsp"
-                authentication-failure-url="/login?error"
-                username-parameter="j_username"
-                password-parameter="j_password" />
-    </security:http>-->
 
-    <bean id="entryPoint"
-          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
 
-   <security:global-method-security pre-post-annotations="enabled"/>
+    <!--<bean id="entryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
+
+    <security:global-method-security pre-post-annotations="enabled"/>
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider>
@@ -74,6 +67,8 @@
                     authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
         </security:authentication-provider>
     </security:authentication-manager>
+
+
 
 
     <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">

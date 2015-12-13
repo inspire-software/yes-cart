@@ -26,18 +26,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Created by igor on 06.12.2015.
  */
 @Controller
+@RequestMapping("/pages")
 public class JaumController {
 
 
-    @RequestMapping(value = { "/manage", "/manage/" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
     public String homePage(ModelMap model) {
         return "index";
     }
 
-    /*@RequestMapping(value = "/login", method = RequestMethod.GET)
+
+    @RequestMapping(value = { "/onemore" }, method = RequestMethod.GET)
+    public String oneMorePAge(ModelMap model) {
+        return "onemore";
+    }
+
+    @RequestMapping(value = {"/login", "/login/"}, method = RequestMethod.GET)
     public String loginPage() {
         return "login";
-    }*/
+    }
 
 
    /*

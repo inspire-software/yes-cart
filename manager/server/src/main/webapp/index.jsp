@@ -25,7 +25,7 @@
 <body>
 <div class="container">
     <div class="inside">
-        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/manage' />">Старт Українська</a></div>
+        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/app/pages/index' />">Старт Українська</a></div>
 
     </div>
 </div>
@@ -51,7 +51,7 @@
     } else {
         redirectToPage = "en_US/" + redirectToPage;
     }
-    redirectToPage = "<c:url value='/manage' />";
+    redirectToPage = "<c:url value='/app/pages/index' />";
 
     setTimeout('redirectTo()', 1);
     function redirectTo() {
