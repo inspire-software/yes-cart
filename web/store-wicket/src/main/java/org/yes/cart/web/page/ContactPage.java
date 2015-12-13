@@ -16,15 +16,11 @@
 
 package org.yes.cart.web.page;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -32,8 +28,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.auth.BaseAuthForm;
@@ -45,7 +39,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +58,12 @@ public class ContactPage  extends AbstractWebPage {
      */
     public ContactPage(final PageParameters params) {
         super(params);
+        add(new StandardFooter(FOOTER));
+        add(new StandardHeader(HEADER));
+        add(new ServerSideJs("serverSideJs"));
+        add(new HeaderMetaInclude("headerInclude"));
+        add(new ContactForm("contactForm"));
+        add(new FeedbackPanel("feedback"));
     }
 
     /**
@@ -73,12 +72,6 @@ public class ContactPage  extends AbstractWebPage {
     protected void onBeforeRender() {
 
         executeHttpPostedCommands();
-        addOrReplace(new StandardFooter(FOOTER));
-        addOrReplace(new StandardHeader(HEADER));
-        addOrReplace(new ServerSideJs("serverSideJs"));
-        addOrReplace(new HeaderMetaInclude("headerInclude"));
-        addOrReplace(new ContactForm("contactForm"));
-        addOrReplace(new FeedbackPanel("feedback"));
 
         final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
@@ -118,7 +111,7 @@ public class ContactPage  extends AbstractWebPage {
         private String name;
         private String phone;
         private String subject;
-        private String body;
+        private String message;
 
 
         /**
@@ -198,17 +191,17 @@ public class ContactPage  extends AbstractWebPage {
          *
          * @return body
          */
-        public String getBody() {
-            return body;
+        public String getMessage() {
+            return message;
         }
 
         /**
          * Set body.
          *
-         * @param body body
+         * @param message body
          */
-        public void setBody(final String body) {
-            this.body = body;
+        public void setMessage(final String message) {
+            this.message = message;
         }
 
         /**
@@ -247,7 +240,7 @@ public class ContactPage  extends AbstractWebPage {
             );
 
             add(
-                    new TextArea<String>("body")
+                    new TextArea<String>("message")
                             .setRequired(true)
             );
 
@@ -264,7 +257,7 @@ public class ContactPage  extends AbstractWebPage {
                             data.put("phone", getPhone());
                             data.put("email", getEmail());
                             data.put("subject", getSubject());
-                            data.put("body", getBody());
+                            data.put("body", getMessage());
 
                             getCustomerServiceFacade().registerEmailRequest(
                                     ApplicationDirector.getCurrentShop(), email, data);
@@ -277,7 +270,7 @@ public class ContactPage  extends AbstractWebPage {
                             setPhone(null);
                             setName(null);
                             setSubject(null);
-                            setBody(null);
+                            setMessage(null);
 
                         }
                     }
