@@ -73,6 +73,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "customer.email", readOnly = true)
     private String email;
 
+    @DtoField(value = "customer.salutation")
+    private String salutation;
+
     @DtoField(value = "customer.firstname", readOnly = true)
     private String firstname;
 
@@ -456,6 +459,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public long getCustomerId() {
         return customerId;
     }
@@ -508,6 +525,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
                 ", multipleShipmentOption=" + multipleShipmentOption +
                 ", orderTimestamp=" + orderTimestamp +
                 ", email='" + email + '\'' +
+                ", salutation='" + salutation + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +

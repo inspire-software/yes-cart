@@ -56,6 +56,7 @@ public class DefaultCustomerNameFormatterImpl implements CustomerNameFormatter {
         if (address != null) {
 
             final Map<String, String> values = new HashMap<String, String>();
+            values.put("salutation", StringUtils.defaultString(address.getSalutation()));
             values.put("firstname", StringUtils.defaultString(address.getFirstname()));
             values.put("middlename", StringUtils.defaultString(address.getMiddlename()));
             values.put("lastname", StringUtils.defaultString(address.getLastname()));
@@ -84,6 +85,7 @@ public class DefaultCustomerNameFormatterImpl implements CustomerNameFormatter {
         if (customer != null) {
 
             final Map<String, String> values = new HashMap<String, String>();
+            values.put("salutation", StringUtils.defaultString(customer.getSalutation()));
             values.put("firstname", StringUtils.defaultString(customer.getFirstname()));
             values.put("middlename", StringUtils.defaultString(customer.getMiddlename()));
             values.put("lastname", StringUtils.defaultString(customer.getLastname()));

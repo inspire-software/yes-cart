@@ -76,7 +76,9 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         assertEquals(1, mail.size());
         final Mail email = mail.get(0);
         assertTrue(email.getHtmlVersion().contains("neWpaSswOrd"));
+        assertTrue(email.getHtmlVersion().contains("Mr"));
         assertTrue(email.getHtmlVersion().contains("Bender"));
+        assertTrue(email.getHtmlVersion().contains("Bending"));
         assertTrue(email.getHtmlVersion().contains("Rodrigez"));
         assertTrue(email.getHtmlVersion().contains("Gadget universe"));
         assertTrue(email.getHtmlVersion().contains("somegadget.com"));
@@ -88,8 +90,10 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
 
     private RegistrationMessage createRegistrationMessage(final List<String> templateChain) {
         RegistrationMessage registrationMessage = new RegistrationMessageImpl();
+        registrationMessage.setSalutation("Mr");
         registrationMessage.setFirstname("Bender");
         registrationMessage.setLastname("Rodrigez");
+        registrationMessage.setMiddlename("Bending");
         registrationMessage.setEmail("bender@bar.localhost");
         registrationMessage.setPassword("neWpaSswOrd");
         registrationMessage.setShopId(10L);

@@ -42,6 +42,9 @@ public class CustomerDTOImpl implements CustomerDTO {
     @DtoField(value = "email")
     private String email;
 
+    @DtoField(value = "salutation")
+    private String salutation;
+
     @DtoField(value = "firstname")
     private String firstname;
 
@@ -123,6 +126,16 @@ public class CustomerDTOImpl implements CustomerDTO {
     }
 
     /** {@inheritDoc} */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /** {@inheritDoc} */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    /** {@inheritDoc} */
     public Set<AttrValueCustomerDTO> getAttributes() {
         return attributes;
     }
@@ -147,6 +160,7 @@ public class CustomerDTOImpl implements CustomerDTO {
         return "CustomerDTOImpl{" +
                 "customerId=" + customerId +
                 ", email='" + email + '\'' +
+                ", salutation='" + salutation + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +

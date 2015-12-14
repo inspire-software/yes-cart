@@ -41,8 +41,10 @@ public class RegistrationMessageImpl implements RegistrationMessage {
 
 
     private String email;
+    private String salutation;
     private String firstname;
     private String lastname;
+    private String middlename;
     private String password;
     private String authToken;
     private List<String> mailTemplatePathChain;
@@ -179,6 +181,26 @@ public class RegistrationMessageImpl implements RegistrationMessage {
     /** {@inheritDoc} */
     public void setLastname(final String lastname) {
         this.lastname = lastname;
+    }
+
+    /** {@inheritDoc} */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /** {@inheritDoc} */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    /** {@inheritDoc} */
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    /** {@inheritDoc} */
+    public void setMiddlename(final String middlename) {
+        this.middlename = middlename;
     }
 
     /** {@inheritDoc} */

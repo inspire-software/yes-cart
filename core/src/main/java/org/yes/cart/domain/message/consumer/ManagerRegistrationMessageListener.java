@@ -78,8 +78,10 @@ public class ManagerRegistrationMessageListener implements Runnable {
 
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("password", registrationMessage.getPassword());
+        model.put("salutation", registrationMessage.getSalutation());
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
+        model.put("middleName", registrationMessage.getMiddlename());
         model.put("additionalData", registrationMessage.getAdditionalData());
 
         final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);

@@ -24,10 +24,15 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.entity.State;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.util.CountryModel;
 import org.yes.cart.web.page.component.util.CountryRenderer;
 import org.yes.cart.web.page.component.util.StateModel;
@@ -35,7 +40,9 @@ import org.yes.cart.web.page.component.util.StateRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Form to create / edit customer address.
@@ -66,6 +73,9 @@ public class AddressForm extends Form<Address> {
 
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
+
+    @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
+    private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
     private final Class<? extends Page> successPage;
     private final PageParameters successPageParameters;
@@ -159,7 +169,24 @@ public class AddressForm extends Form<Address> {
                     @Override
                     public void onSubmit() {
                         final Address addr = getModelObject();
+                        final boolean isNew = addr.getAddressId() == 0;
                         addressBookFacade.createOrUpdate(addr);
+                        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+                        // if we just added new address that became new default or we modified an address that is in the cart
+                        // reset address
+                        if (isNew && addr.isDefaultAddress() ||
+                                Long.valueOf(addr.getAddressId()).equals(cart.getOrderInfo().getBillingAddressId()) ||
+                                Long.valueOf(addr.getAddressId()).equals(cart.getOrderInfo().getDeliveryAddressId())) {
+                                final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
+                                    ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
+                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, ApplicationDirector.getShoppingCart(),
+                                    (Map) new HashMap() {{
+                                        put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
+                                        put(key, addr);
+                                    }}
+                            );
+                        }
                         setResponsePage(successPage, successPageParameters);
                     }
 

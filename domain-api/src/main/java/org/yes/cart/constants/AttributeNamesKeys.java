@@ -267,6 +267,11 @@ public interface AttributeNamesKeys {
         String CUSTOMER_NAME_FORMATTER = "SHOP_CUSTOMER_FORMATTER";
 
         /**
+         * Supported by shop customer salutations.
+         */
+        String CUSTOMER_SALUTATIONS = "SHOP_CUSTOMER_SALUTATIONS";
+
+        /**
          * Supported by shop storefront languages.
          */
         String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";
@@ -483,9 +488,8 @@ public interface AttributeNamesKeys {
     String MARKETING_OPT_IN = "MARKETING_OPT_IN";
 
     /**
-     * Shop mail from.
+     * Customer salutation attribute (only used for options)
      */
-    String SHOP_MAIL_FROM = "SHOP_MAIL_FROM";
-
+    String CUSTOMER_SALUTATIONS = "CUSTOMER_SALUTATIONS";
 
 }

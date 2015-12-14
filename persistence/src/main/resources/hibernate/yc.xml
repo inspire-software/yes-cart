@@ -32,6 +32,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="email" length="255" type="java.lang.String" column="EMAIL" unique-key="MANAGER_EMAIL" not-null="true"/>
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -557,6 +558,7 @@
         <property name="custom3" type="string" column="CUSTOM3" length="255" not-null="false"/>
         <property name="custom4" type="string" column="CUSTOM4" length="255" not-null="false"/>
 
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -1738,6 +1740,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="email" type="string" column="EMAIL" length="255" not-null="true"/>
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>

@@ -44,6 +44,7 @@ public class DefaultCustomerNameFormatterImplTest {
             allowing(address).getFirstname(); will(returnValue("A"));
             allowing(address).getMiddlename(); will(returnValue("B"));
             allowing(address).getLastname(); will(returnValue("C"));
+            allowing(address).getSalutation(); will(returnValue("D"));
         }});
 
         final DefaultCustomerNameFormatterImpl formatter = new DefaultCustomerNameFormatterImpl("{{firstname}} {{middlename}} {{lastname}}");
@@ -51,6 +52,7 @@ public class DefaultCustomerNameFormatterImplTest {
         assertEquals("A B C", formatter.formatName(address));
         assertEquals("A C", formatter.formatName(address, "{{firstname}} {{lastname}}"));
         assertEquals("A C B", formatter.formatName(address, "{{firstname}} {{lastname}} {{middlename}}"));
+        assertEquals("D C B", formatter.formatName(address, "{{salutation}} {{lastname}} {{middlename}}"));
     }
 
     @Test
@@ -62,6 +64,7 @@ public class DefaultCustomerNameFormatterImplTest {
             allowing(customer).getFirstname(); will(returnValue("A"));
             allowing(customer).getMiddlename(); will(returnValue("B"));
             allowing(customer).getLastname(); will(returnValue("C"));
+            allowing(customer).getSalutation(); will(returnValue("D"));
         }});
 
         final DefaultCustomerNameFormatterImpl formatter = new DefaultCustomerNameFormatterImpl("{{firstname}} {{middlename}} {{lastname}}");
@@ -69,6 +72,7 @@ public class DefaultCustomerNameFormatterImplTest {
         assertEquals("A B C", formatter.formatName(customer));
         assertEquals("A C", formatter.formatName(customer, "{{firstname}} {{lastname}}"));
         assertEquals("A C B", formatter.formatName(customer, "{{firstname}} {{lastname}} {{middlename}}"));
+        assertEquals("D A C B", formatter.formatName(customer, "{{salutation}} {{firstname}} {{lastname}} {{middlename}}"));
 
     }
 }

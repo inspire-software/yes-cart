@@ -17,14 +17,9 @@
 package org.yes.cart.web.page.component.customer.summary;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
@@ -39,9 +34,6 @@ public class SummaryPanel extends BaseComponent {
     private static final String SUMMARY_FORM = "summaryForm";
 
     private static final String EMAIL_LABEL = "email";
-    private static final String FIRSTNAME_INPUT = "firstname";
-    private static final String LASTNAME_INPUT = "lastname";
-    private final static String SAVE_LINK = "saveLink";
 
 // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -61,25 +53,10 @@ public class SummaryPanel extends BaseComponent {
 
         final Customer customer = customerModel.getObject();
 
-        add(
-                new Form<Customer>(SUMMARY_FORM, customerModel) {
+        add(new Label(EMAIL_LABEL, customer != null ? customer.getEmail() : ""));
 
-                    @Override
-                    protected void onSubmit() {
-                        customerServiceFacade.updateCustomer(ApplicationDirector.getCurrentShop(), getModelObject());
-                        info(getLocalizer().getString("profileUpdated", this));
-                        super.onSubmit();
-                    }
-                }.add(
-                        new Label(EMAIL_LABEL, customer != null ? customer.getEmail() : "")
-                ).add(
-                        new TextField(FIRSTNAME_INPUT, customer != null ? new PropertyModel(customer, "firstname") : null).setRequired(true)
-                ).add(
-                        new TextField(LASTNAME_INPUT, customer != null ? new PropertyModel(customer, "lastname") : null).setRequired(true)
-                ).add(
-                        new SubmitLink(SAVE_LINK)
-                ).setVisible(customer != null)
-        );
+        setVisible(customer != null);
+
     }
 
 }

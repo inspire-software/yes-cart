@@ -17,9 +17,12 @@
 package org.yes.cart.service.domain.impl;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.service.order.OrderAddressFormatter;
 
 import java.util.List;
 
@@ -30,12 +33,17 @@ import java.util.List;
  */
 public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implements AddressService {
 
+    private final OrderAddressFormatter orderAddressFormatter;
+
     /**
      * Construct service.
-     * @param genericDao dao  to use. 
+     * @param genericDao dao  to use.
+     * @param orderAddressFormatter address formatter
      */
-    public AddressServiceImpl(final GenericDAO<Address, Long> genericDao) {
+    public AddressServiceImpl(final GenericDAO<Address, Long> genericDao,
+                              final OrderAddressFormatter orderAddressFormatter) {
         super(genericDao);
+        this.orderAddressFormatter = orderAddressFormatter;
     }
 
     /** {@inheritDoc} */
@@ -102,5 +110,16 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String formatAddressFor(final Address address, final Shop shop) {
 
+        if (shop != null) {
+            final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
+            return orderAddressFormatter.formatAddress(address, format);
+        }
+        return orderAddressFormatter.formatAddress(address);
+
+    }
 }

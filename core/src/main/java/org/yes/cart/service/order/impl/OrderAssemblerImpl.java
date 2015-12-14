@@ -310,6 +310,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setPostcode(address.getPostcode());
             copy.setCountryCode(address.getCountryCode());
 
+            copy.setSalutation(address.getSalutation());
             copy.setFirstname(address.getFirstname());
             copy.setLastname(address.getLastname());
             copy.setMiddlename(address.getMiddlename());

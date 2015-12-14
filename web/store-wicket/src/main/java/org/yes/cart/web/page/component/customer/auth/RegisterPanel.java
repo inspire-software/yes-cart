@@ -143,9 +143,6 @@ public class RegisterPanel extends BaseComponent {
 
 
         private String email;
-        private String firstname;
-        private String lastname;
-        private String phone;
 
 
         /**
@@ -166,60 +163,6 @@ public class RegisterPanel extends BaseComponent {
             this.email = email;
         }
 
-        /**
-         * Get first name.
-         *
-         * @return first name
-         */
-        public String getFirstname() {
-            return firstname;
-        }
-
-        /**
-         * Set first name.
-         *
-         * @param firstname first name.
-         */
-        public void setFirstname(final String firstname) {
-            this.firstname = firstname;
-        }
-
-
-        /**
-         * Get last name.
-         *
-         * @return last name.
-         */
-        public String getLastname() {
-            return lastname;
-        }
-
-        /**
-         * set Last name.
-         *
-         * @param lastname last name.
-         */
-        public void setLastname(final String lastname) {
-            this.lastname = lastname;
-        }
-
-        /**
-         * Get phone.
-         *
-         * @return [hone
-         */
-        public String getPhone() {
-            return phone;
-        }
-
-        /**
-         * Set phone.
-         *
-         * @param phone phone .
-         */
-        public void setPhone(final String phone) {
-            this.phone = phone;
-        }
 
         /**
          * Construct form.
@@ -243,23 +186,6 @@ public class RegisterPanel extends BaseComponent {
                             .add(StringValidator.lengthBetween(MIN_LEN, MAX_LEN))
                             .add(EmailAddressValidator.getInstance())
             );
-
-            add(
-                    new TextField<String>(FIRSTNAME_INPUT)
-                            .setRequired(true)
-            );
-
-            add(
-                    new TextField<String>(LASTNAME_INPUT)
-                            .setRequired(true)
-            );
-
-            add(
-                    new TextField<String>(PHONE_INPUT)
-                            .setRequired(true)
-                            .add(StringValidator.lengthBetween(4, 13))
-            );
-
 
             RepeatingView fields = new RepeatingView(FIELDS);
 
@@ -310,9 +236,11 @@ public class RegisterPanel extends BaseComponent {
                             } else {
 
                                 final Map<String, Object> data = new HashMap<String, Object>();
-                                data.put("firstname", getFirstname());
-                                data.put("lastname", getLastname());
-                                data.put("phone", getPhone());
+                                // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
+                                // registration form.
+                                // data.put("firstname", getFirstname());
+                                // data.put("lastname", getLastname());
+                                // data.put("phone", getPhone());
 
                                 for (final AttrValue av : reg) {
                                     if (StringUtils.isNotBlank(av.getVal())) {

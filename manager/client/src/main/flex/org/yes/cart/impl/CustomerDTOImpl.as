@@ -25,6 +25,8 @@ public class CustomerDTOImpl {
 
     public var email:String;
 
+    public var salutation:String;
+
     public var firstname:String;
 
     public var lastname:String;

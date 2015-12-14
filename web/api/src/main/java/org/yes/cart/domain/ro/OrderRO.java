@@ -81,6 +81,9 @@ public class OrderRO implements Serializable {
     @DtoField(value = "customer.email", readOnly = true)
     private String email;
 
+    @DtoField(value = "customer.salutation", readOnly = true)
+    private String salutation;
+
     @DtoField(value = "customer.firstname", readOnly = true)
     private String firstname;
 
@@ -238,6 +241,14 @@ public class OrderRO implements Serializable {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getFirstname() {

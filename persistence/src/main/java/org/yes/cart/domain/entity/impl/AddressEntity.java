@@ -42,6 +42,7 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String phone2;
     private String mobile1;
     private String mobile2;
+    private String salutation;
     private String firstname;
     private String lastname;
     private String middlename;
@@ -172,6 +173,14 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
 
     public void setMiddlename(final String middlename) {
         this.middlename = middlename;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getEmail1() {

@@ -263,6 +263,8 @@
                                            dataField="customerId"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
                                            dataField="email"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='salutation')"
+                                           dataField="salutation"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
                                            dataField="lastname"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"

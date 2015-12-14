@@ -34,6 +34,7 @@ import org.yes.cart.web.page.component.customer.dynaform.editor.SingleChoiceEdit
 import org.yes.cart.web.page.component.customer.dynaform.editor.StringEditor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditorFactory implements Serializable {
@@ -91,12 +92,15 @@ public class EditorFactory implements Serializable {
 
                 public List<Pair<String, String>> getObject() {
                     final String lang = markupContainer.getLocale().getLanguage();
-                    return (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
+                    final List<Pair<String, String>> list = (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
                             choices.getValue(lang),
                             TypeDescriptor.valueOf(String.class),
                             TypeDescriptor.valueOf(List.class)
                     );
-
+                    if (list == null) {
+                        return new ArrayList<Pair<String, String>>();
+                    }
+                    return list;
                 }
             };
             if (attrValue.getAttribute().isAllowduplicate()) {

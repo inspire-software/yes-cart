@@ -118,16 +118,20 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
 
         customer.setEmail(email);
+        customer.setSalutation((String) registrationData.get("salutation"));
         customer.setFirstname((String) registrationData.get("firstname"));
         customer.setLastname((String) registrationData.get("lastname"));
         customer.setMiddlename((String) registrationData.get("middlename"));
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
         final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
+        attrData.remove("salutation");
         attrData.remove("firstname");
         attrData.remove("lastname");
         attrData.remove("middlename");
-        attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
+        if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.CUSTOMER_PHONE)) {
+            attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
+        }
 
         final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList();
         final List<String> allowedFull = new ArrayList<String>();
@@ -238,6 +242,15 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final Map<String, AttrValueCustomer> map = new HashMap<String, AttrValueCustomer>(attrValueCollection.size());
         for (final AttrValueCustomer av : attrValueCollection) {
             map.put(av.getAttribute().getCode(), av);
+            if ("salutation".equals(av.getAttribute().getCode())) {
+                av.setVal(customer.getSalutation());
+            } else if ("firstname".equals(av.getAttribute().getCode())) {
+                av.setVal(customer.getFirstname());
+            } else if ("middlename".equals(av.getAttribute().getCode())) {
+                av.setVal(customer.getMiddlename());
+            } else if ("lastname".equals(av.getAttribute().getCode())) {
+                av.setVal(customer.getLastname());
+            }
         }
         for (final String code : allowed) {
             final AttrValueCustomer av = map.get(code);

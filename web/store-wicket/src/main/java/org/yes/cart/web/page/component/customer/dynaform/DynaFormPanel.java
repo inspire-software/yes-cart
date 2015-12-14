@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.customer.dynaform;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -114,7 +115,21 @@ public class DynaFormPanel extends BaseComponent {
                                     av.getSecond()
                             });
                     if (av.getSecond() != null && !av.getSecond()) {
-                        values.put(av.getFirst().getAttribute().getCode(), av.getFirst().getVal());
+                        if ("salutation".equals(av.getFirst().getAttribute().getCode())) {
+                            customer.setSalutation(av.getFirst().getVal());
+                        } else if ("firstname".equals(av.getFirst().getAttribute().getCode())) {
+                            if (StringUtils.isNotBlank(av.getFirst().getVal())) {
+                                customer.setFirstname(av.getFirst().getVal());
+                            }
+                        } else if ("middlename".equals(av.getFirst().getAttribute().getCode())) {
+                            customer.setMiddlename(av.getFirst().getVal());
+                        } else if ("lastname".equals(av.getFirst().getAttribute().getCode())) {
+                            if (StringUtils.isNotBlank(av.getFirst().getVal())) {
+                                customer.setLastname(av.getFirst().getVal());
+                            }
+                        } else if (!av.getFirst().getAttribute().isMandatory() || StringUtils.isNotBlank(av.getFirst().getVal())) {
+                            values.put(av.getFirst().getAttribute().getCode(), av.getFirst().getVal());
+                        }
                     }
                 }
 

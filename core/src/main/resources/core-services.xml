@@ -219,6 +219,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.AddressServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="addressDao"/>
+                <constructor-arg index="1" type="org.yes.cart.service.order.OrderAddressFormatter" ref="orderAddressFormatter"/>
             </bean>
         </property>
     </bean>
@@ -798,7 +799,7 @@
     </bean>
 
     <bean id="orderAddressFormatter" class="org.yes.cart.service.order.impl.DefaultOrderAddressFormatterImpl">
-        <constructor-arg index="0" value="{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}, {{firstname}} {{middlename}} {{lastname}}, {{phone1}} {{mobile1}} {{email1}}"/>
+        <constructor-arg index="0" value="{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}, {{salutation}} {{firstname}} {{middlename}} {{lastname}}, {{phone1}} {{mobile1}} {{email1}}"/>
     </bean>
 
     <bean id="customerNameFormatter" class="org.yes.cart.service.customer.impl.DefaultCustomerNameFormatterImpl">

@@ -864,6 +864,9 @@ public class CustomerController {
 
         final Address addressEntity = addressBookFacade.getAddress(customer, String.valueOf(address.getAddressId()), type);
 
+        if (StringUtils.isNotBlank(address.getSalutation())) {
+            addressEntity.setSalutation(address.getSalutation());
+        }
         if (StringUtils.isNotBlank(address.getFirstname())) {
             addressEntity.setFirstname(address.getFirstname());
         }

@@ -44,6 +44,8 @@ public class AddressDTOImpl {
 
     public var stateCode:String;
 
+    public var salutation:String;
+
     public var firstname:String;
 
     public var lastname:String;
@@ -69,11 +71,11 @@ public class AddressDTOImpl {
     public var customerId:Number;
 
     public function get fullname():String {
-        return firstname + ' ' + (DomainUtils.isNotBlankString(middlename) ? (middlename + ' ') : '') + lastname;
+        return (DomainUtils.isNotBlankString(salutation) ? (salutation + ' ') : '') + firstname + ' ' + (DomainUtils.isNotBlankString(middlename) ? (middlename + ' ') : '') + lastname;
     }
 
     public function get fulladdress():String {
-        return addrline1 + (DomainUtils.isNotBlankString(addrline2) ? (addrline2 + '\n') : '\n') +
+        return addrline1 + (DomainUtils.isNotBlankString(addrline2) ? (' ' + addrline2 + '\n') : '\n') +
                 city + ' ' + postcode + '\n' +
                 stateCode + '\n' +
                 countryCode;

@@ -226,14 +226,16 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                         new Label(DELIVERY_METHOD, slaName)
                                 )
                                 .add(
-                                        new Label(DELIVERY_ADDRESS, deliveryAddress)
+                                        new Label(DELIVERY_ADDRESS, makeHtml(deliveryAddress))
+                                                .setEscapeModelStrings(false)
+                                                .setVisible(!billingAddress.equals(deliveryAddress))
                                 );
                     }
                 }
         );
 
         add(new Label(DELIVERY_GRAND_TOTAL, grandTotal.getTotal().toString()));
-        add(new Label(BILLING_ADDRESS, billingAddress));
+        add(new Label(BILLING_ADDRESS, makeHtml(billingAddress)).setEscapeModelStrings(false));
         add(new Label(DELIVERY_GRAND_TAX, grandTotal.getTotalTax().toString()));
         add(
             new PriceView(
@@ -243,5 +245,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                     StringUtils.join(allPromos, ','), true, true)
             );
 
+    }
+
+    private String makeHtml(final String address) {
+        return address.trim().replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>");
     }
 }

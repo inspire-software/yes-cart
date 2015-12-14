@@ -19,9 +19,9 @@
 <wicket:panel>
 
 
-    <form wicket:id="summaryForm" class="form-horizontal">
+    <form id="summaryForm" class="form-horizontal">
         <div class="col-xs-12 no-padding">
-            <h2 id="customerSummary" class="profile-title"><wicket:message key="customerSummary">[summary info]</wicket:message></h2>
+            <h2 id="customerSummary" class="profile-title"><wicket:message key="email">[summary info]</wicket:message></h2>
         </div>
 
         <div class="form-group">
@@ -33,33 +33,6 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="profileFirstName" class="control-label col-xs-12 col-sm-2">
-                <wicket:message key="firstname">[firstname]</wicket:message>
-            </label>
-            <div class="col-xs-12 col-sm-5">
-                <input wicket:id="firstname" type="text" class="form-control" id="profileFirstName"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="profileLastName" class="control-label col-xs-12 col-sm-2">
-                <wicket:message key="lastname">[lastname]</wicket:message>
-            </label>
-            <div class="col-xs-12 col-sm-5">
-                <input wicket:id="lastname" type="text" class="form-control" id="profileLastName"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-xs-12 col-sm-offset-2 col-sm-5">
-                <a wicket:id="saveLink" class="btn btn-primary" rel="nofollow">
-                    <span>
-                        <wicket:message key="save">[save]</wicket:message>
-                    </span>
-                </a>
-            </div>
-        </div>
     </form>
 </wicket:panel>
 </body>

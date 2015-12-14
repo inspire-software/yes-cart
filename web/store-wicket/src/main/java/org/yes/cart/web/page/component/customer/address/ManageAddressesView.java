@@ -68,11 +68,7 @@ public class ManageAddressesView extends BaseComponent {
     private final static String DELETE_LINK = "deleteLink";
     private final static String ADDRESS_LABEL = "addressTitle";
 
-    private final static String LINE1 = "addrLine1";
-    private final static String LINE2 = "addrLine2";
-    private final static String LINE3 = "addrLine3";
-    private final static String LINE4 = "addrLine4";
-    private final static String LINE5 = "addrLine5";
+    private final static String FORMATTED_ADDRESS = "formattedAddress";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -168,13 +164,11 @@ public class ManageAddressesView extends BaseComponent {
      */
     protected void populateAddress(final ListItem<Address> addressListItem, final Address address, final boolean returnToCheckout) {
 
+        final String addressString = addressBookFacade.formatAddressFor(address, ApplicationDirector.getCurrentShop());
+
         addressListItem
                 .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
-                .add(new Label(LINE1, address.getFirstname() + ", " + address.getLastname()))
-                .add(new Label(LINE2, address.getAddrline1()))
-                .add(new Label(LINE3, StringUtils.isBlank(address.getAddrline2()) ? StringUtils.EMPTY : address.getAddrline1()))
-                .add(new Label(LINE4, address.getCity() + ", " + address.getStateCode()))
-                .add(new Label(LINE5, address.getPostcode() + ", " + address.getCountryCode()))
+                .add(new Label(FORMATTED_ADDRESS, makeHtml(addressString)).setEscapeModelStrings(false))
                 .add(
                         new SubmitLink(EDIT_LINK) {
                             @Override
@@ -225,4 +219,7 @@ public class ManageAddressesView extends BaseComponent {
     }
 
 
+    private String makeHtml(final String address) {
+        return address.trim().replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>");
+    }
 }

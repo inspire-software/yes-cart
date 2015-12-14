@@ -102,4 +102,16 @@ public interface AddressBookFacade {
      */
     List<State> getStatesByCountry(String countryCode);
 
+
+    /**
+     * Format address as specified by shop address formatting.
+     *
+     * @param address address to format
+     * @param shop shop
+     *
+     * @return string representation of this address
+     */
+    String formatAddressFor(Address address, Shop shop);
+
+
 }
