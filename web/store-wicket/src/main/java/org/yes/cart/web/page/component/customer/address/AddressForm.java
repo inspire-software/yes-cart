@@ -117,7 +117,9 @@ public class AddressForm extends Form<Address> {
                 STATE,
                 new StateModel(new PropertyModel(address, "stateCode"), stateList),
                 stateList).setChoiceRenderer(new StateRenderer());
-        stateDropDownChoice.setRequired(!stateList.isEmpty());
+        final boolean needState = !stateList.isEmpty();
+        stateDropDownChoice.setRequired(needState);
+        stateDropDownChoice.setVisible(needState);
 
 
         add(
@@ -153,7 +155,9 @@ public class AddressForm extends Form<Address> {
                     protected void onSelectionChanged(final Country country) {
                         super.onSelectionChanged(country);
                         stateDropDownChoice.setChoices(getStateList(country.getCountryCode()));
-                        stateDropDownChoice.setRequired(!stateDropDownChoice.getChoices().isEmpty());
+                        final boolean needState = !stateDropDownChoice.getChoices().isEmpty();
+                        stateDropDownChoice.setRequired(needState);
+                        stateDropDownChoice.setVisible(needState);
                         address.setStateCode(StringUtils.EMPTY);
                     }
 
