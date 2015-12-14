@@ -16,15 +16,11 @@
 
 package org.yes.cart.domain.ro;
 
-import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -37,9 +33,6 @@ public class RegisterFormRO implements Serializable {
     private static final long serialVersionUID = 20150301L;
 
     private String email;
-    private String firstname;
-    private String lastname;
-    private String phone;
     private List<AttrValueCustomerRO> custom;
 
     @XmlElementWrapper(name = "custom")
@@ -61,27 +54,4 @@ public class RegisterFormRO implements Serializable {
         this.email = email;
     }
 
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(final String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(final String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
 }

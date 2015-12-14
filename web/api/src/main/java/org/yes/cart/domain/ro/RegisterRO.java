@@ -35,9 +35,6 @@ public class RegisterRO implements Serializable {
     private static final long serialVersionUID = 20150301L;
 
     private String email;
-    private String firstname;
-    private String lastname;
-    private String phone;
     private Map<String, String> custom;
 
     @XmlJavaTypeAdapter(StringMapAdapter.class)
@@ -59,27 +56,4 @@ public class RegisterRO implements Serializable {
         this.email = email;
     }
 
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(final String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(final String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
 }

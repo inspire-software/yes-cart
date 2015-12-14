@@ -620,26 +620,6 @@ public class AuthenticationController {
 
         }
 
-        if (StringUtils.isBlank(registerRO.getFirstname())) {
-
-            return new AuthenticationResultRO("FIRSTNAME_FAILED");
-
-        }
-
-        if (StringUtils.isBlank(registerRO.getLastname())) {
-
-            return new AuthenticationResultRO("LASTNAME_FAILED");
-
-        }
-
-        if (StringUtils.isBlank(registerRO.getPhone())
-                || registerRO.getPhone().length() < 4
-                || registerRO.getPhone().length() > 13) {
-
-            return new AuthenticationResultRO("PHONE_FAILED");
-
-        }
-
         if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())) {
 
             return new AuthenticationResultRO("USER_FAILED");
@@ -680,10 +660,6 @@ public class AuthenticationController {
                 }
             }
         }
-        data.put("firstname", registerRO.getFirstname());
-        data.put("lastname", registerRO.getLastname());
-        data.put("phone", registerRO.getPhone());
-
 
         final String password = customerServiceFacade.registerCustomer(shop, registerRO.getEmail(), data);
 
@@ -884,6 +860,116 @@ public class AuthenticationController {
 
         final Shop shop = cartMixin.getCurrentShop();
         customerServiceFacade.registerNewsletter(shop, email, new HashMap<String, Object>());
+
+        return new AuthenticationResultRO();
+
+    }
+
+    /**
+     * Interface: POST /yes-api/rest/auth/contactus
+     * <p>
+     * <p>
+     * Contact Us interface sends email request to shop administrator with provided
+     * email.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>email</td><td>
+     *         E-mail to be used for newsletters.
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <p>
+     * Output that does not have error code indicates successful processing.
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : false,
+     *    "greeting" : null,
+     *    "token" : null,
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting/&gt;
+     *    &lt;success&gt;false&lt;/success&gt;
+     *    &lt;token/&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>INVALID_EMAIL</td><td>Supplied email is invalid</td></tr>
+     * </table>
+     *
+     *
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/contactus",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO contactUs(@RequestParam(value = "email", required = false) final String email,
+                                                          @RequestParam(value = "name", required = false) final String name,
+                                                          @RequestParam(value = "phone", required = false) final String phone,
+                                                          @RequestParam(value = "subject", required = false) final String subject,
+                                                          @RequestParam(value = "message", required = false) final String message,
+                                                          final HttpServletRequest request,
+                                                          final HttpServletResponse response) {
+
+        cartMixin.persistShoppingCart(request, response);
+
+        if (StringUtils.isBlank(email)
+                || email.length() < 6
+                || email.length() > 256
+                || !EMAIL.matcher(email).matches()) {
+
+            return new AuthenticationResultRO("EMAIL_FAILED");
+
+        }
+
+        final Map<String, Object> data = new HashMap<String, Object>();
+        data.put("name", name);
+        data.put("phone", phone);
+        data.put("email", email);
+        data.put("subject", subject);
+        data.put("body", message);
+
+
+        for (final Map.Entry<String, Object> entry : data.entrySet()) {
+            final String val = (String) entry.getValue();
+            if (StringUtils.isBlank(val)) {
+
+                return new AuthenticationResultRO(entry.getKey() + "_FAILED");
+
+            }
+        }
+
+
+        final Shop shop = cartMixin.getCurrentShop();
+        customerServiceFacade.registerEmailRequest(shop, email, new HashMap<String, Object>());
 
         return new AuthenticationResultRO();
 
