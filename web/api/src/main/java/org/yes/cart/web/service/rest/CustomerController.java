@@ -437,9 +437,11 @@ public class CustomerController {
 
         }
 
-
+        customer.setSalutation(update.getSalutation());
         customer.setFirstname(update.getFirstname());
         customer.setLastname(update.getLastname());
+        customer.setMiddlename(update.getMiddlename());
+
         customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
 
         result.setCustomer(viewSummary(request, response));
