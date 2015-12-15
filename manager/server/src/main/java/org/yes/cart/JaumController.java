@@ -30,21 +30,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class JaumController {
 
 
-    @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
-    public String homePage(ModelMap model) {
-        return "index";
-    }
+  @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+  public String homePage(ModelMap model) {
+    return "index";
+  }
+
+  @RequestMapping(value = {"/shop"}, method = RequestMethod.GET)
+  public String shopPage(ModelMap model) {
+    return "shop";
+  }
 
 
-    @RequestMapping(value = { "/onemore" }, method = RequestMethod.GET)
-    public String oneMorePAge(ModelMap model) {
-        return "onemore";
-    }
+  @RequestMapping(value = {"/onemore"}, method = RequestMethod.GET)
+  public String oneMorePAge(ModelMap model) {
+    return "onemore";
+  }
 
-    @RequestMapping(value = {"/login", "/login/"}, method = RequestMethod.GET)
-    public String loginPage() {
-        return "login";
-    }
+  @RequestMapping(value = {"/login", "/login/"}, method = RequestMethod.GET)
+  public String loginPage() {
+    return "login";
+  }
 
 
    /*
@@ -55,7 +60,6 @@ public class JaumController {
         return "login";
 
     }*/
-
 
 
 }
