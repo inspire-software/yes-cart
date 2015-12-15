@@ -108,10 +108,14 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         if (codes == null || codes.isEmpty()) {
             return Collections.emptyList();
         } else {
-            return attributeDao.findByNamedQuery(
+            final List<Attribute> attrs = attributeDao.findByNamedQuery(
                     "ATTRIBUTES.BY.GROUPCODE.IN.LIST",
                     attributeGroupCode,
                     codes);
+            for (final Attribute attr : attrs) {
+                Hibernate.initialize(attr.getEtype());
+            }
+            return attrs;
         }
     }
 

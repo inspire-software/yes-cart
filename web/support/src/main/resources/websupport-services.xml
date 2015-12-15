@@ -95,6 +95,7 @@
         <constructor-arg index="2" ref="countryService"/>
         <constructor-arg index="3" ref="stateService"/>
         <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="attributeService"/>
     </bean>
 
     <bean id="customerServiceFacade" class="org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl">

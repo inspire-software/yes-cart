@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.customer.dynaform;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -68,6 +69,8 @@ public class EditorFactory implements Serializable {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
+        final String prop = attrValue.getAttribute().getVal();
+
         final IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = nameModel;
@@ -75,7 +78,14 @@ public class EditorFactory implements Serializable {
             @Override
             public String getObject() {
                 final String lang = markupContainer.getLocale().getLanguage();
-                return m.getValue(lang);
+                final String name = m.getValue(lang);
+                if (StringUtils.isNotBlank(name)) {
+                    return name;
+                }
+                if (StringUtils.isNotBlank(prop)) {
+                    return markupContainer.getLocalizer().getString(prop, markupContainer);
+                }
+                return null;
             }
         };
         final String bType = attrValue.getAttribute().getEtype().getBusinesstype();

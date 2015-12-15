@@ -31,6 +31,7 @@ INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) V
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1003, 'PRODUCT',  'PRODUCT', 'Product settings.', '');
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1005, 'BRAND',    'BRAND', 'Brand settings.', '');
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1006, 'CUSTOMER', 'CUSTOMER', 'Customer settings.', '');
+INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10999,  'CURRENCY', 'CURRENCY',  0,  NULL,  'Currencies',  'Supported currencies by shop. First one is the default',  1004, 1001);
@@ -163,6 +164,13 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
   VALUES (  11041,  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop admin email',  'Email used for all CC messages (e.g. order updates)',  1010, 1001, 'SHOP_ADMIN_EMAIL');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
+  VALUES (  11039,  'SHOP_CUSTOMER_ADDRESS_PREFIX',  0,  NULL,  'Customer: address form prefix attribute',
+'Address form prefix attribute used to define various address forms.
+Prefix will be used to select ADDRESS attributes
+E.g. if this attribute is ADDR_FORM and Customer attribute value for it is "default"
+then fields would be resolved as "default_firstname", "default_lastname" etc.',  1000, 1001, 'SHOP_CUSTOMER_ADDR_PREF');
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -510,6 +518,27 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 1000,  1006);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 1000,  1006);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11200,  'default_addressform', 'default_addressform',  0,  NULL,  'Customer: "default_" address form (CSV)',
+    'List of address form attributes separated by comma.
+Available fields:
+salutation, firstname, middlename, lastname
+addrline1, addrline2, postcode, city, countrycode, statecode
+phone1, phone2, mobile1, mobile2
+email1, email2
+custom1, custom2, custom3, custom4',  1004, 1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11201,  'default_salutation', 'default_salutation',  0,  NULL,  'Salutation',  'Salutation CSV options
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 1004,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  NULL,  'First name',  'First name', 1000,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  NULL,  'Last name',  'Last name', 1000,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  NULL,  'Middle name',  'Middle name', 1000,  1007);
+
+
 
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID, GUID, NAME, DESCRIPTION, SERVICE, ENSEMBLE, SHIPPABLE)
   VALUES (500,'Default Product', 'Default Product','Default Product', 0,0,1);

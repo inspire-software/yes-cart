@@ -206,12 +206,16 @@
     <entry key="firstName">Vorname</entry>
     <entry key="lastName">Name</entry>
     <entry key="line1">Adresse</entry>
+    <entry key="addrline1">Adresse</entry>
     <entry key="line2">Adresszusatz</entry>
+    <entry key="addrline2">Adresszusatz</entry>
     <entry key="city">Stadt</entry>
     <entry key="country">Land</entry>
+    <entry key="countryCode">Land</entry>
     <entry key="state">Kanton</entry>
+    <entry key="stateCode">Kanton</entry>
     <entry key="postcode">PLZ</entry>
-    <entry key="phoneList">Telefon</entry>
+    <entry key="phone1">Telefon</entry>
     <entry key="create">Speichern</entry>
     <entry key="cancel">Abbrechen</entry>
     <entry key="createEditAddress">Adressen verwalten</entry>

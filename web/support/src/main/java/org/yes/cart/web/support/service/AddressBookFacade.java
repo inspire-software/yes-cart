@@ -52,14 +52,22 @@ public interface AddressBookFacade {
     /**
      * Get existing address or create new instance object.
      *
-     *
-     *
      * @param customer customer of the address
      * @param addrId address PK
      * @param addressType type of address
      * @return address instance
      */
     Address getAddress(Customer customer, String addrId, String addressType);
+
+    /**
+     * Get address form attributes to be displayed for current customer.
+     *
+     * @param customer customer
+     * @param shop shop
+     *
+     * @return attributes that describe suitable address form
+     */
+    List<AttrValue> getShopCustomerAddressAttributes(Customer customer, Shop shop);
 
     /**
      * Create or update address object.

@@ -56,5 +56,10 @@ public interface AttributeGroupNames {
      */
     String CUSTOMER = "CUSTOMER";
 
+    /**
+     * Address.
+     */
+    String ADDRESS = "ADDRESS";
+
 
 }

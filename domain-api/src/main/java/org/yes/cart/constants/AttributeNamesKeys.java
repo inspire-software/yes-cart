@@ -262,6 +262,12 @@ public interface AttributeNamesKeys {
         String ADDRESS_FORMATTER = "SHOP_ADDRESS_FORMATTER";
 
         /**
+         * Custom attribute on customer profile which value will act as prefix
+         * for address form layout.
+         */
+        String ADDRESS_PREFIX = "SHOP_CUSTOMER_ADDRESS_PREFIX";
+
+        /**
          * Supported by shop customer name formatter.
          */
         String CUSTOMER_NAME_FORMATTER = "SHOP_CUSTOMER_FORMATTER";

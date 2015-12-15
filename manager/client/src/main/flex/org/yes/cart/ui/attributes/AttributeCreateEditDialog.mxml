@@ -50,7 +50,7 @@
                 <mx:CheckBox  id="mandatory"/>
             </mx:FormItem>
             <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='value')">
-                <mx:TextInput  width="160" id="val" enabled="{mandatory.selected}"/>
+                <mx:TextArea  width="100%" height="120" id="val"/>
             </mx:FormItem>
             <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='multipleValue')">
                 <mx:CheckBox  width="160"  id="multiple"/>

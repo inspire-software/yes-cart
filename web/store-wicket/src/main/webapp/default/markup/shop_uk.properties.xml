@@ -206,10 +206,14 @@
     <entry key="firstName">Ім'я</entry>
     <entry key="lastName">Прізвище</entry>
     <entry key="line1">Рядок адреси 1</entry>
+    <entry key="addrline1">Рядок адреси 1</entry>
     <entry key="line2">Рядок адреси 2</entry>
+    <entry key="addrline2">Рядок адреси 2</entry>
     <entry key="city">Місто</entry>
     <entry key="country">Країна</entry>
+    <entry key="countryCode">Країна</entry>
     <entry key="state">Область</entry>
+    <entry key="stateCode">Область</entry>
     <entry key="postcode">Індекс</entry>
     <entry key="phone1">Телефон</entry>
     <entry key="create">Зберегти</entry>

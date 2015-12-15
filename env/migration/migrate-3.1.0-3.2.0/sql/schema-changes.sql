@@ -56,6 +56,16 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (23, 'firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES', 10, 'SHOP_CUSTOMER_REGISTRATION_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (24, 'firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE', 10, 'SHOP_CUSTOMER_PROFILE_10');
 
+--
+-- YC-653 Allow configurable address form
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
+  VALUES (  11039,  'SHOP_CUSTOMER_ADDRESS_PREFIX',  0,  NULL,  'Customer: address form prefix attribute',
+'Address form prefix attribute used to define various address forms.
+Prefix will be used to select ADDRESS attributes
+E.g. if this attribute is ADDR_FORM and Customer attribute value for it is "default"
+then fields would be resolved as "default_firstname", "default_lastname" etc.',  1000, 1001, 'SHOP_CUSTOMER_ADDR_PREF');
 
 
 

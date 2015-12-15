@@ -19,17 +19,15 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -43,17 +41,20 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     private final CountryService countryService;
     private final StateService stateService;
     private final ShopService shopService;
+    private final AttributeService attributeService;
 
     public AddressBookFacadeImpl(final CustomerService customerService,
                                  final AddressService addressService,
                                  final CountryService countryService,
                                  final StateService stateService,
-                                 final ShopService shopService) {
+                                 final ShopService shopService,
+                                 final AttributeService attributeService) {
         this.customerService = customerService;
         this.addressService = addressService;
         this.countryService = countryService;
         this.stateService = stateService;
         this.shopService = shopService;
+        this.attributeService = attributeService;
     }
 
     /** {@inheritDoc} */
@@ -118,6 +119,116 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setPhone1(attrValue == null ? StringUtils.EMPTY : attrValue.getVal());
         }
         return rez;
+    }
+
+    private static final List<String> DEFAULT_FIELDS = Arrays.asList(
+            "firstname", "lastname",
+            "addrline1", "addrline2",
+            "city", "postcode",
+            "stateCode", "countryCode",
+            "phone1"
+    );
+
+    private static final List<String> OPTIONAL_FIELDS = Arrays.asList(
+            "salutation", "middlename",
+            "addrline2",
+            "stateCode",
+            "phone2", "mobile1", "mobile2",
+            "email1", "email2",
+            "custom1", "custom2", "custom3", "custom4"
+    );
+
+    /** {@inheritDoc} */
+    public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop) {
+
+        final String customerTypeAttribute = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_PREFIX);
+        final List<String> addressFormAttributes = getAddressFormAttributeList(customer, customerTypeAttribute);
+
+        List<Attribute> formFieldsConfig = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, addressFormAttributes);
+        if (formFieldsConfig.isEmpty()) {
+            formFieldsConfig = createDefaultFormFieldConfig();
+        }
+
+        final Map<String, Attribute> formFieldsConfigMap = new HashMap<String, Attribute>();
+        for (final Attribute attribute : formFieldsConfig) {
+            formFieldsConfigMap.put(attribute.getCode(), attribute);
+        }
+
+        final List<AttrValue> addressAttributes = new ArrayList<AttrValue>();
+        for (final String formFieldConfigName : addressFormAttributes) {
+            final Attribute formFieldConfig = formFieldsConfigMap.get(formFieldConfigName);
+            if (formFieldConfig != null) {
+                final AttrValue av = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
+                av.setAttribute(formFieldConfig);
+                addressAttributes.add(av);
+            }
+        }
+
+        return addressAttributes;
+    }
+
+    private List<Attribute> createDefaultFormFieldConfig() {
+
+        final Etype etype = attributeService.getGenericDao().getEntityFactory().getByIface(Etype.class);
+        etype.setBusinesstype("String");
+        etype.setJavatype("java.lang.String");
+
+        final List<Attribute> attributes = new ArrayList<Attribute>();
+        for (final String addressFormAttribute : DEFAULT_FIELDS) {
+            final Attribute attr = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
+            attr.setVal(addressFormAttribute);
+            attr.setEtype(etype);
+            attr.setMandatory(!OPTIONAL_FIELDS.contains(addressFormAttribute));
+            attributes.add(attr);
+        }
+        return attributes;
+    }
+
+    private List<String> getAddressFormAttributeList(final Customer customer, final String customerTypeAttribute) {
+
+        List<String> addressFormAttributes = new ArrayList<String>(DEFAULT_FIELDS);
+
+        final List<String> formConfigsToTry;
+        if (StringUtils.isNotBlank(customerTypeAttribute)) {
+
+            final AttrValueCustomer av = customer.getAttributeByCode(customerTypeAttribute);
+            if (av != null && StringUtils.isNotBlank(av.getVal())) {
+                formConfigsToTry = new ArrayList<String>(Arrays.asList(av.getVal() + "_addressform", "default_addressform"));
+            } else {
+                formConfigsToTry = new ArrayList<String>(Arrays.asList("default_addressform"));
+            }
+
+        } else {
+
+            formConfigsToTry = new ArrayList<String>(Arrays.asList("default_addressform"));
+
+        }
+
+        final List<Attribute> formConfigs = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, formConfigsToTry);
+
+        final Map<String, Attribute> formConfigsMap = new HashMap<String, Attribute>();
+        for (final Attribute attr : formConfigs) {
+            formConfigsMap.put(attr.getCode(), attr);
+        }
+
+        for (final String configToTry : formConfigsToTry) {
+            if (formConfigsMap.containsKey(configToTry)) {
+                if (StringUtils.isNotBlank(formConfigsMap.get(configToTry).getVal())) {
+                    final List<String> formAttrs = new ArrayList<String>();
+                    for (final String formAttr : StringUtils.split(formConfigsMap.get(configToTry).getVal(), ',')) {
+                        if (StringUtils.isNotBlank(formAttr)) {
+                            formAttrs.add(formAttr.trim());
+                        }
+                    }
+                    if (!formAttrs.isEmpty()) {
+                        addressFormAttributes = formAttrs;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return addressFormAttributes;
     }
 
     /** {@inheritDoc} */

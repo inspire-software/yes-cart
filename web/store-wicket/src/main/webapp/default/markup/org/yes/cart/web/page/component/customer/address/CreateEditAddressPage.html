@@ -64,85 +64,15 @@
 
         <form wicket:id="addressForm" class="form-horizontal">
 
-            <div class="form-group">
-                <label for="inputFirstName" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="firstName">[First name]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="firstName" class="form-control" id="inputFirstName" maxlength="128"/>
-                </div>
-            </div>
+            <div class="form-group" wicket:id="fields">
+                <wicket:enclosure child="editor">
+                    <label wicket:id="name" class="control-label col-xs-12 col-sm-3">
 
-            <div class="form-group">
-                <label for="inputLastName" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="lastName">[Last Name]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="lastName" class="form-control" id="inputLastName" maxlength="128"/>
-                </div>
-            </div>
+                    </label>
+                    <div class="col-xs-12 col-sm-7" wicket:id="editor">
 
-            <div class="form-group">
-                <label for="inputAddr1" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="line1">[Address Line 1]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="line1" class="form-control" id="inputAddr1" maxlength="255"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="inputAddr2" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="line2">[Address Line 2]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="line2" class="form-control" id="inputAddr2" maxlength="255"/>
-                </div>
-            </div>
-
-            <div class="form-group" wicket:enclosure="state">
-                <label for="selectState" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="state">[State]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <select class="form-control" wicket:id="state" id="selectState"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="selectCountry" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="country">[Country]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <select class="form-control" wicket:id="country" id="selectCountry"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="inputCity" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="city">[City]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="city" class="form-control" id="inputCity" maxlength="128"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="inputPostCode" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="postcode">[Post code]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="postcode" class="form-control" id="inputPostCode" maxlength="16"/>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="inputPhone" class="control-label col-xs-12 col-sm-2">
-                    <wicket:message key="phone1">[Phone list]</wicket:message>
-                </label>
-                <div class="col-xs-12 col-sm-7">
-                    <input type="text" wicket:id="phone1" class="form-control" id="inputPhone" maxlength="256"/>
-                </div>
+                    </div>
+                </wicket:enclosure>
             </div>
 
             <div class="form-group">
@@ -151,31 +81,40 @@
                         <wicket:message key="cancel">[cancel]</wicket:message>
                     </a>
                     <a wicket:id="addAddress" class="btn btn-primary" rel="nofollow">
-                        <wicket:message key="create">[create]</wicket:message>
+                        <wicket:container wicket:id="addAddressLabel" />
                     </a>
                 </div>
             </div>
+
+            <wicket:fragment wicket:id="booleanEditor">
+                <input type="checkbox" wicket:id="edit" class="form-control"/>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="stringEditor">
+                <input type="text"  wicket:id="edit" class="form-control"/>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="singleChoiceEditor">
+                <select wicket:id="edit"  class="form-control"></select>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="multipleChoicesEditor">
+                <span wicket:id="edit" class="form-control"></span>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="countryCodeEditor">
+                <select wicket:id="country"  class="form-control"></select>
+            </wicket:fragment>
+
+            <wicket:fragment wicket:id="stateCodeEditor">
+                <select wicket:id="state"  class="form-control"></select>
+            </wicket:fragment>
 
         </form>
 
     </div>
 
     <span wicket:id="footer">[footer]</span>
-
-<script type="text/javascript">
-
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-4983157-12']);
-    _gaq.push(['_setDomainName', 'yes-cart.org']);
-    _gaq.push(['_trackPageview']);
-
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-
-</script>
 
 </body>
 </html>

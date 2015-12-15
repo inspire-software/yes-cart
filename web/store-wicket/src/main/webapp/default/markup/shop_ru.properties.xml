@@ -206,10 +206,14 @@
     <entry key="firstName">Имя</entry>
     <entry key="lastName">Фамилия</entry>
     <entry key="line1">Строка адреса 1</entry>
+    <entry key="addrline1">Строка адреса 1</entry>
     <entry key="line2">Строка адреса 2</entry>
+    <entry key="addrline2">Строка адреса 2</entry>
     <entry key="city">Город</entry>
     <entry key="country">Страна</entry>
+    <entry key="countryCode">Страна</entry>
     <entry key="state">Область</entry>
+    <entry key="stateCode">Область</entry>
     <entry key="postcode">Индекс</entry>
     <entry key="phone1">Телефон</entry>
     <entry key="create">Сохранить</entry>
@@ -350,11 +354,8 @@
     <entry key="taxNoteNet">без ${tax} ${code}</entry>
     <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>
 
-
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Просмотренные</entry>
-    <entry key="taxNoteNet">без ${tax} ${code}</entry>
-    <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>
 
     <!-- SearchView -->
     <entry key="search">Поиск</entry>
