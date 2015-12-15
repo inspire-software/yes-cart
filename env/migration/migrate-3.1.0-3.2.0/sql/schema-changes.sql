@@ -67,5 +67,6 @@ Prefix will be used to select ADDRESS attributes
 E.g. if this attribute is ADDR_FORM and Customer attribute value for it is "default"
 then fields would be resolved as "default_firstname", "default_lastname" etc.',  1000, 1001, 'SHOP_CUSTOMER_ADDR_PREF');
 
+INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
 
