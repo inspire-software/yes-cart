@@ -49,7 +49,7 @@ public class TestAttributeServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindByAttributeGroupCode() {
         List<Attribute> attrs = attributeService.findByAttributeGroupCode(AttributeGroupNames.CUSTOMER);
-        assertEquals(1, attrs.size());
+        assertEquals(4, attrs.size());
     }
 
     @Test

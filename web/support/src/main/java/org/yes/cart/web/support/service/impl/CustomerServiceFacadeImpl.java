@@ -274,7 +274,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
         if (CollectionUtils.isNotEmpty(allowed)) {
             // must explicitly configure to avoid exposing personal data
-            final List<String> readonly = profileShop.getSupportedProfileFormReadOnlyAttributesAsList();
+            final List<String> readonly = new ArrayList<String>(profileShop.getSupportedProfileFormReadOnlyAttributesAsList());
             // Ensure dummy attributes are not updated
             readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname"));
 

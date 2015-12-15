@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.component.customer.dynaform.editor;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -90,6 +91,7 @@ public class StringEditor extends Fragment {
 
             textField.add(patternValidator);
         }
+        textField.add(new AttributeModifier("placeholder", labelModel));
         add(textField);
     }
 
