@@ -177,6 +177,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         for (final String addressFormAttribute : DEFAULT_FIELDS) {
             final Attribute attr = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
             attr.setVal(addressFormAttribute);
+            attr.setCode(addressFormAttribute);
             attr.setEtype(etype);
             attr.setMandatory(!OPTIONAL_FIELDS.contains(addressFormAttribute));
             attributes.add(attr);
