@@ -34,7 +34,9 @@
 
     <security:http auto-config="true">
         <security:anonymous enabled="false"/>
-        <security:intercept-url pattern="/app/pages/onemore" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/index" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/shop" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/warehouse" access="ROLE_SMADMIN" />
         <!--<security:http-basic />-->
         <security:form-login
                  login-page="/app/pages/login"

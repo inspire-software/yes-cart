@@ -41,9 +41,9 @@ public class JaumController {
   }
 
 
-  @RequestMapping(value = {"/onemore"}, method = RequestMethod.GET)
-  public String oneMorePAge(ModelMap model) {
-    return "onemore";
+  @RequestMapping(value = {"/warehouse"}, method = RequestMethod.GET)
+  public String warehousePage(ModelMap model) {
+    return "warehouse";
   }
 
   @RequestMapping(value = {"/login", "/login/"}, method = RequestMethod.GET)
