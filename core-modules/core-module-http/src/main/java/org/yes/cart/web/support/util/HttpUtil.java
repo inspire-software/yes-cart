@@ -91,7 +91,7 @@ public class HttpUtil {
     }
 
     /**
-     * Get all request parameters as map.
+     * GET request parameters as map.
      *
      * @param requestURL request URL {@link HttpServletRequest#getRequestURL()}
      * @param pathVariables path markers that should be identified as extra parameters
@@ -148,7 +148,7 @@ public class HttpUtil {
     }
 
     /**
-     * Get all request parameters as map.
+     * GET request parameters as map.
      *
      * @param request request
      * @param pathVariables path markers that should be identified as extra parameters
@@ -163,6 +163,37 @@ public class HttpUtil {
             return getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables);
         }
         return getParameters(request.getRequestURL().toString(), pathVariables);
+    }
+
+    /**
+     * GET and POST request parameters as map.
+     *
+     * @param request request
+     * @param pathVariables path markers that should be identified as extra parameters
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> allParameters(final HttpServletRequest request,
+                                                          final Set<String> pathVariables) {
+
+        final Map<String, List<String>> params = getParameters(request, pathVariables);
+
+        for (final Map.Entry<String, Object> param : (Set<Map.Entry>) request.getParameterMap().entrySet()) {
+
+            final String key = param.getKey();
+            if (!params.containsKey(key)) {
+                params.put(key, new LinkedList<String>());
+            }
+
+            if (param.getValue() instanceof String[]) {
+                params.get(key).addAll(Arrays.asList((String[]) param.getValue()));
+            } else if (param.getValue() instanceof String) {
+                params.get(key).add((String) param.getValue());
+            }
+
+        }
+
+        return params;
     }
 
 
