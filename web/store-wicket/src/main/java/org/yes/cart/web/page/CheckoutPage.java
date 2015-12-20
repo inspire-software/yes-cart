@@ -22,9 +22,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
@@ -62,10 +62,7 @@ import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.service.AddressBookFacade;
-import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.web.support.service.CustomerServiceFacade;
-import org.yes.cart.web.support.service.ShippingServiceFacade;
+import org.yes.cart.web.support.service.*;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -160,6 +157,8 @@ public class CheckoutPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct page.
@@ -407,16 +406,12 @@ public class CheckoutPage extends AbstractWebPage {
         final List<Pair<PaymentGatewayDescriptor, String>> available =
                 checkoutServiceFacade.getPaymentGatewaysDescriptors(ApplicationDirector.getCurrentShop(), ApplicationDirector.getShoppingCart());
 
-        final Component pgSelector = new DropDownChoice<Pair<PaymentGatewayDescriptor, String>>(
+        final Component pgSelector = new RadioGroup<String>(
                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                new PaymentGatewayDescriptorModel(
-                        new PropertyModel<String>(orderInfo, "paymentGatewayLabel"),
-                        available
-                ),
-                available) {
+                new PropertyModel<String>(orderInfo, "paymentGatewayLabel")) {
 
             /** {@inheritDoc} */
-            protected void onSelectionChanged(final Pair<PaymentGatewayDescriptor, String> descriptor) {
+            protected void onSelectionChanged(final Object descriptor) {
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
@@ -433,7 +428,7 @@ public class CheckoutPage extends AbstractWebPage {
                 final BigDecimal grandTotal = total.getTotalAmount();
 
                 //pay pal express checkout gateway support
-                order.setPgLabel(descriptor.getFirst().getLabel());
+                order.setPgLabel((String) descriptor);
                 checkoutServiceFacade.update(order);
 
 
@@ -446,7 +441,7 @@ public class CheckoutPage extends AbstractWebPage {
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                         ApplicationDirector.getShoppingCart(),
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor.getFirst().getLabel()));
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
 
             }
 
@@ -456,7 +451,16 @@ public class CheckoutPage extends AbstractWebPage {
                 return true;
             }
 
-        }.setChoiceRenderer(new PaymentGatewayDescriptorRenderer());
+        }.add(
+                new ListView<Pair<PaymentGatewayDescriptor, String>>("pgList", available) {
+                    protected void populateItem(final ListItem<Pair<PaymentGatewayDescriptor, String>> pgListItem) {
+                        pgListItem.add(new Radio<String>("pgListLabel", new Model<String>(pgListItem.getModelObject().getFirst().getLabel())));
+                        pgListItem.add(new Label("pgListName", pgListItem.getModelObject().getSecond()));
+                        final boolean infoVisible = pgListItem.getModelObject().getFirst().getLabel().equals(orderInfo.getPaymentGatewayLabel());
+                        pgListItem.add(new Label("pgInfo", contentServiceFacade.getContentBody("checkout_payment_" + pgListItem.getModelObject().getFirst().getLabel(),
+                                ShopCodeContext.getShopId(), getLocale().getLanguage())).setVisible(infoVisible));
+                    }
+                });
 
         rez.addOrReplace(
                         new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
