@@ -37,7 +37,7 @@ public class HttpUtil {
 
     private static void dumpParamsAndAttrs(final ServletRequest req, final StringBuilder stringBuilder) {
 
-        stringBuilder.append(HttpParamsUtils.stringify("\nParameters", req.getParameterMap()));
+        stringBuilder.append(HttpParamsUtils.stringify("\nParameters\n", req.getParameterMap()));
 
         Enumeration attributeNames = req.getAttributeNames();
         final Map<String, String> map = new HashMap<String, String>();
@@ -45,7 +45,7 @@ public class HttpUtil {
             final String key = (String) attributeNames.nextElement();
             map.put(key, String.valueOf(req.getAttribute(key)));
         }
-        stringBuilder.append(HttpParamsUtils.stringify("\nAttributes", map));
+        stringBuilder.append(HttpParamsUtils.stringify("\nAttributes\n", map));
 
     }
 
@@ -57,7 +57,7 @@ public class HttpUtil {
                 final String key = (String) headerNames.nextElement();
                 map.put(key, String.valueOf(hReq.getHeader(key)));
             }
-            stringBuilder.append(HttpParamsUtils.stringify("\nHeaders", map));
+            stringBuilder.append(HttpParamsUtils.stringify("\nHeaders\n", map));
         }
     }
 
