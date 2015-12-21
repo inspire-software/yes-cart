@@ -22,10 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -94,13 +91,25 @@ public class WsRemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
-    public ShopDTO update(final ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/", method = RequestMethod.PUT, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody ShopDTO update(@RequestBody final ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(instance.getShopId(), ShopDTO.class)) {
             return super.update(instance);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody ShopDTO create(@RequestBody final ShopDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return super.create(instance);
+    }
+
 
     /**
      * {@inheritDoc}

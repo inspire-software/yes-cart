@@ -1,4 +1,4 @@
-angular.module('jaumApp',['ngRoute', 'shopApp'])
+angular.module('jaumApp',['ngRoute', 'shopApp', 'ui.bootstrap'])
 
     .controller('MainController', function($scope, $route, $routeParams, $location) {
         $scope.$route = $route;
@@ -8,15 +8,14 @@ angular.module('jaumApp',['ngRoute', 'shopApp'])
 
     .config(function($routeProvider, $locationProvider) {
         $routeProvider.when(
-            '/Book/:bookId', {
-                templateUrl: 'book.html'
-            }
-        ).when(
             '/shop', {
                 templateUrl: 'shop'
             }
+        ).when(
+            '/store/:storeId', {
+                templateUrl: 'store'
+            }
         )
-
     })
 
 ;

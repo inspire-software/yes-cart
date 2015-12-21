@@ -36,6 +36,7 @@
         <security:anonymous enabled="false"/>
         <security:intercept-url pattern="/app/pages/index" access="ROLE_SMADMIN" />
         <security:intercept-url pattern="/app/pages/shop" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/store" access="ROLE_SMADMIN" />
         <security:intercept-url pattern="/app/pages/warehouse" access="ROLE_SMADMIN" />
         <!--<security:http-basic />-->
         <security:form-login
@@ -44,12 +45,6 @@
                  authentication-failure-url="/login?error"
                  username-parameter="j_username"
                  password-parameter="j_password" />
-        <!-- <security:form-login
-                 login-page="/WEB-INF/pages/login.jsp"
-                 default-target-url="/WEB-INF/pages/index.jsp"
-                 authentication-failure-url="/login?error"
-                 username-parameter="j_username"
-                 password-parameter="j_password" />-->
     </security:http>
 
 

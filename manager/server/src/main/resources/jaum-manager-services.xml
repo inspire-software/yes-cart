@@ -33,6 +33,25 @@
 
   <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
   <mvc:annotation-driven />
+
+  <mvc:annotation-driven>
+    <mvc:argument-resolvers>
+      <bean class="org.yes.bla-bla-bla.ModelAttributeMethodProcessorImpl">
+        <constructor-arg name="annotationNotRequired" value="true"/>
+      </bean>
+    </mvc:argument-resolvers>
+  </mvc:annotation-driven>
+
+  <!--
+   <mvc:annotation-driven>
+    <mvc:argument-resolvers>
+        <bean class="com.example.util.databinding.ModelAttributeMethodProcessorImpl">
+            <constructor-arg name="annotationNotRequired" value="true"/>
+        </bean>
+    </mvc:argument-resolvers>
+</mvc:annotation-driven>
+   -->
+
   <context:component-scan base-package="org.yes.cart.remote.service.impl.**,org.yes.cart" />
 
   <!--<bean id="remoteShopService" class="org.yes.cart.remote.service.impl.WsRemoteShopServiceImpl">

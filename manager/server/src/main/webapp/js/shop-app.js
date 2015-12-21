@@ -1,21 +1,66 @@
-angular.module('shopApp',[])
+angular.module('shopApp', ['ngResource'])
 
-    .controller('ShopController', ['$scope', 'ShopService', function($scope, ShopService) {
+    .controller('ShopController', ['$scope', '$routeParams', 'ShopService',  function ($scope, $routeParams ,ShopService) {
         var self = this;
-        self.shop={id:null,name:''};
-        self.shops=[];
+        self.shops = [];
+        self.shop = {shopId: null, code: '', name: '', description: ''};
 
-        self.fetchAllShops = function(){
+        if ($routeParams.storeId == 'new') {
+            self.shop = {};
+            $scope.shop = {};
+        } else if (!isNaN($routeParams.storeId)) {
+            ShopService.fetchOne($routeParams.storeId).then(
+                function (d) {
+                    self.shop = d;
+                    $scope.shop = d;
+                },
+                function (errResponse) {
+                    console.error('Error while fetching Shops');
+                }
+            );
+        }
+
+        self.fetchAllShops = function () {
             ShopService.fetchAll()
                 .then(
-                function(d) {
+                function (d) {
                     self.shops = d;
                 },
-                function(errResponse){
+                function (errResponse) {
                     console.error('Error while fetching Shops');
                 }
             );
         };
+
+        self.saveOrUpdate = function(s) {
+            if (s.shopId == null) {
+                console.log('Saving new store', s);
+                ShopService.createShop(s);
+            } else {
+                console.log('Update store', s);
+                ShopService.updateShop(s);
+            }
+        };
+
+
+
+        /*self.edit = function (id) {
+            console.log('store id to be edited', id);
+            console.log('seelf', self);
+            ShopService.fetchOne(id).then(
+                function (d) {
+                    self.shop = d;
+                    $scope.shop = d;
+                    $scope.zzz = 'asdfadsfadfadsf';
+                    $location.path('/store/'+id)
+                },
+                function (errResponse) {
+                    console.error('Error while fetching Shops');
+                }
+            );
+        };*/
+
+
 
         /*self.createUser = function(user){
          UserService.createUser(user)
@@ -49,26 +94,11 @@ angular.module('shopApp',[])
 
         self.fetchAllShops();
 
-        /*self.submit = function() {
-         if(self.user.id==null){
-         console.log('Saving New User', self.user);
-         self.createUser(self.user);
-         }else{
-         self.updateUser(self.user, self.user.id);
-         console.log('User updated with id ', self.user.id);
-         }
-         self.reset();
-         };
 
-         self.edit = function(id){
-         console.log('id to be edited', id);
-         for(var i = 0; i < self.users.length; i++){
-         if(self.users[i].id == id) {
-         self.user = angular.copy(self.users[i]);
-         break;
-         }
-         }
-         };
+
+        /*
+
+
 
          self.remove = function(id){
          console.log('id to be deleted', id);
@@ -89,32 +119,78 @@ angular.module('shopApp',[])
 
     }])
     .
-    factory('ShopService', ['$http', '$q', function($http, $q){
+    factory('ShopService', ['$http', '$resource', '$q', function ($http, $resource, $q) {
 
         return {
+            fetchAll: function () {
+                return $http.get('../../service/shop/all')
+                    .then(
+                    function (response) {
+                        return response.data;
+                    },
+                    function (errResponse) {
+                        console.error('Error while fetching shops');
+                        return $q.reject(errResponse);
+                    }
+                );
+            },
+            fetchOne: function (id) {
+                return $http.get('../../service/shop/' + id)
+                    .then(
+                    function (response) {
+                        return response.data;
+                    },
+                    function (errResponse) {
+                        console.error('Error while fetching shop');
+                        return $q.reject(errResponse);
+                    }
+                );
+            },
+            createShop: function(shop){
+                return $http.post('../../service/shop/', shop)
+                    .then(
+                    function(response){
+                        return response.data;
+                    },
+                    function(errResponse){
+                        console.error('Error while creating shop');
+                        return $q.reject(errResponse);
+                    }
+                );
+            },
 
+            updateShop: function(shop){
+                return $http.put('../../service/shop/', shop)
+                    .then(
+                    function(response){
+                        return response.data;
+                    },
+                    function(errResponse){
+                        console.error('Error while updating shop');
+                        return $q.reject(errResponse);
+                    }
+                );
+            },
 
-             fetchAll: function() {
-
-             return $http.get('../../service/shop/all')
-             .then(
-             function(response){
-             return response.data;
-             },
-             function(errResponse){
-             console.error('Error while fetching users');
-             return $q.reject(errResponse);
-             }
-             );
-
-             },
-
-
-
-
-           /* fetchAll: function() {
-                return $q.when(eval('[{ "id" : 1, "name" : "Ivn" }, { "id" : 2, "name" : "QWqwdsfddfdsaf" }]'));
+            /*fetchOne: function (id) {
+                return $resource('../../service/shop/:shopId', { shopId: '@shopId' }).get({ shopId: id }).$promise
+                    .then(
+                    function (response) {
+                        var ddd = response.data;
+                        console.info(">>>>>>>>>>>>>>>>>> " + ddd);
+                        return response.data;
+                    },
+                    function (errResponse) {
+                        console.error('Error while fetching shop');
+                        return $q.reject(errResponse);
+                    }
+                );
             },*/
+
+
+            /* fetchAll: function() {
+             return $q.when(eval('[{ "id" : 1, "name" : "Ivn" }, { "id" : 2, "name" : "QWqwdsfddfdsaf" }]'));
+             },*/
 
 
 
