@@ -49,6 +49,11 @@
         </param-value>
     </context-param>
 
+    <context-param>
+        <param-name>wicket.configuration</param-name>
+        <param-value>${wicket.configuration}</param-value>
+    </context-param>
+
     <listener>
         <listener-class>org.yes.cart.web.context.LogbackJMXContextListener</listener-class>
     </listener>
