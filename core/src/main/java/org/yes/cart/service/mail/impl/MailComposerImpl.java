@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.mail.impl;
 
-import groovy.lang.Writable;
-import groovy.text.GStringTemplateEngine;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -27,6 +25,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
+import org.yes.cart.service.domain.TemplateSupport;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
@@ -34,7 +33,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -64,7 +62,7 @@ public class MailComposerImpl implements MailComposer {
 
     private Pattern resourcePattern;
 
-    private final GStringTemplateEngine templateEngine;
+    private final TemplateSupport templateSupport;
 
     private final MailTemplateResourcesProvider mailTemplateResourcesProvider;
 
@@ -74,11 +72,12 @@ public class MailComposerImpl implements MailComposer {
      *
      * @param mailTemplateResourcesProvider mail resources provider
      */
-    public MailComposerImpl(final MailTemplateResourcesProvider mailTemplateResourcesProvider) throws ClassNotFoundException {
+    public MailComposerImpl(final MailTemplateResourcesProvider mailTemplateResourcesProvider,
+                            final TemplateSupport templateSupport) throws ClassNotFoundException {
         this.mailTemplateResourcesProvider = mailTemplateResourcesProvider;
         final ClassLoader classLoader = this.getClass().getClassLoader();
         classLoader.loadClass(DecimalFormat.class.getName());
-        this.templateEngine = new GStringTemplateEngine(classLoader);
+        this.templateSupport = templateSupport;
     }
 
     /**
@@ -92,11 +91,7 @@ public class MailComposerImpl implements MailComposer {
      */
     String merge(final String view, final Map<String, Object> model)
             throws IOException, ClassNotFoundException {
-        final Writable writable = templateEngine.createTemplate(view).make(model);
-        final StringWriter stringWriter = new StringWriter();
-        writable.writeTo(stringWriter);
-        stringWriter.close();
-        return stringWriter.toString();
+        return templateSupport.get(view).make(model);
     }
 
     void composeMessage(final MimeMessage message,

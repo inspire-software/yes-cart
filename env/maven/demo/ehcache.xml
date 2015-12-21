@@ -169,6 +169,9 @@
     <cache name="contentService-contentBody" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="contentService-templateSupport" maxElementsInMemory="0" overflowToDisk="false"
+           eternal="true"/>
+
     <cache name="contentService-contentAttributeRecursive" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

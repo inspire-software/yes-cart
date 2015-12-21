@@ -22,11 +22,15 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.impl.MailEntity;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.service.domain.TemplateSupport;
+import org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
 import javax.mail.MessagingException;
@@ -51,33 +55,84 @@ public class MailComposerImplTest {
 
     @Test
     public void testMerge$style() throws ClassNotFoundException, IOException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives...somewhere in time."); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives...somewhere in time.")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         String template = "$name lives...somewhere in time.";
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         String result = mailComposer.merge(template, model);
         assertEquals("Bender lives...somewhere in time.", result);
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testMergeJspStyle() throws ClassNotFoundException, IOException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         String template = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         String result = mailComposer.merge(template, createModel());
         assertEquals("Bender lives in theme park with blackjack poetess ", result);
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testMergeGroovyStyle() throws ClassNotFoundException, IOException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% def deliverySum = 1.23456789; deliverySum = deliverySum.setScale(2, BigDecimal.ROUND_HALF_UP); out.print(deliverySum); %>"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% def deliverySum = 1.23456789; deliverySum = deliverySum.setScale(2, BigDecimal.ROUND_HALF_UP); out.print(deliverySum); %>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         String template = "<% def deliverySum = 1.23456789; deliverySum = deliverySum.setScale(2, BigDecimal.ROUND_HALF_UP); out.print(deliverySum); %>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         String result = mailComposer.merge(template, createModel());
         assertEquals("1.23", result);
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testGetResourcesId() throws ClassNotFoundException {
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         //'cid:identifier1234' "cid:id" 'cid:ident' "cid:identifier5678"
         List<String> rez = mailComposer.getResourcesId("'cid:identifier1234' \"cid:id\" 'cid:ident' \"cid:identifier5678\"");
         assertEquals(4, rez.size());
@@ -85,10 +140,25 @@ public class MailComposerImplTest {
         assertEquals("id", rez.get(1));
         assertEquals("ident", rez.get(2));
         assertEquals("identifier5678", rez.get(3));
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testComposeMimeMessageInternalTextAndHtmlVersion() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>")), with(any(Object.class)));
+            allowing(cache).get("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
@@ -96,7 +166,7 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -106,6 +176,7 @@ public class MailComposerImplTest {
         // html and text present in mail message
         assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        mockery.assertIsSatisfied();
     }
 
     /**
@@ -113,6 +184,18 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMimeMessageInternalTextVersionOnly() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
@@ -120,7 +203,7 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = null;
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -129,6 +212,7 @@ public class MailComposerImplTest {
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
+        mockery.assertIsSatisfied();
     }
 
     /**
@@ -136,6 +220,18 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMimeMessageInternalHtmlVersionOnly() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setHost("localhost");
@@ -143,7 +239,7 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = null;
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -152,10 +248,22 @@ public class MailComposerImplTest {
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testComposeMimeMessageInternalFullIntegration() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get(with(any(String.class))); will(returnValue(null));
+            allowing(cache).put(with(any(String.class)), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
 
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
@@ -177,7 +285,7 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider);
+        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider, templates);
         mailComposer.composeMessage(
                 message,
                 "SHOP10",
@@ -215,6 +323,18 @@ public class MailComposerImplTest {
 
     @Test
     public void complexObjectNavigation()  throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$root.first $root.second"); will(returnValue(null));
+            allowing(cache).put(with(equal("$root.first $root.second")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         Map<String, Object> map = new HashMap<String,Object>();
         map.put("root", new Pair("hi", "there"));
         String textTemplate = "$root.first $root.second";
@@ -222,7 +342,7 @@ public class MailComposerImplTest {
         sender.setHost("localhost");
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(helper, textTemplate, null, Collections.EMPTY_LIST, "SHOP10", "en", "test", map);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -230,15 +350,30 @@ public class MailComposerImplTest {
         assertNotNull(str);
         // html and text present in mail message
         assertTrue(str.contains("hi there"));
+        mockery.assertIsSatisfied();
     }
 
 
     @Test
     public void testComposeMailEntityInternalTextAndHtmlVersion() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>")), with(any(Object.class)));
+            allowing(cache).get("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         final Mail mail = new MailEntity();
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
 
         String strTxt = mail.getTextVersion();
@@ -247,6 +382,7 @@ public class MailComposerImplTest {
         String strHtml = mail.getHtmlVersion();
         assertNotNull(strHtml);
         assertTrue(strHtml.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        mockery.assertIsSatisfied();
     }
 
     /**
@@ -254,11 +390,23 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMailEntityInternalTextVersionOnly() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("$name lives in theme park with <% with.each{ out.print(it + ' ');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
         final Mail mail = new MailEntity();
         String textTemplate = "$name lives in theme park with <% with.each{ out.print(it + ' ');}%>";
         String htmlTemplate = null;
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
 
         String strTxt = mail.getTextVersion();
@@ -266,6 +414,7 @@ public class MailComposerImplTest {
         assertTrue(strTxt.contains("Bender lives in theme park with blackjack poetess"));
         String strHtml = mail.getHtmlVersion();
         assertNull(strHtml);
+        mockery.assertIsSatisfied();
     }
 
     /**
@@ -273,11 +422,23 @@ public class MailComposerImplTest {
      */
     @Test
     public void testComposeMailEntityInternalHtmlVersionOnly() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>"); will(returnValue(null));
+            allowing(cache).put(with(equal("<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
         final Mail mail = new MailEntity();
         String textTemplate = null;
         String htmlTemplate = "<h2>$name</h2> lives in theme park with:<br> <% with.each{ out.print(it + '<br>');}%>";
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.composeMessage(mail, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test", createModel());
 
 
@@ -286,10 +447,22 @@ public class MailComposerImplTest {
         String strHtml = mail.getHtmlVersion();
         assertNotNull(strHtml);
         assertTrue(strHtml.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        mockery.assertIsSatisfied();
     }
 
     @Test
     public void testComposeMailEntityInternalFullIntegration() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get(with(any(String.class))); will(returnValue(null));
+            allowing(cache).put(with(any(String.class)), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
 
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
@@ -307,7 +480,7 @@ public class MailComposerImplTest {
         }});
 
         final Mail mail = new MailEntity();
-        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider);
+        MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider, templates);
         mailComposer.composeMessage(
                 mail,
                 "SHOP10",
@@ -338,6 +511,18 @@ public class MailComposerImplTest {
      */
     @Test
     public void testConvertMailEntityToMimeMessage() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovyGStringTemplateSupportImpl(cacheManager);
+
         // of course you would use DI in any real-world cases
 
         final Mail mail = new MailEntity();
@@ -355,7 +540,7 @@ public class MailComposerImplTest {
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        MailComposerImpl mailComposer = new MailComposerImpl(null);
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
         mailComposer.convertMessage(mail, message);
 
         assertTrue(helper.isMultipart());
@@ -371,7 +556,7 @@ public class MailComposerImplTest {
         assertTrue(str.contains("cc@somedomain.com"));
         assertTrue(str.contains("Bcc: bcc@somedomain.com"));
         assertEquals("Тема письма", message.getSubject());
-
+        mockery.assertIsSatisfied();
 
     }
 

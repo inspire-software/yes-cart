@@ -157,7 +157,13 @@
         </property>
     </bean>
 
-    <bean id="groovyContentServiceTemplateSupport" class="org.yes.cart.service.domain.impl.ContentServiceTemplateSupportGroovyImpl"/>
+    <bean id="groovyContentServiceTemplateSupport" class="org.yes.cart.service.domain.impl.ContentServiceTemplateSupportGroovyImpl">
+        <constructor-arg>
+            <bean class="org.yes.cart.service.domain.impl.GroovySimpleTemplateSupportImpl">
+                <constructor-arg ref="cacheManager"/>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <bean id="contentService" parent="txProxyTemplate">
         <property name="target">
@@ -769,6 +775,11 @@
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>
+        <constructor-arg>
+            <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
+                <constructor-arg ref="cacheManager"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <!-- ############################# Shopping Cart Commands and Events ######################### -->
