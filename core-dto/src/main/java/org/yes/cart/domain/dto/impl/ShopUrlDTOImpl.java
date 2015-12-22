@@ -36,6 +36,9 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     @DtoField(value = "themeChain")
     private String themeChain;
 
+    @DtoField(value = "primary")
+    private boolean primary;
+
     @DtoField(value = "storeUrlId", readOnly = true)
     private long storeUrlId;
 
@@ -60,6 +63,16 @@ public class ShopUrlDTOImpl implements ShopUrlDTO {
     /** {@inheritDoc}  */
     public void setThemeChain(final String themeChain) {
         this.themeChain = themeChain;
+    }
+
+    /** {@inheritDoc}  */
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    /** {@inheritDoc}  */
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
     }
 
     /** {@inheritDoc}  */

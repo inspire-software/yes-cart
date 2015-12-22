@@ -56,10 +56,18 @@
         }
 
         private function validateUrlsBeforeSave():Boolean {
+            var _primary:int = 0;
             for each (var urlDto:ShopUrlDTOImpl in this.urlGrid.dataProvider) {
                 if (!DomainNameValidator.validate(urlDto.url)) {
-                    this.urlGrid.errorString = resourceManager.getString('StoreSupportedUrlsPanel', 'invalidUrl', [ urlDto.url ]);
+                    this.urlGrid.errorString = resourceManager.getString('StoreSupportedUrlsPanel', 'invalidUrl', [urlDto.url]);
                     return false;
+                }
+                if (urlDto.primary) {
+                    _primary++;
+                    if (_primary > 1) {
+                        this.urlGrid.errorString = resourceManager.getString('StoreSupportedUrlsPanel', 'invalidPrimary', [urlDto.url]);
+                        return false;
+                    }
                 }
             }
             this.urlGrid.errorString = '';
@@ -87,7 +95,7 @@
 
             if (this.allowDeleteUrl && this.urlGrid.selectedItem != null) {
                 Alert.show(
-                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [ this.urlGrid.selectedItem.url ]),
+                        resourceManager.getString('StoreSupportedUrlsPanel', 'deleteUrlConfirm', [this.urlGrid.selectedItem.url]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteUrlConfirm, null, Alert.OK);
             }
@@ -127,13 +135,24 @@
         }
 
         private function onSaveResult(event:ResultEvent):void {
-            // do nothing for now
+            var _shopUrlDTOImpl:ShopUrlDTOImpl = event.result as ShopUrlDTOImpl;
+            if (_shopUrlDTOImpl != null) {
+                for each (var _item:ShopUrlDTOImpl in this.urlGrid.dataProvider) {
+                    if (_shopUrlDTOImpl.storeUrlId == _item.storeUrlId) {
+                        return;
+                    } else if (_shopUrlDTOImpl.url == _item.url && DomainUtils.isNewPK(_item.storeUrlId)) {
+                        _item.storeUrlId = _shopUrlDTOImpl.storeUrlId;
+                        return;
+                    }
+
+                }
+            }
         }
 
         private function onSaveFault(event:FaultEvent):void {
 
             Alert.show(
-                    resourceManager.getString('StoreSupportedUrlsPanel', 'cannotSaveURL', [ event.toString() ]),
+                    resourceManager.getString('StoreSupportedUrlsPanel', 'cannotSaveURL', [event.toString()]),
                     resourceManager.getString('StoreSupportedUrlsPanel', 'communicationError')
             );
             urlsChanged = true;
@@ -202,6 +221,24 @@
         <mx:columns>
             <mx:DataGridColumn headerText="@Resource(bundle='StoreSupportedUrlsPanel',key='url')" dataField="url"/>
             <mx:DataGridColumn headerText="@Resource(bundle='StoreSummaryPanel',key='themeLocation')" dataField="themeChain"/>
+            <mx:DataGridColumn headerText="@Resource(bundle='StoreSummaryPanel',key='primaryUrl')" dataField="primary"
+                               rendererIsEditor="true" editable="false">
+                <mx:itemRenderer>
+                    <mx:Component>
+                        <mx:HBox horizontalAlign="center">
+                            <mx:CheckBox enabled="true" selected="{data.primary}" change="onPrimaryChange(event)"/>
+                            <mx:Script><![CDATA[
+                                private function onPrimaryChange(event:Event):void {
+                                    if (data.primary != event.target.selected) {
+                                        data.primary = event.target.selected;
+                                        outerDocument.urlsChanged = true;
+                                    }
+                                }
+                                ]]></mx:Script>
+                        </mx:HBox>
+                    </mx:Component>
+                </mx:itemRenderer>
+            </mx:DataGridColumn>
         </mx:columns>
     </mx:DataGrid>
 </mx:VBox>

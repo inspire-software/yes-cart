@@ -32,6 +32,7 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
 
     private String url;
     private String themeChain;
+    private boolean primary;
     private Shop shop;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -73,6 +74,14 @@ public class ShopUrlEntity implements org.yes.cart.domain.entity.ShopUrl, java.i
 
     public void setThemeChain(final String themeChain) {
         this.themeChain = themeChain;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
     }
 
     public Shop getShop() {

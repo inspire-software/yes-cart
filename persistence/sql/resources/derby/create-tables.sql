@@ -828,6 +828,7 @@
         VERSION bigint not null DEFAULT 0,
         URL varchar(512) not null,
         THEME_CHAIN varchar(512),
+        PRIMARY_URL smallint not null DEFAULT 0,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,

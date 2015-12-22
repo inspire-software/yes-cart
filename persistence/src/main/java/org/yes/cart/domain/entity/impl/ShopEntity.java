@@ -375,6 +375,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public String getDefaultShopUrl() {
         for (ShopUrl shopUrl : getShopUrl()) {
+            if (shopUrl.isPrimary()) {
+                return "http://" + shopUrl.getUrl();
+            }
+        }
+        for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
                 continue;
             }

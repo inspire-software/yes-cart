@@ -69,4 +69,10 @@ then fields would be resolved as "default_firstname", "default_lastname" etc.', 
 
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
+--
+-- YC-654 Allow choosing primary shop url
+--
+
+alter table TSHOPURL add column PRIMARY_URL bit not null default 0;
+-- alter table TSHOPURL add column PRIMARY_URL smallint not null DEFAULT 0;
 

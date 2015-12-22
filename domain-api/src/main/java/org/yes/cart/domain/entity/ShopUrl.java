@@ -47,6 +47,13 @@ public interface ShopUrl extends Auditable {
     void setThemeChain(String themeChain);
 
     /**
+     * @return flag to indicate primary URL mapping
+     */
+    boolean isPrimary();
+
+    void setPrimary(boolean primary);
+
+    /**
      * @return {@link Shop}
      */
     Shop getShop();

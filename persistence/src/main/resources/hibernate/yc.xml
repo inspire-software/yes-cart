@@ -1659,6 +1659,7 @@
 
         <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
         <property name="themeChain" column="THEME_CHAIN" type="string" length="512" not-null="false" lazy="false"/>
+        <property name="primary" column="PRIMARY_URL" type="boolean"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPURL_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>

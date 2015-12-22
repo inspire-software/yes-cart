@@ -323,19 +323,19 @@
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="18" VAL="firstname,middlename,lastname,CUSTOMER_PHONE" GUID="18_TSHOPATTRVALUE" CODE="SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE" SHOP_ID="10"/>
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="19" VAL="firstname,middlename,lastname,CUSTOMER_PHONE" GUID="19_TSHOPATTRVALUE" CODE="SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES" SHOP_ID="10"/>
 
-    <TSHOPURL VERSION="0" STOREURL_ID="10" GUID="10"  SHOP_ID="10" URL="gadget.yescart.org"/>
-    <TSHOPURL VERSION="0" STOREURL_ID="11" GUID="11"  SHOP_ID="10" URL="www.gadget.yescart.org"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="10" GUID="10"  SHOP_ID="10" URL="gadget.yescart.org" PRIMARY_URL="0"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="11" GUID="11"  SHOP_ID="10" URL="www.gadget.yescart.org" PRIMARY_URL="0"/>
     <!-- SHOIP10 should be resolvable to localhost, so that we can do automated integration tests from maven -->
-    <TSHOPURL VERSION="0" STOREURL_ID="44" GUID="44"  SHOP_ID="10" URL="localhost"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="44" GUID="44"  SHOP_ID="10" URL="localhost" PRIMARY_URL="0"/>
 
-    <TSHOPURL VERSION="0" STOREURL_ID="20" GUID="20"  SHOP_ID="20" URL="mobile.yescart.org"/>
-    <TSHOPURL VERSION="0" STOREURL_ID="21" GUID="21"  SHOP_ID="20" URL="www.mobile.yescart.org"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="20" GUID="20"  SHOP_ID="20" URL="mobile.yescart.org" PRIMARY_URL="0"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="21" GUID="21"  SHOP_ID="20" URL="www.mobile.yescart.org" PRIMARY_URL="0"/>
 
-    <TSHOPURL VERSION="0" STOREURL_ID="30" GUID="30"  SHOP_ID="30" URL="game.yescart.org"/>
-    <TSHOPURL VERSION="0" STOREURL_ID="31" GUID="31"  SHOP_ID="30" URL="www.game.yescart.org"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="30" GUID="30"  SHOP_ID="30" URL="game.yescart.org" PRIMARY_URL="0"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="31" GUID="31"  SHOP_ID="30" URL="www.game.yescart.org" PRIMARY_URL="0"/>
 
-    <TSHOPURL VERSION="0" STOREURL_ID="32" GUID="32"  SHOP_ID="40" URL="eddie.lives.somewhere.in.time"/>
-    <TSHOPURL VERSION="0" STOREURL_ID="33" GUID="33"  SHOP_ID="50" URL="long.live.robots"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="32" GUID="32"  SHOP_ID="40" URL="eddie.lives.somewhere.in.time" PRIMARY_URL="0"/>
+    <TSHOPURL VERSION="0" STOREURL_ID="33" GUID="33"  SHOP_ID="50" URL="long.live.robots" PRIMARY_URL="0"/>
 
     <TCATEGORY VERSION="0" CATEGORY_ID="100" GUID="100"  PARENT_ID="100" RANK="0" NAME="root" DESCRIPTION="The root category"
                UITEMPLATE="default"

@@ -798,6 +798,7 @@
         VERSION bigint not null default 0,
         URL longtext not null,
         THEME_CHAIN longtext,
+        PRIMARY_URL bit not null default 0,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
