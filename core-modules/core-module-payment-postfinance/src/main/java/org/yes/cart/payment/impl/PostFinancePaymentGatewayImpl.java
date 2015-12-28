@@ -120,7 +120,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
+                ShopCodeContext.getLog(this).debug("Signature is valid");
                 return sorted.get("ORDERID");
+            } else {
+                ShopCodeContext.getLog(this).warn("Signature is not valid");
             }
 
         }
@@ -152,7 +155,10 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
             final String signature = copyHttpParamsAndRemoveSignature(params, sorted);
             final String verify = sha1sign(sorted, getParameterValue(PF_SHA_OUT));
             if (verify.equals(signature)) {
+                ShopCodeContext.getLog(this).debug("Signature is valid");
                 statusRes = sorted.get("STATUS");
+            } else {
+                ShopCodeContext.getLog(this).warn("Signature is not valid");
             }
 
         }
