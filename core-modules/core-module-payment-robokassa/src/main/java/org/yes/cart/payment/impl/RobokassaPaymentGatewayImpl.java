@@ -24,6 +24,8 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentMiscParam;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.payment.PaymentLocaleTranslator;
+import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.util.HttpParamsUtils;
 
 import java.math.BigDecimal;
@@ -66,6 +68,8 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
             null ,
             false, false
     );
+
+    private final PaymentLocaleTranslator paymentLocaleTranslator = new PaymentLocaleTranslatorImpl();
 
     /**
      * {@inheritDoc}
@@ -149,7 +153,7 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
                 0,
                 getDescription(payment),
                 DigestUtils.md5Hex(toSign),
-                locale,
+                paymentLocaleTranslator.translateLocale(this, locale),
                 payment.getOrderCurrency(),
                 orderReference
         );

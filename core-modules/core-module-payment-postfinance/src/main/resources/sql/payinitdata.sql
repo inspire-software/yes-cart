@@ -137,6 +137,10 @@ INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LA
 VALUES (15177, 'postFinancePaymentGateway', 'PF_ITEMISED', 'false', 'Enable itemised data',
   'Itemised data is sent to PF as individual items, if this is set to false then only total is sent');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15178, 'postFinancePaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=de_DE,ru=ru_RU,uk=ru_RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "PostFinance > Support > Parameter CookBook" LANGUAGE parameter for more details');
 
 
 
@@ -277,6 +281,11 @@ VALUES (15276, 'postFinanceManualPaymentGateway', 'priority', '100', 'Gateway pr
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (15277, 'postFinanceManualPaymentGateway', 'PF_ITEMISED', 'false', 'Enable itemised data',
   'Itemised data is sent to PF as individual items, if this is set to false then only total is sent');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15278, 'postFinanceManualPaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=de_DE,ru=ru_RU,uk=ru_RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "PostFinance > Support > Parameter CookBook" LANGUAGE parameter for more details');
 
 
 

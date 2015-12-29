@@ -23,6 +23,8 @@ import org.yes.cart.payment.PaymentGatewayExternalForm;
 import org.yes.cart.payment.dto.*;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.payment.PaymentLocaleTranslator;
+import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
@@ -91,6 +93,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
 
     static final String PF_ITEMISED = "PF_ITEMISED";
 
+    private final PaymentLocaleTranslator paymentLocaleTranslator = new PaymentLocaleTranslatorImpl();
 
     /**
      * {@inheritDoc}
@@ -210,7 +213,7 @@ public class PostFinancePaymentGatewayImpl extends AbstractPostFinancePaymentGat
         // ISO alpha order currency code, for example: EUR, USD, GBP, CHF, ...
         params.put("CURRENCY", currencyCode);
         // Language of the customer, for example: en_US, nl_NL, fr_FR, ...
-        params.put("LANGUAGE", locale);
+        params.put("LANGUAGE", paymentLocaleTranslator.translateLocale(this, locale));
 
         // 2. optional customer details, highly recommended for fraud prevention
 

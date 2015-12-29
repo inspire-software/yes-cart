@@ -536,3 +536,8 @@ VALUES (14558, 'payPalButtonPaymentGateway', 'priority', '100', 'Gateway priorit
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (14559, 'payPalButtonPaymentGateway', 'PPB_ENVIRONMENT', 'sandbox', 'Environment mode', 'Environment mode used by callback verification. Values can be: sandbox or live');
 
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14560, 'payPalButtonPaymentGateway', 'LANGUAGE_MAP', 'en=GB,de=DE,ru=RU,uk=RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "HTML Variables for PayPal Payments Standard" lc parameter for more details');
+

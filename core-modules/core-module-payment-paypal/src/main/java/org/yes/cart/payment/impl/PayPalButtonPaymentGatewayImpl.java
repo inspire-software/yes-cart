@@ -26,6 +26,8 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.payment.PaymentLocaleTranslator;
+import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
@@ -64,6 +66,8 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     static final String PPB_NOTIFYURL = "PPB_NOTIFYURL";
     static final String PPB_RETURNURL = "PPB_RETURNURL";
     static final String PPB_CANCELURL = "PPB_CANCELURL";
+
+    private final PaymentLocaleTranslator paymentLocaleTranslator = new PaymentLocaleTranslatorImpl();
 
 
     /**
@@ -240,12 +244,13 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         form.append(getHiddenFieldValue("invoice", orderReference));
         form.append(getHiddenFieldValue("custom", orderReference));
 
+        form.append(getHiddenFieldValue("lc", paymentLocaleTranslator.translateLocale(this, locale)));
+        form.append(getHiddenFieldValue("charset", "UTF-8"));
+
         if (payment.getBillingAddress() != null) {
             form.append(getHiddenFieldValue("first_name", payment.getBillingAddress().getFirstname()));
             form.append(getHiddenFieldValue("last_name", payment.getBillingAddress().getLastname()));
             form.append(getHiddenFieldValue("email", payment.getBillingEmail()));
-            form.append(getHiddenFieldValue("lc", locale));
-            form.append(getHiddenFieldValue("charset", "UTF-8"));
         }
         if (payment.getShippingAddress() != null) {
             form.append(getHiddenFieldValue("address1", payment.getShippingAddress().getAddrline1()));

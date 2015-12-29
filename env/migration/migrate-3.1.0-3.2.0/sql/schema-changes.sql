@@ -76,3 +76,22 @@ INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) V
 alter table TSHOPURL add column PRIMARY_URL bit not null default 0;
 -- alter table TSHOPURL add column PRIMARY_URL smallint not null DEFAULT 0;
 
+--
+-- YC-662 Add PG attribute for external locale code mapping
+--
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (14560, 'payPalButtonPaymentGateway', 'LANGUAGE_MAP', 'en=GB,de=DE,ru=RU,uk=RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "HTML Variables for PayPal Payments Standard" lc parameter for more details');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15178, 'postFinancePaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=de_DE,ru=ru_RU,uk=ru_RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "PostFinance > Support > Parameter CookBook" LANGUAGE parameter for more details');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (15278, 'postFinanceManualPaymentGateway', 'LANGUAGE_MAP', 'en=en_US,de=de_DE,ru=ru_RU,uk=ru_RU', 'Language Mapping',
+  'Language mapping can be used to map internal locale to PG supported locale
+  See "PostFinance > Support > Parameter CookBook" LANGUAGE parameter for more details');
+
