@@ -127,7 +127,10 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
                     sender_phone);
 
             if (signature.equals(validSignature)) {
+                ShopCodeContext.getLog(this).debug("Signature is valid");
                 return order_id;
+            } else {
+                ShopCodeContext.getLog(this).debug("Signature is not valid");
             }
 
         }
@@ -161,18 +164,21 @@ public class LiqPayPaymentGatewayImpl extends AbstractLiqPayPaymentGatewayImpl
             final String signature = callbackResult.get("signature");
 
             final String validSignature = api.str_to_sign(privateKey +
-                    amount  +
+                    amount +
                     currency +
                     publicKey +
                     order_id +
                     type +
-                    description  +
+                    description +
                     status +
                     transaction_id +
                     sender_phone);
 
             if (validSignature.equals(signature)) {
+                ShopCodeContext.getLog(this).debug("Signature is valid");
                 statusRes = status;
+            } else {
+                ShopCodeContext.getLog(this).debug("Signature is not valid");
             }
 
         }

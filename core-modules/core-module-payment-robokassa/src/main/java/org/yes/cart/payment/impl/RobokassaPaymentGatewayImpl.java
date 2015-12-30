@@ -27,6 +27,7 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.service.payment.PaymentLocaleTranslator;
 import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.util.HttpParamsUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -115,7 +116,10 @@ public class RobokassaPaymentGatewayImpl extends AbstractRobokassaPaymentGateway
         final String md5 = DigestUtils.md5Hex(toCheck);
 
         if (signatureValue.equalsIgnoreCase(md5)) {
+            ShopCodeContext.getLog(this).debug("Signature is valid");
             return CallbackResult.OK;
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return CallbackResult.FAILED;
 

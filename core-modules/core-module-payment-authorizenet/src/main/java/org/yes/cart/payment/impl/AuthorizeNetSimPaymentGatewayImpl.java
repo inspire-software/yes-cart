@@ -256,7 +256,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
     public String restoreOrderGuid(final Map privateCallBackParameters) {
 
         if (isValid(privateCallBackParameters)) {
+            ShopCodeContext.getLog(this).debug("Signature is valid");
             return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID));
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return null;
     }
@@ -276,7 +279,10 @@ public class AuthorizeNetSimPaymentGatewayImpl extends AbstractAuthorizeNetPayme
         */
         String responseCode = null;
         if (isValid(callbackResult)) {
+            ShopCodeContext.getLog(this).debug("Signature is valid");
             responseCode = callbackResult.get("x_response_code");
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         if ("1".equals(responseCode)) {
             return CallbackResult.OK;

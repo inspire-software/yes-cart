@@ -31,6 +31,7 @@ import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -113,11 +114,14 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
         if (ipn.validate()) {
+            ShopCodeContext.getLog(this).debug("Signature is valid");
             final String invoice = ipn.getIpnValue("invoice");
             if (StringUtils.isBlank(invoice)) {
                 return ipn.getIpnValue("custom");
             }
             return invoice;
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return null;
     }
@@ -132,11 +136,15 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         final IPNMessage ipn = createIPNMessage(request);
         if (ipn.validate()) {
 
+            ShopCodeContext.getLog(this).debug("Signature is valid");
+
             final String paymentStatus = ipn.getIpnValue("payment_status");
 
             final boolean settled = "Completed".equals(paymentStatus);
 
             return settled ? CallbackResult.OK : CallbackResult.UNSETTLED;
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return CallbackResult.FAILED;
 
