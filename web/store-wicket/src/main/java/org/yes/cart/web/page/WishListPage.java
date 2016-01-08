@@ -42,6 +42,9 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  *
  * Customer self care page to view orders, wish list, etc.
@@ -108,11 +111,20 @@ public class WishListPage extends AbstractWebPage {
         }
 
 
+        String safePublicKey = publicKey;
+        if (StringUtils.isNotBlank(publicKey)) {
+            try {
+                safePublicKey = URLEncoder.encode(publicKey, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                // nothing
+            }
+        }
+
         add(new FeedbackPanel(FEEDBACK));
         add(
                 new WishListView(WISHLIST_PANEL, new Model<String>(email), new Model<String>(CustomerWishList.SIMPLE_WISH_ITEM), new Model<String>(tag))
                     .setVisible(customer != null)
-                    .add(new AttributeModifier("data-publickey", publicKey))
+                    .add(new AttributeModifier("data-publickey", safePublicKey))
         );
         add(new StandardFooter(FOOTER));
         add(new StandardHeader(HEADER));
