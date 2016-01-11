@@ -17,6 +17,7 @@
 package org.yes.cart.web.page.payment.callback;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -34,11 +35,13 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.util.HttpUtil;
-import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Just show the result of payment operation for
@@ -56,6 +59,9 @@ public class ResultPage extends AbstractWebPage {
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     protected ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct page.
@@ -93,40 +99,46 @@ public class ResultPage extends AbstractWebPage {
 
         final boolean doCleanCart;
 
+        final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderNum);
+        final Map<String, Object> contentParams = new HashMap<>();
+        contentParams.put("order", customerOrder);
+        contentParams.putAll(getWicketUtil().pageParametesAsMap(params));
+
         if (StringUtils.isNotBlank(status)) {
             // Trust the return page as chances are the actual payment callback has not yet happened
             if ("ok".equals(status)) {
                 doCleanCart = true;
-                info(getLocalizer().getString("orderSuccess", this));
+                //info(getLocalizer().getString("orderSuccess", this));
             } else if ("cancel".equals(status)) {
                 doCleanCart = true;
-                error(getLocalizer().getString("orderErrorCancelled", this));
+                //error(getLocalizer().getString("orderErrorCancelled", this));
             } else {
                 doCleanCart = false; // no payment so leave the cart to re-try
-                error(getLocalizer().getString("paymentWasFailed", this));
+                //error(getLocalizer().getString("paymentWasFailed", this));
             }
         } else {
             // Try to get info from the order
-            final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderNum);
             if (customerOrder != null) {
                 if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(customerOrder.getOrderStatus())
                         || CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(customerOrder.getOrderStatus())) {
                     doCleanCart = true;
-                    error(getLocalizer().getString("orderErrorCancelled", this));
+                    //error(getLocalizer().getString("orderErrorCancelled", this));
                 } else {
                     // Could be paid or pending callback, so just display success
                     doCleanCart = true;
-                    info(getLocalizer().getString("orderSuccess", this));
+                    //info(getLocalizer().getString("orderSuccess", this));
                 }
             } else {
                 doCleanCart = false; // no order for cart so don't clean
-                error(getLocalizer().getString("orderErrorNotFound", this));
+                //error(getLocalizer().getString("orderErrorNotFound", this));
             }
         }
 
         if (doCleanCart) {
             cleanCart();
         }
+        add(new Label("resultMessage", contentServiceFacade.getDynamicContentBody("resultpage_message",
+                ShopCodeContext.getShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false));
 
         super.onBeforeRender();
 

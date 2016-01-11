@@ -614,6 +614,176 @@ INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLAT
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10300, 10000, 0, 'Microsites', 'Microsites','include', 'SHOP10-10300');
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10400, 10300, 0, 'Main site', 'Main site','include', 'SHOP10-10400');
 
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10500, 10100, 0, 'Payment Result Page', 'Payment Result Page','include', 'SHOP10-10500');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID, URI) VALUES (10510, 10500, 0, 'Internal payment gateway', 'Internal payment gateway','dynocontent', 'SHOP10-10510', 'SHOP10_paymentpage_message');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12510,'CONTENT_BODY_en_1','
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Your order has been successfully created. You will receive confirmation by e-mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         An error occurred while trying to create your order. Please try again.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } %>
+<% } %>
+
+',10510,'12510_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12511,'CONTENT_BODY_ru_1','
+<h2>Оплата заказа</h2>
+
+<% if (result) { %>
+   <p>
+      Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } %>
+<% } %>
+
+',10510,'12511_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12513,'CONTENT_BODY_uk_1','
+<h2>Оплата замовлення</h2>
+
+<% if (result) { %>
+   <p>
+      Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } %>
+<% } %>
+
+',10510,'12513_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12514,'CONTENT_BODY_de_1','
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } %>
+<% } %>
+
+',10510,'12514_CAV');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID, URI) VALUES (10520, 10500, 0, 'External payment gateway', 'External payment gateway','dynocontent', 'SHOP10-10520', 'SHOP10_resultpage_message');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12520,'CONTENT_BODY_en_1','
+<h2>Payment result</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Order successfully placed</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+<% } else { %>
+	<p>Errors in payment</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+<% } %>
+
+',10520,'12520_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12521,'CONTENT_BODY_ru_1','
+<h2>Результат оплаты</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Заказ успешно оформлен</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+<% } else { %>
+	<p>Ошибки при оплате</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+<% } %>
+
+',10520,'12521_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12522,'CONTENT_BODY_uk_1','
+<h2>Результат оплати</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Замовлення успішно оформлене</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+<% } else { %>
+	<p>Помилка при оплаті</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+<% } %>
+
+',10520,'12522_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12523,'CONTENT_BODY_de_1','
+<h2>Resultat des Zahlungsvorgangs</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Bestellung erfolgreich getätigt</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+<% } else { %>
+	<p>Fehler bei der Zahlung</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+<% } %>
+
+',10520,'12523_CAV');
+
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10400, 0, 'License', 'License Page','content', 'License','license');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi
 

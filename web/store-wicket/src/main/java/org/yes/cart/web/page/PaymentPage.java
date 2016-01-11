@@ -25,7 +25,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.https.RequireHttps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -40,6 +39,7 @@ import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -47,6 +47,7 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -101,6 +102,8 @@ public class PaymentPage extends AbstractWebPage {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     private  boolean result;
 
@@ -117,6 +120,8 @@ public class PaymentPage extends AbstractWebPage {
         addOrReplace(
                 new FeedbackPanel(FEEDBACK));
 
+        final Map<String, Object> resultParam = new HashMap<String, Object>();
+
         try {
 
             final Map param =  getWicketUtil().getHttpServletRequest().getParameterMap();
@@ -127,28 +132,37 @@ public class PaymentPage extends AbstractWebPage {
             final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
             if (cart.getCartItemsCount() > 0) {
-                result = paymentProcessFacade.pay(cart, mparam);
-                if (result) {
-                    addOrReplace(createPositiveResultFragment());
 
-                } else {
-                    addOrReplace(createNegativePaymentResultFragment());
-                }
+                result = paymentProcessFacade.pay(cart, mparam);
+                resultParam.put("order", checkoutServiceFacade.findByReference(cart.getGuid()));
+                resultParam.put("result", result);
+
             } else {
-               addOrReplace(createNeutralResultFragment());
+                resultParam.put("result", false);
             }
 
 
         } catch (OrderItemAllocationException e) {
 
-            addOrReplace(createNegativeItemAllocationResultFragment(e.getProductSkuCode()));
+            final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(e.getProductSkuCode());
+
+            resultParam.put("product", getI18NSupport().getFailoverModel(productSku.getDisplayName(), productSku.getName()).getValue(getLocale().getLanguage()));
+            resultParam.put("sku", e.getProductSkuCode());
+            resultParam.put("result", false);
+            resultParam.put("missingStock", e.getProductSkuCode());
+            resultParam.put("exception", null);
             result = false;
 
         } catch (OrderException e) {
 
-            addOrReplace(createNegativePaymentResultFragment());
+            resultParam.put("result", false);
+            resultParam.put("exception", e.getMessage());
+            resultParam.put("missingStock", null);
             result = false;
         }
+
+        addOrReplace(new Label("paymentMessage", contentServiceFacade.getDynamicContentBody("paymentpage_message",
+                ShopCodeContext.getShopId(), getLocale().getLanguage(), resultParam)).setEscapeModelStrings(false));
 
         if (result) {
             shoppingCartCommandFactory.execute(
