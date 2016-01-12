@@ -94,7 +94,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     public Address getAddress(final Customer customer, final String addrId, final String addressType) {
         long pk;
         try {
-            pk = NumberUtils.createLong(addrId);
+            pk = NumberUtils.toLong(addrId);
         } catch (NumberFormatException nfe) {
             pk = 0;
         }
