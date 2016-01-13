@@ -16,26 +16,25 @@
 
 package org.yes.cart.web.page.component.shipping;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
-import org.yes.cart.web.page.component.util.CarrierRenderer;
-import org.yes.cart.web.page.component.util.CarrierSlaRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
@@ -65,27 +64,12 @@ public class ShippingView extends BaseComponent {
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     private Carrier carrier;
 
     private CarrierSla carrierSla;
-
-
-    /**
-     * Restore carrier by sla from shopping cart into current model.
-     *
-     * @param carriers list of carriers
-     */
-    private void restoreCarrierSla(final List<Carrier> carriers) {
-
-        final Pair<Carrier, CarrierSla> selection =
-                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), carriers);
-
-        setCarrier(selection.getFirst());
-        setCarrierSla(selection.getSecond());
-
-    }
-
 
     /**
      * Construct shipping panel.
@@ -96,23 +80,33 @@ public class ShippingView extends BaseComponent {
 
         super(id);
 
-        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart());
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getShoppingContext().getCustomerEmail());
 
-        restoreCarrierSla(carriers);
+        final Map<String, Object> contentParams = new HashMap<>();
+        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart());
+        final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
+        for (Carrier carrier : carriers) {
+            carrierSlas.addAll(carrier.getCarrierSla());
+        }
+
+        // Restore carrier by sla from shopping cart into current model.
+        final Pair<Carrier, CarrierSla> selection =
+                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), carriers);
+
+        setCarrier(selection.getFirst());
+        setCarrierSla(selection.getSecond());
 
         final Form form = new StatelessForm(SHIPPING_FORM);
 
-        final DropDownChoice<CarrierSla> carrierSlaChoice = new DropDownChoice<CarrierSla>(
+        final Component shippingSelector = new RadioGroup<CarrierSla>(
                 CARRIER_SLA_LIST,
-                new PropertyModel<CarrierSla>(this, "carrierSla"),
-                getCarrierSlas()) {
+                new PropertyModel<CarrierSla>(this, "carrierSla")) {
 
-            @Override
-            protected void onSelectionChanged(final CarrierSla carrierSla) {
+            /** {@inheritDoc} */
+            protected void onSelectionChanged(final Object descriptor) {
                 super.onSelectionChanged(carrierSla);
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getShoppingContext().getCustomerEmail());
                 final Address billingAddress;
                 final Address shippingAddress;
                 if (customer != null &&
@@ -165,65 +159,36 @@ public class ShippingView extends BaseComponent {
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                 addPriceView(form);
-
             }
 
-            /** {@inheritDoc} */
             @Override
             protected boolean wantOnSelectionChangedNotifications() {
                 return true;
             }
+        }.add(
+                new ListView<CarrierSla>("shippingList", carrierSlas) {
+                    protected void populateItem(final ListItem<CarrierSla> shippingItem) {
+                        shippingItem.add(new Radio<CarrierSla>("shippingLabel", new Model<CarrierSla>(shippingItem.getModelObject())));
+                        shippingItem.add(new Label("shippingName", shippingItem.getModelObject().getCarrier().getName() +
+                                ", " + shippingItem.getModelObject().getName()));
 
-            /** {@inheritDoc} */
-            protected CharSequence getDefaultChoice(final String selectedValue) {
-                return super.getDefaultChoice(carrierSla == null ? "" : selectedValue);
-            }
+                        final boolean infoVisible = shippingItem.getModelObject().equals(carrierSla);
 
-        };
+                        contentParams.put("cart", cart);
+                        contentParams.put("carrierSla", carrierSla);
 
-        carrierSlaChoice.setChoiceRenderer(new CarrierSlaRenderer(this)).setRequired(true);
-
-        form.addOrReplace(carrierSlaChoice);
-
-
-        form.add(
-
-                new DropDownChoice<Carrier>(CARRIER_LIST, new PropertyModel<Carrier>(this, "carrier"), carriers) {
-
-                    @Override
-                    protected void onSelectionChanged(final Carrier carrier) {
-
-                        super.onSelectionChanged(carrier);
-
-                        setCarrierSla(null);
-
-                        carrierSlaChoice.setChoices((List) null);
-
-                        carrierSlaChoice.setChoices(new ArrayList<CarrierSla>(carrier.getCarrierSla()));
-
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
-                                (Map) Collections.singletonMap(
-                                        ShoppingCartCommand.CMD_SETCARRIERSLA,
-                                        null)
-                        );
-
-                        addPriceView(form);
+                        shippingItem.add(new Label("shippingInfo", contentServiceFacade.getDynamicContentBody("checkout_shipping_"
+                                        + shippingItem.getModelObject().getCarrierslaId(),
+                                ShopCodeContext.getShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false).setVisible(infoVisible));
 
                     }
+                });
 
-                    @Override
-                    protected boolean wantOnSelectionChangedNotifications() {
-                        return true;
-                    }
-                }.setChoiceRenderer(new CarrierRenderer(this)).setRequired(true)
-
-        );
-
+        form.addOrReplace(shippingSelector);
 
         addPriceView(form);
 
         add(form);
-
 
     }
 

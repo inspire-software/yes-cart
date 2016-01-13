@@ -23,29 +23,21 @@
             <h2><wicket:message key="carrierSelect">[Select Carrier and SLA]</wicket:message></h2>
         </div>
 
-        <div class="form-group">
-            <label for="selectCarrier" class="control-label col-xs-12 col-sm-2">
-                <wicket:message key="carrier">[Carrier]</wicket:message>
-            </label>
-            <div class="col-xs-12 col-sm-8">
-                <select wicket:id="carrier" class="form-control" id="selectCarrier"/>
+        <div class="clearfix"></div>
+        <div wicket:id="carrierSla" class="col-xs-12 no-padding form-group">
+            <div wicket:id="shippingList" class="radio">
+                <label class="radio"><input type="radio" wicket:id="shippingLabel">
+                    <span wicket:id="shippingName">[line 1]</span>
+                </label>
+                <span wicket:id="shippingInfo"></span>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="selectSla" class="control-label col-xs-12 col-sm-2">
-                <wicket:message key="carrierSla">[Carrier SLA]</wicket:message>
-            </label>
-            <div class="col-xs-12 col-sm-8">
-                <select wicket:id="carrierSla" class="form-control" id="selectSla"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-xs-12 col-sm-2">
+        <div class="form-group shipping-cost">
+            <label class="control-label col-xs-12">
                 <wicket:container wicket:id="deliveryCost">[Delivery cost]</wicket:container>
             </label>
-            <div class="col-xs-12 col-sm-8">
+            <div class="col-xs-12">
                 <wicket:container wicket:id="priceView">
                     [price]
                 </wicket:container>

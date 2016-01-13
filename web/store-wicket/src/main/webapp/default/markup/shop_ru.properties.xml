@@ -364,7 +364,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Перевозчик</entry>
     <entry key="carrierSla">Метод доставки</entry>
-    <entry key="carrierSelect">Выберите перевозчика и метод доставки</entry>
+    <entry key="carrierSelect">Выберите метод доставки</entry>
 
     <!-- Currency -->
     <entry key="currency">Валюта</entry>

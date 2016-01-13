@@ -364,7 +364,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Carrier</entry>
     <entry key="carrierSla">Shipping method</entry>
-    <entry key="carrierSelect">Select carrier and shipping method</entry>
+    <entry key="carrierSelect">Select shipping method</entry>
 
     <!-- Currency -->
     <entry key="currency">Currency</entry>

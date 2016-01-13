@@ -364,7 +364,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Versender</entry>
     <entry key="carrierSla">Versandart</entry>
-    <entry key="carrierSelect">Wählen Sie den Versender und Versandart</entry>
+    <entry key="carrierSelect">Wählen Sie Versandart</entry>
 
     <!-- Currency -->
     <entry key="currency">Währung</entry>
