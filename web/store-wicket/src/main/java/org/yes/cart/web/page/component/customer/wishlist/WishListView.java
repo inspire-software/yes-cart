@@ -30,7 +30,6 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductPriceModel;
-import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.MoneyUtils;
@@ -234,55 +233,36 @@ public class WishListView extends AbstractProductSearchResultList {
 
     private PriceView getPriceView(final ProductSearchResultDTO product, final CustomerWishList itemData) {
 
-        final SkuPrice priceNow = getSkuPrice(product.getDefaultSkuCode(), itemData.getQuantity());
-        final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
-
-        final String addedPriceCurr = itemData.getRegularPriceCurrencyWhenAdded();
-        final Pair<BigDecimal, BigDecimal> price;
-        String priceInfo = "";
-        if (isPriceNowAvailable) {
-            if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
-                final BigDecimal addedPrice = itemData.getRegularPriceWhenAdded();
-                final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
-                if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
-                    // no change
-                    if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
-                        price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
-                        priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Serializable>(new ValueMap(
-                                Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice).toPlainString())
-                        )));
-                    } else {
-                        // not on sale
-                        price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
-                    }
-                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
-                    // price dropped since added
-                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
-                    priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Serializable>(new ValueMap(
-                            Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).toPlainString())
-                    )));
-                } else {
-                    // price gone up
-                    price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
-                    priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Serializable>(new ValueMap(
-                            Collections.singletonMap("delta", MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate().toPlainString())
-                    )));
-                }
-            } else {
-                // no comparative price - different currency
-                price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
-            }
-        } else {
-            // Item is not priced now so it cannot be bought
-            price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
-        }
-
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, product.getDefaultSkuCode(), BigDecimal.ONE, price.getFirst(), price.getSecond());
+        final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndDelta = productServiceFacade.getSkuPrice(cart, itemData);
+        final ProductPriceModel model = modelAndDelta.getFirst();
+        final CustomerWishList.PriceChange change = modelAndDelta.getSecond();
+
+        String priceInfo = "";
+        switch (change.getType()) {
+            case ONSALE:
+                priceInfo = getLocalizer().getString("wishListPriceOnSaleNow", this, new Model<Serializable>(new ValueMap(
+                        Collections.singletonMap("delta", change.getDelta().toPlainString())
+                )));
+                break;
+            case DECREASED:
+                priceInfo = getLocalizer().getString("wishListPriceDecreased", this, new Model<Serializable>(new ValueMap(
+                        Collections.singletonMap("delta", change.getDelta().toPlainString())
+                )));
+                break;
+            case INCRSEASED:
+                priceInfo = getLocalizer().getString("wishListPriceIncreased", this, new Model<Serializable>(new ValueMap(
+                        Collections.singletonMap("delta", change.getDelta().toPlainString())
+                )));
+                break;
+            default:
+                break;
+        }
 
         final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
 
+        final boolean isPriceNowAvailable = model.getRegularPrice() != null && MoneyUtils.isFirstBiggerThanSecond(model.getRegularPrice(), BigDecimal.ZERO);
         priceView.setVisible(isPriceNowAvailable);
         return priceView;
     }
@@ -306,28 +286,6 @@ public class WishListView extends AbstractProductSearchResultList {
         final PageParameters params = new PageParameters();
         params.add(WebParametersKeys.SKU_ID, itemData.getSkus().getSkuId());
         return links.newAddToCartLink(linkId, product.getDefaultSkuCode(), qty, params);
-    }
-
-
-
-    /**
-     * Get product or his sku price.
-     * In case of multisku product the minimal regular price from multiple sku was used for single item.
-     *
-     *
-     * @param firstAvailableSkuCode first available sku code.
-     * @param quantity quantity of wish list item
-     *
-     * @return {@link org.yes.cart.domain.entity.SkuPrice}
-     */
-    private SkuPrice getSkuPrice(final String firstAvailableSkuCode, final BigDecimal quantity) {
-        return productServiceFacade.getSkuPrice(
-                null,
-                firstAvailableSkuCode,
-                quantity,
-                ApplicationDirector.getShoppingCart().getCurrencyCode(),
-                ApplicationDirector.getCurrentShop().getShopId()
-        );
     }
 
 }

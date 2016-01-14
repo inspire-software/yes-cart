@@ -252,6 +252,19 @@ public interface ProductServiceFacade {
     SkuPrice getSkuPrice(Long productId, String skuCode, BigDecimal quantity, String currency, long shopId);
 
     /**
+     * Get price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param cart      current cart
+     * @param item      item to create price model for
+     *
+     * @return price (or blank object)
+     */
+    Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart, CustomerWishList item);
+
+
+    /**
      * Get currently active SKU price (or blank object) with respect to current shop tax display settings.
      *
      * If tax info is enabled then prices can shown as net or gross.
