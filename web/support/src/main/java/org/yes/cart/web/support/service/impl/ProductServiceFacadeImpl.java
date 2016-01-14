@@ -443,14 +443,17 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     }
 
-
     /**
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+        return getSkuPrice(cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), item, total);
+    }
 
-        final long shopId = cart.getShoppingContext().getShopId();
-        final String currency = cart.getCurrencyCode();
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getSkuPrice(long shopId, String currency, final CartItem item, boolean total) {
 
         final Shop shop = shopService.getById(shopId);
 
