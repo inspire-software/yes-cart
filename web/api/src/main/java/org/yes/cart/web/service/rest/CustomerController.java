@@ -2275,7 +2275,7 @@ public class CustomerController {
             final List<OrderRO> ros = new ArrayList<OrderRO>();
             for (final CustomerOrder order : orders) {
 
-                final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+                final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
                 final String cartCurrencySymbol = symbol.getFirst();
                 final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
 

@@ -2316,7 +2316,7 @@ public class CartController {
             checkoutServiceFacade.update(order);
 
             final Total total = checkoutServiceFacade.getOrderTotal(order);
-            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+            final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
             final String cartCurrencySymbol = symbol.getFirst();
             final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
 
