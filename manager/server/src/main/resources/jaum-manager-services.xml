@@ -23,7 +23,7 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/mvc 
-                           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+                           http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
                            http://www.springframework.org/schema/context 
                            http://www.springframework.org/schema/context/spring-context-3.0.xsd
                            http://www.springframework.org/schema/security
@@ -32,15 +32,19 @@
 
 
   <!--    ROLE_SMADMIN    ROLE_SMSHOPADMIN    ROLE_SMWAREHOUSEADMIN    ROLE_SMCALLCENTER    -->
-  <mvc:annotation-driven />
+  <!--<mvc:annotation-driven />-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="objectMapper" ref="dtoObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
-  <mvc:annotation-driven>
-    <mvc:argument-resolvers>
-      <bean class="org.yes.bla-bla-bla.ModelAttributeMethodProcessorImpl">
-        <constructor-arg name="annotationNotRequired" value="true"/>
-      </bean>
-    </mvc:argument-resolvers>
-  </mvc:annotation-driven>
+    <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
+
 
   <!--
    <mvc:annotation-driven>

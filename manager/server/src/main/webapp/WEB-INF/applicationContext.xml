@@ -41,7 +41,7 @@
         <!--<security:http-basic />-->
         <security:form-login
                  login-page="/app/pages/login"
-                 default-target-url="/app/pages/onemore"
+                 default-target-url="/app/pages/index"
                  authentication-failure-url="/login?error"
                  username-parameter="j_username"
                  password-parameter="j_password" />

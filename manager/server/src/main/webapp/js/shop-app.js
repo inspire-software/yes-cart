@@ -1,6 +1,6 @@
 angular.module('shopApp', ['ngResource'])
 
-    .controller('ShopController', ['$scope', '$routeParams', 'ShopService',  function (shopResource, $scope, $routeParams ,ShopService, shopResource) {
+    .controller('ShopController', ['$scope', '$routeParams', 'ShopService',  function ($scope, $routeParams ,ShopService) {
         var self = this;
         self.shops = [];
         self.shop = {shopId: null, code: '', name: '', description: ''};
@@ -9,19 +9,15 @@ angular.module('shopApp', ['ngResource'])
             self.shop = {};
             $scope.shop = {};
         } else if (!isNaN($routeParams.storeId)) {
-
-            $scope.shop = shopResource.get({storeId: $routeParams.storeId});
-            this.shop = $scope.shop;
-
-            //ShopService.fetchOne($routeParams.storeId).then(
-            //    function (d) {
-            //        self.shop = d;
-            //        $scope.shop = d;
-            //    },
-            //    function (errResponse) {
-            //        console.error('Error while fetching Shops');
-            //    }
-            //);
+            ShopService.fetchOne($routeParams.storeId).then(
+                function (d) {
+                    self.shop = d;
+                    $scope.shop = d;
+                },
+                function (errResponse) {
+                    console.error('Error while fetching Shops');
+                }
+            );
         }
 
         self.fetchAllShops = function () {
@@ -122,9 +118,6 @@ angular.module('shopApp', ['ngResource'])
          };*/
 
     }])
-    .factory('shopResource', function($resource){
-        return $resource('../../service/shop/:shopId', {shopId: '@shopId'});
-    })
     .
     factory('ShopService', ['$http', '$resource', '$q', function ($http, $resource, $q) {
 
@@ -141,9 +134,6 @@ angular.module('shopApp', ['ngResource'])
                     }
                 );
             },
-
-
-
             fetchOne: function (id) {
                 return $http.get('../../service/shop/' + id)
                     .then(
@@ -156,12 +146,6 @@ angular.module('shopApp', ['ngResource'])
                     }
                 );
             },
-            fetchOne2: function (params) {
-                return $resource('../../service/shop/:shopId',
-                    {shopId: '@shopId'}).get(params)
-            },
-
-
             createShop: function(shop){
                 return $http.post('../../service/shop/', shop)
                     .then(
@@ -188,6 +172,20 @@ angular.module('shopApp', ['ngResource'])
                 );
             },
 
+            /*fetchOne: function (id) {
+                return $resource('../../service/shop/:shopId', { shopId: '@shopId' }).get({ shopId: id }).$promise
+                    .then(
+                    function (response) {
+                        var ddd = response.data;
+                        console.info(">>>>>>>>>>>>>>>>>> " + ddd);
+                        return response.data;
+                    },
+                    function (errResponse) {
+                        console.error('Error while fetching shop');
+                        return $q.reject(errResponse);
+                    }
+                );
+            },*/
 
 
             /* fetchAll: function() {
