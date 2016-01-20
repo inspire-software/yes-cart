@@ -113,7 +113,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
                 log.info("Inventory changed for {} preorder/backorder SKUs: {}", waitingSkus.size(), waitingSkus);
 
-                final int inventoryWaiting = processAwaitingOrders(log, productSkus,
+                final int inventoryWaiting = processAwaitingOrders(log, waitingSkus,
                         CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
                         OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
 
