@@ -9,6 +9,7 @@
   </parent>
   <groupId>org.yes</groupId>
   <artifactId>jam</artifactId>
+  <packaging>war</packaging>
   <version>3.1.0-SNAPSHOT</version>
   <name>jam</name>
   <url>http://maven.apache.org</url>
@@ -16,11 +17,250 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
+
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <groupId>org.yes</groupId>
+      <artifactId>jam-vo</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>jam-services</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-dto</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-module-orderstate</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-module-cluster-ws</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-module-reports</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-module-impex</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core-module-job</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>core</artifactId>
+      <version>${project.parent.version}</version>
+      <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>persistence</artifactId>
+      <version>${project.parent.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.yes</groupId>
+      <artifactId>domain-api</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.mail</groupId>
+      <artifactId>mail</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context-support</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-web</artifactId>
+      <version>${spring-security.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-config</artifactId>
+      <version>${spring-security.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-frontend-jaxws</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-transports-http</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-ws-security</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+
+
   </dependencies>
+
+
+
+  <build>
+
+    <filters>
+      <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+      <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
+    </filters>
+
+    <testResources>
+      <testResource>
+        <directory>../core/src/test/resources</directory>
+        <includes>
+          <include>ehcache.xml</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>../../payment-api/src/test/resources</directory>
+        <includes>
+          <include>**/test-payment-api.xml</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>../../core-modules/core-module-payment-base/src/test/resources</directory>
+        <includes>
+          <include>**/test-core-module-payment-base.xml</include>
+        </includes>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </testResource>
+    </testResources>
+
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>${basedir}/../../env/maven/${env}</directory>
+        <includes>
+          <include>ehcache.xml</include>
+        </includes>
+      </resource>
+    </resources>
+
+
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <configuration>
+            <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
+            <nonFilteredFileExtensions>
+              <!-- default value contains jpg,jpeg,gif,bmp,png -->
+              <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+            </nonFilteredFileExtensions>
+            <webResources>
+              <resource>
+                <filtering>true</filtering>
+                <directory>src/main/webapp</directory>
+                <includes>
+                  <include>**/*.xml</include>
+                  <include>default/**</include>
+                </includes>
+              </resource>
+              <resource>
+                <filtering>false</filtering>
+                <directory>../client/target</directory>
+                <includes>
+                  <include>en_US/**</include>
+                  <include>ru_RU/**</include>
+                  <include>uk_UK/**</include>
+                  <include>de_DE/**</include>
+                </includes>
+              </resource>
+              <resource>
+                <filtering>false</filtering>
+                <directory>../../theme/mail/src/main/resources</directory>
+              </resource>
+              <resource>
+                <filtering>false</filtering>
+                <directory>../../theme/reports/src/main/resources</directory>
+              </resource>
+            </webResources>
+            <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
+            <!--<packagingExcludes>WEB-INF/web.xml</packagingExcludes>-->
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

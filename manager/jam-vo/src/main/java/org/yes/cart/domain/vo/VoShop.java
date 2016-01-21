@@ -2,7 +2,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.apache.commons.lang3.builder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created by igor on 31.12.2015.
@@ -57,5 +57,13 @@ public class VoShop {
         this.description = description;
     }
 
-
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("shopId", shopId)
+            .append("code", code)
+            .append("name", name)
+            .append("description", description)
+            .build();
+    }
 }

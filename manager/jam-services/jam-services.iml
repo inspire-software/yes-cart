@@ -11,6 +11,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="jam-vo" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.4" level="project" />
     <orderEntry type="library" name="Maven: com.inspire-software.lib.dto.geda:geda.core:3.1.0" level="project" />
     <orderEntry type="module" module-name="core" />
     <orderEntry type="module" module-name="payment-api" />

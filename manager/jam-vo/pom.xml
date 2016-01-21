@@ -17,6 +17,12 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.4</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.inspire-software.lib.dto.geda</groupId>
       <artifactId>geda.core</artifactId>
       <version>${GeDA.version}</version>
@@ -47,5 +53,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>org.jmock</groupId>
+      <artifactId>jmock-junit4</artifactId>
+      <version>2.5.1</version>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 </project>
