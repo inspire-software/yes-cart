@@ -237,7 +237,7 @@
                   <include>default/**</include>
                 </includes>
               </resource>
-              <resource>
+              <!--resource>
                 <filtering>false</filtering>
                 <directory>../client/target</directory>
                 <includes>
@@ -246,7 +246,7 @@
                   <include>uk_UK/**</include>
                   <include>de_DE/**</include>
                 </includes>
-              </resource>
+              </resource-->
               <resource>
                 <filtering>false</filtering>
                 <directory>../../theme/mail/src/main/resources</directory>

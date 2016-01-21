@@ -1,3 +1,7 @@
+target/
+
+*.iml
+
 derby.log
 
 derbyinit.log
