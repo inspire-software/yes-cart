@@ -42,14 +42,14 @@ public class CsvImportTupleImplTest {
 
         mockery.checking(new Expectations() {{
             allowing(column).getColumnIndex(); will(returnValue(0));
-            allowing(column).getValue("A''''''BC", adapter); will(returnValue("A''''''BC"));
-            allowing(column).getGroupCount("A''''''BC"); will(returnValue(1));
+            allowing(column).getValue("A'''BC", adapter); will(returnValue("A'''BC"));
+            allowing(column).getGroupCount("A'''BC"); will(returnValue(1));
         }});
 
         final String[] line = new String[] { "A'''BC", "123" };
         final CsvImportTupleImpl tuple = new CsvImportTupleImpl("file", 1, line);
 
-        assertEquals(tuple.getColumnValue(column, adapter), "A''''''BC");
+        assertEquals(tuple.getColumnValue(column, adapter), "A'''BC");
 
         mockery.assertIsSatisfied();
 

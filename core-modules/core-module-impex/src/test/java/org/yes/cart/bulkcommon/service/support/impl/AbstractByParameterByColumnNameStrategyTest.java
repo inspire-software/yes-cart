@@ -50,12 +50,13 @@ public class AbstractByParameterByColumnNameStrategyTest {
     public void testReplace() {
         final AbstractByParameterByColumnNameStrategy strategy = new AbstractByParameterByColumnNameStrategy() {
             @Override
-            protected void addParameter(final int index,
-                                        final Object param,
+            protected boolean addParameter(final int index,
+                                        final boolean wrappedInQuotes, final Object param,
                                         final StringBuilder query,
                                         final List<Object> params) {
                 query.append('?').append(index);
                 params.add(param);
+                return true;
             }
 
             public LookUpQuery getQuery(final ImpExDescriptor descriptor,
@@ -91,7 +92,7 @@ public class AbstractByParameterByColumnNameStrategyTest {
                 "select * from Entity e where e.parentId = {masterObjectId} and e.code = '{code}' ",
                 query, params, descriptor, master, tuple, adapter);
 
-        assertEquals(query.toString(), "select * from Entity e where e.parentId = ?1 and e.code = '?2' ");
+        assertEquals(query.toString(), "select * from Entity e where e.parentId = ?1 and e.code = ?2 ");
         assertEquals(params.size(), 2);
         assertEquals(params.get(0), Long.valueOf(10L));
         assertEquals(params.get(1), "A'''BC"); // escaped value

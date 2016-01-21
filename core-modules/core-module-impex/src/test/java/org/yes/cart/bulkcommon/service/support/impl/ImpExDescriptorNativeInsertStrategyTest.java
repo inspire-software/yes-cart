@@ -62,18 +62,22 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId(); will(returnValue(10L));
-            one(descriptor).getColumn("code"); will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue("A''BC"));
+            one(master).getId();
+            will(returnValue(10L));
+            one(descriptor).getColumn("code");
+            will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter);
+            will(returnValue("A''BC"));
         }});
 
         final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
                 "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = '{code}' ");
 
         assertNotNull(query);
-        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = 'A''BC' ");
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = ?1 ");
         assertNotNull(query.getParameters());
-        assertEquals(query.getParameters().length, 0);
+        assertEquals(query.getParameters().length, 1);
+        assertEquals(query.getParameters()[0], "A''BC");
 
         mockery.assertIsSatisfied();
 
@@ -98,9 +102,12 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
 
         mockery.checking(new Expectations() {{
-            one(master).getId(); will(returnValue(10L));
-            one(descriptor).getColumn("code"); will(returnValue(codeColumn));
-            one(tuple).getColumnValue(codeColumn, adapter); will(returnValue(null));
+            one(master).getId();
+            will(returnValue(10L));
+            one(descriptor).getColumn("code");
+            will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter);
+            will(returnValue(null));
         }});
 
         final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
@@ -180,6 +187,123 @@ public class ImpExDescriptorNativeInsertStrategyTest {
 
         assertNotNull(query);
         assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = NULL ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 0);
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testGetQueryParenthesisValue() throws Exception {
+
+        final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId();
+            will(returnValue(10L));
+            one(descriptor).getColumn("code");
+            will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter);
+            will(returnValue("some (code)"));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = '{code}' ");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = ?1 ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 1);
+        assertEquals(query.getParameters()[0], "some (code)");
+
+        mockery.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testGetQueryCombinedValue() throws Exception {
+
+        final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId();
+            will(returnValue(10L));
+            one(descriptor).getColumn("code");
+            will(returnValue(codeColumn));
+            one(tuple).getColumnValue(codeColumn, adapter);
+            will(returnValue("some' code"));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "SELECT * FROM TENTITY e WHERE e.PARENT_ID = {masterObjectId} AND e.CODE = '{code}_combined' ");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "SELECT * FROM TENTITY e WHERE e.PARENT_ID = 10 AND e.CODE = 'some'' code_combined' ");
+        assertNotNull(query.getParameters());
+        assertEquals(query.getParameters().length, 0);
+
+        mockery.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testGetQueryPartialValue() throws Exception {
+
+        final ImpExDescriptorNativeInsertStrategy strategy = new ImpExDescriptorNativeInsertStrategy();
+
+        strategy.setProviders(new HashMap<String, LookUpQueryParameterStrategyValueProvider>() {{
+            put(LookUpQueryParameterStrategy.MASTER_ID, new MasterObjectIdLookUpQueryParameterStrategyValueProviderImpl());
+        }});
+        strategy.setDefaultProvider(new ColumnValueLookUpQueryParameterStrategyValueProviderImpl());
+
+
+        final Identifiable master = mockery.mock(Identifiable.class, "master");
+        final CsvImportDescriptor descriptor = mockery.mock(CsvImportDescriptor.class, "descriptor");
+        final CsvImportColumn codeColumn = mockery.mock(CsvImportColumn.class, "codeColumn");
+        final ImportTuple tuple = mockery.mock(ImportTuple.class, "tuple");
+        final ValueAdapter adapter = mockery.mock(ValueAdapter.class, "adapter");
+
+
+        mockery.checking(new Expectations() {{
+            one(master).getId();
+            will(returnValue(10L));
+        }});
+
+        final LookUpQuery query = strategy.getQuery(descriptor, master, tuple, adapter,
+                "\n                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '{masterObjectId}_CATDESC_en'");
+
+        assertNotNull(query);
+        assertEquals(query.getQueryString(), "\n                    DELETE FROM TCATEGORYATTRVALUE WHERE GUID = '10_CATDESC_en'");
         assertNotNull(query.getParameters());
         assertEquals(query.getParameters().length, 0);
 

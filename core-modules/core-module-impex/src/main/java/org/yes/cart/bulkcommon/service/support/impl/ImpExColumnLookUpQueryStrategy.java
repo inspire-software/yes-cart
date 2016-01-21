@@ -37,12 +37,14 @@ public class ImpExColumnLookUpQueryStrategy extends AbstractByParameterByColumnN
           implements LookUpQueryParameterStrategy {
 
     @Override
-    protected void addParameter(final int index,
-                                final Object param,
-                                final StringBuilder query,
-                                final List<Object> params) {
+    protected boolean addParameter(final int index,
+                                   final boolean wrappedInQuotes,
+                                    final Object param,
+                                    final StringBuilder query,
+                                    final List<Object> params) {
         query.append('?').append(index);
         params.add(param);
+        return true;
     }
 
     /** {@inheritDoc} */

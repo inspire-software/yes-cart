@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkimport.csv.impl;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkimport.csv.CsvImportDescriptor;
@@ -64,7 +63,7 @@ public class CsvImportTupleImpl implements CsvImportTuple {
         final int colIndex = column.getColumnIndex();
         String rawValue = null;
         if (colIndex > -1 && line != null && colIndex < line.length) {
-            rawValue = StringEscapeUtils.escapeSql(line[colIndex]);
+            rawValue = line[colIndex];
         }
         if (rawValue != null && column.getGroupCount(rawValue) > 1) {
             return column.getValues(rawValue, valueAdapter);
