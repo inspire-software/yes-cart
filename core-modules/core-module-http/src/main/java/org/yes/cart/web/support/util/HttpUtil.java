@@ -90,6 +90,7 @@ public class HttpUtil {
         return stringBuilder.toString();
     }
 
+
     /**
      * GET request parameters as map.
      *
@@ -100,6 +101,21 @@ public class HttpUtil {
      */
     public static Map<String, List<String>> getParameters(final String requestURL,
                                                           final Set<String> pathVariables) {
+        return getParameters(requestURL, pathVariables, false);
+    }
+
+    /**
+     * GET request parameters as map.
+     *
+     * @param requestURL request URL {@link HttpServletRequest#getRequestURL()}
+     * @param pathVariables path markers that should be identified as extra parameters
+     * @param removeDuplicates remove duplicate values
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> getParameters(final String requestURL,
+                                                          final Set<String> pathVariables,
+                                                          final boolean removeDuplicates) {
 
 
         final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
@@ -114,11 +130,17 @@ public class HttpUtil {
 
                 for (String pathItem : pathPairs) {
                     if (key != null) {
+                        final List<String> values;
                         if (!parameters.containsKey(key)) {
-                            parameters.put(key, new LinkedList<String>());
+                            values = new LinkedList<String>();
+                            parameters.put(key, values);
+                        } else {
+                            values = parameters.get(key);
                         }
                         final String value = URLDecoder.decode(pathItem, "UTF-8");
-                        parameters.get(key).add(value);
+                        if (!removeDuplicates || !values.contains(value)) {
+                            values.add(value);
+                        }
                         key = null;
                     } else if (pathVariables.contains(pathItem)) {
                         key = pathItem; // next path is value
@@ -132,11 +154,17 @@ public class HttpUtil {
                 for (String parameterPair : parameterPairs) {
                     final int idx = parameterPair.indexOf("=");
                     key = idx > 0 ? URLDecoder.decode(parameterPair.substring(0, idx), "UTF-8") : parameterPair;
+                    final List<String> values;
                     if (!parameters.containsKey(key)) {
-                        parameters.put(key, new LinkedList<String>());
+                        values = new LinkedList<String>();
+                        parameters.put(key, values);
+                    } else {
+                        values = parameters.get(key);
                     }
                     final String value = idx > 0 && parameterPair.length() > idx + 1 ? URLDecoder.decode(parameterPair.substring(idx + 1), "UTF-8") : null;
-                    parameters.get(key).add(value);
+                    if (!removeDuplicates || !values.contains(value)) {
+                        values.add(value);
+                    }
                 }
             }
 
@@ -158,11 +186,27 @@ public class HttpUtil {
     public static Map<String, List<String>> getParameters(final HttpServletRequest request,
                                                           final Set<String> pathVariables) {
 
+        return getParameters(request, pathVariables, false);
+    }
+
+    /**
+     * GET request parameters as map.
+     *
+     * @param request request
+     * @param pathVariables path markers that should be identified as extra parameters
+     * @param removeDuplicates remove duplicate values
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> getParameters(final HttpServletRequest request,
+                                                          final Set<String> pathVariables,
+                                                          final boolean removeDuplicates) {
+
         final String query = request.getQueryString();
         if (StringUtils.isNotBlank(query)) {
-            return getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables);
+            return getParameters(request.getRequestURL().toString().concat("?").concat(query), pathVariables, removeDuplicates);
         }
-        return getParameters(request.getRequestURL().toString(), pathVariables);
+        return getParameters(request.getRequestURL().toString(), pathVariables, removeDuplicates);
     }
 
     /**

@@ -130,6 +130,179 @@ public class HttpUtilTest {
 
     }
 
+    @Test
+    public void testGetParametersWithDuplicatesPreserve() throws Exception {
+
+        String request = "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
+
+        Map<String, List<String>> parameters;
+        Iterator<Map.Entry<String, List<String>>> parametersIt;
+        Map.Entry<String, List<String>> p1, p2, p3, p4;
+
+        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+
+        assertEquals(2, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("a", p1.getKey());
+        assertEquals(4, p1.getValue().size());
+        assertEquals("a1", p1.getValue().get(0));
+        assertEquals("a2", p1.getValue().get(1));
+        assertEquals("a1", p1.getValue().get(2));
+        assertEquals("a2", p1.getValue().get(3));
+
+        p2 = parametersIt.next();
+        assertEquals("b", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("b1", p2.getValue().get(0));
+        assertEquals("b1", p2.getValue().get(1));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+
+        assertEquals(3, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+        assertEquals("abc", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("a", p2.getKey());
+        assertEquals(4, p2.getValue().size());
+        assertEquals("a1", p2.getValue().get(0));
+        assertEquals("a2", p2.getValue().get(1));
+        assertEquals("a1", p2.getValue().get(2));
+        assertEquals("a2", p2.getValue().get(3));
+
+        p3 = parametersIt.next();
+        assertEquals("b", p3.getKey());
+        assertEquals(2, p3.getValue().size());
+        assertEquals("b1", p3.getValue().get(0));
+        assertEquals("b1", p3.getValue().get(1));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+
+        assertEquals(4, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+        assertEquals("abc", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("sku", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("xyz", p2.getValue().get(0));
+        assertEquals("xyz", p2.getValue().get(1));
+
+        p3 = parametersIt.next();
+        assertEquals("a", p3.getKey());
+        assertEquals(4, p3.getValue().size());
+        assertEquals("a1", p3.getValue().get(0));
+        assertEquals("a2", p3.getValue().get(1));
+        assertEquals("a1", p3.getValue().get(2));
+        assertEquals("a2", p3.getValue().get(3));
+
+        p4 = parametersIt.next();
+        assertEquals("b", p4.getKey());
+        assertEquals(2, p4.getValue().size());
+        assertEquals("b1", p4.getValue().get(0));
+        assertEquals("b1", p4.getValue().get(1));
+
+    }
+
+
+    @Test
+    public void testGetParametersWithDuplicatesRemove() throws Exception {
+
+        String request = "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz?a=a1&a=a2&b=b1&a=a1&a=a2&b=b1";
+
+        Map<String, List<String>> parameters;
+        Iterator<Map.Entry<String, List<String>>> parametersIt;
+        Map.Entry<String, List<String>> p1, p2, p3, p4;
+
+        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet(), true);
+
+        assertEquals(2, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("a", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("a1", p1.getValue().get(0));
+        assertEquals("a2", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("b", p2.getKey());
+        assertEquals(1, p2.getValue().size());
+        assertEquals("b1", p2.getValue().get(0));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")), true);
+
+        assertEquals(3, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(1, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+
+        p2 = parametersIt.next();
+        assertEquals("a", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("a1", p2.getValue().get(0));
+        assertEquals("a2", p2.getValue().get(1));
+
+        p3 = parametersIt.next();
+        assertEquals("b", p3.getKey());
+        assertEquals(1, p3.getValue().size());
+        assertEquals("b1", p3.getValue().get(0));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")), true);
+
+        assertEquals(4, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(1, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+
+        p2 = parametersIt.next();
+        assertEquals("sku", p2.getKey());
+        assertEquals(1, p2.getValue().size());
+        assertEquals("xyz", p2.getValue().get(0));
+
+        p3 = parametersIt.next();
+        assertEquals("a", p3.getKey());
+        assertEquals(2, p3.getValue().size());
+        assertEquals("a1", p3.getValue().get(0));
+        assertEquals("a2", p3.getValue().get(1));
+
+        p4 = parametersIt.next();
+        assertEquals("b", p4.getKey());
+        assertEquals(1, p4.getValue().size());
+        assertEquals("b1", p4.getValue().get(0));
+
+    }
+
 
     @Test
     public void testGetParameters2() throws Exception {
@@ -183,6 +356,180 @@ public class HttpUtilTest {
         assertEquals("b1", p3.getValue().get(0));
 
         parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+
+        assertEquals(4, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(1, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+
+        p2 = parametersIt.next();
+        assertEquals("sku", p2.getKey());
+        assertEquals(1, p2.getValue().size());
+        assertEquals("xyz", p2.getValue().get(0));
+
+        p3 = parametersIt.next();
+        assertEquals("a", p3.getKey());
+        assertEquals(2, p3.getValue().size());
+        assertEquals("a1", p3.getValue().get(0));
+        assertEquals("a2", p3.getValue().get(1));
+
+        p4 = parametersIt.next();
+        assertEquals("b", p4.getKey());
+        assertEquals(1, p4.getValue().size());
+        assertEquals("b1", p4.getValue().get(0));
+
+    }
+
+    @Test
+    public void testGetParameters2WithDuplicatesPreserve() throws Exception {
+
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        request.setQueryString("a=a1&a=a2&b=b1&a=a1&a=a2&b=b1");
+
+        Map<String, List<String>> parameters;
+        Iterator<Map.Entry<String, List<String>>> parametersIt;
+        Map.Entry<String, List<String>> p1, p2, p3, p4;
+
+        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet());
+
+        assertEquals(2, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("a", p1.getKey());
+        assertEquals(4, p1.getValue().size());
+        assertEquals("a1", p1.getValue().get(0));
+        assertEquals("a2", p1.getValue().get(1));
+        assertEquals("a1", p1.getValue().get(2));
+        assertEquals("a2", p1.getValue().get(3));
+
+        p2 = parametersIt.next();
+        assertEquals("b", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("b1", p2.getValue().get(0));
+        assertEquals("b1", p2.getValue().get(1));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")));
+
+        assertEquals(3, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+        assertEquals("abc", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("a", p2.getKey());
+        assertEquals(4, p2.getValue().size());
+        assertEquals("a1", p2.getValue().get(0));
+        assertEquals("a2", p2.getValue().get(1));
+        assertEquals("a1", p2.getValue().get(2));
+        assertEquals("a2", p2.getValue().get(3));
+
+        p3 = parametersIt.next();
+        assertEquals("b", p3.getKey());
+        assertEquals(2, p3.getValue().size());
+        assertEquals("b1", p3.getValue().get(0));
+        assertEquals("b1", p3.getValue().get(1));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")));
+
+        assertEquals(4, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+        assertEquals("abc", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("sku", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("xyz", p2.getValue().get(0));
+        assertEquals("xyz", p2.getValue().get(1));
+
+        p3 = parametersIt.next();
+        assertEquals("a", p3.getKey());
+        assertEquals(4, p3.getValue().size());
+        assertEquals("a1", p3.getValue().get(0));
+        assertEquals("a2", p3.getValue().get(1));
+        assertEquals("a1", p3.getValue().get(2));
+        assertEquals("a2", p3.getValue().get(3));
+
+        p4 = parametersIt.next();
+        assertEquals("b", p4.getKey());
+        assertEquals(2, p4.getValue().size());
+        assertEquals("b1", p4.getValue().get(0));
+        assertEquals("b1", p4.getValue().get(1));
+
+    }
+
+    @Test
+    public void testGetParameters2WithDuplicatesRemove() throws Exception {
+
+        MockHttpServletRequest request = new MockHttpServletRequest("GET", "/yes-shop/category/abc/sku/xyz/category/abc/sku/xyz");
+        request.setQueryString("a=a1&a=a2&b=b1&a=a1&a=a2&b=b1");
+
+        Map<String, List<String>> parameters;
+        Iterator<Map.Entry<String, List<String>>> parametersIt;
+        Map.Entry<String, List<String>> p1, p2, p3, p4;
+
+        parameters = HttpUtil.getParameters(request, Collections.<String>emptySet(), true);
+
+        assertEquals(2, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("a", p1.getKey());
+        assertEquals(2, p1.getValue().size());
+        assertEquals("a1", p1.getValue().get(0));
+        assertEquals("a2", p1.getValue().get(1));
+
+        p2 = parametersIt.next();
+        assertEquals("b", p2.getKey());
+        assertEquals(1, p2.getValue().size());
+        assertEquals("b1", p2.getValue().get(0));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Collections.singletonList("category")), true);
+
+        assertEquals(3, parameters.size());
+
+        // Make sure order is preserved!!!!
+        parametersIt = parameters.entrySet().iterator();
+
+        p1 = parametersIt.next();
+        assertEquals("category", p1.getKey());
+        assertEquals(1, p1.getValue().size());
+        assertEquals("abc", p1.getValue().get(0));
+
+        p2 = parametersIt.next();
+        assertEquals("a", p2.getKey());
+        assertEquals(2, p2.getValue().size());
+        assertEquals("a1", p2.getValue().get(0));
+        assertEquals("a2", p2.getValue().get(1));
+
+        p3 = parametersIt.next();
+        assertEquals("b", p3.getKey());
+        assertEquals(1, p3.getValue().size());
+        assertEquals("b1", p3.getValue().get(0));
+
+        parameters = HttpUtil.getParameters(request, new HashSet<String>(Arrays.asList("sku", "category")), true);
 
         assertEquals(4, parameters.size());
 
