@@ -209,6 +209,7 @@ public class HttpUtil {
         return getParameters(request.getRequestURL().toString(), pathVariables, removeDuplicates);
     }
 
+
     /**
      * GET and POST request parameters as map.
      *
@@ -220,19 +221,48 @@ public class HttpUtil {
     public static Map<String, List<String>> allParameters(final HttpServletRequest request,
                                                           final Set<String> pathVariables) {
 
-        final Map<String, List<String>> params = getParameters(request, pathVariables);
+        return allParameters(request, pathVariables, false);
+    }
+
+
+    /**
+     * GET and POST request parameters as map.
+     *
+     * @param request request
+     * @param pathVariables path markers that should be identified as extra parameters
+     * @param removeDuplicates remove duplicate values
+     *
+     * @return map of parameters (with preserved other)
+     */
+    public static Map<String, List<String>> allParameters(final HttpServletRequest request,
+                                                          final Set<String> pathVariables,
+                                                          final boolean removeDuplicates) {
+
+        final Map<String, List<String>> params = getParameters(request, pathVariables, removeDuplicates);
 
         for (final Map.Entry<String, Object> param : (Set<Map.Entry>) request.getParameterMap().entrySet()) {
 
             final String key = param.getKey();
+
+            final List<String> values;
             if (!params.containsKey(key)) {
-                params.put(key, new LinkedList<String>());
+                values = new LinkedList<String>();
+                params.put(key, values);
+            } else {
+                values = params.get(key);
             }
 
             if (param.getValue() instanceof String[]) {
-                params.get(key).addAll(Arrays.asList((String[]) param.getValue()));
+                for (final String value : (String[]) param.getValue()) {
+                    if (!removeDuplicates || !values.contains(value)) {
+                        values.add(value);
+                    }
+                }
             } else if (param.getValue() instanceof String) {
-                params.get(key).add((String) param.getValue());
+                final String value = (String) param.getValue();
+                if (!removeDuplicates || !values.contains(value)) {
+                    values.add(value);
+                }
             }
 
         }
