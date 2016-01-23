@@ -509,9 +509,9 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 1007,  1006);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 1008,  1006);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11052,  'salutation', 'salutation',  0,  NULL,  'Salutation',  'Salutation CSV options
-e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 1004,  1006);
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#uk#~#Пані-Пані,Пан-Пан#~#ru#~#-#~#de#~#Frau-Frau,Herr-Herr', 1004,  1006);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 1000,  1006);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -528,15 +528,15 @@ addrline1, addrline2, postcode, city, countrycode, statecode
 phone1, phone2, mobile1, mobile2
 email1, email2
 custom1, custom2, custom3, custom4',  1004, 1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11201,  'default_salutation', 'default_salutation',  0,  'salutation',  'Salutation',  'Salutation CSV options
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#uk#~#Пані-Пані,Пан-Пан#~#ru#~#-#~#de#~#Frau-Frau,Herr-Herr', 1004,  1007);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11201,  'default_salutation', 'default_salutation',  0,  NULL,  'Salutation',  'Salutation CSV options
-e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 1004,  1007);
+  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  'firstname',  'First name',  'First name', 1000,  1007);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  NULL,  'First name',  'First name', 1000,  1007);
+  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  'lastname',  'Last name',  'Last name', 1000,  1007);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  NULL,  'Last name',  'Last name', 1000,  1007);
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  NULL,  'Middle name',  'Middle name', 1000,  1007);
+  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  'middlename',  'Middle name',  'Middle name', 1000,  1007);
 
 
 
