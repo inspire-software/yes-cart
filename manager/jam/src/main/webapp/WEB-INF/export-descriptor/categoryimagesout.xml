@@ -1,0 +1,44 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>IMAGE</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>categoryimages.zip</file-name>
+        <print-header>false</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>/imgvault/category/</select-sql>
+
+    <export-columns>
+
+        <column-descriptor>
+            <column-header>Category Images</column-header>
+            <field-type>FIELD</field-type>
+            <data-type>STRING</data-type>
+            <name>description</name>
+            <value-constant>This is a category/content image export</value-constant>
+        </column-descriptor>
+
+    </export-columns>
+
+</export-descriptor>

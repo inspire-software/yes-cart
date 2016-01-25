@@ -1,0 +1,120 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>org.yes.cart.payment.persistence.entity.CustomerOrderPayment</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>payments-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>select c from CustomerOrderPaymentEntity c</select-sql>
+
+    <export-columns>
+        
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Shop Code</column-header>
+            <field-type>FIELD</field-type>
+            <name>shopCode</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Order Number</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderNumber</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Delivery Number</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderShipment</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Payment Gateway</column-header>
+            <field-type>FIELD</field-type>
+            <name>transactionGatewayLabel</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Operation</column-header>
+            <field-type>FIELD</field-type>
+            <name>transactionOperation</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Operation Result</column-header>
+            <field-type>FIELD</field-type>
+            <name>transactionOperationResultCode</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Operation Result Message</column-header>
+            <field-type>FIELD</field-type>
+            <name>transactionOperationResultMessage</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Payment Processor Result</column-header>
+            <field-type>FIELD</field-type>
+            <name>paymentProcessorResult</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Is Settlement</column-header>
+            <field-type>FIELD</field-type>
+            <name>paymentProcessorBatchSettlement</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Transaction ID</column-header>
+            <field-type>FIELD</field-type>
+            <name>transactionReferenceId</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Currency</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderCurrency</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Payment Amount</column-header>
+            <field-type>FIELD</field-type>
+            <name>paymentAmount</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Tax Amount</column-header>
+            <field-type>FIELD</field-type>
+            <name>taxAmount</name>
+        </column-descriptor>
+
+    </export-columns>
+
+</export-descriptor>
