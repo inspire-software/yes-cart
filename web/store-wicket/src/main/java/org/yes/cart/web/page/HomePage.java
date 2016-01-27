@@ -16,10 +16,12 @@
 
 package org.yes.cart.web.page;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -205,6 +207,10 @@ public class HomePage extends AbstractWebPage {
             final IModel<String> rez = centralPanel.getPageTitle();
             if (rez == null) {
                 return super.getPageTitle();
+            }
+            final String shop = super.getPageTitle().getObject();
+            if (StringUtils.isNotEmpty(shop)) {
+                return new Model<String>(rez.getObject() + " - " + shop);
             }
             return rez;
         }
