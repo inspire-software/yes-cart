@@ -433,7 +433,12 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_STEP_QTY_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_MULTISKU,
                 ProductSearchQueryBuilder.PRODUCT_MANUFACTURER_CODE_FIELD,
-                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD
+                ProductSearchQueryBuilder.ATTRIBUTE_VALUE_STORE_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_UPDATED_FIELD,
+                ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                ProductSearchQueryBuilder.BRAND_FIELD
+
                 );
 
         final List<ProductSearchResultDTO> rez = new ArrayList<ProductSearchResultDTO>(searchRez.getFirst().size());
@@ -458,6 +463,10 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
             dto.setMultisku(obj[16] != null && Boolean.valueOf((String) obj[16]));
             dto.setManufacturerCode((String) obj[17]);
             dto.setAttributes(new StoredAttributesImpl((String) obj[18]));
+            dto.setCreatedTimestamp((Date) obj[19]);
+            dto.setUpdatedTimestamp((Date) obj[20]);
+            dto.setTag((String) obj[21]);
+            dto.setBrand((String) obj[22]);
             rez.add(dto);
         }
 

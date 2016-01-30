@@ -45,8 +45,12 @@ public class ProductSearchResultDTOImplTest {
         first.setDisplayName("FirstDisplayName");
         first.setDescription("FirstDescription");
         first.setDisplayDescription("FirstDisplayDescription");
+        first.setTag("tag");
+        first.setBrand("brand");
         first.setAvailablefrom(new Date());
         first.setAvailableto(new Date());
+        first.setCreatedTimestamp(new Date());
+        first.setUpdatedTimestamp(new Date());
         first.setAvailability(1);
         first.setQtyOnWarehouse(new HashMap<Long, Map<String, BigDecimal>>() {{
             put(10L, new HashMap<String, BigDecimal>());
@@ -65,8 +69,12 @@ public class ProductSearchResultDTOImplTest {
         assertEquals(first.getDisplayName(), copy.getDisplayName());
         assertEquals(first.getDescription(), copy.getDescription());
         assertEquals(first.getDisplayDescription(), copy.getDisplayDescription());
+        assertEquals(first.getTag(), copy.getTag());
+        assertEquals(first.getBrand(), copy.getBrand());
         assertEquals(first.getAvailablefrom(), copy.getAvailablefrom());
         assertEquals(first.getAvailableto(), copy.getAvailableto());
+        assertEquals(first.getCreatedTimestamp(), copy.getCreatedTimestamp());
+        assertEquals(first.getUpdatedTimestamp(), copy.getUpdatedTimestamp());
         assertEquals(first.getAvailability(), copy.getAvailability());
         assertEquals(first.getQtyOnWarehouse(10L), copy.getQtyOnWarehouse(10L));
         assertEquals(first.getDefaultImage(), copy.getDefaultImage());

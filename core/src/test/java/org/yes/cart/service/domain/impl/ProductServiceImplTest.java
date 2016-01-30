@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.LazyInitializationException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.cache.Cache;
@@ -28,12 +27,13 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.BrandService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
