@@ -127,6 +127,11 @@ public interface AttributeNamesKeys {
          */
         String CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS = "CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS";
 
+        /**
+         * Allowed image sizes
+         */
+        String SYSTEM_ALLOWED_IMAGE_SIZES = "SYSTEM_ALLOWED_IMAGE_SIZES";
+
     }
 
 

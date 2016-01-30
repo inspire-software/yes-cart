@@ -16,13 +16,16 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.service.domain.ImageService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.image.ImageNameStrategyResolver;
 import org.yes.cart.stream.io.IOProvider;
@@ -50,7 +53,7 @@ public class ImageServiceImpl
         extends BaseGenericServiceImpl<SeoImage>
         implements ImageService {
 
-    private final String allowedSizes;
+    private String allowedSizes;
 
     private final boolean cropToFit;
     private final int forceCropToFitOnSize;
@@ -276,7 +279,13 @@ public class ImageServiceImpl
      * {@inheritDoc}
      */
     public boolean isSizeAllowed(final String size) {
-        return allowedSizes.contains(size);
+
+        final SystemService systemService = getSystemService();
+        final String allowedSizes = systemService.getAttributeValue(AttributeNamesKeys.System.SYSTEM_ALLOWED_IMAGE_SIZES);
+        if (StringUtils.isNotBlank(allowedSizes)) {
+            return allowedSizes.contains(size);
+        }
+        return this.allowedSizes.contains(size);
     }
 
     /**
@@ -458,4 +467,14 @@ public class ImageServiceImpl
     public void delete(SeoImage instance) {
         super.delete(instance);
     }
+
+    /**
+     * Spring IoC.
+     *
+     * @return system service
+     */
+    public SystemService getSystemService() {
+        return null;
+    }
+
 }

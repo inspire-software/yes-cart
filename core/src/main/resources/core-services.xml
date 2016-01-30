@@ -384,6 +384,11 @@
                     IO operations abstraction
                  -->
                 <constructor-arg type="org.yes.cart.stream.io.IOProvider" ref="ioProviderFactory"/>
+                <!--
+                    System Service allows to provide system wide settings
+                 -->
+                <lookup-method name="getSystemService" bean="systemService"/>
+
             </bean>
         </property>
     </bean>
