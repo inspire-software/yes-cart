@@ -329,9 +329,18 @@ public class ImageServiceImpl
 
                     if (resizedContent.length > 0) {
                         ioProvider.write(resized, resizedContent, ctx);
+                        return resizedContent;
                     }
 
-                    return resizedContent;
+                    /*
+                         If we failed to resize this is probably due to invalid color metadata for the original image.
+                         JDK image API will fail if the metadata is incorrect. In order to fail gracefully we
+                         just pass back the original bytes so that the original image is used instead. There will be an
+                         ERROR log produced by catch block from #resizeImage(), so sys admins should provide regular
+                         feedback to business users to fix these images. Usually the fix is  simply erasing all meta
+                         from the image.
+                     */
+                    return originalContent;
                 }
 
                 return ioProvider.read(resized, ctx);
