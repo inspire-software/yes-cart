@@ -147,6 +147,7 @@
         <constructor-arg index="8" ref="promotionService"/>
         <constructor-arg index="9" ref="categoryServiceFacade"/>
         <constructor-arg index="10" ref="shopService"/>
+        <constructor-arg index="11" ref="brandService"/>
     </bean>
 
     <!-- ############################ Facades for web end ####################################################### -->

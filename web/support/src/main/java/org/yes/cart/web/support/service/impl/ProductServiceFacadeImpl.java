@@ -63,6 +63,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final PromotionService promotionService;
     private final CategoryServiceFacade categoryServiceFacade;
     private final ShopService shopService;
+    private final BrandService brandService;
 
     public ProductServiceFacadeImpl(final ProductService productService,
                                     final ProductSkuService productSkuService,
@@ -74,7 +75,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                     final ShoppingCartCalculator shoppingCartCalculator,
                                     final PromotionService promotionService,
                                     final CategoryServiceFacade categoryServiceFacade,
-                                    final ShopService shopService) {
+                                    final ShopService shopService,
+                                    final BrandService brandService) {
         this.productService = productService;
         this.productSkuService = productSkuService;
         this.productAssociationService = productAssociationService;
@@ -86,6 +88,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.categoryServiceFacade = categoryServiceFacade;
         this.promotionService = promotionService;
         this.shopService = shopService;
+        this.brandService = brandService;
     }
 
     /**
@@ -830,5 +833,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         }
 
         return result;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "productService-brandById")
+    public Brand getBrandById(final long brandId) {
+        return brandService.findById(brandId);
     }
 }

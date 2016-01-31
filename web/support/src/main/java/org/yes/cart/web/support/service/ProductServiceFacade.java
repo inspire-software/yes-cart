@@ -365,4 +365,11 @@ public interface ProductServiceFacade {
      */
     Map<String, ProductPromotionModel> getPromotionModel(String appliedPromo);
 
+    /**
+     * Brand are lazily initialised. This method allows to retrieve brand by name and cache it for later use.
+     * @param brandId
+     * @return
+     */
+    Brand getBrandById(long brandId);
+
 }
