@@ -136,10 +136,10 @@
     <logger name="SHOP10" level="INFO">
         <appender-ref ref="SHOP10"/>
     </logger>
-    <logger name="SHOP10.org.yes.cart.web.filter.payment" level="DEBUG">
+    <logger name="SHOP10.org.yes.cart.web.filter.payment" level="INFO">
         <appender-ref ref="SHOP10PAY"/>
     </logger>
-    <logger name="SHOP10.org.yes.cart.payment.impl" level="DEBUG">
+    <logger name="SHOP10.org.yes.cart.payment.impl" level="INFO">
         <appender-ref ref="SHOP10PAY"/>
     </logger>
     <logger name="AUDIT" level="INFO">

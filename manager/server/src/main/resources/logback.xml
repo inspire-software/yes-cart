@@ -146,34 +146,34 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
     </appender>
-    <logger name="DEFAULT" level="DEBUG">
+    <logger name="DEFAULT" level="INFO">
         <appender-ref ref="DEFAULT"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkjob" level="DEBUG">
+    <logger name="DEFAULT.org.yes.cart.bulkjob" level="INFO">
         <appender-ref ref="JOB"/>
     </logger>
-    <logger name="org.yes.cart.bulkimport" level="DEBUG">
+    <logger name="org.yes.cart.bulkimport" level="INFO">
         <appender-ref ref="BULKIMPORT"/>
     </logger>
-    <logger name="org.yes.cart.remote" level="DEBUG">
+    <logger name="org.yes.cart.remote" level="INFO">
         <appender-ref ref="REMOTE"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkimport" level="DEBUG">
+    <logger name="DEFAULT.org.yes.cart.bulkimport" level="INFO">
         <appender-ref ref="BULKIMPORT"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkjob.bulkimport" level="DEBUG">
+    <logger name="DEFAULT.org.yes.cart.bulkjob.bulkimport" level="INFO">
         <appender-ref ref="BULKIMPORT"/>
     </logger>
-    <logger name="AUDIT" level="DEBUG">
+    <logger name="AUDIT" level="INFO">
         <appender-ref ref="AUDIT"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.remote" level="DEBUG">
+    <logger name="DEFAULT.org.yes.cart.remote" level="INFO">
         <appender-ref ref="REMOTE"/>
     </logger>
-    <logger name="org.yes.cart.bulkjob" level="DEBUG">
+    <logger name="org.yes.cart.bulkjob" level="INFO">
         <appender-ref ref="JOB"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.service.async.impl" level="DEBUG">
+    <logger name="DEFAULT.org.yes.cart.service.async.impl" level="INFO">
         <appender-ref ref="JOB"/>
         <appender-ref ref="BULKIMPORT"/>
     </logger>
@@ -183,10 +183,10 @@
     <logger name="WS.OUT" level="ERROR"><!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
     </logger>
-    <logger name="SHOP10" level="DEBUG">
+    <logger name="SHOP10" level="INFO">
         <appender-ref ref="SHOP10"/>
     </logger>
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="YC"/>
         <appender-ref ref="CONSOLE"/>
     </root>
