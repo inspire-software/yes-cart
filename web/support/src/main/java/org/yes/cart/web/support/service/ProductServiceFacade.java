@@ -367,8 +367,10 @@ public interface ProductServiceFacade {
 
     /**
      * Brand are lazily initialised. This method allows to retrieve brand by name and cache it for later use.
-     * @param brandId
-     * @return
+     *
+     * @param brandId brand PK
+     *
+     * @return brand
      */
     Brand getBrandById(long brandId);
 
