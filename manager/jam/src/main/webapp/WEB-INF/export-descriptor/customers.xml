@@ -1,0 +1,101 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.Customer</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>customers-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>select c from CustomerEntity c</select-sql>
+
+    <export-columns>
+        
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Email</column-header>
+            <field-type>FIELD</field-type>
+            <name>email</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>First name</column-header>
+            <field-type>FIELD</field-type>
+            <name>firstname</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Last name</column-header>
+            <field-type>FIELD</field-type>
+            <name>lastname</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Middle name</column-header>
+            <field-type>FIELD</field-type>
+            <name>middlename</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Tags</column-header>
+            <field-type>FIELD</field-type>
+            <name>tag</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Attributes</column-header>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name>attributes</name>
+            <export-descriptor>
+                <entity-type>org.yes.cart.domain.entity.AttrValueCustomer</entity-type>
+                <export-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name/>
+                    <print-header>false</print-header>
+                    <column-delimiter>&#09;</column-delimiter>
+                    <text-qualifier>'</text-qualifier>
+                </export-file-descriptor>
+                <select-sql></select-sql>
+                <export-columns>
+                    <column-descriptor>
+                        <column-header/>
+                        <field-type>FK_FIELD</field-type>
+                        <name>attribute.code</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header/>
+                        <field-type>FIELD</field-type>
+                        <name>val</name>
+                    </column-descriptor>
+                </export-columns>
+            </export-descriptor>
+        </column-descriptor>
+
+    </export-columns>
+
+</export-descriptor>

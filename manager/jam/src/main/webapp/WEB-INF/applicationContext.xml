@@ -27,7 +27,7 @@
     class="org.springframework.web.servlet.view.UrlBasedViewResolver">
     <property name="viewClass"
       value="org.springframework.web.servlet.view.JstlView" />
-    <property name="prefix" value="/WEB-INF/pages/" />
+    <property name="prefix" value="/pages/" />
     <property name="suffix" value=".jsp" />
   </bean>
 
@@ -47,8 +47,6 @@
       password-parameter="j_password" />
   </security:http>
 
-
-
   <!--<bean id="entryPoint"
         class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
 
@@ -66,8 +64,6 @@
   </security:authentication-manager>
 
 
-
-
   <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
     <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
     <property name="lookupOnStartup" value="true"/>
@@ -78,14 +74,20 @@
 
 
 
+
+
+
+
+
+
+  <import resource="classpath:jam-persistence.xml"/>
+
   <import resource="classpath:core-config.xml"/>
   <import resource="classpath:core-persistence.xml"/>
   <import resource="classpath:core-io.xml"/>
   <import resource="classpath:core-services.xml"/>
   <import resource="classpath:core-dto-services.xml"/>
   <import resource="classpath:core-services-commands.xml"/>
-
-  <import resource="classpath:jam-persistence.xml"/>
 
   <import resource="classpath:payment-persistence.xml"/>
   <import resource="classpath:payment-api.xml"/>

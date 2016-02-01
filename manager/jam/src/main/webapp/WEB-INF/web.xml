@@ -103,9 +103,9 @@
   </resource-ref>
 
 
+<!--
   <security-constraint>
-    <!-- YUM should only be accessible via https -->
-    <display-name>YUM Security</display-name>
+    <display-name>YUM Security</display-name>  should only be accessible via https
     <web-resource-collection>
       <web-resource-name>YUM</web-resource-name>
       <url-pattern>/*</url-pattern>
@@ -114,6 +114,7 @@
       <transport-guarantee>${yum.transport.guarantee}</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
+-->
 
 
 </web-app>
