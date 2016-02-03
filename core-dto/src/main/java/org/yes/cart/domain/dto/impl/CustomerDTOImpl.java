@@ -57,6 +57,9 @@ public class CustomerDTOImpl implements CustomerDTO {
     @DtoField(value = "tag")
     private String tag;
 
+    @DtoField(value = "customerType")
+    private String customerType;
+
     @DtoCollection(
             value="attributes",
             dtoBeanKey="org.yes.cart.domain.dto.AttrValueCustomerDTO",
@@ -155,6 +158,16 @@ public class CustomerDTOImpl implements CustomerDTO {
         this.tag = tag;
     }
 
+    /** {@inheritDoc} */
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
+    }
+
     @Override
     public String toString() {
         return "CustomerDTOImpl{" +
@@ -165,6 +178,7 @@ public class CustomerDTOImpl implements CustomerDTO {
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +
                 ", tag='" + tag + '\'' +
+                ", customerType='" + customerType + '\'' +
                 ", attribute=" + attributes +
                 '}';
     }

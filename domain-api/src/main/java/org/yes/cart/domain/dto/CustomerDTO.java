@@ -144,4 +144,19 @@ public interface CustomerDTO extends Identifiable {
     void setTag(String tag);
 
 
+    /**
+     * Get customer type.
+     *
+     * @return customer type
+     */
+    String getCustomerType();
+
+    /**
+     * Set customer type.
+     *
+     * @param customerType customer type
+     */
+    void setCustomerType(String customerType);
+
+
 }

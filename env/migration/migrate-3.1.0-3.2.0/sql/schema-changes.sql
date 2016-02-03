@@ -60,13 +60,6 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (24, 'fi
 -- YC-653 Allow configurable address form
 --
 
-INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
-  VALUES (  11039,  'SHOP_CUSTOMER_ADDRESS_PREFIX',  0,  NULL,  'Customer: address form prefix attribute',
-'Address form prefix attribute used to define various address forms.
-Prefix will be used to select ADDRESS attributes
-E.g. if this attribute is ADDR_FORM and Customer attribute value for it is "default"
-then fields would be resolved as "default_firstname", "default_lastname" etc.',  1000, 1001, 'SHOP_CUSTOMER_ADDR_PREF');
-
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
 
@@ -302,4 +295,51 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)
   VALUES (1023,'40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240','SYSTEM_ALLOWED_IMAGE_SIZES',100, 'YC_SYSTEM_ALLOWED_IMAGE_SIZES');
+
+--
+-- YC-667 Add standard property to Customer object to define customer type
+--
+
+alter table TCUSTOMER add column CUSTOMERTYPE varchar(255);
+
+UPDATE TATTRIBUTE set DESCRIPTION = 'Default list of customer attributes separated by comma to be shown on registration form
+For customer type specific configuration add "_[customertype]" attribute. E.g. SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES_B2C' where CODE = 'SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES';
+
+UPDATE TATTRIBUTE set DESCRIPTION = 'Default list of customer attributes separated by comma to be shown on profile form
+For customer type specific configuration add "_[customertype]" attribute. E.g. SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_B2C' where CODE = 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE';
+
+UPDATE TATTRIBUTE set DESCRIPTION = 'Default list of customer attributes separated by comma to be shown on profile form but not editable
+For customer type specific configuration add "_[customertype]" attribute. E.g. SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY_B2C' where CODE = 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY';
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  8001,  'SHOP_CUSTOMER_TYPES', 'SHOP_CUSTOMER_TYPES',  0,  NULL,  'Shop: supported customer types',  'Supported shop customer types CSV
+  E.g. value=B2B,B2C, display value=Private,Company',  1000, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 1000,  1006);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10880,  'SHOP_CREGATTRS_B2C', 'SHOP_CREGATTRS_B2C',  0,  NULL,  'Customer (B2C): registration form attributes (CSV)',
+    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10881,  'SHOP_CPROFATTRS_VISIBLE_B2C', 'SHOP_CPROFATTRS_VISIBLE_B2C',  0,  NULL,  'Customer (B2C): profile form attributes (CSV)',
+    'List of customer attributes separated by comma to be shown on profile form',  1004, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10882,  'SHOP_CPROFATTRS_READONLY_B2C', 'SHOP_CPROFATTRS_READONLY_B2C',  0,  NULL,  'Customer (B2C): profile form attributes - read only (CSV)',
+    'List of customer attributes separated by comma to be shown on profile form but not editable',  1004, 1001);
+
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,DISPLAYVAL,CODE,SHOP_ID, GUID)
+ VALUES (25, 'B2C', 'en#~#B2C#~#uk#~#B2C#~#ru#~#B2C#~#de#~#B2C', 'SHOP_CUSTOMER_TYPES', 10, 'SHOP_CUSTOMER_TYPES_10');
+
+UPDATE TSHOPATTRVALUE set CODE = 'SHOP_CREGATTRS_B2C'
+ where CODE = 'SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES' and SHOP_ID = 10;
+UPDATE TSHOPATTRVALUE set CODE = 'SHOP_CPROFATTRS_VISIBLE_B2C'
+ where CODE = 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE' and SHOP_ID = 10;
+UPDATE TSHOPATTRVALUE set CODE = 'SHOP_CPROFATTRS_READONLY_B2C'
+ where CODE = 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY' and SHOP_ID = 10;
+
+UPDATE TCUSTOMER SET CUSTOMERTYPE = 'B2C';
 

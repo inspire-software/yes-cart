@@ -57,6 +57,20 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
      */
     void setPublicKey(String publicKey);
 
+    /**
+     * Get customer type.
+     *
+     * @return customer type
+     */
+    String getCustomerType();
+
+    /**
+     * Set customer type.
+     *
+     * @param customerType customer type
+     */
+    void setCustomerType(String customerType);
+
 
     /**
      * Get orders

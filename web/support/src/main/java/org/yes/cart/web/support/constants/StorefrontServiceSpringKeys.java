@@ -123,4 +123,9 @@ public interface StorefrontServiceSpringKeys {
       */
      public String PRODUCT_SERVICE_FACADE = "productServiceFacade";
 
+     /**
+      * Page mounter
+      */
+     public String WICKET_PAGES_MOUNTER = "wicketPagesMounter";
+
 }

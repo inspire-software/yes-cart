@@ -30,7 +30,7 @@ import java.io.Serializable;
  * Time: 15:17
  */
 @Dto
-@XmlRootElement(name = "country")
+@XmlRootElement(name = "state")
 public class StateRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;

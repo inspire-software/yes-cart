@@ -64,6 +64,17 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("custom")))
+                .andExpect(content().string(StringContains.containsString("customerType")))
+                .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
+
+        mockMvc.perform(get("/auth/register?customerType=B2C")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("custom")))
+                .andExpect(content().string(StringContains.containsString("firstname")))
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()));
 
 
@@ -72,10 +83,10 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
         final MvcResult regResult =
         mockMvc.perform(put("/auth/register")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .locale(locale)
-                    .content(regBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .locale(locale)
+                .content(regBody))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("uuid")))

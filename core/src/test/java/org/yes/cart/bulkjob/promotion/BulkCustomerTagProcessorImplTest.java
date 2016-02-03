@@ -109,15 +109,15 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         // run the job
         bulkCustomerTagProcessor.run();
 
-        final List<Customer> customer1tagged = customerService.findCustomer(customer1.getEmail(), null, null, null, null);
+        final List<Customer> customer1tagged = customerService.findCustomer(customer1.getEmail(), null, null, null, null, null);
 
         assertEquals("tag1 tag1or3", customer1tagged.get(0).getTag());
 
-        final List<Customer> customer2tagged = customerService.findCustomer(customer2.getEmail(), null, null, null, null);
+        final List<Customer> customer2tagged = customerService.findCustomer(customer2.getEmail(), null, null, null, null, null);
 
         assertNull(customer2tagged.get(0).getTag());
 
-        final List<Customer> customer3tagged = customerService.findCustomer(customer3.getEmail(), null, null, null, null);
+        final List<Customer> customer3tagged = customerService.findCustomer(customer3.getEmail(), null, null, null, null, null);
 
         assertEquals("first3 tag1or3 tag3", customer3tagged.get(0).getTag());
 

@@ -275,44 +275,56 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     /**
      * Get all supported customer attributes.
      *
-     * @return separated by comma all supported attributes.
-     */
-    String getSupportedRegistrationFormAttributes();
-
-    /**
-     * Get all supported customer attributes.
-     *
-     * @return list of attribute codes.
-     */
-    List<String> getSupportedRegistrationFormAttributesAsList();
-
-    /**
-     * Get all supported customer attributes.
+     * @param customerType customer type {@link Customer#getCustomerType()}
      *
      * @return separated by comma all supported attributes.
      */
-    String getSupportedProfileFormAttributes();
+    String getSupportedRegistrationFormAttributes(String customerType);
 
     /**
      * Get all supported customer attributes.
      *
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     *
      * @return list of attribute codes.
      */
-    List<String> getSupportedProfileFormAttributesAsList();
+    List<String> getSupportedRegistrationFormAttributesAsList(String customerType);
 
     /**
      * Get all supported customer attributes.
+     *
+     * @param customerType customer type {@link Customer#getCustomerType()}
      *
      * @return separated by comma all supported attributes.
      */
-    String getSupportedProfileFormReadOnlyAttributes();
+    String getSupportedProfileFormAttributes(String customerType);
 
     /**
      * Get all supported customer attributes.
      *
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     *
      * @return list of attribute codes.
      */
-    List<String> getSupportedProfileFormReadOnlyAttributesAsList();
+    List<String> getSupportedProfileFormAttributesAsList(String customerType);
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     *
+     * @return separated by comma all supported attributes.
+     */
+    String getSupportedProfileFormReadOnlyAttributes(String customerType);
+
+    /**
+     * Get all supported customer attributes.
+     *
+     * @param customerType customer type {@link Customer#getCustomerType()}
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getSupportedProfileFormReadOnlyAttributesAsList(String customerType);
 
 
 }

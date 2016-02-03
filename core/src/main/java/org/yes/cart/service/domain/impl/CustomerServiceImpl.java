@@ -158,8 +158,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    public List<Customer> findCustomer(final String email, final String firstname,
-                                       final String lastname, final String middlename, final String tag) {
+    public List<Customer> findCustomer(final String email,
+                                       final String firstname,
+                                       final String lastname,
+                                       final String middlename,
+                                       final String tag,
+                                       final String customerType) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
 
@@ -181,6 +185,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
         if (StringUtils.isNotBlank(tag)) {
             criterionList.add(Restrictions.like("tag", tag, MatchMode.ANYWHERE));
+        }
+
+        if (StringUtils.isNotBlank(customerType)) {
+            criterionList.add(Restrictions.like("customerType", customerType, MatchMode.ANYWHERE));
         }
 
         if (criterionList.isEmpty()) {

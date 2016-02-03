@@ -37,6 +37,8 @@ public class CustomerDTOImpl {
 
     public var tag : String;
 
+    public var customerType : String;
+
     public function CustomerDTOImpl() {
     }
 }

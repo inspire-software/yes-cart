@@ -39,11 +39,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.util.*;
 
@@ -77,6 +77,10 @@ public class ManageAddressesView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
+
 
     /**
      * Create panel to manage addresses
@@ -187,7 +191,11 @@ public class ManageAddressesView extends BaseComponent {
                             @Override
                             public void onSubmit() {
                                 addressBookFacade.remove(address);
-                                setResponsePage(ProfilePage.class);
+                                if (returnToCheckout) {
+                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/checkout").get());
+                                } else {
+                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/profile").get());
+                                }
                             }
                         }.setDefaultFormProcessing(false)
                 );
@@ -207,7 +215,7 @@ public class ManageAddressesView extends BaseComponent {
                                                                                final long addressId,
                                                                                final String addressType) {
 
-        final Class<? extends Page> successfulPage = CreateEditAddressPage.class;
+        final Class<? extends Page> successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/address").get();
         final PageParameters parameters = new PageParameters();
 
         parameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,

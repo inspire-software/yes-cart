@@ -27,8 +27,11 @@ import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
@@ -38,9 +41,7 @@ import org.yes.cart.web.support.service.CustomerServiceFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -56,6 +57,9 @@ public class AuthenticationController {
     private CustomerServiceFacade customerServiceFacade;
     @Autowired
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+    @Autowired
+    private LanguageService languageService;
 
     @Autowired
     private CartMixin cartMixin;
@@ -258,35 +262,17 @@ public class AuthenticationController {
 
         if (customer != null) {
 
-            do {
+            executeLoginCommand(loginRO.getUsername(), loginRO.getPassword());
 
-                executeLoginCommand(loginRO.getUsername(), loginRO.getPassword());
+            final TokenRO token = cartMixin.persistShoppingCart(request, response);
 
-                final TokenRO token = cartMixin.persistShoppingCart(request, response);
+            ShoppingCart cart = cartMixin.getCurrentCart();
+            final int logOnState = cart.getLogonState();
+            if (logOnState == ShoppingCart.LOGGED_IN) {
 
-                ShoppingCart cart = cartMixin.getCurrentCart();
-                final int logOnState = cart.getLogonState();
-                if (logOnState == ShoppingCart.LOGGED_IN) {
+                return new AuthenticationResultRO(cart.getCustomerName(), token);
 
-                    return new AuthenticationResultRO(cart.getCustomerName(), token);
-
-                } else if (logOnState == ShoppingCart.INACTIVE_FOR_SHOP) {
-
-                    if (loginRO.isActivate()) {
-                        // Login again with inactive state adds customer to shop
-                        continue;
-                    }
-
-                    return new AuthenticationResultRO("INACTIVE_FOR_SHOP");
-
-                } else {
-
-                    // any other state should break to AUTH_FAILED
-                    break;
-
-                }
-
-            } while (true);
+            }
 
             return new AuthenticationResultRO("AUTH_FAILED");
 
@@ -392,7 +378,9 @@ public class AuthenticationController {
      * <p>
      * <h3>Parameters for register GET operation</h3><p>
      * <p>
-     * NONE
+     * <table border="1">
+     *     <tr><td>customerType</td><td>B2B,B2C etc must be configured in SHOP_CUSTOMER_TYPES</td></tr>
+     * </table>
      * <p>
      * <h3>Output</h3><p>
      * <table border="1">
@@ -475,17 +463,53 @@ public class AuthenticationController {
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
     public @ResponseBody RegisterFormRO register(final HttpServletRequest request,
-                                                 final HttpServletResponse response) {
+                                                 final HttpServletResponse response,
+                                                 final @RequestParam(value = "customerType", required = false) String customerType) {
 
         cartMixin.persistShoppingCart(request, response);
         final Shop shop = cartMixin.getCurrentShop();
 
-        final List<AttrValueCustomer> avs = customerServiceFacade.getShopRegistrationAttributes(shop);
+        final List<Pair<String, I18NModel>> allowedTypes = customerServiceFacade.getShopSupportedCustomerTypes(shop);
 
-        final RegisterFormRO formRO = new RegisterFormRO();
-        formRO.setCustom(mappingMixin.map(avs, AttrValueCustomerRO.class, AttrValueCustomer.class));
+        if (StringUtils.isNotBlank(customerType)) {
+            // Retrieve form fields for type
 
-        return formRO;
+            final List<AttrValueCustomer> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
+
+            final RegisterFormRO formRO = new RegisterFormRO();
+            formRO.setCustom(mappingMixin.map(avs, AttrValueCustomerRO.class, AttrValueCustomer.class));
+
+            return formRO;
+
+        } else {
+            // If no type then present form with allowed types.
+
+            final RegisterFormRO formRO = new RegisterFormRO();
+            final AttrValueCustomerRO avro = new AttrValueCustomerRO();
+            avro.setAttributeCode("customerType");
+
+            final List<String> supported = languageService.getSupportedLanguages(shop.getCode());
+
+            final Map<String, String> displayChoice = new HashMap<String, String>();
+            for (final Pair<String, I18NModel> allowedType : allowedTypes) {
+                for (final String lang : supported) {
+                    final String i18n = allowedType.getSecond().getValue(lang);
+
+                    String existing = displayChoice.get(lang);
+                    if (existing != null) {
+                        displayChoice.put(lang, existing + "," + allowedType.getFirst() + "-" + i18n);
+                    } else {
+                        displayChoice.put(lang, allowedType.getFirst() + "-" + i18n);
+                    }
+                }
+            }
+            avro.setAttributeDisplayChoices(displayChoice);
+
+            formRO.setCustom(new ArrayList<AttrValueCustomerRO>(Collections.singletonList(avro)));
+
+            return formRO;
+
+        }
     }
 
     private static final Pattern EMAIL =
@@ -630,9 +654,11 @@ public class AuthenticationController {
         final Shop shop = cartMixin.getCurrentShop();
 
         final Map<String, Object> data = new HashMap<String, Object>();
+        data.put("customerType", registerRO.getCustomerType());
+
         if (registerRO.getCustom() != null) {
 
-            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop)) {
+            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
 
                 final Attribute attr = av.getAttribute();
                 final String value = registerRO.getCustom().get(attr.getCode());

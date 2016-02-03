@@ -17,6 +17,17 @@
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel>
+
+    <form wicket:id="customerTypesForm" class="form-horizontal">
+        <div wicket:id="customerTypesRadioGroup" class="col-xs-12 no-padding form-group">
+            <div wicket:id="customerTypeList" class="radio">
+                <label class="radio"><input type="radio" wicket:id="customerTypeLabel">
+                    <span wicket:id="customerType">[line 1]</span>
+                </label>
+            </div>
+        </div>
+    </form>
+
     <form wicket:id="registerForm" class="form-horizontal">
 
         <div class="new-customer-title">

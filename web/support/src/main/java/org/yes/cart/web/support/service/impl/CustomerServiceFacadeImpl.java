@@ -21,6 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CustomerService;
@@ -113,7 +116,15 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     public String registerCustomer(Shop registrationShop, String email, Map<String, Object> registrationData) {
 
-        final String password = phrazeGenerator.getNextPassPhrase();
+        final Object customerTypeData = registrationData.get("customerType");
+        final String customerType = customerTypeData != null ? String.valueOf(customerTypeData) : null;
+
+        final AttrValue types = getShopCustomerTypes(registrationShop);
+        if (types == null || StringUtils.isBlank(types.getVal()) ||
+                !Arrays.asList(StringUtils.split(types.getVal(), ',')).contains(customerType)) {
+            ShopCodeContext.getLog(this).warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType'", customerType);
+            return null;
+        }
 
         final Customer customer = customerService.getGenericDao().getEntityFactory().getByIface(Customer.class);
 
@@ -122,6 +133,15 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         customer.setFirstname((String) registrationData.get("firstname"));
         customer.setLastname((String) registrationData.get("lastname"));
         customer.setMiddlename((String) registrationData.get("middlename"));
+        customer.setCustomerType(customerType);
+
+        if (StringUtils.isBlank(customer.getEmail()) || StringUtils.isBlank(customer.getFirstname()) ||
+                StringUtils.isBlank(customer.getLastname()) || StringUtils.isBlank(customer.getCustomerType())) {
+            ShopCodeContext.getLog(this).warn("Missing required registration data, please check that registration details have sufficient data");
+            return null;
+        }
+
+        final String password = phrazeGenerator.getNextPassPhrase();
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
         final Map<String, Object> attrData = new HashMap<String, Object>(registrationData);
@@ -133,7 +153,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
             attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
         }
 
-        final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList();
+        final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList(customerType);
         final List<String> allowedFull = new ArrayList<String>();
         allowedFull.addAll(allowed);
         allowedFull.add(AttributeNamesKeys.CUSTOMER_PHONE);
@@ -191,10 +211,51 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         return email; // do nothing, email is sent via ContactUsAspect
     }
 
-    /** {@inheritDoc} */
-    public List<AttrValueCustomer> getShopRegistrationAttributes(final Shop shop) {
+    @Override
+    public List<Pair<String, I18NModel>> getShopSupportedCustomerTypes(final Shop shop) {
 
-        final List<String> allowed = shop.getSupportedRegistrationFormAttributesAsList();
+        final AttrValue av = getShopCustomerTypes(shop);
+        if (av != null && StringUtils.isNotBlank(av.getVal())) {
+
+            final String[] types = StringUtils.split(av.getVal(), ',');
+
+            final I18NModel model = new StringI18NModel(av.getDisplayVal());
+            final Map<String, String[]> values = new HashMap<String, String[]>();
+            for (final Map.Entry<String, String> displayValues : model.getAllValues().entrySet()) {
+                values.put(displayValues.getKey(), StringUtils.split(displayValues.getValue(), ','));
+            }
+
+            final List<Pair<String, I18NModel>> out = new ArrayList<Pair<String, I18NModel>>(types.length);
+            for (int i = 0; i < types.length; i++) {
+                final String type = types[i];
+                final Map<String, String> names = new HashMap<String, String>();
+                for (final Map.Entry<String, String[]> entry : values.entrySet()) {
+                    if (entry.getValue().length > i) {
+                        names.put(entry.getKey(), entry.getValue()[i]);
+                    }
+                }
+                out.add(new Pair<String, I18NModel>(type, new FailoverStringI18NModel(names, type)));
+            }
+            return out;
+        }
+        return Collections.emptyList();
+    }
+
+    private AttrValue getShopCustomerTypes(Shop shop) {
+        return shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+    }
+
+    /** {@inheritDoc} */
+    public List<AttrValueCustomer> getShopRegistrationAttributes(final Shop shop, final String customerType) {
+
+        final AttrValue types = getShopCustomerTypes(shop);
+        if (types == null || StringUtils.isBlank(types.getVal()) ||
+                !Arrays.asList(StringUtils.split(types.getVal(), ',')).contains(customerType)) {
+            ShopCodeContext.getLog(this).warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type", customerType);
+            return Collections.emptyList();
+        }
+
+        final List<String> allowed = shop.getSupportedRegistrationFormAttributesAsList(customerType);
         if (CollectionUtils.isEmpty(allowed)) {
             // must explicitly configure to avoid exposing personal data
             return Collections.emptyList();
@@ -224,13 +285,13 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     public List<Pair<AttrValueCustomer, Boolean>> getCustomerProfileAttributes(final Shop shop, final Customer customer) {
 
-        final List<String> allowed = shop.getSupportedProfileFormAttributesAsList();
+        final List<String> allowed = shop.getSupportedProfileFormAttributesAsList(customer.getCustomerType());
         if (CollectionUtils.isEmpty(allowed)) {
             // must explicitly configure to avoid exposing personal data
             return Collections.emptyList();
         }
 
-        final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
+        final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType());
 
         final List<AttrValueCustomer> attrValueCollection = customerService.getRankedAttributeValues(customer);
         if (CollectionUtils.isEmpty(attrValueCollection)) {
@@ -270,11 +331,11 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     public void updateCustomerAttributes(final Shop profileShop, final Customer customer, final Map<String, String> values) {
 
-        final List<String> allowed = profileShop.getSupportedProfileFormAttributesAsList();
+        final List<String> allowed = profileShop.getSupportedProfileFormAttributesAsList(customer.getCustomerType());
 
         if (CollectionUtils.isNotEmpty(allowed)) {
             // must explicitly configure to avoid exposing personal data
-            final List<String> readonly = new ArrayList<String>(profileShop.getSupportedProfileFormReadOnlyAttributesAsList());
+            final List<String> readonly = new ArrayList<String>(profileShop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType()));
             // Ensure dummy attributes are not updated
             readonly.addAll(Arrays.asList("salutation", "firstname", "middlename", "lastname"));
 

@@ -108,6 +108,7 @@ public class PromotionContextImpl implements PromotionContext {
         context.put(PromotionCondition.VAR_REGISTERED, customer != null);
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
         context.put(PromotionCondition.VAR_CART, cart);
 
         for (final CartItem item : cart.getCartItemList()) {
@@ -133,6 +134,7 @@ public class PromotionContextImpl implements PromotionContext {
         context.put(PromotionCondition.VAR_REGISTERED, customer != null);
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
         context.put(PromotionCondition.VAR_CART, cart);
         context.put(PromotionCondition.VAR_CART_ITEM_TOTAL, itemTotal);
         context.put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(itemTotal));
@@ -156,6 +158,7 @@ public class PromotionContextImpl implements PromotionContext {
         context.put(PromotionCondition.VAR_REGISTERED, customer != null);
         context.put(PromotionCondition.VAR_CUSTOMER, customer);
         context.put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+        context.put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
         context.put(PromotionCondition.VAR_CART, cart);
         context.put(PromotionCondition.VAR_CART_ORDER_TOTAL, orderTotal);
 
@@ -185,6 +188,7 @@ public class PromotionContextImpl implements PromotionContext {
         final Map<String, Object> context = new HashMap<String, Object>() {{
             put(PromotionCondition.VAR_CUSTOMER, customer);
             put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+            put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
             put(PromotionCondition.VAR_CART, cart);
         }};
 

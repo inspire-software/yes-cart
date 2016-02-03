@@ -395,7 +395,7 @@ public class CustomerController {
                 valuesInThisUpdate.put(avRO.getAttributeCode(), avRO);
             }
 
-            final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
+            final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType());
             for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
 
                 final Attribute attr = av.getFirst().getAttribute();

@@ -151,6 +151,8 @@ public class DtoCustomerServiceImpl
                 attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
             } else if ("lastname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
                 attrValueCategoryDTO.setVal(customerDTO.getLastname());
+            } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
             }
             result.add(attrValueCategoryDTO);
         }
@@ -200,6 +202,11 @@ public class DtoCustomerServiceImpl
                 customer.setLastname(attrValueDTO.getVal());
             }
             getService().update(customer);
+        } else if ("customertype".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setCustomerType(attrValueDTO.getVal());
+            }
+            getService().update(customer);
         } else {
             if (!multivalue) {
                 for (final AttrValueCustomer avp : customer.getAttributes()) {
@@ -240,8 +247,9 @@ public class DtoCustomerServiceImpl
                                           final String firstname,
                                           final String lastname,
                                           final String middlename,
-                                          final String tag) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag);
+                                          final String tag,
+                                          final String customerType) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag, customerType);
         final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

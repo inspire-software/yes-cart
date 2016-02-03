@@ -17,6 +17,7 @@
 package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 
 import java.util.List;
@@ -109,18 +110,26 @@ public interface CustomerServiceFacade {
      */
     void resetPassword(Shop shop, Customer customer);
 
+    /**
+     * List of supported customer types.
+     *
+     * @param shop shop
+     *
+     * @return supported customer types
+     */
+    List<Pair<String, I18NModel>> getShopSupportedCustomerTypes(Shop shop);
 
     /**
      * List of custom attributes eligible for profile edit form.
      * CPOINT - This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.
      *
-     *
      * @param shop shop
+     * @param customerType customer type {@link Customer#getCustomerType()}
      *
      * @return list of eligible attributes
      */
-    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop);
+    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop, String customerType);
 
 
     /**

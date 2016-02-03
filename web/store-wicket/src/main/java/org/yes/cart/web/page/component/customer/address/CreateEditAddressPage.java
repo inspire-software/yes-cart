@@ -28,8 +28,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.CheckoutHeader;
@@ -40,6 +38,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -61,6 +60,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
 
     /**
      * Construct page to create / edit customer address.
@@ -134,9 +136,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
         final PageParameters parameters = new PageParameters();
 
         if (isCheckout) {
-            successfulPage = CheckoutPage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
         } else {
-            successfulPage = ProfilePage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }

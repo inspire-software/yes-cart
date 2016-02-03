@@ -121,6 +121,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final RegisterRO register = new RegisterRO();
         register.setEmail(email);
+        register.setCustomerType("B2C");
         register.setCustom(new HashMap<String, String>());
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");

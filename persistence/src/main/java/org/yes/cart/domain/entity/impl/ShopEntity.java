@@ -52,9 +52,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private List<String> supportedBillingCountriesAsList;
     private List<String> supportedLanguagesAsList;
 
-    private List<String> supportedRegistrationFormAttributesAsList;
-    private List<String> supportedProfileFormAttributesAsList;
-    private List<String> supportedProfileFormReadOnlyAttributesAsList;
+    private Map<String, List<String>> supportedRegistrationFormAttributesByType = new HashMap<String, List<String>>();
+    private Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<String, List<String>>();
+    private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
 
     public ShopEntity() {
     }
@@ -281,50 +281,65 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedLanguagesAsList;
     }
 
-    public String getSupportedRegistrationFormAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES);
+    public String getSupportedRegistrationFormAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX + '_' + customerType);
     }
 
-    public List<String> getSupportedRegistrationFormAttributesAsList() {
+    public List<String> getSupportedRegistrationFormAttributesAsList(final String customerType) {
+        List<String> supportedRegistrationFormAttributesAsList = this.supportedRegistrationFormAttributesByType.get(customerType);
         if (supportedRegistrationFormAttributesAsList == null) {
-            final String attrs = getSupportedRegistrationFormAttributes();
+            final String attrs = getSupportedRegistrationFormAttributes(customerType);
             if (attrs != null) {
                 supportedRegistrationFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedRegistrationFormAttributesAsList = Collections.emptyList();
             }
+            this.supportedRegistrationFormAttributesByType.put(customerType, supportedRegistrationFormAttributesAsList);
         }
         return supportedRegistrationFormAttributesAsList;
     }
 
-    public String getSupportedProfileFormAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE);
+    public String getSupportedProfileFormAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX + '_' + customerType);
     }
 
-    public List<String> getSupportedProfileFormAttributesAsList() {
+    public List<String> getSupportedProfileFormAttributesAsList(final String customerType) {
+        List<String> supportedProfileFormAttributesAsList = this.supportedProfileFormAttributesByType.get(customerType);
         if (supportedProfileFormAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormAttributes();
+            final String attrs = getSupportedProfileFormAttributes(customerType);
             if (attrs != null) {
                 supportedProfileFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedProfileFormAttributesAsList = Collections.emptyList();
             }
+            this.supportedProfileFormAttributesByType.put(customerType, supportedProfileFormAttributesAsList);
         }
         return supportedProfileFormAttributesAsList;
     }
 
-    public String getSupportedProfileFormReadOnlyAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY);
+    public String getSupportedProfileFormReadOnlyAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX + '_' + customerType);
     }
 
-    public List<String> getSupportedProfileFormReadOnlyAttributesAsList() {
+    public List<String> getSupportedProfileFormReadOnlyAttributesAsList(final String customerType) {
+        List<String> supportedProfileFormReadOnlyAttributesAsList = this.supportedProfileFormReadOnlyAttributesByType.get(customerType);
         if (supportedProfileFormReadOnlyAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormReadOnlyAttributes();
+            final String attrs = getSupportedProfileFormReadOnlyAttributes(customerType);
             if (attrs != null) {
                 supportedProfileFormReadOnlyAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedProfileFormReadOnlyAttributesAsList = Collections.emptyList();
             }
+            this.supportedProfileFormReadOnlyAttributesByType.put(customerType, supportedProfileFormReadOnlyAttributesAsList);
         }
         return supportedProfileFormReadOnlyAttributesAsList;
     }

@@ -141,8 +141,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     /** {@inheritDoc} */
     public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop) {
 
-        final String customerTypeAttribute = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_PREFIX);
-        final List<String> addressFormAttributes = getAddressFormAttributeList(customer, customerTypeAttribute);
+        final List<String> addressFormAttributes = getAddressFormAttributeList(customer);
 
         List<Attribute> formFieldsConfig = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, addressFormAttributes);
         if (formFieldsConfig.isEmpty()) {
@@ -185,24 +184,17 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         return attributes;
     }
 
-    private List<String> getAddressFormAttributeList(final Customer customer, final String customerTypeAttribute) {
+    private List<String> getAddressFormAttributeList(final Customer customer) {
 
         List<String> addressFormAttributes = new ArrayList<String>(DEFAULT_FIELDS);
 
         final List<String> formConfigsToTry;
-        if (StringUtils.isNotBlank(customerTypeAttribute)) {
 
-            final AttrValueCustomer av = customer.getAttributeByCode(customerTypeAttribute);
-            if (av != null && StringUtils.isNotBlank(av.getVal())) {
-                formConfigsToTry = new ArrayList<String>(Arrays.asList(av.getVal() + "_addressform", "default_addressform"));
-            } else {
-                formConfigsToTry = new ArrayList<String>(Arrays.asList("default_addressform"));
-            }
-
+        final String type = customer.getCustomerType();
+        if (StringUtils.isNotBlank(type)) {
+            formConfigsToTry = new ArrayList<String>(Arrays.asList(type + "_addressform", "default_addressform"));
         } else {
-
             formConfigsToTry = new ArrayList<String>(Arrays.asList("default_addressform"));
-
         }
 
         final List<Attribute> formConfigs = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, formConfigsToTry);

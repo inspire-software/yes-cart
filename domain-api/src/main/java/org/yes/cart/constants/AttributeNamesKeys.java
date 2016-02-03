@@ -267,20 +267,14 @@ public interface AttributeNamesKeys {
         String ADDRESS_FORMATTER = "SHOP_ADDRESS_FORMATTER";
 
         /**
-         * Custom attribute on customer profile which value will act as prefix
-         * for address form layout.
-         */
-        String ADDRESS_PREFIX = "SHOP_CUSTOMER_ADDRESS_PREFIX";
-
-        /**
          * Supported by shop customer name formatter.
          */
         String CUSTOMER_NAME_FORMATTER = "SHOP_CUSTOMER_FORMATTER";
 
         /**
-         * Supported by shop customer salutations.
+         * Supported by shop customer types.
          */
-        String CUSTOMER_SALUTATIONS = "SHOP_CUSTOMER_SALUTATIONS";
+        String SHOP_CUSTOMER_TYPES = "SHOP_CUSTOMER_TYPES";
 
         /**
          * Supported by shop storefront languages.
@@ -399,17 +393,17 @@ public interface AttributeNamesKeys {
         /**
          * Attributes to be used for the registration form
          */
-        String CUSTOMER_REGISTRATION_ATTRIBUTES = "SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES";
+        String CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX = "SHOP_CREGATTRS";
 
         /**
          * Attributes to be used for the profile editing (by customer) form
          */
-        String CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE";
+        String CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX = "SHOP_CPROFATTRS_VISIBLE";
 
         /**
          * Attributes on the profile editing (by customer) form which must not editable
          */
-        String CUSTOMER_PROFILE_ATTRIBUTES_READONLY = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY";
+        String CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX = "SHOP_CPROFATTRS_READONLY";
 
         /**
          * Time in seconds since last cart modification before session expires
