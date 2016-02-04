@@ -462,10 +462,11 @@
 
         private function onPreferencesClick(event:MouseEvent):void {
             setFontWeight(prefsBtn);
-            // Do not cache preferences page so that we can see fresh data every time
-            var _prefs:SystemAttributesPanel = new SystemAttributesPanel();
-            mainPanel.addChild(_prefs);
-            showMainPanelSection(_prefs);
+            if (!panelCache.hasOwnProperty('SystemAttributesPanel')) {
+                panelCache['SystemAttributesPanel'] = new SystemAttributesPanel();
+                mainPanel.addChild(panelCache['SystemAttributesPanel']);
+            }
+            showMainPanelSection(panelCache['SystemAttributesPanel']);
         }
 
         private function onQueryDataClick(event:MouseEvent):void {

@@ -20,7 +20,8 @@
            xmlns:mx="http://www.adobe.com/2006/mxml"
            xmlns:attr="org.yes.cart.ui.attributes.*"
            width="100%"
-           height="100%">
+           height="100%"
+           creationComplete="init()">
 
     <mx:Script><![CDATA[
         import mx.collections.ArrayCollection;
@@ -47,6 +48,11 @@
             _shop = value;
             entityCode = value != null ? value.code : null;
 
+            onRefreshView();
+        }
+
+
+        override protected function onRefreshView():void {
             this.attrValues.removeAll();
             this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting
             onEntitySet(AttributeGroupNames.SHOP);
@@ -54,6 +60,10 @@
             if (_shop != null) {
                 remoteShopService.getEntityAttributes(_shop.shopId);
             }
+        }
+
+        private function init():void {
+            canRefresh = true;
         }
 
         override protected function onValueAdded(selectedAttributeDTO:AttributeDTOImpl):void {
