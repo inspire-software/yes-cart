@@ -17,9 +17,9 @@
 package org.yes.cart.service.domain.impl;
 
 import org.springframework.cache.annotation.CacheEvict;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.order.OrderAddressFormatter;
@@ -113,10 +113,12 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
     /**
      * {@inheritDoc}
      */
-    public String formatAddressFor(final Address address, final Shop shop) {
+    public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
 
-        if (shop != null) {
-            final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
+        final String type = customer != null ? customer.getCustomerType() : null;
+
+        if (shop != null && address != null) {
+            final String format = shop.getAddressFormatByCountryAndCustomerTypeAndLocale(address.getCountryCode(), type, lang);
             return orderAddressFormatter.formatAddress(address, format);
         }
         return orderAddressFormatter.formatAddress(address);

@@ -56,6 +56,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<String, List<String>>();
     private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
 
+    private Map<String, Map<String, String>> addressFormattingByLanguageByCountryCode = new HashMap<String, Map<String, String>>();
+
     public ShopEntity() {
     }
 
@@ -279,6 +281,48 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             }
         }
         return supportedLanguagesAsList;
+    }
+
+    public String getAddressFormatByCountryAndCustomerTypeAndLocale(final String countryCode, final String locale, final String customerType) {
+
+        Map<String, String> formatByCountryCode = addressFormattingByLanguageByCountryCode.get(locale);
+
+        if (formatByCountryCode == null) {
+            formatByCountryCode = new HashMap<String, String>();
+            addressFormattingByLanguageByCountryCode.put(locale, formatByCountryCode);
+        }
+
+        final String countryKey = StringUtils.isNotBlank(customerType) ? countryCode + "_" + customerType : countryCode;
+        String format = formatByCountryCode.get(countryKey);
+        if (!formatByCountryCode.containsKey(countryKey)) {
+            if (StringUtils.isNotBlank(customerType)) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale + "_" + customerType);
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + customerType);
+                }
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX);
+            }
+            formatByCountryCode.put(countryKey, format);
+        }
+
+        return format;
     }
 
     public String getSupportedRegistrationFormAttributes(final String customerType) {

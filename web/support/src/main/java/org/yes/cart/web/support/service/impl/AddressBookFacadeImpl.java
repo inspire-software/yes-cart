@@ -282,7 +282,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    public String formatAddressFor(final Address address, final Shop shop) {
-        return addressService.formatAddressFor(address, shop);
+    public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
+        return addressService.formatAddressFor(address, shop, customer, lang);
     }
 }

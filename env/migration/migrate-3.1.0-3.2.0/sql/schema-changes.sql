@@ -33,14 +33,6 @@ alter table TMANAGER  add column SALUTATION varchar(24);
 alter table TCUSTOMER add column SALUTATION varchar(24);
 alter table TADDRESS  add column SALUTATION varchar(24);
 
-update TATTRIBUTE set DESCRIPTION = 'Placeholders:
-{{salutation}} {{firstname}} {{middlename}} {{lastname}}
-{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
-{{phone1}} {{phone2}} {{mobile1}} {{mobile2}}
-{{email1}} {{email2}}
-{{custom1}} {{custom2}} {{custom3}} {{custom4}}', ETYPE_ID = 1011
-where CODE = 'SHOP_ADDRESS_FORMATTER';
-
 update TATTRIBUTE set DESCRIPTION = 'Placeholders: {{salutation}} {{firstname}} {{middlename}} {{lastname}}', ETYPE_ID = 1011 where CODE = 'SHOP_CUSTOMER_FORMATTER';
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -342,4 +334,16 @@ UPDATE TSHOPATTRVALUE set CODE = 'SHOP_CPROFATTRS_READONLY_B2C'
  where CODE = 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY' and SHOP_ID = 10;
 
 UPDATE TCUSTOMER SET CUSTOMERTYPE = 'B2C';
+
+--
+-- YC-672 Per country address formatting
+--
+
+update TATTRIBUTE set NAME = 'Address: address format (default)', DESCRIPTION = 'Placeholders:
+{{salutation}} {{firstname}} {{middlename}} {{lastname}}
+{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{custom1}} {{custom2}} {{custom3}} {{custom4}}
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]', ETYPE_ID = 1011
+where CODE = 'SHOP_ADDRESS_FORMATTER';
 

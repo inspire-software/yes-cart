@@ -116,10 +116,12 @@ public interface AddressBookFacade {
      *
      * @param address address to format
      * @param shop shop
+     * @param customer customer
+     * @param lang language
      *
      * @return string representation of this address
      */
-    String formatAddressFor(Address address, Shop shop);
+    String formatAddressFor(Address address, Shop shop, Customer customer, String lang);
 
 
 }

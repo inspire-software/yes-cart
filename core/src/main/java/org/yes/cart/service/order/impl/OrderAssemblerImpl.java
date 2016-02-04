@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -187,6 +186,10 @@ public class OrderAssemblerImpl implements OrderAssembler {
             long selectedBillingAddressId = shoppingCart.getOrderInfo().getBillingAddressId() != null ? shoppingCart.getOrderInfo().getBillingAddressId() : 0L;
             long selectedShippingAddressId = shoppingCart.getOrderInfo().getDeliveryAddressId()!= null ? shoppingCart.getOrderInfo().getDeliveryAddressId() : 0L;
 
+
+            boolean billingNotRequired = shoppingCart.getOrderInfo().isBillingAddressNotRequired();
+            boolean shippingNotRequired = shoppingCart.getOrderInfo().isDeliveryAddressNotRequired();
+
             Address billingAddress = null;
             Address shippingAddress = null;
 
@@ -202,22 +205,30 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 }
             }
 
-            if (billingAddress == null) {
+            if (billingAddress == null && !billingNotRequired) {
                 billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
             }
-            if (shippingAddress == null) {
+            if (shippingAddress == null && !shippingNotRequired) {
                 shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
             }
 
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
 
-            customerOrder.setShippingAddress(formatAddress(shippingAddress, customerOrder.getShop()));
+            if (!shippingNotRequired) {
+                customerOrder.setShippingAddress(formatAddress(shippingAddress, customerOrder.getShop(), customer, customerOrder.getLocale()));
+            } else {
+                customerOrder.setShippingAddress("");
+            }
 
             if (sameAddress) {
                 billingAddress = shippingAddress;
             }
 
-            customerOrder.setBillingAddress(formatAddress(billingAddress, customerOrder.getShop()));
+            if (!billingNotRequired) {
+                customerOrder.setBillingAddress(formatAddress(billingAddress, customerOrder.getShop(), customer, customerOrder.getLocale()));
+            } else {
+                customerOrder.setBillingAddress("");
+            }
 
             if (!temp) {
 
@@ -229,8 +240,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
                     orderBillingAddress = createCopy(billingAddress);
                 }
 
-                customerOrder.setBillingAddressDetails(orderBillingAddress);
-                customerOrder.setShippingAddressDetails(orderShippingAddress);
+                if (!billingNotRequired) {
+                    customerOrder.setBillingAddressDetails(orderBillingAddress);
+                }
+                if (!shippingNotRequired) {
+                    customerOrder.setShippingAddressDetails(orderShippingAddress);
+                }
 
             }
 
@@ -333,12 +348,14 @@ public class OrderAssemblerImpl implements OrderAssembler {
      *
      * @param address given address
      * @param shop shop for which to format it
+     * @param lang language
      *
      * @return formatted address
      */
-    private String formatAddress(final Address address, final Shop shop) {
+    private String formatAddress(final Address address, final Shop shop, final Customer customer, final String lang) {
 
-        final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER);
+        final String type = customer != null ? customer.getCustomerType() : null;
+        final String format = shop.getAddressFormatByCountryAndCustomerTypeAndLocale(address.getCountryCode(), type, lang);
         return addressFormatter.formatAddress(address, format);
 
     }

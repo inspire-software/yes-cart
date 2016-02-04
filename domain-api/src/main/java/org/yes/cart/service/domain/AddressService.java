@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 
 import java.util.List;
@@ -61,10 +62,12 @@ public interface AddressService extends GenericService<Address> {
      *
      * @param address address to format
      * @param shop shop
+     * @param customer customer
+     * @param lang language
      *
      * @return string representation of this address
      */
-    String formatAddressFor(Address address, Shop shop);
+    String formatAddressFor(Address address, Shop shop, Customer customer, String lang);
 
 
 }

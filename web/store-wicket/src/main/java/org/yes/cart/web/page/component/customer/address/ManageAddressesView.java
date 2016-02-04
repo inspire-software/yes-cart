@@ -93,7 +93,7 @@ public class ManageAddressesView extends BaseComponent {
     public ManageAddressesView(final String panelId, final IModel<Customer> customerModel,
                                final String addressType, final boolean returnToCheckout) {
 
-        super(panelId);
+        super(panelId, customerModel);
 
         final List<Address> allowed = determineAllowedAddresses(customerModel, addressType);
 
@@ -168,7 +168,12 @@ public class ManageAddressesView extends BaseComponent {
      */
     protected void populateAddress(final ListItem<Address> addressListItem, final Address address, final boolean returnToCheckout) {
 
-        final String addressString = addressBookFacade.formatAddressFor(address, ApplicationDirector.getCurrentShop());
+        final String addressString = addressBookFacade.formatAddressFor(
+                address,
+                ApplicationDirector.getCurrentShop(),
+                (Customer) getDefaultModelObject(),
+                getLocale().getLanguage()
+        );
 
         addressListItem
                 .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))

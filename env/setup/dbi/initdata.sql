@@ -76,13 +76,13 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'Enable "Add coupon" section on the shopping cart page',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format',
+  VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format (default)',
 'Placeholders:
 {{salutation}} {{firstname}} {{middlename}} {{lastname}}
 {{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
-{{phone1}} {{phone2}} {{mobile1}} {{mobile2}}
-{{email1}} {{email2}}
-{{custom1}} {{custom2}} {{custom3}} {{custom4}}',  1011, 1001);
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{custom1}} {{custom2}} {{custom3}} {{custom4}}
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  1011, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10985,  'SHOP_CUSTOMER_FORMATTER', 'SHOP_CUSTOMER_FORMATTER',  0,  NULL,  'Customer: name format',

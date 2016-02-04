@@ -271,6 +271,16 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     List<String> getSupportedLanguagesAsList();
 
+    /**
+     * Get address formatting per country per locale.
+     *
+     * @param countryCode  country for which to provide address format
+     * @param locale       language for which to provide address format
+     * @param customerType (optional) customer type
+     *
+     * @return format
+     */
+    String getAddressFormatByCountryAndCustomerTypeAndLocale(String countryCode, String locale, String customerType);
 
     /**
      * Get all supported customer attributes.

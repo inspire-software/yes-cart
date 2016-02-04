@@ -264,7 +264,7 @@ public interface AttributeNamesKeys {
         /**
          * Supported by shop address formatter.
          */
-        String ADDRESS_FORMATTER = "SHOP_ADDRESS_FORMATTER";
+        String ADDRESS_FORMATTER_PREFIX = "SHOP_ADDRESS_FORMATTER";
 
         /**
          * Supported by shop customer name formatter.
