@@ -149,6 +149,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         attrData.remove("firstname");
         attrData.remove("lastname");
         attrData.remove("middlename");
+        attrData.remove("customerType");
         if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.CUSTOMER_PHONE)) {
             attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
         }
