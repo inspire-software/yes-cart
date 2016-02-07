@@ -209,7 +209,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     public String registerEmailRequest(final Shop registrationShop,
                                        final String email,
                                        final Map<String, Object> registrationData) {
-        return email; // do nothing, email is sent via ContactUsAspect
+        return email; // do nothing, email is sent via ContactFormAspect
     }
 
     @Override
