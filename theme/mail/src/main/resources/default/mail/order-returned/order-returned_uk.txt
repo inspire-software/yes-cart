@@ -1,4 +1,4 @@
-Шановний (-на) $customer.firstname $customer.lastname!
+Шановний (-на) $root.firstname $root.lastname!
 Повернення замовлення $root.ordernum at $shop.name було виконано.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

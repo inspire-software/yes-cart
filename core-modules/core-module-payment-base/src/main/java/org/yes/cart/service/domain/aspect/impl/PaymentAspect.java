@@ -235,13 +235,15 @@ public class PaymentAspect extends BaseNotificationAspect {
         final CustomerOrder customerOrder = (CustomerOrder) pjp.getArgs()[0];
         final Shop shop = shopService.getById(customerOrder.getShop().getShopId());
         map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
-        map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getCustomer().getEmail());
+        map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getEmail());
         map.put(StandardMessageListener.RESULT, rez);
         map.put(StandardMessageListener.ROOT, customerOrder);
         map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
 
         map.put(StandardMessageListener.SHOP, shop);
         map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
+        map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
+        map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
         map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
         final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), shop.getCode()).getPaymentGatewayFeatures();

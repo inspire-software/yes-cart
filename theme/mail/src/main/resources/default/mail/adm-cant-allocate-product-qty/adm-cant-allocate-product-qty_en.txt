@@ -1,5 +1,5 @@
 Cannot allocate quantity for product $sku.name, code $sku.code
-for order $root.ordernum at $shop.name for $customer.firstname $customer.lastname $customer.email
+for order $root.ordernum at $shop.name for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

@@ -278,6 +278,11 @@
         PG_LABEL varchar(255) comment 'Payment gateway label',
         ORDERNUM varchar(255) comment 'Depends from order num producer.',
         CART_GUID varchar(36) not null,
+        EMAIL varchar(255) not null,
+        SALUTATION varchar(24),
+        FIRSTNAME varchar(128) not null,
+        LASTNAME varchar(128) not null,
+        MIDDLENAME varchar(128),
         CURRENCY varchar(3) not null,
         LOCALE varchar(5) not null,
         PRICE decimal(19,2) not null,
@@ -1235,6 +1240,7 @@
 
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
+    create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
 
     alter table TCUSTOMERORDER
         add index FK_ORDER_BILLADDR (BILL_ADDRESS_ID),

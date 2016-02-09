@@ -249,7 +249,13 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             }
 
-            customerOrder.setCustomer(customer);
+            customerOrder.setCustomer(customer);  // TODO: Do not set guests, they need to be discarded
+
+            customerOrder.setEmail(customer.getEmail());
+            customerOrder.setSalutation(customer.getSalutation());
+            customerOrder.setFirstname(customer.getFirstname());
+            customerOrder.setLastname(customer.getLastname());
+            customerOrder.setMiddlename(customer.getMiddlename());
         }
 
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());

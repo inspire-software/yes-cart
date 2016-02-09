@@ -650,36 +650,25 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                                          final String transactionOperation,
                                          final String transactionGatewayLabel) {
 
-        final Customer customer = order.getCustomer();
+        Address shippingAddr = order.getShippingAddressDetails();
+        Address billingAddr = order.getBillingAddressDetails();
 
-        if (customer != null) {
-
-            Address shippingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
-            Address billingAddr = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-
-            if (billingAddr == null) {
-                billingAddr = shippingAddr;
-            }
-
-            if (billingAddr != null) {
-                PaymentAddress addr = new PaymentAddressImpl();
-                BeanUtils.copyProperties(billingAddr, addr);
-                templatePayment.setBillingAddress(addr);
-            }
-
-            if (shippingAddr != null) {
-                PaymentAddress addr = new PaymentAddressImpl();
-                BeanUtils.copyProperties(shippingAddr, addr);
-                templatePayment.setShippingAddress(addr);
-            }
-
-            templatePayment.setBillingAddressString(order.getBillingAddress());
-            templatePayment.setShippingAddressString(order.getShippingAddress());
-
-            templatePayment.setBillingEmail(customer.getEmail());
-
+        if (billingAddr != null) {
+            PaymentAddress addr = new PaymentAddressImpl();
+            BeanUtils.copyProperties(billingAddr, addr);
+            templatePayment.setBillingAddress(addr);
         }
 
+        if (shippingAddr != null) {
+            PaymentAddress addr = new PaymentAddressImpl();
+            BeanUtils.copyProperties(shippingAddr, addr);
+            templatePayment.setShippingAddress(addr);
+        }
+
+        templatePayment.setBillingAddressString(order.getBillingAddress());
+        templatePayment.setShippingAddressString(order.getShippingAddress());
+
+        templatePayment.setBillingEmail(order.getEmail());
 
         templatePayment.setOrderDate(order.getOrderTimestamp());
         templatePayment.setOrderCurrency(order.getCurrency());

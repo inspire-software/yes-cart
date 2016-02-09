@@ -347,3 +347,26 @@ update TATTRIBUTE set NAME = 'Address: address format (default)', DESCRIPTION = 
 For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]', ETYPE_ID = 1011
 where CODE = 'SHOP_ADDRESS_FORMATTER';
 
+--
+-- YC-665 Guest Checkout
+--
+
+alter table TCUSTOMERORDER add column EMAIL varchar(255);
+alter table TCUSTOMERORDER add column SALUTATION varchar(24);
+alter table TCUSTOMERORDER add column FIRSTNAME varchar(128);
+alter table TCUSTOMERORDER add column LASTNAME varchar(128);
+alter table TCUSTOMERORDER add column MIDDLENAME varchar(128);
+
+update TCUSTOMERORDER o set EMAIL = (select EMAIL from TCUSTOMER  c where c.CUSTOMER_ID = o.CUSTOMER_ID);
+update TCUSTOMERORDER o set SALUTATION = (select SALUTATION from TCUSTOMER  c where c.CUSTOMER_ID = o.CUSTOMER_ID);
+update TCUSTOMERORDER o set FIRSTNAME = (select FIRSTNAME from TCUSTOMER  c where c.CUSTOMER_ID = o.CUSTOMER_ID);
+update TCUSTOMERORDER o set LASTNAME = (select LASTNAME from TCUSTOMER  c where c.CUSTOMER_ID = o.CUSTOMER_ID);
+update TCUSTOMERORDER o set MIDDLENAME = (select MIDDLENAME from TCUSTOMER  c where c.CUSTOMER_ID = o.CUSTOMER_ID);
+
+alter table TCUSTOMERORDER modify column EMAIL varchar(255) not null;
+alter table TCUSTOMERORDER modify column FIRSTNAME varchar(128) not null;
+alter table TCUSTOMERORDER modify column LASTNAME varchar(128) not null;
+-- alter table TCUSTOMERORDER alter column EMAIL not null;
+-- alter table TCUSTOMERORDER alter column FIRSTNAME not null;
+-- alter table TCUSTOMERORDER alter column LASTNAME not null;
+create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);

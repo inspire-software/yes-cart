@@ -1,5 +1,5 @@
 Die Artikel können leider nicht reserviert werden $sku.name, SKU $sku.code
-für Bestellung $root.ordernum at $shop.name für $customer.firstname $customer.lastname $customer.email
+für Bestellung $root.ordernum at $shop.name für $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

@@ -29,6 +29,8 @@ import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -112,14 +114,12 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
         mutableOrderInfo.setMultipleDelivery(customerOrder.getDelivery().size() > 1);
 
-        mutableShoppingContext.setCustomerEmail(customerOrder.getCustomer().getEmail());
-        mutableShoppingContext.setCustomerName(formatNameFor(customerOrder.getCustomer(), customerOrder.getShop()));
+        mutableShoppingContext.setCustomerEmail(customerOrder.getEmail());
+        mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, customerOrder.getShop()));
 
         final List<String> customerShops = new ArrayList<String>();
-        for (final CustomerShop shop : customerOrder.getCustomer().getShops()) {
-            customerShops.add(shop.getShop().getCode());
-        }
-        mutableShoppingContext.setCustomerShops(customerShops);
+        customerShops.add(customerOrder.getShop().getCode());
+        mutableShoppingContext.setCustomerShops(customerShops); // Only use order's shop, since it may be guest checkout
         mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
         mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
 
@@ -133,10 +133,260 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
     }
 
 
-    private String formatNameFor(final Customer customer, final Shop shop) {
+    private String formatNameFor(final CustomerOrder order, final Shop shop) {
 
         final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
-        return customerNameFormatter.formatName(customer, format);
+        return customerNameFormatter.formatName(new Customer() {
+            @Override
+            public long getCustomerId() {
+                return 0;
+            }
+
+            @Override
+            public void setCustomerId(final long customerId) {
+
+            }
+
+            @Override
+            public String getPublicKey() {
+                return null;
+            }
+
+            @Override
+            public void setPublicKey(final String publicKey) {
+
+            }
+
+            @Override
+            public String getCustomerType() {
+                return null;
+            }
+
+            @Override
+            public void setCustomerType(final String customerType) {
+
+            }
+
+            @Override
+            public Collection<CustomerOrder> getOrders() {
+                return null;
+            }
+
+            @Override
+            public void setOrders(final Collection<CustomerOrder> orders) {
+
+            }
+
+            @Override
+            public Collection<CustomerWishList> getWishList() {
+                return null;
+            }
+
+            @Override
+            public void setWishList(final Collection<CustomerWishList> wishList) {
+
+            }
+
+            @Override
+            public Collection<AttrValueCustomer> getAttributes() {
+                return null;
+            }
+
+            @Override
+            public Collection<AttrValueCustomer> getAttributesByCode(final String attributeCode) {
+                return null;
+            }
+
+            @Override
+            public AttrValueCustomer getAttributeByCode(final String attributeCode) {
+                return null;
+            }
+
+            @Override
+            public List<Address> getAddresses(final String addressType) {
+                return null;
+            }
+
+            @Override
+            public Address getDefaultAddress(final String addressType) {
+                return null;
+            }
+
+            @Override
+            public void setAttributes(final Collection<AttrValueCustomer> attribute) {
+
+            }
+
+            @Override
+            public Collection<Address> getAddress() {
+                return null;
+            }
+
+            @Override
+            public void setAddress(final Collection<Address> address) {
+
+            }
+
+            @Override
+            public Collection<CustomerShop> getShops() {
+                return null;
+            }
+
+            @Override
+            public void setShops(final Collection<CustomerShop> shops) {
+
+            }
+
+            @Override
+            public Date getCreatedTimestamp() {
+                return null;
+            }
+
+            @Override
+            public void setCreatedTimestamp(final Date createdTimestamp) {
+
+            }
+
+            @Override
+            public Date getUpdatedTimestamp() {
+                return null;
+            }
+
+            @Override
+            public void setUpdatedTimestamp(final Date updatedTimestamp) {
+
+            }
+
+            @Override
+            public String getCreatedBy() {
+                return null;
+            }
+
+            @Override
+            public void setCreatedBy(final String createdBy) {
+
+            }
+
+            @Override
+            public String getUpdatedBy() {
+                return null;
+            }
+
+            @Override
+            public void setUpdatedBy(final String updatedBy) {
+
+            }
+
+            @Override
+            public String getGuid() {
+                return null;
+            }
+
+            @Override
+            public void setGuid(final String guid) {
+
+            }
+
+            @Override
+            public long getId() {
+                return 0;
+            }
+
+            @Override
+            public String getEmail() {
+                return order.getEmail();
+            }
+
+            @Override
+            public void setEmail(final String email) {
+
+            }
+
+            @Override
+            public String getFirstname() {
+                return order.getFirstname();
+            }
+
+            @Override
+            public void setFirstname(final String firstname) {
+
+            }
+
+            @Override
+            public String getLastname() {
+                return order.getLastname();
+            }
+
+            @Override
+            public void setLastname(final String lastname) {
+
+            }
+
+            @Override
+            public String getMiddlename() {
+                return order.getMiddlename();
+            }
+
+            @Override
+            public void setMiddlename(final String middlename) {
+
+            }
+
+            @Override
+            public String getSalutation() {
+                return order.getSalutation();
+            }
+
+            @Override
+            public void setSalutation(final String salutation) {
+
+            }
+
+            @Override
+            public String getPassword() {
+                return null;
+            }
+
+            @Override
+            public void setPassword(final String password) {
+
+            }
+
+            @Override
+            public String getAuthToken() {
+                return null;
+            }
+
+            @Override
+            public void setAuthToken(final String authToken) {
+
+            }
+
+            @Override
+            public Date getAuthTokenExpiry() {
+                return null;
+            }
+
+            @Override
+            public void setAuthTokenExpiry(final Date authTokenExpiry) {
+
+            }
+
+            @Override
+            public String getTag() {
+                return null;
+            }
+
+            @Override
+            public void setTag(final String tag) {
+
+            }
+
+            @Override
+            public long getVersion() {
+                return 0;
+            }
+        }, format);
 
     }
 

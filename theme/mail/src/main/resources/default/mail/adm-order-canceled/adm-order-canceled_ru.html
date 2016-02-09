@@ -34,7 +34,7 @@
                     <td width="2%">&nbsp;</td>
                     <td>
                         Заказ <b>$root.ordernum</b> на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> был отменен <br>
-                        для $customer.firstname $customer.lastname $customer.email <br>
+                        для $root.firstname $root.lastname $root.email <br>
                         <% if ($root.orderStatus.endsWith("waiting.payment")) { %>
                         Возврат средств не совершен. Необходимо провести возврат.
                         <% } %>

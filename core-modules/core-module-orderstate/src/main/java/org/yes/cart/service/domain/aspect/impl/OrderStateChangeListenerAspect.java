@@ -122,7 +122,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 final String templateKey = getTemplateKey(orderEvent);
 
-                fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getCustomer().getEmail());
+                fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getEmail());
 
                 if (StringUtils.isBlank(adminEmail)) {
                     LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );

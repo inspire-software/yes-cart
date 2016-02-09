@@ -1,5 +1,5 @@
 Bestellung $root.ordernum bei $shop.name ist bestätigt
-für $customer.firstname $customer.lastname $customer.email
+für $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

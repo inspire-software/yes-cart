@@ -1,4 +1,4 @@
-Уважаемый (-ая) $customer.firstname $customer.lastname!
+Уважаемый (-ая) $root.firstname $root.lastname!
 Доставка $deliveryNum по заказу $root.ordernum на $shop.name отправлена.
 Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
 <%

@@ -1,4 +1,4 @@
-Було сформоване нове замовлення $root.ordernum на $shop.name для $customer.firstname $customer.lastname $customer.email
+Було сформоване нове замовлення $root.ordernum на $shop.name для $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

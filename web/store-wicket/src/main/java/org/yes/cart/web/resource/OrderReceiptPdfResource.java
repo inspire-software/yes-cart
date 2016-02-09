@@ -34,7 +34,7 @@ public class OrderReceiptPdfResource extends AbstractDynamicResource {
             if (StringUtils.isNotBlank(ordernum)) {
 
                 final CustomerOrder order = checkoutServiceFacade.findByReference(ordernum);
-                if (order != null && cart.getCustomerEmail().equals(order.getCustomer().getEmail())) {
+                if (order != null && cart.getCustomerEmail().equals(order.getEmail())) {
 
                     try {
                         final ByteArrayOutputStream baos = new ByteArrayOutputStream();

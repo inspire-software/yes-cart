@@ -1,4 +1,4 @@
-Payment for order $root.ordernum at $shop.name was confirmed for $customer.firstname $customer.lastname $customer.email
+Payment for order $root.ordernum at $shop.name was confirmed for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

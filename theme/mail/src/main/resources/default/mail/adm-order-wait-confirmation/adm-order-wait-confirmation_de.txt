@@ -1,4 +1,4 @@
-Bestellbestätigung erforderlich für $customer.firstname $customer.lastname $customer.email.
+Bestellbestätigung erforderlich für $root.firstname $root.lastname $root.email.
 Bestellnummer $root.ordernum bei $shop.name.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

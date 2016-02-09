@@ -1,4 +1,4 @@
-Уважаемый (-ая) $customer.firstname $customer.lastname!
+Уважаемый (-ая) $root.firstname $root.lastname!
 Ваш заказ $root.ordernum на $shop.name был подтвержден.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

@@ -1,4 +1,4 @@
-Уважаемый (-ая) $customer.firstname $customer.lastname!
+Уважаемый (-ая) $root.firstname $root.lastname!
 Оплата по Вашему заказу получена. Спасибо!
 Подробную информацию Вы можете посмотреть в истории заказов
 "<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

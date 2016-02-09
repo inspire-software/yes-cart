@@ -1,4 +1,4 @@
-Dear $customer.firstname $customer.lastname!
+Dear $root.firstname $root.lastname!
 New order $root.ordernum at $shop.name was cancelled.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

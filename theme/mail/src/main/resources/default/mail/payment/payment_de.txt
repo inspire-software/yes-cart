@@ -1,4 +1,4 @@
-Guten Tag $customer.firstname $customer.lastname!
+Guten Tag $root.firstname $root.lastname!
 Ihre Zahlung für die Bestellung $root.ordernum haben wir erhalten. Besten Dank!
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

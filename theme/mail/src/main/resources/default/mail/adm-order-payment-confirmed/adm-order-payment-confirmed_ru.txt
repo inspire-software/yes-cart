@@ -1,4 +1,4 @@
-Оплата по заказу $root.ordernum на $shop.name подтверждена для $customer.firstname $customer.lastname $customer.email
+Оплата по заказу $root.ordernum на $shop.name подтверждена для $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

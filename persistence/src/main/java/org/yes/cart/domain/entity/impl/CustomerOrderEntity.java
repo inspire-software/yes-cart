@@ -38,6 +38,12 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String ordernum;
     private String cartGuid;
 
+    private String email;
+    private String salutation;
+    private String firstname;
+    private String lastname;
+    private String middlename;
+
     private String currency;
     private BigDecimal price;
     private BigDecimal listPrice;
@@ -87,6 +93,46 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setOrdernum(String ordernum) {
         this.ordernum = ordernum;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(final String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(final String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getMiddlename() {
+        return middlename;
+    }
+
+    public void setMiddlename(final String middlename) {
+        this.middlename = middlename;
     }
 
     public String getCartGuid() {

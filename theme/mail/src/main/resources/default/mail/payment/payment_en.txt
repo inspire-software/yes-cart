@@ -1,4 +1,4 @@
-Dear $customer.firstname $customer.lastname!
+Dear $root.firstname $root.lastname!
 Your payment for order has been received. Thank You!
 You can view detailed information in order history
 "<%out.print(shop.getDefaultShopUrl())%>/yes-shop/order?order=<%=root.cartGuid%>"

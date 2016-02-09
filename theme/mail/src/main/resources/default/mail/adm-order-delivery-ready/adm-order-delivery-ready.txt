@@ -1,5 +1,5 @@
 Delivery $deliveryNum for order $root.ordernum at $shop.name is ready for shipment
-for $customer.firstname $customer.lastname $customer.email
+for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

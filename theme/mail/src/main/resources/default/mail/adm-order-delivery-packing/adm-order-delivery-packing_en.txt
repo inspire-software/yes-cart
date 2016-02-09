@@ -1,5 +1,5 @@
 Доставка $deliveryNum для заказа $root.ordernum на $shop.name подготавливается <br>
-для $customer.firstname $customer.lastname $customer.email
+для $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

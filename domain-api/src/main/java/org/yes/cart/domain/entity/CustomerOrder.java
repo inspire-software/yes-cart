@@ -119,6 +119,77 @@ public interface CustomerOrder extends Auditable {
     void setOrdernum(String ordernum);
 
     /**
+     * Get person id.
+     *
+     * @return customer email.
+     */
+    String getEmail();
+
+    /**
+     * Set customer email
+     *
+     * @param email email
+     */
+    void setEmail(String email);
+
+
+    /**
+     * Get first name.
+     *
+     * @return first name
+     */
+    String getFirstname();
+
+    /**
+     * Set first name
+     *
+     * @param firstname value to set
+     */
+    void setFirstname(String firstname);
+
+    /**
+     * Get last name.
+     *
+     * @return last name
+     */
+    String getLastname();
+
+    /**
+     * Set last name
+     *
+     * @param lastname value to set
+     */
+    void setLastname(String lastname);
+
+    /**
+     * Get middle name
+     *
+     * @return middle name
+     */
+    String getMiddlename();
+
+    /**
+     * Set middle name
+     *
+     * @param middlename value to set
+     */
+    void setMiddlename(String middlename);
+
+    /**
+     * Get salutation
+     *
+     * @return salutation
+     */
+    String getSalutation();
+
+    /**
+     * Set salutation
+     *
+     * @param salutation value to set
+     */
+    void setSalutation(String salutation);
+
+    /**
      * Get payment gateway label.
      *
      * @return payment gateway label.

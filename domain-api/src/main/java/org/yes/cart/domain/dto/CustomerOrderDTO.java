@@ -60,6 +60,8 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setOrdernum(String ordernum);
 
+
+
     /**
      * Get payment gateway label.
      *

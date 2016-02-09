@@ -1,4 +1,4 @@
-New order $root.ordernum at $shop.name was created for $customer.firstname $customer.lastname $customer.email
+New order $root.ordernum at $shop.name was created for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

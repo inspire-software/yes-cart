@@ -1,4 +1,4 @@
-Уважаемый (-ая) $customer.firstname $customer.lastname!
+Уважаемый (-ая) $root.firstname $root.lastname!
 Возврат заказа $root.ordernum на $shop.name был выполнен.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

@@ -1,5 +1,5 @@
 Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name wird vorbereitet
-für $customer.firstname $customer.lastname $customer.email
+für $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

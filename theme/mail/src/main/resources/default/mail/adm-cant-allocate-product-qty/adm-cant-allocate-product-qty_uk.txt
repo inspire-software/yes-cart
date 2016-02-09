@@ -1,5 +1,5 @@
 Відсутній залишок для товара $sku.name, код $sku.code
-для замовлення $root.ordernum at $shop.name для $customer.firstname $customer.lastname $customer.email
+для замовлення $root.ordernum at $shop.name для $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

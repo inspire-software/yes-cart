@@ -133,30 +133,33 @@ public class DtoCustomerServiceImpl
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final CustomerDTO customerDTO = getById(entityPk);
         final List<AttrValueCustomerDTO> result = new ArrayList<AttrValueCustomerDTO>();
-        result.addAll(getById(entityPk).getAttributes());
-        final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
-                AttributeGroupNames.CUSTOMER,
-                getCodes(result));
-        for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
-            attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-            attrValueCategoryDTO.setCustomerId(entityPk);
-            if ("salutation".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                attrValueCategoryDTO.setVal(customerDTO.getSalutation());
-            } else if ("firstname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                attrValueCategoryDTO.setVal(customerDTO.getFirstname());
-            } else if ("middlename".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
-            } else if ("lastname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                attrValueCategoryDTO.setVal(customerDTO.getLastname());
-            } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
-                attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
+        if (entityPk > 0L) {
+
+            final CustomerDTO customerDTO = getById(entityPk);
+            result.addAll(getById(entityPk).getAttributes());
+            final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
+                    AttributeGroupNames.CUSTOMER,
+                    getCodes(result));
+            for (AttributeDTO attributeDTO : availableAttributeDTOs) {
+                AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
+                attrValueCategoryDTO.setAttributeDTO(attributeDTO);
+                attrValueCategoryDTO.setCustomerId(entityPk);
+                if ("salutation".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getSalutation());
+                } else if ("firstname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getFirstname());
+                } else if ("middlename".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
+                } else if ("lastname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getLastname());
+                } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
+                }
+                result.add(attrValueCategoryDTO);
             }
-            result.add(attrValueCategoryDTO);
+            Collections.sort(result, new AttrValueDTOComparatorImpl());
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
         return result;
     }
 

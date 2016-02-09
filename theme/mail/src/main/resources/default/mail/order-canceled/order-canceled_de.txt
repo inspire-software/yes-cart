@@ -1,4 +1,4 @@
-Guten Tag $customer.firstname $customer.lastname!
+Guten Tag $root.firstname $root.lastname!
 Neue Bestellung $root.ordernum at $shop.name wurde annuliert.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

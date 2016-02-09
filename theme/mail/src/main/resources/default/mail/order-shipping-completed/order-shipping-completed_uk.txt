@@ -1,4 +1,4 @@
-Шановний (-на) $customer.firstname $customer.lastname!
+Шановний (-на) $root.firstname $root.lastname!
 Доставка $deliveryNum для замовлення $root.ordernum на $shop.name виконана.
 Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
 <%
