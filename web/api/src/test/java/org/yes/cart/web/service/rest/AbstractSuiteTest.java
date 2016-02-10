@@ -131,6 +131,27 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
     }
 
+    /**
+     * JSON bytes for registration request object
+     *
+     * @param email customer email
+     * @return bytes for request body
+     *
+     * @throws Exception
+     */
+    protected byte[] toJsonBytesGuestDetails(final String email) throws Exception {
+
+        final RegisterRO register = new RegisterRO();
+        register.setEmail(email);
+        register.setCustomerType("B2G");
+        register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("firstname", "Bob");
+        register.getCustom().put("lastname", "Doe");
+
+        return toJsonBytes(register);
+
+    }
+
 
     /**
      * JSON bytes for address request object

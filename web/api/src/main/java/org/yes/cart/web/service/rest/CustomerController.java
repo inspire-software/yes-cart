@@ -858,11 +858,13 @@ public class CustomerController {
 
     private List<AddressRO> updateAddressbookInternal(final String type, final AddressRO address) {
 
-        cartMixin.throwSecurityExceptionIfNotLoggedIn();
-
-        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Shop shop = cartMixin.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        }
 
         final Address addressEntity = addressBookFacade.getAddress(customer, String.valueOf(address.getAddressId()), type);
 

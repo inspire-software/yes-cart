@@ -1220,16 +1220,18 @@ public class CartController {
                 Address billing = null;
                 Address delivery = null;
 
-                if ((billingAddressId > 0L || deliveryAddressId > 0L) && cart.getLogonState() == ShoppingCart.LOGGED_IN) {
+                if (billingAddressId > 0L || deliveryAddressId > 0L) {
 
-                    final Customer customer = customerServiceFacade.getCustomerByEmail(cartMixin.getCurrentShop(), cart.getCustomerEmail());
+                    final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
 
-                    for (final Address address : customer.getAddress()) {
-                        if (address.getAddressId() == billingAddressId) {
-                            billing = address;
-                        }
-                        if (address.getAddressId() == deliveryAddressId) {
-                            delivery = address;
+                    if (customer != null) {
+                        for (final Address address : customer.getAddress()) {
+                            if (address.getAddressId() == billingAddressId) {
+                                billing = address;
+                            }
+                            if (address.getAddressId() == deliveryAddressId) {
+                                delivery = address;
+                            }
                         }
                     }
                 }
@@ -1619,41 +1621,41 @@ public class CartController {
                                                    final HttpServletResponse response) {
 
 
-        cartMixin.throwSecurityExceptionIfNotLoggedIn();
-
         final long addressId = NumberUtils.toLong(option.getAddressId());
 
         if (addressId > 0L) {
             final ShoppingCart cart = cartMixin.getCurrentCart();
             final Shop shop = cartMixin.getCurrentShop();
 
-            final List<AddressRO> addresses = addressSupportMixin.viewAddressOptions(cart, shop, type);
+            final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
-            for (final AddressRO address : addresses) {
-                if (address.getAddressId() == addressId) {
+            if (customer != null) {
+                final List<AddressRO> addresses = addressSupportMixin.viewAddressOptions(cart, shop, type);
 
-                    final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+                for (final AddressRO address : addresses) {
+                    if (address.getAddressId() == addressId) {
 
-                    final Address optionAddress = addressBookFacade.getAddress(customer, option.getAddressId(), type);
+                        final Address optionAddress = addressBookFacade.getAddress(customer, option.getAddressId(), type);
 
-                    if (optionAddress != null) {
+                        if (optionAddress != null) {
 
-                        final Map<String, Object> params = new HashMap<String, Object>();
-                        params.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
-                        if (Address.ADDR_TYPE_BILLING.equals(type) || option.isShippingSameAsBilling()) {
-                            params.put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, optionAddress);
+                            final Map<String, Object> params = new HashMap<String, Object>();
+                            params.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
+                            if (Address.ADDR_TYPE_BILLING.equals(type) || option.isShippingSameAsBilling()) {
+                                params.put(ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS, optionAddress);
+                            }
+                            if (Address.ADDR_TYPE_SHIPPING.equals(type) || option.isShippingSameAsBilling()) {
+                                params.put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, optionAddress);
+                            }
+
+                            params.put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!option.isShippingSameAsBilling()));
+
+                            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, cart, params);
+                            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, params);
+
                         }
-                        if (Address.ADDR_TYPE_SHIPPING.equals(type) || option.isShippingSameAsBilling()) {
-                            params.put(ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS, optionAddress);
-                        }
-
-                        params.put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!option.isShippingSameAsBilling()));
-
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, cart, params);
-                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, cart, params);
-
+                        break;
                     }
-                    break;
                 }
             }
         }
@@ -2256,9 +2258,14 @@ public class CartController {
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
-        cartMixin.throwSecurityExceptionIfNotLoggedIn();
-
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Shop shop = cartMixin.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        }
+
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, cart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, String.valueOf(option.isForceSingleDelivery())));
         cartMixin.persistShoppingCart(request, response);
@@ -2275,7 +2282,7 @@ public class CartController {
         }
 
         if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail(), cartMixin.getCurrentShop())) {
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), cartMixin.getCurrentShop())) {
             // Must have an address if it is required
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
@@ -2637,14 +2644,19 @@ public class CartController {
     public @ResponseBody OrderPlacedRO orderPlace(final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
-        cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Shop shop = cartMixin.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        }
 
         final Map param = request.getParameterMap();
         final Map mparam = new HashMap();
         mparam.putAll(param);
         mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
 
-        final ShoppingCart cart = cartMixin.getCurrentCart();
         final String guid = cart.getGuid();
         final OrderPlacedRO placed = new OrderPlacedRO();
 

@@ -163,6 +163,16 @@ public interface CustomerServiceFacade {
     boolean isShopGuestCheckoutSupported(Shop shop);
 
     /**
+     * Check to see if customer type is supported.
+     *
+     * @param shop shop
+     * @param customerType type code
+     *
+     * @return flag to determine if gues checkout is supported
+     */
+    boolean isShopCustomerTypeSupported(Shop shop, String customerType);
+
+    /**
      * List of custom attributes eligible for profile edit form.
      * CPOINT - This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.

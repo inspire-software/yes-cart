@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.ro;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,6 +34,8 @@ public class RegisterFormRO implements Serializable {
     private static final long serialVersionUID = 20150301L;
 
     private String email;
+    private String customerType;
+    private boolean customerTypeSupported;
     private List<AttrValueCustomerRO> custom;
 
     @XmlElementWrapper(name = "custom")
@@ -54,4 +57,21 @@ public class RegisterFormRO implements Serializable {
         this.email = email;
     }
 
+    @XmlAttribute(name = "customer-type")
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
+    }
+
+    @XmlAttribute(name = "customer-type-supported")
+    public boolean isCustomerTypeSupported() {
+        return customerTypeSupported;
+    }
+
+    public void setCustomerTypeSupported(final boolean customerTypeSupported) {
+        this.customerTypeSupported = customerTypeSupported;
+    }
 }

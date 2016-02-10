@@ -324,6 +324,11 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         return val != null && Boolean.valueOf(val);
     }
 
+    /** {@inheritDoc} */
+    public boolean isShopCustomerTypeSupported(final Shop shop, final String customerType) {
+        return getShopCustomerTypesCodes(shop, false).contains(customerType);
+    }
+
     private AttrValue getShopCustomerTypes(Shop shop) {
         return shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
     }

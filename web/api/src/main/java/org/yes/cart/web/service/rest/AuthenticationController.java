@@ -365,7 +365,12 @@ public class AuthenticationController {
      * Interface: GET /yes-api/rest/auth/register
      * <p>
      * <p>
-     * Interface to list all attributes required for registration
+     * Interface to list all attributes required for registration.
+     * <p>
+     * If customerType is not specified returns form with two custom attributes: 1) customerType - containing customer type choices
+     * and 2) guestCheckoutEnabled - containing true/false flag.
+     * <p>
+     * If customerType is specified returns custom attributes that represent form fields.
      * <p>
      * <p>
      * <h3>Headers for operation</h3><p>
@@ -471,22 +476,27 @@ public class AuthenticationController {
 
         final List<Pair<String, I18NModel>> allowedTypes = customerServiceFacade.getShopSupportedCustomerTypes(shop);
 
+        final RegisterFormRO formRO = new RegisterFormRO();
+
         if (StringUtils.isNotBlank(customerType)) {
             // Retrieve form fields for type
 
+            formRO.setCustomerType(customerType);
+            if ("B2G".equals(customerType)) {
+                formRO.setCustomerTypeSupported(customerServiceFacade.isShopGuestCheckoutSupported(shop));
+            } else {
+                formRO.setCustomerTypeSupported(customerServiceFacade.isShopCustomerTypeSupported(shop, customerType));
+            }
+
             final List<AttrValueCustomer> avs = customerServiceFacade.getShopRegistrationAttributes(shop, customerType);
 
-            final RegisterFormRO formRO = new RegisterFormRO();
             formRO.setCustom(mappingMixin.map(avs, AttrValueCustomerRO.class, AttrValueCustomer.class));
-
-            return formRO;
 
         } else {
             // If no type then present form with allowed types.
 
-            final RegisterFormRO formRO = new RegisterFormRO();
-            final AttrValueCustomerRO avro = new AttrValueCustomerRO();
-            avro.setAttributeCode("customerType");
+            final AttrValueCustomerRO avroct = new AttrValueCustomerRO();
+            avroct.setAttributeCode("customerType");
 
             final List<String> supported = languageService.getSupportedLanguages(shop.getCode());
 
@@ -503,13 +513,18 @@ public class AuthenticationController {
                     }
                 }
             }
-            avro.setAttributeDisplayChoices(displayChoice);
+            avroct.setAttributeDisplayChoices(displayChoice);
 
-            formRO.setCustom(new ArrayList<AttrValueCustomerRO>(Collections.singletonList(avro)));
+            final AttrValueCustomerRO avrogc = new AttrValueCustomerRO();
+            avrogc.setAttributeCode("guestCheckoutEnabled");
+            avrogc.setVal(String.valueOf(customerServiceFacade.isShopGuestCheckoutSupported(shop)));
 
-            return formRO;
+            formRO.setCustom(new ArrayList<AttrValueCustomerRO>(Arrays.asList(avrogc, avroct)));
 
         }
+
+        return formRO;
+
     }
 
     private static final Pattern EMAIL =
@@ -544,6 +559,7 @@ public class AuthenticationController {
      *    "firstname" : "Bob",
      *    "lastname" : "Doe",
      *    "phone" : "123123123123",
+     *    "customerType" : "B2C",
      *    "custom" : {
      *        "attr1": "value1",
      *        "attr2": "value2",
@@ -644,7 +660,9 @@ public class AuthenticationController {
 
         }
 
-        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())) {
+        // No existing users, non-typed customers or guests allowed
+        if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())
+                || StringUtils.isBlank(registerRO.getCustomerType()) || "B2G".equals(registerRO.getCustomerType())) {
 
             return new AuthenticationResultRO("USER_FAILED");
 
@@ -694,6 +712,199 @@ public class AuthenticationController {
         loginRO.setPassword(password);
 
         return login(loginRO, request, response);
+
+    }
+
+
+    /**
+     * Interface: PUT /yes-api/rest/auth/guest
+     * <p>
+     * <p>
+     * Guest interface that allows create guest user. The token for the authenticated cart is
+     * returned back as response header and also as a cookie.
+     * <p>
+     * <p>
+     * <h3>Headers for operation</h3><p>
+     * <table border="1">
+     *     <tr><td>Content-Type</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>Accept</td><td>application/json or application/xml</td></tr>
+     *     <tr><td>yc</td><td>token uuid (optional)</td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Parameters for register PUT operation</h3><p>
+     * <p>
+     * <p>
+     * <table border="1">
+     *     <tr><td>JSON example:</td><td>
+     * <pre><code>
+     * {
+     *    "email" : "bobdoe@yes-cart.org",
+     *    "firstname" : "Bob",
+     *    "lastname" : "Doe",
+     *    "phone" : "123123123123",
+     *    "customerType" : "B2G",
+     *    "custom" : {
+     *        "attr1": "value1",
+     *        "attr2": "value2",
+     *        ...
+     *        "attrN": "valueN"
+     *    }
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example:</td><td>
+     * <pre><code>
+     * &lt;login&gt;
+     *    &lt;email&gt;bobdoe@yes-cart.org&lt;/email&gt;
+     *    &lt;firstname&gt;Bob&lt;/firstname&gt;
+     *    &lt;lastname&gt;Doe&lt;/lastname&gt;
+     *    &lt;phone&gt;123123123123&lt;/phone&gt;
+     *    &lt;custom&gt;
+     *        &lt;entry key="attr1"&gt;value1&lt;/entry&gt;
+     *        &lt;entry key="attr2"&gt;value2&lt;/entry&gt;
+     *        ...
+     *        &lt;entry key="attrN"&gt;valueN&lt;/entry&gt;
+     *    &lt;/custom&gt;
+     * &lt;/login&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Output</h3><p>
+     * <table border="1">
+     *     <tr><td>JSON example</td><td>
+     * <pre><code>
+     * {
+     *    "success" : true,
+     *    "greeting" : "Bob Doe",
+     *    "token" : {
+     *        "uuid" : "1db8def2-21e0-44d2-aeb0-56baae761129"
+     *    },
+     *    "error" : null
+     * }
+     * </code></pre>
+     *     </td></tr>
+     *     <tr><td>XML example</td><td>
+     * <pre><code>
+     * &lt;authentication-result&gt;
+     *    &lt;greeting&gt;Bob Doe&lt;/greeting&gt;
+     *    &lt;success&gt;true&lt;/success&gt;
+     *    &lt;token&gt;
+     *       &lt;uuid&gt;1db8def2-21e0-44d2-aeb0-56baae761129&lt;/uuid&gt;
+     *    &lt;/token&gt;
+     * &lt;/authentication-result&gt;
+     * </code></pre>
+     *     </td></tr>
+     * </table>
+     * <p>
+     * <p>
+     * <h3>Error codes</h3><p>
+     * <table border="1">
+     *     <tr><td>EMAIL_FAILED</td><td>email must be more than 6 and less than 256 chars (^[_A-Za-z0-9-]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*((\.[A-Za-z]{2,}){1}$)) </td></tr>
+     *     <tr><td>FIRSTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>LASTNAME_FAILED</td><td>must be not blank</td></tr>
+     *     <tr><td>PHONE_FAILED</td><td>phone must be more than 4 and less than 13 chars</td></tr>
+     *     <tr><td>[ATTRIBUTE CODE]:FAILED</td><td>
+     *         E.g. CUSTOMERTYPE_FAILED denoting that mandatory value was missing (could also happen if regex fails but there is no
+     *         validation message specified on the {@link org.yes.cart.domain.entity.Attribute#getValidationFailedMessage()})
+     *     </td></tr>
+     *     <tr><td>[ATTRIBUTE CODE]:FAILED:[Message]</td><td>
+     *         E.g. "CUSTOMERTYPE:FAILED:Please choose either Buyer or Seller (UK)" denoting that regex test failed.
+     *         RegEx and Message come from {@link org.yes.cart.domain.entity.Attribute#getRegexp()} and
+     *         {@link org.yes.cart.domain.entity.Attribute#getValidationFailedMessage()} respectively
+     *     </td></tr>
+     *     <tr><td>GUEST_FAILED</td><td>error creating guest account</td></tr>
+     * </table>
+     *
+     *
+     * @param registerRO register parameters (see examples above)
+     * @param request request
+     * @param response response
+     *
+     * @return authentication result
+     */
+    @RequestMapping(
+            value = "/guest",
+            method = RequestMethod.PUT,
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            consumes =  { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+    )
+    public @ResponseBody AuthenticationResultRO guest(final @RequestBody RegisterRO registerRO,
+                                                      final HttpServletRequest request,
+                                                      final HttpServletResponse response) {
+
+        if (StringUtils.isBlank(registerRO.getEmail())
+                || registerRO.getEmail().length() < 6
+                || registerRO.getEmail().length() > 256
+                || !EMAIL.matcher(registerRO.getEmail()).matches()) {
+
+            return new AuthenticationResultRO("EMAIL_FAILED");
+
+        }
+
+        // Only guests allowed
+        if (StringUtils.isBlank(registerRO.getCustomerType()) || !"B2G".equals(registerRO.getCustomerType())) {
+
+            return new AuthenticationResultRO("GUEST_FAILED");
+
+        }
+
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+        final Shop shop = cartMixin.getCurrentShop();
+
+        if (!customerServiceFacade.isShopGuestCheckoutSupported(shop)) {
+
+            return new AuthenticationResultRO("GUEST_FAILED");
+
+        }
+
+        final Map<String, Object> data = new HashMap<String, Object>();
+        data.put("customerType", registerRO.getCustomerType());
+        data.put("cartGuid", cart.getGuid());
+
+        if (registerRO.getCustom() != null) {
+
+            for (final AttrValueCustomer av : customerServiceFacade.getShopRegistrationAttributes(shop, registerRO.getCustomerType())) {
+
+                final Attribute attr = av.getAttribute();
+                final String value = registerRO.getCustom().get(attr.getCode());
+
+                if (attr.isMandatory() && StringUtils.isBlank(value)) {
+
+                    return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+
+                } else if (StringUtils.isNotBlank(attr.getRegexp())
+                        && !Pattern.compile(attr.getRegexp()).matcher(value).matches()) {
+
+                    final String regexError = new FailoverStringI18NModel(
+                            attr.getValidationFailedMessage(),
+                            null).getValue(cart.getCurrentLocale());
+
+                    if (StringUtils.isBlank(regexError)) {
+                        return new AuthenticationResultRO(attr.getCode() + ":FAILED");
+                    }
+                    return new AuthenticationResultRO(attr.getCode() + ":FAILED:" + regexError);
+
+                } else {
+
+                    data.put(attr.getCode(), value);
+
+                }
+            }
+        }
+
+        final String guest = customerServiceFacade.registerGuest(shop, registerRO.getEmail(), data);
+
+        if (StringUtils.isNotBlank(guest)) {
+
+            final TokenRO token = cartMixin.persistShoppingCart(request, response);
+
+            return new AuthenticationResultRO(null, token);
+        }
+
+        return new AuthenticationResultRO("GUEST_FAILED");
 
     }
 
