@@ -27,6 +27,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.customer.CustomerNameFormatter;
 import org.yes.cart.service.domain.AttributeService;
@@ -37,6 +38,7 @@ import org.yes.cart.utils.impl.AttrValueRankComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -381,5 +383,12 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             customerShopDao.delete(cshop);
         }
         super.delete(instance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ResultsIterator<Customer> findGuestsBefore(final Date date) {
+        return getGenericDao().findByNamedQueryIterator("GUESTS.BEFORE.CREATED", Boolean.TRUE, date);
     }
 }

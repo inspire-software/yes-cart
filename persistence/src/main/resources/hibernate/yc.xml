@@ -2563,6 +2563,11 @@
        ]]>
     </query>
 
+    <query name="GUESTS.BEFORE.CREATED">
+        <![CDATA[
+       select g from CustomerEntity g where g.guest = ?1 and g.createdTimestamp < ?2
+       ]]>
+    </query>
 
     <query name="TOPCATEGORIES.BY.SHOPID">
         <![CDATA[

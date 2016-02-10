@@ -123,6 +123,11 @@ public interface AttributeNamesKeys {
         String CART_ABANDONED_TIMEOUT_SECONDS = "CART_ABANDONED_TIMEOUT_SECONDS";
 
         /**
+         * Time in seconds for expired guest accounts
+         */
+        String GUESTS_EXPIRY_TIMEOUT_SECONDS = "GUESTS_EXPIRY_TIMEOUT_SECONDS";
+
+        /**
          * Time in seconds for abandoned carts
          */
         String CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS = "CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS";
