@@ -378,6 +378,7 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Items</entry>
+    <entry key="noResultsFound">No items found matching your query</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">Add to wishlist</entry>

@@ -377,7 +377,8 @@
     <entry key="language">Язык</entry>
 
     <!-- ProductsCentralView -->
-    <entry key="items">Продуктов</entry>
+    <entry key="items">Товаров</entry>
+    <entry key="noResultsFound">Не найдено товаров, соответствующих вашему запросу</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">В пожелания</entry>

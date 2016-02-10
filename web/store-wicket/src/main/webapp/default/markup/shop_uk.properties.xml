@@ -378,6 +378,7 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Товарів</entry>
+    <entry key="noResultsFound">Не знайдено товарів, які відповідають вашому запиту</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">До побажань</entry>

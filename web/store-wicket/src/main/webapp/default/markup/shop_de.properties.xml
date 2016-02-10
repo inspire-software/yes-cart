@@ -378,6 +378,7 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Artikel</entry>
+    <entry key="noResultsFound">Keine Artikel gefunden die Ihrer Suche entsprechen</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">Auf Merkliste</entry>
