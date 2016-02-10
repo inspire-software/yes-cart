@@ -180,7 +180,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
      */
     private void fillCustomerData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) {
 
-        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), customerOrder.getShop());
+        final boolean guest = shoppingCart.getLogonState() != ShoppingCart.LOGGED_IN;
+
+        final Customer customer = customerService.getCustomerByEmail(
+                guest ? shoppingCart.getGuid() : shoppingCart.getCustomerEmail(),
+                customerOrder.getShop()
+        );
 
         if (customer != null) {
             long selectedBillingAddressId = shoppingCart.getOrderInfo().getBillingAddressId() != null ? shoppingCart.getOrderInfo().getBillingAddressId() : 0L;
@@ -249,9 +254,11 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
             }
 
-            customerOrder.setCustomer(customer);  // TODO: Do not set guests, they need to be discarded
+            if (!customer.isGuest()) {
+                customerOrder.setCustomer(customer);
+            }
 
-            customerOrder.setEmail(customer.getEmail());
+            customerOrder.setEmail(customer.getContactEmail());
             customerOrder.setSalutation(customer.getSalutation());
             customerOrder.setFirstname(customer.getFirstname());
             customerOrder.setLastname(customer.getLastname());

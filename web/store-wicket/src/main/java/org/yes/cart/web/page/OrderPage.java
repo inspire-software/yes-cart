@@ -93,7 +93,7 @@ public class OrderPage extends AbstractWebPage {
         final String orderGuid = params.get("order").toString();
 
         CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
-        if (customerOrder.getCustomer() != null && customer != null
+        if (customerOrder != null && customerOrder.getCustomer() != null && customer != null
                 && customerOrder.getCustomer().getCustomerId() != customer.getCustomerId()) {
             customerOrder = null; // DO NOT ALLOW VIEWING ORDERS THAT DO NOT BELONG TO CUSTOMER
         }

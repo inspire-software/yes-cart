@@ -97,6 +97,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
     'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10780,  'SHOP_CREGATTRS_B2G', 'SHOP_CREGATTRS_B2G',  0,  NULL,  'Customer (B2G): registration form attributes (CSV)',
+    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10881,  'SHOP_CPROFATTRS_VISIBLE_B2C', 'SHOP_CPROFATTRS_VISIBLE_B2C',  0,  NULL,  'Customer (B2C): profile form attributes (CSV)',
     'List of customer attributes separated by comma to be shown on profile form',  1004, 1001);
 
@@ -168,6 +172,11 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, E
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  8001,  'SHOP_CUSTOMER_TYPES', 'SHOP_CUSTOMER_TYPES',  0,  NULL,  'Shop: supported customer types',  'Supported shop customer types CSV
   E.g. value=B2B,B2C, display value=Private,Company',  1000, 1001);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  8002,  'SHOP_CHECKOUT_ENABLE_GUEST', 'SHOP_CHECKOUT_ENABLE_GUEST',  0,  NULL,  'Shop: enable guest checkout',
+  'Enables guest checkout customerType=B2G',  1008, 1001);
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -577,11 +586,13 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (15, 'tr
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (16, 'true','SHOP_CHECKOUT_ENABLE_ORDER_MSG', 10, 'SHOP10_SHOP_CHECKOUT_ENBL_ORDER_MSG');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (17, 'true','CART_ADD_ENABLE_QTY_PICKER', 10, 'SHOP10_CART_ADD_ENABLE_QTY_PICKER');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (18, 'true','SHOP_COOKIE_POLICY_ENABLE', 10, 'SHOP_COOKIE_POLICY_ENABLE');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (8, 'true','SHOP_CHECKOUT_ENABLE_GUEST', 10, 'SHOP_CHECKOUT_ENABLE_GUEST');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (19, 'r@nD()mTok3n4Pa$$Re$3+','SHOP_CUSTOMER_PASSWORD_RESET_CC', 10, 'SHOP_CUSTOMER_PASSWORD_RESET_CC');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (20, 'true','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (21, 'false','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_N');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (22, 'false','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_A');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (23, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CREGATTRS_B2C', 10, 'SHOP_CUSTOMER_REGISTRATION_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (7, 'firstname,lastname','SHOP_CREGATTRS_B2G', 10, 'SHOP_CUSTOMER_REGGUEST_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (24, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CPROFATTRS_VISIBLE_B2C', 10, 'SHOP_CUSTOMER_PROFILE_10');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,DISPLAYVAL,CODE,SHOP_ID, GUID)  VALUES (25, 'B2C', 'en#~#B2C#~#uk#~#B2C#~#ru#~#B2C#~#de#~#B2C', 'SHOP_CUSTOMER_TYPES', 10, 'SHOP_CUSTOMER_TYPES_10');
 
@@ -630,7 +641,9 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       Your order has been successfully created. You will receive confirmation by e-mail.
    </p>
    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
-   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
@@ -654,7 +667,9 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
    </p>
    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
-   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+       <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
@@ -678,7 +693,9 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
    </p>
    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
-   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
@@ -702,7 +719,9 @@ INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES
       Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
    </p>
    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
-   <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+     <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% } %>
 <% } else {
    if (missingStock !=null) { %>
       <p>
@@ -727,7 +746,9 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Order successfully placed</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
-	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
@@ -744,7 +765,9 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Заказ успешно оформлен</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
-	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
@@ -761,7 +784,9 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Замовлення успішно оформлене</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
-	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+	  <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	<% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
@@ -778,7 +803,9 @@ def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''
 if (_status.equals("ok")) { %>
 	<p>Bestellung erfolgreich getätigt</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
-	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+   	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% } %>
 <% } else if (_status.equals("cancel")) { %>
 	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
 	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>

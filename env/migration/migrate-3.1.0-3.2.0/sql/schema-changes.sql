@@ -370,3 +370,21 @@ alter table TCUSTOMERORDER modify column LASTNAME varchar(128) not null;
 -- alter table TCUSTOMERORDER alter column FIRSTNAME not null;
 -- alter table TCUSTOMERORDER alter column LASTNAME not null;
 create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
+
+alter table TCUSTOMER add column GUEST_EMAIL varchar(255);
+alter table TCUSTOMER add column GUEST bit not null default 0;
+-- alter table TCUSTOMER add column GUEST smallint not null default 0;
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  8002,  'SHOP_CHECKOUT_ENABLE_GUEST', 'SHOP_CHECKOUT_ENABLE_GUEST',  0,  NULL,  'Shop: enable guest checkout',
+  'Enables guest checkout customerType=B2G',  1008, 1001);
+
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (8, 'true','SHOP_CHECKOUT_ENABLE_GUEST', 10, 'SHOP_CHECKOUT_ENABLE_GUEST');
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10780,  'SHOP_CREGATTRS_B2G', 'SHOP_CREGATTRS_B2G',  0,  NULL,  'Customer (B2G): registration form attributes (CSV)',
+    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
+
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (7, 'firstname,lastname','SHOP_CREGATTRS_B2G', 10, 'SHOP_CUSTOMER_REGGUEST_10');
+
+

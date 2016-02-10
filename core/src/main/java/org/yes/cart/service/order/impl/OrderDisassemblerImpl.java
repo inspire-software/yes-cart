@@ -303,6 +303,31 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             }
 
             @Override
+            public boolean isGuest() {
+                return false;
+            }
+
+            @Override
+            public void setGuest(final boolean guest) {
+
+            }
+
+            @Override
+            public String getGuestEmail() {
+                return null;
+            }
+
+            @Override
+            public void setGuestEmail(final String email) {
+
+            }
+
+            @Override
+            public String getContactEmail() {
+                return order.getEmail();
+            }
+
+            @Override
             public String getFirstname() {
                 return order.getFirstname();
             }

@@ -240,6 +240,10 @@
     <entry key="newPasswordEmailSent">Neues Passwort zugestellt. Bitte schauen Sie in Ihre Mails</entry>
     <entry key="newPasswordInvalidToken">Ungültiger Token. Das Passwort kann nicht zurückgesetzt werden.</entry>
 
+    <!-- GuestPanel -->
+    <entry key="guestUser">Gast Kasse</entry>
+    <entry key="canNotGuestCheckout">Unfähig Gast Kasse durchführen</entry>
+
     <!-- RegisterPanel -->
     <entry key="newUser">Neuer Kunde</entry>
     <entry key="register">Registrieren</entry>

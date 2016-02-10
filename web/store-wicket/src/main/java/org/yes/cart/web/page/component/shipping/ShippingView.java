@@ -81,7 +81,7 @@ public class ShippingView extends BaseComponent {
         super(id);
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getShoppingContext().getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(ApplicationDirector.getCurrentShop(), cart);
 
         final Map<String, Object> contentParams = new HashMap<>();
         final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart());

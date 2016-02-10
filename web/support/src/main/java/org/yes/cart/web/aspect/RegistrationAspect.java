@@ -25,6 +25,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.RegistrationMessage;
@@ -109,6 +110,10 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Shop shop = (Shop) args[1];
         final String token = !newPerson ? (String) args[2] : null;
 
+        if (registeredPerson instanceof Customer && ((Customer) registeredPerson).isGuest()) {
+            // Do not send registration notification to guests
+            return pjp.proceed();
+        }
 
         final String generatedPassword;
         final String generatedPasswordHash;

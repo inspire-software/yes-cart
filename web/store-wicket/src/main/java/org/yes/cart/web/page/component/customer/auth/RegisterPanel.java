@@ -65,9 +65,6 @@ public class RegisterPanel extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String EMAIL_INPUT = "email";
-    private static final String FIRSTNAME_INPUT = "firstname";
-    private static final String LASTNAME_INPUT = "lastname";
-    private static final String PHONE_INPUT = "phone";
     private static final String REGISTER_BUTTON = "registerBtn";
     private static final String REGISTER_FORM = "registerForm";
     private static final String CUSTOMER_TYPE_FORM = "customerTypesForm";

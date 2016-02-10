@@ -149,12 +149,12 @@
     <entry key="sale">Sale</entry>
     <entry key="specialoffer">Special offer</entry>
     <entry key="newarrival">New arrivals</entry>
-    <entry key="multisku">multi-sku</entry>
-    <entry key="preorder">preorder</entry>
-    <entry key="backorder">backorder</entry>
-    <entry key="always">always</entry>
-    <entry key="showroom">showroom</entry>
-    <entry key="multibuy">multi-buy</entry>
+    <entry key="multisku">Multi-sku</entry>
+    <entry key="preorder">Preorder</entry>
+    <entry key="backorder">Backorder</entry>
+    <entry key="always">Always</entry>
+    <entry key="showroom">Showroom</entry>
+    <entry key="multibuy">Multi-buy</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Product</entry>
@@ -239,6 +239,10 @@
     <entry key="newPasswordRequestEmailSent">New password request was sent to ${email}. Check email please.</entry>
     <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
     <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
+
+    <!-- GuestPanel -->
+    <entry key="guestUser">Guest checkout</entry>
+    <entry key="canNotGuestCheckout">Unable to perform guest checkout</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">New customer</entry>

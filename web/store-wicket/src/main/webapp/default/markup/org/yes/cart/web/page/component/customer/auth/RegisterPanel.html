@@ -18,6 +18,10 @@
 <body>
 <wicket:panel>
 
+    <div class="new-customer-title">
+        <h2><wicket:message key="newUser">[new user]</wicket:message></h2>
+    </div>
+
     <form wicket:id="customerTypesForm" class="form-horizontal">
         <div wicket:id="customerTypesRadioGroup" class="col-xs-12 no-padding form-group">
             <div wicket:id="customerTypeList" class="radio">
@@ -29,10 +33,6 @@
     </form>
 
     <form wicket:id="registerForm" class="form-horizontal">
-
-        <div class="new-customer-title">
-            <h2><wicket:message key="newUser">[new user]</wicket:message></h2>
-        </div>
 
         <div class="form-group">
             <label for="registerEmail" class="control-label col-xs-12 col-sm-3">

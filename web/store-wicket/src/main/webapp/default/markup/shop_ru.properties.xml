@@ -240,6 +240,10 @@
     <entry key="newPasswordEmailSent">Новый пароль был выслан на почту</entry>
     <entry key="newPasswordInvalidToken">Неверный код авторизации. Невозможно сгенирировать новый пароль.</entry>
 
+    <!-- GuestPanel -->
+    <entry key="guestUser">Заказать без регистрации</entry>
+    <entry key="canNotGuestCheckout">Невозможно выполнить заказ без регистрации</entry>
+
     <!-- RegisterPanel -->
     <entry key="newUser">Новый покупатель</entry>
     <entry key="register">Регистрация</entry>

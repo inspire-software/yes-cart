@@ -71,6 +71,45 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
      */
     void setCustomerType(String customerType);
 
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @return true if guest account, false for registered user account
+     */
+    boolean isGuest();
+
+    /**
+     * Flag to determine if this is a guest account
+     *
+     * @param guest true if guest account, false for registered user account
+     */
+    void setGuest(boolean guest);
+
+
+    /**
+     * Get person email for guest account.
+     *
+     * @return customer email.
+     */
+    String getGuestEmail();
+
+    /**
+     * Set customer email for guest account
+     *
+     * @param email email
+     */
+    void setGuestEmail(String email);
+
+
+    /**
+     * Get correct email for contacting this customer.
+     *
+     * For registered customers this is {@link #getEmail()}, for guests this is {@link #getGuestEmail()}
+     *
+     * @return contact email
+     */
+    String getContactEmail();
+
 
     /**
      * Get orders

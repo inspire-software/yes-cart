@@ -277,6 +277,11 @@ public interface AttributeNamesKeys {
         String SHOP_CUSTOMER_TYPES = "SHOP_CUSTOMER_TYPES";
 
         /**
+         * Flag to determine is guest checkout is enabled.
+         */
+        String SHOP_CHECKOUT_ENABLE_GUEST = "SHOP_CHECKOUT_ENABLE_GUEST";
+
+        /**
          * Supported by shop storefront languages.
          */
         String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";

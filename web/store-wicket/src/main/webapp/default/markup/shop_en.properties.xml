@@ -240,6 +240,10 @@
     <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
     <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
 
+    <!-- GuestPanel -->
+    <entry key="guestUser">Guest checkout</entry>
+    <entry key="canNotGuestCheckout">Unable to perform guest checkout</entry>
+
     <!-- RegisterPanel -->
     <entry key="newUser">New customer</entry>
     <entry key="register">Register</entry>

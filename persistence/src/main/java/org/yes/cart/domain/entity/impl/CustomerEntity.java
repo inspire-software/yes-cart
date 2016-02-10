@@ -31,6 +31,8 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private long version;
 
     private String email;
+    private String guestEmail;
+    private boolean guest;
     private String salutation;
     private String firstname;
     private String lastname;
@@ -64,6 +66,29 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getGuestEmail() {
+        return guestEmail;
+    }
+
+    public void setGuestEmail(final String guestEmail) {
+        this.guestEmail = guestEmail;
+    }
+
+    public boolean isGuest() {
+        return guest;
+    }
+
+    public void setGuest(final boolean guest) {
+        this.guest = guest;
+    }
+
+    public String getContactEmail() {
+        if (isGuest()) {
+            return getGuestEmail();
+        }
+        return getEmail();
     }
 
     public String getFirstname() {

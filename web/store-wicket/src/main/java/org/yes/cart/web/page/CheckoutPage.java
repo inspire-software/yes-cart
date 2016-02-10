@@ -52,6 +52,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
+import org.yes.cart.web.page.component.customer.auth.GuestPanel;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
@@ -117,12 +118,14 @@ public class CheckoutPage extends AbstractWebPage {
 
     public static final String PART_REGISTER_VIEW = "registerView";
     public static final String PART_LOGIN_VIEW = "loginView";
+    public static final String PART_GUEST_VIEW = "guestView";
 
     public static final String ERROR = "e";
     public static final String ERROR_COUPON = "ec";
     public static final String ERROR_SKU = "es";
 
     public static final String STEP = "step";
+    public static final String GUEST = "guest";
 
     public static final String STEP_LOGIN = "login";
     public static final String STEP_ADDR = "address";
@@ -169,11 +172,21 @@ public class CheckoutPage extends AbstractWebPage {
 
         super(params);
 
-        final boolean threeStepsProcess = params.get(THREE_STEPS_PROCESS).toBoolean(
-                ((AuthenticatedWebSession) getSession()).isSignedIn()
-        ) && ((AuthenticatedWebSession) getSession()).isSignedIn();
-
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = ApplicationDirector.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+
+        final boolean guestInProgress =
+                (params.getNamedKeys().contains(STEP) || "1".equals(params.get(GUEST).toString()))
+                    && customer != null && customer.isGuest();
+
+        final boolean sessionSignedIn = ((AuthenticatedWebSession) getSession()).isSignedIn();
+
+        final boolean threeStepsProcess =
+                guestInProgress ||
+                        (params.get(THREE_STEPS_PROCESS).toBoolean(sessionSignedIn) && sessionSignedIn);
+
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? null : STEP_LOGIN);
         if (currentStep == null) {
@@ -194,7 +207,7 @@ public class CheckoutPage extends AbstractWebPage {
                 new Fragment(NAVIGATION_VIEW, threeStepsProcess ?
                         NAVIGATION_THREE_FRAGMENT : NAVIGATION_FOUR_FRAGMENT, this)
         ).add(
-                getContent(currentStep)
+                getContent(currentStep, customer, cart, guestInProgress, sessionSignedIn)
         ).addOrReplace(
                 new CheckoutFooter(FOOTER)
         ).addOrReplace(
@@ -217,15 +230,22 @@ public class CheckoutPage extends AbstractWebPage {
      * Resolve content by given current step.
      *
      * @param currentStep current step label
+     * @param customer checkout customer (registered or guest)
+     * @param cart current cart
+     * @param guestInProgress guest checkout in progress (i.e. URL has step)
+     * @param sessionSignedIn wicket session is authenticated
+     *
      * @return markup container
      */
-    private MarkupContainer getContent(final String currentStep) {
+    private MarkupContainer getContent(final String currentStep,
+                                       final Customer customer,
+                                       final ShoppingCart cart,
+                                       final boolean guestInProgress,
+                                       final boolean sessionSignedIn) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
-        if (!STEP_LOGIN.equals(currentStep) &&
-                (!((AuthenticatedWebSession) getSession()).isSignedIn()
-                    || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+        if (!STEP_LOGIN.equals(currentStep)
+                && !guestInProgress
+                && (!sessionSignedIn || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
             final PageParameters parameters = new PageParameters(getPageParameters());
             parameters.set(STEP, STEP_LOGIN);
             setResponsePage(this.getClass(), parameters);
@@ -247,7 +267,7 @@ public class CheckoutPage extends AbstractWebPage {
             executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail(), ApplicationDirector.getCurrentShop())) {
+                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), ApplicationDirector.getCurrentShop())) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);
@@ -319,11 +339,9 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private MarkupContainer createLoginFragment() {
         return new Fragment(CONTENT_VIEW, LOGIN_FRAGMENT, this)
-                .add(
-                        new LoginPanel(PART_LOGIN_VIEW, true))
-                .add(
-                        new RegisterPanel(PART_REGISTER_VIEW, true)
-                );
+                .add(new LoginPanel(PART_LOGIN_VIEW, true))
+                .add(new RegisterPanel(PART_REGISTER_VIEW, true))
+                .add(new GuestPanel(PART_GUEST_VIEW));
     }
 
     /**
@@ -414,9 +432,13 @@ public class CheckoutPage extends AbstractWebPage {
             protected void onSelectionChanged(final Object descriptor) {
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final Shop shop = ApplicationDirector.getCurrentShop();
+
+                final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
                 if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+                                || cart.getLogonState() != ShoppingCart.LOGGED_IN) &&
+                        (customer == null || !customer.isGuest())) {
                     // Make sure we are logged in on the very last step
                     final PageParameters parameters = new PageParameters(getPageParameters());
                     parameters.set(STEP, STEP_LOGIN);
@@ -588,7 +610,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
 
