@@ -97,6 +97,8 @@
     <entry key="checkoutTitle">Checkout</entry>
     <entry key="selectAddr">Bitte geben Sie Versand- und Rechnungsadresse an</entry>
     <entry key="selectPayment">Zahlung</entry>
+    <entry key="selectDeliveryAddress">Bitte geben Sie Ihre Versandadresse ein bevor Sie die Versandart wählen</entry>
+    <entry key="selectBillingAddress">Bitte geben Sie die Rechnungsadresse ein bevor Sie die Versandart wählen</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Kontaktinformationen</entry>

@@ -159,6 +159,8 @@ public class ShippingView extends BaseComponent {
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                 addPriceView(form);
+
+                addShippingOptionFeedback();
             }
 
             @Override
@@ -190,6 +192,14 @@ public class ShippingView extends BaseComponent {
 
         add(form);
 
+        addShippingOptionFeedback();
+
+    }
+
+    private void addShippingOptionFeedback() {
+        if (ApplicationDirector.getShoppingCart().getCarrierSlaId() == null) {
+            info(getLocalizer().getString("carrierSelect", this));
+        }
     }
 
 

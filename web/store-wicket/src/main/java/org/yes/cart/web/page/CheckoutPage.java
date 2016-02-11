@@ -648,11 +648,39 @@ public class CheckoutPage extends AbstractWebPage {
                                         }}
                                 );
                                 persistCartIfNecessary();
+
+                                addFeedbackForAddressSelection();
                             }
                         }
                 )
         );
+
+        addFeedbackForAddressSelection();
+
         return rez;
+    }
+
+
+    private void addFeedbackForAddressSelection() {
+
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(
+                shop,
+                cart);
+
+        if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_SHIPPING).isEmpty()) {
+
+            info(getLocalizer().getString("selectDeliveryAddress", this));
+
+        } else if (cart.getOrderInfo().isSeparateBillingAddress()) {
+
+            if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_BILLING).isEmpty()) {
+                info(getLocalizer().getString("selectBillingAddress", this));
+            }
+        }
+
     }
 
     /**

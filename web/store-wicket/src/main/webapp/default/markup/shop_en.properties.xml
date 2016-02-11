@@ -97,6 +97,8 @@
     <entry key="checkoutTitle">Checkout</entry>
     <entry key="selectAddr">Provide shipping and billing addresses</entry>
     <entry key="selectPayment">Payment</entry>
+    <entry key="selectDeliveryAddress">Please provide delivery address</entry>
+    <entry key="selectBillingAddress">Please provide billing address</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Contact information</entry>

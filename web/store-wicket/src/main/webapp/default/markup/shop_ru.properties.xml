@@ -97,6 +97,8 @@
     <entry key="checkoutTitle">Оформление покупки</entry>
     <entry key="selectAddr">Укажите адреса для доставки и счета</entry>
     <entry key="selectPayment">Оплата</entry>
+    <entry key="selectDeliveryAddress">Укажите адреса для доставки</entry>
+    <entry key="selectBillingAddress">Укажите адреса для счета</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Контактная информация</entry>
