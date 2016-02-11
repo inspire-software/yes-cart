@@ -24,7 +24,7 @@ import java.util.Collection;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface Brand extends Auditable {
+public interface Brand extends Auditable, Attributable {
 
     /**
      * Get brand pk.
