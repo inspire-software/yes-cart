@@ -18,16 +18,17 @@ package org.yes.cart.domain.message.consumer;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Mail;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.MailService;
+import org.yes.cart.service.domain.ProductSkuService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +93,11 @@ public class StandardMessageListener implements Runnable {
     public static final String ROOT = "root";
 
     /**
+     * Map of SKU codes to ProductSku entity to allow detailed order notifications
+     */
+    public static final String PRODUCTS = "products";
+
+    /**
      * Current template folder.
      */
     public static final String TEMPLATE_FOLDER = "templateFolder";
@@ -142,6 +148,8 @@ public class StandardMessageListener implements Runnable {
 
     private final CustomerService customerService;
 
+    private final ProductSkuService productSkuService;
+
     private final ShopService shopService;
 
     private final Object objectMessage;
@@ -149,16 +157,17 @@ public class StandardMessageListener implements Runnable {
     /**
      * Constructor for listener.
      */
-    public StandardMessageListener(
-            final MailService mailService,
-            final MailComposer mailComposer,
-            final CustomerService customerService,
-            final ShopService shopService,
-            final Object objectMessage) {
+    public StandardMessageListener(final MailService mailService,
+                                   final MailComposer mailComposer,
+                                   final CustomerService customerService,
+                                   final ProductSkuService productSkuService,
+                                   final ShopService shopService,
+                                   final Object objectMessage) {
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.shopService = shopService;
         this.customerService = customerService;
+        this.productSkuService = productSkuService;
         this.objectMessage = objectMessage;
 
     }
@@ -178,6 +187,9 @@ public class StandardMessageListener implements Runnable {
                 }
                 if (map.get(CUSTOMER) == null) {
                     enrichMapWithCustomer(map);
+                }
+                if (map.get(ROOT) instanceof CustomerOrder) {
+                    enrichMapWithProducts(map);
                 }
 
                 final Mail mail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
@@ -221,6 +233,27 @@ public class StandardMessageListener implements Runnable {
 
 
 
+    }
+
+    /**
+     * Enrich given map with product date.
+     *
+     * @param map given map to enrich
+     */
+    private void enrichMapWithProducts(final Map<String, Object> map) {
+
+        final Map<String, ProductSku> products = new HashMap<String, ProductSku>();
+
+        for (final CustomerOrderDet orderDet : ((CustomerOrder) map.get(ROOT)).getOrderDetail()) {
+
+            final ProductSku sku = productSkuService.getProductSkuBySkuCode(orderDet.getProductSkuCode());
+            if (sku != null) {
+                products.put(sku.getCode(), sku);
+            }
+
+        }
+
+        map.put(PRODUCTS, products);
     }
 
     /**
