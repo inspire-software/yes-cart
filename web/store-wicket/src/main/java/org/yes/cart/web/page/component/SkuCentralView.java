@@ -287,8 +287,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, shop.getShopId());
 
-        final AttrValue val = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
-        final boolean qtyPickVisible = pam.isAvailable() && val != null && val.getVal() != null && Boolean.valueOf(val.getVal());
+        final boolean qtyPickVisible = pam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
 
         add(new QuantityPickerPanel(QTY_PICKER, product.getProductId(), sku.getCode()).setVisible(qtyPickVisible));
 
@@ -391,8 +390,8 @@ public class SkuCentralView extends AbstractCentralView {
     private String getDisplaySkuCode(final Shop shop, final ProductSku sku) {
 
         if (StringUtils.isNotBlank(sku.getManufacturerCode())) {
-            final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
-            if (displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal())) {
+            final String displayAttrValue = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
+            if (displayAttrValue != null && Boolean.valueOf(displayAttrValue)) {
                 return sku.getManufacturerCode();
             }
         }

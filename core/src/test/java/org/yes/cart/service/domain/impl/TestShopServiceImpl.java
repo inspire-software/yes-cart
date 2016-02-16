@@ -85,7 +85,7 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         shop = shopService.getShopByDomainName("long.live.robots");
         assertEquals("Supported currency is incorrect",
                 "QWE,ASD,ZXC",
-                shop.getAttributeByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES).getVal());
+                shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SUPPORTED_CURRENCIES));
     }
 
     /**

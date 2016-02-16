@@ -248,6 +248,20 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
     }
 
 
+
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
+
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
+
+
     public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
         if (this.attributes != null) {
@@ -284,13 +298,13 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
      */
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public String getDefaultImage() {
-        final AttrValue attr = getAttributeByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
-        if (attr == null || StringUtils.isBlank(attr.getVal())) {
+        final String attr = getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0");
+        if (StringUtils.isBlank(attr)) {
 
             return Constants.NO_IMAGE;
 
         }
-        return attr.getVal();
+        return attr;
     }
 
 

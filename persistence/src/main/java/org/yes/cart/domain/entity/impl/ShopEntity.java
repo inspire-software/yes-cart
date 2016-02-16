@@ -419,6 +419,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return val != null ? val.getVal() : null;
     }
 
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValueShop val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
     @Override
     public String toString() {
         return this.getClass().getName() + this.getShopId();

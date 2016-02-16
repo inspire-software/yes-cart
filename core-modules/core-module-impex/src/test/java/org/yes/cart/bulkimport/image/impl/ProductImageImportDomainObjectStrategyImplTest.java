@@ -63,7 +63,7 @@ public class ProductImageImportDomainObjectStrategyImplTest extends BaseCoreDBTe
         product = productService.getProductById(9998L, true);
         assertNotNull(product);
         assertNotNull(product.getAttributeByCode("IMAGE0")); // image was imported as IMAGE0 attribute
-        assertEquals("im-image-file_BENDER-ua_a.jpeg", product.getAttributeByCode("IMAGE0").getVal());
+        assertEquals("im-image-file_BENDER-ua_a.jpeg", product.getAttributeValueByCode("IMAGE0"));
 
         mockery.assertIsSatisfied();
 

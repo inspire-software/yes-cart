@@ -16,9 +16,9 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.web.support.service.AttributableImageService;
@@ -56,9 +56,9 @@ public class CategoryImageServiceImpl extends AbstractImageServiceImpl implement
         if (attributableOrStrategy instanceof String) {
             strategyKey = (String) attributableOrStrategy;
         } else if (attributableOrStrategy instanceof Category) {
-            final AttrValue imgStrategy = ((Category) attributableOrStrategy).getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY);
-            if (imgStrategy != null) {
-                strategyKey = imgStrategy.getVal();
+            final String imgStrategy = ((Category) attributableOrStrategy).getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE_RETRIEVE_STRATEGY);
+            if (StringUtils.isNotBlank(imgStrategy)) {
+                strategyKey = imgStrategy;
             }
         }
 

@@ -59,6 +59,23 @@ public interface Attributable extends Identifiable {
      */
     AttrValue getAttributeByCode(String attributeCode);
 
+    /**
+     * Get single attribute value.
+     *
+     * @param attributeCode code of attribute
+     * @return single value or null if not found or not set.
+     */
+    String getAttributeValueByCode(String attributeCode);
+
+
+    /**
+     * Check single boolean attribute value.
+     *
+     * @param attributeCode code of attribute
+     * @return single value or null if not found or not set.
+     */
+    boolean isAttributeValueByCodeTrue(String attributeCode);
+
 
     /**
      * Get category name.

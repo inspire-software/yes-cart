@@ -82,9 +82,9 @@ public class ProductSkuImageImportDomainObjectStrategyImplTest extends BaseCoreD
                 assertNotNull(productSku.getAttributeByCode("IMAGE1")); // at this point sku has images
                 assertNotNull(productSku.getAttributeByCode("IMAGE2")); // at this point sku has images
 
-                assertEquals("im-image1-file_SOBOT-BEER_a.jpeg", productSku.getAttributeByCode("IMAGE0").getVal());
-                assertEquals("im-image2-file_SOBOT-BEER_b.jpeg", productSku.getAttributeByCode("IMAGE1").getVal());
-                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeByCode("IMAGE2").getVal());
+                assertEquals("im-image1-file_SOBOT-BEER_a.jpeg", productSku.getAttributeValueByCode("IMAGE0"));
+                assertEquals("im-image2-file_SOBOT-BEER_b.jpeg", productSku.getAttributeValueByCode("IMAGE1"));
+                assertEquals("im-image-file_SOBOT-BEER_c.jpeg", productSku.getAttributeValueByCode("IMAGE2"));
             }
         }
 

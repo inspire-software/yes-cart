@@ -21,7 +21,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
@@ -268,9 +267,9 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         }
 
         final Shop shop = shopService.getById(shopId);
-        final AttrValueShop attrValueShop = shop.getAttributeByCode(shopCsvAttribute);
-        if (attrValueShop != null && StringUtils.isNotBlank(attrValueShop.getVal())) {
-            return Arrays.asList(StringUtils.split(attrValueShop.getVal(), ','));
+        final String attrValueShop = shop.getAttributeValueByCode(shopCsvAttribute);
+        if (StringUtils.isNotBlank(attrValueShop)) {
+            return Arrays.asList(StringUtils.split(attrValueShop, ','));
         }
 
         return defaultCsv;
@@ -326,11 +325,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         }
 
         final Shop shop = shopService.getById(shopId);
-        final AttrValueShop widthAttrValueShop = shop.getAttributeByCode(shopWidthAndHeightAttribute[0]);
-        final AttrValueShop heightAttrValueShop = shop.getAttributeByCode(shopWidthAndHeightAttribute[1]);
-        if (widthAttrValueShop != null && heightAttrValueShop != null && StringUtils.isNotBlank(widthAttrValueShop.getVal())
-                && StringUtils.isNotBlank(heightAttrValueShop.getVal())) {
-            return new Pair<String, String>(widthAttrValueShop.getVal(), heightAttrValueShop.getVal());
+        final String widthAttrValueShop = shop.getAttributeValueByCode(shopWidthAndHeightAttribute[0]);
+        final String heightAttrValueShop = shop.getAttributeValueByCode(shopWidthAndHeightAttribute[1]);
+        if (StringUtils.isNotBlank(widthAttrValueShop) && StringUtils.isNotBlank(heightAttrValueShop)) {
+            return new Pair<String, String>(widthAttrValueShop, heightAttrValueShop);
         }
 
         return defaultWidthAndHeight;

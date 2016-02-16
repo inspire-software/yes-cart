@@ -78,8 +78,7 @@ public class SkuInListView extends BaseComponent {
     private String getDisplaySkuCode(final Shop shop, final ProductSku sku) {
 
         if (StringUtils.isNotBlank(sku.getManufacturerCode())) {
-            final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
-            if (displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal())) {
+            if (shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE)) {
                 return sku.getManufacturerCode();
             }
         }

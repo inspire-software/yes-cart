@@ -19,7 +19,6 @@ package org.yes.cart.service.mail.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ImageService;
@@ -87,13 +86,13 @@ public class MailTemplateResourcesProviderShopContentImpl implements MailTemplat
 
             final Category content = contentService.getById(contentId);
 
-            final AttrValue imageValue = content.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE);
+            final String imageValue = content.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE);
 
-            if (imageValue != null && StringUtils.isNotBlank(imageValue.getVal())) {
+            if (StringUtils.isNotBlank(imageValue)) {
 
                 final String path = systemService.getImageRepositoryDirectory();
 
-                return imageService.imageToByteArray(imageValue.getVal(), uri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
+                return imageService.imageToByteArray(imageValue, uri, Constants.CATEGORY_IMAGE_REPOSITORY_URL_PATTERN, path);
 
             }
 

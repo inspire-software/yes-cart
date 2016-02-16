@@ -134,11 +134,11 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
     protected String getImageAttributeValue(final Attributable attributable,
                                             final String attrName,
                                             final String defaultValue) {
-        final AttrValue attrValue = attributable.getAttributeByCode(attrName);
-        if (attrValue == null || StringUtils.isBlank(attrValue.getVal())) {
+        final String attrValue = attributable.getAttributeValueByCode(attrName);
+        if (StringUtils.isBlank(attrValue)) {
             return defaultValue;
         }
-        return attrValue.getVal();
+        return attrValue;
 
     }
 

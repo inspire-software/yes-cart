@@ -169,14 +169,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     AttrValueShop getAttributeByCode(String attributeCode);
 
-    /**
-     * Get single attribute value.
-     *
-     * @param attributeCode code of attribute
-     * @return single value or null if not found or not set.
-     */
-    String getAttributeValueByCode(String attributeCode);
-
 
     /**
      * Set collection of  attributes.
