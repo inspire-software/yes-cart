@@ -437,7 +437,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_UPDATED_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                ProductSearchQueryBuilder.BRAND_FIELD
+                ProductSearchQueryBuilder.BRAND_NAME_FIELD
 
                 );
 

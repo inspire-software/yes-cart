@@ -198,8 +198,12 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.tag = tag;
     }
 
-    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
-            bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class))
+    @Fields({
+            @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
+                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandBridge.class)),
+            @Field(name = "brandName", index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES,
+                    bridge = @FieldBridge(impl = org.yes.cart.domain.entity.bridge.BrandNameBridge.class))
+    })
     public Brand getBrand() {
         return this.brand;
     }

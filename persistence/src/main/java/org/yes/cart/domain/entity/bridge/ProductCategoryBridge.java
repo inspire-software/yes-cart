@@ -48,7 +48,7 @@ public class ProductCategoryBridge implements FieldBridge {
                 ProductCategory productCategory = (ProductCategory) obj;
 
                 document.add(new Field(
-                        "productCategory.category",
+                        ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD,
                         String.valueOf(productCategory.getCategory().getCategoryId()),
                         Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
