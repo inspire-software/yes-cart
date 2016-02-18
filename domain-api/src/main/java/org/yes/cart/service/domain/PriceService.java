@@ -91,17 +91,8 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param shop          currency shop
      * @return list of navigation records for given price tree and currency
      */
-    List<FilteredNavigationRecord> getPriceNavigationRecords(
-            PriceTierTree priceTierTree,
-            String currency,
-            Shop shop);
-
-    /**
-     * Delete derived prices in given shop.
-     *
-     * @param shop            given shop id
-     * @param derivedCurrency derived currency
-     */
-    void deleteDerivedPrices(Shop shop, String derivedCurrency);
+    List<FilteredNavigationRecord> getPriceNavigationRecords(PriceTierTree priceTierTree,
+                                                             String currency,
+                                                             Shop shop);
 
 }

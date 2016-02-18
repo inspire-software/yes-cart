@@ -39,7 +39,6 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -448,10 +447,9 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<FilteredNavigationRecord> getPriceNavigationRecords(
-            final PriceTierTree priceTierTree,
-            final String currency,
-            final Shop shop) {
+    public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree,
+                                                                    final String currency,
+                                                                    final Shop shop) {
         final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, shop);
         final List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(priceTierNodes.size());
         for (PriceTierNode priceTierNode : priceTierNodes) {
@@ -497,17 +495,6 @@ public class PriceServiceImpl
         }
 
         return new BigDecimal(intValue).setScale(-1 * tailZeroCount, BigDecimal.ROUND_HALF_UP);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void deleteDerivedPrices(final Shop shop, final String derivedCurrency) {
-        final String shopId = String.valueOf(shop.getShopId());
-        final String sql = MessageFormat.format("delete from tskuprice where shop_id = {0} and currency = ''{1}''",
-                shopId,
-                derivedCurrency);
-        skuPriceDao.executeNativeUpdate(sql);
     }
 
     /**
