@@ -22,12 +22,10 @@ import org.apache.lucene.document.Fieldable;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
 import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -54,6 +52,8 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
         if (value instanceof Collection) {
 
+            final Set<Shop> availableIn = new HashSet<Shop>();
+
             for (Object obj : (Collection) value) {
 
                 final ProductSku sku = (ProductSku) obj;
@@ -72,18 +72,42 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
                     if (MoneyUtils.isFirstBiggerThanSecond(qtyForShop, BigDecimal.ZERO)) {
                         String rez = objectToString(shop.getShopId(), sku.getCode(), qtyForShop);
-                        Field field = new Field(
+
+                        // Compacted
+                        document.add(new Field(
                                 proposedFiledName,
                                 rez,
                                 Field.Store.YES,
                                 Field.Index.NOT_ANALYZED,
                                 luceneOptions.getTermVector()
-                        );
-                        document.add(field);
+                        ));
+
+                        // Available in stock
+                        availableIn.add(shop);
+
+                    } else if (sku.getProduct().getAvailability() != Product.AVAILABILITY_STANDARD) {
+
+                        // Available as perpetual (dates are verified by the index interceptor)
+                        availableIn.add(shop);
+
                     }
 
                 }
             }
+
+            for (final Shop shop : availableIn) {
+
+                // Fill in PK's of shops where we have this in stock.
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD,
+                        String.valueOf(shop.getShopId()),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+            }
+
         }
     }
 

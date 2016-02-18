@@ -30,6 +30,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Product category bridge determines allows to track immediate categories to which this product is
+ * linked to.
+ *
+ * It also infers the relationship between product and shop if the product is reachable via
+ * shop category assigned branch.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2/4/12
  * Time: 1:33 PM

@@ -97,29 +97,29 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 NavigationContext context;
 
                 // basic search
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
                 List<Product> products = productDao.fullTextSearch(context.getProductQuery());
                 assertTrue("Failed [" + context.getProductQuery().toString() +"]", !products.isEmpty());
                 // search by name exact
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Bender Bending Rodriguez")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
                 // search by Sku code (must be exact)
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L, 313L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("This is fuzzy so we see all CC_TESTX", 1, products.size());
                 assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
                 // search by Sku code (misspelt)
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L, 313L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TESTX")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("This is fuzzy so we see all CC_TESTX", 10, products.size());
                 // search by Sku code with stems
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L, 313L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("cc_test4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Relaxed search should give all cc_test skus", 10, products.size());
@@ -131,43 +131,43 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(1, products.size());
                 assertEquals("PRODUCT5", products.get(0).getSku().iterator().next().getCode());
                 //test fuzzy search
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("blender")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
                 //test search by description
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Rodriguez Bending")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertTrue(!products.isEmpty());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("DiMaggio")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
                 // search on empty string
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty()); //return all product in described categories
 
                 // search on brand
                 // product with code "PRODUCT1" also future robotics, but not assigned to any category
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("FutureRobots")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(2, products.size());
 
                 // search on primary attribute MATERIAL ('metal')
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("metal")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(1, products.size());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
                 // search on primary attribute MATERIAL no fuzzy! ('metall')
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 104L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("metall")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(0, products.size());
@@ -870,7 +870,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
 
                 // Test that we able to find Bender by his material in  list of categories where he exists
-                context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L, 200L),
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 200L),
                         Collections.singletonMap("MATERIAL", (List) Arrays.asList("metal")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(1, products.size());
@@ -1184,7 +1184,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
                 productDao.fullTextSearchReindex(false);
 
-                List<Product> products = productDao.fullTextSearch(luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(212L), null).getProductQuery());
+                List<Product> products = productDao.fullTextSearch(luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(212L), null).getProductQuery());
                 assertEquals("Only 5 product available in 212 category", 5, products.size());
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_1"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_2"));

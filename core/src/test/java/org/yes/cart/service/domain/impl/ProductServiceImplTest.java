@@ -215,7 +215,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 productService.getGenericDao().fullTextSearchReindex(false);
 
-                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
+                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context.getProductQuery(),
                         0,

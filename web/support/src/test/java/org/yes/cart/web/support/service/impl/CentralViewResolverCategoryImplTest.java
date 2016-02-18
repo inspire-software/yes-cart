@@ -122,7 +122,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
@@ -158,7 +158,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
@@ -194,7 +194,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
             one(categoryService).getById(10L); will(returnValue(null));
@@ -231,7 +231,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
             one(categoryService).getById(10L); will(returnValue(category));
@@ -270,7 +270,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
             one(categoryService).getById(10L); will(returnValue(category));
@@ -311,7 +311,7 @@ public class CentralViewResolverCategoryImplTest {
             one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
             one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
             one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(0L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
             one(categoryService).getById(10L); will(returnValue(category));

@@ -16,6 +16,8 @@
 
 package org.yes.cart.dao.impl;
 
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +28,7 @@ import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.query.SearchQueryBuilder;
+import org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder;
 import org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder;
 
 import java.math.BigDecimal;
@@ -245,11 +248,22 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 List<Product> products = null;
 
-                final SearchQueryBuilder queryBuilder = new ProductSkuCodeSearchQueryBuilder();
-                final Query query = queryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
+                final SearchQueryBuilder skuCodeQueryBuilder = new ProductSkuCodeSearchQueryBuilder();
+                final Query queryBySku = skuCodeQueryBuilder.createStrictQuery(0L, null, Arrays.asList("SONY_PRODUCT_CODE"));
 
-                products = productDao.fullTextSearch(query);
-                assertEquals("Product must be found . Failed query [" + query + "]", 1, products.size());
+                final SearchQueryBuilder inStockQueryBuilder = new ProductShopInStockSearchQueryBuilder();
+                final Query queryInStock = inStockQueryBuilder.createStrictQuery(10L, null, 10L);
+
+                BooleanQuery skuInStockQuery = new BooleanQuery();
+                skuInStockQuery.add(queryBySku, BooleanClause.Occur.MUST);
+                skuInStockQuery.add(queryInStock, BooleanClause.Occur.MUST);
+
+                products = productDao.fullTextSearch(queryBySku);
+                assertEquals("Product must be found . Failed query [" + queryBySku + "]", 1, products.size());
+                assertEquals(pk, products.get(0).getProductId());
+
+                products = productDao.fullTextSearch(skuInStockQuery);
+                assertEquals("Product must be found . Failed query [" + skuInStockQuery + "]", 1, products.size());
                 assertEquals(pk, products.get(0).getProductId());
 
                 skuWarehouse = skuWareHouseDao.findById(skuWarehouse.getId());
@@ -259,8 +273,10 @@ public class ProductDAOTest extends AbstractTestDAO {
                 // Need to call index as we are not committing the transaction
                 productDao.fullTextSearchReindex(product.getProductId(), false);
 
+                // Product is not removed from index if it is out of stock as it is shop dependent
+                assertEquals("Failed SKU search [" + queryBySku + "] because products are out of stock", 1, productDao.fullTextSearchCount(queryBySku));
                 // on site global. must be empty, because quantity is 0
-                assertEquals("Failed SKU search [" + query + "] because products are out of stock", 0, productDao.fullTextSearchCount(query));
+                assertEquals("Failed SKU search [" + skuInStockQuery + "] because products are out of stock", 0, productDao.fullTextSearchCount(skuInStockQuery));
 
                 status.setRollbackOnly();
 

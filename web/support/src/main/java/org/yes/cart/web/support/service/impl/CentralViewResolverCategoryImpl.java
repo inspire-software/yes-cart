@@ -87,8 +87,9 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                     return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
                 }
 
+                final long shopId = ShopCodeContext.getShopId();
                 // If template is not set try to figure out the view
-                final boolean lookInSubCats = categoryService.isSearchInSubcategory(categoryId, ShopCodeContext.getShopId());
+                final boolean lookInSubCats = categoryService.isSearchInSubcategory(categoryId, shopId);
 
                 final List<Long> catIds;
                 if (lookInSubCats) {
@@ -97,8 +98,8 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                     catIds = Collections.singletonList(categoryId);
                 }
 
-                // Do not use shopId as it will bring all products
-                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(0L, catIds, null);
+                // shopId will be used for inStock check, because we have category IDs will always look in those
+                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, catIds, null);
 
                 if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
 

@@ -53,6 +53,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private final SearchQueryBuilder productCategoryBuilder;
     private final SearchQueryBuilder productShopBuilder;
+    private final SearchQueryBuilder productShopStockBuilder;
     private final SearchQueryBuilder productAttributeBuilder;
     private final SearchQueryBuilder productTagBuilder;
     private final SearchQueryBuilder skuAttributeBuilder;
@@ -82,6 +83,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         this.skuBuilders = skuBuilders;
         this.productCategoryBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD);
         this.productShopBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD);
+        this.productShopStockBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD);
         this.productAttributeBuilder = productBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
         this.productTagBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
         this.skuAttributeBuilder = skuBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
@@ -213,6 +215,13 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
             productQueryChainStrict.add(store);
             productQueryChainRelaxed.add(store);
+        }
+
+        // Enforce in stock products
+        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, shopId);
+        if (inStock != null) {
+            productQueryChainStrict.add(inStock);
+            productQueryChainRelaxed.add(inStock);
         }
 
         final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>();
