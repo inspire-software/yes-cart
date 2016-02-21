@@ -153,4 +153,16 @@ public interface CategoryServiceFacade {
      */
     int getCategoryListColumnOptionsConfig(long categoryId, long shopId);
 
+
+    /**
+     * Get category type with failover mechanism. Uses category product type if set, otherwise
+     * looks up parent category product type, until one is found
+     *
+     * @param categoryId category id
+     * @param shopId     current shop
+     *
+     * @return product type for this category
+     */
+    Long getCategoryProductTypeId(long categoryId, long shopId);
+
 }

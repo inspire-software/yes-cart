@@ -52,7 +52,6 @@
         <column-descriptor>
             <column-index>2</column-index>
             <field-type>FK_FIELD</field-type>
-            <entity-type>org.yes.cart.domain.entity.ProductType</entity-type>
             <name>productType</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>

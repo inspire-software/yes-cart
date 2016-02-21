@@ -18,7 +18,6 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.queryobject.NavigationContext;
@@ -103,12 +102,9 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
 
                 if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
 
-                    final Category category = categoryService.getById(categoryId);
-                    if (category != null && category.getProductType() != null) {
-                        final String searchTemplate = category.getProductType().getUisearchtemplate();
-                        if (StringUtils.isNotBlank(searchTemplate)) {
-                            return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
-                        }
+                    final String searchTemplate = categoryService.getCategorySearchTemplate(categoryId);
+                    if (StringUtils.isNotBlank(searchTemplate)) {
+                        return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
                     }
 
                     return DEFAULT_PL;

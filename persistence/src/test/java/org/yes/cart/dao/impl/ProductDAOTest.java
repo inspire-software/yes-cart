@@ -589,7 +589,7 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 List<Object[]> list;
                 list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES",
-                        map.keySet(), 1L);
+                        map.keySet());
                 assertNotNull(list);
                 final Map<String, List<String>> expected = new HashMap<String, List<String>>();
                 expected.put("MATERIAL", Arrays.asList("Plastik", "metal"));
@@ -602,7 +602,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 }
 
                 list = productDao.findQueryObjectsByNamedQuery("PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES",
-                        map.keySet(), 1L);
+                        map.keySet());
                 assertNotNull(list);
                 final Map<String, List<String>> expectedSku = new HashMap<String, List<String>>();
                 expectedSku.put("SIZE", Arrays.asList("small", "large", "medium", "xxl"));

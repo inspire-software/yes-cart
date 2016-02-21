@@ -81,6 +81,24 @@ public interface CategoryService extends GenericService<Category> {
     String getCategoryTemplate(long categoryId);
 
     /**
+     * Get the "template variation" template (No fail over).
+     *
+     * @param categoryId given category PK
+     * @return Template variation
+     */
+    String getCategorySearchTemplate(long categoryId);
+
+    /**
+     * Get category type with failover mechanism. Uses category product type if set, otherwise
+     * looks up parent category product type, until one is found
+     *
+     * @param categoryId category id
+     *
+     * @return product type for this category
+     */
+    Long getCategoryProductTypeId(long categoryId);
+
+    /**
      * Max number of newarrival products for small view
      *
      * @param categoryId current category

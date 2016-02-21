@@ -64,7 +64,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
-    private CategoryServiceFacade categoryServiceFacade;
+    protected CategoryServiceFacade categoryServiceFacade;
 
     private final long categoryId;
     private Category category;

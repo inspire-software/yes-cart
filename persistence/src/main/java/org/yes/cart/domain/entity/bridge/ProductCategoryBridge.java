@@ -58,7 +58,7 @@ public class ProductCategoryBridge implements FieldBridge {
                         String.valueOf(productCategory.getCategory().getCategoryId()),
                         Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
-                        Field.TermVector.NO
+                        luceneOptions.getTermVector()
                 ));
 
             }

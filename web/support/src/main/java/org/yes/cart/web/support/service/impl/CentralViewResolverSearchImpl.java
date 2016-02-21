@@ -18,7 +18,6 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
@@ -69,12 +68,9 @@ public class CentralViewResolverSearchImpl implements CentralViewResolver {
             if (parameters.containsKey(WebParametersKeys.CATEGORY_ID)) {
                 final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
                 if (categoryId > 0L) {
-                    final Category category = categoryService.getById(categoryId);
-                    if (category != null && category.getProductType() != null) {
-                        final String searchTemplate = category.getProductType().getUisearchtemplate();
-                        if (StringUtils.isNotBlank(searchTemplate)) {
-                            return new Pair<String, String>(searchTemplate, CentralViewLabel.SEARCH_LIST);
-                        }
+                    final String searchTemplate = categoryService.getCategorySearchTemplate(categoryId);
+                    if (StringUtils.isNotBlank(searchTemplate)) {
+                        return new Pair<String, String>(searchTemplate, CentralViewLabel.SEARCH_LIST);
                     }
                 }
             }

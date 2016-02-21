@@ -585,12 +585,29 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (!singleNavAttrCodes.isEmpty()) {
             final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
 
+            /*
+                Attribute values can be used by many different product types. However we cannot enforce usage of
+                product types in determination of distinct values since we want to use product type definitions
+                in polymorphic fashion.
+
+                For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
+                refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
+                access filtered navigation for Category PC we want distinct values of PROCESSOR for both
+                PCs and Notebooks.
+
+                Therefore distinct grouping must only be done on Attribute.CODE.
+
+                However a causion must be taken here because this means that values for attribute must be consistent
+                accross all product types, otherwise there is no guarantee on what displayable name will appear in
+                filtered navigation.
+             */
+
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
+                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
+                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
         }
         return new ArrayList<FilteredNavigationRecord>(records.values());

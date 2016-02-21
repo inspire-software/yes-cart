@@ -126,6 +126,12 @@
     <cache name="categoryService-categoryTemplate" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="categoryService-categorySearchTemplate" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryProductTypeId" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="categoryService-searchInSubcategory" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 

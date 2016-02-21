@@ -20,8 +20,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.queryobject.NavigationContext;
@@ -93,7 +91,8 @@ public class CentralViewResolverCategoryImplTest {
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(categoryService, productService, luceneQueryFactory);
 
         context.checking(new Expectations() {{
-            one(categoryService).getCategoryTemplate(10L); will(returnValue("cattemplate"));
+            one(categoryService).getCategoryTemplate(10L);
+            will(returnValue("cattemplate"));
         }});
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
@@ -197,45 +196,7 @@ public class CentralViewResolverCategoryImplTest {
             one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
-            one(categoryService).getById(10L); will(returnValue(null));
-        }});
-
-        ShopCodeContext.setShopId(11L);
-
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put(WebParametersKeys.CATEGORY_ID, "10");
-        }});
-
-        ShopCodeContext.clear();
-
-        assertNotNull(resolved);
-        assertEquals(CentralViewLabel.PRODUCTS_LIST, resolved.getFirst());
-        assertEquals(CentralViewLabel.PRODUCTS_LIST, resolved.getSecond());
-
-        context.assertIsSatisfied();
-
-    }
-
-    @Test
-    public void testResolveMainPanelRendererLabelCategoryNoTemplateProductsCatNoType() throws Exception {
-
-        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
-        final ProductService productService = context.mock(ProductService.class, "productService");
-        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
-        final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
-        final Category category = context.mock(Category.class, "category");
-
-        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(categoryService, productService, luceneQueryFactory);
-
-        context.checking(new Expectations() {{
-            one(categoryService).getCategoryTemplate(10L); will(returnValue(" "));
-            one(categoryService).isSearchInSubcategory(10L, 11L); will(returnValue(true));
-            one(categoryService).getChildCategoriesRecursiveIds(10L); will(returnValue(new HashSet<Long>(Arrays.asList(10L))));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
-            one(hasProducts).getProductQuery();
-            one(productService).getProductQty(null); will(returnValue(1));
-            one(categoryService).getById(10L); will(returnValue(category));
-            one(category).getProductType(); will(returnValue(null));
+            one(categoryService).getCategorySearchTemplate(10L); will(returnValue(null));
         }});
 
         ShopCodeContext.setShopId(11L);
@@ -261,8 +222,6 @@ public class CentralViewResolverCategoryImplTest {
         final ProductService productService = context.mock(ProductService.class, "productService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
-        final Category category = context.mock(Category.class, "category");
-        final ProductType type = context.mock(ProductType.class, "type");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(categoryService, productService, luceneQueryFactory);
 
@@ -273,10 +232,7 @@ public class CentralViewResolverCategoryImplTest {
             one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
-            one(categoryService).getById(10L); will(returnValue(category));
-            one(category).getProductType(); will(returnValue(type));
-            one(category).getProductType(); will(returnValue(type));
-            one(type).getUisearchtemplate(); will(returnValue("  "));
+            one(categoryService).getCategorySearchTemplate(10L); will(returnValue(" "));
         }});
 
         ShopCodeContext.setShopId(11L);
@@ -302,8 +258,6 @@ public class CentralViewResolverCategoryImplTest {
         final ProductService productService = context.mock(ProductService.class, "productService");
         final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
         final NavigationContext hasProducts = context.mock(NavigationContext.class, "hasProducts");
-        final Category category = context.mock(Category.class, "category");
-        final ProductType type = context.mock(ProductType.class, "type");
 
         CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(categoryService, productService, luceneQueryFactory);
 
@@ -314,10 +268,7 @@ public class CentralViewResolverCategoryImplTest {
             one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
-            one(categoryService).getById(10L); will(returnValue(category));
-            one(category).getProductType(); will(returnValue(type));
-            one(category).getProductType(); will(returnValue(type));
-            one(type).getUisearchtemplate(); will(returnValue("prodtypesearch"));
+            one(categoryService).getCategorySearchTemplate(10L); will(returnValue("prodtypesearch"));
         }});
 
         ShopCodeContext.setShopId(11L);

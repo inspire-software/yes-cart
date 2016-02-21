@@ -335,4 +335,15 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
+    public Long getCategoryProductTypeId(final long categoryId, final long shopId) {
+        if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
+            return categoryService.getCategoryProductTypeId(categoryId);
+        }
+        return null;
+    }
+
+
 }

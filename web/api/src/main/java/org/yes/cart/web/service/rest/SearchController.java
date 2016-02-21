@@ -562,12 +562,12 @@ public class SearchController {
             }
 
             final boolean byAttr = category.getNavigationByAttributes() == null ? false : category.getNavigationByAttributes();
-            final ProductType productType = category.getProductType();
+            final Long productType = categoryServiceFacade.getCategoryProductTypeId(category.getCategoryId(), shopId);
 
             if (byAttr && productType != null) {
 
                 populateFilteredNavigationRecords(navigationRo,
-                        attributeFilteredNavigationSupport.getFilteredNavigationRecords(context, locale, productType.getProducttypeId()));
+                        attributeFilteredNavigationSupport.getFilteredNavigationRecords(context, locale, productType));
 
             }
 

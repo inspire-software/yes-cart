@@ -143,6 +143,14 @@
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categorySearchTemplate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryProductTypeId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-searchInSubcategory"/>
             <constructor-arg index="1" value="key"/>
         </bean>

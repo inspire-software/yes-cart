@@ -23,10 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.ShopCategory;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 
@@ -151,6 +148,41 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 return proxy().getCategoryTemplate(category.getParentId());
             } else {
                 return category.getUitemplate();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categorySearchTemplate")
+    public String getCategorySearchTemplate(final long categoryId) {
+        final Category category = proxy().findById(categoryId);
+        if (category != null && !category.isRoot()) {
+
+            final String template = category.getProductType() != null ? category.getProductType().getUisearchtemplate() : null;
+
+            if (StringUtils.isBlank(template)) {
+                return proxy().getCategorySearchTemplate(category.getParentId());
+            } else {
+                return template;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryProductTypeId")
+    public Long getCategoryProductTypeId(final long categoryId) {
+        final Category category = proxy().findById(categoryId);
+        if (category != null && !category.isRoot()) {
+            if (category.getProductType() == null) {
+                return proxy().getCategoryProductTypeId(category.getParentId());
+            } else {
+                return category.getProductType().getProducttypeId();
             }
         }
         return null;
@@ -547,6 +579,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
             "categoryService-categoryTemplate",
+            "categoryService-categorySearchTemplate",
+            "categoryService-categoryProductTypeId",
             "categoryService-searchInSubcategory",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
@@ -574,6 +608,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
             "categoryService-categoryTemplate",
+            "categoryService-categorySearchTemplate",
+            "categoryService-categoryProductTypeId",
             "categoryService-searchInSubcategory",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
