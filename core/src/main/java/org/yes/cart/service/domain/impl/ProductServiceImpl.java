@@ -534,9 +534,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = "productService-distinctBrands")
     public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
         List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
+                "PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES",
                 categories);
-        return constructBrandFilteredNavigationRecords(list);
+
+        final List<FilteredNavigationRecord> records = constructBrandFilteredNavigationRecords(list);
+        Collections.sort(
+                records,
+                new Comparator<FilteredNavigationRecord>() {
+                    public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
+                        int rez = record1.getName().compareTo(record2.getName());
+                        if (rez == 0) {
+                            rez = record1.getValue().compareTo(record2.getValue());
+                        }
+                        return rez;
+                    }
+                });
+        return records;
     }
 
 
@@ -625,7 +638,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
                 "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId, Boolean.TRUE);
+                productTypeId, Boolean.TRUE, Boolean.TRUE);
 
 
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();

@@ -37,6 +37,10 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
     private boolean mandatory;
     private boolean allowduplicate;
     private boolean allowfailover;
+    private boolean store;
+    private boolean search;
+    private boolean primary;
+    private boolean navigation;
     private String val;
     private String regexp;
     private String validationFailedMessage;
@@ -230,6 +234,38 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.code = code;
     }
 
+    public boolean isStore() {
+        return store;
+    }
+
+    public void setStore(final boolean store) {
+        this.store = store;
+    }
+
+    public boolean isSearch() {
+        return search;
+    }
+
+    public void setSearch(final boolean search) {
+        this.search = search;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
+    }
+
+    public boolean isNavigation() {
+        return navigation;
+    }
+
+    public void setNavigation(final boolean navigation) {
+        this.navigation = navigation;
+    }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -269,7 +305,11 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
                 this.getUpdatedBy(),
                 UUID.randomUUID().toString(),
                 this.getAttributeId(),
-                this.getCode()
+                this.getCode(),
+                this.isStore(),
+                this.isSearch(),
+                this.isPrimary(),
+                this.isNavigation()
         );
     }
 
@@ -278,7 +318,7 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
                            String regexp, String validationFailedMessage, int rank, String choiceData, String name,
                            String displayName, String description, Etype etype, AttributeGroup attributeGroup,
                            Date createdTimestamp, Date updatedTimestamp, String createdBy, String updatedBy,
-                           String guid, long attributeId, String code) {
+                           String guid, long attributeId, String code, boolean store, boolean search, boolean primary, boolean navigation) {
         this.mandatory = mandatory;
         this.allowduplicate = allowduplicate;
         this.allowfailover = allowfailover;
@@ -299,6 +339,10 @@ public class AttributeEntity implements org.yes.cart.domain.entity.Attribute, ja
         this.guid = guid;
         this.attributeId = attributeId;
         this.code = code;
+        this.store = store;
+        this.search = search;
+        this.primary = primary;
+        this.navigation = navigation;
     }
 
 }

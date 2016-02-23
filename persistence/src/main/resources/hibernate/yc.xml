@@ -261,6 +261,28 @@
             <column name="ATTRIBUTEGROUP_ID" not-null="true"/>
         </many-to-one>
 
+        <property name="store" type="boolean">
+            <column name="STORE">
+                <comment>Will attribute be stored in FT index</comment>
+            </column>
+        </property>
+        <property name="search" type="boolean">
+            <column name="SEARCH">
+                <comment>Will attribute be used for searching</comment>
+            </column>
+        </property>
+        <property name="primary" type="boolean">
+            <column name="SEARCHPRIMARY">
+                <comment>Will attribute be used for exact searching</comment>
+            </column>
+        </property>
+
+        <property name="navigation" type="boolean">
+            <column name="NAV">
+                <comment>Will be used in filtered navigation</comment>
+            </column>
+        </property>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -770,27 +792,7 @@
                 <comment>Will attribute be used for calculate products similarity</comment>
             </column>
         </property>
-        <property name="store" type="boolean">
-            <column name="STORE">
-                <comment>Will attribute be stored in FT index</comment>
-            </column>
-        </property>
-        <property name="search" type="boolean">
-            <column name="SEARCH">
-                <comment>Will attribute be used for searching</comment>
-            </column>
-        </property>
-        <property name="primary" type="boolean">
-            <column name="SEARCHPRIMARY">
-                <comment>Will attribute be used for exact searching</comment>
-            </column>
-        </property>
 
-        <property name="navigation" type="boolean">
-            <column name="NAV">
-                <comment>Will be used in filtered navigation</comment>
-            </column>
-        </property>
         <property name="navigationType" type="string" length="1">
             <column name="NAV_TYPE" default="'S'" length="1">
                 <comment>S - single, R- range</comment>
@@ -2824,14 +2826,14 @@
           <![CDATA[
        select pta
        from  ProductTypeAttrEntity pta
-            where pta.producttype.producttypeId = ?1 and pta.navigation = ?2
+            where pta.producttype.producttypeId = ?1 and pta.visible = ?2 and pta.attribute.navigation = ?3
        ]]>
     </query>
 
     <query name="PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID">
           <![CDATA[
-       select attr
-       from  ProductTypeAttrEntity pta  inner join pta.attribute attr
+       select pta.attribute
+       from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
        ]]>
     </query>
@@ -2893,18 +2895,17 @@
        from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
             and pta.navigationType = 'R'
-            and pta.navigation = ?2
-            order by pta.rank
+            and pta.attribute.navigation = ?2
+            and pta.visible = ?3
        ]]>
     </query>
 
-    <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES">
+    <query name="PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES">
         <![CDATA[
        select distinct b.name, b.name, b.name, 0
        from ProductCategoryEntity pc, ProductEntity p inner join p.brand b
        where p.productId = pc.product.productId
         and pc.category.categoryId in (?1)
-        order by b.name
        ]]>
     </query>
 
@@ -2924,25 +2925,25 @@
 
     <query name="ATTRIBUTE.CODES.NAVIGATION.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.navigation = ?1
+       select distinct a.code from AttributeEntity a where a.navigation = ?1
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.SEARCH.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.navigation = ?2
+       select distinct a.code from AttributeEntity a where a.search = ?1 and a.navigation = ?2
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.STORE.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.store = ?1
+       select distinct a.code from AttributeEntity a where a.store = ?1
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.primary = ?2
+       select distinct a.code from AttributeEntity a where a.search = ?1 and a.primary = ?2
        ]]>
     </query>
 
@@ -2950,8 +2951,9 @@
         <![CDATA[
        select distinct pt.attribute.code, pt.rank from ProductTypeAttrEntity pt
        where pt.producttype.producttypeId = ?1
-         and pt.navigation = ?2
+         and pt.attribute.navigation = ?2
          and pt.navigationType = 'S'
+         and pt.visible = ?3
        ]]>
     </query>
 

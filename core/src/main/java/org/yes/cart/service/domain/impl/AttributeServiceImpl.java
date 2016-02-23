@@ -216,7 +216,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
         final List<Object[]> allowedAttributeNames = attributeDao
                 .findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
-                        productTypeId, Boolean.TRUE);
+                        productTypeId, Boolean.TRUE, Boolean.TRUE);
         if (allowedAttributeNames.isEmpty()) {
             return Collections.emptyMap();
         }

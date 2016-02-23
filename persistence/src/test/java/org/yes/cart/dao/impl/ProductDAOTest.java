@@ -455,7 +455,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     }
 
     /**
-     * Test for PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES named query
+     * Test for PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES named query
      */
     @Test
     public void testGetUniqueBrandsByCategoriesTest() throws InterruptedException {
@@ -480,7 +480,7 @@ public class ProductDAOTest extends AbstractTestDAO {
                 params.add(135L);
                 params.add(136L);
                 List<Object[]> brands = productDao.findQueryObjectsByNamedQuery(
-                        "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
+                        "PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES",
                         params);
 
                 assertNotNull(brands);
@@ -581,7 +581,7 @@ public class ProductDAOTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 List<Object[]> codesByProductId = productDao.findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
-                        1L, true);
+                        1L, true, true);
                 final Map<String, Integer> map = new HashMap<String, Integer>();
                 for (final Object[] codeAndRank : codesByProductId) {
                     map.put((String) codeAndRank[0], (Integer) codeAndRank[1]);

@@ -391,3 +391,35 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11115,  'GUESTS_EXPIRY_TIMEOUT_SECONDS', 'GUESTS_EXPIRY_TIMEOUT_SECONDS',  0,  NULL,  'SF\Behaviour Cart: guests expiry in seconds',
     'Guest account expiry seconds. All expired guest accounts are deleted by bulk job. Default: 86400s (1 day)',  1006, 1000);
 
+--
+-- YC-677 Product types attributes management and configuration
+--
+
+-- Add columns to attribute
+alter table TATTRIBUTE add column STORE bit;
+alter table TATTRIBUTE add column SEARCH bit;
+alter table TATTRIBUTE add column SEARCHPRIMARY bit;
+alter table TATTRIBUTE add column NAV bit;
+
+-- alter table TATTRIBUTE add column STORE smallint;
+-- alter table TATTRIBUTE add column SEARCH smallint;
+-- alter table TATTRIBUTE add column SEARCHPRIMARY smallint;
+-- alter table TATTRIBUTE add column NAV smallint;
+
+-- Copy configurations
+update TATTRIBUTE a set a.STORE = (select max(pa.STORE) from TPRODUCTTYPEATTR pa where pa.CODE = a.CODE);
+update TATTRIBUTE a set a.SEARCH = (select max(pa.SEARCH) from TPRODUCTTYPEATTR pa where pa.CODE = a.CODE);
+update TATTRIBUTE a set a.SEARCHPRIMARY = (select max(pa.SEARCHPRIMARY) from TPRODUCTTYPEATTR pa where pa.CODE = a.CODE);
+update TATTRIBUTE a set a.NAV = (select max(pa.NAV) from TPRODUCTTYPEATTR pa where pa.CODE = a.CODE);
+update TATTRIBUTE a set a.STORE = 0 where a.STORE is null;
+update TATTRIBUTE a set a.SEARCH = 0 where a.SEARCH is null;
+update TATTRIBUTE a set a.SEARCHPRIMARY = 0 where a.SEARCHPRIMARY is null;
+update TATTRIBUTE a set a.NAV = 0 where a.NAV is null;
+
+
+-- Drop unnecessary columns
+alter table TPRODUCTTYPEATTR drop column STORE;
+alter table TPRODUCTTYPEATTR drop column SEARCH;
+alter table TPRODUCTTYPEATTR drop column SEARCHPRIMARY;
+alter table TPRODUCTTYPEATTR drop column NAV;
+

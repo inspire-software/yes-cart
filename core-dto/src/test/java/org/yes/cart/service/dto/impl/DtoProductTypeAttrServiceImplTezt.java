@@ -28,6 +28,7 @@ import org.yes.cart.service.dto.DtoProductTypeAttrService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -71,7 +72,7 @@ public class DtoProductTypeAttrServiceImplTezt extends BaseCoreDBTestCase {
         dtoProductTypeAttr.setSimilarity(true);
         dtoProductTypeAttr.setVisible(true);
         dtoProductTypeAttr = dtoService.update(dtoProductTypeAttr);
-        assertTrue(dtoProductTypeAttr.isNavigation());
+        assertFalse(dtoProductTypeAttr.isNavigation()); // Nav is updated on the Attribute
         assertTrue(dtoProductTypeAttr.isSimilarity());
         assertTrue(dtoProductTypeAttr.isVisible());
         assertEquals("R", dtoProductTypeAttr.getNavigationType());
