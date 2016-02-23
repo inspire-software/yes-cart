@@ -72,6 +72,14 @@ public class DtoBrandServiceImplTezt extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testFindBrands() throws Exception {
+
+        List<BrandDTO> list = dtoService.findBrands("Robo");
+        assertFalse(list.isEmpty());
+
+    }
+
+    @Test
     public void testRemove() throws Exception {
         BrandDTO dto = getDto();
         dto = dtoService.create(dto);

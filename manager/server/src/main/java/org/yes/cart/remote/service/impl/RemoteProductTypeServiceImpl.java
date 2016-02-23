@@ -17,8 +17,12 @@
 package org.yes.cart.remote.service.impl;
 
 import org.yes.cart.domain.dto.ProductTypeDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.remote.service.RemoteProductTypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
+
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -30,6 +34,8 @@ public class RemoteProductTypeServiceImpl
         implements RemoteProductTypeService {
 
 
+    private final DtoProductTypeService dtoProductTypeService;
+
     /**
      * Construct remote service.
      *
@@ -37,7 +43,13 @@ public class RemoteProductTypeServiceImpl
      */
     public RemoteProductTypeServiceImpl(final DtoProductTypeService dtoProductTypeService) {
         super(dtoProductTypeService);
+        this.dtoProductTypeService = dtoProductTypeService;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductTypeDTO> findProductTypes(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoProductTypeService.findProductTypes(name);
+    }
 }

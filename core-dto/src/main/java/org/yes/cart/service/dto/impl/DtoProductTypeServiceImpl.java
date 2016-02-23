@@ -17,12 +17,19 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductTypeDTOImpl;
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.dto.DtoProductTypeService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,10 +47,9 @@ public class DtoProductTypeServiceImpl
      * @param dtoFactory    {@link org.yes.cart.domain.dto.factory.DtoFactory}
      * @param productTypeGenericService       {@link org.yes.cart.service.domain.GenericService}
      */
-    public DtoProductTypeServiceImpl(
-            final GenericService<ProductType> productTypeGenericService,
-            final DtoFactory dtoFactory,
-            final AdaptersRepository adaptersRepository) {
+    public DtoProductTypeServiceImpl(final GenericService<ProductType> productTypeGenericService,
+                                     final DtoFactory dtoFactory,
+                                     final AdaptersRepository adaptersRepository) {
         super(dtoFactory, productTypeGenericService, adaptersRepository);
     }
 
@@ -74,5 +80,20 @@ public class DtoProductTypeServiceImpl
      */
     public Class<ProductType> getEntityIFace() {
         return ProductType.class;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductTypeDTO> findProductTypes(final String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<ProductType> entities = service.getGenericDao().findByCriteria(
+                Restrictions.or(
+                        Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                        Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                )
+        );
+        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
     }
 }

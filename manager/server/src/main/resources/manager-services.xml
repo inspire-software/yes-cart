@@ -323,6 +323,7 @@
             <security:protect method="getNew" access="ROLE_SMADMIN"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="findBrands" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
 
             <security:protect method="getEntityAttributes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="updateEntityAttributeValue" access="ROLE_SMADMIN"/>
@@ -479,6 +480,7 @@
             <security:protect method="getNew" access="ROLE_SMADMIN"/>
             <security:protect method="getAll" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
             <security:protect method="getById" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
+            <security:protect method="findProductTypes" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN"/>
         </security:intercept-methods>
     </bean>
 
