@@ -49,6 +49,10 @@ Actions for development:
    If you followed the IDE setup guide and run from Intellij then it is recommended to create "imagevault"
    directory in $YC_HOME and then set the SYSTEM_IMAGE_VAULT to "context://../../../../imagevault", which
    should work properly for all applications: "manager", "yes-shop" and "yes-api".
+   Alternatively run this SQL:
+   update TSYSTEMATTRVALUE set VAL = 'context://../../../../imagevault' where CODE = 'SYSTEM_IMAGE_VAULT';
 
    If you use standalone Tomcat deployment then default initdata.sql should be sufficient. i.e. SYSTEM_IMAGE_VAULT
-   is "context://../imagevault".
+   is "context://../imagevault", or use full file path if you encounter IO security exceptions
+   "file://[tomcatroot]/imagevault".
+
