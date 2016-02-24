@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ProductTypeDTO;
@@ -86,12 +87,19 @@ public class DtoProductTypeServiceImpl
      * {@inheritDoc}
      */
     public List<ProductTypeDTO> findProductTypes(final String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<ProductType> entities = service.getGenericDao().findByCriteria(
-                Restrictions.or(
-                        Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                        Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                )
-        );
+
+        final List<ProductType> entities;
+
+        if (StringUtils.isNotBlank(name)) {
+            entities = service.getGenericDao().findByCriteria(
+                    Restrictions.or(
+                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                    )
+            );
+        } else {
+            entities = service.findAll();
+        }
         final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

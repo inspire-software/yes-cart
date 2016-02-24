@@ -224,7 +224,23 @@
 
         private function onFindByAttributeGroupCodeResult(event:ResultEvent):void {
             attributeSelected = false;
-            attributesGrid.dataProvider = event.result;
+
+            var _attributesCollection:ArrayCollection = event.result as ArrayCollection;
+            _attributesCollection.filterFunction = function(item:AttributeDTOImpl):Boolean {
+
+                var _search:String = attributeTextInput.text;
+                if (_search == null || _search == '') {
+                    return true;
+                }
+                return item != null && (
+                        item.code.indexOf(_search) != -1 ||
+                        item.name.indexOf(_search) != -1
+                        );
+
+            }
+            _attributesCollection.refresh();
+
+            attributesCollection = _attributesCollection;
         }
 
         private function onGetAllETypesResult(event:ResultEvent):void {
@@ -249,12 +265,20 @@
             }
             attributeSelected = false;
         }
+
+
+        private function onRefreshAttributesClick(event:MouseEvent):void {
+            attributesCollection.refresh();
+        }
+
+
         ]]>
     </mx:Script>
 
 
     <mx:Boolean id="groupSelected">false</mx:Boolean>
     <mx:Boolean id="attributeSelected">false</mx:Boolean>
+    <mx:ArrayCollection id="attributesCollection"/>
 
     <mx:ArrayCollection id="etypesList"/>
 
@@ -315,7 +339,7 @@
 
     <mx:VDividedBox id="attributesManagementPanel" width="100%"
                     height="100%">
-        <mx:VBox width="100%" height="50%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%" height="25%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNewGroup')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewGroupHint')"
@@ -346,7 +370,7 @@
                 </mx:columns>
             </mx:DataGrid>
         </mx:VBox>
-        <mx:VBox width="100%" height="50%" visible="{groupSelected}" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%" height="75%" visible="{groupSelected}" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNew')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
@@ -369,8 +393,17 @@
                            click="onDeleteAttributeClick(event)"
 
                         />
+
+                <mx:Label text="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+                <mx:TextInput id="attributeTextInput" width="100" toolTip="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+
+                <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                           click="onRefreshAttributesClick(event)"  height="100%"/>
+
+
             </mx:HBox>
-            <mx:DataGrid width="100%" height="90%" id="attributesGrid"
+            <mx:DataGrid width="100%" height="90%" id="attributesGrid" dataProvider="{attributesCollection}"
                          doubleClickEnabled="true"
                          itemDoubleClick="onUpdateAttributeClick(event)"
                          itemClick="onAttributeSelected(event)">

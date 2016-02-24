@@ -15,7 +15,7 @@
   -    limitations under the License.
   -->
 
-<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%">
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" creationComplete="initBase()">
 
     <mx:Script>
 		<![CDATA[
@@ -42,7 +42,30 @@
         private var _attributeGroup:String;
         private var _entityCode:String;
 
-         public  function isLocalizationEnabled(popUp:ValueDialog):Boolean {
+        private function initBase():void {
+            this.attrValues.filterFunction = function (item:Object) {
+                if (canFilter) {
+                    var _search:String = attributeTextInput.text;
+                    if (_search != null && _search != '') {
+                        if (item != null) {
+                            if (item.hasOwnProperty('attributeDTO')) {
+                                var _attr:AttributeDTOImpl = item['attributeDTO'] as AttributeDTOImpl;
+                                if (_attr != null) {
+                                    if (_attr.code.indexOf(_search) != -1 || _attr.name.indexOf(_search) != -1) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            return item['val'] != null && item['val'].indexOf(_search) != -1;
+                        }
+                        return false;
+                    }
+                }
+                return true;
+            };
+        }
+
+        public function isLocalizationEnabled(popUp:ValueDialog):Boolean {
             return true;
         }
 
@@ -137,7 +160,7 @@
          */
         private function onCreateAttributeValueClick(event:MouseEvent):void {
 
-            newAttrValuePopUp =  AttributeValueQuickCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeValueQuickCreateDialog, true));
+            newAttrValuePopUp = AttributeValueQuickCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeValueQuickCreateDialog, true));
             newAttrValuePopUp.saveBtn.addEventListener(MouseEvent.CLICK, onQuickCreateAttrSaveClick);
             PopUpManager.centerPopUp(newAttrValuePopUp);
         }
@@ -174,6 +197,7 @@
 
         private function onRefreshAttributeValueClick(event:Event):void {
             onRefreshView();
+            this.attrValues.refresh();
         }
 
         /**
@@ -189,7 +213,7 @@
          * @param attrName new attribute name
          * @param attrValue new attribute value
          */
-        protected function onAttrValueAdded(attrName:String,  attrValue:String):void {
+        protected function onAttrValueAdded(attrName:String, attrValue:String):void {
             // must be overwritten in sub classes
 
         }
@@ -207,7 +231,7 @@
         private function onRemoveAttributeValueClick(event:MouseEvent):void {
             if (canDelete && this.valueDataGrid.selectedItem != null) {
                 Alert.show(
-                        resourceManager.getString('AttributesManagementPanel', 'deleteAttributeValueConfirm', [ this.valueDataGrid.selectedItem.val ]),
+                        resourceManager.getString('AttributesManagementPanel', 'deleteAttributeValueConfirm', [this.valueDataGrid.selectedItem.val]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onRemoveAttributeValueConfirm, null, Alert.OK);
             }
@@ -264,6 +288,7 @@
     <mx:Boolean id="canAdd">false</mx:Boolean>
     <mx:Boolean id="canCreate">false</mx:Boolean>
     <mx:Boolean id="canRefresh">false</mx:Boolean>
+    <mx:Boolean id="canFilter">true</mx:Boolean>
 
     <mx:VBox paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2" width="100%" height="100%">
 
@@ -292,6 +317,13 @@
                        enabled="{canRefresh}" visible="{canRefresh}" includeInLayout="{canRefresh}"
                     click="onRefreshAttributeValueClick(event)"
                     />
+
+            <mx:TextInput id="attributeTextInput" width="100" toolTip="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+
+            <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                       toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                       click="onRefreshAttributeValueClick(event)"  height="100%"/>
+
 
         </mx:HBox>
         <mx:DataGrid id="valueDataGrid" width="100%" height="100%" editable="true"

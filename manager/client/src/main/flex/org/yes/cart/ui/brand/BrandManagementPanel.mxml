@@ -48,9 +48,12 @@
         private var newPopUp:BrandCreateDialog;
 
         public function init():void {
-            remoteBrandService.getAll();
+
         }
 
+        public function search():void {
+            remoteBrandService.findBrands(brandTextInput.text);
+        }
 
         private function onBrandSelectedClick(event:ListEvent):void {
             brandSelected = this.brandGrid.selectedItem != null;
@@ -191,7 +194,7 @@
         }
 
         private function onRefreshBrandsClick(event:MouseEvent):void {
-            init();
+            search();
         }
         ]]>
     </mx:Script>
@@ -202,7 +205,7 @@
                      destination="remoteBrandService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-        <mx:method id="getAll" name="getAll"
+        <mx:method id="findBrands" name="findBrands"
                    result="onGetAllResult(event)"
                    fault="onRpcMethodFault(event)"/>
 
@@ -234,10 +237,14 @@
                            toolTip="@Resource(bundle='BrandManagementPanel',key='deleteBrandHint')"
                            enabled="{brandSelected}"
                            click="onDeleteBrandClick(event)"/>
-                <mx:Button label="@Resource(bundle='CategoryManagementPanel',key='refreshCategories')"
-                           toolTip="@Resource(bundle='CategoryManagementPanel',key='refreshCategoriesHint')"
-                           click="onRefreshBrandsClick(event)"
-                        />
+
+                <mx:Label text="@Resource(bundle='BrandManagementPanel',key='name')"/>
+                <mx:TextInput id="brandTextInput" width="100" toolTip="@Resource(bundle='BrandManagementPanel',key='name')"/>
+
+                <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                           click="onRefreshBrandsClick(event)"  height="100%"/>
+
             </mx:HBox>
 
             <mx:DataGrid id="brandGrid"

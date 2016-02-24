@@ -24,14 +24,14 @@
 
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='name')">
-            <mx:ComboBox
-                    id="attributeComboBox"
-                    change="attributeChangeEvt(event)"
-                    width="200"
-                    labelField="name"
-                    prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
-                    rowCount="10"
-                    />
+            <mx:HBox>
+                <mx:TextInput id="attributeName" width="200" editable="false"/>
+                <mx:Button
+                        label="..." width="30"
+                        toolTip="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
+                        click="onAssignAttributeClick(event)"
+                        />
+            </mx:HBox>
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='visible')">
@@ -120,6 +120,8 @@
         import mx.events.ItemClickEvent;
         import mx.managers.PopUpManager;
 
+        import org.yes.cart.ui.attributes.AttributeFinderDialog;
+
         import org.yes.cart.util.DomainUtils;
 
 
@@ -127,6 +129,8 @@
         public var productTypeAttr:ProductTypeAttrDTOImpl;
 
         private var rangeNavigationDialog:RangeNavigationDialog;
+
+        private var attributeFinderPopUp:AttributeFinderDialog;
 
         private function init():void {
 
@@ -141,19 +145,11 @@
             if (DomainUtils.isPersistentPK(productTypeAttr.productTypeAttrId)) {
                 //edit so set the combo boxes and radio buttons
 
-                updateAttributeFlags();
+                updateAttributeData();
 
                 navTypeSingle.selected = (productTypeAttr.navigationType == "S");
                 navigationTypeRangeEditEnabled = navTypeRange.selected = (productTypeAttr.navigationType == "R");
 
-                for (var i:int = 0; i < attributeComboBox.dataProvider.length; i++) {
-                    var candidate:Object = attributeComboBox.dataProvider[i];
-                    if (candidate.attributeId == productTypeAttr.attributeDTO.attributeId) {
-                        attributeComboBox.selectedItem = candidate;
-                        attributeComboBox.selectedIndex = i;
-                        break;
-                    }
-                }
             }
         }
 
@@ -162,10 +158,6 @@
             productTypeAttr.navigationType = event.currentTarget.selectedValue;
         }
 
-        private function attributeChangeEvt(event:Event):void {
-            productTypeAttr.attributeDTO = AttributeDTOImpl(event.currentTarget.selectedItem);
-            updateAttributeFlags();
-        }
 
         private function editRangeNavigationXml(event:flash.events.MouseEvent):void {
             rangeNavigationDialog = RangeNavigationDialog(PopUpManager.createPopUp(
@@ -181,7 +173,29 @@
             rangeNavigationDialog = null;
         }
 
-        private function updateAttributeFlags():void {
+        private function onAssignAttributeClick(event:MouseEvent):void {
+            attributeFinderPopUp = AttributeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeFinderDialog, true));
+            attributeFinderPopUp.selectAttributeButton.addEventListener(MouseEvent.CLICK, onAssignSelectedAttributeConfirm);
+            PopUpManager.centerPopUp(attributeFinderPopUp);
+        }
+
+        private function onAssignSelectedAttributeConfirm(event:Event):void {
+            if (attributeFinderPopUp != null) {
+                var attributes:Array = attributeFinderPopUp.attributeSelection;
+                if (attributes.length > 0) {
+                    productTypeAttr.attributeDTO = AttributeDTOImpl(attributes[0]);
+                    updateAttributeData();
+                }
+                attributeFinderPopUp.selectAttributeButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedAttributeConfirm);
+                PopUpManager.removePopUp(attributeFinderPopUp);
+                attributeFinderPopUp = null;
+            }
+        }
+
+        private function updateAttributeData():void {
+
+            attributeName.text = productTypeAttr.attributeDTO.name + ' (' + productTypeAttr.attributeDTO.code + ')';
+
             storeCheckBox.selected = productTypeAttr.attributeDTO.store;
             primaryCheckBox.selected = productTypeAttr.attributeDTO.primary;
             searchCheckBox.selected = productTypeAttr.attributeDTO.search;
