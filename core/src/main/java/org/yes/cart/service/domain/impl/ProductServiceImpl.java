@@ -31,7 +31,6 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
@@ -320,6 +319,89 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return map;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
+                                                                                                                              final List<Long> productId,
+                                                                                                                              final List<Long> skuId) {
+
+        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view =
+                new TreeMap<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>>(BY_SECOND);
+
+        for (final Long id : productId) {
+
+            final Product product = proxy().getProductById(id, true);
+            if (product != null) {
+
+                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
+                        proxy().getProductAttributes(locale, id, 0L, product.getProducttype().getProducttypeId());
+
+                mergeCompareView(view, productView, "p_" + id);
+            }
+
+        }
+
+        for (final Long id : skuId) {
+
+            final ProductSku sku = proxy().getSkuById(id, true);
+            if (sku != null) {
+
+                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
+                        proxy().getProductAttributes(locale, sku.getProduct().getProductId(), id, sku.getProduct().getProducttype().getProducttypeId());
+
+                mergeCompareView(view, productView, "s_" + id);
+
+            }
+
+        }
+
+        return view;
+
+    }
+
+
+    private void mergeCompareView(final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view,
+                                  final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> add,
+                                  final String id) {
+
+        for (final Map.Entry<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> group : add.entrySet()) {
+
+            Map<Pair<String, String>, Map<String, List<Pair<String, String>>>> attributesInGroup = view.get(group.getKey());
+
+            if (attributesInGroup == null) {
+
+                attributesInGroup = new TreeMap<Pair<String, String>, Map<String, List<Pair<String, String>>>>(BY_SECOND);
+                view.put(group.getKey(), attributesInGroup);
+
+            }
+
+            for (final Map.Entry<Pair<String, String>, List<Pair<String, String>>> attribute : group.getValue().entrySet()) {
+
+                Map<String, List<Pair<String, String>>> valueByProduct = attributesInGroup.get(attribute.getKey());
+
+                if (valueByProduct == null) {
+
+                    valueByProduct = new HashMap<String, List<Pair<String, String>>>();
+                    attributesInGroup.put(attribute.getKey(), valueByProduct);
+
+                }
+
+                valueByProduct.put(id, new ArrayList<Pair<String, String>>(attribute.getValue()));
+
+
+            }
+
+
+        }
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "productService-productAttribute")
     public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
         if (skuId > 0L) {
@@ -347,6 +429,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "productService-allProductsAttributeValues")
     public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
         final List<Object[]> values = (List) getGenericDao().findByNamedQuery("ALL.PRODUCT.ATTR.VALUE", attributeCode);

@@ -102,6 +102,51 @@ public interface ProductServiceFacade {
                                                                                                           long skuId,
                                                                                                           long productTypeId);
 
+    /**
+     * Get the grouped product attributes, with values. The result can be represented in following form:
+     *
+     *                   Prod A    SKU B    Prod C
+     * Shipment details:
+     * weight:            17 Kg    15kg      14kg
+     * length:            15 Cm    15 Cm     15 Cm
+     * height:            20 Cm    20 Cm     20 Cm
+     * width:             35 Cm    35 Cm     35 Cm
+     * Power:
+     * Charger:           200/110            200/115
+     * Battery type:      Lithium  Lithium
+     *
+     * So the hierarchy returned for the above example will be:
+     * Map
+     *    Entry[1001, Shipment details] =>
+     *      Map
+     *          Entry [10010, weight] =>
+     *               Map
+     *                  Entry[ p_10001 =>
+     *                      List
+     *                         [100001, 17 Kg]
+     *                  ]
+     *                  Entry[ s_10001 =>
+     *                      List
+     *                         [100001, 15 Kg]
+     *                  ]
+     *                  Entry[ p_10002 =>
+     *                      List
+     *                         [100001, 14 Kg]
+     *                  ]
+     *  ... etc
+     *
+     *  If this is SKU then it should inherit the attributes of the product,
+     *  If this is just product then we only display product attributes
+     *
+     * @param locale locale
+     * @param productId  product ID
+     * @param skuId sku ID
+     * @return hierarchy of attributes for this product or sku.
+     */
+    Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(String locale,
+                                                                                                                       List<Long> productId,
+                                                                                                                       List<Long> skuId);
+
 
     /**
      * Get all product associations by association type.

@@ -206,6 +206,32 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testCompareAttributesView() throws Exception {
+
+        // bender vs bender-ua sku
+        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> attrs =
+                productService.getCompareAttributes("en", Arrays.asList(9999L), Arrays.asList(9998L));
+
+        assertNotNull(attrs);
+        assertFalse(attrs.isEmpty());
+        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        assertTrue(attrs.containsKey(dvdKey));
+        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
+        final Map<String, List<Pair<String, String>>> products = attrs.get(dvdKey).get(weightKey);
+        assertEquals(2, products.size());
+
+        final List<Pair<String, String>> values9998 = products.get("s_9998");
+        assertEquals(1, values9998.size());
+        assertEquals("1.16", values9998.get(0).getSecond());
+
+        final List<Pair<String, String>> values9999 = products.get("p_9999");
+        assertEquals(1, values9999.size());
+        assertEquals("1.1", values9999.get(0).getSecond());
+
+    }
+
+    @Test
     public void testGetProductSearchResultDTOByQuery() {
 
 

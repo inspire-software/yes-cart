@@ -41,7 +41,6 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -126,6 +125,17 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                                                                                  final long skuId,
                                                                                                                  final long productTypeId) {
         return productService.getProductAttributes(locale, productId, skuId, productTypeId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
+                                                                                                                              final List<Long> productId,
+                                                                                                                              final List<Long> skuId) {
+
+        return productService.getCompareAttributes(locale, productId, skuId);
+
     }
 
     /**
