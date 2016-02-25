@@ -43,7 +43,7 @@
         private var _entityCode:String;
 
         private function initBase():void {
-            this.attrValues.filterFunction = function (item:Object) {
+            this.attrValues.filterFunction = function (item:Object):Boolean {
                 if (canFilter) {
                     var _search:String = attributeTextInput.text;
                     if (_search != null && _search != '') {
