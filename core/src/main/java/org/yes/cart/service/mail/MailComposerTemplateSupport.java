@@ -14,20 +14,20 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.domain;
+package org.yes.cart.service.mail;
 
 import java.util.Map;
 
 /**
  * User: denispavlov
- * Date: 25/04/2014
+ * Date: 26/02/2016
  * Time: 12:58
  */
-public interface ContentServiceTemplateSupport {
+public interface MailComposerTemplateSupport {
 
     interface FunctionProvider {
 
-        Object doAction(Object ... params);
+        Object doAction(Object... params);
 
     }
 

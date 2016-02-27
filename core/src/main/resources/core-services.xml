@@ -782,9 +782,13 @@
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>
-        <constructor-arg>
-            <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
-                <constructor-arg ref="cacheManager"/>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.service.mail.impl.MailComposerTemplateSupportGroovyImpl">
+                <constructor-arg>
+                    <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
+                        <constructor-arg ref="cacheManager"/>
+                    </bean>
+                </constructor-arg>
             </bean>
         </constructor-arg>
     </bean>
