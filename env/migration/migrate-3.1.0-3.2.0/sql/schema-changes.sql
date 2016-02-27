@@ -391,6 +391,198 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11115,  'GUESTS_EXPIRY_TIMEOUT_SECONDS', 'GUESTS_EXPIRY_TIMEOUT_SECONDS',  0,  NULL,  'SF\Behaviour Cart: guests expiry in seconds',
     'Guest account expiry seconds. All expired guest accounts are deleted by bulk job. Default: 86400s (1 day)',  1006, 1000);
 
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Your order has been successfully created. You will receive confirmation by e-mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         An error occurred while trying to create your order. Please try again.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } %>
+<% } %>
+
+' where GUID = '12510_CAV';
+
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата заказа</h2>
+
+<% if (result) { %>
+   <p>
+      Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+       <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } %>
+<% } %>
+
+'  where GUID = '12511_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Оплата замовлення</h2>
+
+<% if (result) { %>
+   <p>
+      Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } %>
+<% } %>
+
+'  where GUID = '12513_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+     <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } %>
+<% } %>
+
+'  where GUID = '12514_CAV';
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Payment result</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Order successfully placed</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+<% } else { %>
+	<p>Errors in payment</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+<% } %>
+
+'  where GUID = '12520_CAV';
+
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплаты</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Заказ успешно оформлен</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+<% } else { %>
+	<p>Ошибки при оплате</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+<% } %>
+
+'  where GUID = '12521_CAV';
+
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Результат оплати</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Замовлення успішно оформлене</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+	  <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	<% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+<% } else { %>
+	<p>Помилка при оплаті</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+<% } %>
+
+'  where GUID = '12522_CAV';
+
+
+update TCATEGORYATTRVALUE set VAL = '
+<h2>Resultat des Zahlungsvorgangs</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Bestellung erfolgreich getätigt</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+   	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+<% } else { %>
+	<p>Fehler bei der Zahlung</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+<% } %>
+
+' where GUID = '12523_CAV';
+
 --
 -- YC-677 Product types attributes management and configuration
 --
