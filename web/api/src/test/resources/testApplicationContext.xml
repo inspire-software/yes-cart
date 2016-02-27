@@ -39,10 +39,10 @@
     <import resource="classpath:core-orderstate.xml"/>
 
     <import resource="classpath:websupport-services.xml"/>
-    <import resource="classpath:websupport-cluster-WS.xml"/>
+    <!--<import resource="classpath:websupport-cluster-WS.xml"/>-->
     <import resource="classpath:websupport-cluster.xml"/>
     <import resource="classpath:websupport-tools.xml"/>
-    <import resource="classpath:websupport-cronjob.xml"/>
+    <!--<import resource="classpath:websupport-cronjob.xml"/>-->
     <import resource="classpath:websupport-storefront.xml"/>
     <import resource="websupport-api.xml"/>
 

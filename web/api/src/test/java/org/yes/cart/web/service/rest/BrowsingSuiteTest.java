@@ -28,13 +28,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.yes.cart.domain.ro.SearchRO;
 
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
 
 /**
  * User: denispavlov
@@ -43,13 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-@WebAppConfiguration
+@WebAppConfiguration(value = "src/test/webapp")
 public class BrowsingSuiteTest extends AbstractSuiteTest {
 
     private final Locale locale = Locale.ENGLISH;
-
-    private final Pattern UUID_JSON = Pattern.compile("\"guid\":\"([0-9a-zA-Z\\-]*)\"");
-    private final Pattern UUID_XML = Pattern.compile("guid=\"([0-9a-zA-Z\\-]*)\"");
 
 
     @Test
@@ -135,9 +130,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final Matcher matcher = UUID_JSON.matcher(firstLoad.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = firstLoad.getResponse().getHeader("yc");
 
         mockMvc.perform(get("/product/9998")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -252,9 +245,7 @@ public class BrowsingSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final Matcher matcher = UUID_XML.matcher(firstLoad.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = firstLoad.getResponse().getHeader("yc");
 
 
         mockMvc.perform(get("/product/9998")

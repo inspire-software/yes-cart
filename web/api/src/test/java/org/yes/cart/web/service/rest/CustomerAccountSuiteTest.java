@@ -30,13 +30,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
 
 /**
  * User: denispavlov
@@ -45,12 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-@WebAppConfiguration
+@WebAppConfiguration(value = "src/test/webapp")
 public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
     private final Locale locale = Locale.ENGLISH;
-    private final Pattern UUID_JSON = Pattern.compile("\"uuid\":\"([0-9a-zA-Z\\-]*)\"");
-    private final Pattern UUID_XML = Pattern.compile("uuid>([0-9a-zA-Z\\-]*)</uuid");
 
     @Test
     public void testCustomerJson() throws Exception {
@@ -93,9 +89,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final Matcher matcher = UUID_JSON.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
 
         mockMvc.perform(get("/auth/check")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -276,9 +270,7 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                 .andReturn();
 
-        final Matcher matcher = UUID_XML.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
 
         mockMvc.perform(get("/auth/check")
                     .contentType(MediaType.APPLICATION_JSON)
