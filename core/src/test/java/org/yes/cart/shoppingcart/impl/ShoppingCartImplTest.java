@@ -16,7 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -30,6 +33,8 @@ import static org.junit.Assert.*;
  * Time: 1:19:22 AM
  */
 public class ShoppingCartImplTest {
+
+    private Mockery mockery = new JUnit4Mockery();
 
     private ShoppingCartImpl cart = new ShoppingCartImpl();
 
@@ -218,6 +223,18 @@ public class ShoppingCartImplTest {
         applied = cart.getAppliedCoupons();
         assertNotNull(applied);
         assertEquals(0, applied.size());
+
+    }
+
+    @Test
+    public void testModificaion() throws Exception {
+
+        final AmountCalculationStrategy strategy = mockery.mock(AmountCalculationStrategy.class);
+
+        cart.initialise(strategy);
+        assertFalse(cart.isModified());
+        cart.markDirty();
+        assertTrue(cart.isModified());
 
     }
 }

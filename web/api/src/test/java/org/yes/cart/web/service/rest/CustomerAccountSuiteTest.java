@@ -20,17 +20,25 @@ import org.hamcrest.CustomMatchers;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.entity.ShoppingCartState;
+import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,6 +55,14 @@ import static org.springframework.test.web.servlet.result.YcMockMvcResultHandler
 public class CustomerAccountSuiteTest extends AbstractSuiteTest {
 
     private final Locale locale = Locale.ENGLISH;
+
+
+    @Autowired
+    private ShoppingCartStateService shoppingCartStateService;
+
+    @Autowired
+    private CartRepository cartRepository;
+
 
     @Test
     public void testCustomerJson() throws Exception {
@@ -90,6 +106,15 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andReturn();
 
         final String uuid = regResult.getResponse().getHeader("yc");
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertEquals("bob.doe@yc-account-json.com", state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertEquals("bob.doe@yc-account-json.com", cart.getCustomerEmail());
+
 
         mockMvc.perform(get("/auth/check")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -271,6 +296,14 @@ public class CustomerAccountSuiteTest extends AbstractSuiteTest {
                 .andReturn();
 
         final String uuid = regResult.getResponse().getHeader("yc");
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertEquals("bob.doe@yc-account-xml.com", state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertEquals("bob.doe@yc-account-xml.com", cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                     .contentType(MediaType.APPLICATION_JSON)

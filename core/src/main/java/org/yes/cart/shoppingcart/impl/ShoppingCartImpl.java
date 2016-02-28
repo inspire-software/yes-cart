@@ -92,6 +92,10 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public void markDirty() {
         this.modifiedTimestamp = System.currentTimeMillis();
+        if (!isModified()) {
+            // New carts need artificial time lag.
+            this.modifiedTimestamp += 1;
+        }
     }
 
     /** {@inheritDoc} */
