@@ -35,19 +35,24 @@
                 <mx:CheckBox id="featuredCheckBox"/>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='brand')">
-                <mx:ComboBox id="brandComboBox" width="300"
-                             dataProvider="{brands}"
-                             labelField="name"
-                             prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
-                        />
+                <mx:HBox>
+                    <mx:TextInput id="brandLabel" width="150" editable="false"/>
+                    <mx:Button id="selectBrandBtn" width="30"
+                               label="..."
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
+                               click="onBrandSelectedClick(event);"
+                            />
+                </mx:HBox>
             </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='type')">
-                <mx:ComboBox id="typeComboBox" width="300"
-                             dataProvider="{productTypes}"
-                             labelField="name"
-                             prompt="@Resource(bundle='ProductManagementPanel',key='selectTypePropmt')"
-                        />
-
+                <mx:HBox>
+                    <mx:TextInput id="productTypeLabel" width="150" editable="false"/>
+                    <mx:Button id="selectProductTypeBtn" width="30"
+                               label="..."
+                               toolTip="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
+                               click="onProductTypeSelectedClick(event);"
+                            />
+                </mx:HBox>
             </mx:FormItem>
 
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
@@ -159,9 +164,6 @@
 
     <mx:ArrayCollection id="propertyWatchers"/>
 
-    <mx:ArrayCollection id="productTypes"/>
-    <mx:ArrayCollection id="brands"/>
-
     <mx:Boolean id="allowChangeCode">false</mx:Boolean>
     <mx:Boolean id="productDTOImplChanged">false</mx:Boolean>
 
@@ -169,21 +171,30 @@
         import mx.binding.utils.BindingUtils;
         import mx.binding.utils.ChangeWatcher;
         import mx.controls.Alert;
+        import mx.core.FlexGlobals;
         import mx.events.FlexEvent;
         import mx.events.PropertyChangeEvent;
+        import mx.managers.PopUpManager;
         import mx.rpc.events.FaultEvent;
         import mx.rpc.events.ResultEvent;
         import mx.utils.ObjectUtil;
 
         import org.yes.cart.event.DtoEvent;
+        import org.yes.cart.impl.BrandDTOImpl;
 
         import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
+        import org.yes.cart.ui.brand.BrandFinderDialog;
+        import org.yes.cart.ui.producttype.ProductTypeFinderDialog;
         import org.yes.cart.util.DataModelUtils;
         import org.yes.cart.util.DomainUtils;
 
         [Bindable]
         private var _productDTOImpl:ProductDTOImpl;
+
+        private var brandFinderPopUp:BrandFinderDialog;
+        private var productTypeFinderPopUp:ProductTypeFinderDialog;
 
         public function get productDTOImpl():ProductDTOImpl {
             return _productDTOImpl;
@@ -242,8 +253,6 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableFromDateField, "selectedDate", _productDTOImpl, "availablefrom"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(productAvailableToDateField, "selectedDate", _productDTOImpl, "availableto"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(featuredCheckBox, "selected", _productDTOImpl, "featured"));
-                propertyWatchers.addItem(BindingUtils.bindProperty(brandComboBox, "selectedItem", _productDTOImpl, "brandDTO"));
-                propertyWatchers.addItem(BindingUtils.bindProperty(typeComboBox, "selectedItem", _productDTOImpl, "productTypeDTO"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(productAvailabilityComboBox, "selectedItem", _productDTOImpl, "availability"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(minOrderQuantity, "text", _productDTOImpl, "minOrderQuantityS"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(maxOrderQuantity, "text", _productDTOImpl, "maxOrderQuantityS"));
@@ -256,9 +265,8 @@
                     }
                 }
 
-                DataModelUtils.selectCombo(brandComboBox, _productDTOImpl.brandDTO, 'brandId');
-                DataModelUtils.selectCombo(typeComboBox, _productDTOImpl.productTypeDTO, 'producttypeId');
-
+                brandLabel.text = _productDTOImpl.brandDTO.name;
+                productTypeLabel.text = _productDTOImpl.productTypeDTO.name;
 
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "guid", guidTextInput, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "code", codeTextInput, "text"));
@@ -269,8 +277,6 @@
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availablefrom", productAvailableFromDateField, "selectedDate"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "availableto", productAvailableToDateField, "selectedDate"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "featured", featuredCheckBox, "selected"));
-                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "brandDTO", brandComboBox, "selectedItem"));
-                propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "productTypeDTO", typeComboBox, "selectedItem"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "minOrderQuantityS", minOrderQuantity, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "maxOrderQuantityS", maxOrderQuantity, "text"));
                 propertyWatchers.addItem(BindingUtils.bindProperty(_productDTOImpl, "stepOrderQuantityS", stepOrderQuantity, "text"));
@@ -342,6 +348,51 @@
                 codeTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'codeIsNotAvailable', [ codeTextInput.text ]);
             }
         }
+
+
+
+
+        private function onProductTypeSelectedClick(event:MouseEvent):void {
+            productTypeFinderPopUp = ProductTypeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeFinderDialog, true));
+            productTypeFinderPopUp.selectProductTypeButton.addEventListener(MouseEvent.CLICK, onProductTypeSelectedClickConfirm);
+            PopUpManager.centerPopUp(productTypeFinderPopUp);
+        }
+
+        private function onProductTypeSelectedClickConfirm(event:Event):void {
+            if (productTypeFinderPopUp != null) {
+                var types:Array = productTypeFinderPopUp.productTypeSelection;
+                if (types.length > 0) {
+                    var _type:ProductTypeDTOImpl = ProductTypeDTOImpl(types[0]);
+                    _productDTOImpl.productTypeDTO = _type;
+                    productTypeLabel.text = _type.name;
+                }
+                productTypeFinderPopUp.selectProductTypeButton.removeEventListener(MouseEvent.CLICK, onProductTypeSelectedClickConfirm);
+                PopUpManager.removePopUp(productTypeFinderPopUp);
+                productTypeFinderPopUp = null;
+            }
+        }
+
+
+        private function onBrandSelectedClick(event:MouseEvent):void {
+            brandFinderPopUp = BrandFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandFinderDialog, true));
+            brandFinderPopUp.selectBrandButton.addEventListener(MouseEvent.CLICK, onBrandSelectedClickConfirm);
+            PopUpManager.centerPopUp(brandFinderPopUp);
+        }
+
+        private function onBrandSelectedClickConfirm(event:Event):void {
+            if (brandFinderPopUp != null) {
+                var brands:Array = brandFinderPopUp.brandSelection;
+                if (brands.length > 0) {
+                    var _brand:BrandDTOImpl = BrandDTOImpl(brands[0]);
+                    _productDTOImpl.brandDTO = _brand;
+                    brandLabel.text = _brand.name;
+                }
+                brandFinderPopUp.selectBrandButton.removeEventListener(MouseEvent.CLICK, onBrandSelectedClickConfirm);
+                PopUpManager.removePopUp(brandFinderPopUp);
+                brandFinderPopUp = null;
+            }
+        }
+
 
         ]]></mx:Script>
 

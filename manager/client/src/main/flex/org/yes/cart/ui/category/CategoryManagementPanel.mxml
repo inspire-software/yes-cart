@@ -46,16 +46,14 @@
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.CategoryTreeDescriptor;
         import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
         import org.yes.cart.ui.product.ProductFinderDialog;
-        import org.yes.cart.util.DataModelUtils;
+        import org.yes.cart.ui.producttype.ProductTypeFinderDialog;
         import org.yes.cart.util.DomainUtils;
-
-        import spark.collections.Sort;
-        import spark.collections.SortField;
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_SEO_IDX:int = 1;
@@ -69,12 +67,12 @@
 
         private var newCategoryPopUp:CategoryCreateDialog;
         private var productFinderPopUp:ProductFinderDialog;
+        private var productTypeFinderPopUp:ProductTypeFinderDialog;
         private var categoryPropertyChangeWatchers:ArrayList = new ArrayList();
 
         private var attrValuePanel:EntityAttributeValuesManagementPanel;
 
         public function init():void {
-            remoteProductTypeService.getAll();
             remoteCategoryService.getAll();
         }
 
@@ -102,14 +100,6 @@
 
             if (categorySelected && categoryTree.selectedItem != null) {
 
-                categoryProductTypeComboBox.selectedItem = null;
-                categoryProductTypeComboBox.selectedIndex = -1;
-                categoryProductTypeClearButton.visible = false;
-
-                if (DomainUtils.isPersistent(categoryTree.selectedItem, 'productTypeId')) {
-                    categoryProductTypeClearButton.visible =
-                            DataModelUtils.selectCombo(categoryProductTypeComboBox, categoryTree.selectedItem, 'productTypeId', 'producttypeId');
-                }
                 bingCategoryDataMain();
             }
         }
@@ -178,7 +168,6 @@
             if (uriNameTextInput != null) {
                 uriNameTextInput.errorString = '';
             }
-            categoryProductTypeComboBox.removeEventListener(Event.CHANGE, onCategoryProductTypeChanged);
         }
 
         private function unbindSeo():void {
@@ -221,7 +210,7 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByBrand", categoryFNByBrandsCheckBox, "selected"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByPrice", categoryFNByPriceCheckBox, "selected"));
 
-            categoryProductTypeComboBox.addEventListener(Event.CHANGE, onCategoryProductTypeChanged);
+            categoryProductTypeName.text = this.selectedCategoryDTOImpl.productTypeId > 0 ? this.selectedCategoryDTOImpl.productTypeName : '';
 
             // if (!saveBtnVisible) {
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "guid", categoryDtoChanged));
@@ -280,7 +269,7 @@
             if (_available) {
                 uriNameTextInput.errorString = '';
             } else {
-                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [uriNameTextInput.text]);
             }
 
         }
@@ -296,7 +285,7 @@
             if (_available) {
                 categoryGUIDTextInput.errorString = '';
             } else {
-                categoryGUIDTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'guidIsNotAvailable', [ categoryGUIDTextInput.text ]);
+                categoryGUIDTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'guidIsNotAvailable', [categoryGUIDTextInput.text]);
             }
 
         }
@@ -317,21 +306,34 @@
             categoryTree.validateNow();
         }
 
-        private function onCategoryProductTypeChanged(event:Event):void {
-            if (categoryProductTypeComboBox.selectedItem != null) {
-                categoryProductTypeClearButton.visible = true;
-                selectedCategoryDTOImpl.productTypeId = categoryProductTypeComboBox.selectedItem.producttypeId;
-            } else {
-                categoryProductTypeClearButton.visible = false;
-                selectedCategoryDTOImpl.productTypeId = 0;
+
+        private function onAssignProductTypeClick(event:MouseEvent):void {
+            productTypeFinderPopUp = ProductTypeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeFinderDialog, true));
+            productTypeFinderPopUp.selectProductTypeButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductTypeConfirm);
+            PopUpManager.centerPopUp(productTypeFinderPopUp);
+        }
+
+        private function onAssignSelectedProductTypeConfirm(event:Event):void {
+            if (productTypeFinderPopUp != null && this.selectedCategoryDTOImpl != null) {
+                var types:Array = productTypeFinderPopUp.productTypeSelection;
+                if (types.length > 0) {
+                    var _type:ProductTypeDTOImpl = ProductTypeDTOImpl(types[0]);
+                    selectedCategoryDTOImpl.productTypeId = _type.producttypeId;
+                    selectedCategoryDTOImpl.productTypeName = _type.name;
+                    categoryProductTypeName.text = _type.name;
+                }
+                productTypeFinderPopUp.selectProductTypeButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductTypeConfirm);
+                PopUpManager.removePopUp(productTypeFinderPopUp);
+                productTypeFinderPopUp = null;
             }
+            categoryProductTypeClearButton.visible = selectedCategoryDTOImpl.productTypeId > 0;
         }
 
         private function onCategoryProductTypeClear(event:Event):void {
             categoryProductTypeClearButton.visible = false;
-            categoryProductTypeComboBox.selectedItem = null;
-            categoryProductTypeComboBox.selectedIndex = -1;
             selectedCategoryDTOImpl.productTypeId = 0;
+            selectedCategoryDTOImpl.productTypeName = '';
+            categoryProductTypeName.text = '';
         }
 
 
@@ -364,7 +366,7 @@
         private function onDeleteCategoryClick(event:MouseEvent):void {
             if (categorySelected && this.selectedCategoryDTOImpl != null) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'deleteCategoryConfirm', [ this.selectedCategoryDTOImpl.name ]),
+                        resourceManager.getString('CategoryManagementPanel', 'deleteCategoryConfirm', [this.selectedCategoryDTOImpl.name]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteSelectedCategoryConfirm, null, Alert.OK);
             }
@@ -389,7 +391,7 @@
             if (!categoryOrRootSelected || categoryTree.selectedItem == null ||
                     DomainUtils.isNew(categoryTree.selectedItem, 'categoryId')) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'canNotAddtoUnsavedCategory', [ categoryTree.selectedItem.name ]),
+                        resourceManager.getString('CategoryManagementPanel', 'canNotAddtoUnsavedCategory', [categoryTree.selectedItem.name]),
                         resourceManager.getString('ShopManagerApplication', 'info'));
 
             } else {
@@ -515,7 +517,7 @@
         private function onRemoveProductFromCategoryClick(event:MouseEvent):void {
             if (productSelected && assignedProductsGrid.selectedItem != null) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'deleteProductFromCategoryConfirm', [ assignedProductsGrid.selectedItem.code ]),
+                        resourceManager.getString('CategoryManagementPanel', 'deleteProductFromCategoryConfirm', [assignedProductsGrid.selectedItem.code]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, removeSelectedProductFromCategory, null, Alert.OK);
             }
@@ -579,21 +581,10 @@
             categoryTree.dataProvider = event.result;
             categoryTree.dataDescriptor = new CategoryTreeDescriptor(null);
             if (categoryTree.dataProvider.length > 0) {
-                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                categoryTree.openItems = [categoryTree.dataProvider.getItemAt(0)];
                 categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
                 categoryTree.validateNow();
             }
-        }
-
-        private function onGetAllProductTypesResult(event:ResultEvent):void {
-
-            var _types:ArrayCollection = event.result as ArrayCollection;
-            var _sort:Sort = new Sort();
-            _sort.fields = [ new SortField('name') ];
-            _types.sort = _sort;
-            _types.refresh();
-            this.categoryProductTypeList = _types;
-
         }
 
         private function onCreateCategoriesResult(event:ResultEvent):void {
@@ -682,15 +673,6 @@
 
     </mx:RemoteObject>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}">
-
-        <mx:method id="getAllProductTypes" name="getAll"
-                   result="onGetAllProductTypesResult(event)"
-                   fault="onRpcMethodFault(event)"/>
-
-    </mx:RemoteObject>
-
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductCategoryService" destination="remoteProductCategoryService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
@@ -710,8 +692,6 @@
     <mx:Boolean id="categoryOrRootSelected">false</mx:Boolean>
     <mx:Boolean id="categorySelectedAndChanged">false</mx:Boolean>
     <mx:Boolean id="productSelected">false</mx:Boolean>
-
-    <mx:ArrayCollection id="categoryProductTypeList"/>
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='CategoryManagementPanel',key='categories')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
@@ -828,11 +808,11 @@
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='productType')">
                                         <mx:HBox>
-                                            <mx:ComboBox id="categoryProductTypeComboBox" width="300"
-                                                         dataProvider="{categoryProductTypeList}"
-                                                         labelField="name"
-                                                         data="producttypeId"
-                                                         prompt="@Resource(bundle='CategoryManagementPanel',key='selectTypePropmt')"
+                                            <mx:TextInput id="categoryProductTypeName" width="180" editable="false"/>
+                                            <mx:Button
+                                                    label="..." width="30"
+                                                    toolTip="@Resource(bundle='CategoryManagementPanel',key='selectTypePropmt')"
+                                                    click="onAssignProductTypeClick(event)"
                                                     />
                                             <mx:Button id="categoryProductTypeClearButton"
                                                     label="@Resource(bundle='CategoryManagementPanel',key='clearType')"

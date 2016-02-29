@@ -24,36 +24,46 @@
 
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productCode')">
-            <mx:TextInput id="codeTextInput" width="215"/>
+            <mx:TextInput id="codeTextInput" width="215" change="onChangeTextInput(event)"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productName')">
-            <mx:TextInput id="nameTextImput" width="215"/>
+            <mx:TextInput id="nameTextImput" width="215" change="onChangeTextInput(event)"/>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productBrand')">
-            <mx:ComboBox id="brandComboBox" width="215"
-                         labelField="name"
-                         prompt="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
-                    />
+            <mx:HBox>
+                <mx:TextInput id="brandLabel" width="150" editable="false"/>
+                <mx:Button id="selectBrandBtn" width="30"
+                           label="..."
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='selectBrandPropmt')"
+                           click="onBrandSelectedClick(event);"
+                        />
+            </mx:HBox>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productType')">
-            <mx:ComboBox id="productTypeComboBox" width="215"
-                         labelField="name"
-                         prompt="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
-                    />
+            <mx:HBox>
+                <mx:TextInput id="productTypeLabel" width="150" editable="false"/>
+                <mx:Button id="selectProductTypeBtn" width="30"
+                           label="..."
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='selectProductType')"
+                           click="onProductTypeSelectedClick(event);"
+                        />
+            </mx:HBox>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='productAvailability')">
             <mx:ComboBox id="productAvailabilityComboBox" width="215"
-                         labelField="name"
+                         labelField="name" change="onChangeTextInput(event)"
                          prompt="@Resource(bundle='ProductManagementPanel',key='selectAvailability')"
                     />
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='category')">
-            <mx:Label id="categoryLabel" width="150"/>
-            <mx:Button id="selectProductBtn" width="30"
-                       label="..."
-                       toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
-                       click="onCategorySelectedClick(event);"
-                    />
+            <mx:HBox>
+                <mx:TextInput id="categoryLabel" width="150" editable="false"/>
+                <mx:Button id="selectCategoryBtn" width="30"
+                           label="..."
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='addProductCategory')"
+                           click="onCategorySelectedClick(event);"
+                        />
+            </mx:HBox>
         </mx:FormItem>
     </mx:Form>
 		
@@ -71,12 +81,30 @@
         import mx.core.FlexGlobals;
         import mx.managers.PopUpManager;
 
-        import org.yes.cart.impl.ProductCategoryDTOImpl;
-        import org.yes.cart.ui.category.CategoryFinderDialog;
+        import org.yes.cart.impl.BrandDTOImpl;
 
+        import org.yes.cart.impl.ProductCategoryDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
+        import org.yes.cart.ui.brand.BrandFinderDialog;
+        import org.yes.cart.ui.category.CategoryFinderDialog;
+        import org.yes.cart.ui.producttype.ProductTypeFinderDialog;
+
+        private var _brandDTO:BrandDTOImpl;
+        private var _productTypeDTO:ProductTypeDTOImpl;
         private var _categoryDTO:ProductCategoryDTOImpl;
 
         private var categoryFinderPopUp:CategoryFinderDialog;
+        private var brandFinderPopUp:BrandFinderDialog;
+        private var productTypeFinderPopUp:ProductTypeFinderDialog;
+
+        public function get brandDTO():BrandDTOImpl {
+            return _brandDTO;
+        }
+
+        public function get productTypeDTO():ProductTypeDTOImpl {
+            return _productTypeDTO;
+        }
+
 
         public function get categoryDTO():ProductCategoryDTOImpl {
             return _categoryDTO;
@@ -102,12 +130,65 @@
                 PopUpManager.removePopUp(categoryFinderPopUp);
                 categoryFinderPopUp = null;
 
-                allowSave = true;
+
             }
+            checkAllowedToSave();
         }
 
 
+        private function onProductTypeSelectedClick(event:MouseEvent):void {
+            productTypeFinderPopUp = ProductTypeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeFinderDialog, true));
+            productTypeFinderPopUp.selectProductTypeButton.addEventListener(MouseEvent.CLICK, onProductTypeSelectedClickConfirm);
+            PopUpManager.centerPopUp(productTypeFinderPopUp);
+        }
 
+        private function onProductTypeSelectedClickConfirm(event:Event):void {
+            if (productTypeFinderPopUp != null) {
+                var types:Array = productTypeFinderPopUp.productTypeSelection;
+                if (types.length > 0) {
+                    var _type:ProductTypeDTOImpl = ProductTypeDTOImpl(types[0]);
+                    _productTypeDTO = _type;
+                    productTypeLabel.text = _type.name;
+                }
+                productTypeFinderPopUp.selectProductTypeButton.removeEventListener(MouseEvent.CLICK, onProductTypeSelectedClickConfirm);
+                PopUpManager.removePopUp(productTypeFinderPopUp);
+                productTypeFinderPopUp = null;
+            }
+            checkAllowedToSave();
+        }
+
+
+        private function onBrandSelectedClick(event:MouseEvent):void {
+            brandFinderPopUp = BrandFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), BrandFinderDialog, true));
+            brandFinderPopUp.selectBrandButton.addEventListener(MouseEvent.CLICK, onBrandSelectedClickConfirm);
+            PopUpManager.centerPopUp(brandFinderPopUp);
+        }
+
+        private function onBrandSelectedClickConfirm(event:Event):void {
+            if (brandFinderPopUp != null) {
+                var brands:Array = brandFinderPopUp.brandSelection;
+                if (brands.length > 0) {
+                    var _brand:BrandDTOImpl = BrandDTOImpl(brands[0]);
+                    _brandDTO = _brand;
+                    brandLabel.text = _brand.name;
+                }
+                brandFinderPopUp.selectBrandButton.removeEventListener(MouseEvent.CLICK, onBrandSelectedClickConfirm);
+                PopUpManager.removePopUp(brandFinderPopUp);
+                brandFinderPopUp = null;
+            }
+            checkAllowedToSave();
+        }
+
+        private function checkAllowedToSave():void {
+            allowSave = codeTextInput.text != null && codeTextInput.text != ''
+                    && nameTextImput.text != null && nameTextImput.text != ''
+                    && _categoryDTO != null && _brandDTO != null && _productTypeDTO != null
+                    && productAvailabilityComboBox.selectedItem != null;
+        }
+
+        private function onChangeTextInput(event:Event):void {
+            checkAllowedToSave();
+        }
         ]]>
 
         </mx:Script>
