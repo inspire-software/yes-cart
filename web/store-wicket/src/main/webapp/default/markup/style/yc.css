@@ -487,6 +487,11 @@ fieldset[disabled] .btn-primary2.active {
     min-height: 67px;
 }
 
+.product-price-holder .glyphicon.glyphicon-info-sign,
+.product-detail-price .glyphicon.glyphicon-info-sign {
+    margin-left: 3px;
+}
+
 .regular-price-currency,
 .sale-price-currency {
     font-size: 20px;
@@ -904,6 +909,11 @@ fieldset[disabled] .btn-primary2.active {
     color: #3498db;
 }
 
+.cart-items-holder .glyphicon.glyphicon-info-sign {
+    color: #ffffff;
+    margin-left: 3px;
+}
+
 .cart-items-holder .wishlist-btn {
     margin-top: 5px;
 }
@@ -983,6 +993,11 @@ fieldset[disabled] .btn-primary2.active {
 
 .shopping-cart-sidebar a > .glyphicon:hover {
     color: #3498db;
+}
+
+.shopping-cart-sidebar a > .glyphicon.glyphicon-info-sign {
+    color: #ffffff;
+    margin-left: 3px;
 }
 
 .shopping-cart-sidebar .checkout-btn {
