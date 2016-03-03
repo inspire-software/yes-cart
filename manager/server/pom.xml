@@ -32,7 +32,7 @@
         <repository>
             <id>spring-maven-external</id>
             <name>Springframework Maven External Repository</name>
-            <url>http://maven.springframework.org/external</url>
+            <url>http://repo.spring.io/plugins-release/</url>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
