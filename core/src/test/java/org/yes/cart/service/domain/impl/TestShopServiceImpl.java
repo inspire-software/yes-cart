@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
 
@@ -75,6 +76,36 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
     }
 
     /**
+     * Test to getByKey assigned categories
+     */
+    @Test
+    public void testGetAllCategoriesTestOnShopWithLinkedAssignedCategories() {
+        List<Long> categories = Arrays.asList(401L, 411L /* link to 312L */, 313L);
+        Set<Long> categorySet = shopService.getShopCategoriesIds(70L);
+        assertFalse(categorySet.isEmpty());
+        assertEquals(categories.size(), categorySet.size());
+        for (Long categoryId : categorySet) {
+            assertTrue(categories.contains(categoryId));
+        }
+    }
+
+
+    @Test
+    public void testGetShopCategoryParentId() throws Exception {
+
+        // In shop 70 the parent is the linked category
+        assertEquals(Long.valueOf(411L), shopService.getShopCategoryParentId(70L, 313L));
+        assertNull(shopService.getShopCategoryParentId(70L, 312L));
+        // In shop 80 the parent is the parent category
+        assertEquals(Long.valueOf(312L), shopService.getShopCategoryParentId(80L, 313L));
+        assertEquals(Long.valueOf(311L), shopService.getShopCategoryParentId(80L, 312L));
+        // In shop 50 the category is not assigned
+        assertNull(shopService.getShopCategoryParentId(50L, 313L));
+        assertNull(shopService.getShopCategoryParentId(50L, 312L));
+
+    }
+
+    /**
      * Prove, that supported currency can be assigned via shop attributes.
      */
     // TODO: YC-64 fix to not depend on order or running
@@ -108,4 +139,5 @@ public class TestShopServiceImpl extends BaseCoreDBTestCase {
         assertEquals("USD", iter.next());
         assertEquals("ZXC", iter.next());
     }
+
 }

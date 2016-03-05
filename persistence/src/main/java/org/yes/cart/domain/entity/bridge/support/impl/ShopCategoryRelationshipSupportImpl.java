@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
+import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
@@ -64,11 +65,32 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Long categoryId) {
 
-        result.add(categoryDao.findById(categoryId));
+        final Category cat = categoryDao.findById(categoryId);
+        if (cat == null) {
+            return;
+        }
+
+        Hibernate.initialize(cat);
+        result.add(cat);
+
+        final long parentId;
+        if (cat.getLinkToId() != null) {
+            // linked
+            final Category linked = categoryDao.findById(cat.getLinkToId());
+            if (linked == null) {
+                return;
+            }
+
+            Hibernate.initialize(linked);
+            result.add(linked);
+            parentId = cat.getLinkToId();
+        } else {
+            parentId = categoryId;
+        }
 
         final List<Category> categories = categoryDao.findByNamedQueryCached(
                 "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
-                categoryId
+                parentId
         );
 
         result.addAll(categories);

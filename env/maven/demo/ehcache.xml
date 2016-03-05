@@ -126,13 +126,22 @@
     <cache name="categoryService-categoryTemplate" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="shopService-shopCategoryTemplate" maxElementsInMemory="100" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
     <cache name="categoryService-categorySearchTemplate" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="shopService-shopCategorySearchTemplate" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-categoryProductTypeId" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
-    <cache name="categoryService-searchInSubcategory" maxElementsInMemory="100" overflowToDisk="false"
+    <cache name="shopService-shopCategoryProductTypeId" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-searchCategoriesIds" maxElementsInMemory="100" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-categoryNewArrivalLimit" maxElementsInMemory="100" overflowToDisk="false"
@@ -157,6 +166,12 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-childCategoriesRecursiveIds" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-childCategoriesRecursiveIdsWithLinks" maxElementsInMemory="200" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="categoryService-categoryIdsWithLinks" maxElementsInMemory="200" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="categoryService-categoryHasSubcategory" maxElementsInMemory="200" overflowToDisk="false"

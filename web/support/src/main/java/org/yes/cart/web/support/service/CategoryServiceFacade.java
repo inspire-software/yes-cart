@@ -19,6 +19,7 @@ package org.yes.cart.web.support.service;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,15 @@ import java.util.List;
  * Time: 00:06
  */
 public interface CategoryServiceFacade {
+
+    /**
+     * Get the category parent ID for given shop.
+     *
+     * @param shopId shop id
+     * @param categoryId given category PK
+     * @return parent ID (or symlink parent)
+     */
+    Long getCategoryParentId(long categoryId, long shopId);
 
     /**
      * Get category if it belongs to given shop.
@@ -112,6 +122,18 @@ public interface CategoryServiceFacade {
      * @return max number of products
      */
     int getNewArrivalListSizeConfig(long categoryId, long shopId);
+
+
+    /**
+     * Number of days that counts towards newarrival products
+     *
+     * @param categoryId current category
+     * @param shopId current shop
+     *
+     * @return max number of days
+     */
+    Date getCategoryNewArrivalDate(long categoryId, long shopId);
+
 
     /**
      * Get pagination options configuration.

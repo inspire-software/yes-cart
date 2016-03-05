@@ -59,13 +59,14 @@
             <bean class="org.yes.cart.service.dto.impl.DtoCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
                 <constructor-arg index="1" ref="categoryService"/>
-                <constructor-arg index="2" ref="shopCategoryService"/>
-                <constructor-arg index="3" ref="productTypeService"/>
-                <constructor-arg index="4" ref="dtoAttributeService"/>
-                <constructor-arg index="5" ref="attrValueEntityCategoryDao"/>
-                <constructor-arg index="6" ref="imageService"/>
-                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
-                <constructor-arg index="8" ref="systemService"/>
+                <constructor-arg index="2" ref="shopService"/>
+                <constructor-arg index="3" ref="shopCategoryService"/>
+                <constructor-arg index="4" ref="productTypeService"/>
+                <constructor-arg index="5" ref="dtoAttributeService"/>
+                <constructor-arg index="6" ref="attrValueEntityCategoryDao"/>
+                <constructor-arg index="7" ref="imageService"/>
+                <constructor-arg index="8" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="9" ref="systemService"/>
             </bean>
         </property>
     </bean>

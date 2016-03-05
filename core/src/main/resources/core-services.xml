@@ -52,7 +52,7 @@
     <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
         <constructor-arg index="0" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
         <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-        <constructor-arg index="2" type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+        <constructor-arg index="2" type="org.yes.cart.domain.query.ShopSearchSupportService" ref="shopSearchSupportService"/>
         <constructor-arg index="3">
             <map>
                 <!-- Direct sku from URL or in code -->
@@ -77,7 +77,7 @@
                 <entry key="featured"                      value-ref="featuredProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
-        <constructor-arg>
+        <constructor-arg index="4">
             <map>
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="noopLuceneQueryBuilder"/>
@@ -107,6 +107,11 @@
         </constructor-arg>
     </bean>
 
+    <bean id="shopSearchSupportService" class="org.yes.cart.domain.query.impl.ShopSearchSupportServiceImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+    </bean>
+
     <bean id="systemService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
@@ -125,6 +130,7 @@
                 <constructor-arg type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
                 <constructor-arg type="org.yes.cart.service.domain.ContentService" ref="contentService"/>
                 <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <lookup-method name="getSelf" bean="shopService"/>
             </bean>
         </property>
     </bean>
@@ -152,8 +158,6 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <lookup-method name="getSelf" bean="categoryService"/>
             </bean>
         </property>
@@ -445,6 +449,8 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ShopCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
             </bean>
         </property>
     </bean>

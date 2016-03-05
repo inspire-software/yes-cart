@@ -23,6 +23,8 @@ import org.junit.Test;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -50,8 +52,9 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes();
@@ -72,8 +75,9 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
             put(WebParametersKeys.QUERY, "1");
@@ -91,8 +95,9 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
@@ -114,8 +119,9 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
             put(WebParametersKeys.QUERY, "1");
@@ -134,8 +140,9 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
@@ -159,21 +166,29 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue(null));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put(WebParametersKeys.QUERY, "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
+        try {
+            ShopCodeContext.setShopId(2L);
 
-        assertNotNull(resolved);
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put(WebParametersKeys.QUERY, "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
         context.assertIsSatisfied();
 
     }
@@ -184,22 +199,31 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue(null));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(null));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put("nav1", "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
+        try {
+            ShopCodeContext.setShopId(2L);
 
-        assertNotNull(resolved);
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put("nav1", "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
+
         context.assertIsSatisfied();
 
     }
@@ -211,21 +235,31 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue(""));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put(WebParametersKeys.QUERY, "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
 
-        assertNotNull(resolved);
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+        try {
+            ShopCodeContext.setShopId(2L);
+
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put(WebParametersKeys.QUERY, "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
+
         context.assertIsSatisfied();
 
     }
@@ -235,22 +269,31 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
             one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue(""));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue(""));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put("nav1", "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
+        try {
+            ShopCodeContext.setShopId(2L);
 
-        assertNotNull(resolved);
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put("nav1", "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
+
         context.assertIsSatisfied();
 
     }
@@ -261,21 +304,30 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue("prodtypetemplate"));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L); will(returnValue("prodtypetemplate"));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put(WebParametersKeys.QUERY, "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
+        try {
+            ShopCodeContext.setShopId(2L);
 
-        assertNotNull(resolved);
-        assertEquals("prodtypetemplate", resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put(WebParametersKeys.QUERY, "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals("prodtypetemplate", resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
+
         context.assertIsSatisfied();
 
     }
@@ -285,22 +337,33 @@ public class CentralViewResolverSearchImplTest {
 
         final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
         final AttributeService attributeService = context.mock(AttributeService.class, "attributeService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
 
-        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(attributeService, categoryService);
+        CentralViewResolverSearchImpl resolver = new CentralViewResolverSearchImpl(shopService, attributeService, categoryService);
 
         context.checking(new Expectations() {{
-            one(attributeService).getAllNavigatableAttributeCodes(); will(returnValue(NAV));
-            one(categoryService).getCategorySearchTemplate(1L); will(returnValue("prodtypetemplate"));
+            one(attributeService).getAllNavigatableAttributeCodes();
+            will(returnValue(NAV));
+            one(shopService).getShopCategorySearchTemplate(2L, 1L);
+            will(returnValue("prodtypetemplate"));
         }});
 
-        final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
-            put("nav1", "1");
-            put(WebParametersKeys.CATEGORY_ID, "1");
-        }});
+        try {
+            ShopCodeContext.setShopId(2L);
 
-        assertNotNull(resolved);
-        assertEquals("prodtypetemplate", resolved.getFirst());
-        assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put("nav1", "1");
+                put(WebParametersKeys.CATEGORY_ID, "1");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals("prodtypetemplate", resolved.getFirst());
+            assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
+
+        } finally {
+            ShopCodeContext.clear();
+        }
+
         context.assertIsSatisfied();
 
     }

@@ -42,4 +42,22 @@ public interface ShopCategoryService extends GenericService<ShopCategory> {
      */
     ShopCategory findByShopCategory(Shop shop, Category category);
 
+    /**
+     * Assign category to shop.
+     *
+     * @param categoryId category id
+     * @param shopId     shop id
+     * @return {@link ShopCategory}
+     */
+    ShopCategory assignToShop(long categoryId, long shopId);
+
+    /**
+     * Unassign category from shop.
+     *
+     * @param categoryId category id
+     * @param shopId     shop id
+     */
+    void unassignFromShop(long categoryId, long shopId);
+
+
 }

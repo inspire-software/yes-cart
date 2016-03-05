@@ -945,6 +945,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="parentId" column="PARENT_ID" type="long"/>
+        <property name="linkToId" column="LINKTO_ID" type="long" not-null="false"/>
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
                 <comment>
@@ -2571,37 +2572,21 @@
        ]]>
     </query>
 
-    <query name="TOPCATEGORIES.BY.SHOPID">
-        <![CDATA[
-       select c from CategoryEntity c, ShopCategoryEntity sc
-       where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by sc.rank, sc.shopCategoryId
-       ]]>
-    </query>
-
     <query name="ALL.TOPCATEGORIES.BY.SHOPID">
         <![CDATA[
-       select c from CategoryEntity c, ShopCategoryEntity sc
-       where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       order by sc.rank, sc.shopCategoryId
+       select sc from ShopCategoryEntity sc where sc.shop.shopId = ?1
        ]]>
     </query>
 
-    <query name="ROOTCATEORY">
+    <query name="LINKED.CATEGORY.IDS.BY.ID">
+        <![CDATA[
+       select l.categoryId from CategoryEntity l where l.linkToId = ?1
+       ]]>
+    </query>
+
+    <query name="ROOTCATEGORY">
         <![CDATA[
        select c from CategoryEntity c WHERE c.categoryId = c.parentId 
-       ]]>
-    </query>
-
-    <query name="CATEGORIES.BY.PARENTID">
-        <![CDATA[
-       select c from CategoryEntity c where c.parentId = ?1
-       and c.categoryId <> c.parentId 
-       and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by c.rank 
        ]]>
     </query>
 
@@ -2616,9 +2601,7 @@
 
     <query cacheable="true" name="CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING">
         <![CDATA[
-       select c from CategoryEntity c where c.parentId = ?1
-       and c.categoryId <> c.parentId
-       order by c.rank
+       select c from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
        ]]>
     </query>
 

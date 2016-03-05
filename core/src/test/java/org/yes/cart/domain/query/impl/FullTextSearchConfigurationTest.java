@@ -172,6 +172,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(0, products.size());
 
+
+                // query search via linked category
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(70L, Arrays.asList(313L),
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertEquals(1, products.size());
+                assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
+
                 status.setRollbackOnly();
             }
         });
@@ -276,6 +284,15 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("metall")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals(0, products.size());
+
+
+                // query search via linked category
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(70L, null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertEquals(1, products.size());
+                assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
+
 
                 status.setRollbackOnly();
             }

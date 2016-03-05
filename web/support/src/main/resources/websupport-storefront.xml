@@ -228,13 +228,16 @@
                     <constructor-arg index="0" ref="productService"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverSearchImpl">
-                    <constructor-arg index="0" ref="attributeService"/>
-                    <constructor-arg index="1" ref="categoryService"/>
+                    <constructor-arg index="0" ref="shopService"/>
+                    <constructor-arg index="1" ref="attributeService"/>
+                    <constructor-arg index="2" ref="categoryService"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverCategoryImpl">
-                    <constructor-arg index="0" ref="categoryService"/>
-                    <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="luceneQueryFactory"/>
+                    <constructor-arg index="0" ref="shopService"/>
+                    <constructor-arg index="1" ref="categoryService"/>
+                    <constructor-arg index="2" ref="shopSearchSupportService"/>
+                    <constructor-arg index="3" ref="productService"/>
+                    <constructor-arg index="4" ref="luceneQueryFactory"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverContentImpl">
                     <constructor-arg index="0" ref="contentService"/>

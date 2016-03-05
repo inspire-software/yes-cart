@@ -17,15 +17,15 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
+import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValue;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.util.DomainApiUtils;
 
 import java.util.*;
 
@@ -38,94 +38,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
 
     private final GenericDAO<Category, Long> categoryDao;
 
-    private final GenericDAO<ShopCategory, Long> shopCategoryDao;
-
-    private final GenericDAO<Shop, Long> shopDao;
-
     /**
      * Construct service to manage categories
      *
      * @param categoryDao     category dao to use
-     * @param shopCategoryDao shop category dao to use
-     * @param shopDao         shop dao
      */
-    public CategoryServiceImpl(
-            final GenericDAO<Category, Long> categoryDao,
-            final GenericDAO<ShopCategory, Long> shopCategoryDao,
-            final GenericDAO<Shop, Long> shopDao) {
+    public CategoryServiceImpl(final GenericDAO<Category, Long> categoryDao) {
         super(categoryDao);
         this.categoryDao = categoryDao;
-        this.shopCategoryDao = shopCategoryDao;
-        this.shopDao = shopDao;
-    }
-
-    /**
-     * Get the top level categories assigned to shop.
-     *
-     * @param shopId given shop
-     * @return ordered by rank list of assigned top level categories
-     */
-    @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
-    public List<Category> getTopLevelCategories(final Long shopId) {
-        return categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shopId, new Date());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public List<Category> findAllByShopId(final long shopId) {
-        return categoryDao.findByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "categoryService-topLevelCategories",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "shopService-shopByCode",
-            "shopService-shopById",
-            "shopService-shopByDomainName",
-            "shopService-allShops",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds",
-            "categoryService-searchInSubcategory",
-            "categoryService-categoryNewArrivalLimit",
-            "categoryService-categoryNewArrivalDate"
-    }, allEntries = true)
-    public ShopCategory assignToShop(final long categoryId, final long shopId) {
-        final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
-        shopCategory.setCategory(categoryDao.findById(categoryId));
-        shopCategory.setShop(shopDao.findById(shopId));
-        return shopCategoryDao.create(shopCategory);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "categoryService-topLevelCategories",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "shopService-shopByCode",
-            "shopService-shopById",
-            "shopService-shopByDomainName",
-            "shopService-allShops",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds",
-            "categoryService-searchInSubcategory",
-            "categoryService-categoryNewArrivalLimit",
-            "categoryService-categoryNewArrivalDate"
-    }, allEntries = true)
-    public void unassignFromShop(final long categoryId, final long shopId) {
-        ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
-                "SHOP.CATEGORY",
-                categoryId,
-                shopId);
-        shopCategoryDao.delete(shopCategory);
-
     }
 
 
@@ -134,7 +54,15 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-rootCategory")
     public Category getRootCategory() {
-        return categoryDao.findSingleByNamedQuery("ROOTCATEORY");
+        return categoryDao.findSingleByNamedQuery("ROOTCATEGORY");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Long> getCategoryLinks(final long categoryId) {
+        return (List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", categoryId);
     }
 
     /**
@@ -186,97 +114,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             }
         }
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryService-categoryNewArrivalLimit")
-    public int getCategoryNewArrivalLimit(final long categoryId, final long shopId) {
-
-        if (categoryId > 0L) {
-            final String value = proxy().getCategoryAttributeRecursive(
-                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL, null);
-            if (value != null) {
-                final int limit = NumberUtils.toInt(value, 0);
-                if (limit > 1) {
-                    return limit;
-                }
-            }
-        }
-
-        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
-                shopId, AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_NEW_ARRIVAL);
-        final int limit;
-        if (value != null && value.size() > 0) {
-            limit = NumberUtils.toInt((String) value.get(0), Constants.RECOMMENDATION_SIZE);
-        } else {
-            limit = Constants.RECOMMENDATION_SIZE;
-        }
-
-        return limit;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryService-categoryNewArrivalDate")
-    public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
-
-        if (categoryId > 0L) {
-            final String value = proxy().getCategoryAttributeRecursive(
-                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_NEW_ARRIVAL_DAYS_OFFSET, null);
-            if (value != null) {
-                final int days = NumberUtils.toInt(value, 0);
-                if (days > 1) {
-                    final Calendar beforeDays = Calendar.getInstance();
-                    beforeDays.add(Calendar.DAY_OF_YEAR, -days);
-                    beforeDays.set(Calendar.HOUR, 0);
-                    beforeDays.set(Calendar.MINUTE, 0);
-                    beforeDays.set(Calendar.SECOND, 0);
-                    beforeDays.set(Calendar.MILLISECOND, 0);
-                    return beforeDays.getTime();
-                }
-            }
-        }
-
-        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
-                shopId, AttributeNamesKeys.Shop.SHOP_NEW_ARRIVAL_DAYS_OFFSET);
-        final int days;
-        if (value != null && value.size() > 0) {
-            days = NumberUtils.toInt((String) value.get(0), 15);
-        } else {
-            days = 15;
-        }
-        final Calendar beforeDays = Calendar.getInstance();
-        beforeDays.add(Calendar.DAY_OF_YEAR, -days);
-        beforeDays.set(Calendar.HOUR, 0);
-        beforeDays.set(Calendar.MINUTE, 0);
-        beforeDays.set(Calendar.SECOND, 0);
-        beforeDays.set(Calendar.MILLISECOND, 0);
-        return beforeDays.getTime();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Cacheable(value = "categoryService-searchInSubcategory")
-    public boolean isSearchInSubcategory(final long categoryId, final long shopId) {
-
-        if (categoryId > 0L) {
-            final String value = proxy().getCategoryAttributeRecursive(
-                    null, categoryId, AttributeNamesKeys.Category.CATEGORY_INCLUDE_SUBCATEGORIES_IN_SEARCH, null);
-            if (value != null) {
-                return Boolean.valueOf(value);
-            }
-        }
-
-        final List<Object> value = getGenericDao().findQueryObjectByNamedQuery("SHOP.ATTRIBUTE.BY.ID.AND.ATTRCODE",
-                shopId, AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
-        if (value != null && value.size() > 0) {
-            return Boolean.valueOf((String) value.get(0));
-        }
-        return false;
     }
 
     /**
@@ -365,11 +202,15 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-categoryHasChildren")
     public boolean isCategoryHasChildren(final long categoryId) {
-        List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", categoryId);
-        if (count != null && count.size() == 1) {
-            int qty = ((Number) count.get(0)).intValue();
-            if (qty > 0) {
-                return true;
+        final Category category = proxy().getById(categoryId);
+        if (category != null) {
+            final long id = category.getLinkToId() != null ? category.getLinkToId() : categoryId;
+            List<Object> count = categoryDao.findQueryObjectByNamedQuery("CATEGORY.SUBCATEGORY.COUNT", id);
+            if (count != null && count.size() == 1) {
+                int qty = ((Number) count.get(0)).intValue();
+                if (qty > 0) {
+                    return true;
+                }
             }
         }
         return false;
@@ -380,25 +221,46 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-childCategories")
     public List<Category> getChildCategories(final long categoryId) {
-        return findChildCategoriesWithAvailability(categoryId, true);
+
+        final Category current = proxy().getById(categoryId);
+        if (current != null) {
+            if (current.getLinkToId() != null) {
+                return findChildCategoriesWithAvailability(current.getLinkToId(), true);
+            }
+
+            return findChildCategoriesWithAvailability(categoryId, true);
+        }
+        return new ArrayList<Category>(0);
     }
 
     /**
      * {@inheritDoc}
      */
     public List<Category> findChildCategoriesWithAvailability(final long categoryId, final boolean withAvailability) {
+
+        final List<Category> cats = new ArrayList<Category>(categoryDao.findByNamedQuery(
+                "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
+                categoryId
+        ));
         if (withAvailability) {
-            return categoryDao.findByNamedQuery(
-                    "CATEGORIES.BY.PARENTID",
-                    categoryId,
-                    new Date()
-            );
-        } else {
-            return categoryDao.findByNamedQuery(
-                    "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
-                    categoryId
-            );
+
+            final Date now = new Date();
+            final Iterator<Category> it = cats.iterator();
+            while (it.hasNext()) {
+
+                final Category cat = it.next();
+
+                if (!DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)) {
+
+                    it.remove();
+
+                }
+
+            }
+
         }
+        return cats;
+
     }
 
 
@@ -407,7 +269,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
-        final Category thisCat = proxy().findById(categoryId);
+        final Category thisCat = proxy().getById(categoryId);
         if (thisCat != null) {
             final Set<Category> all = new HashSet<Category>();
             all.add(thisCat);
@@ -421,12 +283,24 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-childCategoriesRecursiveIds")
-    public Set<Long> getChildCategoriesRecursiveIds(final long categoryId) {
-        final Set<Category> cats = getChildCategoriesRecursive(categoryId);
+    public List<Long> getChildCategoriesRecursiveIds(final long categoryId) {
+        final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
-            return Collections.emptySet();
+            return Collections.emptyList();
         }
-        return transform(cats);
+        return Collections.unmodifiableList(transform(cats));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-childCategoriesRecursiveIdsWithLinks")
+    public List<Long> getChildCategoriesRecursiveIdsWithLinks(final long categoryId) {
+        final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
+        if (cats.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(transformWithLinks(cats));
     }
 
     private void loadChildCategoriesRecursiveInternal(final Set<Category> result, final Category category) {
@@ -440,9 +314,26 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "categoryService-categoryIdsWithLinks")
+    public List<Long> getCategoryIdsWithLinks(final long categoryId) {
+        final Category category = proxy().getById(categoryId);
+        if (category != null) {
+            if (category.getLinkToId() != null) {
+                return Arrays.asList(categoryId, category.getLinkToId());
+            } else {
+                return Collections.singletonList(categoryId);
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
-        final Category start = proxy().findById(subCategoryId);
+        final Category start = proxy().getById(subCategoryId);
         if (start != null) {
             if (subCategoryId == topCategoryId) {
                 return true;
@@ -459,7 +350,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     private void addParent(final List<Category> categoryChain, final long categoryIdStopAt) {
         final Category cat = categoryChain.get(categoryChain.size() - 1);
         if (!cat.isRoot()) {
-            final Category parent = findById(cat.getParentId());
+            final Category parent = proxy().getById(cat.getParentId());
             if (parent != null) {
                 categoryChain.add(parent);
                 if (parent.getCategoryId() != categoryIdStopAt) {
@@ -474,15 +365,28 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      */
     @Cacheable(value = "categoryService-byId")
     public Category getById(final long pk) {
-        return getGenericDao().findById(pk);
+        final Category cat = getGenericDao().findById(pk);
+        Hibernate.initialize(cat);
+        return cat;
     }
 
-    private Set<Long> transform(final Collection<Category> categories) {
+    private List<Long> transform(final Collection<Category> categories) {
         final Set<Long> result = new LinkedHashSet<Long>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
         }
-        return result;
+        return new ArrayList<Long>(result);
+    }
+
+    private List<Long> transformWithLinks(final Collection<Category> categories) {
+        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        for (Category category : categories) {
+            result.add(category.getCategoryId());
+            if (category.getLinkToId() != null) {
+                result.add(category.getLinkToId());
+            }
+        }
+        return new ArrayList<Long>(result);
     }
 
     /**
@@ -561,6 +465,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
+            "categoryService-childCategoriesRecursiveIdsWithLinks",
+            "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
             "shopService-shopCategoriesIds",
@@ -578,10 +484,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-currentCategoryMenu",
             "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
+            "shopService-shopCategoryParentId",
             "categoryService-categoryTemplate",
+            "shopService-shopCategoryTemplate",
             "categoryService-categorySearchTemplate",
+            "shopService-shopCategorySearchTemplate",
             "categoryService-categoryProductTypeId",
-            "categoryService-searchInSubcategory",
+            "shopService-shopCategoryProductTypeId",
+            "categoryService-searchCategoriesIds",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
             "categoryService-categoryAttributeRecursive",
@@ -590,6 +500,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
+            "categoryService-childCategoriesRecursiveIdsWithLinks",
+            "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
             "shopService-shopCategoriesIds",
@@ -607,10 +519,14 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-currentCategoryMenu",
             "breadCrumbBuilder-breadCrumbs",
             "categoryService-rootCategory",
+            "shopService-shopCategoryParentId",
             "categoryService-categoryTemplate",
+            "shopService-shopCategoryTemplate",
             "categoryService-categorySearchTemplate",
+            "shopService-shopCategorySearchTemplate",
             "categoryService-categoryProductTypeId",
-            "categoryService-searchInSubcategory",
+            "shopService-shopCategoryProductTypeId",
+            "categoryService-searchCategoriesIds",
             "categoryService-categoryNewArrivalLimit",
             "categoryService-categoryNewArrivalDate",
             "categoryService-categoryAttributeRecursive",
@@ -619,6 +535,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategories",
             "categoryService-childCategoriesRecursive",
             "categoryService-childCategoriesRecursiveIds",
+            "categoryService-childCategoriesRecursiveIdsWithLinks",
+            "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId"
     }, allEntries = true)

@@ -128,6 +128,7 @@
     <bean id="categoryServiceFacade"  class="org.yes.cart.web.support.service.impl.CategoryServiceFacadeImpl">
         <constructor-arg index="0" ref="categoryService"/>
         <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="shopSearchSupportService"/>
     </bean>
 
     <bean id="contentServiceFacade"  class="org.yes.cart.web.support.service.impl.ContentServiceFacadeImpl">

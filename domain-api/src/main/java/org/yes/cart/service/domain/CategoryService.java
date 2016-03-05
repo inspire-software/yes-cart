@@ -17,9 +17,7 @@
 package org.yes.cart.service.domain;
 
 import org.yes.cart.domain.entity.Category;
-import org.yes.cart.domain.entity.ShopCategory;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -31,46 +29,20 @@ import java.util.Set;
 public interface CategoryService extends GenericService<Category> {
 
     /**
-     * Get the top level categories assigned to shop.
-     *
-     * @param shopId given shop
-     * @return ordered by rank list of assigned top level categories
-     */
-    List<Category> getTopLevelCategories(Long shopId);
-
-    /**
-     * Get all assigned to shop categories.
-     *
-     * @param shopId shop id
-     * @return list of assigned categories
-     */
-    List<Category> findAllByShopId(long shopId);
-
-
-    /**
-     * Assign category to shop.
-     *
-     * @param categoryId category id
-     * @param shopId     shop id
-     * @return {@link ShopCategory}
-     */
-    ShopCategory assignToShop(long categoryId, long shopId);
-
-    /**
-     * Unassign category from shop.
-     *
-     * @param categoryId category id
-     * @param shopId     shop id
-     */
-    void unassignFromShop(long categoryId, long shopId);
-
-
-    /**
      * Get the root category.
      *
      * @return root category.
      */
     Category getRootCategory();
+
+    /**
+     * Resolve links to given category (i.e. virtual parents from other category branches).
+     *
+     * @param categoryId given category PK
+     *
+     * @return link of links to this category
+     */
+    List<Long> getCategoryLinks(long categoryId);
 
     /**
      * Get the "template variation" template (No fail over).
@@ -97,36 +69,6 @@ public interface CategoryService extends GenericService<Category> {
      * @return product type for this category
      */
     Long getCategoryProductTypeId(long categoryId);
-
-    /**
-     * Max number of newarrival products for small view
-     *
-     * @param categoryId current category
-     * @param shopId current shop
-     *
-     * @return max number of products
-     */
-    int getCategoryNewArrivalLimit(long categoryId, long shopId);
-
-    /**
-     * Number of days that counts towards newarrival products
-     *
-     * @param categoryId current category
-     * @param shopId current shop
-     *
-     * @return max number of days
-     */
-    Date getCategoryNewArrivalDate(long categoryId, long shopId);
-
-    /**
-     * Check if product search should include sub categories.
-     *
-     * @param categoryId current category
-     * @param shopId current shop
-     *
-     * @return true if search in subcategories too
-     */
-    boolean isSearchInSubcategory(long categoryId, long shopId);
 
     /**
      * Does given this category have at least one sub category.
@@ -171,7 +113,24 @@ public interface CategoryService extends GenericService<Category> {
      * @param categoryId given categoryId
      * @return list of child categories
      */
-    Set<Long> getChildCategoriesRecursiveIds(long categoryId);
+    List<Long> getChildCategoriesRecursiveIds(long categoryId);
+
+    /**
+     * Get the child categories with recursion (including linkToId).
+     * Category from parameter will be included also.
+     *
+     * @param categoryId given categoryId
+     * @return list of child categories
+     */
+    List<Long> getChildCategoriesRecursiveIdsWithLinks(long categoryId);
+
+    /**
+     * Get category id including linkToId.
+     *
+     * @param categoryId given categoryId
+     * @return list of categories
+     */
+    List<Long> getCategoryIdsWithLinks(long categoryId);
 
 
     /**
@@ -184,7 +143,11 @@ public interface CategoryService extends GenericService<Category> {
      * @param attributeName attribute name
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
+     *
+     * @deprecated this method does not take into account linked categories all attribute access should be done via CategoryServiceFacade
+     *             that resolves parent correctly
      */
+    @Deprecated
     String getCategoryAttributeRecursive(String locale, long categoryId, String attributeName, String defaultValue);
 
     /**
@@ -197,7 +160,11 @@ public interface CategoryService extends GenericService<Category> {
      * @param categoryId     given category
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
+     *
+     * @deprecated this method does not take into account linked categories all attribute access should be done via CategoryServiceFacade
+     *             that resolves parent correctly
      */
+    @Deprecated
     String[] getCategoryAttributeRecursive(String locale, long categoryId, String[] attributeNames);
 
 

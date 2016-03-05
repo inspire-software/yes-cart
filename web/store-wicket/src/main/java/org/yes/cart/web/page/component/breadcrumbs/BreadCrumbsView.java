@@ -25,8 +25,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -51,25 +53,27 @@ public class BreadCrumbsView extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.BREAD_CRUMBS_BUILDER)
     private BreadCrumbsBuilder breadCrumbsBuilder;
 
-    private final Set<Long> shopCategoryIds;
+    @SpringBean(name = ServiceSpringKeys.SHOP_SERVICE)
+    private ShopService shopService;
 
+    private final long shopId;
     private final long categoryId;
 
     /**
      * Build bread crumbs navigation view.
      *
      * @param id              component id
+     * @param shopId          current shop id
      * @param categoryId      current category id
      */
-    public BreadCrumbsView(
-            final String id,
-            final long categoryId,
-            final Set<Long> shopCategoryIds) {
+    public BreadCrumbsView(final String id,
+                           final long shopId,
+                           final long categoryId) {
 
         super(id);
 
-        this.shopCategoryIds = shopCategoryIds;
         this.categoryId = categoryId;
+        this.shopId = shopId;
 
     }
 
@@ -88,7 +92,7 @@ public class BreadCrumbsView extends BaseComponent {
             final String tagPrefix = StringUtils.EMPTY;
 
             crumbs = breadCrumbsBuilder.getBreadCrumbs(getLocale().getLanguage(),
-                    categoryId, getPage().getPageParameters(), shopCategoryIds,
+                    shopId, categoryId, getPage().getPageParameters(), shopService.getShopAllCategoriesIds(shopId),
                     brandPrefix, pricePrefix, queryPrefix, tagPrefix);
 
         }

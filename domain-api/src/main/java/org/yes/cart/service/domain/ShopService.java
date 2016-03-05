@@ -101,11 +101,67 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
     Set<Long> getShopContentIds(long shopId);
 
     /**
+     * Get the top level categories assigned to shop.
+     *
+     * @param shopId given shop
+     * @return ordered by rank list of assigned top level categories
+     */
+    Set<Category> getTopLevelCategories(Long shopId);
+
+    /**
+     * Get all assigned to shop categories.
+     *
+     * @param shopId shop id
+     * @return list of assigned categories
+     */
+    Set<Category> findAllByShopId(long shopId);
+
+
+    /**
      * Get all supported currencies by all shops.
      *
      * @return all supported currencies.
      */
     Collection<String> findAllSupportedCurrenciesByShops();
 
+    /**
+     * Get the category parent ID for given shop.
+     *
+     * @param shopId shop id
+     * @param categoryId given category PK
+     * @return parent ID (or symlink parent)
+     */
+    Long getShopCategoryParentId(long shopId, long categoryId);
+
+
+    /**
+     * Get the "template variation" template (No fail over).
+     *
+     * @param shopId shop id
+     * @param categoryId given category PK
+     * @return Template variation
+     */
+    String getShopCategoryTemplate(long shopId, long categoryId);
+
+
+    /**
+     * Get the "template variation" template (No fail over).
+     *
+     * @param shopId shop id
+     * @param categoryId given category PK
+     * @return Template variation
+     */
+    String getShopCategorySearchTemplate(long shopId, long categoryId);
+
+    /**
+     * Get category type with failover mechanism. Uses category product type if set, otherwise
+     * looks up parent category product type, until one is found
+     *
+     * @param shopId shop id
+     * @param categoryId category id
+     *
+     * @return product type for this category
+     */
+    Long getShopCategoryProductTypeId(long shopId, long categoryId);
 
 }

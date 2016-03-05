@@ -66,9 +66,25 @@ public class CategoryController {
 
     private List<CategoryRO> listRootInternal() {
 
+        final long shopId = cartMixin.getCurrentShopId();
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, cartMixin.getCurrentShopId(), lang);
-        return mappingMixin.map(categories, CategoryRO.class, Category.class);
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, shopId, lang);
+
+        final List<CategoryRO> cats = mappingMixin.map(categories, CategoryRO.class, Category.class);
+        if (cats.size() > 0) {
+
+            for (final CategoryRO cat : cats) {
+                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), shopId);
+                cat.setBreadcrumbs(crumbs);
+                final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+                if (parentId != null) {
+                    cat.setParentId(parentId); // This may be parent from linkTo
+                }
+            }
+
+        }
+
+        return cats;
 
     }
 
@@ -401,6 +417,11 @@ public class CategoryController {
                 catRO.setUitemplate(templates.getFirst());
                 catRO.setUitemplateFallback(templates.getSecond());
             }
+            final Long parentId = categoryServiceFacade.getCategoryParentId(categoryId, shopId);
+            if (parentId != null) {
+                catRO.setParentId(parentId); // This may be parent from linkTo
+            }
+
             return catRO;
 
         }
@@ -425,6 +446,10 @@ public class CategoryController {
                 for (final CategoryRO cat : cats) {
                     final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), shopId);
                     cat.setBreadcrumbs(crumbs);
+                    final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+                    if (parentId != null) {
+                        cat.setParentId(parentId); // This may be parent from linkTo
+                    }
                 }
 
             }
@@ -644,7 +669,12 @@ public class CategoryController {
             final BreadcrumbRO crumb = mappingMixin.map(cat, BreadcrumbRO.class, Category.class);
             crumbs.add(crumb);
 
-            current = cat.getParentId();
+            Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+            if (parentId == null) {
+                break;
+            }
+
+            current = parentId;
 
         }
 

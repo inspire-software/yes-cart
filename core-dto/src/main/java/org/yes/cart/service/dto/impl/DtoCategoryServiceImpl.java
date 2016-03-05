@@ -48,6 +48,7 @@ public class DtoCategoryServiceImpl
         extends AbstractDtoServiceImpl<CategoryDTO, CategoryDTOImpl, Category>
         implements DtoCategoryService {
 
+    private final GenericService<Shop> shopGenericService;
     private final GenericService<ShopCategory> shopCategoryGenericService;
     private final GenericService<ProductType> productTypeService;
 
@@ -64,14 +65,15 @@ public class DtoCategoryServiceImpl
 
     /**
      * Construct base remote service.
-     *
-     * @param dtoFactory             {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param categoryGenericService category     {@link org.yes.cart.service.domain.GenericService}
-     * @param imageService           {@link org.yes.cart.service.domain.ImageService} to manipulate  related images.
+     *  @param dtoFactory             {@link DtoFactory}
+     * @param categoryGenericService category     {@link GenericService}
+     * @param imageService           {@link ImageService} to manipulate  related images.
+     * @param shopGenericService     shop service
      * @param systemService          system service
      */
     public DtoCategoryServiceImpl(final DtoFactory dtoFactory,
                                   final GenericService<Category> categoryGenericService,
+                                  final GenericService<Shop> shopGenericService,
                                   final GenericService<ShopCategory> shopCategoryGenericService,
                                   final GenericService<ProductType> productTypeService,
                                   final DtoAttributeService dtoAttributeService,
@@ -86,6 +88,7 @@ public class DtoCategoryServiceImpl
         this.productTypeService = productTypeService;
         this.attrValueEntityCategoryDao = attrValueEntityCategoryDao;
         this.dtoAttributeService = dtoAttributeService;
+        this.shopGenericService = shopGenericService;
         this.systemService = systemService;
 
         this.attributeService = dtoAttributeService.getService();
@@ -145,9 +148,23 @@ public class DtoCategoryServiceImpl
     /**
      * {@inheritDoc}
      */
+    protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
+        if (entity.getLinkToId() != null) {
+            final Category link = ((CategoryService)getService()).getById(entity.getLinkToId());
+            if (link != null) {
+                dto.setLinkToName(link.getName());
+            }
+        }
+        super.assemblyPostProcess(dto, entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected void createPostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
+        ensureZeroLinkIdIsNull(entity);
         super.createPostProcess(dto, entity);
     }
 
@@ -157,6 +174,7 @@ public class DtoCategoryServiceImpl
     protected void updatePostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
+        ensureZeroLinkIdIsNull(entity);
         super.updatePostProcess(dto, entity);
     }
 
@@ -164,6 +182,12 @@ public class DtoCategoryServiceImpl
     private void ensureBlankUriIsNull(final Seoable entity) {
         if (entity.getSeo() != null && entity.getSeo().getUri() != null && StringUtils.isBlank(entity.getSeo().getUri())) {
             entity.getSeo().setUri(null);
+        }
+    }
+
+    private void ensureZeroLinkIdIsNull(final Category category) {
+        if (category.getLinkToId() != null && category.getLinkToId() <= 0L) {
+            category.setLinkToId(null);
         }
     }
 
@@ -193,7 +217,7 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public List<CategoryDTO> getAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Category> categories = new ArrayList<Category>(((CategoryService) service).findAllByShopId(shopId));
+        final List<Category> categories = new ArrayList<Category>(((ShopService) shopGenericService).findAllByShopId(shopId));
         Collections.sort(categories, new CategoryRankNameComparator());
         final List<CategoryDTO> dtos = new ArrayList<CategoryDTO>(categories.size());
         fillDTOs(categories, dtos);
@@ -219,7 +243,7 @@ public class DtoCategoryServiceImpl
      */
     public ShopCategoryDTO assignToShop(final long categoryId, final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final ShopCategory shopCategory = ((CategoryService) service).assignToShop(categoryId, shopId);
+        final ShopCategory shopCategory = ((ShopCategoryService) shopCategoryGenericService).assignToShop(categoryId, shopId);
         ShopCategoryDTO dto = dtoFactory.getByIface(ShopCategoryDTO.class);
         shopCategoryAssembler.assembleDto(dto, shopCategory, getAdaptersRepository(), dtoFactory);
         return dto;
@@ -232,7 +256,7 @@ public class DtoCategoryServiceImpl
      * @param shopId     shop id
      */
     public void unassignFromShop(final long categoryId, final long shopId) {
-        ((CategoryService) service).unassignFromShop(categoryId, shopId);
+        ((ShopCategoryService) shopCategoryGenericService).unassignFromShop(categoryId, shopId);
 
     }
 

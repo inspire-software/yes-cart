@@ -24,12 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.SearchQueryBuilder;
+import org.yes.cart.domain.query.ShopSearchSupportService;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.queryobject.impl.NavigationContextImpl;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private final AttributeService attributeService;
     private final ProductService productService;
-    private final CategoryService categoryService;
+    private final ShopSearchSupportService shopSearchSupportService;
 
     private final Map<String, SearchQueryBuilder> productBuilders;
     private final Map<String, SearchQueryBuilder> skuBuilders;
@@ -60,24 +60,23 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     /**
      * Construct query builder factory.
-     *
      * @param attributeService attribute service to filter not allowed page parameters during filtered navigation
      * @param productService   product service
-     * @param categoryService  category service
+     * @param shopSearchSupportService shop search support
      * @param productBuilders  map of builders to provide parts of navigation query
      * @param skuBuilders      map of builders to provide parts of navigation query
      * @param useQueryRelaxation set of parameters names that are allowed to be relaxed to avoid no search results
      */
     public LuceneQueryFactoryImpl(final AttributeService attributeService,
                                   final ProductService productService,
-                                  final CategoryService categoryService,
+                                  final ShopSearchSupportService shopSearchSupportService,
                                   final Map<String, SearchQueryBuilder> productBuilders,
                                   final Map<String, SearchQueryBuilder> skuBuilders,
                                   final Set<String> useQueryRelaxation) {
 
         this.attributeService = attributeService;
         this.productService = productService;
-        this.categoryService = categoryService;
+        this.shopSearchSupportService = shopSearchSupportService;
 
         this.productBuilders = productBuilders;
         this.skuBuilders = skuBuilders;
@@ -193,7 +192,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     /**
      * {@inheritDoc}
      */
-    public NavigationContext getFilteredNavigationQueryChain(final Long shopId,
+    public NavigationContext getFilteredNavigationQueryChain(final long shopId,
                                                              final List<Long> categories,
                                                              final Map<String, List> requestParameters) {
 
@@ -318,12 +317,15 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     }
 
     private Date earliestNewArrivalDate(final Long shopId, final List<Long> categories) {
+
         Date beforeDays = new Date();
         if (CollectionUtils.isEmpty(categories)) {
-            beforeDays = categoryService.getCategoryNewArrivalDate(0L, shopId);
+
+            beforeDays = shopSearchSupportService.getCategoryNewArrivalDate(0L, shopId);
+
         } else {
             for (final Long categoryId : categories) {
-                Date catBeforeDays = categoryService.getCategoryNewArrivalDate(categoryId, shopId);
+                Date catBeforeDays = shopSearchSupportService.getCategoryNewArrivalDate(categoryId, shopId);
                 if (catBeforeDays.before(beforeDays)) {
                     beforeDays = catBeforeDays; // get the earliest
                 }

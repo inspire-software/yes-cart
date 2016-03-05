@@ -615,3 +615,10 @@ alter table TPRODUCTTYPEATTR drop column SEARCH;
 alter table TPRODUCTTYPEATTR drop column SEARCHPRIMARY;
 alter table TPRODUCTTYPEATTR drop column NAV;
 
+
+--
+-- YC-681 Support category links
+--
+
+alter table TCATEGORY add column LINKTO_ID bigint;
+

@@ -24,6 +24,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryRankDisplayNameComparator;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,10 +42,14 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
     private final CategoryService categoryService;
     private final ShopService shopService;
+    private final ShopSearchSupportService shopSearchSupportService;
 
-    public CategoryServiceFacadeImpl(final CategoryService categoryService, final ShopService shopService) {
+    public CategoryServiceFacadeImpl(final CategoryService categoryService,
+                                     final ShopService shopService,
+                                     final ShopSearchSupportService shopSearchSupportService) {
         this.categoryService = categoryService;
         this.shopService = shopService;
+        this.shopSearchSupportService = shopSearchSupportService;
     }
 
     /**
@@ -62,10 +67,9 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public List<Long> getSearchCategoriesIds(final long categoryId, final long shopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
-            if (categoryService.isSearchInSubcategory(categoryId, shopId)) {
-                return Collections.unmodifiableList(new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId)));
-            }
-            return Collections.singletonList(categoryId);
+
+            return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
+
         }
         return null;
     }
@@ -84,7 +88,7 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         } else {
 
-            categories = new ArrayList<Category>(categoryService.getTopLevelCategories(shopId));
+            categories = new ArrayList<Category>(shopService.getTopLevelCategories(shopId));
 
         }
 
@@ -190,11 +194,61 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "categoryService-categoryNewArrivalLimit")
     public int getNewArrivalListSizeConfig(final long categoryId, final long shopId) {
 
-        return categoryService.getCategoryNewArrivalLimit(categoryId, shopId);
+
+        if (categoryId > 0L) {
+
+            Category category = categoryService.getById(categoryId);
+
+            while (category != null) {
+                final String value = category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_ITEMS_NEW_ARRIVAL);
+                if (StringUtils.isBlank(value)) {
+                    final Long parentId = getCategoryParentId(category.getCategoryId(), shopId);
+                    if (parentId != null) {
+                        category = categoryService.getById(parentId);
+                    } else {
+                        break;
+                    }
+                } else {
+                    final int limit = NumberUtils.toInt(value, 0);
+                    if (limit > 1) {
+                        return limit;
+                    }
+                }
+            }
+
+        }
+
+        final Shop shop = shopService.getById(shopId);
+        if (shop != null) {
+
+            final String value = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_NEW_ARRIVAL);
+            if (StringUtils.isNotBlank(value)) {
+                final int limit = NumberUtils.toInt(value, 0);
+                if (limit > 1) {
+                    return limit;
+                }
+            }
+
+        }
+
+        return Constants.RECOMMENDATION_SIZE;
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryNewArrivalDate")
+    public Date getCategoryNewArrivalDate(final long categoryId, final long shopId) {
+
+        return shopSearchSupportService.getCategoryNewArrivalDate(categoryId, shopId);
+
+    }
+
 
     /**
      * {@inheritDoc}
@@ -202,10 +256,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     public List<String> getItemsPerPageOptionsConfig(final long categoryId, final long shopId) {
 
         return getCSVConfig(categoryId,
-                            shopId,
-                            AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE,
-                            AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE,
-                            Constants.DEFAULT_ITEMS_ON_PAGE);
+                shopId,
+                AttributeNamesKeys.Category.CATEGORY_ITEMS_PER_PAGE,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_ITEMS_PER_PAGE,
+                Constants.DEFAULT_ITEMS_ON_PAGE);
 
     }
 
@@ -216,10 +270,10 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
 
         return getCSVConfig(categoryId,
-                            shopId,
-                            AttributeNamesKeys.Category.CATEGORY_SORT_OPTIONS,
-                            AttributeNamesKeys.Shop.SHOP_CATEGORY_SORT_OPTIONS,
-                            Constants.DEFAULT_PAGE_SORT);
+                shopId,
+                AttributeNamesKeys.Category.CATEGORY_SORT_OPTIONS,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_SORT_OPTIONS,
+                Constants.DEFAULT_PAGE_SORT);
 
     }
 
@@ -257,11 +311,20 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
-            final String csv = categoryService.getCategoryAttributeRecursive(
-                    null, categoryId, categoryCsvAttribute, null
-            );
-            if (StringUtils.isNotBlank(csv)) {
-                return Arrays.asList(StringUtils.split(csv, ','));
+            Category category = categoryService.getById(categoryId);
+
+            while (category != null) {
+                final String csv = category.getAttributeValueByCode(categoryCsvAttribute);
+                if (StringUtils.isBlank(csv)) {
+                    final Long parentId = getCategoryParentId(category.getCategoryId(), shopId);
+                    if (parentId != null) {
+                        category = categoryService.getById(parentId);
+                    } else {
+                        break;
+                    }
+                } else {
+                    return Arrays.asList(StringUtils.split(csv, ','));
+                }
             }
 
         }
@@ -285,13 +348,22 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
-            final String size = categoryService.getCategoryAttributeRecursive(
-                    null, categoryId, categoryLimitAttribute, null
-            );
-            if (size != null) {
-                final int limit = NumberUtils.toInt(size, 0);
-                if (limit > 0) {
-                    return limit;
+            Category category = categoryService.getById(categoryId);
+
+            while (category != null) {
+                final String size = category.getAttributeValueByCode(categoryLimitAttribute);
+                if (StringUtils.isBlank(size)) {
+                    final Long parentId = getCategoryParentId(category.getCategoryId(), shopId);
+                    if (parentId != null) {
+                        category = categoryService.getById(parentId);
+                    } else {
+                        break;
+                    }
+                } else {
+                    final int limit = NumberUtils.toInt(size, 0);
+                    if (limit > 1) {
+                        return limit;
+                    }
                 }
             }
 
@@ -317,9 +389,21 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
 
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
-            final String[] size = categoryService.getCategoryAttributeRecursive(null, categoryId, widthAndHeightAttribute);
-            if (size != null && size.length == 2) {
-                return new Pair<String, String>(size[0], size[1]);
+            Category category = categoryService.getById(categoryId);
+
+            while (category != null) {
+                final String size1 = category.getAttributeValueByCode(widthAndHeightAttribute[0]);
+                final String size2 = category.getAttributeValueByCode(widthAndHeightAttribute[1]);
+                if (StringUtils.isBlank(size1) || StringUtils.isBlank(size2)) {
+                    final Long parentId = getCategoryParentId(category.getCategoryId(), shopId);
+                    if (parentId != null) {
+                        category = categoryService.getById(parentId);
+                    } else {
+                        break;
+                    }
+                } else {
+                    return new Pair<String, String>(size1, size2);
+                }
             }
 
         }
@@ -340,10 +424,15 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
      */
     public Long getCategoryProductTypeId(final long categoryId, final long shopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
-            return categoryService.getCategoryProductTypeId(categoryId);
+            return shopService.getShopCategoryProductTypeId(shopId, categoryId);
         }
         return null;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public Long getCategoryParentId(final long categoryId, final long shopId) {
+        return shopService.getShopCategoryParentId(shopId, categoryId);
+    }
 }

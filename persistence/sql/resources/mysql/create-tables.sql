@@ -182,6 +182,7 @@
         CATEGORY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         PARENT_ID bigint,
+        LINKTO_ID bigint,
         RANK integer comment 'What the default order of child category in parent ?',
         PRODUCTTYPE_ID bigint comment 'Default product type in category, can be null if category contains different product types',
         NAME varchar(255) not null,

@@ -100,7 +100,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
         final Date now = new Date();
 
-        final List<Category> categories = categoryService.getTopLevelCategories(shop.getShopId());
+        final Set<Category> categories = shopService.findAllByShopId(shop.getShopId());
         for (final Category category : categories) {
 
             if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now) &&

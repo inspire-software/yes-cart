@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
+import org.springframework.cache.annotation.CacheEvict;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
@@ -34,10 +35,24 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
 
     private final GenericDAO<ShopCategory, Long> shopCategoryDao;
 
-    public ShopCategoryServiceImpl(
-            final GenericDAO<ShopCategory, Long> shopCategoryDao) {
+    private final GenericDAO<Category, Long> categoryDao;
+
+    private final GenericDAO<Shop, Long> shopDao;
+
+    /**
+     * Construct service to manage categories
+     *
+     * @param categoryDao     category dao to use
+     * @param shopCategoryDao shop category dao to use
+     * @param shopDao         shop dao
+     */
+    public ShopCategoryServiceImpl(final GenericDAO<ShopCategory, Long> shopCategoryDao,
+                                   final GenericDAO<Category, Long> categoryDao,
+                                   final GenericDAO<Shop, Long> shopDao) {
         super(shopCategoryDao);
         this.shopCategoryDao = shopCategoryDao;
+        this.categoryDao = categoryDao;
+        this.shopDao = shopDao;
     }
 
     /**
@@ -60,5 +75,58 @@ public class ShopCategoryServiceImpl extends BaseGenericServiceImpl<ShopCategory
                 Restrictions.eq("shop", shop)
         );
     }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds",
+            "categoryService-searchCategoriesIds",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate"
+    }, allEntries = true)
+    public ShopCategory assignToShop(final long categoryId, final long shopId) {
+        final ShopCategory shopCategory = shopCategoryDao.getEntityFactory().getByIface(ShopCategory.class);
+        shopCategory.setCategory(categoryDao.findById(categoryId));
+        shopCategory.setShop(shopDao.findById(shopId));
+        return shopCategoryDao.create(shopCategory);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "categoryService-topLevelCategories",
+            "categoryService-currentCategoryMenu",
+            "breadCrumbBuilder-breadCrumbs",
+            "shopService-shopByCode",
+            "shopService-shopById",
+            "shopService-shopByDomainName",
+            "shopService-allShops",
+            "shopService-shopCategoriesIds",
+            "shopService-shopAllCategoriesIds",
+            "categoryService-searchCategoriesIds",
+            "categoryService-categoryNewArrivalLimit",
+            "categoryService-categoryNewArrivalDate"
+    }, allEntries = true)
+    public void unassignFromShop(final long categoryId, final long shopId) {
+        ShopCategory shopCategory = shopCategoryDao.findSingleByNamedQuery(
+                "SHOP.CATEGORY",
+                categoryId,
+                shopId);
+        shopCategoryDao.delete(shopCategory);
+
+    }
+
 
 }

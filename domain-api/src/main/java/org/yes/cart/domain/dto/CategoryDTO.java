@@ -64,6 +64,36 @@ public interface CategoryDTO extends Identifiable, Guidable {
     void setParentId(long parentId);
 
     /**
+     * Get link to pk value.
+     *
+     * @return link to pk value.
+     */
+    Long getLinkToId();
+
+    /**
+     * Set link to pk value.
+     *
+     * @param linkToId link to pk value.
+     */
+    void setLinkToId(Long linkToId);
+
+
+    /**
+     * Get link to name value.
+     *
+     * @return link to name value.
+     */
+    String getLinkToName();
+
+    /**
+     * Set link to name value.
+     *
+     * @param linkToName link to name value.
+     */
+    void setLinkToName(String linkToName);
+
+
+    /**
      * Get category rank inside parent category.
      *
      * @return category rank.
