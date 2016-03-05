@@ -355,7 +355,7 @@
     <entry key="discountRule">Покупая более одной единицы товара, вы получаете скидку. Чем больше однотипных товаров Вы покупаете, тем больше скидка</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Скидка ${discount}%</entry>
+    <entry key="savePercent">${discount}% &lt;span class="glyphicon glyphicon-info-sign"&gt;&lt;/span&gt;</entry>
     <entry key="savePercentTitle">Акция</entry>
     <entry key="taxNoteNet">без ${tax} ${code}</entry>
     <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>

@@ -355,7 +355,7 @@
     <entry key="discountRule">Mengenrabatt</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Rabatt ${discount}%</entry>
+    <entry key="savePercent">${discount}% &lt;span class="glyphicon glyphicon-info-sign"&gt;&lt;/span&gt;</entry>
     <entry key="savePercentTitle">Abverkauf</entry>
     <entry key="taxNoteNet">zzgl. ${tax} ${code}</entry>
     <entry key="taxNoteGross">inkl. ${tax} ${code}</entry>
