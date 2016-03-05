@@ -1,0 +1,31 @@
+<h2>Payment result</h2>
+
+<%
+
+def _status = binding.hasVariable('status') ? status : (binding.hasVariable('hint') ? hint : "");
+
+if (_status.equals("ok")) { %>
+
+    <p>Order successfully placed</p>
+
+    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+
+    <% if (binding.hasVariable('order') && order.customer != null) { %>
+
+        <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+
+    <% } %>
+
+<% } else if (_status.equals("cancel")) { %>
+
+    <p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+
+    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+
+<% } else { %>
+
+    <p>Errors in payment</p>
+
+    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+
+<% } %>
