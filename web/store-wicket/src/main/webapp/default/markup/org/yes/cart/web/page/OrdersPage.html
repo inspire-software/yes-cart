@@ -32,16 +32,11 @@
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
-        <!--[if lt IE 9]>
-        <script src="../../../../../js/html5.js"></script>
-        <![endif]-->
         <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
         <link rel="stylesheet" href="../../../../../style/fonts.css"/>
         <link rel="stylesheet" href="../../../../../style/yc.css"/>
 
-        <script type="text/javascript" src="../../../../../js/yc.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
     <wicket:container wicket:id="headerInclude">
@@ -119,6 +114,14 @@
     </div>
 
     <span wicket:id="footer">[footer]</span>
+
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
 
 </body>
 </html>

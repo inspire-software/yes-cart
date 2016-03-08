@@ -20,14 +20,19 @@ public class ServerSideJs extends BaseComponent {
 
         addOrReplace(new Label("jsInclude", new StringBuilder()
             .append("<script type=\"text/javascript\">")
-            .append("ctx.page = '").append(getPage().getClass().getSimpleName()).append("';\n")
-            .append("ctx.root = '").append(getWicketUtil().getHttpServletRequest().getContextPath()).append("';\n")
-            .append("ctx.resources['areYouSure'] = '").append(getLocalizer().getString("areYouSure", this)).append("';\n")
-            .append("ctx.resources['yes'] = '").append(getLocalizer().getString("yes", this)).append("';\n")
-            .append("ctx.resources['no'] = '").append(getLocalizer().getString("no", this)).append("';\n")
-            .append("ctx.resources['wishlistTagsInfo'] = '").append(getLocalizer().getString("wishlistTagsInfo", this)).append("';\n")
-            .append("ctx.resources['wishlistTagLinkOffInfo'] = '").append(getLocalizer().getString("wishlistTagLinkOffInfo", this)).append("';\n")
-            .append("ctx.resources['wishlistTagLinkOnInfo'] = '").append(getLocalizer().getString("wishlistTagLinkOnInfo", this)).append("';\n")
+            .append("var ctx = {").append("\n")
+            .append("  url: document.URL,\n")
+            .append("  page: '").append(getPage().getClass().getSimpleName()).append("',\n")
+            .append("  root: '").append(getWicketUtil().getHttpServletRequest().getContextPath()).append("',\n")
+            .append("  resources: {\n")
+            .append("     areYouSure: '").append(getLocalizer().getString("areYouSure", this)).append("',\n")
+            .append("     yes: '").append(getLocalizer().getString("yes", this)).append("',\n")
+            .append("     no: '").append(getLocalizer().getString("no", this)).append("',\n")
+            .append("     wishlistTagsInfo: '").append(getLocalizer().getString("wishlistTagsInfo", this)).append("',\n")
+            .append("     wishlistTagLinkOffInfo: '").append(getLocalizer().getString("wishlistTagLinkOffInfo", this)).append("',\n")
+            .append("     wishlistTagLinkOnInfo: '").append(getLocalizer().getString("wishlistTagLinkOnInfo", this)).append("'\n")
+            .append("  }\n")
+            .append("}\n")
             .append("</script>").toString()).setEscapeModelStrings(false));
 
         super.onBeforeRender();

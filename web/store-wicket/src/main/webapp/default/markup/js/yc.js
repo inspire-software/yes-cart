@@ -14,33 +14,6 @@
  *    limitations under the License.
  */
 
-var ctx = {
-    url: document.URL,
-    root: '/yes-shop', /* This is how it appears from WicketUtil.getHttpServletRequest().getContextPath() for default config, use ServerSideJs Wicket component to inject this. */
-    page: 'HomePage',
-    resources: {},
-    productBuyPanels: function() {
-
-        var _panels = [];
-
-        return {
-            addPanel: function(panel) {
-                _panels.push(panel);
-            },
-            getPanel: function(sku) {
-                for (var i = 0; i < _panels.length; i++) {
-                    if (_panels[i].SKU == sku) {
-                        return _panels[i];
-                    }
-                }
-                return null;
-            }
-        }
-    }(),
-    showModalWindow: function(){}
-};
-
-
 // -- Logging -----------------------------------------------------------------------
 
 (function() {
@@ -103,6 +76,24 @@ $(document).ready(function() {
     });
 
     // -- AJAX buy with minicart -----------------------------------------------------------------------
+
+    ctx.productBuyPanels = function() {
+        var _panels = [];
+
+        return {
+            addPanel: function(panel) {
+                _panels.push(panel);
+            },
+            getPanel: function(sku) {
+                for (var i = 0; i < _panels.length; i++) {
+                    if (_panels[i].SKU == sku) {
+                        return _panels[i];
+                    }
+                }
+                return null;
+            }
+        }
+    }();
 
     $('a.js-buy').click(function(event) {
         event.preventDefault();
@@ -652,6 +643,10 @@ $(document).ready(function() {
             });
         }, 2500);
     };
+
+    if (typeof ctx.showModalWindowCall === 'function') {
+        ctx.showModalWindowCall(ctx.showModalWindow);
+    }
 
     // Enable tooltips
     $("[data-toggle=\"tooltip\"]").tooltip();
