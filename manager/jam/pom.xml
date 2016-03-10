@@ -429,6 +429,7 @@
 
     <pluginManagement>
       <plugins>
+
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <configuration>
@@ -471,5 +472,130 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <!-- ######################################################################################################################## -->
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>exec-npm-install</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>install</argument>
+              </arguments>
+              <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+            </configuration>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>exec-npm-build</id>
+            <phase>process-sources</phase>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>run</argument>
+                <argument>build.dev</argument>
+              </arguments>
+              <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+            </configuration>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <id>copy-node-modules</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/src/main/webapp/resources/node_modules</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/typescript/node_modules</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy-javascript</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/src/main/webapp/resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.basedir}/src/main/typescript/dist/dev</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>1.5.2</version>
+        <executions>
+          <execution>
+            <id>replace-main.css</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+            <configuration>
+              <file>${basedir}/src/main/webapp/resources/index.html</file>
+              <replacements>
+                <replacement>
+                  <token>href=".*assets\/main.css.*"</token>
+                  <value>href="assets/main.css"</value>
+                </replacement>
+              </replacements>
+            </configuration>
+          </execution>
+          <execution>
+            <id>replace-bootstrap.css</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+            <configuration>
+              <file>${basedir}/src/main/webapp/resources/index.html</file>
+              <replacements>
+                <replacement>
+                  <token>href=".*assets\/bootstrap.min.css.*"</token>
+                  <value>href="assets/bootstrap.min.css"</value>
+                </replacement>
+              </replacements>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- ######################################################################################################################## -->
+
+    </plugins>
+
   </build>
 </project>

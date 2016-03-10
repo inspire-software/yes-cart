@@ -1,0 +1,92 @@
+<wrapper *ngIf="shopUrl">
+
+  <data-control [changed]="changed"
+                (saveEvent)="onSaveHandler()"
+                (discardEvent)="onDiscardEventHandler()"
+                (refreshEvent)="onRefreshHandler()"></data-control>
+
+  <div class="row">
+    <p align="right">
+      <button class="btn btn-primary" (click)="onRowNew()">N</button>
+    </p>
+  </div>
+
+
+  <div class="row">
+    <div class="col-lg-5">
+      Url
+    </div>
+    <div class="col-lg-5">
+      Theme
+    </div>
+    <div class="col-lg-2">
+      &nbsp;
+    </div>
+  </div>
+
+  <wrapper *ngFor="#row of shopUrl.urls; #i = index">
+    <div class="row"  *ngIf=" ( i >= (maxSize * (currentPage - 1)) ) && ( i < (maxSize * currentPage) )">
+      <div class="col-lg-5">
+        {{row.url}}
+      </div>
+      <div class="col-lg-5">
+        {{row.theme}}
+      </div>
+      <div class="col-lg-2" style="text-align: right">
+        <button class="btn btn-primary" (click)="onRowEdit(row)">E</button>
+        <button class="btn btn-danger" (click)="onRowDelete(row)">X</button>
+
+      </div>
+    </div>
+  </wrapper>
+
+  <modal id="deleteConfirmationModalDialog"
+         [title]="'Are you sure?'"
+         [cancelLabel]="'Cancel'"
+         [positiveLabel]="'OK'"
+         (loaded)="deleteConfirmationModalDialogLoaded($event)"
+         (closed)="onDeleteConfirmationResult($event)">
+    Do you really want to delete url {{urlToDelete}} ?
+  </modal>
+
+  <modal id="editUrlModalDialog"
+         [title]="'Shop URL'"
+         [cancelLabel]="'Cancel'"
+         [positiveLabel]="'Save'"
+         (loaded)="editUrlModalLoaded($event)"
+         (closed)="onEditUrlModalResult($event)">
+
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">
+            URL
+          </div>
+          <div class="col-lg-9">
+            <input class="form-control" placeholder="Default value" name="locale" type="text" [(ngModel)]="urlToEdit.url">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            Theme
+          </div>
+          <div class="col-lg-9">
+            <input class="form-control" placeholder="Default value" name="locale" type="text" [(ngModel)]="urlToEdit.theme">
+          </div>
+
+        </div>
+      </fieldset>
+    </form>
+
+  </modal>
+
+
+
+
+  <div class="row">
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [(ngModel)]="currentPage" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+
+</wrapper>

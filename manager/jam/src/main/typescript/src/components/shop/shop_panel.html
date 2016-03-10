@@ -1,0 +1,39 @@
+<wrapper *ngIf="shop">
+
+  <data-control [changed]="changed"
+                (saveEvent)="onSaveHandler()"
+                (discardEvent)="onDiscardEvent()"
+                (refreshEvent)="onRefreshHandler()"></data-control>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <h1 class="page-header">{{shop.name}}</h1>
+    </div>
+  </div>
+
+
+  <div>
+    <div class="col-lg-6">
+      <div class="panel-body">
+        <form role="form">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control" (ngModelChange)="onDataChange()" placeholder="Shop-code" name="code" type="text" [(ngModel)]="shop.code">
+            </div>
+            <div class="form-group">
+              <input class="form-control"  (ngModelChange)="onDataChange()"  placeholder="Shop-name" name="name" type="text"  autofocus  [(ngModel)]="shop.name">
+            </div>
+            <div class="form-group">
+              <textarea class="form-control"  (ngModelChange)="onDataChange()"  placeholder="Shop-decription" name="description" [(ngModel)]="shop.description"></textarea>
+            </div>
+            <div class="form-group">
+              <input class="form-control" (ngModelChange)="onDataChange()"  placeholder="Shop-name" name="name" type="text"  autofocus  [(ngModel)]="shop.theme">
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</wrapper>

@@ -1,0 +1,68 @@
+<div>
+  <div class="col-lg-6">
+
+
+    <div class="panel-body">
+
+      <form role="form">
+        <fieldset>
+
+          <div class="row">
+            <h3>{{title}}</h3>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-3">
+              Default value
+            </div>
+            <div class="col-lg-9">
+              <input class="form-control" placeholder="Default value" name="locale" type="text" [(ngModel)]="defaultvalue">
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div class="col-lg-3">
+              Locale
+            </div>
+            <div class="form-group col-lg-9">
+              <input class="form-control" placeholder="Locale" name="locale" type="text" [(ngModel)]="selectedRow.first">
+            </div>
+
+            <div class="col-lg-3">
+              Value
+            </div>
+            <div class="form-group col-lg-9">
+              <input class="form-control" placeholder="Value" name="value" type="text" autofocus [(ngModel)]="selectedRow.second">
+            </div>
+
+          </div>
+
+          <p align="right">
+            <button class="btn" (click)="onRowAdd()">Add</button>
+          </p>
+
+          <table width="100%">
+            <tr>
+              <th>Locale</th>
+              <th>Value</th>
+              <th>&nbsp;</th>
+            </tr>
+            <tr *ngFor="#row of data" (click)="onRowSelect(row)">
+              <td style="width: 30pt">{{row.first}}</td>
+              <td>{{row.second}}</td>
+              <td style="width: 30pt" align="right">
+                <button class="btn btn-danger" (click)="onRowDelete(row)">X</button>
+              </td>
+            </tr>
+
+          </table>
+
+
+        </fieldset>
+      </form>
+    </div>
+
+
+  </div>
+</div>

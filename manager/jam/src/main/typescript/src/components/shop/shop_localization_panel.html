@@ -1,0 +1,14 @@
+<wrapper *ngIf="shopLocalization">
+
+  <data-control [changed]="changed"
+                (saveEvent)="onSaveHandler()"
+                (discardEvent)="onDiscardEvent()"
+                (refreshEvent)="onRefreshHandler()"></data-control>
+
+  <localization-table title="Window title" [data]="shopLocalization.windowTitle" (dataChanged)="onDataChanged()"></localization-table>
+
+  <localization-table title="Meta keywords"  [data]="shopLocalization.metaKeywords" (dataChanged)="onDataChanged()"></localization-table>
+
+  <localization-table title="Description"  [data]="shopLocalization.metaDesciption" (dataChanged)="onDataChanged()"></localization-table>
+
+</wrapper>

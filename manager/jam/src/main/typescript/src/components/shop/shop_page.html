@@ -1,0 +1,19 @@
+<wrapper *ngIf="shop">
+
+  <tabset>
+
+    <tab heading="Main"  (select)="tabSelected('Main')">
+      <shop-panel></shop-panel>
+    </tab>
+
+    <tab heading="Localization" (select)="tabSelected('Localization')">
+      <shop-localization-panel></shop-localization-panel>
+    </tab>
+
+    <tab heading="Urls" (select)="tabSelected('Urls')">
+      <shop-url-panel></shop-url-panel>
+    </tab>
+
+  </tabset>
+
+</wrapper>
