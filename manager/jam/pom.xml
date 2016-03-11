@@ -338,27 +338,6 @@
                                         </resources>
                                     </configuration>
                                 </execution>
-                                <execution>
-                                    <id>copy-client-swf</id>
-                                    <phase>validate</phase>
-                                    <goals>
-                                        <goal>copy-resources</goal>
-                                    </goals>
-                                    <configuration>
-                                        <outputDirectory>${basedir}/target/yes-manager</outputDirectory>
-                                        <resources>
-                                            <resource>
-                                                <directory>${basedir}/../client/target</directory>
-                                                <includes>
-                                                    <include>en_US/**</include>
-                                                    <include>ru_RU/**</include>
-                                                    <include>uk_UK/**</include>
-                                                    <include>de_DE/**</include>
-                                                </includes>
-                                            </resource>
-                                        </resources>
-                                    </configuration>
-                                </execution>
                             </executions>
                         </plugin>
                     </plugins>
@@ -433,11 +412,6 @@
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <configuration>
-            <!--<resourceEncoding>${project.build.sourceEncoding}</resourceEncoding>-->
-            <nonFilteredFileExtensions>
-              <!-- default value contains jpg,jpeg,gif,bmp,png -->
-              <nonFilteredFileExtension>swf</nonFilteredFileExtension>
-            </nonFilteredFileExtensions>
             <webResources>
               <resource>
                 <filtering>true</filtering>
@@ -447,16 +421,6 @@
                   <include>default/**</include>
                 </includes>
               </resource>
-              <!--resource>
-                <filtering>false</filtering>
-                <directory>../client/target</directory>
-                <includes>
-                  <include>en_US/**</include>
-                  <include>ru_RU/**</include>
-                  <include>uk_UK/**</include>
-                  <include>de_DE/**</include>
-                </includes>
-              </resource-->
               <resource>
                 <filtering>false</filtering>
                 <directory>../../theme/mail/src/main/resources</directory>
