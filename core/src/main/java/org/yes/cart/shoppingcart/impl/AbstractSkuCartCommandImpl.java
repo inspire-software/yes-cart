@@ -81,7 +81,7 @@ public abstract class AbstractSkuCartCommandImpl extends AbstractCartCommandImpl
                 execute(shoppingCart, productSku, parameters);
             } catch (Exception e) {
                 final Logger log = ShopCodeContext.getLog(this);
-                log.error("Can not retreive product sku dto with code {}", skuCode, e);
+                log.error("Can not retrieve product sku dto with code {}", skuCode, e);
                 log.error(e.getMessage(), e);
             }
         }

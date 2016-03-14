@@ -301,6 +301,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setQty(item.getQty());
             customerOrderDet.setGift(item.isGift());
             customerOrderDet.setPromoApplied(item.isPromoApplied());
+            customerOrderDet.setFixedPrice(item.isFixedPrice());
             customerOrderDet.setAppliedPromo(item.getAppliedPromo());
             customerOrderDet.setNetPrice(item.getNetPrice());
             customerOrderDet.setGrossPrice(item.getGrossPrice());

@@ -63,6 +63,8 @@ public class CartItemRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean promoApplied;
     @DtoField(readOnly = true)
+    private boolean fixedPrice;
+    @DtoField(readOnly = true)
     private String appliedPromo;
 
     private SkuPriceRO unitPricing;
@@ -165,6 +167,15 @@ public class CartItemRO implements Serializable {
 
     public void setGift(final boolean gift) {
         this.gift = gift;
+    }
+
+    @XmlAttribute(name = "fixed-price")
+    public boolean isFixedPrice() {
+        return fixedPrice;
+    }
+
+    public void setFixedPrice(final boolean fixedPrice) {
+        this.fixedPrice = fixedPrice;
     }
 
     @XmlAttribute(name = "promo-applied")

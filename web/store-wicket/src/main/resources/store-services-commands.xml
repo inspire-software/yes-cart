@@ -145,43 +145,48 @@
         <property name="priority" value="16"/>
     </bean>
 
-    <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl">
+    <bean id="setPriceCmd" class="org.yes.cart.shoppingcart.impl.SetSkuPriceEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <property name="priority" value="17"/>
+    </bean>
+
+    <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <property name="priority" value="18"/>
     </bean>
 
     <bean id="cleanCartCmd" class="org.yes.cart.shoppingcart.impl.WicketCleanCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="cartRepository"/>
-        <property name="priority" value="18"/>
+        <property name="priority" value="19"/>
     </bean>
 
     <bean id="logoutCmd" class="org.yes.cart.shoppingcart.impl.WicketLogoutCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="19"/>
+        <property name="priority" value="20"/>
     </bean>
 
     <bean id="viewSkuInternalCmd" class="org.yes.cart.shoppingcart.impl.ViewProductSkuInternalCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" value="10"/>
-        <property name="priority" value="20"/>
+        <property name="priority" value="21"/>
     </bean>
 
     <bean id="setOrderMsgCmd" class="org.yes.cart.shoppingcart.impl.SetOrderMessageCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="21"/>
+        <property name="priority" value="22"/>
     </bean>
 
     <bean id="resetPasswordCmd" class="org.yes.cart.shoppingcart.impl.PasswordResetCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="customerService"/>
         <constructor-arg index="2" ref="shopService"/>
-        <property name="priority" value="22"/>
+        <property name="priority" value="23"/>
     </bean>
 
     <bean id="setIpInternalCmd" class="org.yes.cart.shoppingcart.impl.SetIpInternalCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <property name="priority" value="23"/>
+        <property name="priority" value="24"/>
     </bean>
 
 </beans>

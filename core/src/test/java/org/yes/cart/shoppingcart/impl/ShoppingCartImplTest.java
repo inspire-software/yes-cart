@@ -20,6 +20,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
+import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -235,6 +236,235 @@ public class ShoppingCartImplTest {
         assertFalse(cart.isModified());
         cart.markDirty();
         assertTrue(cart.isModified());
+
+    }
+
+    /**
+     * Test shows that only promotions are removed.
+     */
+    @Test
+    public void testRemoveItemPromotions() throws Exception {
+
+        cart.addProductSkuToCart("ABC001", BigDecimal.ONE);
+        cart.setProductSkuPrice("ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPromotion("ABC001", new BigDecimal("5.99"), "-50");
+
+        cart.addGiftToCart("G001", BigDecimal.ONE, "G001");
+        cart.setGiftPrice("G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
+
+        cart.addProductSkuToCart("ABC002", BigDecimal.ONE);
+        cart.setProductSkuPrice("ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuOffer("ABC002", new BigDecimal("5.99"), "AUTH001");
+
+        assertEquals(3, cart.getCartItemList().size());
+
+        final CartItem abc001 = cart.getCartItemList().get(0);
+        assertNotNull(abc001);
+        assertFalse(abc001.isGift());
+        assertTrue(abc001.isPromoApplied());
+        assertFalse(abc001.isFixedPrice());
+        assertEquals("-50", abc001.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc001.getPrice());
+
+        final CartItem abc002 = cart.getCartItemList().get(1);
+        assertNotNull(abc002);
+        assertFalse(abc002.isGift());
+        assertFalse(abc002.isPromoApplied());
+        assertTrue(abc002.isFixedPrice());
+        assertEquals("AUTH001", abc002.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc002.getPrice());
+
+        final CartItem gift = cart.getCartItemList().get(2);
+        assertNotNull(gift);
+        assertTrue(gift.isGift());
+        assertTrue(gift.isPromoApplied());
+        assertFalse(gift.isFixedPrice());
+        assertEquals("G001", gift.getAppliedPromo());
+        assertEquals(new BigDecimal("0.00"), gift.getPrice());
+
+        cart.removeItemPromotions();
+
+        assertEquals(2, cart.getCartItemList().size());
+
+        final CartItem abc001_2 = cart.getCartItemList().get(0);
+        assertNotNull(abc001_2);
+        assertFalse(abc001_2.isGift());
+        assertFalse(abc001_2.isPromoApplied());
+        assertFalse(abc001_2.isFixedPrice());
+        assertNull(abc001_2.getAppliedPromo());
+        assertEquals(new BigDecimal("9.99"), abc001_2.getPrice());
+
+        final CartItem abc002_2 = cart.getCartItemList().get(1);
+        assertNotNull(abc002_2);
+        assertFalse(abc002_2.isGift());
+        assertFalse(abc002_2.isPromoApplied());
+        assertTrue(abc002_2.isFixedPrice());
+        assertEquals("AUTH001", abc002_2.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc002_2.getPrice());
+
+
+    }
+
+
+    /**
+     * Test shows that only offers are removed.
+     */
+    @Test
+    public void testRemoveItemOffers() throws Exception {
+
+        cart.addProductSkuToCart("ABC001", BigDecimal.ONE);
+        cart.setProductSkuPrice("ABC001", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuPromotion("ABC001", new BigDecimal("5.99"), "-50");
+
+        cart.addGiftToCart("G001", BigDecimal.ONE, "G001");
+        cart.setGiftPrice("G001", new BigDecimal("4.99"), new BigDecimal("4.99"));
+
+        cart.addProductSkuToCart("ABC002", BigDecimal.ONE);
+        cart.setProductSkuPrice("ABC002", new BigDecimal("9.99"), new BigDecimal("10.99"));
+        cart.setProductSkuOffer("ABC002", new BigDecimal("5.99"), "AUTH001");
+
+        assertEquals(3, cart.getCartItemList().size());
+
+        final CartItem abc001 = cart.getCartItemList().get(0);
+        assertNotNull(abc001);
+        assertFalse(abc001.isGift());
+        assertTrue(abc001.isPromoApplied());
+        assertFalse(abc001.isFixedPrice());
+        assertEquals("-50", abc001.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc001.getPrice());
+
+        final CartItem abc002 = cart.getCartItemList().get(1);
+        assertNotNull(abc002);
+        assertFalse(abc002.isGift());
+        assertFalse(abc002.isPromoApplied());
+        assertTrue(abc002.isFixedPrice());
+        assertEquals("AUTH001", abc002.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc002.getPrice());
+
+        final CartItem gift = cart.getCartItemList().get(2);
+        assertNotNull(gift);
+        assertTrue(gift.isGift());
+        assertTrue(gift.isPromoApplied());
+        assertFalse(gift.isFixedPrice());
+        assertEquals("G001", gift.getAppliedPromo());
+        assertEquals(new BigDecimal("0.00"), gift.getPrice());
+
+        cart.removeItemOffers();
+
+        assertEquals(3, cart.getCartItemList().size());
+
+        final CartItem abc001_2 = cart.getCartItemList().get(0);
+        assertNotNull(abc001_2);
+        assertFalse(abc001_2.isGift());
+        assertTrue(abc001_2.isPromoApplied());
+        assertFalse(abc001_2.isFixedPrice());
+        assertEquals("-50", abc001_2.getAppliedPromo());
+        assertEquals(new BigDecimal("5.99"), abc001_2.getPrice());
+
+        final CartItem abc002_2 = cart.getCartItemList().get(1);
+        assertNotNull(abc002_2);
+        assertFalse(abc002_2.isGift());
+        assertFalse(abc002_2.isPromoApplied());
+        assertFalse(abc002_2.isFixedPrice());
+        assertNull("AUTH001", abc002_2.getAppliedPromo());
+        assertEquals(new BigDecimal("9.99"), abc002_2.getPrice());
+
+        final CartItem gift_2 = cart.getCartItemList().get(2);
+        assertNotNull(gift_2);
+        assertTrue(gift_2.isGift());
+        assertTrue(gift_2.isPromoApplied());
+        assertFalse(gift_2.isFixedPrice());
+        assertEquals("G001", gift_2.getAppliedPromo());
+        assertEquals(new BigDecimal("0.00"), gift_2.getPrice());
+
+
+    }
+
+
+    @Test
+    public void testSetProductSkuPrice() throws Exception {
+
+        cart.addProductSkuToCart("ABC", BigDecimal.ONE);
+
+        final CartItem noPrice = cart.getCartItemList().get(0);
+
+        assertEquals(BigDecimal.ZERO, noPrice.getListPrice());
+        assertEquals(BigDecimal.ZERO, noPrice.getSalePrice());
+        assertEquals(BigDecimal.ZERO, noPrice.getPrice());
+        assertFalse(noPrice.isPromoApplied());
+        assertFalse(noPrice.isFixedPrice());
+        assertNull(noPrice.getAppliedPromo());
+
+        cart.setProductSkuPrice("ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
+
+        final CartItem hasPrice = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("10.99"), hasPrice.getListPrice());
+        assertEquals(new BigDecimal("9.99"), hasPrice.getSalePrice());
+        assertEquals(new BigDecimal("9.99"), hasPrice.getPrice());
+        assertFalse(hasPrice.isPromoApplied());
+        assertFalse(hasPrice.isFixedPrice());
+        assertNull(hasPrice.getAppliedPromo());
+
+        // Do promotion
+        cart.setProductSkuPromotion("ABC", new BigDecimal("4.99"), "50OFF");
+
+        final CartItem promoPrice = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("10.99"), promoPrice.getListPrice());
+        assertEquals(new BigDecimal("9.99"), promoPrice.getSalePrice());
+        assertEquals(new BigDecimal("4.99"), promoPrice.getPrice());
+        assertTrue(promoPrice.isPromoApplied());
+        assertFalse(promoPrice.isFixedPrice());
+        assertEquals("50OFF", promoPrice.getAppliedPromo());
+
+        // Perform set price
+        cart.setProductSkuPrice("ABC", new BigDecimal("9.99"), new BigDecimal("10.99"));
+
+        final CartItem promoPriceAfterReset = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("10.99"), promoPriceAfterReset.getListPrice());
+        assertEquals(new BigDecimal("9.99"), promoPriceAfterReset.getSalePrice());
+        assertEquals(new BigDecimal("9.99"), promoPriceAfterReset.getPrice());
+        assertFalse(promoPriceAfterReset.isPromoApplied());
+        assertFalse(promoPriceAfterReset.isFixedPrice());
+        assertNull(promoPriceAfterReset.getAppliedPromo());
+
+        // Do offer
+        cart.setProductSkuOffer("ABC", new BigDecimal("8.99"), "AUTH001");
+
+        final CartItem offerPrice = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("10.99"), offerPrice.getListPrice());
+        assertEquals(new BigDecimal("9.99"), offerPrice.getSalePrice());
+        assertEquals(new BigDecimal("8.99"), offerPrice.getPrice());
+        assertFalse(offerPrice.isPromoApplied());
+        assertTrue(offerPrice.isFixedPrice());
+        assertEquals("AUTH001", offerPrice.getAppliedPromo());
+
+        // Perform set price higher than offer
+        cart.setProductSkuPrice("ABC", new BigDecimal("11.99"), new BigDecimal("12.99"));
+
+        final CartItem offerPriceAfterResetHigher = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("12.99"), offerPriceAfterResetHigher.getListPrice());
+        assertEquals(new BigDecimal("11.99"), offerPriceAfterResetHigher.getSalePrice());
+        assertEquals(new BigDecimal("8.99"), offerPriceAfterResetHigher.getPrice());
+        assertFalse(offerPriceAfterResetHigher.isPromoApplied());
+        assertTrue(offerPriceAfterResetHigher.isFixedPrice());
+        assertEquals("AUTH001", offerPriceAfterResetHigher.getAppliedPromo());
+
+        // Perform set price lower than offer
+        cart.setProductSkuPrice("ABC", new BigDecimal("4.99"), new BigDecimal("5.99"));
+
+        final CartItem offerPriceAfterResetLower = cart.getCartItemList().get(0);
+
+        assertEquals(new BigDecimal("8.99"), offerPriceAfterResetLower.getListPrice());
+        assertEquals(new BigDecimal("8.99"), offerPriceAfterResetLower.getSalePrice());
+        assertEquals(new BigDecimal("8.99"), offerPriceAfterResetLower.getPrice());
+        assertFalse(offerPriceAfterResetLower.isPromoApplied());
+        assertTrue(offerPriceAfterResetLower.isFixedPrice());
+        assertEquals("AUTH001", offerPriceAfterResetLower.getAppliedPromo());
 
     }
 }

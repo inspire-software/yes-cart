@@ -50,6 +50,11 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
             shoppingCart.getShoppingContext().clearContext();
+            if (shoppingCart.removeItemOffers()) {
+                // Offers have to be removed from cart, since we may get stale prices
+                // Offers assumed to be valid only for duration of cart validity
+                recalculate(shoppingCart);
+            }
             markDirty(shoppingCart);
         }
     }

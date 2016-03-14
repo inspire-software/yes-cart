@@ -849,7 +849,14 @@
         </property>
     </bean>
 
-
+    <bean id="orderDisassembler" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.OrderDisassemblerImpl">
+                <constructor-arg index="0" ref="amountCalculationStrategy"/>
+                <constructor-arg index="1" ref="customerService"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">
         <constructor-arg index="0" ref="warehouseService"/>

@@ -16,9 +16,9 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.yes.cart.constants.AttributeNamesKeys;
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.customer.CustomerNameFormatter;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.AmountCalculationStrategy;
@@ -43,12 +43,12 @@ import java.util.List;
 public class OrderDisassemblerImpl implements OrderDisassembler {
 
     private final AmountCalculationStrategy amountCalculationStrategy;
-    private final CustomerNameFormatter customerNameFormatter;
+    private final CustomerService customerService;
 
     public OrderDisassemblerImpl(final AmountCalculationStrategy amountCalculationStrategy,
-                                 final CustomerNameFormatter customerNameFormatter) {
+                                 final CustomerService customerService) {
         this.amountCalculationStrategy = amountCalculationStrategy;
-        this.customerNameFormatter = customerNameFormatter;
+        this.customerService = customerService;
     }
 
     /**
@@ -57,23 +57,31 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
      * @param customerOrder given order
      * @return cart
      */
-    public ShoppingCart assembleCustomerOrder(final CustomerOrder customerOrder) throws OrderAssemblyException {
+    public ShoppingCart assembleShoppingCart(final CustomerOrder customerOrder, final boolean promotionsDisabled) throws OrderAssemblyException {
 
         final ShoppingCartImpl shoppingCart = new ShoppingCartImpl();
+        shoppingCart.setPromotionsDisabled(promotionsDisabled); // Allow to not to calculate promotions to preserve "deals" on the order
+        shoppingCart.initialise(amountCalculationStrategy);
 
         //fill cart item list
         for (CustomerOrderDet orderDet :customerOrder.getOrderDetail()) {
             if(orderDet.isGift()) {
                 shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getQty(), orderDet.getAppliedPromo());
+                shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
             } else {
                 shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getQty());
+                shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                if (orderDet.isFixedPrice()) {
+                    // Offers in existing order
+                    shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                }
             }
         }
 
-        //fill deliveries
-        for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery())  {
-            shoppingCart.addShippingToCart(String.valueOf( orderDelivery.getCarrierSla().getCarrierslaId()), BigDecimal.ONE);
-        }
+        //fill deliveries (shipping is calculated)
+//        for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery())  {
+//            shoppingCart.addShippingToCart(String.valueOf( orderDelivery.getCarrierSla().getCarrierslaId()), BigDecimal.ONE);
+//        }
 
         //coupons
         for(PromotionCouponUsage coupons : customerOrder.getCoupons()) {
@@ -88,9 +96,10 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
 
-        mutableOrderInfo.setCarrierSlaId(getFirstDelivery(customerOrder).getCarrierSla().getCarrierslaId());
-
-        mutableOrderInfo.setSeparateBillingAddress(!customerOrder.getBillingAddress().equals(customerOrder.getShippingAddress()));
+        final CustomerOrderDelivery firstDelivery = getFirstDelivery(customerOrder);
+        if (firstDelivery != null) {
+            mutableOrderInfo.setCarrierSlaId(firstDelivery.getCarrierSla().getCarrierslaId());
+        }
 
         if (customerOrder.getBillingAddressDetails() != null) {
             mutableOrderInfo.setBillingAddressId(customerOrder.getBillingAddressDetails().getAddressId());
@@ -111,8 +120,24 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             mutableOrderInfo.setDeliveryAddressNotRequired(true);
         }
 
+        if (customerOrder.getBillingAddressDetails() != null && customerOrder.getShippingAddressDetails() != null) {
+            mutableOrderInfo.setSeparateBillingAddress(!customerOrder.getBillingAddress().equals(customerOrder.getShippingAddress()));
+        } else {
+            mutableOrderInfo.setSeparateBillingAddress(false);
+        }
+
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
-        mutableOrderInfo.setMultipleDelivery(customerOrder.getDelivery().size() > 1);
+        if (CollectionUtils.isNotEmpty(customerOrder.getDelivery())) {
+            int count = 0;
+            for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+                if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())) {
+                    count++; // NON Electronic only
+                }
+            }
+            mutableOrderInfo.setMultipleDelivery(count > 1);
+        } else {
+            mutableOrderInfo.setMultipleDelivery(false);
+        }
 
         mutableShoppingContext.setCustomerEmail(customerOrder.getEmail());
         mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, customerOrder.getShop()));
@@ -122,21 +147,28 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         mutableShoppingContext.setCustomerShops(customerShops); // Only use order's shop, since it may be guest checkout
         mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
         mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
+        mutableShoppingContext.setResolvedIp(customerOrder.getOrderIp());
+
+        shoppingCart.recalculate();
+        shoppingCart.markDirty();
 
         return shoppingCart;
     }
 
     private CustomerOrderDelivery getFirstDelivery(final CustomerOrder customerOrder) {
 
-        return customerOrder.getDelivery().iterator().next();
+        final Collection<CustomerOrderDelivery> deliveries = customerOrder.getDelivery();
+        if (CollectionUtils.isNotEmpty(deliveries)) {
+            return deliveries.iterator().next();
+        }
+        return null;
 
     }
 
 
     private String formatNameFor(final CustomerOrder order, final Shop shop) {
 
-        final String format = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_NAME_FORMATTER);
-        return customerNameFormatter.formatName(new Customer() {
+        return customerService.formatNameFor(new Customer() {
             @Override
             public long getCustomerId() {
                 return 0;
@@ -411,7 +443,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             public long getVersion() {
                 return 0;
             }
-        }, format);
+        }, shop);
 
     }
 

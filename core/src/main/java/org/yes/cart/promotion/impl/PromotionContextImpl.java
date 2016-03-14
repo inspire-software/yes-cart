@@ -113,9 +113,13 @@ public class PromotionContextImpl implements PromotionContext {
 
         for (final CartItem item : cart.getCartItemList()) {
 
-            context.put(PromotionCondition.VAR_CART_ITEM, item);
+            if (!item.isFixedPrice()) { // Offers do not participate in promotions
 
-            applyPromotions(itemPromoBuckets, context);
+                context.put(PromotionCondition.VAR_CART_ITEM, item);
+
+                applyPromotions(itemPromoBuckets, context);
+
+            }
 
         }
 

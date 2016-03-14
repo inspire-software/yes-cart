@@ -32,8 +32,10 @@ public interface OrderDisassembler {
      * Create {@link org.yes.cart.shoppingcart.ShoppingCart} from {@link org.yes.cart.domain.entity.CustomerOrder} for order adjustment.
      *
      * @param customerOrder given order
+     * @param promotionsDisabled flag to indicate to skip promotions in the calculation
+     *
      * @return cart
      */
-    ShoppingCart assembleCustomerOrder(CustomerOrder customerOrder) throws OrderAssemblyException;
+    ShoppingCart assembleShoppingCart(CustomerOrder customerOrder, boolean promotionsDisabled) throws OrderAssemblyException;
 
 }

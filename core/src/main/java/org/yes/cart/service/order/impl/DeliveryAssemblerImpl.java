@@ -183,6 +183,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setListPrice(orderDet.getListPrice());
         deliveryDet.setGift(orderDet.isGift());
         deliveryDet.setPromoApplied(orderDet.isPromoApplied());
+        deliveryDet.setFixedPrice(orderDet.isFixedPrice());
         deliveryDet.setAppliedPromo(orderDet.getAppliedPromo());
         deliveryDet.setNetPrice(orderDet.getNetPrice());
         deliveryDet.setGrossPrice(orderDet.getGrossPrice());

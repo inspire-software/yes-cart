@@ -2035,6 +2035,7 @@
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
@@ -2139,6 +2140,7 @@
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>

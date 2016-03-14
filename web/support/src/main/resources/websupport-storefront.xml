@@ -180,11 +180,14 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
+                <value>setPriceCmd</value>
                 <value>qty</value>
                 <value>type</value>
                 <value>wlv</value>
                 <value>sku</value>
                 <value>wla</value>
+                <value>cip</value>
+                <value>aup</value>
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
@@ -205,6 +208,7 @@
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
+                <value>setPriceCmd</value>
             </list>
         </property>
     </bean>
