@@ -49,12 +49,16 @@
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/pages/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/resources/index.html</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/resources/components/*</url-pattern>
   </filter-mapping>
-<!--  <filter-mapping>
-    <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/app/*</url-pattern>
-  </filter-mapping>-->
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/service/*</url-pattern>
@@ -74,10 +78,10 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
-  <servlet-mapping>
+<!--  <servlet-mapping>
     <servlet-name>Spring MVC despatcher</servlet-name>
-    <url-pattern>/app/*</url-pattern>
-  </servlet-mapping>
+    <url-pattern>/pages/*</url-pattern>
+  </servlet-mapping>-->
 
   <servlet-mapping>
     <servlet-name>Spring MVC despatcher</servlet-name>

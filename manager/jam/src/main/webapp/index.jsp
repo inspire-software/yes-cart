@@ -19,47 +19,28 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>YUM Yes cart update manager</title>
-    <link rel="stylesheet" href="style/style.css" type="text/css"/>
+    <title>JAM Yes cart update manager</title>
+    <link href="<c:url value='/resources/assets/bootstrap.min.css' />" rel="stylesheet"></link>
 </head>
 <body>
-<div class="container">
-    <div class="inside">
-        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/app/pages/index' />">Старт Українська</a></div>
-        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/pages/index' />">Старт Українська 2</a></div>
 
-    </div>
-</div>
 
 <script type="text/javascript">
     <!--
-
-    var browserLanguage = "en" ;
-    if (navigator.userLanguage) { // IE
-        browserLanguage = navigator.userLanguage.substr(0,2);
-    } else if (navigator.language) {// FF
-        browserLanguage = navigator.language.substr(0,2);
-    }
-
-    var redirectToPage = "ShopManagerApplication.html";
-
-    if(browserLanguage == "ru" || browserLanguage == "be") {
-        redirectToPage = "ru_RU/" + redirectToPage;
-    } else if(browserLanguage == "ua") {
-        redirectToPage = "uk_UK/" + redirectToPage;
-    } else if(browserLanguage == "de") {
-        redirectToPage = "de_DE/" + redirectToPage;
-    } else {
-        redirectToPage = "en_US/" + redirectToPage;
-    }
-    redirectToPage = "<c:url value='/app/pages/index' />";
-
-    setTimeout('redirectTo()', 10000);
+    redirectToPage = "<c:url value='/pages/'/>";
+    setTimeout('redirectTo()', 1);
     function redirectTo() {
         window.location = redirectToPage;
     }
     //-->
 </script>
+
+<div class="container">
+    <div class="inside">
+        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/pages/' />">Start</a></div>
+    </div>
+</div>
+
 
 </body>
 </html>

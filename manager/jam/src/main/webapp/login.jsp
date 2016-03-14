@@ -20,13 +20,26 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Login page</title>
     <link href="<c:url value='resources/assets/bootstrap.min.css' />" rel="stylesheet"></link>
+    <style type="text/css">
+        .vertical-center {
+            min-height: 100%;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+        }
+
+    </style>
 </head>
 
 <body>
-<div class="container">
+<div class="container vertical-center">
     <div class="row">
         <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <form name='loginForm' action='<c:url value="/j_spring_security_check"/>' method='POST' class="form-s">
+            <form name='loginForm' action='<c:url value="/j_spring_security_check"/>' method='POST'>
+                <div class="">
+                    <p><h2>JAM Login.</h2></p>
+                </div>
                 <c:if test="${param.error != null}">
                     <div class="alert alert-danger">
                         <p>Invalid username and/or password.</p>
@@ -51,7 +64,7 @@
                 </div>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                <div class="form-actions">
+                <div class="">
                     <input type="submit"
                            class="btn btn-block btn-primary btn-default" value="Log in">
                 </div>

@@ -15,5 +15,10 @@ $ npm install -g npm@3
 
  - located in typescript/tools/config/seed.config.ts
  
+## Hints
+
+ - indexing of typescript/node_modules and typescript/dist make take some time, so better to mark this folders as excluded
+ - mvn -Pmysql,dev tomcat:run-war
+ 
  
  

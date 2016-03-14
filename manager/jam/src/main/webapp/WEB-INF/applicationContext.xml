@@ -34,13 +34,17 @@
 
   <security:http auto-config="true">
     <security:anonymous enabled="false"/>
-    <security:intercept-url pattern="/resources/components/**" access="ROLE_SMADMIN" />
+    <security:intercept-url pattern="/pages/**" access="ROLE_SMADMIN" />
+
     <security:intercept-url pattern="/resources/index.html" access="ROLE_SMADMIN" />
+
+    <security:intercept-url pattern="/resources/components/**" access="ROLE_SMADMIN" />
+
     <!--<security:http-basic />-->
     <security:form-login
       login-page="/login.jsp"
-      default-target-url="/index.jsp"
-      authentication-failure-url="/login?error"
+      default-target-url="/pages/index.jsp"
+      authentication-failure-url="/login.jsp?error"
       username-parameter="j_username"
       password-parameter="j_password" />
   </security:http>
