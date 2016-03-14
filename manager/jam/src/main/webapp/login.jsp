@@ -19,7 +19,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Login page</title>
-    <link href="<c:url value='../bootstrap/css/bootstrap.css' />" rel="stylesheet"></link>
+    <link href="<c:url value='resources/assets/bootstrap.min.css' />" rel="stylesheet"></link>
 </head>
 
 <body>

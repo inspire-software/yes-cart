@@ -49,8 +49,12 @@
 
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
-    <url-pattern>/app/*</url-pattern>
+    <url-pattern>/resources/components/*</url-pattern>
   </filter-mapping>
+<!--  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/app/*</url-pattern>
+  </filter-mapping>-->
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/service/*</url-pattern>
