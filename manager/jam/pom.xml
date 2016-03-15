@@ -557,7 +557,7 @@
       </plugin>
 
         <!-- Build node js application end  -->
-        
+
     </plugins>
 
   </build>
