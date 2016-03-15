@@ -18,7 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
+import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.Map;
 

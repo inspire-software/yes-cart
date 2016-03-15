@@ -626,6 +626,8 @@ alter table TCATEGORY add column LINKTO_ID bigint;
 -- YC-457 Refactor order amendment capabilities (allow to dissassemble order and set fixed prices)
 --
 
-alter table TCUSTOMERORDERDELIVERYDET add column IS_FIXED_PRICE smallint not null default 0;
-alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE smallint not null default 0;
+alter table TCUSTOMERORDERDELIVERYDET add column IS_FIXED_PRICE bit not null default 0;
+alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE bit not null default 0;
+-- alter table TCUSTOMERORDERDELIVERYDET add column IS_FIXED_PRICE smallint not null default 0;
+-- alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE smallint not null default 0;
 

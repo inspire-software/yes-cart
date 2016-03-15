@@ -23,8 +23,8 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.support.shoppingcart.CartDetuplizationException;
-import org.yes.cart.web.support.shoppingcart.CartTuplizer;
+import org.yes.cart.shoppingcart.support.CartDetuplizationException;
+import org.yes.cart.shoppingcart.support.CartTuplizer;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;

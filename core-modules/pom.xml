@@ -41,5 +41,7 @@
         <module>core-module-reports</module>
         <module>core-module-impex</module>
         <module>core-module-job</module>
+        <module>core-module-cart</module>
+        <module>core-module-cart-websupport</module>
     </modules>
 </project>

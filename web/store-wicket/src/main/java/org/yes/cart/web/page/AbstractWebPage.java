@@ -46,7 +46,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
+import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;

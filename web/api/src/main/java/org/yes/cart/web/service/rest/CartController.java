@@ -42,7 +42,7 @@ import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
-import org.yes.cart.web.shoppingcart.CommandConfig;
+import org.yes.cart.shoppingcart.support.CommandConfig;
 import org.yes.cart.web.support.service.*;
 
 import javax.servlet.http.HttpServletRequest;

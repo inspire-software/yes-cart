@@ -30,7 +30,7 @@ import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.service.domain.ShoppingCartStateService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
+import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
 import java.util.HashMap;
 import java.util.Locale;

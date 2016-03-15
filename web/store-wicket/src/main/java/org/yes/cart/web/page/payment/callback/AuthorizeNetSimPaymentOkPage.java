@@ -38,7 +38,7 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.web.support.shoppingcart.tokendriven.CartRepository;
+import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.util.WicketUtil;
 
