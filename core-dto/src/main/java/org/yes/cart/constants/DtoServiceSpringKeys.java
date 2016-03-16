@@ -123,4 +123,9 @@ public interface DtoServiceSpringKeys {
      * {@link org.yes.cart.service.dto.DtoTaxConfigService}
      */
     String DTO_TAX_CONFIG_SERVICE = "dtoTaxConfigService";
+    /**
+     * {@link org.yes.cart.service.dto.DtoShoppingCartService} bean key.
+     */
+    String DTO_SHOPPINGCART_SERVICE = "dtoShoppingCartService";
+
 }

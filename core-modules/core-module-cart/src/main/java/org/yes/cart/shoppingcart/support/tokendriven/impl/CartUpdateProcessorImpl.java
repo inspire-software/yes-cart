@@ -61,6 +61,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
         if (dbState == null) {
             dbState = shoppingCartStateService.getGenericDao().getEntityFactory().getByIface(ShoppingCartState.class);
             dbState.setGuid(shoppingCart.getGuid());
+            dbState.setOrdernum(shoppingCart.getOrdernum());
         }
 
         // 2. If this is for logged in cart now but was anonymous we have just logged in

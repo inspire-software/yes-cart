@@ -51,6 +51,22 @@ public interface ShoppingCartState extends Auditable {
      */
     void setCustomerEmail(String customerEmail);
 
+
+    /**
+     * Order number for order amendment cart.
+     *
+     * @return order number
+     */
+    String getOrdernum();
+
+    /**
+     * Set order number.
+     *
+     * @param ordernum order number to set.
+     */
+    void setOrdernum(String ordernum);
+
+
     /**
      * Get empty flag. Indicates if cart is blank or not.
      *

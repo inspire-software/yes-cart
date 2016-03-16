@@ -291,4 +291,19 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      */
     void setPromotionsDisabled(boolean promotionsDisabled);
 
+    /**
+     * Order number for order amendment cart.
+     *
+     * @return order number
+     */
+    String getOrdernum();
+
+    /**
+     * Set order number.
+     *
+     * @param ordernum order number to set.
+     */
+    void setOrdernum(String ordernum);
+
+
 }

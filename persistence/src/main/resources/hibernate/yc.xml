@@ -2414,6 +2414,7 @@
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
         <property name="empty" column="EMPTY" type="boolean" />
         <property name="state" column="CART_STATE" type="byte[]" length="16384" not-null="true"/>
+        <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2549,7 +2550,13 @@
 
     <query name="SHOPPINGCARTSTATE.BY.EMAIL">
         <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1
+       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1 and scs.ordernum IS NULL
+       ]]>
+    </query>
+
+    <query name="SHOPPINGCARTSTATE.BY.ORDERNUM">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where scs.ordernum  = ?1
        ]]>
     </query>
 

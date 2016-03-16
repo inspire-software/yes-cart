@@ -146,9 +146,10 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), shoppingCart.getCustomerEmail());
-        assertEquals(customerOrder.getCurrency(), shoppingCart.getCurrencyCode());
-        assertEquals(customerOrder.getLocale(), shoppingCart.getCurrentLocale());
+        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
+        assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
+        assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
 
         final ShoppingContext reassembledSC = reassembledCart.getShoppingContext();
         assertNotNull(reassembledSC.getCustomerName());
@@ -267,9 +268,10 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5422.92"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), shoppingCart.getCustomerEmail());
-        assertEquals(customerOrder.getCurrency(), shoppingCart.getCurrencyCode());
-        assertEquals(customerOrder.getLocale(), shoppingCart.getCurrentLocale());
+        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
+        assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
+        assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
 
         final ShoppingContext reassembledSC = reassembledCart.getShoppingContext();
         assertNotNull(reassembledSC.getCustomerName());
@@ -405,9 +407,10 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5497.45"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5497.45"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), shoppingCart.getCustomerEmail());
-        assertEquals(customerOrder.getCurrency(), shoppingCart.getCurrencyCode());
-        assertEquals(customerOrder.getLocale(), shoppingCart.getCurrentLocale());
+        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
+        assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
+        assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
 
         final ShoppingContext reassembledSC = reassembledCart.getShoppingContext();
         assertNotNull(reassembledSC.getCustomerName());
@@ -544,9 +547,10 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5497.45"), reassembledTotal.getListTotalAmount());
         assertEquals(new BigDecimal("5456.46"), reassembledTotal.getTotalAmount());
 
-        assertEquals(customerOrder.getEmail(), shoppingCart.getCustomerEmail());
-        assertEquals(customerOrder.getCurrency(), shoppingCart.getCurrencyCode());
-        assertEquals(customerOrder.getLocale(), shoppingCart.getCurrentLocale());
+        assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
+        assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
+        assertEquals(customerOrder.getLocale(), reassembledCart.getCurrentLocale());
+        assertEquals(customerOrder.getOrdernum(), reassembledCart.getOrdernum());
 
         final ShoppingContext reassembledSC = reassembledCart.getShoppingContext();
         assertNotNull(reassembledSC.getCustomerName());

@@ -212,7 +212,7 @@
     <import resource="classpath:core-io.xml"/>
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-dto-services.xml"/>
-    <import resource="classpath:core-services-commands.xml"/>
+    <import resource="classpath:manager-services-commands.xml"/>
 
     <import resource="classpath:payment-persistence.xml"/>
     <import resource="classpath:payment-api.xml"/>

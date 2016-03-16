@@ -1102,6 +1102,7 @@
         CART_STATE blob(16384),
         EMPTY smallint not null,
         CUSTOMER_EMAIL varchar(255),
+        ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
     );
 

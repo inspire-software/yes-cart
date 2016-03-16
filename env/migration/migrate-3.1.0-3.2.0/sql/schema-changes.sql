@@ -631,3 +631,4 @@ alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE bit not null default 0;
 -- alter table TCUSTOMERORDERDELIVERYDET add column IS_FIXED_PRICE smallint not null default 0;
 -- alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE smallint not null default 0;
 
+alter table TSHOPPINGCARTSTATE add column ORDERNUM varchar(255);

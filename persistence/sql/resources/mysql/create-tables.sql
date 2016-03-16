@@ -1067,6 +1067,7 @@
         CART_STATE varbinary(16384),
         EMPTY bit not null,
         CUSTOMER_EMAIL varchar(255),
+        ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
     );
 

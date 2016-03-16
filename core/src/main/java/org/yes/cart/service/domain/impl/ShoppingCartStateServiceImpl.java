@@ -55,6 +55,13 @@ public class ShoppingCartStateServiceImpl extends BaseGenericServiceImpl<Shoppin
     /**
      * {@inheritDoc}
      */
+    public List<ShoppingCartState> findByOrdernum(final String ordernum) {
+        return shoppingCartStateDao.findByNamedQuery("SHOPPINGCARTSTATE.BY.ORDERNUM", ordernum);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ResultsIterator<ShoppingCartState> findByModificationPrior(final Date lastModification) {
         return shoppingCartStateDao.findByNamedQueryIterator("SHOPPINGCARTSTATE.BY.LASTMODIFIED", lastModification);
     }

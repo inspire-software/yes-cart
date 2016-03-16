@@ -48,6 +48,15 @@ public interface ShoppingCartStateService extends GenericService<ShoppingCartSta
     List<ShoppingCartState> findByCustomerEmail(String email);
 
     /**
+     * Get state by order number.
+     *
+     * @param ordernum order number
+     *
+     * @return get by order number
+     */
+    List<ShoppingCartState> findByOrdernum(String ordernum);
+
+    /**
      * Get all states that were modified before given date.
      *
      * @param lastModification last modification date

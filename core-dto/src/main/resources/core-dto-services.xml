@@ -28,6 +28,7 @@
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-payments.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
+    <import resource="classpath:core-dto-cart.xml"/>
 
     <!-- ############################################ DTO Support ######################################################################### -->
 
@@ -462,6 +463,19 @@
         </property>
     </bean>
 
+    <bean id="dtoShoppingCartService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoShoppingCartServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="1" ref="customerOrderService"/>
+                <constructor-arg index="2" ref="cartRepository"/>
+                <constructor-arg index="3" ref="orderDisassembler"/>
+                <constructor-arg index="4" ref="shoppingCartCommandFactory"/>
+                <constructor-arg index="5" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="dtoInterfaceToClassFactory" class="org.yes.cart.domain.dto.factory.impl.DtoFactoryImpl">
         <constructor-arg>
@@ -525,6 +539,12 @@
 
                 <entry key="org.yes.cart.domain.dto.TaxDTO"              value="org.yes.cart.domain.dto.impl.TaxDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.TaxConfigDTO"        value="org.yes.cart.domain.dto.impl.TaxConfigDTOImpl"/>
+
+                <entry key="org.yes.cart.shoppingcart.ShoppingCart"      value="org.yes.cart.domain.dto.impl.CartDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.CartItem"          value="org.yes.cart.domain.dto.impl.CartItemDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.ShoppingContext"   value="org.yes.cart.domain.dto.impl.CartShoppingContextDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.OrderInfo"         value="org.yes.cart.domain.dto.impl.CartOrderInfoDTOImpl"/>
+                <entry key="org.yes.cart.shoppingcart.Total"             value="org.yes.cart.domain.dto.impl.CartTotalDTOImpl"/>
 
             </map>
         </constructor-arg>

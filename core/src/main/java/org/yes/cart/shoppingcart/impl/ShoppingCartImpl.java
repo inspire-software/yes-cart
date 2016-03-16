@@ -72,6 +72,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     private boolean promotionsDisabled = false;
 
+    private String ordernum;
+
     private transient AmountCalculationStrategy calculationStrategy;
 
 
@@ -665,6 +667,17 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public void setPromotionsDisabled(final boolean promotionsDisabled) {
         this.promotionsDisabled = promotionsDisabled;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public String getOrdernum() {
+        return ordernum;
+    }
+
+    /** {@inheritDoc} */
+    public void setOrdernum(final String ordernum) {
+        this.ordernum = ordernum;
     }
 
     /** {@inheritDoc} */

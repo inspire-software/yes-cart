@@ -61,6 +61,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         final ShoppingCartImpl shoppingCart = new ShoppingCartImpl();
         shoppingCart.setPromotionsDisabled(promotionsDisabled); // Allow to not to calculate promotions to preserve "deals" on the order
+        shoppingCart.setOrdernum(customerOrder.getOrdernum()); // Mark this as amendment cart
         shoppingCart.initialise(amountCalculationStrategy);
 
         //fill cart item list
