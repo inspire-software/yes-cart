@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ProductTypeDTO;
+import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -37,5 +38,16 @@ public interface DtoProductTypeService extends GenericDTOService<ProductTypeDTO>
      * @return list of types
      */
     List<ProductTypeDTO> findProductTypes(String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Find all product types that use attribute code.
+     *
+     * @param code {@link Attribute#getCode()}
+     *
+     * @return list of product types
+     */
+    List<ProductTypeDTO> findByAttributeCode(String code)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
 }

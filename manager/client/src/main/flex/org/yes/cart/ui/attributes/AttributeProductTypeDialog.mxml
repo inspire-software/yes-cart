@@ -33,8 +33,12 @@
 
       import org.yes.cart.shopmanager.ShopManagerGlobal;
 
-      public function get productTypeSelection():Array {
-          return productTypesGrid.selectedItems;
+
+      private var _attributeCode:String;
+
+      public function set attributeCode(code:String):void {
+          _attributeCode = code;
+          remoteProductTypeService.findByAttributeCode(_attributeCode);
       }
 
       protected function onRpcMethodFault(event:FaultEvent):void {
@@ -42,32 +46,19 @@
       }
 
       private function onFindProductTypesResult(event:ResultEvent):void {
-          hasSelection = false;
           productTypesCollection = event.result as ArrayCollection;
       }
 
-
-      private function onRefreshProductTypeClick(event:MouseEvent):void {
-          remoteProductTypeService.findProductTypes(productTypeTextInput.text);
-      }
-
-
-      private function onProductTypeSelected(event:ListEvent):void {
-          hasSelection = productTypesGrid.selectedItem != null;
-      }
-
       private function init():void {
-
       }
       ]]></mx:Script>
 
-  <mx:Boolean id="hasSelection">false</mx:Boolean>
   <mx:ArrayCollection id="productTypesCollection"/>
 
   <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
                    channelSet="{ShopManagerGlobal.instance.channelSet}">
 
-    <mx:method id="findProductTypes" name="findProductTypes"
+    <mx:method id="findByAttributeCode" name="findByAttributeCode"
                result="onFindProductTypesResult(event)"
                fault="onRpcMethodFault(event)"/>
 
@@ -76,19 +67,7 @@
   <mx:VBox width="100%" height="100%"
            paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
 
-    <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
-
-        <mx:Label text="@Resource(bundle='ProductTypeManagementPanel',key='name')"/>
-      <mx:TextInput id="productTypeTextInput" width="100" toolTip="@Resource(bundle='ProductTypeManagementPanel',key='name')"/>
-
-      <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
-                 toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
-                 click="onRefreshProductTypeClick(event)"  height="100%"/>
-
-
-    </mx:HBox>
-    <mx:DataGrid width="100%" height="90%" id="productTypesGrid" dataProvider="{productTypesCollection}"
-                 itemClick="onProductTypeSelected(event)">
+    <mx:DataGrid width="100%" height="90%" id="productTypesGrid" dataProvider="{productTypesCollection}">
       <mx:columns>
           <mx:DataGridColumn width="80"
                              headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
@@ -146,8 +125,6 @@
       </mx:columns>
     </mx:DataGrid>
     <mx:ControlBar width="100%" horizontalAlign="right">
-      <mx:Button id="selectProductTypeButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
-                 enabled="{hasSelection}"/>
       <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
                  click="PopUpManager.removePopUp(this)"/>
     </mx:ControlBar>

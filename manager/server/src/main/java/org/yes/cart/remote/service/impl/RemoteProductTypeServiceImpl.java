@@ -52,4 +52,11 @@ public class RemoteProductTypeServiceImpl
     public List<ProductTypeDTO> findProductTypes(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoProductTypeService.findProductTypes(name);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductTypeDTO> findByAttributeCode(final String code) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoProductTypeService.findByAttributeCode(code);
+    }
 }

@@ -2823,10 +2823,18 @@
     </query>
 
     <query name="PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID">
-          <![CDATA[
+        <![CDATA[
        select pta.attribute
        from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
+       ]]>
+    </query>
+
+    <query name="PRODUCT.TYPE.BY.ATTRIBUTE.CODE">
+          <![CDATA[
+       select pta.producttype
+       from  ProductTypeAttrEntity pta
+            where pta.attribute.code = ?1
        ]]>
     </query>
 

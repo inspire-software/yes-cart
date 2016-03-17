@@ -24,9 +24,12 @@ import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: denispavlov
@@ -51,6 +54,28 @@ public class DtoProductTypeServiceImplTezt extends BaseCoreDBTestCase {
         List<ProductTypeDTO> list = dtoService.findProductTypes("Play");
         assertFalse(list.isEmpty());
 
+        for (final ProductTypeDTO typeDTO : list) {
+            assertTrue(
+                    (typeDTO.getName() != null && typeDTO.getName().toLowerCase().contains("play")) ||
+                            (typeDTO.getDescription() != null && typeDTO.getDescription().toLowerCase().contains("play"))
+            );
+        }
+
     }
 
+
+    @Test
+    public void testFindByAttributeCode() throws Exception {
+
+        List<ProductTypeDTO> list = dtoService.findByAttributeCode("MATERIAL");
+        assertFalse(list.isEmpty());
+
+        final Set<String> names = new HashSet<String>();
+        for (final ProductTypeDTO type : list) {
+            names.add(type.getName());
+        }
+
+        assertTrue(names.contains("Robots"));
+
+    }
 }

@@ -16,7 +16,7 @@
   -->
 
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
-                title="@Resource(bundle='ProductManagementPanel',key='find')"
+                title="@Resource(bundle='ProductManagementPanel',key='findBtn')"
                 showCloseButton="true"
                 close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"

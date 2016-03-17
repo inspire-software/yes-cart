@@ -27,6 +27,7 @@ import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
+import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
 import java.util.ArrayList;
@@ -103,5 +104,17 @@ public class DtoProductTypeServiceImpl
         final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductTypeDTO> findByAttributeCode(final String code) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<ProductType> entities = ((ProductTypeService) service).findByAttributeCode(code);
+        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
+
     }
 }
