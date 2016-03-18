@@ -32,6 +32,7 @@ import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -669,6 +670,8 @@ public class DefaultAmountCalculationStrategyTest {
     }
 
 
+
+
     @Test
     public void testCalculateOrderSingleDeliveryInclusiveTax() throws Exception {
 
@@ -964,6 +967,141 @@ public class DefaultAmountCalculationStrategyTest {
         assertEquals("156.00", rezTaxExcluded.getListTotalAmount().toPlainString());
         assertEquals("96.00", rezTaxExcluded.getTotalAmount().toPlainString());
         assertEquals("16.00", rezTaxExcluded.getTotalTax().toPlainString());
+
+    }
+
+
+
+    @Test
+    public void testCalculateDraftOrderInclusiveTax() throws Exception {
+
+        final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");
+        final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final CartItem item1 = context.mock(CartItem.class, "item1");
+        final CartItem item2 = context.mock(CartItem.class, "item2");
+
+        final CustomerOrder order = context.mock(CustomerOrder.class, "order");
+
+        context.checking(new Expectations() {{
+            allowing(order).getDelivery(); will(returnValue(Collections.EMPTY_LIST));
+            allowing(order).isPromoApplied(); will(returnValue(true));
+            allowing(order).getAppliedPromo(); will(returnValue("ORDER-25%"));
+            allowing(order).getPrice(); will(returnValue(new BigDecimal("60.00")));
+            allowing(order).getNetPrice(); will(returnValue(new BigDecimal("50.00")));
+            allowing(order).getGrossPrice(); will(returnValue(new BigDecimal("60.00")));
+            allowing(order).getListPrice(); will(returnValue(new BigDecimal("90.00")));
+            allowing(order).getOrderDetail(); will(returnValue(Arrays.asList(item1, item2)));
+            allowing(item1).getPrice(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).getNetPrice(); will(returnValue(new BigDecimal("16.66")));
+            allowing(item1).getGrossPrice(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item1).getSalePrice(); will(returnValue(new BigDecimal("22.50")));
+            allowing(item1).getListPrice(); will(returnValue(new BigDecimal("25.00")));
+            allowing(item1).getQty(); will(returnValue(new BigDecimal("2")));
+            allowing(item2).getPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getNetPrice(); will(returnValue(new BigDecimal("33.33")));
+            allowing(item2).getGrossPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(false));
+            allowing(item2).getSalePrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getListPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
+        }});
+
+        final Total rezTaxIncluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService).calculate(order);
+
+        assertEquals("90.00", rezTaxIncluded.getListSubTotal().toPlainString());
+        assertEquals("85.00", rezTaxIncluded.getSaleSubTotal().toPlainString());
+        assertEquals("40.00", rezTaxIncluded.getNonSaleSubTotal().toPlainString());
+        assertEquals("80.00", rezTaxIncluded.getPriceSubTotal().toPlainString());
+        assertTrue(rezTaxIncluded.isOrderPromoApplied());
+        assertEquals("ORDER-25%", rezTaxIncluded.getAppliedOrderPromo());
+        assertEquals("60.00", rezTaxIncluded.getSubTotal().toPlainString());
+        assertEquals("60.00", rezTaxIncluded.getSubTotalAmount().toPlainString());
+        assertEquals("10.00", rezTaxIncluded.getSubTotalTax().toPlainString());
+        assertEquals("0.00", rezTaxIncluded.getDeliveryListCost().toPlainString());
+        assertFalse(rezTaxIncluded.isDeliveryPromoApplied());
+        assertEquals("0.00", rezTaxIncluded.getDeliveryCost().toPlainString());
+        assertEquals("0.00", rezTaxIncluded.getDeliveryCostAmount().toPlainString());
+        assertNull(rezTaxIncluded.getAppliedDeliveryPromo());
+        assertEquals("0.00", rezTaxIncluded.getDeliveryTax().toPlainString());
+        assertEquals("60.00", rezTaxIncluded.getTotal().toPlainString());
+        assertEquals("90.00", rezTaxIncluded.getListTotalAmount().toPlainString());
+        assertEquals("60.00", rezTaxIncluded.getTotalAmount().toPlainString());
+        assertEquals("10.00", rezTaxIncluded.getTotalTax().toPlainString());
+
+    }
+
+
+
+
+    @Test
+    public void testCalculateDraftOrderExclusiveTax() throws Exception {
+
+        final TaxProvider taxProvider = context.mock(TaxProvider.class, "taxProvider");
+        final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy = context.mock(DeliveryCostCalculationStrategy.class, "deliveryCost");
+        final PromotionContextFactory promotionContextFactory = context.mock(PromotionContextFactory.class, "promotion");
+        final CustomerService customerService = context.mock(CustomerService.class, "customerService");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final CartItem item1 = context.mock(CartItem.class, "item1");
+        final CartItem item2 = context.mock(CartItem.class, "item2");
+
+        final CustomerOrder order = context.mock(CustomerOrder.class, "order");
+
+        context.checking(new Expectations() {{
+            allowing(order).getDelivery(); will(returnValue(Collections.EMPTY_LIST));
+            allowing(order).isPromoApplied(); will(returnValue(true));
+            allowing(order).getAppliedPromo(); will(returnValue("ORDER-25%"));
+            allowing(order).getPrice(); will(returnValue(new BigDecimal("60.00")));
+            allowing(order).getNetPrice(); will(returnValue(new BigDecimal("60.00")));
+            allowing(order).getGrossPrice(); will(returnValue(new BigDecimal("72.00")));
+            allowing(order).getListPrice(); will(returnValue(new BigDecimal("90.00")));
+            allowing(order).getOrderDetail(); will(returnValue(Arrays.asList(item1, item2)));
+            allowing(item1).getPrice(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).getNetPrice(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).getGrossPrice(); will(returnValue(new BigDecimal("24.00")));
+            allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item1).isTaxExclusiveOfPrice(); will(returnValue(true));
+            allowing(item1).getSalePrice(); will(returnValue(new BigDecimal("22.50")));
+            allowing(item1).getListPrice(); will(returnValue(new BigDecimal("25.00")));
+            allowing(item1).getQty(); will(returnValue(new BigDecimal("2")));
+            allowing(item2).getPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getNetPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getGrossPrice(); will(returnValue(new BigDecimal("48.00")));
+            allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
+            allowing(item2).isTaxExclusiveOfPrice(); will(returnValue(true));
+            allowing(item2).getSalePrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getListPrice(); will(returnValue(new BigDecimal("40.00")));
+            allowing(item2).getQty(); will(returnValue(new BigDecimal("1")));
+        }});
+
+        final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService).calculate(order);
+
+        assertEquals("90.00", rezTaxExcluded.getListSubTotal().toPlainString());
+        assertEquals("85.00", rezTaxExcluded.getSaleSubTotal().toPlainString());
+        assertEquals("40.00", rezTaxExcluded.getNonSaleSubTotal().toPlainString());
+        assertEquals("80.00", rezTaxExcluded.getPriceSubTotal().toPlainString());
+        assertTrue(rezTaxExcluded.isOrderPromoApplied());
+        assertEquals("ORDER-25%", rezTaxExcluded.getAppliedOrderPromo());
+        assertEquals("60.00", rezTaxExcluded.getSubTotal().toPlainString());
+        assertEquals("72.00", rezTaxExcluded.getSubTotalAmount().toPlainString());
+        assertEquals("12.00", rezTaxExcluded.getSubTotalTax().toPlainString());
+        assertEquals("0.00", rezTaxExcluded.getDeliveryListCost().toPlainString());
+        assertFalse(rezTaxExcluded.isDeliveryPromoApplied());
+        assertEquals("0.00", rezTaxExcluded.getDeliveryCost().toPlainString());
+        assertEquals("0.00", rezTaxExcluded.getDeliveryCostAmount().toPlainString());
+        assertNull(rezTaxExcluded.getAppliedDeliveryPromo());
+        assertEquals("0.00", rezTaxExcluded.getDeliveryTax().toPlainString());
+        assertEquals("60.00", rezTaxExcluded.getTotal().toPlainString());
+        assertEquals("108.00", rezTaxExcluded.getListTotalAmount().toPlainString());
+        assertEquals("72.00", rezTaxExcluded.getTotalAmount().toPlainString());
+        assertEquals("12.00", rezTaxExcluded.getTotalTax().toPlainString());
 
     }
 
