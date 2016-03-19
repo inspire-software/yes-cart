@@ -531,6 +531,7 @@
 
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.CustomerOrderDetailDTO"  value="org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO"        value="org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl"/>
 

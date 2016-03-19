@@ -18,19 +18,24 @@ package org.yes.cart.service.dto.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -46,10 +51,14 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
     private DtoCustomerOrderService dtoService;
     private CustomerOrderService customerOrderService;
 
+    private GenericDAO<Object, Long> genericDao;
+
+
     @Before
     public void setUp() {
         dtoService = (DtoCustomerOrderService) ctx().getBean(DtoServiceSpringKeys.DTO_CUSTOMER_ORDER_SERVICE);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
+        genericDao = (GenericDAO<Object, Long>) ctx().getBean("genericDao");
         super.setUp();
     }
 
@@ -101,6 +110,40 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
         }
         assertEquals(4, deliveryNumsSet.size());
 
+
+    }
+
+    @Test
+    public void testFindDeliveryDetailsNoDeliveries()      throws Exception {
+        final Customer customer = createCustomer();
+        final ShoppingCart shoppingCart = getShoppingCart();
+        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            @Override
+            protected void doInTransactionWithoutResult(final TransactionStatus status) {
+                final CustomerOrder persistent = customerOrderService.findById(order.getCustomerorderId());
+                final Iterator<CustomerOrderDelivery> itDel = persistent.getDelivery().iterator();
+                while (itDel.hasNext()) {
+
+                    final CustomerOrderDelivery del = itDel.next();
+                    genericDao.delete(del);
+                    itDel.remove();
+                }
+            }
+        });
+
+        final String orderNum = order.getOrdernum();
+        final List<CustomerOrderDeliveryDetailDTO> details = dtoService.findDeliveryDetailsByOrderNumber(orderNum);
+
+        assertTrue(!details.isEmpty());
+
+        for(CustomerOrderDeliveryDetailDTO det :details) {
+            assertNull(det.getDeliveryStatusLabel());
+            assertNull(det.getDeliveryNum());
+        }
+
+        assertEquals(6, details.size());
 
     }
 
