@@ -167,4 +167,9 @@ public interface Constants {
     /** Root category PK. */
     long ROOT_CATEGORY_ID = 100L;
 
+    /**
+     * Default category filter nav limit
+     */
+    int CATEGORY_FILTERNAV_LIMIT = 25;
+
 }

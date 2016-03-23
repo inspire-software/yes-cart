@@ -187,4 +187,16 @@ public interface CategoryServiceFacade {
      */
     Long getCategoryProductTypeId(long categoryId, long shopId);
 
+
+    /**
+     * Get number of values to display in a filter nav block.
+     *
+     * @param categoryId category PK
+     * @param shopId     current shop
+     *
+     * @return filter nav options limit
+     */
+    int getCategoryFilterLimitConfig(long categoryId, long shopId);
+
+
 }

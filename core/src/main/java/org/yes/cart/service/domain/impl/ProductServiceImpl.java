@@ -658,7 +658,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                         int rez = record1.getRank() - record2.getRank();
                         if (rez == 0) {
                             rez = record1.getName().compareTo(record2.getName());
-                            if (rez == 0) {
+                            if (rez == 0 && !"R".equals(record1.getType())) {
                                 rez = record1.getValue().compareTo(record2.getValue());
                             }
                         }

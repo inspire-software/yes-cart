@@ -75,6 +75,8 @@ public abstract class AbstractProductFilter extends BaseComponent {
 
     private final NavigationContext navigationContext;
 
+    private final int recordLimit;
+
     /**
      * Construct panel.
      *
@@ -86,7 +88,33 @@ public abstract class AbstractProductFilter extends BaseComponent {
         super(id);
         this.navigationContext = navigationContext;
         this.categoryId  = categoryId;
-        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, ShopCodeContext.getShopId());
+        final long shopId = ShopCodeContext.getShopId();
+        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId);
+        this.recordLimit = getCategoryFilterLimitConfig(categoryId, shopId);
+    }
+
+    /**
+     * Determine size of the filter nav records. Allows to overwrite the default setting.
+     *
+     * @param categoryId category
+     * @param shopId shop
+     *
+     * @return max records to render
+     */
+    protected int getCategoryFilterLimitConfig(final long categoryId, final long shopId) {
+        return categoryServiceFacade.getCategoryFilterLimitConfig(categoryId, shopId);
+    }
+
+    /**
+     * Determine size of the filter nav records. Allows to overwrite the default setting for specific code.
+     *
+     * @param code filter group code
+     * @param limit max limit for category
+     *
+     * @return max records to render
+     */
+    protected int getCategoryFilterLimitConfig(final String code, final int limit) {
+        return limit;
     }
 
     /**
@@ -185,7 +213,11 @@ public abstract class AbstractProductFilter extends BaseComponent {
                     protected void populateItem(ListItem<Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>>> pairListItem) {
                         final Pair<Pair<String, String>, List<Pair<Pair<String, Integer>, PageParameters>>> headValues = pairListItem.getModelObject();
                         pairListItem.add(
-                                new BaseFilterView(FILTER, headValues.getFirst().getFirst(), headValues.getFirst().getSecond(), headValues.getSecond())
+                                new BaseFilterView(
+                                        FILTER,
+                                        headValues.getFirst().getFirst(), headValues.getFirst().getSecond(), headValues.getSecond(),
+                                        getCategoryFilterLimitConfig(headValues.getFirst().getFirst(), recordLimit)
+                                )
                         );
                     }
                 }

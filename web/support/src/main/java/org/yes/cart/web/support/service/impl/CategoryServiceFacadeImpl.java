@@ -435,4 +435,15 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
     public Long getCategoryParentId(final long categoryId, final long shopId) {
         return shopService.getShopCategoryParentId(shopId, categoryId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getCategoryFilterLimitConfig(final long categoryId, final long shopId) {
+
+        return getLimitSizeConfig(categoryId, shopId,
+                AttributeNamesKeys.Category.CATEGORY_FILTERNAV_LIMIT,
+                AttributeNamesKeys.Shop.SHOP_CATEGORY_FILTERNAV_LIMIT,
+                Constants.CATEGORY_FILTERNAV_LIMIT);
+    }
 }

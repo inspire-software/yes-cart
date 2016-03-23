@@ -61,6 +61,11 @@ public class PriceProductFilter extends AbstractProductFilter {
         super(id, categoryId, navigationContext);
     }
 
+    @Override
+    protected int getCategoryFilterLimitConfig(final long categoryId, final long shopId) {
+        return Integer.MAX_VALUE; // Prices are in ranges, all should be visible
+    }
+
     /**
      * {@inheritDoc}
      * Convert value from filtered navigation parameter to more human readable form. Example

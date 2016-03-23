@@ -632,3 +632,16 @@ alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE bit not null default 0;
 -- alter table TCUSTOMERORDERDET add column IS_FIXED_PRICE smallint not null default 0;
 
 alter table TSHOPPINGCARTSTATE add column ORDERNUM varchar(255);
+
+
+--
+-- YC-687 Add configurable filter navigation lists size
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8003,  'SHOP_CATEGORY_FILTERNAV_LIMIT', 'SHOP_CATEGORY_FILTERNAV_LIMIT',  0,  NULL,  'Shop: filter navigation records limit',
+  'Filter navigation records limit per group. Default is 25',  1006, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11319,  'CATEGORY_FILTERNAV_LIMIT', 'CATEGORY_FILTERNAV_LIMIT',  0,  NULL,  'Filter navigation records limit',
+  'Filter navigation records limit per group. Default is 25',  1006, 1002, 0, 0, 0, 0);

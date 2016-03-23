@@ -218,6 +218,10 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_NEW_ARRIVAL_DAYS_OFFSET = "CATEGORY_NEW_ARRIVAL_DAYS_OFFSET";
 
+        /**
+         * Limit of how many filter nav values to display in a block
+         */
+        String CATEGORY_FILTERNAV_LIMIT = "CATEGORY_FILTERNAV_LIMIT";
 
     }
 
@@ -389,6 +393,11 @@ public interface AttributeNamesKeys {
          * Max count of new arrival products for category
          */
         String SHOP_CATEGORY_ITEMS_NEW_ARRIVAL = "SHOP_CATEGORY_ITEMS_NEW_ARRIVAL";
+
+        /**
+         * Limit of how many filter nav values to display in a block
+         */
+        String SHOP_CATEGORY_FILTERNAV_LIMIT = "SHOP_CATEGORY_FILTERNAV_LIMIT";
 
         /**
          * Setting for whether to show coupons or not
