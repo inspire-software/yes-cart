@@ -111,10 +111,6 @@ public class ImageFilter extends AbstractFilter implements Filter {
     public void handleRequestInternal(final HttpServletRequest httpServletRequest,
                                       final HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
-        final String requestPath = httpServletRequest.getRequestURI();            // RequestURI  -> /yes-shop/imagevault/product/image.png
-        final String contextPath = httpServletRequest.getContextPath();           // ContextPath -> /yes-shop
-        final String servletPath = requestPath.substring(contextPath.length());   // ServletPath ->          /imagevault/product/image.png
-
         final String previousToken = httpServletRequest.getHeader(IF_NONE_MATCH);
         final String currentToken = getETagValue(httpServletRequest);
 
@@ -135,6 +131,10 @@ public class ImageFilter extends AbstractFilter implements Filter {
                 log.debug("ETag the same, will return 304");
             }
         } else {
+
+            final String requestPath = URLDecoder.decode(httpServletRequest.getRequestURI(), "UTF-8");            // RequestURI  -> /yes-shop/imagevault/product/image.png
+            final String contextPath = httpServletRequest.getContextPath();                                       // ContextPath -> /yes-shop
+            final String servletPath = requestPath.substring(contextPath.length());                               // ServletPath ->          /imagevault/product/image.png
 
             httpServletResponse.setDateHeader(LAST_MODIFIED, (new Date()).getTime());
 
