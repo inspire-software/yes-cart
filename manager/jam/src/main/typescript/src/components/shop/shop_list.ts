@@ -1,8 +1,7 @@
 import {Component,  OnInit} from 'angular2/core';
 import {NgFor} from 'angular2/common';
-
+import {HTTP_PROVIDERS}    from 'angular2/http';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
-
 import {ShopVO} from '../../model/shop';
 import {ShopService} from '../../service/shop_service';
 
@@ -14,7 +13,7 @@ import {ShopService} from '../../service/shop_service';
   templateUrl: './shop_list.html',
   styleUrls: ['./shop_list.css'],
   directives: [ROUTER_DIRECTIVES, NgFor],
-  providers : [ShopService]
+  providers: [HTTP_PROVIDERS, ShopService]
 })
 
 export class ShopList implements OnInit {
@@ -28,7 +27,7 @@ export class ShopList implements OnInit {
   }
 
   getAllShops() {
-    this._shopService.getAllShops().then( allshops => { this.shops = allshops; }   );
+    this._shopService.getAllShops().subscribe( allshops => { this.shops = allshops; }   );
   }
 
   ngOnInit() {

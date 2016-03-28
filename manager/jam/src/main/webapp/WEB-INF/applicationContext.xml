@@ -31,7 +31,6 @@
     <property name="suffix" value=".jsp" />
   </bean>
 
-
   <security:http auto-config="true">
     <security:anonymous enabled="false"/>
     <security:intercept-url pattern="/pages/**" access="ROLE_SMADMIN" />
@@ -52,7 +51,7 @@
   <!--<bean id="entryPoint"
         class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
 
-  <security:global-method-security pre-post-annotations="enabled"/>
+  <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 
   <security:authentication-manager alias="authenticationManager">
     <security:authentication-provider>

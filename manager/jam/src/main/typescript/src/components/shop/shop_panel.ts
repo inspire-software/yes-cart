@@ -4,6 +4,7 @@ import {OnInit} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {ShopService} from '../../service/shop_service';
 import {DataControl} from '../common/data_control';
+import {HTTP_PROVIDERS}    from 'angular2/http';
 
 @Component({
   selector: 'shop-panel',
@@ -11,7 +12,7 @@ import {DataControl} from '../common/data_control';
   templateUrl: './shop_panel.html',
   styleUrls: ['./shop_panel.css'],
   directives: [DataControl],
-  providers: [ShopService]
+  providers: [HTTP_PROVIDERS, ShopService]
 })
 
 export class ShopPanel implements OnInit {

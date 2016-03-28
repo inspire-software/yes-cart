@@ -12,17 +12,25 @@ export interface ShopVO {
   code : string;
   name :string;
   description : string;
-  theme : string;
+  fspointer : string;
 }
 
 /**
  * Represent localization information for shop.
  */
 export interface ShopLocaleVO  {
+
   shopId : number;
-  windowTitle : Array<Pair<string, string>>;
-  metaKeywords : Array<Pair<string, string>>;
-  metaDesciption : Array<Pair<string, string>>;
+
+  uri : string;
+  title : string;
+  metakeywords : string;
+  metadescription : string;
+
+  displayTitles : Array<Pair<string, string>>;
+  displayMetakeywords : Array<Pair<string, string>>;
+  displayMetadescriptions : Array<Pair<string, string>>;
+
 }
 
 export interface UrlVO {

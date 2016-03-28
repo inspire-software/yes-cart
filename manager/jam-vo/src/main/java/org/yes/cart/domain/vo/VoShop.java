@@ -24,6 +24,16 @@ public class VoShop {
     @DtoField(value = "description")
     private String description;
 
+    @DtoField(value = "fspointer")
+    private String fspointer;
+
+    public String getFspointer() {
+        return fspointer;
+    }
+
+    public void setFspointer(String fspointer) {
+        this.fspointer = fspointer;
+    }
 
     public long getShopId() {
         return shopId;
@@ -64,6 +74,7 @@ public class VoShop {
             .append("code", code)
             .append("name", name)
             .append("description", description)
+            .append("fspointer", fspointer)
             .build();
     }
 }

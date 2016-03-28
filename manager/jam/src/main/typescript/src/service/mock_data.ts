@@ -8,25 +8,35 @@ import {ShopUrlVO} from '../model/shop';
 
 
 export var mockShops: ShopVO[] = [
-  {'shopId': 11, 'code' : 'C11', 'name': 'Eleven-seven', 'description' : 'This is 11-7 megastore', 'theme' : 'boomerang'},
-  {'shopId': 12, 'code' : 'CODE12', 'name': 'Midnight shop', 'description' : 'Midnight shop', 'theme' : 'boomerang'}
+  {'shopId':10,'code':'SHOP10','name':'YesCart shop','description':'YesCart shop','fspointer':'ycdemo'},
+  {'shopId': 11, 'code' : 'C11', 'name': 'Eleven-seven', 'description' : 'This is 11-7 megastore', 'fspointer' : 'boomerang'},
+  {'shopId': 12, 'code' : 'CODE12', 'name': 'Midnight shop', 'description' : 'Midnight shop', 'fspointer' : 'boomerang'}
 ];
 
-export var mockNewShop : ShopVO = {'shopId': 13, 'code' : 'CODE' + 13, 'name': '', 'description' : '', 'theme' : 'boomerang'};
+export var mockNewShop : ShopVO = {'shopId': 13, 'code' : 'CODE' + 13, 'name': '', 'description' : '', 'fspointer' : 'boomerang'};
 
 
 var locale11 : ShopLocaleVO = {
   'shopId':11,
-  'windowTitle' : [new Pair('en', 'title'), new Pair('uk', 'вікно')],
-  metaDesciption : [new Pair('en', 'description'), new Pair('uk', 'опис')],
-  metaKeywords : [new Pair('en', 'meta, keywords'), new Pair('uk', 'слова')]
+  'uri' : 'default',
+  'title' : 'default title',
+  'metakeywords' : 'metakeywords',
+  'metadescription' : 'metadescription',
+  'displayTitles' : [new Pair('en', 'title'), new Pair('uk', 'вікно')],
+  'displayMetakeywords' : [new Pair('en', 'description'), new Pair('uk', 'опис')],
+  'displayMetadescriptions' : [new Pair('en', 'meta, keywords'), new Pair('uk', 'слова')]
 };
+
 var locale12 : ShopLocaleVO = {
   'shopId':12,
-  'windowTitle' : [new Pair('en', 'Midnight shop'), new Pair('uk', 'Нічний магазин ')],
-  metaDesciption : [new Pair('en', 'Midnight shop, we are glad to serve 24 hours'),
+  'uri' : 'default',
+  'title' : 'default title',
+  'metakeywords' : 'metakeywords',
+  'metadescription' : 'metadescription',
+  'displayTitles' : [new Pair('en', 'Midnight shop'), new Pair('uk', 'Нічний магазин ')],
+  'displayMetakeywords' : [new Pair('en', 'Midnight shop, we are glad to serve 24 hours'),
     new Pair('uk', 'Нічний магазин працює 24 години на добу')],
-  metaKeywords : [new Pair('en', 'meta, keywords'), new Pair('uk', 'слова')]
+  'displayMetadescriptions' : [new Pair('en', 'meta, keywords'), new Pair('uk', 'слова')]
 };
 
 export var mockShopLocalization : ShopLocaleVO[] = [

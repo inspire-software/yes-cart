@@ -61,7 +61,7 @@ export class SeedConfig {
     { src: 'rxjs/bundles/Rx.js', inject: 'libs' },
     { src: 'angular2/bundles/angular2.js', inject: 'libs' },
     { src: 'angular2/bundles/router.js', inject: 'libs' },
-    { src: 'angular2/bundles/http.js', inject: 'libs' }
+    { src: 'angular2/bundles/http.dev.js', inject: 'libs' }
   ]);
 
   PROD_NPM_DEPENDENCIES: InjectableDependency[] = normalizeDependencies([

@@ -7,6 +7,7 @@ import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.vo.VoShop;
+import org.yes.cart.domain.vo.VoShopLocale;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoShopService;
@@ -36,6 +37,7 @@ public class VoShopServiceImpl implements VoShopService {
     this.simpleVoShopAssembler = DTOAssembler.newAssembler(VoShop.class, ShopDTO.class);
   }
 
+  /** {@inheritDoc} */
   public List<VoShop> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException {
     final List<ShopDTO> all = dtoShopService.getAll();
     federationFacade.applyFederationFilter(all, ShopDTO.class);
@@ -44,6 +46,22 @@ public class VoShopServiceImpl implements VoShopService {
     return rez;
   }
 
+  /** {@inheritDoc} */
+  public VoShop getById(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    final ShopDTO shopDTO = dtoShopService.getById(id);
+    if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+      final VoShop voShop = new VoShop();
+      simpleVoShopAssembler.assembleDto(voShop, shopDTO, null,null);
+      return voShop;
+    }
+    return null;
+  }
 
-
+  /** {@inheritDoc} */
+  public VoShopLocale getShopLocale(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    final ShopDTO shopDTO = dtoShopService.getById(shopId);
+    final VoShopLocale voShopLocale = new VoShopLocale();
+    simpleVoShopAssembler.assembleDto(voShopLocale, shopDTO, null, null);
+    return voShopLocale;
+  }
 }

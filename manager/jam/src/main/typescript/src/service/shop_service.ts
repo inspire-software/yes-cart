@@ -1,24 +1,32 @@
 import {mockShops, mockNewShop, mockShopLocalization} from './mock_data';
 import {Injectable} from 'angular2/core';
+import {Http, Response} from 'angular2/http';
 import {Util} from './util';
 import {ShopVO, ShopLocaleVO} from './../model/shop';
 import {ShopUrlVO} from '../model/shop';
 import {mockShopUls} from './mock_data';
+import {Observable}     from 'rxjs/Observable';
+import 'rxjs/Rx';
 
 @Injectable()
 export class ShopService {
 
+  private _heroesUrl = '../service/shop';  // URL to web api
+
+  constructor (private http: Http) {
+    console.debug('ShopService constructed');
+  }
+
   getAllShops() {
-    return Promise.resolve(mockShops);
+    return this.http.get(this._heroesUrl + '/all')
+      .map(res => <ShopVO[]> res.json())
+      .catch(this.handleError);
   }
 
   getShop(id:number) {
-    for (var idx = 0 ; idx < mockShops.length; idx++) {
-      if (mockShops[idx].shopId === id) {
-        return Promise.resolve(Util.clone(mockShops[idx]));
-      }
-    }
-    return Promise.resolve(null);
+    return this.http.get(this._heroesUrl + '/all')
+      .map(res => <ShopVO[]> res.json())
+      .catch(this.handleError);
   }
 
   saveShopshop(shop:ShopVO) {
@@ -85,4 +93,13 @@ export class ShopService {
     return Promise.resolve(Util.clone(clonned));
 
   }
+
+
+  private handleError (error: Response) {
+    // in a real world app, we may send the error to some remote logging infrastructure
+    // instead of just logging it to the console
+    console.error(error);
+    return Observable.throw(error.json().error || 'Server error');
+  }
+
 }

@@ -6,6 +6,7 @@ import {Tab, TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ShopPanel} from './shop_panel';
 import {ShopUrlPanel} from './shop_url_panel';
 import {ShopLocalizationPanel} from './shop_localization_panel';
+import {HTTP_PROVIDERS}    from 'angular2/http';
 
 @Component({
   selector: 'shop',
@@ -13,7 +14,7 @@ import {ShopLocalizationPanel} from './shop_localization_panel';
   templateUrl: './shop_page.html',
   styleUrls: ['./shop_page.css'],
   directives: [TAB_DIRECTIVES, ShopPanel, ShopLocalizationPanel, ShopUrlPanel],
-  providers: [ShopService]
+  providers: [HTTP_PROVIDERS, ShopService]
 })
 
 export class ShopPage implements OnInit, AfterContentInit {

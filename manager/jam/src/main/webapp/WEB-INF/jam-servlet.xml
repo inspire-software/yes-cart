@@ -27,7 +27,7 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 
   <import resource="classpath:jam-services.xml"/>
 
-  <context:component-scan base-package="org.yes.cart.service.endpoint" />
+  <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
 
   <tx:annotation-driven />
 
