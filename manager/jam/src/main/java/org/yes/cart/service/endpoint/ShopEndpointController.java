@@ -46,6 +46,6 @@ public interface ShopEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShop getById(@PathVariable long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    VoShop getById(@PathVariable("id") long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }
