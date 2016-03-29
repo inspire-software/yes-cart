@@ -37,7 +37,7 @@ export class ShopPanel implements OnInit {
         this.changed = false;
       });
     } else {
-      this._shopService.getShop(+shopId).then(shop => {
+      this._shopService.getShop(+shopId).subscribe(shop => {
         this.shop = shop;
         this.changed = false;
       });
@@ -59,7 +59,7 @@ export class ShopPanel implements OnInit {
 
   onDiscardEvent() {
     console.debug('Discard hander for shop id ' + this.shop.shopId);
-    this._shopService.getShop(this.shop.shopId).then(shop => {
+    this._shopService.getShop(this.shop.shopId).subscribe(shop => {
       this.shop = shop;
       this.changed = false;
     });

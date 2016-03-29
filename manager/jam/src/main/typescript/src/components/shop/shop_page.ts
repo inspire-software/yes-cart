@@ -35,7 +35,7 @@ export class ShopPage implements OnInit, AfterContentInit {
         this.shop = shop;
       });
     } else {
-      this._shopService.getShop(+shopId).then(shop => {
+      this._shopService.getShop(+shopId).subscribe(shop => {
         this.shop = shop;
       });
     }

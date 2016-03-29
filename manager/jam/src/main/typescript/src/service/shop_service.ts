@@ -24,8 +24,9 @@ export class ShopService {
   }
 
   getShop(id:number) {
-    return this.http.get(this._heroesUrl + '/all')
-      .map(res => <ShopVO[]> res.json())
+    console.debug('ShopService get shop by id ' + id);
+    return this.http.get(this._heroesUrl + '/' + id)
+      .map(res => <ShopVO> res.json())
       .catch(this.handleError);
   }
 
