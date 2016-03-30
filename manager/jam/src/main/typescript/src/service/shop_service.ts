@@ -1,6 +1,6 @@
 import {mockShopLocalization} from './mock_data';
 import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
+import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 import {Util} from './util';
 import {ShopVO, ShopLocaleVO} from './../model/shop';
 import {ShopUrlVO} from '../model/shop';
@@ -38,17 +38,21 @@ export class ShopService {
 
   saveShop(shop:ShopVO) {
     console.debug('ShopService save shop ' + shop.shopId);
+
+    let body = JSON.stringify(shop);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
     if (shop.shopId === 0) {
-      return this.http.put(this._shopUrl)
+      return this.http.put(this._shopUrl, body, options)
         .map(res => <ShopVO> res.json())
         .catch(this.handleError);
     } else {
-      return this.http.post(this._shopUrl)
+      return this.http.post(this._shopUrl, body, options)
         .map(res => <ShopVO> res.json())
         .catch(this.handleError);
     }
   }
-
 
 
   getShopLocalization(id:number) {

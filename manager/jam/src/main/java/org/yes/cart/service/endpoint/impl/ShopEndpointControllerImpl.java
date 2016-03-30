@@ -45,21 +45,21 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     }
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(method = RequestMethod.PUT,  produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(method = RequestMethod.PUT,  produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     VoShop create(@RequestBody VoShop voShop) throws Exception {
         return voShopService.create(voShop);
     }
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     VoShop update(@RequestBody VoShop voShop) throws Exception {
         return voShopService.update(voShop);
     }
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_JSON_VALUE })
     public @ResponseBody
     void remove(@PathVariable("id") long id) throws Exception {
         voShopService.remove(id);
