@@ -30,7 +30,6 @@ public class VoShopServiceImplTest {
 
   @Test
   public void testGetAll() throws Exception {
-
     final FederationFacade ff = new TestJamFederationFacadeImpl();
     final DtoShopService dss = context.mock(DtoShopService.class, "dss");
     context.checking(new Expectations() {{
@@ -40,6 +39,64 @@ public class VoShopServiceImplTest {
     List<VoShop> voShops = voShopService.getAll();
     assertEquals(1, voShops.size());
     context.assertIsSatisfied();
+  }
+
+  @Test
+  public void testGetById() throws Exception {
+    final FederationFacade ff = new TestJamFederationFacadeImpl();
+    final DtoShopService dss = context.mock(DtoShopService.class);
+    context.checking(new Expectations() {{
+      allowing(dss).getById(100); will(returnValue(createShop(100)));
+    }});
+    final VoShopService voShopService = new VoShopServiceImpl(dss, ff);
+    VoShop voShop = voShopService.getById(100);
+    assertEquals("shopname_100", voShop.getName());
+    assertEquals("shopdescr_100", voShop.getDescription());
+    assertEquals("JEWEL_SHOP", voShop.getCode());
+    context.assertIsSatisfied();
+  }
+
+
+  @Test
+  public void testUpdate() throws Exception {
+    final ShopDTO shopDTOOriginal = createShop(100);
+    final FederationFacade ff = new TestJamFederationFacadeImpl();
+    final DtoShopService dss = context.mock(DtoShopService.class);
+    context.checking(new Expectations() {{
+      allowing(dss).getById(100); will(returnValue(shopDTOOriginal));
+      allowing(dss).update(shopDTOOriginal); will(returnValue(shopDTOOriginal));
+      allowing(dss).getById(100); will(returnValue(shopDTOOriginal));
+    }});
+    final VoShopService voShopService = new VoShopServiceImpl(dss, ff);
+    VoShop voShop = voShopService.getById(100);
+    voShop.setName("new name");
+    voShop = voShopService.update(voShop);
+    assertEquals("new name", voShop.getName());
+    context.assertIsSatisfied();
+  }
+
+  @Test
+  public void testCreate() throws Exception {
+    final ShopDTO shopDTOOriginal = createShop(0);
+    final FederationFacade ff = new TestJamFederationFacadeImpl();
+    final DtoShopService dss = context.mock(DtoShopService.class);
+    context.checking(new Expectations() {{
+      allowing(dss).getNew(); will(returnValue(shopDTOOriginal));
+      allowing(dss).create(shopDTOOriginal); will(returnValue(shopDTOOriginal));
+      allowing(dss).getById(with(any(int.class))); will(returnValue(shopDTOOriginal));
+    }});
+    final VoShopService voShopService = new VoShopServiceImpl(dss, ff);
+    voShopService.create(new VoShop());
+    context.assertIsSatisfied();
+  }
+
+  private ShopDTO createShop(long id) {
+    final ShopDTO shop = new ShopDTOImpl();
+    shop.setShopId(id);
+    shop.setName("shopname_" + id);
+    shop.setDescription("shopdescr_" + id);
+    shop.setCode("JEWEL_SHOP");
+    return shop;
   }
 
   private List<ShopDTO> createShops() {

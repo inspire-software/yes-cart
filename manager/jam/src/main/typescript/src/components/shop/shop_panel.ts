@@ -51,7 +51,7 @@ export class ShopPanel implements OnInit {
 
   onSaveHandler() {
     console.debug('Save handler for shop id ' + this.shop.shopId);
-    this._shopService.saveShopshop(this.shop).then(shop => {
+    this._shopService.saveShop(this.shop).subscribe(shop => {
       this.shop = shop;
       this.changed = false;
     });

@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.service.vo.impl;
 
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
@@ -58,10 +74,34 @@ public class VoShopServiceImpl implements VoShopService {
   }
 
   /** {@inheritDoc} */
+  public VoShop update(VoShop voShop) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    final ShopDTO shopDTO = dtoShopService.getById(voShop.getShopId());
+    if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+      simpleVoShopAssembler.assembleEntity(voShop, shopDTO, null, null);
+      dtoShopService.update(shopDTO);
+    }
+    return getById(voShop.getShopId());
+  }
+
+  /** {@inheritDoc} */
+  public VoShop create(VoShop voShop) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    ShopDTO shopDTO = dtoShopService.getNew();
+    simpleVoShopAssembler.assembleEntity(voShop, shopDTO, null, null);
+    shopDTO = dtoShopService.create(shopDTO);
+    return getById(shopDTO.getShopId());
+  }
+
+  /** {@inheritDoc} */
   public VoShopLocale getShopLocale(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
     final ShopDTO shopDTO = dtoShopService.getById(shopId);
     final VoShopLocale voShopLocale = new VoShopLocale();
     simpleVoShopAssembler.assembleDto(voShopLocale, shopDTO, null, null);
     return voShopLocale;
   }
+
+  /** {@inheritDoc} */
+  public void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    dtoShopService.remove(id);
+  }
+
 }

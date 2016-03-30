@@ -1,4 +1,4 @@
-import {mockShops, mockNewShop, mockShopLocalization} from './mock_data';
+import {mockShopLocalization} from './mock_data';
 import {Injectable} from 'angular2/core';
 import {Http, Response} from 'angular2/http';
 import {Util} from './util';
@@ -11,35 +11,45 @@ import 'rxjs/Rx';
 @Injectable()
 export class ShopService {
 
-  private _heroesUrl = '../service/shop';  // URL to web api
+  private _shopUrl = '../service/shop';  // URL to web api
 
   constructor (private http: Http) {
     console.debug('ShopService constructed');
   }
 
   getAllShops() {
-    return this.http.get(this._heroesUrl + '/all')
+    return this.http.get(this._shopUrl + '/all')
       .map(res => <ShopVO[]> res.json())
       .catch(this.handleError);
   }
 
   getShop(id:number) {
     console.debug('ShopService get shop by id ' + id);
-    return this.http.get(this._heroesUrl + '/' + id)
+    return this.http.get(this._shopUrl + '/' + id)
       .map(res => <ShopVO> res.json())
       .catch(this.handleError);
   }
 
-  saveShopshop(shop:ShopVO) {
-    for (var idx = 0 ; idx < mockShops.length; idx++) {
-      if (mockShops[idx].shopId === shop.shopId) {
-        mockShops[idx] = shop;
-        return Promise.resolve(Util.clone(mockShops[idx]));
-      }
-    }
-    mockShops.push(shop);
-    return Promise.resolve(Util.clone(mockShops[mockShops.length - 1]));
+  createShop() {
+    var shopVOTemplate : ShopVO = {'shopId': 0, 'code' : '', 'name': '', 'description' : '', 'fspointer' : ''};
+    var newShop : ShopVO = Util.clone(shopVOTemplate);
+    return Promise.resolve(newShop);
   }
+
+  saveShop(shop:ShopVO) {
+    console.debug('ShopService save shop ' + shop.shopId);
+    if (shop.shopId === 0) {
+      return this.http.put(this._shopUrl)
+        .map(res => <ShopVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.post(this._shopUrl)
+        .map(res => <ShopVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
 
   getShopLocalization(id:number) {
     for (var idx=0; idx < mockShopLocalization.length; idx++) {
@@ -61,11 +71,6 @@ export class ShopService {
     }
   }
 
-  createShop() {
-    var newShop : ShopVO = Util.clone(mockNewShop);
-    mockNewShop.code = 'C-' + mockNewShop.shopId;
-    return Promise.resolve(newShop);
-  }
 
   getShopUrls(id:number) {
     for (var idx=0; idx < mockShopUls.length; idx++) {

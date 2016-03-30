@@ -18,8 +18,6 @@ package org.yes.cart.remote.service.misc;
 import org.codehaus.jackson.Version;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
-import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 
 /**
  * Customzed object mapper to support creation of particular dto classes from json.
@@ -30,7 +28,7 @@ public class DtoObjectMapper extends ObjectMapper {
     public DtoObjectMapper() {
         super();
         SimpleModule module = new SimpleModule("dto", new Version(1,0,0,""));
-        module.addAbstractTypeMapping(ShopDTO.class, ShopDTOImpl.class);
+        //module.addAbstractTypeMapping(ShopDTO.class, ShopDTOImpl.class);
         this.registerModule(module);
     }
 }
