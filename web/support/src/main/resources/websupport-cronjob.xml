@@ -85,7 +85,7 @@
                 <constructor-arg index="2" ref="nodeService"/>
                 <constructor-arg index="3" ref="systemService"/>
                 <constructor-arg index="4" ref="runtimeAttributeService"/>
-                <property name="batchSize" value="20"/>
+                <property name="batchSize" value="100"/>
             </bean>
         </property>
     </bean>
