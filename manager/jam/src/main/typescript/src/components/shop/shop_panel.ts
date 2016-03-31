@@ -54,6 +54,7 @@ export class ShopPanel implements OnInit {
     this._shopService.saveShop(this.shop).subscribe(shop => {
       this.shop = shop;
       this.changed = false;
+      console.debug('Shop service returns new shop ' + JSON.stringify(this.shop));
     });
   }
 

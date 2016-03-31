@@ -8,21 +8,37 @@ import {mockShopUls} from './mock_data';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
+/**
+ * Shop service has all methods to work with shop.
+ */
 @Injectable()
 export class ShopService {
 
   private _shopUrl = '../service/shop';  // URL to web api
 
+  /**
+   * Constrcut shop service, which has methods to work with information related to shop(s).
+   * @param http http client.
+   */
   constructor (private http: Http) {
     console.debug('ShopService constructed');
   }
 
+  /**
+   * Get list of all shop, which are accesable to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
   getAllShops() {
     return this.http.get(this._shopUrl + '/all')
       .map(res => <ShopVO[]> res.json())
       .catch(this.handleError);
   }
 
+  /**
+   * Get detail shop information by given id.
+   * @param id giveh shop id.
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
   getShop(id:number) {
     console.debug('ShopService get shop by id ' + id);
     return this.http.get(this._shopUrl + '/' + id)
@@ -30,12 +46,21 @@ export class ShopService {
       .catch(this.handleError);
   }
 
+  /**
+   * Create empty shop detail.
+   * @returns {Promise<ShopVO>}
+   */
   createShop() {
     var shopVOTemplate : ShopVO = {'shopId': 0, 'code' : '', 'name': '', 'description' : '', 'fspointer' : ''};
     var newShop : ShopVO = Util.clone(shopVOTemplate);
     return Promise.resolve(newShop);
   }
 
+  /**
+   * Save or create given shop detal - the root of shop related information.
+   * @param shop
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
   saveShop(shop:ShopVO) {
     console.debug('ShopService save shop ' + shop.shopId);
 
