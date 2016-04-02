@@ -786,6 +786,36 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
     }
 
+
+    @Test
+    public void testMultiValueSpecificFieldSearch() throws InterruptedException {
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productDao.fullTextSearchReindex(false);
+
+                NavigationContext context;
+
+                // search by sku id with multiple values
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+                        Collections.singletonMap(ProductSearchQueryBuilder.SKU_ID_FIELD, (List) Arrays.asList("11003", "11004")));
+                List<Product> products = productDao.fullTextSearch(context.getProductQuery());
+                assertEquals(2, products.size());
+
+                final List<String> expected = Arrays.asList("PRODUCT4", "PRODUCT5");
+                for (final Product product : products) {
+                    assertTrue(expected.contains(product.getSku().iterator().next().getCode()));
+                }
+
+                status.setRollbackOnly();
+
+            }
+        });
+
+    }
+
+
     @Test
     public void testCategoryBrowsing() throws InterruptedException {
 

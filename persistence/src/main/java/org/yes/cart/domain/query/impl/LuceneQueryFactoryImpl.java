@@ -242,6 +242,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
                         final boolean tag = prodBuilder == productTagBuilder;
 
+                        final List<Query> productQueryChainStrictClauses = new ArrayList<Query>();
+                        final List<Query> productQueryChainRelaxedClauses = new ArrayList<Query>();
+                        final List<Query> skuQueryChainStrictClauses = new ArrayList<Query>();
+                        final List<Query> skuQueryChainRelaxedClauses = new ArrayList<Query>();
+
                         for (final Object valueItem : value) {
 
                             final Object searchValue;
@@ -263,34 +268,62 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                             }
                             paramValues.add(String.valueOf(valueItem)); // record original value as string
 
-                            productQueryChainStrict.add(strictProdQuery);
+                            productQueryChainStrictClauses.add(strictProdQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
                                 final Query relaxedProdQuery = prodBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
                                 if (relaxedProdQuery == null) {
                                     continue; // no valid criteria
                                 }
-                                productQueryChainRelaxed.add(relaxedProdQuery);
+                                productQueryChainRelaxedClauses.add(relaxedProdQuery);
                             } else {
-                                productQueryChainRelaxed.add(strictProdQuery);
+                                productQueryChainRelaxedClauses.add(strictProdQuery);
                             }
 
                             final Query strictSkuQuery = skuBuilder.createStrictQuery(shopId, decodedKeyName, searchValue);
                             if (strictSkuQuery == null) {
                                 continue; // no valid criteria
                             }
-                            skuQueryChainStrict.add(strictSkuQuery);
+                            skuQueryChainStrictClauses.add(strictSkuQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
                                 final Query relaxedSkuQuery = skuBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
                                 if (relaxedSkuQuery == null) {
                                     continue; // no valid criteria
                                 }
-                                skuQueryChainRelaxed.add(relaxedSkuQuery);
+                                skuQueryChainRelaxedClauses.add(relaxedSkuQuery);
                             } else {
-                                skuQueryChainRelaxed.add(strictSkuQuery);
+                                skuQueryChainRelaxedClauses.add(strictSkuQuery);
                             }
 
+                        }
+
+                        if (productQueryChainStrictClauses.size() == 1) {
+                            productQueryChainStrict.add(productQueryChainStrictClauses.get(0));
+                        } else if (productQueryChainStrictClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            productQueryChainStrict.add(join(productQueryChainStrictClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (productQueryChainRelaxedClauses.size() == 1) {
+                            productQueryChainRelaxed.add(productQueryChainRelaxedClauses.get(0));
+                        } else if (productQueryChainRelaxedClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            productQueryChainRelaxed.add(join(productQueryChainRelaxedClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (skuQueryChainStrictClauses.size() == 1) {
+                            skuQueryChainStrict.add(skuQueryChainStrictClauses.get(0));
+                        } else if (skuQueryChainStrictClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            skuQueryChainStrict.add(join(skuQueryChainStrictClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (skuQueryChainRelaxedClauses.size() == 1) {
+                            skuQueryChainRelaxed.add(skuQueryChainRelaxedClauses.get(0));
+                        } else if (skuQueryChainRelaxedClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            skuQueryChainRelaxed.add(join(skuQueryChainRelaxedClauses, BooleanClause.Occur.SHOULD));
                         }
 
                     }
