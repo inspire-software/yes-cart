@@ -99,6 +99,11 @@ a {
     white-space:pre-wrap;
 }
 
+.form-horizontal input[type='checkbox'] {
+    width: 30px;
+    height: 30px;
+}
+
 /*===================================================================================*/
 /*	TOP NAVIGATION MENU, CHECKOUT TOP MENU
 /*===================================================================================*/
