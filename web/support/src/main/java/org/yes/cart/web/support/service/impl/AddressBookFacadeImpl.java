@@ -121,6 +121,45 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         return rez;
     }
 
+    /** {@inheritDoc} */
+    public Address copyAddress(final Customer customer, final String addrId, final String addressType) {
+
+        final Address original = getAddress(customer, addrId, addressType);
+
+        if (original.getAddressId() > 0L) {
+
+            Address rez = customerService.getGenericDao().getEntityFactory().getByIface(Address.class);
+            rez.setCustomer(customer);
+            rez.setAddressType(addressType);
+            // customer.getAddress().add(rez); Must do this when we create address only!
+
+            rez.setSalutation(original.getSalutation());
+            rez.setFirstname(original.getFirstname());
+            rez.setMiddlename(original.getMiddlename());
+            rez.setLastname(original.getLastname());
+            rez.setPhone1(original.getPhone1());
+            rez.setPhone2(original.getPhone2());
+            rez.setMobile1(original.getMobile1());
+            rez.setMobile2(original.getMobile2());
+            rez.setEmail1(original.getEmail1());
+            rez.setEmail2(original.getEmail2());
+            rez.setCity(original.getCity());
+            rez.setPostcode(original.getPostcode());
+            rez.setAddrline1(original.getAddrline1());
+            rez.setAddrline2(original.getAddrline2());
+            rez.setCountryCode(original.getCountryCode());
+            rez.setStateCode(original.getStateCode());
+            rez.setCustom1(original.getCustom1());
+            rez.setCustom2(original.getCustom2());
+            rez.setCustom3(original.getCustom3());
+            rez.setCustom4(original.getCustom4());
+
+            return rez;
+
+        }
+        return null;
+    }
+
     private static final List<String> DEFAULT_FIELDS = Arrays.asList(
             "firstname", "lastname",
             "addrline1", "addrline2",

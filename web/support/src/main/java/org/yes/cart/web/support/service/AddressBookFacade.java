@@ -60,6 +60,16 @@ public interface AddressBookFacade {
     Address getAddress(Customer customer, String addrId, String addressType);
 
     /**
+     * Create a copy of the existing address.
+     *
+     * @param customer customer of the address
+     * @param addrId address PK
+     * @param addressType type of address
+     * @return new address instance with copy of original data (or null if not found)
+     */
+    Address copyAddress(Customer customer, String addrId, String addressType);
+
+    /**
      * Get address form attributes to be displayed for current customer.
      *
      * @param customer customer
