@@ -31,7 +31,7 @@ export class ShopLocalizationPanel implements OnInit {
     let shopId = this._routeParams.get('shopId');
     console.debug('shopId from params is ' + shopId);
 
-    this._shopService.getShopLocalization(+shopId).then(shopLocalization => {
+    this._shopService.getShopLocalization(+shopId).subscribe(shopLocalization => {
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });
@@ -44,7 +44,7 @@ export class ShopLocalizationPanel implements OnInit {
 
   onSaveHandler() {
     console.debug('Save handler for shop id ' + this.shopLocalization.shopId);
-    this._shopService.saveShopLocalization(this.shopLocalization).then(shopLocalization => {
+    this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });
@@ -52,7 +52,7 @@ export class ShopLocalizationPanel implements OnInit {
 
   onDiscardEvent() {
     console.debug('Discard hander for shop id ' + this.shopLocalization.shopId);
-    this._shopService.getShopLocalization(this.shopLocalization.shopId).then(shopLocalization => {
+    this._shopService.getShopLocalization(this.shopLocalization.shopId).subscribe(shopLocalization => {
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });

@@ -78,8 +78,13 @@ export class ShopUrlPanel implements OnInit {
 
   protected onSaveHandler() {
     console.debug('Save handler for shop id ');
-    this._shopService.saveShopUrls(this.shopUrl).then(
-      rez => { this.getShopUrls(); }
+    this._shopService.saveShopUrls(this.shopUrl).subscribe(
+      rez => {
+        this.shopUrl = rez;
+        this.changed = false;
+        this.totalItems = this.shopUrl.urls.length;
+        this.currentPage = 1;
+      }
     );
   }
 
@@ -138,7 +143,7 @@ export class ShopUrlPanel implements OnInit {
 
     console.debug('shopId from params is ' + shopId);
 
-    this._shopService.getShopUrls(+shopId).then(shopUrl => {
+    this._shopService.getShopUrls(+shopId).subscribe(shopUrl => {
 
       this.shopUrl = shopUrl;
       this.changed = false;

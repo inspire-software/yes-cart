@@ -1,12 +1,31 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 package org.yes.cart.domain.vo;
 
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Igor_Azarny on 3/28/2016.
  */
+@Dto
 public class VoShopLocale {
 
     @DtoField(value = "shopId", readOnly = true)
@@ -24,14 +43,14 @@ public class VoShopLocale {
     @DtoField(value = "metadescription")
     private String metadescription;
 
-    @DtoField(value = "displayTitle")
-    private Map<String, String> displayTitles;
+    //@DtoField(value = "displayTitles")
+    private List<MutablePair<String, String>> displayTitles;
 
-    @DtoField(value = "displayMetakeywords")
-    private Map<String, String> displayMetakeywords;
+    //@DtoField(value = "displayMetakeywords")
+    private List<MutablePair<String, String>> displayMetakeywords;
 
-    @DtoField(value = "displayMetadescription")
-    private Map<String, String> displayMetadescriptions;
+    //@DtoField(value = "displayMetadescriptions")
+    private List<MutablePair<String, String>> displayMetadescriptions;
 
 
     public long getShopId() {
@@ -74,27 +93,27 @@ public class VoShopLocale {
         this.metadescription = metadescription;
     }
 
-    public Map<String, String> getDisplayTitles() {
+    public List<MutablePair<String, String>> getDisplayTitles() {
         return displayTitles;
     }
 
-    public void setDisplayTitles(Map<String, String> displayTitles) {
+    public void setDisplayTitles(List<MutablePair<String, String>> displayTitles) {
         this.displayTitles = displayTitles;
     }
 
-    public Map<String, String> getDisplayMetakeywords() {
+    public List<MutablePair<String, String>> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
 
-    public void setDisplayMetakeywords(Map<String, String> displayMetakeywords) {
+    public void setDisplayMetakeywords(List<MutablePair<String, String>> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
 
-    public Map<String, String> getDisplayMetadescriptions() {
+    public List<MutablePair<String, String>> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
 
-    public void setDisplayMetadescriptions(Map<String, String> displayMetadescriptions) {
+    public void setDisplayMetadescriptions(List<MutablePair<String, String>> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 }

@@ -26,20 +26,23 @@ import java.io.Serializable;
  * @param <FIRST>  the type of the first object
  * @param <SECOND> the type of the second object
  */
-public class Pair<FIRST, SECOND> implements Serializable {
+public class MutablePair<FIRST, SECOND> implements Serializable {
 
     private static final long serialVersionUID = 20100711L;
 
-    private final FIRST first;
-    private final SECOND second;
+    private FIRST first;
+    private SECOND second;
 
-    public static Pair of(Object first, Object second) {
-        return new Pair(first, second);
+    public static MutablePair of(Object first, Object second) {
+        return new MutablePair(first, second);
     }
 
-    public Pair(final FIRST first, final SECOND second) {
+    public MutablePair(final FIRST first, final SECOND second) {
         this.first = first;
         this.second = second;
+    }
+
+    public MutablePair() {
     }
 
     public FIRST getFirst() {
@@ -50,41 +53,18 @@ public class Pair<FIRST, SECOND> implements Serializable {
         return second;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        final Pair pair = (Pair) obj;
-
-        if (!first.equals(pair.first)) {
-            return false;
-        }
-        if (!second.equals(pair.second)) {
-            return false;
-        }
-
-        return true;
+    public void setFirst(FIRST first) {
+        this.first = first;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-        return (first == null   ? 0 : first.hashCode()) ^   (second == null ? 0 : second.hashCode());
+    public void setSecond(SECOND second) {
+        this.second = second;
     }
+
 
     @Override
     public String toString() {
-        return "Pair{" +
+        return "MutablePair{" +
                 "first=" + first +
                 ", second=" + second +
                 '}';

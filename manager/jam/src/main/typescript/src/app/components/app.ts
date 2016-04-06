@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation} from 'angular2/core';
+import {Component, ViewEncapsulation, Inject} from 'angular2/core';
 import {
   RouteConfig,
   ROUTER_DIRECTIVES
@@ -9,6 +9,7 @@ import {AboutCmp} from '../../about/components/about';
 import {NameList} from '../../shared/services/name_list';
 import {Sidebar} from '../../sidebar/components/sidebar';
 import {ShopPage} from '../../components/shop/shop_page';
+import {ShopEventBus} from '../../service/shop_event_bus';
 
 @Component({
   selector: 'app',
@@ -17,14 +18,30 @@ import {ShopPage} from '../../components/shop/shop_page';
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
   encapsulation: ViewEncapsulation.None,
-  directives: [ROUTER_DIRECTIVES, Sidebar]
+  directives: [ROUTER_DIRECTIVES, Sidebar],
+  providers:  [ShopEventBus]
 })
 @RouteConfig([
   { path: '/', component: HomeCmp, name: 'Home' },
   { path: '/about', component: AboutCmp, name: 'About' },
   { path: '/shop', component: ShopPage, name: 'Shop' }
 ])
-export class AppCmp {}
+export class AppCmp {
+
+  private static _shopEventBus:ShopEventBus;
+
+  constructor(@Inject(ShopEventBus)  _shopEventBus:ShopEventBus) {
+    AppCmp._shopEventBus = _shopEventBus;
+  }
+
+  public static getShopEventBus() : ShopEventBus {
+    console.debug('Get evt bus instance ' + AppCmp._shopEventBus);
+    return AppCmp._shopEventBus;
+  }
+
+
+
+}
 
 /*@Component({
   selector: 'wrapper',

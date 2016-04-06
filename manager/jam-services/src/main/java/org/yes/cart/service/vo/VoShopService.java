@@ -18,6 +18,7 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoShop;
 import org.yes.cart.domain.vo.VoShopLocale;
+import org.yes.cart.domain.vo.VoShopUrl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -31,54 +32,76 @@ public interface VoShopService {
   /**
    * Get all manageable shops.
    * @return list of all manageble shops.
-   * @throws UnmappedInterfaceException
-   * @throws UnableToCreateInstanceException
+   *
+   * @throwsException
    */
-  List<VoShop> getAll() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  List<VoShop> getAll() throws Exception;
 
   /**
    * Get shop by id.
    * @param id
    * @return shop vo
-   * @throws UnmappedInterfaceException
-   * @throws UnableToCreateInstanceException
+   *
+   * @throwsException
      */
-  VoShop getById(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  VoShop getById(long id) throws Exception;
 
   /**
    * Update given shop.
    * @param voShop shop to update
    * @return updated instance
-   * @throws UnmappedInterfaceException
-   * @throws UnableToCreateInstanceException
+   *
+   * @throwsException
    */
-  VoShop update(VoShop voShop) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  VoShop update(VoShop voShop) throws Exception;
 
   /**
    * Create new shop
    * @param voShop given instance to persist
    * @return persisted instance
-   * @throws UnmappedInterfaceException
-   * @throws UnableToCreateInstanceException
+   *
+   * @throwsException
    */
-  VoShop create(VoShop voShop) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  VoShop create(VoShop voShop) throws Exception;
 
   /**
    * Get shop by id.
    * @param id
    * @return shop vo
-   * @throws UnmappedInterfaceException
-   * @throws UnableToCreateInstanceException
+   *
+   * @throws Exception
    */
-  void remove(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  void remove(long id) throws Exception;
 
   /**
      * Fet localization information for given shop.
      * @param shopId given shop
      * @return localization information
-     * @throws UnmappedInterfaceException
-     * @throws UnableToCreateInstanceException
+     *
+     * @throwsException
      */
-  VoShopLocale getShopLocale(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+  VoShopLocale getShopLocale(long shopId) throws Exception;
 
+  /**
+   * Update localization infomation.
+   * @param voShopLocale
+   * @return localization information
+   * @throws Exception
+     */
+  VoShopLocale update(final VoShopLocale voShopLocale) throws Exception;
+
+  /**
+   * Get urls for shop.
+   * @param shopId
+   * @return
+   * @throws Exception
+     */
+  VoShopUrl getShopUrls(long shopId) throws Exception;
+
+  /**
+   * Update shop urls, that are belong to some shop
+   * @param voShopUrl urls
+   * @return updated version of shop urls
+     */
+  VoShopUrl update(VoShopUrl voShopUrl) throws Exception;
 }

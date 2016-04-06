@@ -1,10 +1,24 @@
-import {mockShopLocalization} from './mock_data';
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 import {Injectable} from 'angular2/core';
 import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 import {Util} from './util';
 import {ShopVO, ShopLocaleVO} from './../model/shop';
 import {ShopUrlVO} from '../model/shop';
-import {mockShopUls} from './mock_data';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -80,52 +94,59 @@ export class ShopService {
   }
 
 
-  getShopLocalization(id:number) {
-    for (var idx=0; idx < mockShopLocalization.length; idx++) {
-      var localeVO : ShopLocaleVO  = mockShopLocalization[idx];
-      if (localeVO.shopId === id) {
-        return Promise.resolve(Util.clone(localeVO));
-      }
-    }
-    return Promise.resolve(Util.clone(mockShopLocalization[0]));
+  /**
+   * Get localization information for given shop id.
+   * @param id given shop id
+   * @return {Promise<ShopLocaleVO>}
+   */
+  getShopLocalization(shopId:number) {
+    console.debug('ShopService get shop localization info ' + shopId);
+    return this.http.get(this._shopUrl + '/localization/' + shopId)
+      .map(res => <ShopLocaleVO> res.json())
+      .catch(this.handleError);
   }
 
+  /**
+   * Save changes in localisation information
+   * @param shopLocaleVO
+   * @returns {Promise<ShopLocaleVO>}
+     */
   saveShopLocalization(shopLocaleVO:ShopLocaleVO) {
-    for (var idx=0; idx < mockShopLocalization.length; idx++) {
-      var localeVO : ShopLocaleVO  = mockShopLocalization[idx];
-      if (localeVO.shopId === shopLocaleVO.shopId) {
-        mockShopLocalization[idx] = Util.clone(shopLocaleVO);
-        return Promise.resolve(Util.clone(shopLocaleVO));
-      }
-    }
+    console.debug('ShopService save localization info ' + JSON.stringify(shopLocaleVO));
+
+    let body = JSON.stringify(shopLocaleVO);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._shopUrl + '/localization', body, options)
+      .map(res => <ShopLocaleVO> res.json())
+      .catch(this.handleError);
   }
 
-
+  /**
+   * Get urls for gien shop id.
+   * @param id
+   * @returns {Observable<R>}
+     */
   getShopUrls(id:number) {
-    for (var idx=0; idx < mockShopUls.length; idx++) {
-      var shopUrlVO : ShopUrlVO  = mockShopUls[idx];
-      if (shopUrlVO.shopId === id) {
-        return Promise.resolve(Util.clone(shopUrlVO));
-      }
-    }
-    var clonned : ShopUrlVO = Util.clone(mockShopUls[0]);
-    clonned.shopId = id;
-    return Promise.resolve(Util.clone(clonned));
+    return this.http.get(this._shopUrl + '/urls/' + id)
+      .map(res => <ShopUrlVO> res.json())
+      .catch(this.handleError);
   }
 
+  /**
+   * Save changes in list of shop urls
+   * @param shopUrl
+   * @returns {Promise<ShopUrlVO>}
+     */
   saveShopUrls(shopUrl:ShopUrlVO) {
 
-    for (var idx=0; idx < mockShopUls.length; idx++) {
-      var shopUrlVO : ShopUrlVO  = mockShopUls[idx];
-      if (shopUrlVO.shopId === shopUrl.shopId) {
-        mockShopUls[idx] = shopUrl;
-        return Promise.resolve(Util.clone(shopUrlVO));
-      }
-    }
+    let body = JSON.stringify(shopUrl);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
 
-    var clonned : ShopUrlVO = Util.clone(mockShopUls[0]);
-    clonned.shopId = shopUrl.shopId;
-    return Promise.resolve(Util.clone(clonned));
+    return this.http.post(this._shopUrl + '/urls', body, options)
+      .map(res => <ShopUrlVO> res.json())
+      .catch(this.handleError);
 
   }
 

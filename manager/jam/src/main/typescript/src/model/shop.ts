@@ -3,7 +3,6 @@
  */
 
 
-import {Pair} from './common';
 /**
  * Represent simple data about shop
  */
@@ -27,9 +26,9 @@ export interface ShopLocaleVO  {
   metakeywords : string;
   metadescription : string;
 
-  displayTitles : Array<Pair<string, string>>;
-  displayMetakeywords : Array<Pair<string, string>>;
-  displayMetadescriptions : Array<Pair<string, string>>;
+  displayTitles : any;
+  displayMetakeywords : any;
+  displayMetadescriptions : any;
 
 }
 

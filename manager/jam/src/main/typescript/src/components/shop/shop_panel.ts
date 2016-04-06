@@ -5,6 +5,8 @@ import {RouteParams} from 'angular2/router';
 import {ShopService} from '../../service/shop_service';
 import {DataControl} from '../common/data_control';
 import {HTTP_PROVIDERS}    from 'angular2/http';
+import {ShopEventBus} from '../../service/shop_event_bus';
+import {AppCmp} from '../../app/components/app';
 
 @Component({
   selector: 'shop-panel',
@@ -12,7 +14,7 @@ import {HTTP_PROVIDERS}    from 'angular2/http';
   templateUrl: './shop_panel.html',
   styleUrls: ['./shop_panel.css'],
   directives: [DataControl],
-  providers: [HTTP_PROVIDERS, ShopService]
+  providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
 })
 
 export class ShopPanel implements OnInit {
@@ -27,7 +29,6 @@ export class ShopPanel implements OnInit {
   }
 
   ngOnInit() {
-
     let shopId = this._routeParams.get('shopId');
     console.debug('shopId from params is ' + shopId);
 
@@ -55,6 +56,8 @@ export class ShopPanel implements OnInit {
       this.shop = shop;
       this.changed = false;
       console.debug('Shop service returns new shop ' + JSON.stringify(this.shop));
+      AppCmp.getShopEventBus().emit(shop);
+      console.debug('Shop refresh event was emitted');
     });
   }
 
@@ -70,6 +73,5 @@ export class ShopPanel implements OnInit {
     console.debug('Refresh handler');
     this.onDiscardEvent();
   }
-
 
 }

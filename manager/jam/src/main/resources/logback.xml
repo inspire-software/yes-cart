@@ -149,6 +149,9 @@
     <logger name="DEFAULT" level="INFO">
         <appender-ref ref="DEFAULT"/>
     </logger>
+    <logger name="org.springframework.web" level="DEBUG">
+        <appender-ref ref="DEFAULT"/>
+    </logger>
     <logger name="DEFAULT.org.yes.cart.bulkjob" level="INFO">
         <appender-ref ref="JOB"/>
     </logger>
