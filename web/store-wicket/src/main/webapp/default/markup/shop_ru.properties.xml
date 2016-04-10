@@ -171,7 +171,7 @@
     <entry key="deliveryMethod">Метод</entry>
     <entry key="deliveryAddress">Адрес</entry>
     <entry key="grandTotal">Сумма</entry>
-    <entry key="grandTotalTax">ПДВ</entry>
+    <entry key="grandTotalTax">НДС</entry>
     <entry key="grandTotalAmount">Сумма (с НДС)</entry>
     <entry key="billingAddress">Адрес</entry>
     <entry key="orderVerification">Проверьте заказ и выберите метод оплаты</entry>
