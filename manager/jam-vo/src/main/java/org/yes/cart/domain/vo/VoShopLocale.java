@@ -17,6 +17,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yes.cart.domain.misc.MutablePair;
 
 import java.util.List;
@@ -115,5 +116,16 @@ public class VoShopLocale {
 
     public void setDisplayMetadescriptions(List<MutablePair<String, String>> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("shopId", shopId)
+                .append("uri", uri)
+                .append("title", title)
+                .append("metakeywords", metakeywords)
+                .append("metadescription", metadescription)
+                .build();
     }
 }

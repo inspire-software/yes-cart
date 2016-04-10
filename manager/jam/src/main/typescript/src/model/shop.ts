@@ -32,15 +32,33 @@ export interface ShopLocaleVO  {
 
 }
 
+/**
+ * Record in shopo urls.
+ */
 export interface UrlVO {
   urlId : number;
   url : string;
   theme : string;
 }
 
+/**
+ * Shop urls.
+ */
 export interface ShopUrlVO {
   shopId : number;
   urls : Array<UrlVO>;
+}
+
+/**
+ * Represent supported currencies.
+ */
+export interface ShopSupportedCurrenciesVO {
+
+  shopId : number;
+
+  all : Array<string>;
+  supported : Array<string>;
+
 }
 
 

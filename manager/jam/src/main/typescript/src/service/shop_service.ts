@@ -17,7 +17,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 import {Util} from './util';
-import {ShopVO, ShopLocaleVO} from './../model/shop';
+import {ShopVO, ShopLocaleVO, ShopSupportedCurrenciesVO} from './../model/shop';
 import {ShopUrlVO} from '../model/shop';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -148,6 +148,17 @@ export class ShopService {
       .map(res => <ShopUrlVO> res.json())
       .catch(this.handleError);
 
+  }
+
+  /**
+   * Get urls for gien shop id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getShopCurrencies(id:number) {
+    return this.http.get(this._shopUrl + '/currencies/' + id)
+      .map(res => <ShopSupportedCurrenciesVO> res.json())
+      .catch(this.handleError);
   }
 
 

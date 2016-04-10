@@ -1,0 +1,45 @@
+<wrapper *ngIf="shopUrl">
+
+  <data-control [changed]="changed"
+                (saveEvent)="onSaveHandler()"
+                (discardEvent)="onDiscardEventHandler()"
+                (refreshEvent)="onRefreshHandler()"></data-control>
+
+  <div class="row">
+    <div class="col-lg-2">
+      Available
+    </div>
+    <div class="col-lg-1">
+      &nbsp;
+    </div>
+    <div class="col-lg-2">
+      Supported
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-2">
+      <wrapper *ngFor="#available of curr.available">
+        <div class="row">
+          <div class="col-lg-12">
+            {{available}}
+          </div>
+        </div>
+      </wrapper>
+    </div>
+    <div class="col-lg-1">
+      <button class="btn btn-primary" (click)="onAddCurrency(row)">&lt;&lt;</button>
+      <button class="btn btn-primary" (click)="onRemoveCurrency(row)">&gt;&gt;</button>
+    </div>
+    <div class="col-lg-2">
+      <wrapper *ngFor="#supported of curr.supported">
+        <div class="row">
+          <div class="col-lg-12">
+            {{supported}}
+          </div>
+        </div>
+      </wrapper>
+    </div>
+  </div>
+
+</wrapper>

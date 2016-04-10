@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import {Component} from 'angular2/core';
-import {ShopVO} from './../../model/shop';
+import {ShopSupportedCurrenciesVO} from './../../model/shop';
 import {OnInit} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {ShopService} from '../../service/shop_service';
@@ -24,40 +24,36 @@ import {ShopEventBus} from '../../service/shop_event_bus';
 import {AppCmp} from '../../app/components/app';
 
 @Component({
-  selector: 'shop-panel',
+  selector: 'shop-currency',
   moduleId: module.id,
-  templateUrl: './shop_panel.html',
-  styleUrls: ['./shop_panel.css'],
+  templateUrl: './shop_currency.html',
+  styleUrls: ['./shop_currency.css'],
   directives: [DataControl],
   providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
 })
 
-export class ShopPanel implements OnInit {
+export class ShopCurrency implements OnInit {
 
-  shop:ShopVO;
+  shopSupportedCurrenciesVO:ShopSupportedCurrenciesVO;
+  curr:ShopSupportedCurrenciesVO;
 
   changed:boolean = false;
 
   constructor(private _shopService:ShopService,
               private _routeParams:RouteParams) {
-    console.debug('Shop list constructed');
+    console.debug('Shop currencies');
   }
 
   ngOnInit() {
     let shopId = this._routeParams.get('shopId');
     console.debug('shopId from params is ' + shopId);
 
-    if (shopId === 'new') {
-      this._shopService.createShop().then(shop => {
-        this.shop = shop;
-        this.changed = false;
-      });
-    } else {
-      this._shopService.getShop(+shopId).subscribe(shop => {
-        this.shop = shop;
-        this.changed = false;
-      });
-    }
+    this._shopService.getShopCurrencies(+shopId).subscribe(shopSupportedCurrenciesVO => {
+      this.shopSupportedCurrenciesVO = shopSupportedCurrenciesVO;
+      this.changed = false;
+      this.curr  = shopSupportedCurrenciesVO;
+      //TODO create copy of object to filer out supported from available
+    });
   }
 
   onDataChange() {
@@ -66,22 +62,13 @@ export class ShopPanel implements OnInit {
   }
 
   onSaveHandler() {
-    console.debug('Save handler for shop id ' + this.shop.shopId);
-    this._shopService.saveShop(this.shop).subscribe(shop => {
-      this.shop = shop;
-      this.changed = false;
-      console.debug('Shop service returns new shop ' + JSON.stringify(this.shop));
-      AppCmp.getShopEventBus().emit(shop);
-      console.debug('Shop refresh event was emitted');
-    });
+    console.debug('Save handler for shop id ');
+
   }
 
   onDiscardEvent() {
-    console.debug('Discard hander for shop id ' + this.shop.shopId);
-    this._shopService.getShop(this.shop.shopId).subscribe(shop => {
-      this.shop = shop;
-      this.changed = false;
-    });
+    console.debug('Discard hander for shop id ' );
+
   }
 
   onRefreshHandler() {

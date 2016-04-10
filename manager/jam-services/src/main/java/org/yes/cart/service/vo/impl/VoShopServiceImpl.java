@@ -19,6 +19,9 @@ package org.yes.cart.service.vo.impl;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 
+import net.sf.saxon.functions.*;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
@@ -26,10 +29,7 @@ import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
 import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.vo.VoShop;
-import org.yes.cart.domain.vo.VoShopLocale;
-import org.yes.cart.domain.vo.VoShopUrl;
-import org.yes.cart.domain.vo.VoShopUrlDetail;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoShopService;
@@ -168,6 +168,33 @@ public class VoShopServiceImpl implements VoShopService {
         dtoShopUrlService.remove(dto.getId());
       }
       return getShopUrls(voShopUrl.getShopId());
+    }
+    return null;
+  }
+
+  @Override
+  public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
+    if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(shopId).getCode())) {
+      VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
+      ssc.setShopId(shopId);
+      ssc.setAll(dtoShopService.getAllSupportedCurrenciesByShops());
+      String curr = dtoShopService.getSupportedCurrencies(shopId);
+      ssc.setSupported(
+              curr == null ? Collections.<String>emptyList() :   Arrays.asList(curr.split(","))
+      );
+      return ssc;
+    }
+    return null;
+  }
+
+  @Override
+  public VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception {
+    if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(supportedCurrencies.getShopId()).getCode())) {
+      dtoShopService.updateSupportedCurrencies(
+              supportedCurrencies.getShopId(),
+              StringUtils.join(supportedCurrencies.getSupported().toArray(), ",")
+      );
+      return getShopCurrencies(supportedCurrencies.getShopId());
     }
     return null;
   }

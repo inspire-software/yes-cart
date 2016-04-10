@@ -18,6 +18,7 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoShop;
 import org.yes.cart.domain.vo.VoShopLocale;
+import org.yes.cart.domain.vo.VoShopSupportedCurrencies;
 import org.yes.cart.domain.vo.VoShopUrl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -104,4 +105,21 @@ public interface VoShopService {
    * @return updated version of shop urls
      */
   VoShopUrl update(VoShopUrl voShopUrl) throws Exception;
+
+  /**
+   * GEt supprted currencies.
+   * @param shopId given shop id
+   * @return supported currencies
+   * @throws Exception
+     */
+  VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception;
+
+
+    /**
+     * Update supported currencies.
+     * @param supportedCurrencies
+     * @return updated version of supported currencies.
+     * @throws Exception
+     */
+  VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception;
 }

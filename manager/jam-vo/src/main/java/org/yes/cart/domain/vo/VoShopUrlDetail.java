@@ -17,6 +17,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created by Igor_Azarny on 4/5/2016.
@@ -32,6 +33,21 @@ public class VoShopUrlDetail {
 
     @DtoField(value = "themeChain")
     private String theme;
+
+    /**
+     * Construct url detail
+     * @param urlId
+     * @param url
+     * @param theme
+     */
+    public VoShopUrlDetail(long urlId, String url, String theme) {
+        this.urlId = urlId;
+        this.url = url;
+        this.theme = theme;
+    }
+
+    public VoShopUrlDetail() {
+    }
 
     public long getUrlId() {
         return urlId;
@@ -57,4 +73,12 @@ public class VoShopUrlDetail {
         this.theme = theme;
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("urlId", urlId)
+                .append("url", url)
+                .append("theme", theme)
+                .build();
+    }
 }

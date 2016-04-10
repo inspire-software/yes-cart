@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoShop;
 import org.yes.cart.domain.vo.VoShopLocale;
+import org.yes.cart.domain.vo.VoShopSupportedCurrencies;
 import org.yes.cart.domain.vo.VoShopUrl;
 
 import java.util.List;
@@ -82,5 +83,16 @@ public interface ShopEndpointController {
     @RequestMapping(value = "/urls", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShopUrl update(@RequestBody VoShopUrl voShopUrl)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/currencies/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") long shopId) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/currencies", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShopSupportedCurrencies update(@RequestBody VoShopSupportedCurrencies supportedCurrencies) throws Exception;
+
 
 }
