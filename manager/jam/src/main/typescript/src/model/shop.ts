@@ -3,6 +3,7 @@
  */
 
 
+import {Pair} from './common';
 /**
  * Represent simple data about shop
  */
@@ -53,12 +54,19 @@ export interface ShopUrlVO {
  * Represent supported currencies.
  */
 export interface ShopSupportedCurrenciesVO {
-
   shopId : number;
-
   all : Array<string>;
   supported : Array<string>;
+}
 
+
+/**
+ * Represent supported languages by shop.
+ */
+export interface ShopLanguagesVO {
+  shopId : number;
+  all : Array<Pair<string, string>>;
+  supported : Array<string>;
 }
 
 

@@ -18,23 +18,16 @@ package org.yes.cart.service.vo.impl;
 
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
-
-import net.sf.saxon.functions.*;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
-import org.yes.cart.domain.entity.AttrValueShop;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.service.vo.VoShopService;
 
 import java.util.*;
@@ -51,13 +44,15 @@ public class VoShopServiceImpl implements VoShopService {
   private final Assembler simpleVoShopAssembler;
   private final Assembler simpleVoShopLocaleAssembler;
   private final Assembler simpleVoShopUrlDetailAssembler;
+  private final LanguageService languageService;
 
   /**
    * Construct service.
-   * @param dtoShopService underlaying service to use.
-   * @param dtoShopUrlService underlaying service to work with shop urls.
+   * @param dtoShopService underlying service to use.
+   * @param dtoShopUrlService underlying service to work with shop urls.
    */
-  public VoShopServiceImpl(final DtoShopUrlService dtoShopUrlService,
+  public VoShopServiceImpl(final LanguageService languageService,
+                           final DtoShopUrlService dtoShopUrlService,
                            final DtoShopService dtoShopService,
                            final FederationFacade federationFacade) {
     this.dtoShopUrlService = dtoShopUrlService;
@@ -66,6 +61,7 @@ public class VoShopServiceImpl implements VoShopService {
     this.simpleVoShopAssembler = DTOAssembler.newAssembler(VoShop.class, ShopDTO.class);
     this.simpleVoShopLocaleAssembler = DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class);
     this.simpleVoShopUrlDetailAssembler = DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class);
+    this.languageService = languageService;
   }
 
   /** {@inheritDoc} */
@@ -172,7 +168,7 @@ public class VoShopServiceImpl implements VoShopService {
     return null;
   }
 
-  @Override
+  /** {@inheritDoc} */
   public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
     if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(shopId).getCode())) {
       VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
@@ -187,7 +183,7 @@ public class VoShopServiceImpl implements VoShopService {
     return null;
   }
 
-  @Override
+  /** {@inheritDoc} */
   public VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception {
     if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(supportedCurrencies.getShopId()).getCode())) {
       dtoShopService.updateSupportedCurrencies(
@@ -195,6 +191,30 @@ public class VoShopServiceImpl implements VoShopService {
               StringUtils.join(supportedCurrencies.getSupported().toArray(), ",")
       );
       return getShopCurrencies(supportedCurrencies.getShopId());
+    }
+    return null;
+  }
+
+  /** {@inheritDoc} */
+  public VoShopLanguages getShopLanguages(long shopId) throws Exception {
+    final String code = dtoShopService.getById(shopId).getCode();
+    if (federationFacade.isShopAccessibleByCurrentManager(code)) {
+      final VoShopLanguages voShopLanguages = new VoShopLanguages();
+      String lng = dtoShopService.getSupportedLanguages(shopId);
+      voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() :   Arrays.asList(lng.split(",")));
+      voShopLanguages.setAll(adaptMapToPairs(languageService.getLanguageName().entrySet()));
+      voShopLanguages.setShopId(shopId);
+      return voShopLanguages;
+    }
+    return null;
+  }
+
+  /** {@inheritDoc} */
+  public VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception {
+    if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(voShopLanguages.getShopId()).getCode())) {
+      dtoShopService.updateSupportedLanguages(voShopLanguages.getShopId(),
+              StringUtils.join(voShopLanguages.getSupported().toArray(), ","));
+      return getShopLanguages(voShopLanguages.getShopId());
     }
     return null;
   }

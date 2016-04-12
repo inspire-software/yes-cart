@@ -17,7 +17,7 @@
 import {Injectable} from 'angular2/core';
 import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 import {Util} from './util';
-import {ShopVO, ShopLocaleVO, ShopSupportedCurrenciesVO} from './../model/shop';
+import {ShopVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO} from './../model/shop';
 import {ShopUrlVO} from '../model/shop';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -161,16 +161,44 @@ export class ShopService {
       .catch(this.handleError);
   }
 
+  /**
+   * Update supported currencies.
+   * @param curr
+   * @returns {Observable<R>}
+     */
   saveShopCurrencies(curr:ShopSupportedCurrenciesVO) {
-
     let body = JSON.stringify(curr);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-
     return this.http.post(this._shopUrl + '/currencies', body, options)
       .map(res => <ShopSupportedCurrenciesVO> res.json())
       .catch(this.handleError);
+  }
 
+
+  /**
+   * Get urls for given shop id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getShopLanguages(id:number) {
+    return this.http.get(this._shopUrl + '/languages/' + id)
+      .map(res => <ShopLanguagesVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Update supported currencies.
+   * @param curr
+   * @returns {Observable<R>}
+     */
+  saveShopLanguages(curr:ShopLanguagesVO) {
+    let body = JSON.stringify(curr);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._shopUrl + '/languages', body, options)
+      .map(res => <ShopLanguagesVO> res.json())
+      .catch(this.handleError);
   }
 
 

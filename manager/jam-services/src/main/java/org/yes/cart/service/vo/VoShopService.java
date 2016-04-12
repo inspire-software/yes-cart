@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoShop;
-import org.yes.cart.domain.vo.VoShopLocale;
-import org.yes.cart.domain.vo.VoShopSupportedCurrencies;
-import org.yes.cart.domain.vo.VoShopUrl;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -30,96 +27,117 @@ import java.util.List;
  */
 public interface VoShopService {
 
-  /**
-   * Get all manageable shops.
-   * @return list of all manageble shops.
-   *
-   * @throwsException
-   */
-  List<VoShop> getAll() throws Exception;
-
-  /**
-   * Get shop by id.
-   * @param id
-   * @return shop vo
-   *
-   * @throwsException
-     */
-  VoShop getById(long id) throws Exception;
-
-  /**
-   * Update given shop.
-   * @param voShop shop to update
-   * @return updated instance
-   *
-   * @throwsException
-   */
-  VoShop update(VoShop voShop) throws Exception;
-
-  /**
-   * Create new shop
-   * @param voShop given instance to persist
-   * @return persisted instance
-   *
-   * @throwsException
-   */
-  VoShop create(VoShop voShop) throws Exception;
-
-  /**
-   * Get shop by id.
-   * @param id
-   * @return shop vo
-   *
-   * @throws Exception
-   */
-  void remove(long id) throws Exception;
-
-  /**
-     * Fet localization information for given shop.
-     * @param shopId given shop
-     * @return localization information
+    /**
+     * Get all manageable shops.
      *
+     * @return list of all manageble shops.
      * @throwsException
      */
-  VoShopLocale getShopLocale(long shopId) throws Exception;
+    List<VoShop> getAll() throws Exception;
 
-  /**
-   * Update localization infomation.
-   * @param voShopLocale
-   * @return localization information
-   * @throws Exception
+    /**
+     * Get shop by id.
+     *
+     * @param id
+     * @return shop vo
+     * @throwsException
      */
-  VoShopLocale update(final VoShopLocale voShopLocale) throws Exception;
+    VoShop getById(long id) throws Exception;
 
-  /**
-   * Get urls for shop.
-   * @param shopId
-   * @return
-   * @throws Exception
+    /**
+     * Update given shop.
+     *
+     * @param voShop shop to update
+     * @return updated instance
+     * @throwsException
      */
-  VoShopUrl getShopUrls(long shopId) throws Exception;
+    VoShop update(VoShop voShop) throws Exception;
 
-  /**
-   * Update shop urls, that are belong to some shop
-   * @param voShopUrl urls
-   * @return updated version of shop urls
+    /**
+     * Create new shop
+     *
+     * @param voShop given instance to persist
+     * @return persisted instance
+     * @throwsException
      */
-  VoShopUrl update(VoShopUrl voShopUrl) throws Exception;
+    VoShop create(VoShop voShop) throws Exception;
 
-  /**
-   * GEt supprted currencies.
-   * @param shopId given shop id
-   * @return supported currencies
-   * @throws Exception
+    /**
+     * Get shop by id.
+     *
+     * @param id
+     * @return shop vo
+     * @throws Exception
      */
-  VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception;
+    void remove(long id) throws Exception;
+
+    /**
+     * Fet localization information for given shop.
+     *
+     * @param shopId given shop
+     * @return localization information
+     * @throwsException
+     */
+    VoShopLocale getShopLocale(long shopId) throws Exception;
+
+    /**
+     * Update localization infomation.
+     *
+     * @param voShopLocale
+     * @return localization information
+     * @throws Exception
+     */
+    VoShopLocale update(final VoShopLocale voShopLocale) throws Exception;
+
+    /**
+     * Get urls for shop.
+     *
+     * @param shopId
+     * @return
+     * @throws Exception
+     */
+    VoShopUrl getShopUrls(long shopId) throws Exception;
+
+    /**
+     * Update shop urls, that are belong to some shop
+     *
+     * @param voShopUrl urls
+     * @return updated version of shop urls
+     */
+    VoShopUrl update(VoShopUrl voShopUrl) throws Exception;
+
+    /**
+     * GEt supprted currencies.
+     *
+     * @param shopId given shop id
+     * @return supported currencies
+     * @throws Exception
+     */
+    VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception;
 
 
     /**
      * Update supported currencies.
+     *
      * @param supportedCurrencies
      * @return updated version of supported currencies.
      * @throws Exception
      */
-  VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception;
+    VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception;
+
+    /**
+     * Get supported languages by given shop
+     * @param shopId guven shop id
+     * @return
+     * @throws Exception
+     */
+    VoShopLanguages getShopLanguages(long shopId) throws Exception;
+
+    /**
+     * Update supported languages.
+     * @param voShopLanguages
+     * @return updated version of supported langs.
+     * @throws Exception
+     */
+    VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception;
 }

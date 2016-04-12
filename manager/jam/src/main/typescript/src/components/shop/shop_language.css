@@ -1,0 +1,24 @@
+.available {
+  cursor:pointer;
+}
+
+.available:after {
+  content: " >> ";
+}
+
+.available:hover {
+  text-decoration: underline;
+}
+
+.supported {
+  cursor:pointer;
+}
+
+.supported:before {
+  content: " << ";
+}
+
+.supported:hover {
+  text-decoration: underline;
+}
+

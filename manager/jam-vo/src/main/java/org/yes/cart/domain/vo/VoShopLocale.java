@@ -21,7 +21,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.yes.cart.domain.misc.MutablePair;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Igor_Azarny on 3/28/2016.

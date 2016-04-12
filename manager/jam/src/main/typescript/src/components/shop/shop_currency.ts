@@ -19,7 +19,6 @@ import {OnInit} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {ShopService} from '../../service/shop_service';
 import {DataControl} from '../common/data_control';
-import {ActiveLabel} from '../common/active_label';
 import {HTTP_PROVIDERS}    from 'angular2/http';
 import {Util} from '../../service/util';
 
@@ -28,7 +27,7 @@ import {Util} from '../../service/util';
   moduleId: module.id,
   templateUrl: './shop_currency.html',
   styleUrls: ['./shop_currency.css'],
-  directives: [DataControl, ActiveLabel],
+  directives: [DataControl],
   providers: [HTTP_PROVIDERS, ShopService]
 })
 
