@@ -96,7 +96,7 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
-    public Collection<String> getAllSupportedCurrenciesByShops() {
+    public List<String> getAllSupportedCurrenciesByShops() {
         return ((ShopService)service).findAllSupportedCurrenciesByShops();
     }
 

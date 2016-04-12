@@ -1,4 +1,4 @@
-<wrapper *ngIf="shopUrl">
+<wrapper *ngIf="curr">
 
   <data-control [changed]="changed"
                 (saveEvent)="onSaveHandler()"
@@ -6,38 +6,23 @@
                 (refreshEvent)="onRefreshHandler()"></data-control>
 
   <div class="row">
-    <div class="col-lg-2">
+    <div class="col-lg-3">
       Available
     </div>
-    <div class="col-lg-1">
-      &nbsp;
-    </div>
-    <div class="col-lg-2">
+    <div class="col-lg-3">
       Supported
     </div>
   </div>
 
   <div class="row">
-    <div class="col-lg-2">
-      <wrapper *ngFor="#available of curr.available">
-        <div class="row">
-          <div class="col-lg-12">
-            {{available}}
-          </div>
-        </div>
+    <div class="col-lg-3">
+      <wrapper *ngFor="#available of curr.all">
+        <span class="available" (click)=onAvailableCurrencyClick(available)>{{available}}</span>
       </wrapper>
     </div>
-    <div class="col-lg-1">
-      <button class="btn btn-primary" (click)="onAddCurrency(row)">&lt;&lt;</button>
-      <button class="btn btn-primary" (click)="onRemoveCurrency(row)">&gt;&gt;</button>
-    </div>
-    <div class="col-lg-2">
+    <div class="col-lg-3">
       <wrapper *ngFor="#supported of curr.supported">
-        <div class="row">
-          <div class="col-lg-12">
-            {{supported}}
-          </div>
-        </div>
+        <span class="supported" (click)=onSupportedCurrencyClick(supported)>{{supported}}</span>
       </wrapper>
     </div>
   </div>

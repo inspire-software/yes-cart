@@ -171,7 +171,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
 
 
     /** {@inheritDoc} */
-    public Collection<String> findAllSupportedCurrenciesByShops() {
+    public List<String> findAllSupportedCurrenciesByShops() {
         final List<Shop> shops = shopDao.findAll();
         final Set<String> currencies = new TreeSet<String>();
 
@@ -182,7 +182,7 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             }
         }
 
-        return currencies;
+        return new ArrayList<>(currencies);
     }
 
 

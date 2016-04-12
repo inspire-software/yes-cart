@@ -161,6 +161,18 @@ export class ShopService {
       .catch(this.handleError);
   }
 
+  saveShopCurrencies(curr:ShopSupportedCurrenciesVO) {
+
+    let body = JSON.stringify(curr);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._shopUrl + '/currencies', body, options)
+      .map(res => <ShopSupportedCurrenciesVO> res.json())
+      .catch(this.handleError);
+
+  }
+
 
   private handleError (error: Response) {
     // in a real world app, we may send the error to some remote logging infrastructure

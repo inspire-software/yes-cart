@@ -177,7 +177,7 @@ public class VoShopServiceImpl implements VoShopService {
     if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(shopId).getCode())) {
       VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
       ssc.setShopId(shopId);
-      ssc.setAll(dtoShopService.getAllSupportedCurrenciesByShops());
+      ssc.setAll(getAvailableCurrencies());
       String curr = dtoShopService.getSupportedCurrencies(shopId);
       ssc.setSupported(
               curr == null ? Collections.<String>emptyList() :   Arrays.asList(curr.split(","))
@@ -223,6 +223,15 @@ public class VoShopServiceImpl implements VoShopService {
       map.put(pair.getFirst(), pair.getSecond());
     }
     return map;
+  }
+
+  private List<String> getAvailableCurrencies() {
+    return Arrays.asList("ALL","AFN","ANG","ARS","AUD","AWG","AZN","BAM","BBD","BGN","BND","BOB","BRL","BSD","BWP","BYR","BZD","CAD","CHF","CLP","CNY","COP",
+            "CRC","CUP","CZK","DKK","DOP","EEK","EGP","EUR","FJD","FKP","GBP","GGP","GHC","GIP","GTQ","GYD","HKD","HNL","HRK","HUF","IDR","ILS",
+            "IMP","INR","IRR","ISK","JEP","JMD","JPY","KGS","KHR","KPW","KRW","KYD","KZT","LAK","LBP","LKR","LRD","LTL","LVL","MKD","MNT","MUR",
+            "MXN","MYR","MZN","NAD","NGN","NIO","NOK","NPR","NZD","OMR","PAB","PEN","PHP","PKR","PLN","PYG","QAR","RON","RSD","RUB","SAR","SBD",
+            "SCR","SEK","SGD","SHP","SOS","SRD","SVC","SYP","THB","TRL","TRY","TTD","TVD","TWD","UAH","USD","UYU","UZS","VEF","VND","XCD","YER",
+            "ZAR","ZWD");
   }
 
 

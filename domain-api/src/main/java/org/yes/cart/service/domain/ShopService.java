@@ -105,7 +105,7 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      *
      * @return all supported currencies.
      */
-    Collection<String> findAllSupportedCurrenciesByShops();
+    List<String> findAllSupportedCurrenciesByShops();
 
 
 }

@@ -20,16 +20,18 @@ import {ShopService} from '../../service/shop_service';
 import {Tab, TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ShopPanel} from './shop_panel';
 import {ShopUrlPanel} from './shop_url_panel';
+import {ShopCurrency} from './shop_currency';
 import {ShopLocalizationPanel} from './shop_localization_panel';
 import {HTTP_PROVIDERS}    from 'angular2/http';
 import {ShopEventBus} from '../../service/shop_event_bus';
+
 
 @Component({
   selector: 'shop',
   moduleId: module.id,
   templateUrl: './shop_page.html',
   styleUrls: ['./shop_page.css'],
-  directives: [TAB_DIRECTIVES, ShopPanel, ShopLocalizationPanel, ShopUrlPanel],
+  directives: [TAB_DIRECTIVES, ShopPanel, ShopLocalizationPanel, ShopUrlPanel, ShopCurrency],
   providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
 })
 

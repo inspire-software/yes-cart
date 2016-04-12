@@ -567,6 +567,22 @@
                             </replacements>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>replace-font-awesome.min.css</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${basedir}/src/main/webapp/resources/index.html</file>
+                            <replacements>
+                                <replacement>
+                                    <token>href=".*assets\/font-awesome.min.css.*"</token>
+                                    <value>href="assets/font-awesome.min.css"</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

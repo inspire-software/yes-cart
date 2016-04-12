@@ -19,17 +19,17 @@ import {OnInit} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {ShopService} from '../../service/shop_service';
 import {DataControl} from '../common/data_control';
+import {ActiveLabel} from '../common/active_label';
 import {HTTP_PROVIDERS}    from 'angular2/http';
-import {ShopEventBus} from '../../service/shop_event_bus';
-import {AppCmp} from '../../app/components/app';
+import {Util} from '../../service/util';
 
 @Component({
   selector: 'shop-currency',
   moduleId: module.id,
   templateUrl: './shop_currency.html',
   styleUrls: ['./shop_currency.css'],
-  directives: [DataControl],
-  providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
+  directives: [DataControl, ActiveLabel],
+  providers: [HTTP_PROVIDERS, ShopService]
 })
 
 export class ShopCurrency implements OnInit {
@@ -46,15 +46,10 @@ export class ShopCurrency implements OnInit {
 
   ngOnInit() {
     let shopId = this._routeParams.get('shopId');
-    console.debug('shopId from params is ' + shopId);
-
-    this._shopService.getShopCurrencies(+shopId).subscribe(shopSupportedCurrenciesVO => {
-      this.shopSupportedCurrenciesVO = shopSupportedCurrenciesVO;
-      this.changed = false;
-      this.curr  = shopSupportedCurrenciesVO;
-      //TODO create copy of object to filer out supported from available
-    });
+    console.debug('ngOnInit shopId from params is ' + shopId);
+    this.onRefreshHandler();
   }
+
 
   onDataChange() {
     console.debug('data changed');
@@ -63,17 +58,44 @@ export class ShopCurrency implements OnInit {
 
   onSaveHandler() {
     console.debug('Save handler for shop id ');
+    this._shopService.saveShopCurrencies(this.curr).subscribe(shopSupportedCurrenciesVO => {
+      this.curr  = Util.clone(shopSupportedCurrenciesVO);
+      Util.remove(this.curr.all, this.curr.supported);
+      this.changed = false;
+    });
 
   }
 
-  onDiscardEvent() {
-    console.debug('Discard hander for shop id ' );
-
+  onDiscardEventHandler() {
+    console.debug('Discard handler for shop id ' );
+    this.curr  = Util.clone(this.shopSupportedCurrenciesVO);
+    this.changed = false;
   }
 
   onRefreshHandler() {
     console.debug('Refresh handler');
-    this.onDiscardEvent();
+    let shopId = this._routeParams.get('shopId');
+    this._shopService.getShopCurrencies(+shopId).subscribe(shopSupportedCurrenciesVO => {
+      this.shopSupportedCurrenciesVO  = Util.clone(shopSupportedCurrenciesVO);
+      this.curr  = Util.clone(shopSupportedCurrenciesVO);
+      Util.remove(this.curr.all, this.curr.supported);
+      this.changed = false;
+    });
+  }
+
+  onAvailableCurrencyClick(event) {
+    console.debug('onAvailableCurrencyClick evt ' + event);
+    this.curr.supported.push(event);
+    Util.remove(this.curr.all, this.curr.supported);
+    this.changed = true;
+  }
+
+  onSupportedCurrencyClick(event) {
+    console.debug('onSupportedCurrencyClick evt ' + event);
+    this.curr.supported = this.curr.supported.filter( obj => {return obj !== event;});
+    this.curr.all = Util.clone(this.shopSupportedCurrenciesVO.all);
+    Util.remove(this.curr.all, this.curr.supported);
+    this.changed = true;
   }
 
 }
