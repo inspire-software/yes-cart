@@ -42,10 +42,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Aspect responsible for send email in case of person registration.
@@ -186,6 +183,13 @@ public class RegistrationAspect extends BaseNotificationAspect {
         registrationMessage.setShopCode(shop.getCode());
         registrationMessage.setShopName(shop.getName());
         registrationMessage.setShopUrl(transformShopUrls(shop));
+
+        if (registeredPerson instanceof Customer) {
+            final Customer customer = (Customer) registeredPerson;
+            final Map<String, Object> registrationData = new HashMap<String, Object>();
+            registrationData.put("customerType", customer.getCustomerType());
+            registrationData.put("tag", customer.getTag());
+        }
 
         sendNotification(registrationMessage);
 
