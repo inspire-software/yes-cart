@@ -156,6 +156,35 @@ public class RegistrationAspect extends BaseNotificationAspect {
             }
         }
 
+
+        final RegistrationMessage registrationMessage = createRegistrationMessage(
+                newPerson,
+                registeredPerson,
+                shop,
+                generatedPassword,
+                generatedPasswordHash,
+                generatedToken,
+                generatedTokenExpiry,
+                newPerson ? "customer-registered" : "customer-change-password"
+        );
+
+        sendNotification(registrationMessage);
+
+        ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
+
+        return pjp.proceed();
+    }
+
+    private RegistrationMessage createRegistrationMessage(final boolean newPerson,
+                                                          final RegisteredPerson registeredPerson,
+                                                          final Shop shop,
+                                                          final String generatedPassword,
+                                                          final String generatedPasswordHash,
+                                                          final String generatedToken,
+                                                          final Date generatedTokenExpiry,
+                                                          final String template) throws Throwable {
+
+
         registeredPerson.setPassword(generatedPasswordHash);
         registeredPerson.setAuthToken(generatedToken);
         registeredPerson.setAuthTokenExpiry(generatedTokenExpiry);
@@ -175,7 +204,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         registrationMessage.setMailTemplatePathChain(themeService.getMailTemplateChainByShopId(shop.getShopId()));
 
-        registrationMessage.setTemplateName(newPerson ? "customer-registered" : "customer-change-password");
+        registrationMessage.setTemplateName(template);
 
         registrationMessage.setShopMailFrom(determineFromEmail(shop));
 
@@ -189,13 +218,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
             final Map<String, Object> registrationData = new HashMap<String, Object>();
             registrationData.put("customerType", customer.getCustomerType());
             registrationData.put("tag", customer.getTag());
+            registrationData.put("newPerson", newPerson);
         }
-
-        sendNotification(registrationMessage);
-
-        ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
-
-        return pjp.proceed();
+        return registrationMessage;
     }
 
     private String determineFromEmail(final Shop shop) {
