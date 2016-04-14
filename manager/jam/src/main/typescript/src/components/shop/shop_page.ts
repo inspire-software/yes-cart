@@ -22,6 +22,7 @@ import {ShopPanel} from './shop_panel';
 import {ShopUrlPanel} from './shop_url_panel';
 import {ShopCurrency} from './shop_currency';
 import {ShopLanguage} from './shop_language';
+import {ShopCatalogue} from './shop_catalogue';
 import {ShopLocalizationPanel} from './shop_localization_panel';
 import {HTTP_PROVIDERS}    from 'angular2/http';
 import {ShopEventBus} from '../../service/shop_event_bus';
@@ -32,7 +33,7 @@ import {ShopEventBus} from '../../service/shop_event_bus';
   moduleId: module.id,
   templateUrl: './shop_page.html',
   styleUrls: ['./shop_page.css'],
-  directives: [TAB_DIRECTIVES, ShopPanel, ShopLocalizationPanel, ShopUrlPanel, ShopCurrency, ShopLanguage],
+  directives: [TAB_DIRECTIVES, ShopPanel, ShopLocalizationPanel, ShopUrlPanel, ShopCurrency, ShopLanguage, ShopCatalogue],
   providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
 })
 

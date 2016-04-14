@@ -50,7 +50,7 @@ public class VoShopServiceImplTest {
     context.checking(new Expectations() {{
       allowing(dss).getAll(); will(returnValue(createShops()));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
     List<VoShop> voShops = voShopService.getAll();
     assertEquals(1, voShops.size());
     context.assertIsSatisfied();
@@ -63,7 +63,7 @@ public class VoShopServiceImplTest {
     context.checking(new Expectations() {{
       allowing(dss).getById(100); will(returnValue(createShop(100)));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
     VoShop voShop = voShopService.getById(100);
     assertEquals("shopname_100", voShop.getName());
     assertEquals("shopdescr_100", voShop.getDescription());
@@ -82,7 +82,7 @@ public class VoShopServiceImplTest {
       allowing(dss).update(shopDTOOriginal); will(returnValue(shopDTOOriginal));
       allowing(dss).getById(100); will(returnValue(shopDTOOriginal));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
     VoShop voShop = voShopService.getById(100);
     voShop.setName("new name");
     voShop = voShopService.update(voShop);
@@ -100,7 +100,7 @@ public class VoShopServiceImplTest {
       allowing(dss).create(shopDTOOriginal); will(returnValue(shopDTOOriginal));
       allowing(dss).getById(with(any(int.class))); will(returnValue(shopDTOOriginal));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
     voShopService.create(new VoShop());
     context.assertIsSatisfied();
   }

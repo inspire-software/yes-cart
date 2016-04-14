@@ -1,0 +1,19 @@
+<ul class="treenodes">
+  <li *ngFor="#node of Nodes" class="treenode">
+    <i class="nodebutton fa fa-{{node.expanded ? 'minus' : 'plus'}}-square-o"
+       (click)="onExpand(node)">
+    </i>
+
+		<span class="nodetext {{node == SelectedNode ? 'bg-info' : ''}}"
+          (click)="onSelectNode(node)">
+			{{node.name}}
+		</span>
+
+    <tree-view [Nodes]="node.children"
+               [SelectedNode]="SelectedNode"
+               (onSelectedChanged)="onSelectNode($event)"
+               (onRequestNodes)="onRequest($event)"
+               *ngIf="node.expanded">
+    </tree-view>
+  </li>
+</ul>

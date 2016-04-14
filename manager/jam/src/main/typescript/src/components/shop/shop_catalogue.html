@@ -1,0 +1,25 @@
+<wrapper>
+
+  <data-control [changed]="changed"
+                (saveEvent)="onSaveHandler()"
+                (discardEvent)="onDiscardEventHandler()"
+                (refreshEvent)="onRefreshHandler()"></data-control>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <tree-view [Nodes]="nodes"
+                 [SelectedNode]="selectedNode"
+                 (onSelectedChanged)="onSelectNode($event)"
+                 (onRequestNodes)="onRequest($event)">
+      </tree-view>
+    </div>
+    <div class="col-lg-1">
+      <button>&lt;&lt;</button>
+    </div>
+    <div class="col-lg-5">
+      List of assigned catalogue
+    </div>
+  </div>
+
+
+</wrapper>
