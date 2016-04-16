@@ -219,6 +219,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
             registrationData.put("customerType", customer.getCustomerType());
             registrationData.put("tag", customer.getTag());
             registrationData.put("newPerson", newPerson);
+            registrationMessage.setAdditionalData(registrationData);
         }
         return registrationMessage;
     }
