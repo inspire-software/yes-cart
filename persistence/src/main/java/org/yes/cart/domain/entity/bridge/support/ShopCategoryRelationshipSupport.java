@@ -44,4 +44,12 @@ public interface ShopCategoryRelationshipSupport {
      */
     Set<Long> getShopCategoriesIds(long shopId);
 
+    /**
+     * Get category by id.
+     *
+     * @param categoryId given category id
+     * @return category
+     */
+    Category getCategoryById(long categoryId);
+
 }

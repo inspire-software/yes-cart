@@ -105,6 +105,18 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
 
 
     /**
+     * {@inheritDoc} Just to cache
+     */
+    @Cacheable(value = "categoryService-byId")
+    public Category getCategoryById(final long pk) {
+        final Category cat = categoryDao.findById(pk);
+        Hibernate.initialize(cat);
+        return cat;
+    }
+
+
+
+    /**
      * {@inheritDoc}
      */
     @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)

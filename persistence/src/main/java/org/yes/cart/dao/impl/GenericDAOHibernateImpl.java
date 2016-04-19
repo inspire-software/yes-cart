@@ -665,7 +665,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                                 .setFetchSize(BATCH_SIZE)
                                 .scroll(ScrollMode.FORWARD_ONLY);
 
-                        final Logger log = ShopCodeContext.getLog(this);
+                        final Logger log = LOGFTQ;
                         while (results.next()) {
 
                             final T entity = (T) HibernateHelper.unproxy(results.get(0));
@@ -703,6 +703,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     }
                 } catch (Exception exp) {
                     LOG.error("Error during indexing", exp);
+                    LOGFTQ.error("Error during indexing", exp);
                 } finally {
                     count[0] = index;
                     if (async) {

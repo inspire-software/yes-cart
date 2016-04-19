@@ -26,7 +26,10 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     //can be used in sort order
     String PRODUCT_NAME_FIELD = "name";
     String PRODUCT_DISPLAYNAME_FIELD = "displayName";
+    String PRODUCT_DISPLAYNAME_STEM_FIELD = "displayName_stem";
     String PRODUCT_DISPLAYNAME_ASIS_FIELD = "displayNameAsIs"; //for projections only
+    String PRODUCT_CATEGORYNAME_FIELD = "categoryName";
+    String PRODUCT_CATEGORYNAME_STEM_FIELD = "categoryName_stem";
     String PRODUCT_CODE_FIELD = "code";
     String PRODUCT_MANUFACTURER_CODE_FIELD = "manufacturerCode";
     String PRODUCT_DEFAULT_SKU_CODE_FIELD = "defaultSku";
