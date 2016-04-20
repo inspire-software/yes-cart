@@ -22,7 +22,10 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -60,8 +63,6 @@ import org.yes.cart.web.page.component.header.CheckoutHeader;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.page.component.shipping.ShippingView;
-import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
-import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.*;
 
@@ -291,8 +292,17 @@ public class CheckoutPage extends AbstractWebPage {
     }
 
     private void recreateOrderBeforePayment() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                cart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+        persistCartIfNecessary();
+
         try {
-            checkoutServiceFacade.createFromCart(ApplicationDirector.getShoppingCart());
+            checkoutServiceFacade.createFromCart(cart);
         } catch (CouponCodeInvalidException invalidCoupon) {
 
             ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
@@ -464,10 +474,6 @@ public class CheckoutPage extends AbstractWebPage {
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                         cart,
                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
-
-                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
-                        cart,
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
 
                 persistCartIfNecessary();
 
