@@ -462,8 +462,14 @@ public class CheckoutPage extends AbstractWebPage {
                 );
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
-                        ApplicationDirector.getShoppingCart(),
+                        cart,
                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
+
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                        cart,
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+                persistCartIfNecessary();
 
             }
 

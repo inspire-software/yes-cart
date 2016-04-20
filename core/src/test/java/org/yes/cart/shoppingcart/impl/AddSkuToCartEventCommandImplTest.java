@@ -73,4 +73,48 @@ public class AddSkuToCartEventCommandImplTest extends BaseCoreDBTestCase {
 
 
     }
+
+
+    @Test
+    public void testExecuteSkuCodeOnly() {
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETSHOP, 10));
+        commands.execute(shoppingCart,
+                (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
+
+        assertEquals(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), shoppingCart.getTotal().getSubTotal());
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU");
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 99.99 actual value " + shoppingCart.getTotal().getSubTotal(), (new BigDecimal("99.99")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 199.98", (new BigDecimal("199.98")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 299.97", (new BigDecimal("299.97")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "7");
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 999.90", (new BigDecimal("999.90")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "zzzz"); // if invalid use 1
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 1099.89", (new BigDecimal("1099.89")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        params.put(ShoppingCartCommand.CMD_ADDTOCART_P_QTY, "0.3"); // if no prod model round up to int
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 1199.88", (new BigDecimal("1199.88")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+        params.put(ShoppingCartCommand.CMD_ADDTOCART, "NOPROD-SKU-NONEXISTENT");
+        commands.execute(shoppingCart, (Map) params);
+        assertTrue("Expected 1199.88", (new BigDecimal("1199.88")).compareTo(shoppingCart.getTotal().getSubTotal()) == 0);
+
+    }
+
 }

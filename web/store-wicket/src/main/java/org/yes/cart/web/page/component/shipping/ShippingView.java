@@ -147,7 +147,9 @@ public class ShippingView extends BaseComponent {
 
                 }
 
-                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, ApplicationDirector.getShoppingCart(),
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart,
                         (Map) new HashMap() {{
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, carrierSla.isBillingAddressNotRequired());
@@ -156,6 +158,11 @@ public class ShippingView extends BaseComponent {
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddress);
                         }}
                 );
+
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                        cart,
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
                 addPriceView(form);

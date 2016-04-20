@@ -17,6 +17,8 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -41,13 +43,17 @@ public class RESTLoginCommandImpl extends LoginCommandImpl {
      * @param registry shopping cart command registry
      * @param customerService customer service
      * @param shopService shop service
+     * @param priceService price service
+     * @param productService product service
      * @param cartRepository cart repository
      */
     public RESTLoginCommandImpl(final ShoppingCartCommandRegistry registry,
                                 final CustomerService customerService,
                                 final ShopService shopService,
+                                final PriceService priceService,
+                                final ProductService productService,
                                 final CartRepository cartRepository) {
-        super(registry, customerService, shopService);
+        super(registry, customerService, shopService, priceService, productService);
         this.cartRepository = cartRepository;
     }
 

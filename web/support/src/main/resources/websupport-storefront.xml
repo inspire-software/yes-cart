@@ -181,6 +181,7 @@
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
                 <value>setPriceCmd</value>
+                <value>recalculatePriceCmd</value>
                 <value>qty</value>
                 <value>type</value>
                 <value>wlv</value>
@@ -209,6 +210,7 @@
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
                 <value>setPriceCmd</value>
+                <value>recalculatePriceCmd</value>
             </list>
         </property>
     </bean>

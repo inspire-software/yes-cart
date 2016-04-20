@@ -16,28 +16,22 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
 
 /**
- *
- * Remove all sku from cart by given sku code.
- *
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
+ * Date: 20/04/2016
+ * Time: 14:07
  */
-public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl {
+public class RecalculateSkuPricesEventCommandImpl extends AbstractRecalculatePriceCartCommandImpl {
 
-    private static final long serialVersionUID = 20100313L;
-
+    private static final long serialVersionUID = 20100122L;
 
     /**
      * Construct sku command.
@@ -47,32 +41,35 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
      * @param productService product service
      * @param shopService shop service
      */
-    public RemoveAllSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                           final PriceService priceService,
-                                           final ProductService productService,
-                                           final ShopService shopService) {
+    public RecalculateSkuPricesEventCommandImpl(final ShoppingCartCommandRegistry registry,
+                                                final PriceService priceService,
+                                                final ProductService productService,
+                                                final ShopService shopService) {
         super(registry, priceService, productService, shopService);
     }
 
-    /** {@inheritDoc} */
-    public String getCmdKey() {
-        return CMD_REMOVEALLSKU;
-    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected void execute(final MutableShoppingCart shoppingCart,
-                           final ProductSku productSku,
-                           final String skuCode,
-                           final Map<String, Object> parameters) {
-        if(!shoppingCart.removeCartItem(skuCode)) {
-            ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
-                    skuCode);
-
-        } else  {
-            recalculatePricesInCart(shoppingCart);
-            markDirty(shoppingCart);
-        }
+    public String getCmdKey() {
+        return CMD_RECALCULATEPRICE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
+
+        if (parameters.containsKey(getCmdKey())) {
+
+            recalculatePricesInCart(shoppingCart);
+            recalculate(shoppingCart);
+            markDirty(shoppingCart);
+
+        }
+
+    }
 }

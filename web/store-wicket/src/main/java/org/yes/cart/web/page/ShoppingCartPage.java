@@ -24,6 +24,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.customer.wishlist.WishListNotification;
@@ -33,6 +34,7 @@ import org.yes.cart.web.page.component.header.StandardHeader;
 import org.yes.cart.web.page.component.js.ServerSideJs;
 
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -101,6 +103,13 @@ public class ShoppingCartPage extends AbstractWebPage {
         super.onBeforeRender();
 
         final boolean cartModified = cart.isModified();
+
+        if (!cartModified && cart.getCartItemsCount() > 0) {
+            // Refresh prices on cart view
+            getShoppingCartCommandFactory().execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                    cart,
+                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+        }
 
         persistCartIfNecessary();
 

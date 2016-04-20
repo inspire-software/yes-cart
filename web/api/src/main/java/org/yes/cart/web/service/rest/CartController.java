@@ -111,7 +111,9 @@ public class CartController {
      * <p>
      * <p>
      * <h3>Parameters for operation</h3><p>
-     * NONE
+     * <table border="1">
+     *     <tr><td>updatePrices</td><td>optional - true or false</td></tr>
+     * </table>
      * <p>
      * <p>
      * <h3>Output</h3><p>
@@ -293,9 +295,17 @@ public class CartController {
     public @ResponseBody CartRO viewCart(final HttpServletRequest request,
                                          final HttpServletResponse response) {
 
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+
+        if (Boolean.valueOf(request.getParameter("updatePrices"))) {
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                    cart,
+                    (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+        }
+
         cartMixin.persistShoppingCart(request, response);
 
-        final ShoppingCart cart = cartMixin.getCurrentCart();
         final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
         final String cartCurrencySymbol = symbol.getFirst();
         final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
@@ -1247,6 +1257,11 @@ public class CartController {
 
                     shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart, params);
 
+                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                            cart,
+                            (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+
                 }
 
             }
@@ -2012,6 +2027,10 @@ public class CartController {
                 final ShoppingCart cart = cartMixin.getCurrentCart();
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL, cart,
                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, option.getPgLabel()));
+
+                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                        cart,
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
             }
         }
 

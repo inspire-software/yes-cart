@@ -88,6 +88,7 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
+                           final String skuCode,
                            final Map<String, Object> parameters) {
 
         if (productSku != null && ShoppingCart.LOGGED_IN == shoppingCart.getLogonState()) {

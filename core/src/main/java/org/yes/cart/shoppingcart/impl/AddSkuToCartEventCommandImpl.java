@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -75,14 +76,22 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         if (strQty instanceof String) {
             try {
                 final BigDecimal qty = new BigDecimal((String) strQty);
-                final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-                return pqm.getValidAddQty(qty);
+                if (productSku != null) {
+                    final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+                    return pqm.getValidAddQty(qty);
+                }
+                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
+                    return qty.setScale(0, BigDecimal.ROUND_CEILING);
+                }
             } catch (Exception exp) {
                 ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
             }
         }
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-        return pqm.getValidAddQty(null);
+        if (productSku != null) {
+            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            return pqm.getValidAddQty(null);
+        }
+        return BigDecimal.ONE;
     }
 
     /**
@@ -91,16 +100,28 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
+                           final String skuCode,
                            final Map<String, Object> parameters) {
         if (productSku != null) {
             shoppingCart.addProductSkuToCart(productSku.getCode(),
                     getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())));
-            recalculatePrice(shoppingCart, productSku);
+            recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);
             if (log.isDebugEnabled()) {
                 log.debug("Added one item of sku code {} to cart",
                         productSku.getCode());
+            }
+        } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
+            // if we have no product for SKU, make sure we have price for this SKU
+            shoppingCart.addProductSkuToCart(skuCode,
+                    getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode)));
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
+            final Logger log = ShopCodeContext.getLog(this);
+            if (log.isDebugEnabled()) {
+                log.debug("Added one item of sku code {} to cart",
+                        skuCode);
             }
         }
     }

@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.slf4j.Logger;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.PriceService;
@@ -24,6 +25,7 @@ import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
@@ -76,14 +78,22 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
         if (strQty instanceof String) {
             try {
                 final BigDecimal qty = new BigDecimal((String) strQty);
-                final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-                return pqm.getValidSetQty(qty);
+                if (productSku != null) {
+                    final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+                    return pqm.getValidSetQty(qty);
+                }
+                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(qty, BigDecimal.ZERO)) {
+                    return qty.setScale(0, BigDecimal.ROUND_CEILING);
+                }
             } catch (Exception exp) {
                 ShopCodeContext.getLog(this).error("Invalid quantity in add to cart command", exp);
             }
         }
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-        return pqm.getValidSetQty(null);
+        if (productSku != null) {
+            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            return pqm.getValidSetQty(null);
+        }
+        return BigDecimal.ONE;
     }
 
 
@@ -91,15 +101,25 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
+                           final String skuCode,
                            final Map<String, Object> parameters) {
 
         if (productSku != null) {
 
             final BigDecimal validQuantity = getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode()));
             shoppingCart.setProductSkuToCart(productSku.getCode(), validQuantity);
-            recalculatePrice(shoppingCart, productSku);
+            recalculatePricesInCart(shoppingCart);
             ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
                     productSku.getCode(),
+                    validQuantity);
+            markDirty(shoppingCart);
+        } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
+            // if we have no product for SKU, make sure we have price for this SKU
+            final BigDecimal validQuantity = getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode));
+            shoppingCart.setProductSkuToCart(skuCode, validQuantity);
+            recalculatePricesInCart(shoppingCart);
+            ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
+                    skuCode,
                     validQuantity);
             markDirty(shoppingCart);
         }

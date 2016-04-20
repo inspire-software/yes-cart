@@ -70,8 +70,12 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private BigDecimal getQuantityValue(final ProductSku productSku, final BigDecimal quantityInCart) {
 
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-        return pqm.getValidRemoveQty(null);
+        if (productSku != null) {
+            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            return pqm.getValidRemoveQty(null);
+        }
+
+        return BigDecimal.ONE;
 
     }
 
@@ -80,16 +84,26 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
      */
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
-                           final ProductSku productSku, final Map<String, Object> parameters) {
+                           final ProductSku productSku,
+                           final String skuCode,
+                           final Map<String, Object> parameters) {
         if (productSku != null) {
-            final String skuCode = productSku.getCode();
             if(!shoppingCart.removeCartItemQuantity(productSku.getCode(),
                     getQuantityValue(productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())))) {
+                ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
+                        productSku.getCode());
+            }
+
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
+        } else {
+            if(!shoppingCart.removeCartItemQuantity(skuCode,
+                    getQuantityValue(null, shoppingCart.getProductSkuQuantity(skuCode)))) {
                 ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }
 
-            recalculatePrice(shoppingCart, productSku);
+            recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
         }
     }
