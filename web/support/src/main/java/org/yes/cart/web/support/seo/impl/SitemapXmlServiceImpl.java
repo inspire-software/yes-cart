@@ -221,7 +221,7 @@ public class SitemapXmlServiceImpl implements SitemapXmlService {
 
     private void appendLoc(final StringBuilder xml, final String loc, final List<String> languages) {
         for (final String urlLang : languages) {
-            xml.append("<url><loc>").append(alternativeUrl(loc, urlLang)).append("</loc>");
+            xml.append("<url><loc><![CDATA[").append(alternativeUrl(loc, urlLang)).append("]]></loc>");
             for (final String language : languages) {
                 xml.append("<xhtml:link rel=\"alternate\" hreflang=\"").append(language).append("\" href=\"")
                         .append(alternativeUrl(loc, language)).append("\" />");
