@@ -391,13 +391,17 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                             CustomerWishList.PriceChangeType.DECREASED,
                             MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow)
                     );
-                } else {
+                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, BigDecimal.ZERO)) {
                     // price gone up
                     price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
                     priceInfo = new CustomerWishList.PriceChange(
                             CustomerWishList.PriceChangeType.INCRSEASED,
                             MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate()
                     );
+                } else {
+                    // was not on sale
+                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                    priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null);
                 }
             } else {
                 // no comparative price - different currency

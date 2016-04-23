@@ -41,9 +41,7 @@ import org.yes.cart.web.page.component.js.ServerSideJs;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import org.yes.cart.web.support.util.HttpUtil;
 
 /**
  *
@@ -114,9 +112,9 @@ public class WishListPage extends AbstractWebPage {
         String safePublicKey = publicKey;
         if (StringUtils.isNotBlank(publicKey)) {
             try {
-                safePublicKey = URLEncoder.encode(publicKey, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                // nothing
+                safePublicKey = HttpUtil.encodeUtf8UriParam(publicKey);
+            } catch (Exception exp) {
+                ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
             }
         }
 

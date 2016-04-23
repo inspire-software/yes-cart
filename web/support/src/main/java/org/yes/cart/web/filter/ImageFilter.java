@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.support.util.HttpUtil;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.Filter;
@@ -32,7 +33,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -132,7 +132,7 @@ public class ImageFilter extends AbstractFilter implements Filter {
             }
         } else {
 
-            final String requestPath = URLDecoder.decode(httpServletRequest.getRequestURI(), "UTF-8");            // RequestURI  -> /yes-shop/imagevault/product/image.png
+            final String requestPath = HttpUtil.decodeUtf8UriParam(httpServletRequest.getRequestURI());           // RequestURI  -> /yes-shop/imagevault/product/image.png
             final String contextPath = httpServletRequest.getContextPath();                                       // ContextPath -> /yes-shop
             final String servletPath = requestPath.substring(contextPath.length());                               // ServletPath ->          /imagevault/product/image.png
 

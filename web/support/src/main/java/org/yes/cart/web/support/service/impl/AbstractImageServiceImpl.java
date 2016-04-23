@@ -28,9 +28,8 @@ import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
+import org.yes.cart.web.support.util.HttpUtil;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.*;
 
 /**
@@ -106,8 +105,8 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         stringBuilder.append(servletContextPath);
         stringBuilder.append(urlPattern);
         try {
-            stringBuilder.append(URLEncoder.encode(imageName, "UTF-8"));
-        } catch (UnsupportedEncodingException uee) {
+            stringBuilder.append(HttpUtil.encodeUtf8UriParam(imageName));
+        } catch (Exception uee) {
             LOG.error(uee.getMessage(), uee);
             stringBuilder.append(Constants.NO_IMAGE);
         }

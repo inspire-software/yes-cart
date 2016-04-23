@@ -837,4 +837,35 @@ public class HttpUtilTest {
         assertNull(HttpUtil.getSingleValue(new String [0] ));
 
     }
+
+
+    @Test
+    public void testDecodeUtf8UriParam() throws Exception {
+
+        assertEquals("Z+R", HttpUtil.decodeUtf8UriParam("Z+R"));
+        assertEquals("Z+R", HttpUtil.decodeUtf8UriParam("Z%2BR"));
+        assertEquals("Z R", HttpUtil.decodeUtf8UriParam("Z%20R"));
+        assertEquals("белый", HttpUtil.decodeUtf8UriParam("%D0%B1%D0%B5%D0%BB%D1%8B%D0%B9"));
+        assertEquals("белый", HttpUtil.decodeUtf8UriParam("бе%D0%BB%D1%8B%D0%B9"));
+        assertEquals("бе/лый", HttpUtil.decodeUtf8UriParam("бе/%D0%BB%D1%8B%D0%B9"));
+        assertEquals("бе/лый", HttpUtil.decodeUtf8UriParam("бе%2F%D0%BB%D1%8B%D0%B9"));
+        assertEquals("бе{/}лый", HttpUtil.decodeUtf8UriParam("бе{/}%D0%BB%D1%8B%D0%B9"));
+        assertEquals("бе{/}лый", HttpUtil.decodeUtf8UriParam("бе%7B%2F%7D%D0%BB%D1%8B%D0%B9"));
+
+    }
+
+    @Test
+    public void testEncodeUtf8UriParam() throws Exception {
+
+
+        assertEquals("Z%2BR", HttpUtil.encodeUtf8UriParam("Z+R"));
+        assertEquals("Z%25R", HttpUtil.encodeUtf8UriParam("Z%R"));
+        assertEquals("Z%2FR", HttpUtil.encodeUtf8UriParam("Z/R"));
+        assertEquals("Z%23R", HttpUtil.encodeUtf8UriParam("Z#R"));
+        assertEquals("Z%20R", HttpUtil.encodeUtf8UriParam("Z R"));
+        assertEquals("белый", HttpUtil.encodeUtf8UriParam("белый"));
+        assertEquals("бе%2Fлый", HttpUtil.encodeUtf8UriParam("бе/лый"));
+        assertEquals("бе%7B%2F%7Dлый", HttpUtil.encodeUtf8UriParam("бе{/}лый"));
+
+    }
 }

@@ -167,6 +167,17 @@
         }
 
         private function onUriChange(event:Event):void {
+
+            // "'$&+,/:;=?@<>#%{} |\^~[]`
+            var invalid:RegExp = /(["'\$&\+,\/:;=\?@<>#%\{\} \|\\^~\[\]`])/g;
+
+            if (invalid.test(uriNameTextInput.text)) {
+                uriNameTextInput.errorString = resourceManager.getString('ProductManagementPanel', 'urlInvalid', [uriNameTextInput.text]);
+                return;
+            } else {
+                uriNameTextInput.errorString = '';
+            }
+
             remoteProductService.isUriAvailableForProductSku(uriNameTextInput.text, _productSku.skuId);
         }
 
