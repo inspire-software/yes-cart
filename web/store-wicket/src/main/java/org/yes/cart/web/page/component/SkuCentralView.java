@@ -460,4 +460,25 @@ public class SkuCentralView extends AbstractCentralView {
         return new ProductSkuSeoableDecoratorImpl(product, sku, getPage().getLocale().getLanguage());
     }
 
+
+    @Override
+    protected String getRelCanonical(final Seo seo, final String language) {
+
+        if (isProduct) {
+
+            final String uri = getBookmarkService().saveBookmarkForProduct(String.valueOf(product.getProductId()));
+
+            return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                    + WebParametersKeys.PRODUCT_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
+
+        }
+
+        final String uri = getBookmarkService().saveBookmarkForSku(String.valueOf(sku.getSkuId()));
+
+        return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                + WebParametersKeys.SKU_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
+
+    }
+
+
 }

@@ -25,8 +25,11 @@ import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.impl.CategorySeoableDecoratorImpl;
+import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -37,6 +40,9 @@ public abstract class AbstractCentralView extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CATEGORY_SERVICE_FACADE)
     protected CategoryServiceFacade categoryServiceFacade;
+
+    @SpringBean(name = "bookmarkService")
+    private BookmarkService bookmarkService;
 
     private final long categoryId;
 
@@ -134,9 +140,9 @@ public abstract class AbstractCentralView extends BaseComponent {
         final Seoable seoable = getSeoObject();
         if (seoable != null) {
             final String lang = getLocale().getLanguage();
-            final String title = getDescription(seoable.getSeo(), lang);
-            if (title != null) {
-                return new Model<String>(title);
+            final String description = getDescription(seoable.getSeo(), lang);
+            if (description != null) {
+                return new Model<String>(description);
             }
         }
         return null;
@@ -163,9 +169,9 @@ public abstract class AbstractCentralView extends BaseComponent {
         final Seoable seoable = getSeoObject();
         if (seoable != null) {
             final String lang = getLocale().getLanguage();
-            final String title = getKeywords(seoable.getSeo(), lang);
-            if (title != null) {
-                return new Model<String>(title);
+            final String keywords = getKeywords(seoable.getSeo(), lang);
+            if (keywords != null) {
+                return new Model<String>(keywords);
             }
         }
         return null;
@@ -184,6 +190,36 @@ public abstract class AbstractCentralView extends BaseComponent {
         return null;
     }
 
+    /**
+     * SEO optimisation. Since SEO-able object can have many parameters and various paths we need
+     * to provide canonical links to pages. Each abstract view provides link of the form:
+     *
+     * <link href="http://www.example.com/canonical-version-of-page/" rel="canonical" />
+     *
+     * This link is then included in the <head/> section of the page for better indexing of the pages.
+     *
+     * @return link
+     */
+    public IModel<String> getRelCanonical() {
+        final Seoable seoable = getSeoObject();
+        if (seoable != null) {
+            final String lang = getLocale().getLanguage();
+            final String relCanonical = getRelCanonical(seoable.getSeo(), lang);
+            if (relCanonical != null) {
+                return new Model<String>(relCanonical);
+            }
+        }
+        return null;
+    }
 
 
+    protected String getRelCanonical(final Seo seo, final String language) {
+
+        return null;
+
+    }
+
+    protected BookmarkService getBookmarkService() {
+        return bookmarkService;
+    }
 }

@@ -252,5 +252,22 @@ public class HomePage extends AbstractWebPage {
         return super.getKeywords();
     }
 
+    /**
+     * Get rel-canonical link.
+     *
+     * @return link
+     */
+    public IModel<String> getRelCanonical() {
+        final AbstractCentralView centralPanel = getCentralPanel();
+        if (centralPanel != null) {
+            final IModel<String> rez = centralPanel.getRelCanonical();
+            if (rez == null) {
+                return super.getRelCanonical();
+            }
+            return rez;
+        }
+        return super.getRelCanonical();
+    }
+
 
 }
