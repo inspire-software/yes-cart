@@ -65,8 +65,21 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
     @Override
     public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
-        final Product product = productService.getProductBySkuCode(code);
+        Product product = null;
+
+        final Long id = productService.findProductIdByCode(code);
+
+        if (id != null) {
+            product = productService.getProductById(id, true);
+        }
+
         if (product == null) {
+
+            final Product productBySku = productService.getProductBySkuCode(code);
+            if (productBySku != null) {
+                return false; // SKU specific
+            }
+
             final String warn = MessageFormat.format("product with code {0} not found.", code);
             statusListener.notifyWarning(warn);
             LOG.warn(warn);
@@ -75,7 +88,7 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
 
         validateAccessBeforeUpdate(product, Product.class);
 
-        final Product productWithAttrs = productService.getProductById(product.getProductId(), true);
+        final Product productWithAttrs = product;
         final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
         AttrValueProduct imageAttributeValue = (AttrValueProduct) productWithAttrs.getAttributeByCode(attributeCode);
         if (imageAttributeValue == null) {
