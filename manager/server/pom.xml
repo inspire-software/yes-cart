@@ -486,6 +486,17 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
+                    <include>yc-jgroups-udp.xml</include>
+                    <include>yc-ws-cluster.xml</include>
+                    <include>yc-config.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}/YUM</directory>
+                <includes>
+                    <include>logback.xml</include>
+                    <include>logging.properties</include>
                 </includes>
             </resource>
         </resources>

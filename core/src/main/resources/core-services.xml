@@ -902,44 +902,15 @@
     <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
-                <property name="salt" value="YCPWSALT"/>
+                <property name="config" value="classpath:yc-config.properties"/>
                 <lookup-method name="getSelf" bean="passwordHashHelper"/>
             </bean>
         </property>
     </bean>
 
     <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
-        <constructor-arg index="0">
-            <map>
-                <entry key="en" value="Eng"/>
-                <entry key="de" value="Deu"/>
-                <entry key="ru" value="&#x0420;&#x0443;&#x0441;"/>
-                <entry key="uk" value="&#x0423;&#x043A;&#x0440;"/>
-            </map>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <map>
-                <entry key="DEFAULT">
-                    <list>
-                        <!-- by convention the 0th element is the default language -->
-                        <value>en</value>
-                        <value>de</value>
-                        <value>ru</value>
-                        <value>uk</value>
-                    </list>
-                </entry>
-                <entry key="SHOP10">
-                    <list>
-                        <!-- by convention the 0th element is the default language -->
-                        <value>en</value>
-                        <value>de</value>
-                        <value>ru</value>
-                        <value>uk</value>
-                    </list>
-                </entry>
-            </map>
-        </constructor-arg>
-        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="0" value="classpath:yc-config.properties"/>
+        <constructor-arg index="1" ref="shopService"/>
     </bean>
 
     <!-- ########################################## WS support ########################## -->

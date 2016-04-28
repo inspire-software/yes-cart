@@ -18,12 +18,15 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.Resource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.yes.cart.service.domain.HashHelper;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Properties;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -36,6 +39,15 @@ public class MD5HashHelperImpl implements HashHelper, PasswordEncoder {
 
     public void setSalt(final String salt) {
         this.salt = salt;
+    }
+
+    public void setConfig(final Resource config) throws IOException {
+
+        final Properties properties = new Properties();
+        properties.load(config.getInputStream());
+
+        this.salt = properties.getProperty("security.hash.md5salt", "");
+
     }
 
     /**
