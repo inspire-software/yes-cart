@@ -21,6 +21,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
@@ -41,6 +42,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Image service to resize and store resized image.
@@ -55,10 +57,10 @@ public class ImageServiceImpl
 
     private String allowedSizes;
 
-    private final boolean cropToFit;
-    private final int forceCropToFitOnSize;
+    private boolean cropToFit;
+    private int forceCropToFitOnSize;
 
-    private final Color defaultBorder;
+    private Color defaultBorder;
     private final Color alphaBorder = new Color(0, 0, 0, 0);
 
     private final ImageNameStrategyResolver imageNameStrategyResolver;
@@ -103,10 +105,27 @@ public class ImageServiceImpl
         this.imageNameStrategyResolver = imageNameStrategyResolver;
         this.allowedSizes = allowedSizes;
         this.ioProvider = ioProvider;
-        defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
+        this.defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
 
         this.cropToFit = cropToFit;
         this.forceCropToFitOnSize = forceCropToFitOnSize;
+    }
+
+    public void setConfig(final Resource config) throws IOException {
+
+        final Properties properties = new Properties();
+        properties.load(config.getInputStream());
+
+        this.allowedSizes = properties.getProperty("imagevault.resize.allowed.sizes", this.allowedSizes);
+        this.cropToFit = Boolean.valueOf(properties.getProperty("imagevault.resize.crop.to.fit", String.valueOf(this.cropToFit)));
+        this.forceCropToFitOnSize = NumberUtils.toInt(properties.getProperty("imagevault.resize.force.crop.to.fit.on.size"), this.forceCropToFitOnSize);
+
+        this.defaultBorder = new Color(
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.R"), this.defaultBorder.getRed()),
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.G"), this.defaultBorder.getGreen()),
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.B"), this.defaultBorder.getBlue())
+        );
+
     }
 
     /**

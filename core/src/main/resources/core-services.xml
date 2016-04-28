@@ -395,6 +395,8 @@
                  -->
                 <lookup-method name="getSystemService" bean="systemService"/>
 
+                <property name="config" value="classpath:yc-config.properties"/>
+
             </bean>
         </property>
     </bean>
