@@ -888,6 +888,12 @@
         </security:intercept-methods>
     </bean>
 
+    <bean id="remoteLicenseService" class="org.yes.cart.remote.service.impl.RemoteLicenseServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
+        <property name="licenseTextResource" value="classpath:yc-license.txt"/>
+        <flex:remoting-destination/>
+    </bean>
+
 
     <import resource="manager-tools.xml"/>
     <import resource="manager-cronjob.xml"/>

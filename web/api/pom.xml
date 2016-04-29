@@ -423,6 +423,7 @@
                     <include>yc-jgroups-udp.xml</include>
                     <include>yc-ws-cluster.xml</include>
                     <include>yc-config.properties</include>
+                    <include>yc-license.txt</include>
                 </includes>
             </resource>
             <resource>
