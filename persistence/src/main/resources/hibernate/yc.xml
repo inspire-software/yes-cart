@@ -3120,6 +3120,18 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.IDS.BY.CODE.OR.MANUFACTURER.CODE">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.code = ?1 or p.manufacturerCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
+        <![CDATA[
+                 select avp.product.productId from AttrValueEntityProduct avp   where avp.attribute.code = ?1 and avp.val = ?2
+        ]]>
+    </query>
+
     <query name="SEO.URI.BY.PRODUCT.ID">
         <![CDATA[
                  select p.seoInternal.uri from ProductEntity p   where p.productId = ?1

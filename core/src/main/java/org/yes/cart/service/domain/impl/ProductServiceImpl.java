@@ -889,6 +889,20 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    public List<Long> findProductIdsByCodeOrManufacturerCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.CODE.OR.MANUFACTURER.CODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE", attrCode, attrValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String findSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {

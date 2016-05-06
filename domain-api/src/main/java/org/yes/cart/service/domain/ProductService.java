@@ -382,6 +382,23 @@ public interface ProductService extends GenericService<Product> {
     Long findProductIdByCode(String code);
 
     /**
+     * Get product id by given code
+     *
+     * @param code given code or manufacturer code
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByCodeOrManufacturerCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param attrCode attribute code
+     * @param attrValue attribute value
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByAttributeValue(String attrCode, String attrValue);
+
+    /**
      * Get product SEO uri id by given id
      *
      * @param productId given product id

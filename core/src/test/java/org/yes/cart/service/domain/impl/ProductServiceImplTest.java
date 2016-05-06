@@ -260,4 +260,41 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Test
+    public void testFindProductIdsByCodeOrManufacturerCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByCodeOrManufacturerCode("BENDER-ua");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByCodeOrManufacturerCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByAttributeValue() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByAttributeValue("WEIGHT", "1.15");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByAttributeValue("WEIGHT", "zzzz");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+        // Sku attributes are not considered
+        final List<Long> idsSku = productService.findProductIdsByAttributeValue("WEIGHT", "1.16");
+
+        assertNotNull(idsSku);
+        assertEquals(0, idsSku.size());
+
+    }
 }
