@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.ShopEndpointController;
+import org.yes.cart.service.vo.VoShopCategoryService;
 import org.yes.cart.service.vo.VoShopService;
 
 import java.util.List;
@@ -24,9 +25,12 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
 
     private final VoShopService voShopService;
+    private final VoShopCategoryService voShopCategoryService;
 
     @Autowired
-    public ShopEndpointControllerImpl(VoShopService voShopService) {
+    public ShopEndpointControllerImpl(final VoShopService voShopService,
+                                      final VoShopCategoryService voShopCategoryService) {
+        this.voShopCategoryService = voShopCategoryService;
         this.voShopService = voShopService;
     }
 
@@ -120,5 +124,20 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     VoShopLanguages update(@RequestBody VoShopLanguages langs) throws Exception {
         return voShopService.update(langs);
     }
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody
+    List<VoCategory> getCategories(@PathVariable("shopId") long shopId) throws Exception {
+        return voShopCategoryService.getAllByShopId(shopId);
+    }
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody
+    List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception {
+        return voShopCategoryService.update(shopId, voCategories);
+    }
+
 
 }

@@ -21,6 +21,7 @@ import {ShopVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO} from '
 import {ShopUrlVO} from '../model/shop';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
+import {CategoryVO} from '../model/category';
 
 /**
  * Shop service has all methods to work with shop.
@@ -31,7 +32,7 @@ export class ShopService {
   private _shopUrl = '../service/shop';  // URL to web api
 
   /**
-   * Constrcut shop service, which has methods to work with information related to shop(s).
+   * Construct shop service, which has methods to work with information related to shop(s).
    * @param http http client.
    */
   constructor (private http: Http) {
@@ -184,6 +185,33 @@ export class ShopService {
   getShopLanguages(id:number) {
     return this.http.get(this._shopUrl + '/languages/' + id)
       .map(res => <ShopLanguagesVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get all categories assigned to given shop.
+   * @param id shop id
+   * @returns {Observable<R>}
+     */
+  getShopCategories(id:number) {
+    return this.http.get(this._shopUrl + '/categories/' + id)
+      .map(res => <CategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Save changes in shop categories.
+   * @param shopId
+   * @param cats
+   * @returns {Observable<R>}
+     */
+  saveShopCategories(shopId:number, cats : CategoryVO[]) {
+    let body = JSON.stringify(cats);
+    console.debug('Save assigned categories ' + body);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._shopUrl + '/categories/' + shopId, body, options)
+      .map(res => <CategoryVO[]> res.json())
       .catch(this.handleError);
   }
 

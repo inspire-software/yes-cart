@@ -31,7 +31,40 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     public List<VoCategory> getAll() throws Exception {
         final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAll();
         final List<VoCategory> voCategories = new ArrayList<>(categoryDTOs.size());
-        simpleVoCategoryAssembler.assembleDtos(voCategories, categoryDTOs, null ,null);
+        adaptCategories(categoryDTOs, voCategories);
         return voCategories;
+    }
+
+    /**
+     * Adapt dto to vo recursively.
+     * @param categoryDTOs list of dto
+     * @param voCategories list of vo
+     */
+    private void adaptCategories(List<CategoryDTO> categoryDTOs, List<VoCategory> voCategories) {
+        for(CategoryDTO dto : categoryDTOs) {
+            VoCategory voCategory = new VoCategory();
+            simpleVoCategoryAssembler.assembleDto(voCategory, dto, null, null);
+            voCategories.add(voCategory);
+            voCategory.setChildren(new ArrayList<VoCategory>(dto.getChildren().size()));
+            adaptCategories(dto.getChildren(), voCategory.getChildren());
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    public VoCategory getById(long id) throws Exception {
+        final CategoryDTO categoryDTO = dtoCategoryService.getById(id);
+        final VoCategory voCategory = new VoCategory();
+        simpleVoCategoryAssembler.assembleDto(voCategory, categoryDTO, null ,null);
+        return voCategory;
+    }
+
+
+    /** {@inheritDoc} */
+    public VoCategory create(VoCategory voCategory)  throws Exception {
+        final CategoryDTO categoryDTO = dtoCategoryService.getNew();
+        simpleVoCategoryAssembler.assembleEntity(voCategory, categoryDTO, null, null);
+        final CategoryDTO persistent = dtoCategoryService.create(categoryDTO);
+        return getById(persistent.getId());
     }
 }

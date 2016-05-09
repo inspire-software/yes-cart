@@ -1,0 +1,11 @@
+.assigned {
+  cursor:pointer;
+}
+
+.assigned:before {
+  content: " << ";
+}
+
+.assigned :hover {
+  text-decoration: underline;
+}

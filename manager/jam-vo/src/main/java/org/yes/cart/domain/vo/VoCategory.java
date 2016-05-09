@@ -104,10 +104,8 @@ public class VoCategory {
     @DtoField(value = "children")
     private List<VoCategory> children;
 
-
     //TODO VO @DtoField(value = "attributes",readOnly = true )
     //private Set<AttrValueCategoryDTO> attributes;
-
 
     public List<VoCategory> getChildren() {
         return children;

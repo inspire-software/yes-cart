@@ -140,4 +140,6 @@ public interface VoShopService {
      * @throws Exception
      */
     VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception;
+
+
 }

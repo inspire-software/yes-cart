@@ -16,8 +16,7 @@
 
 
 import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
-//import {Http, Response, Headers, RequestOptions} from 'angular2/http';
+import {Http, Response, Headers, RequestOptions} from 'angular2/http';
 //import {Util} from './util';
 import {CategoryVO} from '../model/category';
 import {Observable}     from 'rxjs/Observable';
@@ -49,6 +48,16 @@ export class CategoryService {
       .catch(this.handleError);
   }
 
+  createCategory(name:string, parentId : number) {
+    var cat = {'name' : name, 'parentId' : parentId };
+    let body = JSON.stringify(cat);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this._shopUrl, body, options)
+      .map(res => <CategoryVO> res.json())
+      .catch(this.handleError);
+  }
 
   private handleError (error: Response) {
     // in a real world app, we may send the error to some remote logging infrastructure

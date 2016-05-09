@@ -15,7 +15,7 @@
 }
 
 .supported:before {
-  content: " <<";
+  content: " << ";
 }
 
 .supported:hover {

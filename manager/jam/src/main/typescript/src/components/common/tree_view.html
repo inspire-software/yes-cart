@@ -1,6 +1,6 @@
 <ul class="treenodes">
   <li *ngFor="#node of Nodes" class="treenode">
-    <i class="nodebutton fa fa-{{node.expanded ? 'minus' : 'plus'}}-square-o"
+    <i class="nodebutton fa fa-{{node.children.length === 0 ?  'none' : (node.expanded ? 'minus' : 'plus') }}-square-o"
        (click)="onExpand(node)">
     </i>
 

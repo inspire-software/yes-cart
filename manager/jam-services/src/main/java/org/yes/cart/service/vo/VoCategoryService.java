@@ -16,4 +16,21 @@ public interface VoCategoryService {
      */
     List<VoCategory> getAll() throws Exception;
 
+    /**
+     * Get category by id.
+     *
+     * @param id
+     * @return category vo
+     * @throwsException
+     */
+    VoCategory getById(long id) throws Exception;
+
+    /**
+     * Create new category..
+     * @param voCategory category
+     * @return persistent version
+     * @throws Exception
+     */
+    VoCategory create(VoCategory voCategory)  throws Exception;
+
 }

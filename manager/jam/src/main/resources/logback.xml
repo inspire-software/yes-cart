@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
   ~
@@ -17,7 +16,7 @@
   -->
 <configuration>
 
-    <contextName>YUM</contextName>
+    <contextName>${cluster.config.yes.node_id}</contextName>
 
     <jmxConfigurator />
 
@@ -51,46 +50,16 @@
             <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
-    <appender name="JOB" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="SHOP10PAY" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-default-job.log</File>
         <Append>true</Append>
+        <File>${catalina.base}/logs/yc-shop10pay.log</File>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-default-job.log.%i</FileNamePattern>
-        </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
-    </appender>
-    <appender name="BULKIMPORT" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <Append>true</Append>
-        <File>${catalina.base}/logs/yc-default-import.log</File>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-default-import.log.%i</FileNamePattern>
-        </rollingPolicy>
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
-    </appender>
-    <appender name="REMOTE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
-        <File>${catalina.base}/logs/yc-default-remote.log</File>
-        <Append>true</Append>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <maxIndex>10</maxIndex>
-            <FileNamePattern>${catalina.base}/logs/yc-default-remote.log.%i</FileNamePattern>
+            <FileNamePattern>${catalina.base}/logs/yc-shop10pay.log.%i</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -106,6 +75,21 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
             <FileNamePattern>${catalina.base}/logs/yc-audit.csv.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+    <appender name="FTQ" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${catalina.base}/logs/yc-ftq.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %c{1}:%L - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>10</maxIndex>
+            <FileNamePattern>${catalina.base}/logs/yc-ftq.log.%i</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
@@ -149,45 +133,29 @@
     <logger name="DEFAULT" level="INFO">
         <appender-ref ref="DEFAULT"/>
     </logger>
-    <logger name="org.springframework.web" level="DEBUG">
-        <appender-ref ref="DEFAULT"/>
+    <logger name="SHOP10" level="INFO">
+        <appender-ref ref="SHOP10"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkjob" level="INFO">
-        <appender-ref ref="JOB"/>
+    <logger name="SHOP10.org.yes.cart.web.filter.payment" level="INFO">
+        <appender-ref ref="SHOP10PAY"/>
     </logger>
-    <logger name="org.yes.cart.bulkimport" level="INFO">
-        <appender-ref ref="BULKIMPORT"/>
+    <logger name="SHOP10.org.yes.cart.payment.impl" level="INFO">
+        <appender-ref ref="SHOP10PAY"/>
     </logger>
-    <logger name="org.yes.cart.remote" level="INFO">
-        <appender-ref ref="REMOTE"/>
-    </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkimport" level="INFO">
-        <appender-ref ref="BULKIMPORT"/>
-    </logger>
-    <logger name="DEFAULT.org.yes.cart.bulkjob.bulkimport" level="INFO">
-        <appender-ref ref="BULKIMPORT"/>
+    <logger name="SHOP10.org.yes.cart.web.page.payment.callback" level="INFO">
+        <appender-ref ref="SHOP10PAY"/>
     </logger>
     <logger name="AUDIT" level="INFO">
         <appender-ref ref="AUDIT"/>
     </logger>
-    <logger name="DEFAULT.org.yes.cart.remote" level="INFO">
-        <appender-ref ref="REMOTE"/>
-    </logger>
-    <logger name="org.yes.cart.bulkjob" level="INFO">
-        <appender-ref ref="JOB"/>
-    </logger>
-    <logger name="DEFAULT.org.yes.cart.service.async.impl" level="INFO">
-        <appender-ref ref="JOB"/>
-        <appender-ref ref="BULKIMPORT"/>
+    <logger name="FTQ" level="INFO">
+        <appender-ref ref="FTQ"/>
     </logger>
     <logger name="WS.IN" level="ERROR"><!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
     </logger>
     <logger name="WS.OUT" level="ERROR"><!-- Interceptors log at INFO level -->
         <appender-ref ref="WS"/>
-    </logger>
-    <logger name="SHOP10" level="INFO">
-        <appender-ref ref="SHOP10"/>
     </logger>
     <root level="INFO">
         <appender-ref ref="YC"/>

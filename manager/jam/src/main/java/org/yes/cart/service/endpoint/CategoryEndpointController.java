@@ -36,5 +36,10 @@ public interface CategoryEndpointController {
     @ResponseBody
     List<VoCategory> getAll() throws Exception;
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(method = RequestMethod.PUT,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCategory create(@RequestBody VoCategory voCategory) throws Exception;
+
 
 }

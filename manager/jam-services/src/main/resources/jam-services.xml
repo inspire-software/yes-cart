@@ -21,6 +21,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="vShopCategoryService" class="org.yes.cart.service.vo.impl.VoShopCategoryServiceImpl">
+        <constructor-arg index="0" ref="dtoCategoryService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+    </bean>
+
     <bean id="voShopService" class="org.yes.cart.service.vo.impl.VoShopServiceImpl">
         <constructor-arg index="0" ref="languageService"/>
         <constructor-arg index="1" ref="dtoShopUrlService"/>

@@ -101,5 +101,14 @@ public interface ShopEndpointController {
     @ResponseBody
     VoShopLanguages update(@RequestBody VoShopLanguages langs) throws Exception;
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCategory> getCategories(@PathVariable("shopId") long shopId) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception;
 
 }
