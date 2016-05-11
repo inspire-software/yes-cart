@@ -80,7 +80,7 @@ public class SkuPriceBridge implements FieldBridge {
                         lowestQuantityPriceByShop.put(skuPrice.getCurrency(), skuPrice);
                     } else {
                         final int compare = oldLowestQuantity.getQuantity().compareTo(skuPrice.getQuantity());
-                        if (compare < 0 || (compare == 0 && MoneyUtils.isFirstBiggerThanSecond(
+                        if (compare > 0 || (compare == 0 && MoneyUtils.isFirstBiggerThanSecond(
                                 MoneyUtils.minPositive(oldLowestQuantity.getRegularPrice(), oldLowestQuantity.getSalePrice()),
                                 MoneyUtils.minPositive(skuPrice.getRegularPrice(), skuPrice.getSalePrice())
                         ))) {

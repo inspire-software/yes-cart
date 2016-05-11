@@ -679,13 +679,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals("[00001500, 00002000)", priceFacetResults.get(2).getFirst());
                 assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
                 assertEquals("[00002000, 00002500)", priceFacetResults.get(3).getFirst());
-                assertEquals(Integer.valueOf(2), priceFacetResults.get(3).getSecond());
+                assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
                 assertEquals("[00002500, 00006000)", priceFacetResults.get(4).getFirst());
-                assertEquals(Integer.valueOf(4), priceFacetResults.get(4).getSecond());
+                assertEquals(Integer.valueOf(5), priceFacetResults.get(4).getSecond());
                 assertEquals("[00006000, 00010000)", priceFacetResults.get(5).getFirst());
-                assertEquals(Integer.valueOf(3), priceFacetResults.get(5).getSecond());
+                assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
                 assertEquals("[00010000, 01000000]", priceFacetResults.get(6).getFirst());
-                assertEquals(Integer.valueOf(4), priceFacetResults.get(6).getSecond());
+                assertEquals(Integer.valueOf(5), priceFacetResults.get(6).getSecond());
 
 
                 status.setRollbackOnly();
@@ -973,7 +973,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
 
     @Test
-    public void getRangeAttributeValueNavigation() throws InterruptedException {
+    public void testGetRangeAttributeValueNavigation() throws InterruptedException {
 
 
         getTx().execute(new TransactionCallbackWithoutResult() {
