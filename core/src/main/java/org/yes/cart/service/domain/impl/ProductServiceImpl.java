@@ -906,10 +906,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public String findSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }
@@ -962,10 +963,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public String findSeoUriByProductSkuId(final Long skuId) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }

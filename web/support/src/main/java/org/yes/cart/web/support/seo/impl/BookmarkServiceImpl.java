@@ -17,13 +17,13 @@
 package org.yes.cart.web.support.seo.impl;
 
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.web.support.entity.decorator.impl.DecoratorUtil;
 import org.yes.cart.web.support.seo.BookmarkService;
 
 /**
@@ -88,20 +88,32 @@ public class BookmarkServiceImpl implements BookmarkService {
     public String saveBookmarkForCategory(final String bookmark) {
 
         String seoData = getStringFromValueWrapper(CATEGORY_ENCODE_CACHE.get(bookmark));
+
         if (seoData == null) {
-            final long categoryId = NumberUtils.toLong(bookmark, 0L);
-            if (categoryId > 0L) {
 
-                final String categorySeoUri = categoryService.findSeoUriByCategoryId(categoryId);
-                seoData = DecoratorUtil.encodeId(
-                        bookmark,
-                        categorySeoUri
-                );
-
+            // Need to check the SEO version first, it could be a numeric SEO uri too
+            final Long existingCategoryId = categoryService.findCategoryIdBySeoUri(bookmark);
+            if (existingCategoryId != null) {
+                // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
+                CATEGORY_ENCODE_CACHE.put(existingCategoryId.toString(), bookmark);
+                CATEGORY_ENCODE_CACHE.put(bookmark, bookmark);
+                CATEGORY_DECODE_CACHE.put(bookmark, existingCategoryId.toString());
+                seoData = bookmark;
             }
-            if (seoData != null) {
-                CATEGORY_ENCODE_CACHE.put(bookmark, seoData);
-                CATEGORY_DECODE_CACHE.put(seoData, bookmark);
+
+            if (seoData == null) {
+                final long categoryId = NumberUtils.toLong(bookmark, 0L);
+                if (categoryId > 0L) {
+                    final String categorySeoUri = categoryService.findSeoUriByCategoryId(categoryId);
+                    if (StringUtils.isNotBlank(categorySeoUri)) {
+                        // This is a valid category and categorySeoUri will be either SEO URI or categoryId as String
+                        CATEGORY_ENCODE_CACHE.put(bookmark, categorySeoUri);
+                        CATEGORY_ENCODE_CACHE.put(categorySeoUri, categorySeoUri);
+                        CATEGORY_DECODE_CACHE.put(categorySeoUri, bookmark);
+                        seoData = categorySeoUri;
+                    } // else This is may be a numeric SEO uri
+
+                }
             }
         }
 
@@ -115,10 +127,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(CATEGORY_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long catId = categoryService.findCategoryIdBySeoUri(uri);
-            if (catId != null) {
-                saveBookmarkForCategory(catId.toString());
-                id = catId.toString();
+            // resolve bookmarks, then try cache again
+            final String seo = saveBookmarkForCategory(uri);
+            if (seo != null) {
+                id = getStringFromValueWrapper(CATEGORY_DECODE_CACHE.get(seo));
             }
         }
 
@@ -131,20 +143,31 @@ public class BookmarkServiceImpl implements BookmarkService {
     public String saveBookmarkForContent(final String bookmark) {
 
         String seoData = getStringFromValueWrapper(CONTENT_ENCODE_CACHE.get(bookmark));
+
         if (seoData == null) {
-            final long contentId = NumberUtils.toLong(bookmark, 0L);
-            if (contentId > 0L) {
 
-                final String contentSeoUri = contentService.findSeoUriByContentId(contentId);
-                seoData = DecoratorUtil.encodeId(
-                        bookmark,
-                        contentSeoUri
-                );
-
+            // Need to check the SEO version first, it could be a numeric SEO uri too
+            final Long existingContentId = contentService.findContentIdBySeoUri(bookmark);
+            if (existingContentId != null) {
+                // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
+                CONTENT_ENCODE_CACHE.put(existingContentId.toString(), bookmark);
+                CONTENT_ENCODE_CACHE.put(bookmark, bookmark);
+                CONTENT_DECODE_CACHE.put(bookmark, existingContentId.toString());
+                seoData = bookmark;
             }
-            if (seoData != null) {
-                CONTENT_ENCODE_CACHE.put(bookmark, seoData);
-                CONTENT_DECODE_CACHE.put(seoData, bookmark);
+
+            if (seoData == null) {
+                final long contentId = NumberUtils.toLong(bookmark, 0L);
+                if (contentId > 0L) {
+                    final String contentSeoUri = contentService.findSeoUriByContentId(contentId);
+                    if (StringUtils.isNotBlank(contentSeoUri)) {
+                        // This is a valid category and contentSeoUri will be either SEO URI or contentId as String
+                        CONTENT_ENCODE_CACHE.put(bookmark, contentSeoUri);
+                        CONTENT_ENCODE_CACHE.put(contentSeoUri, contentSeoUri);
+                        CONTENT_DECODE_CACHE.put(contentSeoUri, bookmark);
+                        seoData = contentSeoUri;
+                    } // else This is may be a numeric SEO uri
+                }
             }
         }
 
@@ -158,10 +181,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(CONTENT_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long conId = contentService.findContentIdBySeoUri(uri);
-            if (conId != null) {
-                saveBookmarkForContent(conId.toString());
-                id = conId.toString();
+            // resolve bookmarks, then try cache again
+            final String seo = saveBookmarkForContent(uri);
+            if (seo != null) {
+                id = getStringFromValueWrapper(CONTENT_DECODE_CACHE.get(seo));
             }
         }
 
@@ -174,18 +197,31 @@ public class BookmarkServiceImpl implements BookmarkService {
     public String saveBookmarkForProduct(final String bookmark) {
 
         String seoData = getStringFromValueWrapper(PRODUCT_ENCODE_CACHE.get(bookmark));
+
         if (seoData == null) {
-            final long productId = NumberUtils.toLong(bookmark, 0L);
-            if (productId > 0L) {
-                final String productSeoUri = productService.findSeoUriByProductId(productId);
-                seoData = DecoratorUtil.encodeId(
-                        bookmark,
-                        productSeoUri
-                );
+
+            // Need to check the SEO version first, it could be a numeric SEO uri too
+            final Long existingProductId = productService.findProductIdBySeoUri(bookmark);
+            if (existingProductId != null) {
+                // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
+                PRODUCT_ENCODE_CACHE.put(existingProductId.toString(), bookmark);
+                PRODUCT_ENCODE_CACHE.put(bookmark, bookmark);
+                PRODUCT_DECODE_CACHE.put(bookmark, existingProductId.toString());
+                seoData = bookmark;
             }
-            if (seoData != null) {
-                PRODUCT_ENCODE_CACHE.put(bookmark, seoData);
-                PRODUCT_DECODE_CACHE.put(seoData, bookmark);
+
+            if (seoData == null) {
+                final long productId = NumberUtils.toLong(bookmark, 0L);
+                if (productId > 0L) {
+                    final String productSeoUri = productService.findSeoUriByProductId(productId);
+                    if (StringUtils.isNotBlank(productSeoUri)) {
+                        // This is a valid category and contentSeoUri will be either SEO URI or productId as String
+                        PRODUCT_ENCODE_CACHE.put(bookmark, productSeoUri);
+                        PRODUCT_ENCODE_CACHE.put(productSeoUri, productSeoUri);
+                        PRODUCT_DECODE_CACHE.put(productSeoUri, bookmark);
+                        seoData = productSeoUri;
+                    }
+                }
             }
         }
 
@@ -200,10 +236,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(PRODUCT_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long prodId = productService.findProductIdBySeoUri(uri);
-            if (prodId != null) {
-                saveBookmarkForProduct(prodId.toString());
-                id = prodId.toString();
+            // resolve bookmarks, then try cache again
+            final String seo = saveBookmarkForProduct(uri);
+            if (seo != null) {
+                id = getStringFromValueWrapper(PRODUCT_DECODE_CACHE.get(seo));
             }
         }
 
@@ -217,18 +253,31 @@ public class BookmarkServiceImpl implements BookmarkService {
     public String saveBookmarkForSku(final String bookmark) {
 
         String seoData = getStringFromValueWrapper(SKU_ENCODE_CACHE.get(bookmark));
+
         if (seoData == null) {
-            final long skuId = NumberUtils.toLong(bookmark, 0L);
-            if (skuId > 0L) {
-                final String productSkuUri = productService.findSeoUriByProductSkuId(skuId);
-                seoData = DecoratorUtil.encodeId(
-                        bookmark,
-                        productSkuUri
-                );
+
+            // Need to check the SEO version first, it could be a numeric SEO uri too
+            final Long existingSkuId = productService.findProductSkuIdBySeoUri(bookmark);
+            if (existingSkuId != null) {
+                // The bookmark is SEO Uri so encoding it is bookmark itself, decoding however should return PK
+                SKU_ENCODE_CACHE.put(existingSkuId.toString(), bookmark);
+                SKU_ENCODE_CACHE.put(bookmark, bookmark);
+                SKU_DECODE_CACHE.put(bookmark, existingSkuId.toString());
+                seoData = bookmark;
             }
-            if (seoData != null) {
-                SKU_ENCODE_CACHE.put(bookmark, seoData);
-                SKU_DECODE_CACHE.put(seoData, bookmark);
+
+            if (seoData == null) {
+                final long skuId = NumberUtils.toLong(bookmark, 0L);
+                if (skuId > 0L) {
+                    final String productSkuUri = productService.findSeoUriByProductSkuId(skuId);
+                    if (StringUtils.isNotBlank(productSkuUri)) {
+                        // This is a valid category and contentSeoUri will be either SEO URI or skuId as String
+                        SKU_ENCODE_CACHE.put(bookmark, productSkuUri);
+                        SKU_ENCODE_CACHE.put(productSkuUri, productSkuUri);
+                        SKU_DECODE_CACHE.put(productSkuUri, bookmark);
+                        seoData = productSkuUri;
+                    }
+                }
             }
         }
 
@@ -243,10 +292,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
         String id = getStringFromValueWrapper(SKU_DECODE_CACHE.get(uri));
         if (id == null) {
-            final Long skuId = productService.findProductSkuIdBySeoUri(uri);
-            if (skuId != null) {
-                saveBookmarkForSku(skuId.toString());
-                id = skuId.toString();
+            // resolve bookmarks, then try cache again
+            final String seo = saveBookmarkForSku(uri);
+            if (seo != null) {
+                id = getStringFromValueWrapper(SKU_DECODE_CACHE.get(seo));
             }
         }
 

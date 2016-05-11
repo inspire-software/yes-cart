@@ -3085,7 +3085,7 @@
 
     <query name="SEO.URI.BY.CATEGORY.ID">
         <![CDATA[
-                  select c.seoInternal.uri from CategoryEntity c  where c.categoryId = ?1
+                  select c.seoInternal.uri, c.categoryId from CategoryEntity c  where c.categoryId = ?1
        ]]>
     </query>
 
@@ -3134,7 +3134,7 @@
 
     <query name="SEO.URI.BY.PRODUCT.ID">
         <![CDATA[
-                 select p.seoInternal.uri from ProductEntity p   where p.productId = ?1
+                 select p.seoInternal.uri, p.productId from ProductEntity p   where p.productId = ?1
         ]]>
     </query>
 
@@ -3165,7 +3165,7 @@
 
     <query name="SEO.URI.BY.SKU.ID">
         <![CDATA[
-                 select ps.seoInternal.uri from ProductSkuEntity ps   where ps.skuId = ?1
+                 select ps.seoInternal.uri, ps.skuId from ProductSkuEntity ps   where ps.skuId = ?1
         ]]>
     </query>
 

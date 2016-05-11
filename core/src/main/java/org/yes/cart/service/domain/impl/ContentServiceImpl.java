@@ -388,10 +388,11 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     public String findSeoUriByContentId(final Long contentId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }
