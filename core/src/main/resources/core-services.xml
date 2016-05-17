@@ -387,6 +387,12 @@
                 -->
                 <constructor-arg type="int" value="100"/>
                 <!--
+                    replaceFilesModeOn if set to true will overwrite existing file if name is
+                    the same. Recommended setting is 'true' because the import service refers to the
+                    original filename and thus does not save the rolling filename.
+                 -->
+                <constructor-arg type="boolean" value="true"/>
+                <!--
                     IO operations abstraction
                  -->
                 <constructor-arg type="org.yes.cart.stream.io.IOProvider" ref="ioProviderFactory"/>

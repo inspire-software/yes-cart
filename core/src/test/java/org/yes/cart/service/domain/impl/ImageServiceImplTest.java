@@ -69,7 +69,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testCropImageToCenter() throws Exception {
 
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0, null);
+        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 0, true, null);
 
         final int[] croppedExactEven = srv.cropImageToCenter(100, 100, 100, 100);
         assertNotNull(croppedExactEven);
@@ -108,7 +108,7 @@ public class ImageServiceImplTest  extends BaseCoreDBTestCase {
     @Test
     public void testScaleImageToCenter() throws Exception {
 
-        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 50, null);
+        final ImageServiceImpl srv = new ImageServiceImpl(null, null, "", 0, 0, 0, true, 50, true, null);
 
         final int[] scaledExactEven = srv.scaleImageToCenter(100, 100, 100, 100);
         assertNotNull(scaledExactEven);

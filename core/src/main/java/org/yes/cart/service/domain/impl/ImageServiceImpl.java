@@ -60,6 +60,8 @@ public class ImageServiceImpl
     private boolean cropToFit;
     private int forceCropToFitOnSize;
 
+    private boolean replaceFilesModeOn;
+
     private Color defaultBorder;
     private final Color alphaBorder = new Color(0, 0, 0, 0);
 
@@ -87,6 +89,8 @@ public class ImageServiceImpl
      * @param forceCropToFitOnSize forcefully use cropping if scale is below given size
      *                             This option is very useful for small thumbs (<100px)
      *                             as you really cannot see much with added padding for
+     * @param replaceFilesModeOn if set to true will overwrite existing file if name is
+     *                           the same. Recommended setting is 'true'.
      * @param ioProvider IO provider
      */
     public ImageServiceImpl(final GenericDAO<SeoImage, Long> seoImageDao,
@@ -97,6 +101,7 @@ public class ImageServiceImpl
                             final int borderColorB,
                             final boolean cropToFit,
                             final int forceCropToFitOnSize,
+                            final boolean replaceFilesModeOn,
                             final IOProvider ioProvider) {
 
         super(seoImageDao);
@@ -109,6 +114,8 @@ public class ImageServiceImpl
 
         this.cropToFit = cropToFit;
         this.forceCropToFitOnSize = forceCropToFitOnSize;
+
+        this.replaceFilesModeOn = replaceFilesModeOn;
     }
 
     public void setConfig(final Resource config) throws IOException {
@@ -420,6 +427,9 @@ public class ImageServiceImpl
                                       final String code,
                                       final String suffix,
                                       final String locale) {
+        if (this.replaceFilesModeOn) {
+            return fileName;
+        }
         if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
             final String newFileName = strategy.createRollingFileName(fileName, code, suffix, locale);
             return createRepositoryUniqueName(newFileName, ioProvider, strategy, code, suffix, locale);
