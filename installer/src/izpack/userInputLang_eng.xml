@@ -19,7 +19,7 @@
 <langpack>
 
     <str id="JDKPathPanel.intro" txt=""/>
-    <str id="JDKPathPanel.info" txt="Select path to JDK 1.6 or never"/>
+    <str id="JDKPathPanel.info" txt="Select path to JDK 1.7 or never"/>
 
     <str id="WebServerConfigurationPanel.title" txt="Web Server configuration"/>
     <str id="WebServerConfigurationPanel.http.port" txt="HTTP port"/>
