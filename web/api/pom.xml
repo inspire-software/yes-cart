@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.0-SNAPSHOT</version>
     </parent>
     <artifactId>yes-api</artifactId>
     <packaging>war</packaging>
