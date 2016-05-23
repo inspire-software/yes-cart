@@ -22,6 +22,7 @@ import org.yes.cart.bulkcommon.service.ImportService;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.bulkimport.model.ImportDescriptor;
 import org.yes.cart.bulkimport.service.impl.AbstractImportService;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -124,7 +125,8 @@ public class ImagesBulkImportServiceImpl extends AbstractImportService implement
         final ImageNameStrategy strategy = imageService.getImageNameStrategy(importDescriptor.getSelectSql());
 
         final String fileName = file.getName();
-        final String code = strategy.resolveObjectCode(fileName);
+        final String resolvedCode = strategy.resolveObjectCode(fileName);
+        final String code = Constants.NO_IMAGE.equals(resolvedCode) ? fileName.substring(0, fileName.indexOf('.')) : resolvedCode;
         final String locale = strategy.resolveLocale(fileName);
         final String suffix = strategy.resolveSuffix(fileName);
 

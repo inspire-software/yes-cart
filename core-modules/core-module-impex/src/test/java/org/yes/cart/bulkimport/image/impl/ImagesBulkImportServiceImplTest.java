@@ -252,4 +252,77 @@ public class ImagesBulkImportServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+
+    @Test
+    public void testDoImportProductAndSkuCodeOnly() throws Exception {
+
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                try {
+                    ProductService productService = createContext().getBean("productService", ProductService.class);
+                    Product product = productService.getProductById(10000L, true);
+                    assertNotNull(product);
+                    assertFalse("BENDER.jpeg".equals(product.getAttributeValueByCode("IMAGE0"))); // product has different IMAGE0
+
+                    final XStreamProvider<ImportDescriptor> xml =
+                            createContext().getBean("importDescriptorXStreamProvider", XStreamProvider.class);
+                    final ImportDescriptor descriptor = xml.fromXML(new FileInputStream(new File("src/test/resources/import/productimages_simple.xml")));
+                    descriptor.setImportDirectory(new File("src/test/resources/import/").getAbsolutePath());
+
+                    final JobContext context = mockery.mock(JobContext.class, "context");
+                    final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+
+                    final Set<String> imported = new HashSet<String>();
+
+                    mockery.checking(new Expectations() {{
+                        allowing(context).getListener(); will(returnValue(listener));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE_SET); will(returnValue(imported));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_FILE); will(returnValue(new File("src/test/resources/import/BENDER.jpeg").getAbsolutePath()));
+                        allowing(context).getAttribute(JobContextKeys.IMAGE_VAULT_PATH); will(returnValue("file:" + File.separator + File.separator + "target" + File.separator));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME); will(returnValue("productimages_simple.xml"));
+                        allowing(context).getAttribute(JobContextKeys.IMPORT_DESCRIPTOR); will(returnValue(descriptor));
+                        allowing(listener).notifyMessage(with(any(String.class)));
+                        allowing(listener).notifyPing("Processed 1 of 1 images");
+                    }});
+
+                    ImportService service = (ImportService) createContext().getBean("imagesBulkImportService");
+                    service.doImport(context);
+
+                    clearCache();
+                    product = productService.getProductById(9999L, true);
+                    assertNotNull(product);
+
+
+                    final GenericDAO<AttrValueEntityProduct, Long> attrValueEntityProductDao = createContext().getBean("attrValueEntityProductDao", GenericDAO.class);
+
+                    assertNotNull("BENDER is single sku", product.getAttributeByCode("IMAGE0"));
+                    assertEquals("BENDER.jpeg", product.getAttributeByCode("IMAGE0").getVal());
+
+                    boolean skuFound = false;
+                    for (ProductSku productSku : product.getSku()) {
+                        if (productSku.getCode().equals("BENDER")) {
+                            skuFound = true;
+                            assertNotNull(productSku.getAttributeByCode("IMAGE0"));
+                            assertEquals("BENDER.jpeg", productSku.getAttributeByCode("IMAGE0").getVal());
+                            attrValueEntityProductDao.delete(productSku.getAttributeByCode("IMAGE0"));
+                        }
+                    }
+
+                    assertTrue("SKU not found", skuFound);
+
+                    status.setRollbackOnly();
+
+                    mockery.assertIsSatisfied();
+                } catch (Exception exp) {
+                    fail(exp.getMessage());
+                }
+
+            }
+        });
+
+
+    }
+
+
 }
