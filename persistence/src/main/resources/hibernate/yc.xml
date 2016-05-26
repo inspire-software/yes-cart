@@ -3314,28 +3314,28 @@
     <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="CATEGORY.URI.AND.GUID.BY.IMAGE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="PRODUCT.CODE.BY.IMAGE.NAME">
         <![CDATA[
             select a.product.code from AttrValueEntityProduct a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="SKU.CODE.BY.IMAGE.NAME">
         <![CDATA[
             select a.productSku.code from AttrValueEntityProductSku a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 

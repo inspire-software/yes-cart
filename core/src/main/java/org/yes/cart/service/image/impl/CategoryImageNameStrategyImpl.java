@@ -18,6 +18,7 @@ package org.yes.cart.service.image.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueCategory;
@@ -29,6 +30,8 @@ import org.yes.cart.service.misc.LanguageService;
  * Time: 14:12:54
  */
 public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
+
+    private static final String ATTR_CODE_LIKE = AttributeNamesKeys.Category.CATEGORY_IMAGE_PREFIX + '%';
 
     private final GenericDAO<AttrValueCategory, Long> attrValueEntityCategoryDao;
 
@@ -72,7 +75,7 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
 
         final String val = resolveFileName(url);
 
-        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.IMAGE.NAME", val);
+        final Object[] uriAndGuid = attrValueEntityCategoryDao.findSingleByNamedQuery("CATEGORY.URI.AND.GUID.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
 
         if (uriAndGuid != null && uriAndGuid.length == 2) {
             if (uriAndGuid[0] instanceof String) {
