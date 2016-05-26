@@ -1755,6 +1755,7 @@
         <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
         <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
+        <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">

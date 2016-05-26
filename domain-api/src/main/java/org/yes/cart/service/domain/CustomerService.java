@@ -35,15 +35,16 @@ public interface CustomerService extends GenericService<Customer> {
      * Find customer by given search criteria. Search will be performed using like operation.
      *
      *
-     * @param email        optional email
-     * @param firstname    optional first name
-     * @param lastname     optional last name
-     * @param middlename   optional middle name
-     * @param tag          optional tag
-     * @param customerType optional customer type
+     * @param email         optional email
+     * @param firstname     optional first name
+     * @param lastname      optional last name
+     * @param middlename    optional middle name
+     * @param tag           optional tag
+     * @param customerType  optional customer type
+     * @param pricingPolicy optional customer pricing policy
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag, String customerType);
+    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag, String customerType, String pricingPolicy);
 
     /**
      * Get customer by email.

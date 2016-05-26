@@ -34,12 +34,13 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * Find customer by given search criteria. Search will be performed using like operation.
      *
      *
-     * @param email        optional email
-     * @param firstname    optional first name
-     * @param lastname     optional last name
-     * @param middlename   optional middle name
-     * @param tag          optional tag
-     * @param customerType optional customer type
+     * @param email         optional email
+     * @param firstname     optional first name
+     * @param lastname      optional last name
+     * @param middlename    optional middle name
+     * @param tag           optional tag
+     * @param customerType  optional customer type
+     * @param pricingPolicy optional pricing policy
      *
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
@@ -52,7 +53,8 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
                                    String lastname,
                                    String middlename,
                                    String tag,
-                                   String customerType) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+                                   String customerType,
+                                   String pricingPolicy) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**

@@ -72,7 +72,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             getTx().execute(new TransactionCallbackWithoutResult() {
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null);
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
                     assertFalse(fromDb.isEmpty());
                     promotionContext.applyCustomerPromo(fromDb.get(0), null);
                     assertEquals("first", fromDb.get(0).getTag());
@@ -120,7 +120,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             getTx().execute(new TransactionCallbackWithoutResult() {
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null);
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
                     assertFalse(fromDb.isEmpty());
                     promotionContext.applyCustomerPromo(fromDb.get(0), null);
                     assertNull(fromDb.get(0).getTag());
@@ -183,7 +183,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             getTx().execute(new TransactionCallbackWithoutResult() {
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null);
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
                     assertFalse(fromDb.isEmpty());
                     promotionContext.applyCustomerPromo(fromDb.get(0), null);
                     assertEquals("first john", fromDb.get(0).getTag());
@@ -250,7 +250,7 @@ public class CustomerTagPromotionActionTest extends BaseCoreDBTestCase {
             getTx().execute(new TransactionCallbackWithoutResult() {
                 public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null);
+                    final List<Customer> fromDb = customerService.findCustomer(newCustomer.getEmail(), null, null, null, null, null, null);
                     assertFalse(fromDb.isEmpty());
                     promotionContext.applyCustomerPromo(fromDb.get(0), null);
                     assertEquals("first", fromDb.get(0).getTag());

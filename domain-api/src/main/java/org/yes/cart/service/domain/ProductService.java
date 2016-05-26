@@ -204,16 +204,6 @@ public interface ProductService extends GenericService<Product> {
                                        int maxResults);
 
     /**
-     * Get the list of unique attribute values by given product type
-     * and attribute code.
-     *
-     * @param productTypeId product type id
-     * @param code          attribute code
-     * @return list of distinct attib values
-     */
-    List<Object> getDistinctAttributeValues(long productTypeId, String code);
-
-    /**
      * Get list of products by id list.
      * @param idList given list of id.
      * @return list of product, that satisfy given list of ids.

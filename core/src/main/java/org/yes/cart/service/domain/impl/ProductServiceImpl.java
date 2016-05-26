@@ -594,17 +594,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-distinctAttributeValues")
-    public List<Object> getDistinctAttributeValues(final long productTypeId, final String code) {
-        return productDao.findQueryObjectByNamedQuery(
-                "PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
-                productTypeId,
-                code);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Cacheable(value = "productService-productByIdList")
     public List<Product> getProductByIdList(final List idList) {
         if (idList == null || idList.isEmpty()) {

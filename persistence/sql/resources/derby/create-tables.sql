@@ -261,6 +261,7 @@
         PASSWORD varchar(255) not null,
         PUBLICKEY varchar(255),
         CUSTOMERTYPE varchar(255),
+        PRICINGPOLICY varchar(255),
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY timestamp,
         TAG varchar(255),

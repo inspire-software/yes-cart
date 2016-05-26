@@ -64,6 +64,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
                 put(PromotionCondition.VAR_CUSTOMER, customer);
                 put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
                 put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
+                put(PromotionCondition.VAR_CUSTOMER_PRICING_POLICY, getCustomerPricingPolicies(customer));
                 put(PromotionCondition.VAR_CART, cart);
                 put(PromotionCondition.VAR_CART_ITEM_TOTAL, orderTotal);
                 put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(orderTotal));
@@ -123,6 +124,14 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
     private List<String> getCustomerTags(Customer customer) {
         if (customer != null && customer.getTag() != null) {
             return Arrays.asList(customer.getTag().split(" "));
+        }
+        return Collections.emptyList();
+    }
+
+
+    private List<String> getCustomerPricingPolicies(Customer customer) {
+        if (customer != null && customer.getPricingPolicy() != null) {
+            return Arrays.asList(customer.getPricingPolicy().split(" "));
         }
         return Collections.emptyList();
     }

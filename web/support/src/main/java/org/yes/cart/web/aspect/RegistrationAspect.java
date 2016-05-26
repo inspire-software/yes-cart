@@ -217,6 +217,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
             final Customer customer = (Customer) registeredPerson;
             final Map<String, Object> registrationData = new HashMap<String, Object>();
             registrationData.put("customerType", customer.getCustomerType());
+            registrationData.put("pricingPolicy", customer.getPricingPolicy());
             registrationData.put("tag", customer.getTag());
             registrationData.put("newPerson", newPerson);
             registrationMessage.setAdditionalData(registrationData);

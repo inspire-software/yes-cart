@@ -201,6 +201,16 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
             }
 
             @Override
+            public String getPricingPolicy() {
+                return null;
+            }
+
+            @Override
+            public void setPricingPolicy(final String pricingPolicy) {
+
+            }
+
+            @Override
             public Collection<CustomerOrder> getOrders() {
                 return null;
             }
