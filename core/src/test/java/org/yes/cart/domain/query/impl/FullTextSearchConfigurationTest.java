@@ -28,10 +28,7 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.entity.impl.ProductCategoryEntity;
-import org.yes.cart.domain.entity.impl.ProductEntity;
-import org.yes.cart.domain.entity.impl.ProductSkuEntity;
-import org.yes.cart.domain.entity.impl.SkuWarehouseEntity;
+import org.yes.cart.domain.entity.impl.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -61,6 +58,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
     private GenericDAO<Category, Long> categoryDao;
     private GenericDAO<SkuWarehouse, Long> skuWareHouseDao;
     private GenericDAO<Warehouse, Long> warehouseDao;
+    private GenericDAO<Shop, Long> shopDao;
+    private GenericDAO<SkuPrice, Long> skuPriceDao;
 
     private ProductService productService;
     private ProductSkuService productSkuService;
@@ -76,6 +75,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         categoryDao = (GenericDAO<Category, Long>) ctx().getBean(DaoServiceBeanKeys.CATEGORY_DAO);
         skuWareHouseDao = (GenericDAO<SkuWarehouse, Long>) ctx().getBean(DaoServiceBeanKeys.SKU_WAREHOUSE_DAO);
         warehouseDao = (GenericDAO<Warehouse, Long>) ctx().getBean(DaoServiceBeanKeys.WAREHOUSE_DAO);
+        shopDao = (GenericDAO<Shop, Long>) ctx().getBean(DaoServiceBeanKeys.SHOP_DAO);
+        skuPriceDao = (GenericDAO<SkuPrice, Long>) ctx().getBean(DaoServiceBeanKeys.SKU_PRICE_DAO);
 
 
         productService = (ProductService) ctx().getBean(ServiceSpringKeys.PRODUCT_SERVICE);
@@ -135,7 +136,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("blender")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("BENDER is best match", Arrays.asList("BENDER", "BENDER-ua").contains(products.get(0).getCode()));
                 //test search by description
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("Rodriguez Bending")));
@@ -173,7 +174,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(0, products.size());
 
 
-                // query search via linked category
+                // query search via linked category (price must be set for shop 70)
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(70L, Arrays.asList(313L),
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
@@ -245,7 +246,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("blender")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
-                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+                assertTrue("BENDER is best match", Arrays.asList("BENDER", "BENDER-ua").contains(products.get(0).getCode()));
 
                 //test search by description
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
@@ -1044,11 +1045,11 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L);
-                createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L);
-                createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L);
-                createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L);
-                createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L);
+                createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L, 10L);
+                createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L, 10L);
+                createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L, 10L);
+                createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L, 10L);
+                createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L, 10L);
                 // productDao.fullTextSearchReindex(false);
                 List<Product> foundProducts;
                 NavigationContext context;
@@ -1182,7 +1183,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
     }
 
-    private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId) {
+    private long createProduct(long brandId, String productCode, String productName, long productTypeId, long productCategoryId, long shopId) {
         Product product = new ProductEntity();
         product.setAvailability(Product.AVAILABILITY_STANDARD);
         Brand brand = brandDao.findById(brandId);
@@ -1217,6 +1218,15 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         skuWarehouse.setQuantity(BigDecimal.ONE);
         skuWarehouse.setWarehouse(warehouseDao.findById(2L));
         skuWareHouseDao.create(skuWarehouse);
+        // add prices
+        SkuPrice skuPrice = new SkuPriceEntity();
+        skuPrice.setSkuCode(product.getCode());
+        skuPrice.setQuantity(BigDecimal.ONE);
+        skuPrice.setCurrency("EUR");
+        skuPrice.setRegularPrice(new BigDecimal("9.99"));
+        skuPrice.setShop(shopDao.findById(shopId));
+        skuPriceDao.create(skuPrice);
+        // reindex
         productDao.fullTextSearchReindex(product.getProductId());
         skuWareHouseDao.flushClear();
         return pk;

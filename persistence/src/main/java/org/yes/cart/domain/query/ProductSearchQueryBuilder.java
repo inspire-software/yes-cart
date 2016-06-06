@@ -71,6 +71,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String PRODUCT_CATEGORY_FIELD = "productCategory.category";
     String PRODUCT_SHOP_FIELD = "productShopId";
     String PRODUCT_SHOP_INSTOCK_FIELD = "productInStockShopId";
+    String PRODUCT_SHOP_HASPRICE_FIELD = "productHasPriceShopId";
     String PRODUCT_ID_FIELD = "productId";
     String SKU_ID_FIELD = "sku.skuId"; //////////////////////////////////////////////
 

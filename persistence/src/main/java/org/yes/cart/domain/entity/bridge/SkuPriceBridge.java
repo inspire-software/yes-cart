@@ -16,22 +16,23 @@
 
 package org.yes.cart.domain.entity.bridge;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -52,9 +53,12 @@ public class SkuPriceBridge implements FieldBridge {
             return;
         }
 
+        final boolean isShowRoom = ((ProductSku) value).getProduct().getAvailability() == Product.AVAILABILITY_SHOWROOM;
+
         final SkuPriceRelationshipSupport support = getSkuPriceRelationshipSupport();
         final List<SkuPrice> allPrices = support.getSkuPrices(((ProductSku) value).getCode());
 
+        List<Long> availableIn = null;
         if (!allPrices.isEmpty()) {
 
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
@@ -91,7 +95,9 @@ public class SkuPriceBridge implements FieldBridge {
                     }
                 }
             }
+
             if (!lowestQuantityPrice.isEmpty()) {
+                availableIn = new LinkedList<Long>();
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
@@ -107,8 +113,41 @@ public class SkuPriceBridge implements FieldBridge {
                         );
                         document.add(facetField);
                     }
+
+                    // Note that price is set for this shop
+                    availableIn.add(shop.getKey());
+
                 }
             }
+
+        }
+
+        if (isShowRoom) {
+            for (final Shop shop : support.getAll()) {
+
+                // Fill in PK's for all shops as showroom products are visible regardless of price.
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD,
+                        String.valueOf(shop.getShopId()),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+            }
+        } else if (CollectionUtils.isNotEmpty(availableIn)) {
+
+            for (final Long shopId : availableIn) {
+                // Fill in PK's for all shops that have price entries.
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD,
+                        String.valueOf(shopId),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+            }
+
         }
     }
 

@@ -54,6 +54,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     private final SearchQueryBuilder productCategoryBuilder;
     private final SearchQueryBuilder productShopBuilder;
     private final SearchQueryBuilder productShopStockBuilder;
+    private final SearchQueryBuilder productShopPriceBuilder;
     private final SearchQueryBuilder productAttributeBuilder;
     private final SearchQueryBuilder productTagBuilder;
     private final SearchQueryBuilder skuAttributeBuilder;
@@ -83,6 +84,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         this.productCategoryBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD);
         this.productShopBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD);
         this.productShopStockBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD);
+        this.productShopPriceBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD);
         this.productAttributeBuilder = productBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
         this.productTagBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
         this.skuAttributeBuilder = skuBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
@@ -204,25 +206,6 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         final List<Query> skuQueryChainStrict = new ArrayList<Query>();
         final List<Query> skuQueryChainRelaxed = new ArrayList<Query>();
 
-        final Query cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
-        if (cats != null) {
-            // Every category belongs to a store, so no need to add store query too
-            productQueryChainStrict.add(cats);
-            productQueryChainRelaxed.add(cats);
-        } else {
-            // If we have no category criteria need to ensure we only view products that belong to current store
-            final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
-            productQueryChainStrict.add(store);
-            productQueryChainRelaxed.add(store);
-        }
-
-        // Enforce in stock products
-        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, shopId);
-        if (inStock != null) {
-            productQueryChainStrict.add(inStock);
-            productQueryChainRelaxed.add(inStock);
-        }
-
         final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>();
         if (requestParameters != null) {
             for (Map.Entry<String, List> entry : requestParameters.entrySet()) {
@@ -329,6 +312,33 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                     }
                 }
             }
+        }
+
+        // Mandatory fields are last for better scoring
+        final Query cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
+        if (cats != null) {
+            // Every category belongs to a store, so no need to add store query too
+            productQueryChainStrict.add(cats);
+            productQueryChainRelaxed.add(cats);
+        } else {
+            // If we have no category criteria need to ensure we only view products that belong to current store
+            final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
+            productQueryChainStrict.add(store);
+            productQueryChainRelaxed.add(store);
+        }
+
+        // Enforce in stock products
+        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, shopId);
+        if (inStock != null) {
+            productQueryChainStrict.add(inStock);
+            productQueryChainRelaxed.add(inStock);
+        }
+
+        // Enforce products with price
+        final  Query hasPrice = productShopPriceBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, shopId);
+        if (hasPrice != null) {
+            productQueryChainStrict.add(hasPrice);
+            productQueryChainRelaxed.add(hasPrice);
         }
 
         Query prod = join(productQueryChainStrict, BooleanClause.Occur.MUST);

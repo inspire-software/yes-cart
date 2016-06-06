@@ -14,34 +14,19 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.domain.entity.bridge.support;
+package org.yes.cart.domain.query.impl;
 
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.entity.SkuPrice;
-
-import java.util.List;
+import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 
 /**
  * User: denispavlov
- * Date: 29/05/2015
- * Time: 08:00
+ * Date: 18/02/2016
+ * Time: 08:21
  */
-public interface SkuPriceRelationshipSupport {
+public class ProductShopHasPriceSearchQueryBuilder extends AbstractStrictFieldSearchQueryBuilder implements ProductSearchQueryBuilder {
 
-    /**
-     * Get all entities.
-     *
-     * @return list of all entities
-     */
-    List<Shop> getAll();
-
-    /**
-     * Get prices for given sku on all shops.
-     *
-     * @param sku sku code
-     *
-     * @return all prices for given sku on the system
-     */
-    List<SkuPrice> getSkuPrices(String sku);
+    public ProductShopHasPriceSearchQueryBuilder() {
+        super(PRODUCT_SHOP_HASPRICE_FIELD);
+    }
 
 }

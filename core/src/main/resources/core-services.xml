@@ -43,6 +43,7 @@
     <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
     <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
     <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
+    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
     <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
     <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
     <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
@@ -74,6 +75,7 @@
                 <entry key="productCategory.category"      value-ref="productCategoryLuceneQueryBuilder"/>
                 <entry key="productShopId"                 value-ref="productShopLuceneQueryBuilder"/>
                 <entry key="productInStockShopId"          value-ref="productShopInStockLuceneQueryBuilder"/>
+                <entry key="productHasPriceShopId"         value-ref="productShopHasPriceLuceneQueryBuilder"/>
                 <entry key="featured"                      value-ref="featuredProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
