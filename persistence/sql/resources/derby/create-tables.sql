@@ -907,6 +907,7 @@
         SALE_FROM timestamp,
         SALE_TO timestamp,
         TAG varchar(45),
+        PRICINGPOLICY varchar(255),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -1506,6 +1507,7 @@
         references TSHOP;
 
     create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
+    create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
 
 
     alter table TSKUWAREHOUSE 

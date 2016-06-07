@@ -55,6 +55,13 @@
                                  change="onTagExactChange(event)"/>
                 </mx:HBox>
             </mx:FormItem>
+            <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='pricingPolicy')">
+                <mx:HBox>
+                    <mx:TextInput id="pricingPolicyInput"
+                                  toolTip="@Resource(bundle='ShopManagerApplication',key='optionalInput')"
+                                  change="onPricingPolicyChange(event)"/>
+                </mx:HBox>
+            </mx:FormItem>
             <mx:FormItem label="@Resource(bundle='ProductManagementPanel',key='salePrice')">
                 <mx:HBox>
                     <georg:DateTimeField id="saleFrom"
@@ -256,6 +263,8 @@
                         </mx:Component>
                     </mx:itemRenderer>
                 </mx:DataGridColumn>
+                <mx:DataGridColumn width="80" headerText="@Resource(bundle='ProductManagementPanel',key='pricingPolicy')"
+                                   dataField="pricingPolicy" editable="false"/>
                 <mx:DataGridColumn width="80" headerText="@Resource(bundle='ShopManagerApplication',key='tag')"
                                    dataField="tag" editable="false"/>
             </mx:columns>
@@ -545,6 +554,11 @@
         private function onTagExactChange(event:Event):void {
             _filter.tagExact = tagExact.selected;
         }
+
+        private function onPricingPolicyChange(event:Event):void {
+            _filter.pricingPolicy = pricingPolicyInput.text;
+        }
+
         ]]>
    </mx:Script>
 </mx:Canvas>

@@ -45,6 +45,8 @@ public class PriceListDTOImpl {
 
     public var tag:String;
 
+    public var pricingPolicy:String;
+
     public function PriceListDTOImpl() {
     }
 
@@ -61,7 +63,8 @@ public class PriceListDTOImpl {
                ",quantity=" + String(quantity) +
                ",currency=" + String(currency) +
                ",skuName=" + String(skuName) +
-               ",tag=" + String(tag) + "}";
+               ",tag=" + String(tag) +
+               ",pricingPolicy=" + String(pricingPolicy) + "}";
     }
 }
 }

@@ -34,3 +34,12 @@ alter table TCUSTOMER add column PRICINGPOLICY varchar(255);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11063,  'pricingpolicy', 'pricingpolicy',  1,  NULL,  'Customer Pricing Policy',  'Customer Pricing Policy', 1000,  1006, 0, 0, 0, 0);
 
+--
+-- YC-720 SkuPrice object should support pricing policy attribute
+--
+
+alter table TSKUPRICE add column PRICINGPOLICY varchar(255);
+
+create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
+
+

@@ -72,6 +72,9 @@ public class PriceListDTOImpl implements PriceListDTO {
     @DtoField(value = "tag")
     private String tag;
 
+    @DtoField(value = "pricingPolicy")
+    private String pricingPolicy;
+
 
     /** {@inheritDoc}*/
     public String getSkuName() {
@@ -198,6 +201,16 @@ public class PriceListDTOImpl implements PriceListDTO {
         this.tag = tag;
     }
 
+    /** {@inheritDoc}*/
+    public String getPricingPolicy() {
+        return pricingPolicy;
+    }
+
+    /** {@inheritDoc}*/
+    public void setPricingPolicy(final String pricingPolicy) {
+        this.pricingPolicy = pricingPolicy;
+    }
+
     @Override
     public boolean equals(final Object otherObj) {
         if (this == otherObj) {
@@ -224,6 +237,9 @@ public class PriceListDTOImpl implements PriceListDTO {
         if (tag != null ? !tag.equals(that.tag) : that.tag != null) {
             return false;
         }
+        if (pricingPolicy != null ? !pricingPolicy.equals(that.pricingPolicy) : that.pricingPolicy != null) {
+            return false;
+        }
 
         return true;
     }
@@ -237,6 +253,7 @@ public class PriceListDTOImpl implements PriceListDTO {
         result = 31 * result + (regularPrice != null ? regularPrice.hashCode() : 0);
         result = 31 * result + (salePrice != null ? salePrice.hashCode() : 0);
         result = 31 * result + (tag != null ? tag.hashCode() : 0);
+        result = 31 * result + (pricingPolicy != null ? pricingPolicy.hashCode() : 0);
         return result;
     }
 
@@ -255,6 +272,7 @@ public class PriceListDTOImpl implements PriceListDTO {
                 ", listPrice=" + regularPrice +
                 ", salePrice=" + salePrice +
                 ", tag='" + tag +
+                ", pricingPolicy='" + pricingPolicy +
                 "'}";
     }
 }

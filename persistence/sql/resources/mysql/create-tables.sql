@@ -874,6 +874,7 @@
         SALE_FROM datetime,
         SALE_TO datetime,
         TAG varchar(45),
+        PRICINGPOLICY varchar(255),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -1524,6 +1525,7 @@
         references TSHOP (SHOP_ID);
 
     create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
+    create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
 
 
     alter table TSKUWAREHOUSE 

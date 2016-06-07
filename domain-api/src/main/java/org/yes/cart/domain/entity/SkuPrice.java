@@ -193,4 +193,20 @@ public interface SkuPrice extends Auditable, Taggable {
      * @param tag price tag
      */
     void setTag(String tag);
+
+
+    /**
+     * Get price type. Price type defines customer segment that has access to this price.
+     *
+     * @return price type
+     */
+    String getPricingPolicy();
+
+    /**
+     * Set price type. Price type defines customer segment that has access to this price.
+     *
+     * @param pricingPolicy price type
+     */
+    void setPricingPolicy(String pricingPolicy);
+
 }

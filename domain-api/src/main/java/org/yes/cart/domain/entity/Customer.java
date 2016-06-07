@@ -72,14 +72,14 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
     void setCustomerType(String customerType);
 
     /**
-     * Get price type. Price type defines customer segment that has acce to this price.
+     * Get price type. Price type defines customer segment that has access to this price.
      *
      * @return price type
      */
     String getPricingPolicy();
 
     /**
-     * Set price type. Price type defines customer segment that has acce to this price.
+     * Set price type. Price type defines customer segment that has access to this price.
      *
      * @param pricingPolicy price type
      */

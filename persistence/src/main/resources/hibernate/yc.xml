@@ -1310,6 +1310,7 @@
                 </comment>
             </column>
         </property>
+        <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" index="SKUPRICE_PRICINGPOLICY" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3458,7 +3459,7 @@
 
     <query name="SKUPRICE.BY.SKUCODE.ALL">
         <![CDATA[
-            select sp from SkuPriceEntity sp where sp.skuCode  = ?1
+            select sp from SkuPriceEntity sp where sp.skuCode  = ?1 and (sp.pricingPolicy is NULL or sp.pricingPolicy = '')
         ]]>
     </query>
 

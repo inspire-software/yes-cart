@@ -189,6 +189,9 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     criteria.add(Restrictions.ilike("tag", filter.getTag(), MatchMode.ANYWHERE));
                 }
             }
+            if (StringUtils.hasLength(filter.getPricingPolicy())) {
+                criteria.add(Restrictions.eq("pricingPolicy", filter.getPricingPolicy()));
+            }
             if (filter.getFrom() != null) {
                 criteria.add(
                         Restrictions.or(

@@ -19,7 +19,7 @@
                 xmlns:georg="com.georg.*"
                 xmlns:validation="org.yes.cart.validation.*" layout="absolute"
                 width="500"
-                height="340"
+                height="370"
                 title="@Resource(bundle='ProductManagementPanel',key='createPriceTier')"
                 showCloseButton="true" close="PopUpManager.removePopUp(this)"
                 creationComplete="init();"
@@ -27,7 +27,7 @@
 
     <mx:Form>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='sku')">
-            <mx:TextInput id="skuInput" width="360" enabled="{!editing}"/>
+            <mx:TextInput id="skuInput" width="360" editable="{!editing}"/>
         </mx:FormItem>
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='quantity')">
             <mx:TextInput id="quantityTextInput" width="360"/>
@@ -48,6 +48,10 @@
 
         <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='minimalPrice')">
             <mx:TextInput id="minimalPriceTextInput" width="360"/>
+        </mx:FormItem>
+
+        <mx:FormItem width="100%" label="@Resource(bundle='ProductManagementPanel',key='pricingPolicy')">
+            <mx:TextInput id="pricingPolicyInput" width="360"/>
         </mx:FormItem>
 
         <mx:FormItem width="100%" label="@Resource(bundle='ShopManagerApplication',key='tag')">
@@ -76,6 +80,9 @@
 
     <mx:StringValidator id="tagValidator" source="{tagInput}" property="text"
                         required="false" maxLength="45"/>
+
+    <mx:StringValidator id="pricingPolicyValidator" source="{pricingPolicyInput}" property="text"
+                        required="false" maxLength="255"/>
 
 
     <mx:ControlBar horizontalAlign="right" width="100%">
@@ -148,6 +155,7 @@
 
             BindingUtils.bindProperty(skuInput, "text", _skuPrice, "skuCode");
             BindingUtils.bindProperty(tagInput, "text", _skuPrice, "tag");
+            BindingUtils.bindProperty(pricingPolicyInput, "text", _skuPrice, "pricingPolicy");
             BindingUtils.bindProperty(quantityTextInput, "text", _skuPrice, "quantity");
             BindingUtils.bindProperty(listPriceTextInput, "text", _skuPrice, "regularPrice");
             BindingUtils.bindProperty(salePriceTextInput, "text", _skuPrice, "salePrice");
@@ -156,6 +164,7 @@
             BindingUtils.bindProperty(minimalPriceTextInput, "text", _skuPrice, "minimalPrice");
 
             BindingUtils.bindProperty(_skuPrice, "tag", tagInput, "text");
+            BindingUtils.bindProperty(_skuPrice, "pricingPolicy", pricingPolicyInput, "text");
             BindingUtils.bindProperty(_skuPrice, "skuCode", skuInput, "text");
             BindingUtils.bindProperty(_skuPrice, "quantity", quantityTextInput, "text");
             BindingUtils.bindProperty(_skuPrice, "regularPrice", listPriceTextInput, "text");
@@ -167,6 +176,7 @@
 
             ChangeWatcher.watch(skuInput, "text", priceFormChanged);
             ChangeWatcher.watch(tagInput, "text", priceFormChanged);
+            ChangeWatcher.watch(pricingPolicyInput, "text", priceFormChanged);
             ChangeWatcher.watch(quantityTextInput, "text", priceFormChanged);
             ChangeWatcher.watch(listPriceTextInput, "text", priceFormChanged);
             ChangeWatcher.watch(salePriceTextInput, "text", priceFormChanged);
@@ -179,6 +189,7 @@
             validatorArr.push(salePriceValidator);
             validatorArr.push(minimalPriceValidator);
             validatorArr.push(tagValidator);
+            validatorArr.push(pricingPolicyValidator);
 
 
         }
