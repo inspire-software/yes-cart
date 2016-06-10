@@ -279,23 +279,6 @@ public interface ProductServiceFacade {
      */
     ProductQuantityModel getProductQuantity(BigDecimal cartQty, BigDecimal min, BigDecimal max, BigDecimal step);
 
-
-    /**
-     * Get currently active SKU price (or blank object).
-     *
-     * @param productId product id (optional)
-     * @param skuCode   selected SKU (optional)
-     * @param quantity  quantity tier
-     * @param currency  currency
-     * @param shopId    current shop
-     *
-     * @return active product/SKU price (or blank object)
-     *
-     * @deprecated use {@link #getSkuPrice(ShoppingCart, Long, String, BigDecimal)}
-     */
-    @Deprecated
-    SkuPrice getSkuPrice(Long productId, String skuCode, BigDecimal quantity, String currency, long shopId);
-
     /**
      * Get price model (or blank object) with respect to current shop tax display settings.
      *
@@ -364,21 +347,6 @@ public interface ProductServiceFacade {
      * @return price (or blank object)
      */
     ProductPriceModel getSkuPrice(long shopId, String currency, CartItem item, boolean total);
-
-    /**
-     * Get prices for all SKU quantity tiers.
-     *
-     * @param productId product id (optional)
-     * @param skuCode   selected SKU (optional)
-     * @param currency  currency
-     * @param shopId    current shop
-     *
-     * @return active product/SKU prices (or blank object)
-     *
-     * @deprecated use {@link #getSkuPrices(ShoppingCart, Long, String)}
-     */
-    @Deprecated
-    Collection<SkuPrice> getSkuPrices(Long productId, String skuCode, String currency, long shopId);
 
     /**
      * Get prices for all SKU quantity tiers sorted by tier.

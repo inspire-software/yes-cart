@@ -143,12 +143,13 @@
         <constructor-arg index="3" ref="luceneQueryFactory"/>
         <constructor-arg index="4" ref="productAvailabilityStrategy"/>
         <constructor-arg index="5" ref="productQuantityStrategy"/>
-        <constructor-arg index="6" ref="priceService"/>
-        <constructor-arg index="7" ref="shoppingCartCalculator"/>
-        <constructor-arg index="8" ref="promotionService"/>
-        <constructor-arg index="9" ref="categoryServiceFacade"/>
-        <constructor-arg index="10" ref="shopService"/>
-        <constructor-arg index="11" ref="brandService"/>
+        <constructor-arg index="6" ref="pricingPolicyProvider"/>
+        <constructor-arg index="7" ref="priceService"/>
+        <constructor-arg index="8" ref="shoppingCartCalculator"/>
+        <constructor-arg index="9" ref="promotionService"/>
+        <constructor-arg index="10" ref="categoryServiceFacade"/>
+        <constructor-arg index="11" ref="shopService"/>
+        <constructor-arg index="12" ref="brandService"/>
     </bean>
 
     <!-- ############################ Facades for web end ####################################################### -->

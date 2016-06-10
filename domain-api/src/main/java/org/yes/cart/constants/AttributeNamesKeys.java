@@ -479,6 +479,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_MAIL_SERVER_STARTTLS_ENABLE = "SHOP_MAIL_SERVER_STARTTLS_ENABLE";
 
+        /**
+         * Prefix for regional pricing. The format is SHOP_REGIONAL_PRICING_[COUNTRY_CODE]_[STATE_CODE]
+         */
+        String SHOP_REGIONAL_PRICING_PREFIX = "SHOP_REGIONAL_PRICING_";
+
     }
 
     interface Brand {

@@ -38,12 +38,13 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Get minimal price for given product skus (all), shop, currency and quantity.
      *
      *
-     * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
-     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
-     *                     determine minimal price
-     * @param shopId       shop
-     * @param currencyCode desirable currency
-     * @param quantity     quantity
+     * @param productId     optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku   optional sku to filter the prices. if null all product skus will be  considered to
+     *                      determine minimal price
+     * @param shopId        shop
+     * @param currencyCode  desirable currency
+     * @param quantity      quantity tier
+     * @param pricingPolicy optional pricing policy
      *
      * @return lowest available sku price
      */
@@ -51,7 +52,8 @@ public interface PriceService extends GenericService<SkuPrice> {
                              final String selectedSku,
                              final long shopId,
                              final String currencyCode,
-                             final BigDecimal quantity);
+                             final BigDecimal quantity,
+                             final String pricingPolicy);
 
     /**
      * Get all prices for given product skus (all), shop, currency and quantity.
@@ -61,13 +63,15 @@ public interface PriceService extends GenericService<SkuPrice> {
      *                     determine minimal price
      * @param shopId       shop
      * @param currencyCode desirable currency
+     * @param pricingPolicy optional pricing policy
      *
      * @return lowest available sku price
      */
     List<SkuPrice> getAllCurrentPrices(final Long productId,
                                        final String selectedSku,
                                        final long shopId,
-                                       final String currencyCode);
+                                       final String currencyCode,
+                                       final String pricingPolicy);
 
 
     /**

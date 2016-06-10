@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -50,16 +51,18 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      * @param productQuantityStrategy product quantity strategy
      */
     public SetSkuQuantityToCartEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                                 final PriceService priceService,
+                                                final PricingPolicyProvider pricingPolicyProvider,
                                                 final ProductService productService,
                                                 final ShopService shopService,
                                                 final ProductQuantityStrategy productQuantityStrategy) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.productQuantityStrategy = productQuantityStrategy;
     }
 

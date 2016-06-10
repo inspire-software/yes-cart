@@ -18,14 +18,13 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -51,14 +50,16 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
      * @param customerService customer service
      * @param shopService shop service
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      */
     public LoginCommandImpl(final ShoppingCartCommandRegistry registry,
                             final CustomerService customerService,
                             final ShopService shopService,
                             final PriceService priceService,
+                            final PricingPolicyProvider pricingPolicyProvider,
                             final ProductService productService) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.customerService = customerService;
         this.shopService = shopService;
     }

@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
@@ -54,6 +55,7 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
      * @param customerService customer service
      * @param shopService shop service
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param cartRepository cart repository
      */
@@ -61,9 +63,10 @@ public class WicketLoginCommandImpl extends LoginCommandImpl {
                                   final CustomerService customerService,
                                   final ShopService shopService,
                                   final PriceService priceService,
+                                  final PricingPolicyProvider pricingPolicyProvider,
                                   final ProductService productService,
                                   final CartRepository cartRepository) {
-        super(registry, customerService, shopService, priceService, productService);
+        super(registry, customerService, shopService, priceService, pricingPolicyProvider, productService);
         this.cartRepository = cartRepository;
     }
 

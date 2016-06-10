@@ -21,10 +21,7 @@ import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -41,6 +38,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
     private final PriceService priceService;
 
+    private final PricingPolicyProvider pricingPolicyProvider;
+
     private final ProductService productService;
 
     private final ShopService shopService;
@@ -51,15 +50,18 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public AbstractRecalculatePriceCartCommandImpl(final ShoppingCartCommandRegistry registry,
                                                    final PriceService priceService,
+                                                   final PricingPolicyProvider pricingPolicyProvider,
                                                    final ProductService productService,
                                                    final ShopService shopService) {
         super(registry);
         this.priceService = priceService;
+        this.pricingPolicyProvider = pricingPolicyProvider;
         this.productService = productService;
         this.shopService = shopService;
     }
@@ -80,9 +82,16 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
+            final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
+                    shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                    shoppingCart.getShoppingContext().getCountryCode(),
+                    shoppingCart.getShoppingContext().getStateCode()
+            );
+
+
             for (final CartItem cartItem : shoppingCart.getCartItemList()) {
 
-                setProductSkuPrice(shoppingCart, shop, cartItem.getProductSkuCode(), cartItem.getQty());
+                setProductSkuPrice(shoppingCart, shop, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
 
             }
 
@@ -113,13 +122,19 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
             final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
 
+            final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
+                    shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                    shoppingCart.getShoppingContext().getCountryCode(),
+                    shoppingCart.getShoppingContext().getStateCode()
+            );
+
             final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                     null,
                     skuCode,
                     shop.getShopId(),
                     shoppingCart.getCurrencyCode(),
-                    qty
-            );
+                    qty,
+                    policy.getID());
 
             if (skuPrice.getRegularPrice() != null) {
 
@@ -135,15 +150,16 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
     private void setProductSkuPrice(final MutableShoppingCart shoppingCart,
                                     final Shop shop,
                                     final String skuCode,
-                                    final BigDecimal qty) {
+                                    final BigDecimal qty,
+                                    final PricingPolicyProvider.PricingPolicy policy) {
 
         final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
                 shop.getShopId(),
                 shoppingCart.getCurrencyCode(),
-                qty
-        );
+                qty,
+                policy.getID());
 
         if (!shoppingCart.setProductSkuPrice(
                 skuCode,
@@ -156,6 +172,14 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         }
     }
 
+    /**
+     * Get pricing policy service
+     *
+     * @return {@link PricingPolicyProvider}
+     */
+    public PricingPolicyProvider getPricingPolicyProvider() {
+        return pricingPolicyProvider;
+    }
 
     /**
      * Get price service.

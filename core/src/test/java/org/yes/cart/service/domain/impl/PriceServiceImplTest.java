@@ -102,46 +102,139 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        SkuPrice skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE);
+        // Test default (pricing policy null or empty) prices are returned correctly
+
+        SkuPrice skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE, null);
         assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
 
-        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE, "");
         assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("150.00")).equals(skuPrice.getRegularPrice()));
-
-        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"));
-        assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
-
-        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"));
-        assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePriceForCalculation());
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
 
-        skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"));
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE, null);
         assertNotNull(skuPrice);
-        assertNull(skuPrice.getSalePriceForCalculation());
-        assertTrue((new BigDecimal("145.00")).equals(skuPrice.getRegularPrice()));
+        assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
 
-        //Test than we are can not getByKey the minimal price through price tiers for multisku product for not cofigured currency
-        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "BYR", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE, "");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-PINK", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.11")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"), null);
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"), "");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"), null);
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"), "");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("140.22")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"), null);
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"), "");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("130.11")).equals(skuPrice.getSalePrice()));
+
+        // Test special prices policy
+
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", BigDecimal.ONE, "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", BigDecimal.ONE, "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("2"), "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+        // Make sure that default lower prices still win over the special
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "EUR", new BigDecimal("3"), "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("100.11")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", new BigDecimal("2"), "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-ORIG", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("120.22")).equals(skuPrice.getSalePrice()));
+
+        skuPrice = priceService.getMinimalPrice(10000L, "SOBOT-LIGHT", shop.getShopId(), "EUR", new BigDecimal("2"), "P1");
+        assertNotNull(skuPrice);
+        assertEquals("SOBOT-LIGHT", skuPrice.getSkuCode());
+        assertNotNull(skuPrice.getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.getRegularPrice()));
+        assertTrue((new BigDecimal("115.22")).equals(skuPrice.getSalePrice()));
+
+
+        //Test that we can not getByKey the minimal price through price tiers for multisku product for not configured currency
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "BYR", BigDecimal.ONE, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
-        //Test than we are can getByKey the minimal price through price tiers for multisku product.
-        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "UAH", BigDecimal.ONE);
+
+        skuPrice = priceService.getMinimalPrice(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "UAH", BigDecimal.ONE, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
 
-        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "UAH", BigDecimal.ONE);
+        skuPrice = priceService.getMinimalPrice(10000L, null, shop.getShopId(), "UAH", BigDecimal.ONE, null);
         assertNotNull(skuPrice);
         assertNull(skuPrice.getRegularPrice());
         assertNull(skuPrice.getSalePriceForCalculation());
+
     }
 
     @Test
@@ -151,19 +244,47 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertNotNull(product);
         assertEquals(4, product.getSku().size());
 
-        List<SkuPrice> skuPrice = priceService.getAllCurrentPrices(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR");
+        List<SkuPrice> skuPrice = priceService.getAllCurrentPrices(10000L, product.getDefaultSku().getCode(), shop.getShopId(), "EUR", null);
         assertNotNull(skuPrice);
         assertEquals(1, skuPrice.size());
-        assertNull(skuPrice.get(0).getSalePriceForCalculation());
+        assertEquals("SOBOT-ORIG", skuPrice.get(0).getSkuCode());
+        assertNotNull(skuPrice.get(0).getSalePriceForCalculation());
         assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(0).getRegularPrice()));
+        assertTrue((new BigDecimal("140.22")).equals(skuPrice.get(0).getSalePrice()));
 
-        skuPrice = priceService.getAllCurrentPrices(10000L, null, shop.getShopId(), "EUR");
+        skuPrice = priceService.getAllCurrentPrices(10000L, null, shop.getShopId(), "EUR", null);
         assertNotNull(skuPrice);
-        assertEquals(5, skuPrice.size());  // 4 regular prices + 1 tier 2
-        for (int i = 0; i < skuPrice.size(); i++) {
-            assertNotNull(skuPrice.get(i).getRegularPrice());
+        assertEquals(3, skuPrice.size());  // must only show unique minimal price at each tier
+        assertEquals("SOBOT-PINK", skuPrice.get(0).getSkuCode());
+        assertNotNull(skuPrice.get(0).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(0).getRegularPrice()));
+        assertTrue((new BigDecimal("140.11")).equals(skuPrice.get(0).getSalePrice()));
+        assertEquals("SOBOT-LIGHT", skuPrice.get(1).getSkuCode());
+        assertNotNull(skuPrice.get(1).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(1).getRegularPrice()));
+        assertTrue((new BigDecimal("130.11")).equals(skuPrice.get(1).getSalePrice()));
+        assertEquals("SOBOT-LIGHT", skuPrice.get(2).getSkuCode());
+        assertNotNull(skuPrice.get(2).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(2).getRegularPrice()));
+        assertTrue((new BigDecimal("100.11")).equals(skuPrice.get(2).getSalePrice()));
 
-        }
+
+        skuPrice = priceService.getAllCurrentPrices(10000L, null, shop.getShopId(), "EUR", "P1");
+        assertNotNull(skuPrice);
+        assertEquals(3, skuPrice.size());  // must only show unique minimal price at each tier
+        assertEquals("SOBOT-ORIG", skuPrice.get(0).getSkuCode());
+        assertNotNull(skuPrice.get(0).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(0).getRegularPrice()));
+        assertTrue((new BigDecimal("120.22")).equals(skuPrice.get(0).getSalePrice()));
+        assertEquals("SOBOT-LIGHT", skuPrice.get(1).getSkuCode());
+        assertNotNull(skuPrice.get(1).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(1).getRegularPrice()));
+        assertTrue((new BigDecimal("115.22")).equals(skuPrice.get(1).getSalePrice()));
+        assertEquals("SOBOT-LIGHT", skuPrice.get(2).getSkuCode());
+        assertNotNull(skuPrice.get(2).getSalePriceForCalculation());
+        assertTrue((new BigDecimal("150.85")).equals(skuPrice.get(2).getRegularPrice()));
+        assertTrue((new BigDecimal("100.11")).equals(skuPrice.get(2).getSalePrice()));
+
 
 
     }
@@ -179,164 +300,13 @@ public class PriceServiceImplTest extends BaseCoreDBTestCase {
         assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("5")).intValue());
         assertEquals( new BigDecimal("0").intValue(), priceService1.niceBigDecimal(new BigDecimal("1")).intValue());
 
-        assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("13")).intValue());
+        assertEquals(new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("13")).intValue());
 
-        assertEquals( new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("9")).intValue());
+        assertEquals(new BigDecimal("10").intValue(), priceService1.niceBigDecimal(new BigDecimal("9")).intValue());
 
         assertEquals( new BigDecimal("1200").intValue(), priceService1.niceBigDecimal(new BigDecimal("1234")).intValue());
         assertEquals( new BigDecimal("5700").intValue(), priceService1.niceBigDecimal(new BigDecimal("5678")).intValue());
 
     }
-    
-    
-    @Test
-    public void testAddAllTimePrice() {
-        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
-        skuPricesForOneSku.addAll(getSkuPrices("sku2"));
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null);
-        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
-        assertTrue(priceServiceImpl.addAllTimePrice(rez, skuPricesForOneSku , System.currentTimeMillis()));
-        assertEquals(1, rez.size());
-        assertEquals(11, rez.get(0).getSecond().getSkuPriceId());
-    }
-
-    @Test
-    public void testAddStartPrice() {
-        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null);
-        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
-        assertTrue(priceServiceImpl.addStartPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
-        assertEquals(1, rez.size());
-        assertEquals(8, rez.get(0).getSecond().getSkuPriceId());
-    }
-
-    @Test
-    public void testAddEndPrice() {
-        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null);
-        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
-        assertTrue(priceServiceImpl.addEndPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
-        assertEquals(1, rez.size());
-        assertEquals(5, rez.get(0).getSecond().getSkuPriceId());
-    }
-
-    @Test
-    public void testAllFramedPrice() {
-        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null);
-        priceServiceImpl.reorderSkuPrices(skuPricesForOneSku);
-        List<Pair<String, SkuPrice>> rez = new LinkedList<Pair<String, SkuPrice>>();
-        assertTrue(priceServiceImpl.addFramedPrice(rez, skuPricesForOneSku, System.currentTimeMillis()));
-        assertEquals(1, rez.size());
-        assertEquals(1, rez.get(0).getSecond().getSkuPriceId());
-    }
-
-    @Test
-    public void testGetSkuPricesFilteredByTimeFrame() {
-
-        List<Pair<String, SkuPrice>> skuPricesForOneSku = getSkuPrices("sku1");
-
-        skuPricesForOneSku.addAll(getSkuPrices("sku2"));
-
-        PriceServiceImpl priceServiceImpl = new PriceServiceImpl(null, null);
-
-        List<Pair<String, SkuPrice>> rez = priceServiceImpl.getSkuPricesFilteredByTimeFrame(skuPricesForOneSku);
-
-        assertEquals(2, rez.size());
-
-        assertEquals(1, rez.get(0).getSecond().getSkuPriceId());
-        assertEquals(1, rez.get(1).getSecond().getSkuPriceId());
-    }
-
-
-    private List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode) {
-
-
-        //this price will be overwrited by skuPrice1  because of order of adding -  skuPriceId
-        final SkuPrice skuPrice0 = new SkuPriceEntity();
-        skuPrice0.setSalefrom(new DateTime(1999,10,10,0,0,0,0).toDate());
-        skuPrice0.setSaleto(new DateTime(2025,10,10,0,0,0,0).toDate());
-        skuPrice0.setSkuPriceId(0);
-        final SkuPrice skuPrice1 = new SkuPriceEntity();
-        skuPrice1.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
-        skuPrice1.setSaleto(new DateTime(2024,10,10,0,0,0,0).toDate());
-        skuPrice1.setSkuPriceId(1);
-        //start and end in past
-        final SkuPrice skuPrice2 = new SkuPriceEntity();
-        skuPrice2.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
-        skuPrice2.setSaleto(new DateTime(2010,10,10,0,0,0,0).toDate());
-        skuPrice2.setSkuPriceId(2);
-        //start and end in future
-        final SkuPrice skuPrice3 = new SkuPriceEntity();
-        skuPrice3.setSalefrom(new DateTime(2020,10,10,0,0,0,0).toDate());
-        skuPrice3.setSaleto(new DateTime(2021,10,10,0,0,0,0).toDate());
-        skuPrice3.setSkuPriceId(3);
-
-
-        // price end in future but   skuPrice5 has higher priority 
-        final SkuPrice skuPrice4 = new SkuPriceEntity();
-        skuPrice4.setSaleto(new DateTime(2024,9,9,0,0,0,0).toDate());
-        skuPrice4.setSkuPriceId(4);
-        final SkuPrice skuPrice5 = new SkuPriceEntity();
-        skuPrice5.setSaleto(new DateTime(2040,9,9,0,0,0,0).toDate());
-        skuPrice5.setSkuPriceId(5);
-        // already end
-        final SkuPrice skuPrice6 = new SkuPriceEntity();
-        skuPrice6.setSaleto(new DateTime(1999,9,9,0,0,0,0).toDate());
-        skuPrice6.setSkuPriceId(6);
-
-
-        // this price starts in past, by 8 has more priority
-        final SkuPrice skuPrice7 = new SkuPriceEntity();
-        skuPrice7.setSalefrom(new DateTime(2001,10,10,0,0,0,0).toDate());
-        skuPrice7.setSkuPriceId(7);
-        final SkuPrice skuPrice8 = new SkuPriceEntity();
-        skuPrice8.setSalefrom(new DateTime(2000,10,10,0,0,0,0).toDate());
-        skuPrice8.setSkuPriceId(8);
-        //will start in the future
-        final SkuPrice skuPrice9 = new SkuPriceEntity();
-        skuPrice9.setSalefrom(new DateTime(2050,10,10,0,0,0,0).toDate());
-        skuPrice9.setSkuPriceId(9);
-
-
-
-        //never end price with low priority
-        final SkuPrice skuPrice10 = new SkuPriceEntity();
-        skuPrice10.setSkuPriceId(10);
-        //never end price with high priority
-        final SkuPrice skuPrice11 = new SkuPriceEntity();
-        skuPrice11.setSkuPriceId(11);
-
-
-
-
-
-
-        List<Pair<String, SkuPrice>> rez =  new ArrayList<Pair<String, SkuPrice>>() {{
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice0));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice1));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice2));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice3));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice4));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice5));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice6));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice7));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice8));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice9));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice10));
-            add(new Pair<String, SkuPrice>(skuCode, skuPrice11));
-        }};
-
-        Collections.shuffle(rez);
-
-        return rez;
-        
-    }
-
-
-
 
 }

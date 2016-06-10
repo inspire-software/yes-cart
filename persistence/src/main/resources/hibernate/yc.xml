@@ -3422,7 +3422,14 @@
     <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP">
         <![CDATA[
             select sp from SkuPriceEntity sp
-            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '')
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP.AND.POLICY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
         ]]>
     </query>
 
@@ -3437,7 +3444,15 @@
         <![CDATA[
             select sp from SkuPriceEntity sp
             where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
-                and sp.currency = ?2 and sp.shop.shopId = ?3
+                and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '')
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP.AND.POLICY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
+                and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
         ]]>
     </query>
 

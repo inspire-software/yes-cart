@@ -22,6 +22,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
 import java.util.Map;
@@ -40,14 +41,16 @@ public class ChangeCurrencyEventCommandImpl extends AbstractRecalculatePriceCart
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public ChangeCurrencyEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                           final PriceService priceService,
+                                          final PricingPolicyProvider pricingPolicyProvider,
                                           final ProductService productService,
                                           final ShopService shopService) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
     }
 
     /**

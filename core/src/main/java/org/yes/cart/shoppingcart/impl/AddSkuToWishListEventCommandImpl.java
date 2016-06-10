@@ -20,10 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.*;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -50,6 +47,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      * @param customerService customer service
@@ -58,12 +56,13 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
      */
     public AddSkuToWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                             final PriceService priceService,
+                                            final PricingPolicyProvider pricingPolicyProvider,
                                             final ProductService productService,
                                             final ShopService shopService,
                                             final CustomerService customerService,
                                             final CustomerWishListService customerWishListService,
                                             final ProductQuantityStrategy productQuantityStrategy) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.customerService = customerService;
         this.customerWishListService = customerWishListService;
         this.productQuantityStrategy = productQuantityStrategy;
@@ -218,13 +217,20 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
 
+        final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
+                shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                shoppingCart.getShoppingContext().getCountryCode(),
+                shoppingCart.getShoppingContext().getStateCode()
+        );
+
+
         final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
                 shop.getShopId(),
                 shoppingCart.getCurrencyCode(),
-                quantity
-        );
+                quantity,
+                policy.getID());
 
         final BigDecimal price = MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());
 

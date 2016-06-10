@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
@@ -46,16 +47,18 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      * @param customerWishListService customer wish list service
      */
     public RemoveSkuFromWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
                                                  final PriceService priceService,
+                                                 final PricingPolicyProvider pricingPolicyProvider,
                                                  final ProductService productService,
                                                  final ShopService shopService,
                                                  final CustomerWishListService customerWishListService) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.customerWishListService = customerWishListService;
     }
 

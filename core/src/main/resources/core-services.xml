@@ -832,6 +832,12 @@
         <constructor-arg index="1" ref="taxConfigService"/>
     </bean>
 
+    <bean id="pricingPolicyProvider" class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
+
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
         <constructor-arg index="0" ref="customerOrderDao"/>
     </bean>

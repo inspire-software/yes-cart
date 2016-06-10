@@ -49,7 +49,7 @@ public interface ShoppingCartCalculator {
     }
 
     /**
-     * Calculate price model for given SKU with minimal price ( {@link PriceService#getMinimalPrice(Long, String, long, String, BigDecimal)} ).
+     * Calculate price model for given SKU with minimal price ( {@link PriceService#getMinimalPrice(Long, String, long, String, BigDecimal, String)} ).
      *
      * @param currentCart current cart (to provide additional data such as location)
      * @param skuCode SKU code to calculate price for

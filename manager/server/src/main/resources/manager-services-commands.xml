@@ -32,8 +32,9 @@
     <bean id="changeCurrencyCmd" class="org.yes.cart.shoppingcart.impl.ChangeCurrencyEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
         <property name="priority" value="1"/>
     </bean>
 
@@ -48,7 +49,8 @@
         <constructor-arg index="1" ref="customerService"/>
         <constructor-arg index="2" ref="shopService"/>
         <constructor-arg index="3" ref="priceService"/>
-        <constructor-arg index="4" ref="productService"/>
+        <constructor-arg index="4" ref="pricingPolicyProvider"/>
+        <constructor-arg index="5" ref="productService"/>
         <property name="priority" value="3"/>
     </bean>
 
@@ -81,11 +83,12 @@
     <bean id="addToWishListCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToWishListEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="customerService"/>
-        <constructor-arg index="5" ref="customerWishListService"/>
-        <constructor-arg index="6" ref="productQuantityStrategy"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="customerService"/>
+        <constructor-arg index="6" ref="customerWishListService"/>
+        <constructor-arg index="7" ref="productQuantityStrategy"/>
         <property name="priority" value="9"/>
         <lookup-method name="getRemoveAllSku" bean="removeAllSkuCmd"/>
     </bean>
@@ -93,9 +96,10 @@
     <bean id="removeFromWishListCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromWishListEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="customerWishListService"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="customerWishListService"/>
         <property name="priority" value="10"/>
     </bean>
 
@@ -114,35 +118,39 @@
     <bean id="addToCartCmd" class="org.yes.cart.shoppingcart.impl.AddSkuToCartEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="productQuantityStrategy"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="productQuantityStrategy"/>
         <property name="priority" value="13"/>
     </bean>
 
     <bean id="removeAllSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveAllSkuFromCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
         <property name="priority" value="14"/>
     </bean>
 
     <bean id="removeOneSkuCmd" class="org.yes.cart.shoppingcart.impl.RemoveSkuFromCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="productQuantityStrategy"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="productQuantityStrategy"/>
         <property name="priority" value="15"/>
     </bean>
 
     <bean id="setQuantityToCartCmd" class="org.yes.cart.shoppingcart.impl.SetSkuQuantityToCartEventCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="priceService"/>
-        <constructor-arg index="2" ref="productService"/>
-        <constructor-arg index="3" ref="shopService"/>
-        <constructor-arg index="4" ref="productQuantityStrategy"/>
+        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="4" ref="shopService"/>
+        <constructor-arg index="5" ref="productQuantityStrategy"/>
         <property name="priority" value="16"/>
     </bean>
 
