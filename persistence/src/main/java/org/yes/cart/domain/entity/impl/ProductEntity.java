@@ -43,6 +43,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     private String code;
     private String manufacturerCode;
+    private String pimCode;
     private Date availablefrom;
     private Date availableto;
     private String name;
@@ -95,6 +96,14 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
 
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    public String getPimCode() {
+        return pimCode;
+    }
+
+    public void setPimCode(final String pimCode) {
+        this.pimCode = pimCode;
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
@@ -394,6 +403,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
                     for (ProductSku productSku : this.getSku()) {
                         if (productSku.getRank() > rank) {
                             defaultProductSku = productSku;
+                            rank = productSku.getRank();
                         }
                     }
                     if (defaultProductSku == null) { // if there is no matching one - then take the first one
