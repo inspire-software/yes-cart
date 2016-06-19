@@ -32,27 +32,24 @@ export class AppCmp {
 
   private static _shopEventBus:ShopEventBus;
 
-  constructor(@Inject(ShopEventBus)  _shopEventBus:ShopEventBus) {
-    AppCmp._shopEventBus = _shopEventBus;
-  }
-
   public static getShopEventBus() : ShopEventBus {
     console.debug('Get evt bus instance ' + AppCmp._shopEventBus);
     return AppCmp._shopEventBus;
   }
 
-
-
+  constructor(@Inject(ShopEventBus)  _shopEventBus:ShopEventBus) {
+    AppCmp._shopEventBus = _shopEventBus;
+  }
 }
 
 /*@Component({
-  selector: 'wrapper',
-  template: `<div id="wrapper">
-      <div id="page-wrapper" style="min-height: 561px;">
-        <ng-content></ng-content>
-      </div>
-    </div>`,
-  directives: [CORE_DIRECTIVES]
-})
-export class WrapperCmp {
-}*/
+ selector: 'wrapper',
+ template: `<div id="wrapper">
+ <div id="page-wrapper" style="min-height: 561px;">
+ <ng-content></ng-content>
+ </div>
+ </div>`,
+ directives: [CORE_DIRECTIVES]
+ })
+ export class WrapperCmp {
+ }*/
