@@ -20,7 +20,8 @@ It will install dependencies and after perform lint checks of changed files and 
 
 ## Well know problems
 
- - Under Windows platform maven exec plugin may not run npm. Is this case you may get  "CreateProcess error=193, %1 is not a valid Win32 application" error message
+ - Under Windows platform maven exec plugin may not run npm. Is this case you may get  
+ "CreateProcess error=193, %1 is not a valid Win32 application" error message
  Solution locate and copy npm.cmd to npm.bat and delete npm shell script (without extension). 
  
  

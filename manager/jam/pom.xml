@@ -545,7 +545,7 @@
                             <file>${basedir}/src/main/webapp/resources/index.html</file>
                             <replacements>
                                 <replacement>
-                                    <token>href=".*assets\/main.css.*"</token>
+                                    <token>href=".*assets\/main.css.*"</token> <!--TODO check how to build with correct path delimiter-->
                                     <value>href="assets/main.css"</value>
                                 </replacement>
                             </replacements>
