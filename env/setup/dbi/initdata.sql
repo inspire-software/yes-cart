@@ -31,6 +31,7 @@ INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) V
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1003, 'PRODUCT',  'PRODUCT', 'Product settings.', '');
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1005, 'BRAND',    'BRAND', 'Brand settings.', '');
 INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1006, 'CUSTOMER', 'CUSTOMER', 'Customer settings.', '');
+INSERT INTO TATTRIBUTEGROUP (ATTRIBUTEGROUP_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1007, 'ADDRESS', 'ADDRESS', 'Customer address settings.', '');
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10999,  'CURRENCY', 'CURRENCY',  0,  NULL,  'Currencies',  'Supported currencies by shop. First one is the default',  1004, 1001);
@@ -75,32 +76,36 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
    'Enable "Add coupon" section on the shopping cart page',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format',
+  VALUES (  10986,  'SHOP_ADDRESS_FORMATTER', 'SHOP_ADDRESS_FORMATTER',  0,  NULL,  'Address: address format (default)',
 'Placeholders:
-{{firstname}} {{middlename}} {{lastname}}
+{{salutation}} {{firstname}} {{middlename}} {{lastname}}
 {{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
-{{phone1}} {{phone2}} {{mobile1}} {{mobile2}}
-{{email1}} {{email2}}
-{{custom1}} {{custom2}} {{custom3}} {{custom4}}',  1000, 1001);
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{custom1}} {{custom2}} {{custom3}} {{custom4}}
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  1011, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10985,  'SHOP_CUSTOMER_FORMATTER', 'SHOP_CUSTOMER_FORMATTER',  0,  NULL,  'Customer: name format',
-   'Placeholders: {{firstname}} {{middlename}} {{lastname}}',  1000, 1001);
+   'Placeholders: {{salutation}} {{firstname}} {{middlename}} {{lastname}}',  1011, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  10984,  'PRODUCT_DISPLAY_MAN_CODE_SHOP', 'PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP',  0,  NULL,  'Product: show manufacturer code',
     'Flag whether to use manufacturer code or seller code as primary UI property',  1008, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10983,  'SHOP_CUSTOMER_REG_ATTRS', 'SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES',  0,  NULL,  'Customer: registration form attributes (CSV)',
+  VALUES (  10880,  'SHOP_CREGATTRS_B2C', 'SHOP_CREGATTRS_B2C',  0,  NULL,  'Customer (B2C): registration form attributes (CSV)',
     'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10982,  'SHOP_CUSTOMER_PROFILE_ATTRS_V', 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE',  0,  NULL,  'Customer: profile form attributes (CSV)',
+  VALUES (  10780,  'SHOP_CREGATTRS_B2G', 'SHOP_CREGATTRS_B2G',  0,  NULL,  'Customer (B2G): registration form attributes (CSV)',
+    'List of customer attributes separated by comma to be shown on registration form',  1004, 1001);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10881,  'SHOP_CPROFATTRS_VISIBLE_B2C', 'SHOP_CPROFATTRS_VISIBLE_B2C',  0,  NULL,  'Customer (B2C): profile form attributes (CSV)',
     'List of customer attributes separated by comma to be shown on profile form',  1004, 1001);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  10981,  'SHOP_CUSTOMER_PROFILE_ATTRS_RO', 'SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY',  0,  NULL,  'Customer: profile form attributes - read only (CSV)',
+  VALUES (  10882,  'SHOP_CPROFATTRS_READONLY_B2C', 'SHOP_CPROFATTRS_READONLY_B2C',  0,  NULL,  'Customer (B2C): profile form attributes - read only (CSV)',
     'List of customer attributes separated by comma to be shown on profile form but not editable',  1004, 1001);
 
 
@@ -164,6 +169,15 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, GUID)
   VALUES (  11041,  'SHOP_ADMIN_EMAIL',  1,  NULL,  'Shop admin email',  'Email used for all CC messages (e.g. order updates)',  1010, 1001, 'SHOP_ADMIN_EMAIL');
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  8001,  'SHOP_CUSTOMER_TYPES', 'SHOP_CUSTOMER_TYPES',  0,  NULL,  'Shop: supported customer types',  'Supported shop customer types CSV
+  E.g. value=B2B,B2C, display value=Private,Company',  1000, 1001);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  8002,  'SHOP_CHECKOUT_ENABLE_GUEST', 'SHOP_CHECKOUT_ENABLE_GUEST',  0,  NULL,  'Shop: enable guest checkout',
+  'Enables guest checkout customerType=B2G',  1008, 1001);
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11000,  'SYSTEM_DEFAULT_SHOP', 'SYSTEM_DEFAULT_SHOP',  1,  NULL,  'SF\Behaviour Default shop URL',
@@ -193,6 +207,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11049,  'SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS', 'SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS',  1,  NULL,
   'YUM\Import Image operation timeout', 'Timeout in ms for cluster calls', 1006,  1000);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  10099,  'SYSTEM_ALLOWED_IMAGE_SIZES', 'SYSTEM_ALLOWED_IMAGE_SIZES',  1,  NULL,
+  'SF\Image service: allowed image sizes', 'Image resolutions allowed to be processed by shop
+  E.g. 40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240 ', 1004,  1000);
 
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
@@ -254,6 +272,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11114,  'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE', 'JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE',  0,  NULL,  'Job\Image vault scan: pause image vault scanning',
     'Pause local file system image vault scanner',  1008, 1000);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11115,  'GUESTS_EXPIRY_TIMEOUT_SECONDS', 'GUESTS_EXPIRY_TIMEOUT_SECONDS',  0,  NULL,  'SF\Behaviour Cart: guests expiry in seconds',
+    'Guest account expiry seconds. All expired guest accounts are deleted by bulk job. Default: 86400s (1 day)',  1006, 1000);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11301,  'SHOP_IMAGE0',  'SHOP_IMAGE0',  1,  NULL,  'Shop: Shop image default',  null,  1003, 1001);
@@ -500,7 +522,39 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
   VALUES (  11050,  'CUSTOMER_PHONE', 'CUSTOMER_PHONE',  1,  NULL,  'Phone',  'Phone', 1007,  1006);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
-  VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 1007,  1006);
+  VALUES (  11051,  'MARKETING_OPT_IN', 'MARKETING_OPT_IN',  0,  NULL,  'Marketing Opt in',  'If true then customer opted in for marketing contact', 1008,  1006);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11052,  'salutation', 'salutation',  0,  NULL,  'Salutation',  'Salutation CSV options
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#uk#~#Пані-Пані,Пан-Пан#~#ru#~#-#~#de#~#Frau-Frau,Herr-Herr', 1004,  1006);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11053,  'firstname', 'firstname',  1,  NULL,  'First name',  'First name', 1000,  1006);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11054,  'lastname', 'lastname',  1,  NULL,  'Last name',  'Last name', 1000,  1006);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11055,  'middlename', 'middlename',  0,  NULL,  'Middle name',  'Middle name', 1000,  1006);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11062,  'customertype', 'customertype',  1,  NULL,  'Customer Type',  'Customer Type', 1000,  1006);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11200,  'default_addressform', 'default_addressform',  0,  NULL,  'Customer: "default_" address form (CSV)',
+    'List of address form attributes separated by comma.
+Available fields:
+salutation, firstname, middlename, lastname
+addrline1, addrline2, postcode, city, countrycode, statecode
+phone1, phone2, mobile1, mobile2
+email1, email2
+custom1, custom2, custom3, custom4',  1004, 1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11201,  'default_salutation', 'default_salutation',  0,  'salutation',  'Salutation',  'Salutation CSV options
+e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#uk#~#Пані-Пані,Пан-Пан#~#ru#~#-#~#de#~#Frau-Frau,Herr-Herr', 1004,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11202,  'default_firstname', 'default_firstname',  1,  'firstname',  'First name',  'First name', 1000,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11203,  'default_lastname', 'default_lastname',  1,  'lastname',  'Last name',  'Last name', 1000,  1007);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID)
+  VALUES (  11204,  'default_middlename', 'default_middlename',  0,  'middlename',  'Middle name',  'Middle name', 1000,  1007);
+
+
 
 INSERT INTO TPRODUCTTYPE (PRODUCTTYPE_ID, GUID, NAME, DESCRIPTION, SERVICE, ENSEMBLE, SHIPPABLE)
   VALUES (500,'Default Product', 'Default Product','Default Product', 0,0,1);
@@ -523,6 +577,7 @@ INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALU
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1020,'60000','SYSTEM_BACKDOOR_SQL_TIMEOUT_MS',100, 'YC_SYSTEM_BACKDOOR_SQL_TIMEOUT_MS');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1021,'60000','SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS',100, 'YC_SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS');
 INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1022,'60000','SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS',100, 'YC_SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS');
+INSERT INTO TSYSTEMATTRVALUE ( ATTRVALUE_ID,  VAL,  CODE, SYSTEM_ID, GUID)  VALUES (1023,'40x40,50x50,60x60,80x80,200x200,160x160,360x360,120x120,280x280,240x240','SYSTEM_ALLOWED_IMAGE_SIZES',100, 'YC_SYSTEM_ALLOWED_IMAGE_SIZES');
 
 
 INSERT INTO TSHOP (SHOP_ID, NAME, DESCRIPTION, FSPOINTER, CODE, GUID)  VALUES (10, 'YesCart shop', 'YesCart shop', 'ycdemo', 'SHOP10', 'SHOP10');
@@ -535,10 +590,15 @@ INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (15, 'tr
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (16, 'true','SHOP_CHECKOUT_ENABLE_ORDER_MSG', 10, 'SHOP10_SHOP_CHECKOUT_ENBL_ORDER_MSG');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (17, 'true','CART_ADD_ENABLE_QTY_PICKER', 10, 'SHOP10_CART_ADD_ENABLE_QTY_PICKER');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (18, 'true','SHOP_COOKIE_POLICY_ENABLE', 10, 'SHOP_COOKIE_POLICY_ENABLE');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (8, 'true','SHOP_CHECKOUT_ENABLE_GUEST', 10, 'SHOP_CHECKOUT_ENABLE_GUEST');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (19, 'r@nD()mTok3n4Pa$$Re$3+','SHOP_CUSTOMER_PASSWORD_RESET_CC', 10, 'SHOP_CUSTOMER_PASSWORD_RESET_CC');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (20, 'true','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (21, 'false','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_N');
 INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (22, 'false','SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT', 10, 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_A');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (23, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CREGATTRS_B2C', 10, 'SHOP_CUSTOMER_REGISTRATION_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (7, 'firstname,lastname','SHOP_CREGATTRS_B2G', 10, 'SHOP_CUSTOMER_REGGUEST_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,CODE,SHOP_ID, GUID)  VALUES (24, 'salutation,firstname,middlename,lastname,CUSTOMER_PHONE,MARKETING_OPT_IN','SHOP_CPROFATTRS_VISIBLE_B2C', 10, 'SHOP_CUSTOMER_PROFILE_10');
+INSERT INTO TSHOPATTRVALUE(ATTRVALUE_ID,VAL,DISPLAYVAL,CODE,SHOP_ID, GUID)  VALUES (25, 'B2C', 'en#~#B2C#~#uk#~#B2C#~#ru#~#B2C#~#de#~#B2C', 'SHOP_CUSTOMER_TYPES', 10, 'SHOP_CUSTOMER_TYPES_10');
 
 
 INSERT INTO TWAREHOUSE (WAREHOUSE_ID, GUID, CODE, NAME, DESCRIPTION) VALUES (1, 'Main', 'Main', 'Main warehouse', null);
@@ -573,6 +633,192 @@ INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLAT
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10300, 10000, 0, 'Microsites', 'Microsites','include', 'SHOP10-10300');
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10400, 10300, 0, 'Main site', 'Main site','include', 'SHOP10-10400');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID) VALUES (10500, 10100, 0, 'Payment Result Page', 'Payment Result Page','include', 'SHOP10-10500');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID, URI) VALUES (10510, 10500, 0, 'Internal payment gateway', 'Internal payment gateway','dynocontent', 'SHOP10-10510', 'SHOP10_paymentpage_message');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12510,'CONTENT_BODY_en_1','
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Your order has been successfully created. You will receive confirmation by e-mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         An error occurred while trying to create your order. Please try again.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+   <% } %>
+<% } %>
+
+',10510,'12510_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12511,'CONTENT_BODY_ru_1','
+<h2>Оплата заказа</h2>
+
+<% if (result) { %>
+   <p>
+      Ваш заказ был успешно оформлен. Вы получите уведомление на электронный адрес.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+       <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостаточное количество ${product} (код ${sku}) на складе. Попробуйте купить похожий продукт. Приносим свои извинения
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Произошла ошибка при создании Вашего заказа. Попробуйте еще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+   <% } %>
+<% } %>
+
+',10510,'12511_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12513,'CONTENT_BODY_uk_1','
+<h2>Оплата замовлення</h2>
+
+<% if (result) { %>
+   <p>
+      Ваше замовлення було успішно оформлено. Ви отримаєте повідомлення на електронну адресу.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+      <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Недостатня кількість ${product} (код ${sku}) на складі. Спробуйте купити схожий товар. Приносимо вибачення
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Сталася помилка при створені Вашого замовлення. Спробуйте ще раз.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+   <% } %>
+<% } %>
+
+',10510,'12513_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12514,'CONTENT_BODY_de_1','
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+   <p>
+      Ihre Bestellung wurde erfolgreich erstellt. Sie erhalten eine Bestätigung per E-Mail.
+   </p>
+   <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter mit Einkaufen</a>
+   <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+     <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung überprüfen</a>
+   <% } %>
+<% } else {
+   if (missingStock !=null) { %>
+      <p>
+         Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } else if (exception !=null) { %>
+      <p>
+         Beim Erstellen Ihrer Bestellung ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmals.
+      </p>
+      <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+   <% } %>
+<% } %>
+
+',10510,'12514_CAV');
+
+INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID, URI) VALUES (10520, 10500, 0, 'External payment gateway', 'External payment gateway','dynocontent', 'SHOP10-10520', 'SHOP10_resultpage_message');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12520,'CONTENT_BODY_en_1','
+<h2>Payment result</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Order successfully placed</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Order was cancelled. This maybe due to payment failure or insufficient stock</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+<% } else { %>
+	<p>Errors in payment</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Homepage</a>
+<% } %>
+
+',10520,'12520_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12521,'CONTENT_BODY_ru_1','
+<h2>Результат оплаты</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Заказ успешно оформлен</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+  	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Проверить статус заказа</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Заказ отменен. Возможная причина - это ошибка при оплате, либо недостаточное кол-во товара на складе</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новыми покупками</a>
+<% } else { %>
+	<p>Ошибки при оплате</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Перейти на главную</a>
+<% } %>
+
+',10520,'12521_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12522,'CONTENT_BODY_uk_1','
+<h2>Результат оплати</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Замовлення успішно оформлене</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+	  <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Перевірити статус замовлення</a>
+	<% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Замовлення скасовано. Можлива причина - це помилка при оплаті, або недостатня кількість товару на складі</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">За новими покупками</a>
+<% } else { %>
+	<p>Помилка при оплаті</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Повернутися на головну</a>
+<% } %>
+
+',10520,'12522_CAV');
+INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12523,'CONTENT_BODY_de_1','
+<h2>Resultat des Zahlungsvorgangs</h2>
+<%
+def _status = binding.hasVariable(''status'') ? status : (binding.hasVariable(''hint'') ? hint : "");
+if (_status.equals("ok")) { %>
+	<p>Bestellung erfolgreich getätigt</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+  <% if (binding.hasVariable(''order'') && order.customer != null) { %>
+   	<a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Status der Bestellung verfolgen</a>
+  <% } %>
+<% } else if (_status.equals("cancel")) { %>
+	<p>Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Weiter Einkaufen / Zur Startseite</a>
+<% } else { %>
+	<p>Fehler bei der Zahlung</p>
+	<a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Zurück zur Startseite</a>
+<% } %>
+
+',10520,'12523_CAV');
 
 INSERT INTO TCATEGORY(CATEGORY_ID, PARENT_ID, RANK, NAME, DESCRIPTION, UITEMPLATE, GUID,URI) VALUES (10001, 10400, 0, 'License', 'License Page','content', 'License','license');
 INSERT INTO TCATEGORYATTRVALUE(ATTRVALUE_ID, CODE,VAL, CATEGORY_ID, GUID) VALUES (12010,'CONTENT_BODY_en_1','<pre>Copyright 2009 Denys Pavlov, Igor Azarnyi

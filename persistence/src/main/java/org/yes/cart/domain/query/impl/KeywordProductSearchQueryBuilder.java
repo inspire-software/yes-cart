@@ -90,7 +90,7 @@ public class KeywordProductSearchQueryBuilder extends AbstractSearchQueryBuilder
             phrazeQuery.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedSearchValue, 10f), BooleanClause.Occur.SHOULD);
 
             phrazeQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD, escapedSearchValueLower, 15f), BooleanClause.Occur.SHOULD);
-            phrazeQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValueLower, 0.65f, 3.5f), BooleanClause.Occur.SHOULD);
+            phrazeQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedSearchValueLower, 3.5f), BooleanClause.Occur.SHOULD);
 
             aggregateQuery.add(phrazeQuery, BooleanClause.Occur.SHOULD);
 
@@ -103,14 +103,14 @@ public class KeywordProductSearchQueryBuilder extends AbstractSearchQueryBuilder
 
 //                    wordQuery.add(createFuzzyQuery(PRODUCT_NAME_FIELD, escapedWord, 0.6f, 2.5f), BooleanClause.Occur.SHOULD);
 //                    wordQuery.add(createFuzzyQuery(PRODUCT_DISPLAYNAME_FIELD, escapedWord, 0.6f, 3f), BooleanClause.Occur.SHOULD);
-                    wordQuery.add(createFuzzyQuery(BRAND_FIELD, escapedWord, 0.8f, 5f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createTermQuery(BRAND_FIELD, escapedWord, 5f), BooleanClause.Occur.SHOULD);
 
                     wordQuery.add(createTermQuery(PRODUCT_CODE_FIELD, escapedWord, 4f), BooleanClause.Occur.SHOULD);
                     wordQuery.add(createTermQuery(PRODUCT_MANUFACTURER_CODE_FIELD, escapedWord, 4f), BooleanClause.Occur.SHOULD);
                     wordQuery.add(createTermQuery(SKU_PRODUCT_CODE_FIELD, escapedWord, 4f), BooleanClause.Occur.SHOULD);
                     wordQuery.add(createTermQuery(SKU_PRODUCT_MANUFACTURER_CODE_FIELD, escapedWord, 4f), BooleanClause.Occur.SHOULD);
 
-                    wordQuery.add(createFuzzyQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedWord, 0.65f, 2.75f), BooleanClause.Occur.SHOULD);
+                    wordQuery.add(createTermQuery(ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD, escapedWord, 2.75f), BooleanClause.Occur.SHOULD);
 
                     aggregateQuery.add(wordQuery, BooleanClause.Occur.SHOULD);
                 }

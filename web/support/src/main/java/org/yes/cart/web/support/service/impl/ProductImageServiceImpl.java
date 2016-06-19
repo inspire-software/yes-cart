@@ -19,6 +19,8 @@ package org.yes.cart.web.support.service.impl;
 import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.Attributable;
+import org.yes.cart.domain.entity.Product;
 import org.yes.cart.web.support.service.AttributableImageService;
 
 /**
@@ -30,6 +32,18 @@ public class ProductImageServiceImpl extends AbstractImageServiceImpl implements
 
     public ProductImageServiceImpl(final CacheManager cacheManager) {
         super(cacheManager);
+    }
+
+    /**
+     * This service serves SKU and Products, therefore object cache key must include this information.
+     *
+     * @param attributable attributable entity
+     *
+     * @return cache key
+     */
+    @Override
+    protected String getEntityObjectCacheKey(final Attributable attributable) {
+        return String.valueOf(attributable.getId()).concat(attributable instanceof Product ? "_P" : "_S");
     }
 
     /** {@inheritDoc}

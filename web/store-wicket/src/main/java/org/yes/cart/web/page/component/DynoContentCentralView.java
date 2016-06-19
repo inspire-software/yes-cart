@@ -18,6 +18,7 @@ package org.yes.cart.web.page.component;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 
 public class DynoContentCentralView extends AbstractCentralView {
 
+    private transient Category category;
 
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     protected ContentServiceFacade contentServiceFacade;
@@ -65,4 +67,13 @@ public class DynoContentCentralView extends AbstractCentralView {
 
         super.onBeforeRender();
     }
+
+    @Override
+    public Category getCategory() {
+        if (category == null) {
+            category = contentServiceFacade.getContent(getCategoryId(), ShopCodeContext.getShopId());
+        }
+        return category;
+    }
+
 }

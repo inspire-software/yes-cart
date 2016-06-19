@@ -44,4 +44,13 @@ public interface WicketPagesMounter {
      */
     ClassProvider<IRequestablePage> getLoginPageProvider();
 
+    /**
+     * Get page class by URI
+     *
+     * @param uri mounted URI
+     *
+     * @return page provider that returns theme specific login page.
+     */
+    ClassProvider<IRequestablePage> getPageProviderByUri(String uri);
+
 }

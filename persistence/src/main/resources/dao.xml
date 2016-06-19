@@ -65,8 +65,6 @@
                 <prop key="fullTextSearchReindex">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="fullTextSearchPurge">PROPAGATION_REQUIRED,-Throwable</prop>
                 <prop key="executeNative*">PROPAGATION_REQUIRED,-Throwable</prop>
-                <!-- Import -->
-                <prop key="doImport*">PROPAGATION_REQUIRED,-Throwable</prop>
                 <!-- Utility call that should just pass through -->
                 <prop key="getEntityFactory">PROPAGATION_SUPPORTS,readOnly,-Throwable</prop>
                 <!-- Dto attribute support -->

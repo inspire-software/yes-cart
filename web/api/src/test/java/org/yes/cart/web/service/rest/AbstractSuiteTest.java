@@ -32,11 +32,11 @@ import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.ro.AddressRO;
-import org.yes.cart.domain.ro.CustomerRO;
 import org.yes.cart.domain.ro.RegisterRO;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
+import java.util.HashMap;
 
 /**
  * User: denispavlov
@@ -121,9 +121,32 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final RegisterRO register = new RegisterRO();
         register.setEmail(email);
-        register.setFirstname("Bob");
-        register.setLastname("Doe");
-        register.setPhone("123123123");
+        register.setCustomerType("B2C");
+        register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("firstname", "Bob");
+        register.getCustom().put("lastname", "Doe");
+        register.getCustom().put("CUSTOMER_PHONE", "123123123");
+
+        return toJsonBytes(register);
+
+    }
+
+    /**
+     * JSON bytes for registration request object
+     *
+     * @param email customer email
+     * @return bytes for request body
+     *
+     * @throws Exception
+     */
+    protected byte[] toJsonBytesGuestDetails(final String email) throws Exception {
+
+        final RegisterRO register = new RegisterRO();
+        register.setEmail(email);
+        register.setCustomerType("B2G");
+        register.setCustom(new HashMap<String, String>());
+        register.getCustom().put("firstname", "Bob");
+        register.getCustom().put("lastname", "Doe");
 
         return toJsonBytes(register);
 

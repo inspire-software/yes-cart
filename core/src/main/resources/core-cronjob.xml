@@ -68,5 +68,16 @@
         </property>
     </bean>
 
+    <bean id="bulkExpiredGuestsProcessor" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
+                <constructor-arg index="0" ref="customerService"/>
+                <constructor-arg index="1" ref="systemService"/>
+                <property name="expiredTimeoutDays" value="1"/> <!-- CPOINT -->
+                <property name="batchSize" value="20"/> <!-- CPOINT -->
+            </bean>
+        </property>
+    </bean>
+
 </beans>
         

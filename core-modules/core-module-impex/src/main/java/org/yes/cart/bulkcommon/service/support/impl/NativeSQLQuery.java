@@ -18,6 +18,8 @@ package org.yes.cart.bulkcommon.service.support.impl;
 
 import org.yes.cart.bulkcommon.service.support.LookUpQuery;
 
+import java.util.Arrays;
+
 /**
  * User: denispavlov
  * Date: 12-08-08
@@ -28,9 +30,15 @@ public class NativeSQLQuery implements LookUpQuery {
     private static final Object[] NULL = new Object[0];
 
     private final String sql;
+    private final Object[] params;
 
-    public NativeSQLQuery(final String sql) {
+    public NativeSQLQuery(final String sql, final Object[] params) {
         this.sql = sql;
+        if (params == null || params.length == 1 && params[0] == null) {
+            this.params = NULL;
+        } else {
+            this.params = params;
+        }
     }
 
     /** {@inheritDoc} */
@@ -45,13 +53,14 @@ public class NativeSQLQuery implements LookUpQuery {
 
     /** {@inheritDoc} */
     public Object[] getParameters() {
-        return NULL;
+        return params;
     }
 
     @Override
     public String toString() {
         return "NativeSQLQuery{" +
                 "sql='" + sql + '\'' +
+                ", params=" + (params == null ? null : Arrays.asList(params)) +
                 '}';
     }
 }

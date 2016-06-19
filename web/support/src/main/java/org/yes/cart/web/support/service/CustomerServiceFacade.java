@@ -17,7 +17,9 @@
 package org.yes.cart.web.support.service;
 
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.List;
 import java.util.Map;
@@ -53,17 +55,43 @@ public interface CustomerServiceFacade {
                             Map<String, Object> registrationData);
 
     /**
+     * Register new account for given email in given shop.
+     *
+     * @param registrationShop shop where registration takes place
+     * @param email            customer email
+     * @param registrationData registration data
+     *
+     * @return guest user email hash
+     */
+    String registerGuest(Shop registrationShop,
+                         String email,
+                         Map<String, Object> registrationData);
+
+    /**
      * Register given email in given shop for newsletter list.
      *
      * @param registrationShop shop where registration takes place
      * @param email            customer email
      * @param registrationData registration data
      *
-     * @return password to login user
+     * @return email
      */
     String registerNewsletter(Shop registrationShop,
                               String email,
                               Map<String, Object> registrationData);
+
+    /**
+     * Register request via email in given shop.
+     *
+     * @param registrationShop shop where registration takes place
+     * @param email            customer email
+     * @param registrationData registration data
+     *
+     * @return email
+     */
+    String registerEmailRequest(Shop registrationShop,
+                                String email,
+                                Map<String, Object> registrationData);
 
     /**
      * Find customer by email.
@@ -74,6 +102,26 @@ public interface CustomerServiceFacade {
      * @return customer object or null
      */
     Customer getCustomerByEmail(Shop shop, String email);
+
+    /**
+     * Find guest customer by cart.
+     *
+     * @param shop shop
+     * @param cart shopping cart
+     *
+     * @return customer object or null
+     */
+    Customer getGuestByCart(Shop shop, ShoppingCart cart);
+
+    /**
+     * Get customer object for current checkout process. This could be either guest or registered customer.
+     *
+     * @param shop shop
+     * @param cart shopping cart
+     *
+     * @return customer object or null
+     */
+    Customer getCheckoutCustomer(Shop shop, ShoppingCart cart);
 
     /**
      * Find customer wish list by email.
@@ -96,18 +144,45 @@ public interface CustomerServiceFacade {
      */
     void resetPassword(Shop shop, Customer customer);
 
+    /**
+     * List of supported customer types.
+     *
+     * @param shop shop
+     *
+     * @return supported customer types
+     */
+    List<Pair<String, I18NModel>> getShopSupportedCustomerTypes(Shop shop);
+
+    /**
+     * Check to see if guest checkout is supported.
+     *
+     * @param shop shop
+     *
+     * @return flag to determine if gues checkout is supported
+     */
+    boolean isShopGuestCheckoutSupported(Shop shop);
+
+    /**
+     * Check to see if customer type is supported.
+     *
+     * @param shop shop
+     * @param customerType type code
+     *
+     * @return flag to determine if gues checkout is supported
+     */
+    boolean isShopCustomerTypeSupported(Shop shop, String customerType);
 
     /**
      * List of custom attributes eligible for profile edit form.
      * CPOINT - This will be available to the shoppers to edit as they please, so
      * need to restrict attributes that should be hidden from shoppers.
      *
-     *
      * @param shop shop
+     * @param customerType customer type {@link Customer#getCustomerType()}
      *
      * @return list of eligible attributes
      */
-    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop);
+    List<AttrValueCustomer> getShopRegistrationAttributes(Shop shop, String customerType);
 
 
     /**

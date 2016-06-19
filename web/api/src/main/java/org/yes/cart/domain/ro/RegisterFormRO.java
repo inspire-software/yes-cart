@@ -16,15 +16,12 @@
 
 package org.yes.cart.domain.ro;
 
-import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
-
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: denispavlov
@@ -37,9 +34,8 @@ public class RegisterFormRO implements Serializable {
     private static final long serialVersionUID = 20150301L;
 
     private String email;
-    private String firstname;
-    private String lastname;
-    private String phone;
+    private String customerType;
+    private boolean customerTypeSupported;
     private List<AttrValueCustomerRO> custom;
 
     @XmlElementWrapper(name = "custom")
@@ -61,27 +57,21 @@ public class RegisterFormRO implements Serializable {
         this.email = email;
     }
 
-    public String getFirstname() {
-        return firstname;
+    @XmlAttribute(name = "customer-type")
+    public String getCustomerType() {
+        return customerType;
     }
 
-    public void setFirstname(final String firstname) {
-        this.firstname = firstname;
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
     }
 
-    public String getLastname() {
-        return lastname;
+    @XmlAttribute(name = "customer-type-supported")
+    public boolean isCustomerTypeSupported() {
+        return customerTypeSupported;
     }
 
-    public void setLastname(final String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
+    public void setCustomerTypeSupported(final boolean customerTypeSupported) {
+        this.customerTypeSupported = customerTypeSupported;
     }
 }

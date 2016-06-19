@@ -16,12 +16,14 @@
 
 package org.yes.cart.bulkcommon.service.support.impl;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.yes.cart.bulkcommon.model.ImpExDescriptor;
 import org.yes.cart.bulkcommon.model.ImpExTuple;
 import org.yes.cart.bulkcommon.model.ValueAdapter;
 import org.yes.cart.bulkcommon.service.support.LookUpQuery;
 import org.yes.cart.bulkcommon.service.support.LookUpQueryParameterStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,15 +38,28 @@ public class ImpExDescriptorNativeInsertStrategy extends AbstractByParameterByCo
         implements LookUpQueryParameterStrategy {
 
     @Override
-    protected void addParameter(final int index, final Object param, final StringBuilder query, final List<Object> params) {
+    protected boolean addParameter(final int index,
+                                   final boolean wrappedInQuotes,
+                                   final Object param,
+                                   final StringBuilder query,
+                                   final List<Object> params) {
         if (param == null) {
-            final char character = query.charAt(query.length() - 1);
-            if (character != '\'' && character != '"' && character != '#') {
+            if (!wrappedInQuotes && query.charAt(query.length() - 1) != '#') {
                 query.append("NULL");
-            } // else it is enclosed by quotes or part of I18N so just leave empty
+            }  else if (wrappedInQuotes) {
+                query.append("''");
+            } // else part of I18N so just leave empty
         } else {
-            query.append(param);
+            if (!wrappedInQuotes) {
+                query.append(StringEscapeUtils.escapeSql(String.valueOf(param)));
+            } else {
+                // String values must be sent as parameters as they may include special characters
+                query.append('?').append(index);
+                params.add(param);
+                return true;
+            }
         }
+        return false;
     }
 
     /** {@inheritDoc} */
@@ -55,7 +70,8 @@ public class ImpExDescriptorNativeInsertStrategy extends AbstractByParameterByCo
                                 final String queryTemplate) {
 
         final StringBuilder sql = new StringBuilder();
-        replaceColumnNamesInTemplate(queryTemplate, sql, null, descriptor, masterObject, tuple, adapter);
-        return new NativeSQLQuery(sql.toString());
+        final List params = new ArrayList();
+        replaceColumnNamesInTemplate(queryTemplate, sql, params, descriptor, masterObject, tuple, adapter);
+        return new NativeSQLQuery(sql.toString(), params.toArray());
     }
 }

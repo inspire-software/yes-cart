@@ -295,7 +295,6 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
-    @DateBridge(resolution = Resolution.MINUTE)
     public Date getCreatedTimestamp() {
         return this.createdTimestamp;
     }
@@ -304,6 +303,7 @@ public class ProductEntity implements org.yes.cart.domain.entity.Product, java.i
         this.createdTimestamp = createdTimestamp;
     }
 
+    @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
     public Date getUpdatedTimestamp() {
         return this.updatedTimestamp;
     }

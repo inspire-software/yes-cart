@@ -31,7 +31,7 @@
 
         <mx:Form x="0" y="0" width="400">
             <mx:FormItem>
-                <mx:Label id="infoLabel" maxWidth="250"
+                <mx:Label id="infoLabel" maxWidth="400"
                           visible="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
                           includeInLayout="{this.infoLabel.text != null &amp;&amp; this.infoLabel.text.length >0}"
                         />

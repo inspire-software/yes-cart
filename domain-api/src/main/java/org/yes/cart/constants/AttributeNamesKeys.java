@@ -123,9 +123,19 @@ public interface AttributeNamesKeys {
         String CART_ABANDONED_TIMEOUT_SECONDS = "CART_ABANDONED_TIMEOUT_SECONDS";
 
         /**
+         * Time in seconds for expired guest accounts
+         */
+        String GUESTS_EXPIRY_TIMEOUT_SECONDS = "GUESTS_EXPIRY_TIMEOUT_SECONDS";
+
+        /**
          * Time in seconds for abandoned carts
          */
         String CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS = "CART_EMPTY_ANONYMOUS_TIMEOUT_SECONDS";
+
+        /**
+         * Allowed image sizes
+         */
+        String SYSTEM_ALLOWED_IMAGE_SIZES = "SYSTEM_ALLOWED_IMAGE_SIZES";
 
     }
 
@@ -259,12 +269,22 @@ public interface AttributeNamesKeys {
         /**
          * Supported by shop address formatter.
          */
-        String ADDRESS_FORMATTER = "SHOP_ADDRESS_FORMATTER";
+        String ADDRESS_FORMATTER_PREFIX = "SHOP_ADDRESS_FORMATTER";
 
         /**
          * Supported by shop customer name formatter.
          */
         String CUSTOMER_NAME_FORMATTER = "SHOP_CUSTOMER_FORMATTER";
+
+        /**
+         * Supported by shop customer types.
+         */
+        String SHOP_CUSTOMER_TYPES = "SHOP_CUSTOMER_TYPES";
+
+        /**
+         * Flag to determine is guest checkout is enabled.
+         */
+        String SHOP_CHECKOUT_ENABLE_GUEST = "SHOP_CHECKOUT_ENABLE_GUEST";
 
         /**
          * Supported by shop storefront languages.
@@ -383,17 +403,17 @@ public interface AttributeNamesKeys {
         /**
          * Attributes to be used for the registration form
          */
-        String CUSTOMER_REGISTRATION_ATTRIBUTES = "SHOP_CUSTOMER_REGISTRATION_ATTRIBUTES";
+        String CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX = "SHOP_CREGATTRS";
 
         /**
          * Attributes to be used for the profile editing (by customer) form
          */
-        String CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE";
+        String CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX = "SHOP_CPROFATTRS_VISIBLE";
 
         /**
          * Attributes on the profile editing (by customer) form which must not editable
          */
-        String CUSTOMER_PROFILE_ATTRIBUTES_READONLY = "SHOP_CUSTOMER_PROFILE_ATTRIBUTES_READONLY";
+        String CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX = "SHOP_CPROFATTRS_READONLY";
 
         /**
          * Time in seconds since last cart modification before session expires
@@ -483,9 +503,8 @@ public interface AttributeNamesKeys {
     String MARKETING_OPT_IN = "MARKETING_OPT_IN";
 
     /**
-     * Shop mail from.
+     * Customer salutation attribute (only used for options)
      */
-    String SHOP_MAIL_FROM = "SHOP_MAIL_FROM";
-
+    String CUSTOMER_SALUTATIONS = "CUSTOMER_SALUTATIONS";
 
 }

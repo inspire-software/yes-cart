@@ -55,6 +55,9 @@ public class AddressDTOImpl implements AddressDTO {
     private String stateCode;
 
 
+    @DtoField(value = "salutation")
+    private String salutation;
+
     @DtoField(value = "firstname")
     private String firstname;
 
@@ -339,6 +342,16 @@ public class AddressDTOImpl implements AddressDTO {
         this.middlename = middlename;
     }
 
+    /** {@inheritDoc} */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /** {@inheritDoc} */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
     @Override
     public String toString() {
         return "AddressDTOImpl{" +
@@ -350,6 +363,7 @@ public class AddressDTOImpl implements AddressDTO {
                 ", addressType='" + addressType + '\'' +
                 ", countryCode='" + countryCode + '\'' +
                 ", stateCode='" + stateCode + '\'' +
+                ", salutation='" + salutation + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +

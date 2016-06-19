@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
@@ -38,10 +37,10 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.RegistrationPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
@@ -72,6 +71,9 @@ public class LoginPanel extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
 
     /**
      * Construct login panel.
@@ -113,7 +115,7 @@ public class LoginPanel extends BaseComponent {
         final PageParameters parameters = new PageParameters();
 
         if (isCheckout) {
-            successfulPage = CheckoutPage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
             parameters.set(
                     CheckoutPage.THREE_STEPS_PROCESS,
                     "true"
@@ -175,8 +177,7 @@ public class LoginPanel extends BaseComponent {
 
 
             add(
-                    new BookmarkablePageLink<RegistrationPage>(REGISTRATION_LINK, RegistrationPage.class)
-                        .setVisible(!isCheckout)
+                    new BookmarkablePageLink(REGISTRATION_LINK, (Class) wicketPagesMounter.getPageProviderByUri("/registration").get())
             );
 
             final TextField<String> emailInput = (TextField<String>) new TextField<String>(EMAIL_INPUT)
@@ -286,7 +287,11 @@ public class LoginPanel extends BaseComponent {
             get(TRY_RESTORE_PASSWORD_BUTTON).setVisible(!showResend);
             get(PASSWORD_INPUT).setVisible(!showResend);
             get(LOGIN_BUTTON).setVisible(!showResend);
-            get(REGISTRATION_LINK).setVisible(!showResend);
+
+            final boolean showRegistration = !isCheckout &&
+                    !getCustomerServiceFacade().getShopSupportedCustomerTypes(ApplicationDirector.getCurrentShop()).isEmpty();
+
+            get(REGISTRATION_LINK).setVisible(showRegistration && !showResend);
 
             // We are in reset password mode
             get(RESTORE_PASSWORD_BUTTON).setVisible(showResend);

@@ -36,6 +36,7 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
     private Collection<ManagerShop> shops = new ArrayList<ManagerShop>(0);
 
     private String email;
+    private String salutation;
     private String firstname;
     private String lastname;
     private String middlename;
@@ -84,6 +85,14 @@ public class ManagerEntity implements org.yes.cart.domain.entity.Manager, java.i
 
     public void setMiddlename(String middlename) {
         this.middlename = middlename;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getPassword() {

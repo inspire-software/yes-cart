@@ -21,6 +21,7 @@ public class ShopUrlDTOImpl {
 
     public var  url:String;
     public var  themeChain:String;
+    public var  primary:Boolean;
 
     public var  storeUrlId:Number;
 

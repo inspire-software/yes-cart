@@ -22,9 +22,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
@@ -52,6 +52,7 @@ import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
+import org.yes.cart.web.page.component.customer.auth.GuestPanel;
 import org.yes.cart.web.page.component.customer.auth.LoginPanel;
 import org.yes.cart.web.page.component.customer.auth.RegisterPanel;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
@@ -62,10 +63,7 @@ import org.yes.cart.web.page.component.shipping.ShippingView;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorModel;
 import org.yes.cart.web.page.component.util.PaymentGatewayDescriptorRenderer;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.service.AddressBookFacade;
-import org.yes.cart.web.support.service.CheckoutServiceFacade;
-import org.yes.cart.web.support.service.CustomerServiceFacade;
-import org.yes.cart.web.support.service.ShippingServiceFacade;
+import org.yes.cart.web.support.service.*;
 
 import java.math.BigDecimal;
 import java.text.MessageFormat;
@@ -120,12 +118,14 @@ public class CheckoutPage extends AbstractWebPage {
 
     public static final String PART_REGISTER_VIEW = "registerView";
     public static final String PART_LOGIN_VIEW = "loginView";
+    public static final String PART_GUEST_VIEW = "guestView";
 
     public static final String ERROR = "e";
     public static final String ERROR_COUPON = "ec";
     public static final String ERROR_SKU = "es";
 
     public static final String STEP = "step";
+    public static final String GUEST = "guest";
 
     public static final String STEP_LOGIN = "login";
     public static final String STEP_ADDR = "address";
@@ -160,6 +160,8 @@ public class CheckoutPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
+    protected ContentServiceFacade contentServiceFacade;
 
     /**
      * Construct page.
@@ -170,11 +172,21 @@ public class CheckoutPage extends AbstractWebPage {
 
         super(params);
 
-        final boolean threeStepsProcess = params.get(THREE_STEPS_PROCESS).toBoolean(
-                ((AuthenticatedWebSession) getSession()).isSignedIn()
-        ) && ((AuthenticatedWebSession) getSession()).isSignedIn();
-
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = ApplicationDirector.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+
+        final boolean guestInProgress =
+                (params.getNamedKeys().contains(STEP) || "1".equals(params.get(GUEST).toString()))
+                    && customer != null && customer.isGuest();
+
+        final boolean sessionSignedIn = ((AuthenticatedWebSession) getSession()).isSignedIn();
+
+        final boolean threeStepsProcess =
+                guestInProgress ||
+                        (params.get(THREE_STEPS_PROCESS).toBoolean(sessionSignedIn) && sessionSignedIn);
+
         final String currentStep =
                 params.get(STEP).toString(threeStepsProcess ? null : STEP_LOGIN);
         if (currentStep == null) {
@@ -195,7 +207,7 @@ public class CheckoutPage extends AbstractWebPage {
                 new Fragment(NAVIGATION_VIEW, threeStepsProcess ?
                         NAVIGATION_THREE_FRAGMENT : NAVIGATION_FOUR_FRAGMENT, this)
         ).add(
-                getContent(currentStep)
+                getContent(currentStep, customer, cart, guestInProgress, sessionSignedIn)
         ).addOrReplace(
                 new CheckoutFooter(FOOTER)
         ).addOrReplace(
@@ -218,15 +230,22 @@ public class CheckoutPage extends AbstractWebPage {
      * Resolve content by given current step.
      *
      * @param currentStep current step label
+     * @param customer checkout customer (registered or guest)
+     * @param cart current cart
+     * @param guestInProgress guest checkout in progress (i.e. URL has step)
+     * @param sessionSignedIn wicket session is authenticated
+     *
      * @return markup container
      */
-    private MarkupContainer getContent(final String currentStep) {
+    private MarkupContainer getContent(final String currentStep,
+                                       final Customer customer,
+                                       final ShoppingCart cart,
+                                       final boolean guestInProgress,
+                                       final boolean sessionSignedIn) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
-        if (!STEP_LOGIN.equals(currentStep) &&
-                (!((AuthenticatedWebSession) getSession()).isSignedIn()
-                    || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+        if (!STEP_LOGIN.equals(currentStep)
+                && !guestInProgress
+                && (!sessionSignedIn || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
             final PageParameters parameters = new PageParameters(getPageParameters());
             parameters.set(STEP, STEP_LOGIN);
             setResponsePage(this.getClass(), parameters);
@@ -248,7 +267,7 @@ public class CheckoutPage extends AbstractWebPage {
             executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(cart.getCustomerEmail(), ApplicationDirector.getCurrentShop())) {
+                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), ApplicationDirector.getCurrentShop())) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);
@@ -320,11 +339,9 @@ public class CheckoutPage extends AbstractWebPage {
      */
     private MarkupContainer createLoginFragment() {
         return new Fragment(CONTENT_VIEW, LOGIN_FRAGMENT, this)
-                .add(
-                        new LoginPanel(PART_LOGIN_VIEW, true))
-                .add(
-                        new RegisterPanel(PART_REGISTER_VIEW, true)
-                );
+                .add(new LoginPanel(PART_LOGIN_VIEW, true))
+                .add(new RegisterPanel(PART_REGISTER_VIEW, true))
+                .add(new GuestPanel(PART_GUEST_VIEW));
     }
 
     /**
@@ -407,21 +424,21 @@ public class CheckoutPage extends AbstractWebPage {
         final List<Pair<PaymentGatewayDescriptor, String>> available =
                 checkoutServiceFacade.getPaymentGatewaysDescriptors(ApplicationDirector.getCurrentShop(), ApplicationDirector.getShoppingCart());
 
-        final Component pgSelector = new DropDownChoice<Pair<PaymentGatewayDescriptor, String>>(
+        final Component pgSelector = new RadioGroup<String>(
                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
-                new PaymentGatewayDescriptorModel(
-                        new PropertyModel<String>(orderInfo, "paymentGatewayLabel"),
-                        available
-                ),
-                available) {
+                new PropertyModel<String>(orderInfo, "paymentGatewayLabel")) {
 
             /** {@inheritDoc} */
-            protected void onSelectionChanged(final Pair<PaymentGatewayDescriptor, String> descriptor) {
+            protected void onSelectionChanged(final Object descriptor) {
 
                 final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final Shop shop = ApplicationDirector.getCurrentShop();
+
+                final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
                 if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
-                                || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {
+                                || cart.getLogonState() != ShoppingCart.LOGGED_IN) &&
+                        (customer == null || !customer.isGuest())) {
                     // Make sure we are logged in on the very last step
                     final PageParameters parameters = new PageParameters(getPageParameters());
                     parameters.set(STEP, STEP_LOGIN);
@@ -433,7 +450,7 @@ public class CheckoutPage extends AbstractWebPage {
                 final BigDecimal grandTotal = total.getTotalAmount();
 
                 //pay pal express checkout gateway support
-                order.setPgLabel(descriptor.getFirst().getLabel());
+                order.setPgLabel((String) descriptor);
                 checkoutServiceFacade.update(order);
 
 
@@ -446,7 +463,7 @@ public class CheckoutPage extends AbstractWebPage {
 
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                         ApplicationDirector.getShoppingCart(),
-                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor.getFirst().getLabel()));
+                        (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, descriptor));
 
             }
 
@@ -456,7 +473,16 @@ public class CheckoutPage extends AbstractWebPage {
                 return true;
             }
 
-        }.setChoiceRenderer(new PaymentGatewayDescriptorRenderer());
+        }.add(
+                new ListView<Pair<PaymentGatewayDescriptor, String>>("pgList", available) {
+                    protected void populateItem(final ListItem<Pair<PaymentGatewayDescriptor, String>> pgListItem) {
+                        pgListItem.add(new Radio<String>("pgListLabel", new Model<String>(pgListItem.getModelObject().getFirst().getLabel())));
+                        pgListItem.add(new Label("pgListName", pgListItem.getModelObject().getSecond()));
+                        final boolean infoVisible = pgListItem.getModelObject().getFirst().getLabel().equals(orderInfo.getPaymentGatewayLabel());
+                        pgListItem.add(new Label("pgInfo", contentServiceFacade.getContentBody("checkout_payment_" + pgListItem.getModelObject().getFirst().getLabel(),
+                                ShopCodeContext.getShopId(), getLocale().getLanguage())).setVisible(infoVisible));
+                    }
+                });
 
         rez.addOrReplace(
                         new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
@@ -487,15 +513,9 @@ public class CheckoutPage extends AbstractWebPage {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
 
-        String fullName = StringUtils.EMPTY;
-
-        if (order.getCustomer() != null) {
-
-            fullName = (order.getCustomer().getFirstname()
-                    + " "
-                    + order.getCustomer().getLastname()).toUpperCase();
-
-        }
+        String fullName = (order.getFirstname()
+                        + " "
+                        + order.getLastname()).toUpperCase();
 
         final PaymentGateway gateway = checkoutServiceFacade.getOrderPaymentGateway(order);
         final Payment payment = checkoutServiceFacade.createPaymentToAuthorize(order);
@@ -590,7 +610,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
         final Model<Customer> customerModel = new Model<Customer>(customer);
 
@@ -628,11 +648,39 @@ public class CheckoutPage extends AbstractWebPage {
                                         }}
                                 );
                                 persistCartIfNecessary();
+
+                                addFeedbackForAddressSelection();
                             }
                         }
                 )
         );
+
+        addFeedbackForAddressSelection();
+
         return rez;
+    }
+
+
+    private void addFeedbackForAddressSelection() {
+
+        final Shop shop = ApplicationDirector.getCurrentShop();
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(
+                shop,
+                cart);
+
+        if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_SHIPPING).isEmpty()) {
+
+            info(getLocalizer().getString("selectDeliveryAddress", this));
+
+        } else if (cart.getOrderInfo().isSeparateBillingAddress()) {
+
+            if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_BILLING).isEmpty()) {
+                info(getLocalizer().getString("selectBillingAddress", this));
+            }
+        }
+
     }
 
     /**

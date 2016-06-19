@@ -97,9 +97,16 @@
     <entry key="checkoutTitle">Оформление покупки</entry>
     <entry key="selectAddr">Укажите адреса для доставки и счета</entry>
     <entry key="selectPayment">Оплата</entry>
+    <entry key="selectDeliveryAddress">Укажите адреса для доставки</entry>
+    <entry key="selectBillingAddress">Укажите адреса для счета</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Контактная информация</entry>
+    <entry key="name">Имя</entry>
+    <entry key="subject">Тема</entry>
+    <entry key="message">Сообщение</entry>
+    <entry key="send">Отправить</entry>
+    <entry key="emailSend">Ваше сообщение было отправлено</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Ваш профиль</entry>
@@ -201,10 +208,14 @@
     <entry key="firstName">Имя</entry>
     <entry key="lastName">Фамилия</entry>
     <entry key="line1">Строка адреса 1</entry>
+    <entry key="addrline1">Строка адреса 1</entry>
     <entry key="line2">Строка адреса 2</entry>
+    <entry key="addrline2">Строка адреса 2</entry>
     <entry key="city">Город</entry>
     <entry key="country">Страна</entry>
+    <entry key="countryCode">Страна</entry>
     <entry key="state">Область</entry>
+    <entry key="stateCode">Область</entry>
     <entry key="postcode">Индекс</entry>
     <entry key="phone1">Телефон</entry>
     <entry key="create">Сохранить</entry>
@@ -230,6 +241,10 @@
     <entry key="newPasswordRequestEmailSent">Запрос на новый пароль был выслан на почту ${email}</entry>
     <entry key="newPasswordEmailSent">Новый пароль был выслан на почту</entry>
     <entry key="newPasswordInvalidToken">Неверный код авторизации. Невозможно сгенирировать новый пароль.</entry>
+
+    <!-- GuestPanel -->
+    <entry key="guestUser">Заказать без регистрации</entry>
+    <entry key="canNotGuestCheckout">Невозможно выполнить заказ без регистрации</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">Новый покупатель</entry>
@@ -345,11 +360,8 @@
     <entry key="taxNoteNet">без ${tax} ${code}</entry>
     <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>
 
-
     <!-- RecentlyViewedProducts -->
     <entry key="recentlyViewed">Просмотренные</entry>
-    <entry key="taxNoteNet">без ${tax} ${code}</entry>
-    <entry key="taxNoteGross">в т.ч. ${tax} ${code}</entry>
 
     <!-- SearchView -->
     <entry key="search">Поиск</entry>
@@ -358,7 +370,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Перевозчик</entry>
     <entry key="carrierSla">Метод доставки</entry>
-    <entry key="carrierSelect">Выберите перевозчика и метод доставки</entry>
+    <entry key="carrierSelect">Выберите метод доставки</entry>
 
     <!-- Currency -->
     <entry key="currency">Валюта</entry>
@@ -367,7 +379,8 @@
     <entry key="language">Язык</entry>
 
     <!-- ProductsCentralView -->
-    <entry key="items">Продуктов</entry>
+    <entry key="items">Товаров</entry>
+    <entry key="noResultsFound">Не найдено товаров, соответствующих вашему запросу</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">В пожелания</entry>

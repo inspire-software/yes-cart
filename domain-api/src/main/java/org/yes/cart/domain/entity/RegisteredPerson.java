@@ -83,6 +83,20 @@ public interface RegisteredPerson {
      */
     void setMiddlename(String middlename);
 
+    /**
+     * Get salutation
+     *
+     * @return salutation
+     */
+    String getSalutation();
+
+    /**
+     * Set salutation
+     *
+     * @param salutation value to set
+     */
+    void setSalutation(String salutation);
+
 
     /**
      * Get password.

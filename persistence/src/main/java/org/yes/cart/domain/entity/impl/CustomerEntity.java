@@ -31,6 +31,9 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private long version;
 
     private String email;
+    private String guestEmail;
+    private boolean guest;
+    private String salutation;
     private String firstname;
     private String lastname;
     private String middlename;
@@ -39,6 +42,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private Date authTokenExpiry;
     private String tag;
     private String publicKey;
+    private String customerType;
 
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<CustomerWishList>(0);
@@ -64,6 +68,29 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
         this.email = email;
     }
 
+    public String getGuestEmail() {
+        return guestEmail;
+    }
+
+    public void setGuestEmail(final String guestEmail) {
+        this.guestEmail = guestEmail;
+    }
+
+    public boolean isGuest() {
+        return guest;
+    }
+
+    public void setGuest(final boolean guest) {
+        this.guest = guest;
+    }
+
+    public String getContactEmail() {
+        if (isGuest()) {
+            return getGuestEmail();
+        }
+        return getEmail();
+    }
+
     public String getFirstname() {
         return this.firstname;
     }
@@ -86,6 +113,14 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setMiddlename(String middlename) {
         this.middlename = middlename;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getPassword() {
@@ -126,6 +161,14 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setPublicKey(final String publicKey) {
         this.publicKey = publicKey;
+    }
+
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
     }
 
     public Collection<CustomerOrder> getOrders() {

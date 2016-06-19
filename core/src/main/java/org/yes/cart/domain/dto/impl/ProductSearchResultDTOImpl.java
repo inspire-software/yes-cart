@@ -46,6 +46,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private String displayName;
     private String description;
     private String displayDescription;
+    private String tag;
+    private String brand;
     private Date availablefrom;
     private Date availableto;
     private int availability;
@@ -63,6 +65,9 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     private I18NModel i18NModelDescription;
 
     private StoredAttributes attributes;
+
+    private Date createdTimestamp;
+    private Date updatedTimestamp;
 
 
     /** {@inheritDoc} */
@@ -237,6 +242,25 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         i18NModelDescription = new StringI18NModel(this.displayDescription);
     }
 
+    /** {@inheritDoc} */
+    public String getTag() {
+        return tag;
+    }
+
+    /** {@inheritDoc} */
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    /** {@inheritDoc} */
+    public String getBrand() {
+        return brand;
+    }
+
+    /** {@inheritDoc} */
+    public void setBrand(final String brand) {
+        this.brand = brand;
+    }
 
     /** {@inheritDoc} */
     public Boolean getFeatured() {
@@ -299,6 +323,26 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
     }
 
     /** {@inheritDoc} */
+    public Date getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    public void setCreatedTimestamp(final Date createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    public Date getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
+    }
+
+    /** {@inheritDoc} */
     public ProductSearchResultDTO copy() {
         /*
             DO NOT copy skus as this must be set through FT search - we need them to be
@@ -314,6 +358,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setDisplayName(this.displayName);
         copy.setDescription(this.description);
         copy.setDisplayDescription(this.displayDescription);
+        copy.setTag(this.tag);
+        copy.setBrand(this.brand);
         copy.setAvailablefrom(this.availablefrom);
         copy.setAvailableto(this.availableto);
         copy.setAvailability(this.availability);
@@ -323,6 +369,8 @@ public class ProductSearchResultDTOImpl implements ProductSearchResultDTO {
         copy.setMaxOrderQuantity(this.maxOrderQuantity);
         copy.setMinOrderQuantity(this.minOrderQuantity);
         copy.setStepOrderQuantity(this.stepOrderQuantity);
+        copy.setCreatedTimestamp(this.createdTimestamp);
+        copy.setUpdatedTimestamp(this.updatedTimestamp);
         if (this.attributes != null) {
             copy.setAttributes(new StoredAttributesImpl(this.attributes.toString()));
         }

@@ -24,12 +24,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.CheckoutHeader;
@@ -40,6 +39,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -62,6 +62,9 @@ public class CreateEditAddressPage extends AbstractWebPage {
     @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
     private AddressBookFacade addressBookFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
+
     /**
      * Construct page to create / edit customer address.
      * Created address will be treated as default  shipping or billing address.
@@ -73,8 +76,14 @@ public class CreateEditAddressPage extends AbstractWebPage {
         super(params);
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = ApplicationDirector.getCurrentShop();
 
-        final Customer customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), cart.getCustomerEmail());
+        final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
+
+        final Customer customer =
+                isCheckout ?
+                        customerServiceFacade.getCheckoutCustomer(shop, cart) :
+                        customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
 
         final String addrId = params.get(WebParametersKeys.ADDRESS_ID).toString();
 
@@ -82,10 +91,8 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final Address address = addressBookFacade.getAddress(customer, addrId, addrType);
 
-        final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
-
-        final Pair<Class<? extends Page>, PageParameters> successTarget = determineSuccessTarget(isCheckout);
-        final Pair<Class<? extends Page>, PageParameters> cancelTarget = determineCancelTarget(isCheckout);
+        final Pair<Class<? extends Page>, PageParameters> successTarget = determineSuccessTarget(isCheckout, customer);
+        final Pair<Class<? extends Page>, PageParameters> cancelTarget = determineCancelTarget(isCheckout, customer);
 
         add(
                 new FeedbackPanel(FEEDBACK)
@@ -125,18 +132,22 @@ public class CreateEditAddressPage extends AbstractWebPage {
      * Extension hook to override classes for themes.
      *
      * @param isCheckout where this is checkout registration
+     * @param customer current customer
      *
      * @return redirect target
      */
-    protected Pair<Class<? extends Page>, PageParameters> determineSuccessTarget(boolean isCheckout) {
+    protected Pair<Class<? extends Page>, PageParameters> determineSuccessTarget(boolean isCheckout, final Customer customer) {
 
         final Class<? extends Page> successfulPage;
         final PageParameters parameters = new PageParameters();
 
         if (isCheckout) {
-            successfulPage = CheckoutPage.class;
+            if (customer.isGuest()) {
+                parameters.set("guest", "1");
+            }
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
         } else {
-            successfulPage = ProfilePage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }
@@ -146,12 +157,13 @@ public class CreateEditAddressPage extends AbstractWebPage {
      * Extension hook to override classes for themes.
      *
      * @param isCheckout where this is checkout registration
+     * @param customer current customer
      *
      * @return redirect target
      */
-    protected Pair<Class<? extends Page>, PageParameters> determineCancelTarget(boolean isCheckout) {
+    protected Pair<Class<? extends Page>, PageParameters> determineCancelTarget(boolean isCheckout, final Customer customer) {
 
-        return determineSuccessTarget(isCheckout);
+        return determineSuccessTarget(isCheckout, customer);
 
     }
 

@@ -157,7 +157,13 @@
         </property>
     </bean>
 
-    <bean id="groovyContentServiceTemplateSupport" class="org.yes.cart.service.domain.impl.ContentServiceTemplateSupportGroovyImpl"/>
+    <bean id="groovyContentServiceTemplateSupport" class="org.yes.cart.service.domain.impl.ContentServiceTemplateSupportGroovyImpl">
+        <constructor-arg>
+            <bean class="org.yes.cart.service.domain.impl.GroovySimpleTemplateSupportImpl">
+                <constructor-arg ref="cacheManager"/>
+            </bean>
+        </constructor-arg>
+    </bean>
 
     <bean id="contentService" parent="txProxyTemplate">
         <property name="target">
@@ -219,6 +225,7 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.AddressServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="addressDao"/>
+                <constructor-arg index="1" type="org.yes.cart.service.order.OrderAddressFormatter" ref="orderAddressFormatter"/>
             </bean>
         </property>
     </bean>
@@ -377,6 +384,11 @@
                     IO operations abstraction
                  -->
                 <constructor-arg type="org.yes.cart.stream.io.IOProvider" ref="ioProviderFactory"/>
+                <!--
+                    System Service allows to provide system wide settings
+                 -->
+                <lookup-method name="getSystemService" bean="systemService"/>
+
             </bean>
         </property>
     </bean>
@@ -768,6 +780,11 @@
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>
+        <constructor-arg>
+            <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
+                <constructor-arg ref="cacheManager"/>
+            </bean>
+        </constructor-arg>
     </bean>
 
     <!-- ############################# Shopping Cart Commands and Events ######################### -->
@@ -798,7 +815,7 @@
     </bean>
 
     <bean id="orderAddressFormatter" class="org.yes.cart.service.order.impl.DefaultOrderAddressFormatterImpl">
-        <constructor-arg index="0" value="{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}, {{firstname}} {{middlename}} {{lastname}}, {{phone1}} {{mobile1}} {{email1}}"/>
+        <constructor-arg index="0" value="{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}, {{salutation}} {{firstname}} {{middlename}} {{lastname}}, {{phone1}} {{mobile1}} {{email1}}"/>
     </bean>
 
     <bean id="customerNameFormatter" class="org.yes.cart.service.customer.impl.DefaultCustomerNameFormatterImpl">

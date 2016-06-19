@@ -32,6 +32,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="email" length="255" type="java.lang.String" column="EMAIL" unique-key="MANAGER_EMAIL" not-null="true"/>
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -557,6 +558,7 @@
         <property name="custom3" type="string" column="CUSTOM3" length="255" not-null="false"/>
         <property name="custom4" type="string" column="CUSTOM4" length="255" not-null="false"/>
 
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -1657,6 +1659,7 @@
 
         <property name="url" column="URL" type="string" length="512" not-null="true" lazy="false"/>
         <property name="themeChain" column="THEME_CHAIN" type="string" length="512" not-null="false" lazy="false"/>
+        <property name="primary" column="PRIMARY_URL" type="boolean"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPURL_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
@@ -1738,6 +1741,9 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="email" type="string" column="EMAIL" length="255" not-null="true"/>
+        <property name="guest" type="boolean" column="GUEST" length="1" not-null="true"/>
+        <property name="guestEmail" type="string" column="GUEST_EMAIL" length="255" not-null="false"/>
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
         <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
         <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
@@ -1745,6 +1751,7 @@
         <property name="authToken" length="255" type="java.lang.String" column="AUTHTOKEN" not-null="false"/>
         <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
+        <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">
@@ -1911,6 +1918,11 @@
                 <comment>Depends from order num producer.</comment>
             </column>
         </property>
+        <property name="email" type="string" column="EMAIL" length="255" index="CUSTOMERORDER_EMAIL" not-null="true"/>
+        <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
+        <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>
+        <property name="lastname" type="string" column="LASTNAME" length="128" not-null="true"/>
+        <property name="middlename" type="string" column="MIDDLENAME" length="128" not-null="false"/>
         <property name="cartGuid" column="CART_GUID" type="string" length="36" index="CUSTOMERORDER_CART" not-null="true"/>
 
         <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
@@ -2551,6 +2563,11 @@
        ]]>
     </query>
 
+    <query name="GUESTS.BEFORE.CREATED">
+        <![CDATA[
+       select g from CustomerEntity g where g.guest = ?1 and g.createdTimestamp < ?2
+       ]]>
+    </query>
 
     <query name="TOPCATEGORIES.BY.SHOPID">
         <![CDATA[
@@ -2689,9 +2706,9 @@
     <query name="ORDERS.BY.CRITERIA">
         <![CDATA[
        select p from CustomerOrderEntity p
-       where (p.customer.firstname like ?1 or ?1 is null)
-       and (p.customer.lastname like ?2 or ?2 is null)
-       and (p.customer.email like ?3 or ?3 is null)
+       where (p.firstname like ?1 or ?1 is null)
+       and (p.lastname like ?2 or ?2 is null)
+       and (p.email like ?3 or ?3 is null)
        and (p.orderStatus = ?4 or ?4 is null)
        and (p.orderTimestamp > ?5 or ?5 is null)
        and (p.orderTimestamp < ?6 or ?6 is null)

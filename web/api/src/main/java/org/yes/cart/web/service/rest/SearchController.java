@@ -661,6 +661,12 @@ public class SearchController {
 
                 if (!record.getName().equalsIgnoreCase(head)) {
 
+                    if (attributeRo != null && !attributeRo.getFnValues().isEmpty()) {
+                        // Add previous one
+                        navigationRo.getFnAttributes().add(attributeRo);
+
+                    }
+
                     attributeRo = new FilteredNavigationAttributeRO();
                     attributeRo.setCode(record.getCode());
                     attributeRo.setName(record.getName());
@@ -686,7 +692,7 @@ public class SearchController {
             }
 
             if (!attributeRo.getFnValues().isEmpty()) {
-
+                // Add last one
                 navigationRo.getFnAttributes().add(attributeRo);
 
             }

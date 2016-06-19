@@ -74,6 +74,24 @@
     </bean>
 
 
+    <!-- ################################ Expired guest accounts  ########################################### -->
+
+    <bean name="expiredGuestsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Expired Guest Accounts Clean Up" />
+                <entry key="job" value-ref="bulkExpiredGuestsProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="expiredGuestsJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="expiredGuestsJob" />
+        <property name="cronExpression" value="${yum.cron.expiredGuestsJob}" />
+    </bean>
+
     <!-- ################################ Customer tagging  ################################################# -->
 
     <bean name="customerTagJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -254,6 +272,7 @@
                 <ref bean="preOrderJobCronTrigger" />
                 <ref bean="abandonedShoppingCartJobCronTrigger" />
                 <ref bean="emptyAnonymousShoppingCartJobCronTrigger" />
+                <ref bean="expiredGuestsJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
                 <ref bean="sendMailJobCronTrigger" />
                 <!--<ref bean="autoImportJobCronTrigger" />

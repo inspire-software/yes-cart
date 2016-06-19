@@ -37,9 +37,11 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -61,6 +63,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     private final PromotionService promotionService;
     private final CategoryServiceFacade categoryServiceFacade;
     private final ShopService shopService;
+    private final BrandService brandService;
 
     public ProductServiceFacadeImpl(final ProductService productService,
                                     final ProductSkuService productSkuService,
@@ -72,7 +75,8 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                     final ShoppingCartCalculator shoppingCartCalculator,
                                     final PromotionService promotionService,
                                     final CategoryServiceFacade categoryServiceFacade,
-                                    final ShopService shopService) {
+                                    final ShopService shopService,
+                                    final BrandService brandService) {
         this.productService = productService;
         this.productSkuService = productSkuService;
         this.productAssociationService = productAssociationService;
@@ -84,6 +88,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         this.categoryServiceFacade = categoryServiceFacade;
         this.promotionService = promotionService;
         this.shopService = shopService;
+        this.brandService = brandService;
     }
 
     /**
@@ -337,6 +342,73 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(final ShoppingCart cart,
+                                                                             final CustomerWishList item) {
+
+        final long shopId = cart.getShoppingContext().getShopId();
+        final String currency = cart.getCurrencyCode();
+        final String sku = item.getSkus().getCode();
+        final BigDecimal qty = item.getQuantity();
+
+        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty);
+        final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
+
+        final String addedPriceCurr = item.getRegularPriceCurrencyWhenAdded();
+        final Pair<BigDecimal, BigDecimal> price;
+        final CustomerWishList.PriceChange priceInfo;
+        if (isPriceNowAvailable) {
+            if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
+                final BigDecimal addedPrice = item.getRegularPriceWhenAdded();
+                final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+                if (MoneyUtils.isFirstEqualToSecond(addedPrice, saleNow)) {
+                    // no change
+                    if (MoneyUtils.isFirstBiggerThanSecond(priceNow.getRegularPrice(), addedPrice)) {
+                        price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), addedPrice);
+                        priceInfo = new CustomerWishList.PriceChange(
+                                CustomerWishList.PriceChangeType.ONSALE,
+                                MoneyUtils.getDiscountDisplayValue(priceNow.getRegularPrice(), addedPrice)
+                        );
+                    } else {
+                        // not on sale
+                        price = new Pair<BigDecimal, BigDecimal>(addedPrice, null);
+                        priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.NOCHANGE, null);
+                    }
+                } else if (MoneyUtils.isFirstBiggerThanSecond(addedPrice, saleNow)) {
+                    // price dropped since added
+                    price = new Pair<BigDecimal, BigDecimal>(addedPrice, saleNow);
+                    priceInfo = new CustomerWishList.PriceChange(
+                            CustomerWishList.PriceChangeType.DECREASED,
+                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow)
+                    );
+                } else {
+                    // price gone up
+                    price = new Pair<BigDecimal, BigDecimal>(saleNow, null);
+                    priceInfo = new CustomerWishList.PriceChange(
+                            CustomerWishList.PriceChangeType.INCRSEASED,
+                            MoneyUtils.getDiscountDisplayValue(addedPrice, saleNow).negate()
+                    );
+                }
+            } else {
+                // no comparative price - different currency
+                price = new Pair<BigDecimal, BigDecimal>(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
+                priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.DIFFCURRENCY, null);
+            }
+        } else {
+            // Item is not priced now so it cannot be bought
+            price = new Pair<BigDecimal, BigDecimal>(BigDecimal.ZERO, null);
+            priceInfo = new CustomerWishList.PriceChange(CustomerWishList.PriceChangeType.OFFLINE, null);
+        }
+
+        final ProductPriceModel model = getSkuPrice(cart, sku, BigDecimal.ONE, price.getFirst(), price.getSecond());
+
+        return new Pair<ProductPriceModel, CustomerWishList.PriceChange>(model, priceInfo);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart,
                                          final Long productId,
                                          final String skuCode,
@@ -443,14 +515,17 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     }
 
-
     /**
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+        return getSkuPrice(cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), item, total);
+    }
 
-        final long shopId = cart.getShoppingContext().getShopId();
-        final String currency = cart.getCurrencyCode();
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getSkuPrice(long shopId, String currency, final CartItem item, boolean total) {
 
         final Shop shop = shopService.getById(shopId);
 
@@ -758,5 +833,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         }
 
         return result;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "productService-brandById")
+    public Brand getBrandById(final long brandId) {
+        return brandService.findById(brandId);
     }
 }

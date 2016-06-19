@@ -44,6 +44,12 @@
         </column-descriptor>
 
         <column-descriptor>
+            <column-header>Salutation</column-header>
+            <field-type>FIELD</field-type>
+            <name>salutation</name>
+        </column-descriptor>
+
+        <column-descriptor>
             <column-header>First name</column-header>
             <field-type>FIELD</field-type>
             <name>firstname</name>

@@ -68,7 +68,7 @@ import java.util.*;
  * example - shop and shop url, in this case {@link ImportColumn} has a
  * {@link ImportDescriptor}. At this moment rows in cell are split by comma by default.
  */
-public class CsvBulkImportServiceImpl extends AbstractImportService implements ImportService {
+public class CsvBulkImportServiceImpl extends AbstractImportService implements ImportService, CsvImportServiceSingleFile {
 
     private GenericDAO<Object, Long> genericDAO;
 
@@ -106,7 +106,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         final String csvImportDescriptorName = context.getAttribute(JobContextKeys.IMPORT_DESCRIPTOR_NAME);
 
         try {
-            final Map<String, Object> entityCache = new HashMap<String, Object>();
 
             final File[] filesToImport = getFilesToImport(csvImportDescriptor, fileName);
             if (filesToImport == null) {
@@ -129,25 +128,12 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     statusListener.notifyError(msgErr);
                     return BulkImportResult.ERROR;
                 }
-                doImport(statusListener, filesToImport, csvImportDescriptorName, csvImportDescriptor, importedFiles, entityCache);
+                return doImport(statusListener, filesToImport, csvImportDescriptorName, csvImportDescriptor, importedFiles);
             }
         } catch (Exception e) {
 
-            /**
-             * Programmatically rollback for any error during import - ALL or NOTHING.
-             * But we do not throw exception since this is in a separate thread so not point
-             * Need to finish gracefully with error status
-             */
-            if (!TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            }
-
-            final String msgError = MessageFormat.format(
-                    "unexpected error {0}",
-                    e.getMessage());
-            log.error(msgError, e);
-            statusListener.notifyError(msgError);
             return BulkImportResult.ERROR;
+
         }
         return BulkImportResult.OK;
     }
@@ -161,94 +147,124 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @param csvImportDescriptorName file name of the descriptor
      * @param csvImportDescriptor import descriptor.
      * @param importedFiles       imported files.
-     * @param entityCache         runtime cache
      */
-    void doImport(final JobStatusListener statusListener,
-                  final File[] filesToImport,
-                  final String csvImportDescriptorName,
-                  final CsvImportDescriptor csvImportDescriptor,
-                  final Set<String> importedFiles,
-                  final Map<String, Object> entityCache) throws Exception {
+    BulkImportResult doImport(final JobStatusListener statusListener,
+                              final File[] filesToImport,
+                              final String csvImportDescriptorName,
+                              final CsvImportDescriptor csvImportDescriptor,
+                              final Set<String> importedFiles) throws Exception {
         // Need to add all file to the set for proper clean up after job in case exception occurs
         for (File fileToImport : filesToImport) {
             importedFiles.add(fileToImport.getAbsolutePath());
         }
 
         for (File fileToImport : filesToImport) {
-            doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor, entityCache);
+            final BulkImportResult status = doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
+            if (status != BulkImportResult.OK) {
+                return status;
+            }
         }
+        return BulkImportResult.OK;
+    }
+
+    BulkImportResult doImport(final JobStatusListener statusListener,
+                              final File fileToImport,
+                              final String csvImportDescriptorName,
+                              final CsvImportDescriptor csvImportDescriptor) throws Exception {
+
+        return self().doSingleFileImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
+
     }
 
     /**
-     * Perform import for single file.
-     *
-     * @param statusListener      error report
-     * @param fileToImport        array of files to import
-     * @param csvImportDescriptorName file name of the descriptor
-     * @param csvImportDescriptor import descriptor.
-     * @param entityCache         runtime cache
+     * {@inheritDoc}
      */
-    void doImport(final JobStatusListener statusListener,
-                  final File fileToImport,
-                  final String csvImportDescriptorName,
-                  final CsvImportDescriptor csvImportDescriptor,
-                  final Map<String, Object> entityCache) throws Exception {
+    public BulkImportResult doSingleFileImport(final JobStatusListener statusListener,
+                                               final File fileToImport,
+                                               final String csvImportDescriptorName,
+                                               final CsvImportDescriptor csvImportDescriptor) throws Exception {
 
-        final Logger log = ShopCodeContext.getLog(this);
-        final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
-        final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
-        statusListener.notifyMessage(msgInfoImp);
-        log.info(msgInfoImp);
-
-        CsvFileReader csvFileReader = new CsvFileReaderImpl();
         try {
-            final String filename = fileToImport.getName();
-            long lineNumber = 0;
 
-            csvFileReader.open(
-                    fileToImport.getAbsolutePath(),
-                    csvImportDescriptor.getImportFileDescriptor().getColumnDelimiter(),
-                    csvImportDescriptor.getImportFileDescriptor().getTextQualifier(),
-                    csvImportDescriptor.getImportFileDescriptor().getFileEncoding(),
-                    csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine());
 
-            String[] line;
-            while ((line = csvFileReader.readLine()) != null) {
-                final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
-                if (mode == ImportDescriptor.ImportMode.DELETE) {
-                    doImportDelete(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor);
-                } else {
-                    doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null, entityCache);
+            final Map<String, Object> entityCache = new HashMap<String, Object>();
+
+            final Logger log = ShopCodeContext.getLog(this);
+            final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
+            final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
+            statusListener.notifyMessage(msgInfoImp);
+            log.info(msgInfoImp);
+
+            CsvFileReader csvFileReader = new CsvFileReaderImpl();
+            try {
+                final String filename = fileToImport.getName();
+                long lineNumber = 0;
+
+                csvFileReader.open(
+                        fileToImport.getAbsolutePath(),
+                        csvImportDescriptor.getImportFileDescriptor().getColumnDelimiter(),
+                        csvImportDescriptor.getImportFileDescriptor().getTextQualifier(),
+                        csvImportDescriptor.getImportFileDescriptor().getFileEncoding(),
+                        csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine());
+
+                String[] line;
+                while ((line = csvFileReader.readLine()) != null) {
+                    final CsvImportTuple tuple = new CsvImportTupleImpl(filename, lineNumber++, line);
+                    if (mode == ImportDescriptor.ImportMode.DELETE) {
+                        doImportDelete(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor);
+                    } else {
+                        doImportMerge(statusListener, tuple, csvImportDescriptorName, csvImportDescriptor, null, entityCache);
+                    }
                 }
+                final String msgInfoLines = MessageFormat.format("total data lines : {0}",
+                        (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
+                statusListener.notifyMessage(msgInfoLines);
+                log.info(msgInfoLines);
+
+                csvFileReader.close();
+            } catch (FileNotFoundException e) {
+                final String msgErr = MessageFormat.format(
+                        "can not find the file : {0} {1}",
+                        fileToImport.getAbsolutePath(),
+                        e.getMessage());
+                log.error(msgErr);
+                statusListener.notifyError(msgErr);
+            } catch (UnsupportedEncodingException e) {
+                final String msgErr = MessageFormat.format(
+                        "wrong file encoding in xml descriptor : {0} {1}",
+                        csvImportDescriptor.getImportFileDescriptor().getFileEncoding(),
+                        e.getMessage());
+                log.error(msgErr);
+                statusListener.notifyError(msgErr);
+
+            } catch (IOException e) {
+                final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
+                        fileToImport.getAbsolutePath(),
+                        e.getMessage());
+                log.error(msgErr);
+                statusListener.notifyError(msgErr);
             }
-            final String msgInfoLines = MessageFormat.format("total data lines : {0}",
-                    (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
-            statusListener.notifyMessage(msgInfoLines);
-            log.info(msgInfoLines);
 
-            csvFileReader.close();
-        } catch (FileNotFoundException e) {
-            final String msgErr = MessageFormat.format(
-                    "can not find the file : {0} {1}",
-                    fileToImport.getAbsolutePath(),
-                    e.getMessage());
-            log.error(msgErr);
-            statusListener.notifyError(msgErr);
-        } catch (UnsupportedEncodingException e) {
-            final String msgErr = MessageFormat.format(
-                    "wrong file encoding in xml descriptor : {0} {1}",
-                    csvImportDescriptor.getImportFileDescriptor().getFileEncoding(),
-                    e.getMessage());
-            log.error(msgErr);
-            statusListener.notifyError(msgErr);
+        } catch (Exception e) {
 
-        } catch (IOException e) {
-            final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
-                    fileToImport.getAbsolutePath(),
+            /**
+             * Programmatically rollback for any error during import - ALL or NOTHING - single file.
+             * But we do not throw exception since this is in a separate thread so not point
+             * Need to finish gracefully with error status
+             */
+            if (!TransactionAspectSupport.currentTransactionStatus().isRollbackOnly()) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            }
+
+            final String msgError = MessageFormat.format(
+                    "unexpected error {0}",
                     e.getMessage());
-            log.error(msgErr);
-            statusListener.notifyError(msgErr);
+            ShopCodeContext.getLog(this).error(msgError, e);
+            statusListener.notifyError(msgError);
+            return BulkImportResult.ERROR;
         }
+
+        return BulkImportResult.OK;
 
     }
 
@@ -436,15 +452,21 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                     final Object masterObject,
                                     final ImportTuple tuple,
                                     final String queryTemplate) {
-        final LookUpQuery query = descriptorInsertLookUpQueryParameterStrategy.getQuery(descriptor, masterObject, tuple, valueStringAdapter, queryTemplate);
-        if (query.getQueryString().indexOf(";\n") == -1) {
-            genericDAO.executeNativeUpdate(query.getQueryString());
-        } else {
-            for (final String statement : query.getQueryString().split(";\n")) {
+
+        if (queryTemplate.contains(";\n")) {
+            for (final String statement : queryTemplate.split(";\n")) {
                 if (StringUtils.isNotBlank(statement)) {
-                    genericDAO.executeNativeUpdate(statement);
+                    final LookUpQuery query = descriptorInsertLookUpQueryParameterStrategy.getQuery(
+                            descriptor, masterObject, tuple, valueStringAdapter, statement
+                    );
+                    genericDAO.executeNativeUpdate(query.getQueryString(), query.getParameters());
                 }
             }
+        } else {
+            final LookUpQuery query = descriptorInsertLookUpQueryParameterStrategy.getQuery(
+                    descriptor, masterObject, tuple, valueStringAdapter, queryTemplate
+            );
+            genericDAO.executeNativeUpdate(query.getQueryString(), query.getParameters());
         }
     }
 
@@ -776,4 +798,20 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
     public void setColumnLookUpQueryParameterStrategy(final LookUpQueryParameterStrategy columnLookUpQueryParameterStrategy) {
         this.columnLookUpQueryParameterStrategy = columnLookUpQueryParameterStrategy;
     }
+
+
+    private CsvImportServiceSingleFile self;
+
+    private CsvImportServiceSingleFile self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public CsvImportServiceSingleFile getSelf() {
+        return null;
+    }
+
+
 }

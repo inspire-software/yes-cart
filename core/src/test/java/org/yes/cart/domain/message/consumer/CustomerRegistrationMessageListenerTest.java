@@ -21,11 +21,15 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.message.RegistrationMessage;
 import org.yes.cart.domain.message.impl.RegistrationMessageImpl;
 import org.yes.cart.service.domain.MailService;
+import org.yes.cart.service.domain.TemplateSupport;
+import org.yes.cart.service.domain.impl.GroovySimpleTemplateSupportImpl;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 import org.yes.cart.service.mail.impl.MailComposerImpl;
 
@@ -50,6 +54,17 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
     @Test
     public void testOnMessage0() throws Exception {
 
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get(with(any(String.class))); will(returnValue(null));
+            allowing(cache).put(with(any(String.class)), with(any(Object.class)));
+        }});
+
+        final TemplateSupport templates = new GroovySimpleTemplateSupportImpl(cacheManager);
+
         final MailService mailService = (MailService) ctx().getBean("mailService");
         final MailTemplateResourcesProvider mailTemplateResourcesProvider = mockery.mock(MailTemplateResourcesProvider.class);
 
@@ -64,7 +79,7 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
             will(returnValue(IOUtils.toString(new FileInputStream(new File("src/test/resources/mailtemplates/SHOIP1/customerChangePassword/customerChangePassword.properties")), "UTF-8")));
         }});
 
-        final MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider);
+        final MailComposerImpl mailComposer = new MailComposerImpl(mailTemplateResourcesProvider, templates);
 
         RegistrationMessage registrationMessage = createRegistrationMessage(templateChain);
         new CustomerRegistrationMessageListener(
@@ -76,7 +91,9 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
         assertEquals(1, mail.size());
         final Mail email = mail.get(0);
         assertTrue(email.getHtmlVersion().contains("neWpaSswOrd"));
+        assertTrue(email.getHtmlVersion().contains("Mr"));
         assertTrue(email.getHtmlVersion().contains("Bender"));
+        assertTrue(email.getHtmlVersion().contains("Bending"));
         assertTrue(email.getHtmlVersion().contains("Rodrigez"));
         assertTrue(email.getHtmlVersion().contains("Gadget universe"));
         assertTrue(email.getHtmlVersion().contains("somegadget.com"));
@@ -88,8 +105,10 @@ public class CustomerRegistrationMessageListenerTest extends BaseCoreDBTestCase 
 
     private RegistrationMessage createRegistrationMessage(final List<String> templateChain) {
         RegistrationMessage registrationMessage = new RegistrationMessageImpl();
+        registrationMessage.setSalutation("Mr");
         registrationMessage.setFirstname("Bender");
         registrationMessage.setLastname("Rodrigez");
+        registrationMessage.setMiddlename("Bending");
         registrationMessage.setEmail("bender@bar.localhost");
         registrationMessage.setPassword("neWpaSswOrd");
         registrationMessage.setShopId(10L);

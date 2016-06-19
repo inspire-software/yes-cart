@@ -38,7 +38,7 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
     private Map<String, LookUpQueryParameterStrategyValueProvider> providers = Collections.emptyMap();
     private LookUpQueryParameterStrategyValueProvider defaultProvider;
 
-    private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(\\{[a-zA-Z\\d]*\\})");
+    private static final Pattern MATCH_COLUMNS_IN_SQL_TEMPLATE = Pattern.compile("(([']{0,1})(\\{[a-zA-Z\\d]*\\})([']{0,1}))");
 
     protected final void replaceColumnNamesInTemplate(final String queryTemplate,
                                                       final StringBuilder query,
@@ -57,9 +57,12 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
         int lastIndex = 0;
         int paramCount = 1;
         while (matcher.find()) {
-            final String placeholder = matcher.group(0);
-            query.append(queryTemplate.substring(lastIndex, matcher.start(0)));
-            lastIndex = matcher.end(0);
+            final String placeholder = matcher.group(3);
+            final boolean wrappedInQuotes = matcher.group(2).length() > 0 && matcher.group(2).equals(matcher.group(4));
+            final boolean startingQuote = !wrappedInQuotes && matcher.group(2).length() > 0;
+            final boolean endingQuote = !wrappedInQuotes && matcher.group(4).length() > 0;
+            query.append(queryTemplate.substring(lastIndex, startingQuote ? matcher.end(2) : matcher.start(0)));
+            lastIndex = endingQuote ? matcher.start(4) : matcher.end(0);
 
             final LookUpQueryParameterStrategyValueProvider specific = providers.get(placeholder);
             final Object value;
@@ -70,23 +73,30 @@ public abstract class AbstractByParameterByColumnNameStrategy implements LookUpQ
                 value = specific.getPlaceholderValue(
                         placeholder, descriptor, masterObject, tuple, adapter, queryTemplate);
             }
-            addParameter(paramCount, value, query, params);
 
-            paramCount++;
+            if (addParameter(paramCount, wrappedInQuotes, value, query, params)) {
+
+                paramCount++;
+
+            }
         }
         query.append(queryTemplate.substring(lastIndex));
     }
 
     /**
      * @param index parameter index
+     * @param wrappedInQuotes true if value is wrapped in quotes (' or ") in the template
      * @param param actual param value
      * @param query current query builder
      * @param params current params list
+     *
+     * @return boolean flag whether the parameter was added to params
      */
-    protected abstract void addParameter(final int index,
-                                         final Object param,
-                                         final StringBuilder query,
-                                         final List<Object> params);
+    protected abstract boolean addParameter(final int index,
+                                            final boolean wrappedInQuotes,
+                                            final Object param,
+                                            final StringBuilder query,
+                                            final List<Object> params);
 
 
     /**

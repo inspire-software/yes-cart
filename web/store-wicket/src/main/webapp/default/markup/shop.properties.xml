@@ -97,9 +97,16 @@
     <entry key="checkoutTitle">Checkout</entry>
     <entry key="selectAddr">Provide shipping and billing addresses</entry>
     <entry key="selectPayment">Payment</entry>
+    <entry key="selectDeliveryAddress">Please provide delivery address</entry>
+    <entry key="selectBillingAddress">Please provide billing address</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Contact information</entry>
+    <entry key="name">Name</entry>
+    <entry key="subject">Subject</entry>
+    <entry key="message">Message</entry>
+    <entry key="send">Send</entry>
+    <entry key="emailSend">You message has been sent</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Your profile</entry>
@@ -144,12 +151,12 @@
     <entry key="sale">Sale</entry>
     <entry key="specialoffer">Special offer</entry>
     <entry key="newarrival">New arrivals</entry>
-    <entry key="multisku">multi-sku</entry>
-    <entry key="preorder">preorder</entry>
-    <entry key="backorder">backorder</entry>
-    <entry key="always">always</entry>
-    <entry key="showroom">showroom</entry>
-    <entry key="multibuy">multi-buy</entry>
+    <entry key="multisku">Multi-sku</entry>
+    <entry key="preorder">Preorder</entry>
+    <entry key="backorder">Backorder</entry>
+    <entry key="always">Always</entry>
+    <entry key="showroom">Showroom</entry>
+    <entry key="multibuy">Multi-buy</entry>
 
     <!-- ShoppingCartPaymentVerificationView -->
     <entry key="productName">Product</entry>
@@ -201,10 +208,14 @@
     <entry key="firstName">First name</entry>
     <entry key="lastName">Last name</entry>
     <entry key="line1">Address line 1</entry>
+    <entry key="addrline1">Address line 1</entry>
     <entry key="line2">Address line 2</entry>
+    <entry key="addrline2">Address line 2</entry>
     <entry key="city">City</entry>
     <entry key="country">Country</entry>
+    <entry key="countryCode">Country</entry>
     <entry key="state">State</entry>
+    <entry key="stateCode">State</entry>
     <entry key="postcode">Post code</entry>
     <entry key="phone1">Phone</entry>
     <entry key="create">Save</entry>
@@ -230,6 +241,10 @@
     <entry key="newPasswordRequestEmailSent">New password request was sent to ${email}. Check email please.</entry>
     <entry key="newPasswordEmailSent">New password was sent. Check email please.</entry>
     <entry key="newPasswordInvalidToken">Invalid token. Unable to reset password.</entry>
+
+    <!-- GuestPanel -->
+    <entry key="guestUser">Guest checkout</entry>
+    <entry key="canNotGuestCheckout">Unable to perform guest checkout</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">New customer</entry>
@@ -355,7 +370,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Carrier</entry>
     <entry key="carrierSla">Shipping method</entry>
-    <entry key="carrierSelect">Select carrier and shipping method</entry>
+    <entry key="carrierSelect">Select shipping method</entry>
 
     <!-- Currency -->
     <entry key="currency">Currency</entry>
@@ -365,6 +380,7 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Items</entry>
+    <entry key="noResultsFound">No items found matching your query</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">Add to wishlist</entry>

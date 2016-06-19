@@ -52,9 +52,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private List<String> supportedBillingCountriesAsList;
     private List<String> supportedLanguagesAsList;
 
-    private List<String> supportedRegistrationFormAttributesAsList;
-    private List<String> supportedProfileFormAttributesAsList;
-    private List<String> supportedProfileFormReadOnlyAttributesAsList;
+    private Map<String, List<String>> supportedRegistrationFormAttributesByType = new HashMap<String, List<String>>();
+    private Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<String, List<String>>();
+    private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
+
+    private Map<String, Map<String, String>> addressFormattingByLanguageByCountryCode = new HashMap<String, Map<String, String>>();
 
     public ShopEntity() {
     }
@@ -281,50 +283,107 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedLanguagesAsList;
     }
 
-    public String getSupportedRegistrationFormAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES);
+    public String getAddressFormatByCountryAndCustomerTypeAndLocale(final String countryCode, final String locale, final String customerType) {
+
+        Map<String, String> formatByCountryCode = addressFormattingByLanguageByCountryCode.get(locale);
+
+        if (formatByCountryCode == null) {
+            formatByCountryCode = new HashMap<String, String>();
+            addressFormattingByLanguageByCountryCode.put(locale, formatByCountryCode);
+        }
+
+        final String countryKey = StringUtils.isNotBlank(customerType) ? countryCode + "_" + customerType : countryCode;
+        String format = formatByCountryCode.get(countryKey);
+        if (!formatByCountryCode.containsKey(countryKey)) {
+            if (StringUtils.isNotBlank(customerType)) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale + "_" + customerType);
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + customerType);
+                }
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX);
+            }
+            formatByCountryCode.put(countryKey, format);
+        }
+
+        return format;
     }
 
-    public List<String> getSupportedRegistrationFormAttributesAsList() {
+    public String getSupportedRegistrationFormAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_REGISTRATION_ATTRIBUTES_PREFIX + '_' + customerType);
+    }
+
+    public List<String> getSupportedRegistrationFormAttributesAsList(final String customerType) {
+        List<String> supportedRegistrationFormAttributesAsList = this.supportedRegistrationFormAttributesByType.get(customerType);
         if (supportedRegistrationFormAttributesAsList == null) {
-            final String attrs = getSupportedRegistrationFormAttributes();
+            final String attrs = getSupportedRegistrationFormAttributes(customerType);
             if (attrs != null) {
                 supportedRegistrationFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedRegistrationFormAttributesAsList = Collections.emptyList();
             }
+            this.supportedRegistrationFormAttributesByType.put(customerType, supportedRegistrationFormAttributesAsList);
         }
         return supportedRegistrationFormAttributesAsList;
     }
 
-    public String getSupportedProfileFormAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE);
+    public String getSupportedProfileFormAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_VISIBLE_PREFIX + '_' + customerType);
     }
 
-    public List<String> getSupportedProfileFormAttributesAsList() {
+    public List<String> getSupportedProfileFormAttributesAsList(final String customerType) {
+        List<String> supportedProfileFormAttributesAsList = this.supportedProfileFormAttributesByType.get(customerType);
         if (supportedProfileFormAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormAttributes();
+            final String attrs = getSupportedProfileFormAttributes(customerType);
             if (attrs != null) {
                 supportedProfileFormAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedProfileFormAttributesAsList = Collections.emptyList();
             }
+            this.supportedProfileFormAttributesByType.put(customerType, supportedProfileFormAttributesAsList);
         }
         return supportedProfileFormAttributesAsList;
     }
 
-    public String getSupportedProfileFormReadOnlyAttributes() {
-        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY);
+    public String getSupportedProfileFormReadOnlyAttributes(final String customerType) {
+        if (StringUtils.isBlank(customerType)) {
+            return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX);
+        }
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.CUSTOMER_PROFILE_ATTRIBUTES_READONLY_PREFIX + '_' + customerType);
     }
 
-    public List<String> getSupportedProfileFormReadOnlyAttributesAsList() {
+    public List<String> getSupportedProfileFormReadOnlyAttributesAsList(final String customerType) {
+        List<String> supportedProfileFormReadOnlyAttributesAsList = this.supportedProfileFormReadOnlyAttributesByType.get(customerType);
         if (supportedProfileFormReadOnlyAttributesAsList == null) {
-            final String attrs = getSupportedProfileFormReadOnlyAttributes();
+            final String attrs = getSupportedProfileFormReadOnlyAttributes(customerType);
             if (attrs != null) {
                 supportedProfileFormReadOnlyAttributesAsList = Arrays.asList(StringUtils.split(attrs, ','));
             } else {
                 supportedProfileFormReadOnlyAttributesAsList = Collections.emptyList();
             }
+            this.supportedProfileFormReadOnlyAttributesByType.put(customerType, supportedProfileFormReadOnlyAttributesAsList);
         }
         return supportedProfileFormReadOnlyAttributesAsList;
     }
@@ -374,6 +433,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public String getDefaultShopUrl() {
+        for (ShopUrl shopUrl : getShopUrl()) {
+            if (shopUrl.isPrimary()) {
+                return "http://" + shopUrl.getUrl();
+            }
+        }
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
                 continue;

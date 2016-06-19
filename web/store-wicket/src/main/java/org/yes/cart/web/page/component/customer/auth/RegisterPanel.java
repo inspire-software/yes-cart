@@ -21,29 +21,35 @@ import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
-import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
+import org.yes.cart.web.support.service.CustomerServiceFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,11 +65,10 @@ public class RegisterPanel extends BaseComponent {
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private static final String EMAIL_INPUT = "email";
-    private static final String FIRSTNAME_INPUT = "firstname";
-    private static final String LASTNAME_INPUT = "lastname";
-    private static final String PHONE_INPUT = "phone";
     private static final String REGISTER_BUTTON = "registerBtn";
     private static final String REGISTER_FORM = "registerForm";
+    private static final String CUSTOMER_TYPE_FORM = "customerTypesForm";
+    private static final String CUSTOMER_TYPE_RADIO_GROUP = "customerTypesRadioGroup";
     private final static String FIELDS = "fields";
     private final static String NAME = "name";
     private final static String EDITOR = "editor";
@@ -74,9 +79,17 @@ public class RegisterPanel extends BaseComponent {
     @SpringBean(name = StorefrontServiceSpringKeys.CONTENT_SERVICE_FACADE)
     private ContentServiceFacade contentServiceFacade;
 
+    @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
+    private CustomerServiceFacade customerServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
+
     private final EditorFactory editorFactory = new EditorFactory();
 
     private final boolean isCheckout;
+
+    private String customerType;
 
     /**
      * Create register panel.
@@ -91,7 +104,49 @@ public class RegisterPanel extends BaseComponent {
         this.isCheckout = isCheckout;
 
         final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
-        add(new RegisterForm(REGISTER_FORM, target.getFirst(), target.getSecond()));
+
+        final Shop shop = ApplicationDirector.getCurrentShop();
+
+        final List<Pair<String, I18NModel>> availableTypes = customerServiceFacade.getShopSupportedCustomerTypes(shop);
+
+        customerType = !availableTypes.isEmpty() ? availableTypes.get(0).getFirst() : null;
+
+        add(new RegisterForm(REGISTER_FORM, customerType, target.getFirst(), target.getSecond()));
+
+        final Form typeForm = new Form(CUSTOMER_TYPE_FORM);
+
+        final Component typeSelector = new RadioGroup<String>(
+                CUSTOMER_TYPE_RADIO_GROUP,
+                new PropertyModel<String>(RegisterPanel.this, "customerType")) {
+
+            /**
+             * {@inheritDoc}
+             */
+            protected void onSelectionChanged(final Object descriptor) {
+                // Change the form
+                RegisterPanel.this.get(REGISTER_FORM).replaceWith(new RegisterForm(REGISTER_FORM, customerType, target.getFirst(), target.getSecond()));
+            }
+
+
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
+
+        }.add(
+                new ListView<Pair<String, I18NModel>>("customerTypeList", availableTypes) {
+                    protected void populateItem(final ListItem<Pair<String, I18NModel>> customerTypeItem) {
+                        customerTypeItem.add(new Radio<String>("customerTypeLabel", new Model<String>(customerTypeItem.getModelObject().getFirst())));
+                        customerTypeItem.add(new Label("customerType", customerTypeItem.getModelObject().getSecond().getValue(getLocale().getLanguage())));
+                    }
+                }
+        );
+
+        typeForm.add(typeSelector).setVisible(availableTypes.size() > 1);
+
+        add(typeForm);
+
+        setVisible(!availableTypes.isEmpty());
 
     }
 
@@ -103,7 +158,7 @@ public class RegisterPanel extends BaseComponent {
         final String lang = getLocale().getLanguage();
 
         // Refresh content
-        String regformInfo = getContentInclude(shopId, "registration_regform_content_include", lang);
+        String regformInfo = getContentInclude(shopId, "registration_regform_content_include_" + customerType, lang);
         get(REGISTER_FORM).get(CONTENT).replaceWith(new Label(CONTENT, regformInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -122,7 +177,7 @@ public class RegisterPanel extends BaseComponent {
         final PageParameters parameters = new PageParameters();
 
         if (isCheckout) {
-            successfulPage = CheckoutPage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/checkout").get();
             parameters.set(
                     CheckoutPage.THREE_STEPS_PROCESS,
                     "true"
@@ -131,7 +186,7 @@ public class RegisterPanel extends BaseComponent {
                     CheckoutPage.STEP_ADDR
             );
         } else {
-            successfulPage = ProfilePage.class;
+            successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/profile").get();
         }
         return new Pair<Class<? extends Page>, PageParameters>(successfulPage, parameters);
     }
@@ -142,10 +197,9 @@ public class RegisterPanel extends BaseComponent {
         private final long serialVersionUid = 20111016L;
 
 
+        private String customerType;
+
         private String email;
-        private String firstname;
-        private String lastname;
-        private String phone;
 
 
         /**
@@ -167,58 +221,21 @@ public class RegisterPanel extends BaseComponent {
         }
 
         /**
-         * Get first name.
+         * Customer type.
          *
-         * @return first name
+         * @return type
          */
-        public String getFirstname() {
-            return firstname;
+        public String getCustomerType() {
+            return customerType;
         }
 
         /**
-         * Set first name.
+         * Set customer type.
          *
-         * @param firstname first name.
+         * @param customerType type
          */
-        public void setFirstname(final String firstname) {
-            this.firstname = firstname;
-        }
-
-
-        /**
-         * Get last name.
-         *
-         * @return last name.
-         */
-        public String getLastname() {
-            return lastname;
-        }
-
-        /**
-         * set Last name.
-         *
-         * @param lastname last name.
-         */
-        public void setLastname(final String lastname) {
-            this.lastname = lastname;
-        }
-
-        /**
-         * Get phone.
-         *
-         * @return [hone
-         */
-        public String getPhone() {
-            return phone;
-        }
-
-        /**
-         * Set phone.
-         *
-         * @param phone phone .
-         */
-        public void setPhone(final String phone) {
-            this.phone = phone;
+        public void setCustomerType(final String customerType) {
+            this.customerType = customerType;
         }
 
         /**
@@ -229,6 +246,7 @@ public class RegisterPanel extends BaseComponent {
          * @param parameters parameters
          */
         public RegisterForm(final String id,
+                            final String customerType,
                             final Class<? extends Page> successfulPage,
                             final PageParameters parameters) {
 
@@ -237,6 +255,8 @@ public class RegisterPanel extends BaseComponent {
             setModel(new CompoundPropertyModel<RegisterForm>(RegisterForm.this));
 
 
+            setCustomerType(customerType);
+
             add(
                     new TextField<String>(EMAIL_INPUT)
                             .setRequired(true)
@@ -244,30 +264,13 @@ public class RegisterPanel extends BaseComponent {
                             .add(EmailAddressValidator.getInstance())
             );
 
-            add(
-                    new TextField<String>(FIRSTNAME_INPUT)
-                            .setRequired(true)
-            );
-
-            add(
-                    new TextField<String>(LASTNAME_INPUT)
-                            .setRequired(true)
-            );
-
-            add(
-                    new TextField<String>(PHONE_INPUT)
-                            .setRequired(true)
-                            .add(StringValidator.lengthBetween(4, 13))
-            );
-
-
             RepeatingView fields = new RepeatingView(FIELDS);
 
             add(fields);
 
             final String lang = getLocale().getLanguage();
             final List<AttrValueCustomer> reg = getCustomerServiceFacade()
-                    .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop());
+                    .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop(), customerType);
 
             for (final AttrValue attrValue : reg) {
 
@@ -310,9 +313,12 @@ public class RegisterPanel extends BaseComponent {
                             } else {
 
                                 final Map<String, Object> data = new HashMap<String, Object>();
-                                data.put("firstname", getFirstname());
-                                data.put("lastname", getLastname());
-                                data.put("phone", getPhone());
+                                // Data is now relayed via custom attributes, so we can sort and arrange all attributes on
+                                // registration form.
+                                // data.put("firstname", getFirstname());
+                                // data.put("lastname", getLastname());
+                                // data.put("phone", getPhone());
+                                data.put("customerType", customerType); // Type is required for registration
 
                                 for (final AttrValue av : reg) {
                                     if (StringUtils.isNotBlank(av.getVal())) {

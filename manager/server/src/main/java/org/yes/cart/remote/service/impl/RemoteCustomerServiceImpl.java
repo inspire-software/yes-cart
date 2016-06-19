@@ -81,9 +81,10 @@ public class RemoteCustomerServiceImpl
                                           final String firstname,
                                           final String lastname,
                                           final String middlename,
-                                          final String tag)
+                                          final String tag,
+                                          final String customerType)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<CustomerDTO> customers = new ArrayList<CustomerDTO>(dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag));
+        final List<CustomerDTO> customers = new ArrayList<CustomerDTO>(dtoCustomerService.findCustomer(email, firstname, lastname, middlename, tag, customerType));
         federationFacade.applyFederationFilter(customers, CustomerDTO.class);
         return customers;
     }

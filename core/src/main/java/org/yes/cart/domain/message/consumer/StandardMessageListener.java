@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.MailService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,12 +42,12 @@ import java.util.Map;
 public class StandardMessageListener implements Runnable {
 
     /**
-     * Shop code.  Email context variable.
+     * Shop code.  Shop code context variable.
      */
     public static final String SHOP_CODE = "shop_code";
 
     /**
-     * Shop.  Email context variable.
+     * Shop.  {@link Shop} context variable.
      */
     public static final String SHOP = "shop";
 
@@ -56,9 +57,19 @@ public class StandardMessageListener implements Runnable {
     public static final String CUSTOMER_EMAIL = "email";
 
     /**
-     * Customer object.  Email context variable.
+     * Customer object.  {@link org.yes.cart.domain.entity.Customer} context variable. (could be null)
      */
     public static final String CUSTOMER = "customer";
+
+    /**
+     * Customer object.  {@link org.yes.cart.domain.entity.Address} context variable. (could be null)
+     */
+    public static final String SHIPPING_ADDRESS = "shippingAddress";
+
+    /**
+     * Customer object.  {@link org.yes.cart.domain.entity.Address} context variable. (could be null)
+     */
+    public static final String BILLING_ADDRESS = "billingAddress";
 
     /**
      * Result.  Result context variable.
@@ -66,17 +77,17 @@ public class StandardMessageListener implements Runnable {
     public static final String RESULT = "result";
 
     /**
-     * All order payments.  Payment context variable.
+     * All order payments. List of {@link CustomerOrderPayment} context variable.
      */
     public static final String PAYMENTS = "payments";
 
     /**
-     * All parameters will be passed with index param0, param1, etc
+     * All parameters (from AOP join point) will be passed with index param0, param1, etc
      */
     public static final String PARAM_PREFIX = "param";
 
     /**
-     * Default object, which passed to email template.
+     * Default object, which passed to email template. (E.g. in order notifications it is the {@link org.yes.cart.domain.entity.CustomerOrder})
      */
     public static final String ROOT = "root";
 
@@ -96,17 +107,17 @@ public class StandardMessageListener implements Runnable {
     public static final String LOCALE = "locale";
 
     /**
-     * Carrier name.
+     * Delivery name. {@link org.yes.cart.domain.entity.CustomerOrderDelivery} id this is a delivery notification.
      */
     public static final String DELIVERY = "delivery";
 
     /**
-     * Carrier name.
+     * Carrier name. Localised carrier name.
      */
     public static final String DELIVERY_CARRIER = "deliveryCarrierName";
 
     /**
-     * Delivery sla name.
+     * Delivery sla name. Localised SLA name.
      */
     public static final String DELIVERY_CARRIER_SLA = "deliveryCarrierSlaName";
 

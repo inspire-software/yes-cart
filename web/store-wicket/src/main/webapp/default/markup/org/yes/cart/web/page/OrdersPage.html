@@ -65,6 +65,7 @@
                     console.log(varArray[i]);
                     var param = varArray[i].split("=");
                     if (param[0] == 'view') {
+                        $("#view option").removeAttr('selected');
                         $("#view option[value=" + param[1] + "]").attr("selected", "selected");
                         return;
                     }

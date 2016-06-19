@@ -134,17 +134,32 @@ public class DtoCustomerServiceImpl
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<AttrValueCustomerDTO> result = new ArrayList<AttrValueCustomerDTO>();
-        result.addAll(getById(entityPk).getAttributes());
-        final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
-                AttributeGroupNames.CUSTOMER,
-                getCodes(result));
-        for (AttributeDTO attributeDTO : availableAttributeDTOs) {
-            AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
-            attrValueCategoryDTO.setAttributeDTO(attributeDTO);
-            attrValueCategoryDTO.setCustomerId(entityPk);
-            result.add(attrValueCategoryDTO);
+        if (entityPk > 0L) {
+
+            final CustomerDTO customerDTO = getById(entityPk);
+            result.addAll(getById(entityPk).getAttributes());
+            final List<AttributeDTO> availableAttributeDTOs = dtoAttributeService.findAvailableAttributes(
+                    AttributeGroupNames.CUSTOMER,
+                    getCodes(result));
+            for (AttributeDTO attributeDTO : availableAttributeDTOs) {
+                AttrValueCustomerDTO attrValueCategoryDTO = getAssemblerDtoFactory().getByIface(AttrValueCustomerDTO.class);
+                attrValueCategoryDTO.setAttributeDTO(attributeDTO);
+                attrValueCategoryDTO.setCustomerId(entityPk);
+                if ("salutation".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getSalutation());
+                } else if ("firstname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getFirstname());
+                } else if ("middlename".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getMiddlename());
+                } else if ("lastname".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getLastname());
+                } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
+                }
+                result.add(attrValueCategoryDTO);
+            }
+            Collections.sort(result, new AttrValueDTOComparatorImpl());
         }
-        Collections.sort(result, new AttrValueDTOComparatorImpl());
         return result;
     }
 
@@ -166,23 +181,54 @@ public class DtoCustomerServiceImpl
         final Attribute atr = ((AttributeService) dtoAttributeService.getService()).findById(attrValueDTO.getAttributeDTO().getAttributeId());
         final boolean multivalue = atr.isAllowduplicate();
         final Customer customer = service.findById(((AttrValueCustomerDTO) attrValueDTO).getCustomerId());
-        if (!multivalue) {
-            for (final AttrValueCustomer avp : customer.getAttributes()) {
-                if (avp.getAttribute().getCode().equals(atr.getCode())) {
-                    // this is a duplicate, so need to update
-                    attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
-                    return updateEntityAttributeValue(attrValueDTO);
+        if ("salutation".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setSalutation(attrValueDTO.getVal());
+            } else {
+                customer.setSalutation(null);
+            }
+            getService().update(customer);
+        } else if ("firstname".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setFirstname(attrValueDTO.getVal());
+            }
+            getService().update(customer);
+        } else if ("middlename".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setMiddlename(attrValueDTO.getVal());
+            } else {
+                customer.setMiddlename(null);
+            }
+            getService().update(customer);
+        } else if ("lastname".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setLastname(attrValueDTO.getVal());
+            }
+            getService().update(customer);
+        } else if ("customertype".equals(atr.getCode())) {
+            if (StringUtils.isNotBlank(attrValueDTO.getVal())) {
+                customer.setCustomerType(attrValueDTO.getVal());
+            }
+            getService().update(customer);
+        } else {
+            if (!multivalue) {
+                for (final AttrValueCustomer avp : customer.getAttributes()) {
+                    if (avp.getAttribute().getCode().equals(atr.getCode())) {
+                        // this is a duplicate, so need to update
+                        attrValueDTO.setAttrvalueId(avp.getAttrvalueId());
+                        return updateEntityAttributeValue(attrValueDTO);
+                    }
                 }
             }
+
+
+            AttrValueCustomer valueEntityCustomer = getPersistenceEntityFactory().getByIface(AttrValueCustomer.class);
+            attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
+            valueEntityCustomer.setAttribute(atr);
+            valueEntityCustomer.setCustomer(customer);
+            valueEntityCustomer = attrValueEntityCustomerDao.create((AttrValueEntityCustomer) valueEntityCustomer);
+            attrValueDTO.setAttrvalueId(valueEntityCustomer.getAttrvalueId());
         }
-
-
-        AttrValueCustomer valueEntityCustomer = getPersistenceEntityFactory().getByIface(AttrValueCustomer.class);
-        attrValueAssembler.assembleEntity(attrValueDTO, valueEntityCustomer, getAdaptersRepository(), dtoFactory);
-        valueEntityCustomer.setAttribute(atr);
-        valueEntityCustomer.setCustomer(customer);
-        valueEntityCustomer = attrValueEntityCustomerDao.create((AttrValueEntityCustomer) valueEntityCustomer);
-        attrValueDTO.setAttrvalueId(valueEntityCustomer.getAttrvalueId());
         return attrValueDTO;
 
     }
@@ -204,8 +250,9 @@ public class DtoCustomerServiceImpl
                                           final String firstname,
                                           final String lastname,
                                           final String middlename,
-                                          final String tag) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag);
+                                          final String tag,
+                                          final String customerType) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag, customerType);
         final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

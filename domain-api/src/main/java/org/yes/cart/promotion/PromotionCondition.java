@@ -35,6 +35,7 @@ public interface PromotionCondition extends Serializable {
     String VAR_REGISTERED = "registered";
     String VAR_CUSTOMER = "customer";
     String VAR_CUSTOMER_TAGS = "customerTags";
+    String VAR_CUSTOMER_TYPE = "customerType";
     String VAR_CART = "shoppingCart";
     String VAR_CART_ITEM = "shoppingCartItem";
     String VAR_SHIPPING = "shipping";

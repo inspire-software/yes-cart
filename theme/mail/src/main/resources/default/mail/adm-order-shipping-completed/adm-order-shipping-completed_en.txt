@@ -1,6 +1,6 @@
 Shipment completed for $deliveryNum for $root.ordernum at $shop.name
 by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
-for $customer.firstname $customer.lastname $customer.email
+for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

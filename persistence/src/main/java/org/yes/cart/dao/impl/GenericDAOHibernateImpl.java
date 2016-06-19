@@ -647,7 +647,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
     private Runnable createIndexingRunnable(final boolean async, final int[] count, final IndexFilter<T> filter) {
-        final int BATCH_SIZE = 20;
+        final int BATCH_SIZE = 100;
         return new Runnable() {
             @Override
             public void run() {

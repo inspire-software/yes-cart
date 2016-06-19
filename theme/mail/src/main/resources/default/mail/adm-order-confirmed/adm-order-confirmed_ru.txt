@@ -1,4 +1,4 @@
-Заказ $root.ordernum на $shop.name подтвержден для $customer.firstname $customer.lastname $customer.email
+Заказ $root.ordernum на $shop.name подтвержден для $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

@@ -169,6 +169,9 @@
     <cache name="contentService-contentBody" maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
+    <cache name="contentService-templateSupport" maxElementsInMemory="0" overflowToDisk="false"
+           eternal="true"/>
+
     <cache name="contentService-contentAttributeRecursive" maxElementsInMemory="1000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
@@ -221,7 +224,7 @@
     <cache name="productSkuService-productSkuBySkuCode" maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
-    <cache name="productSkuService-productSkuSearchResultDTOByQuery" maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="productSkuService-productSkuSearchResultDTOByQuery" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
     <cache name="productService-defaultImage" maxElementsInMemory="5000" overflowToDisk="false"
@@ -251,10 +254,10 @@
     <cache name="productService-productByQuery" maxElementsInMemory="2000" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
-    <cache name="productService-productSearchResultDTOByQuery" maxElementsInMemory="2000" overflowToDisk="false"
+    <cache name="productService-productSearchResultDTOByQuery" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="600" timeToIdleSeconds="300"/>
 
-    <cache name="productService-productQtyByQuery" maxElementsInMemory="10000" overflowToDisk="false"
+    <cache name="productService-productQtyByQuery" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="3600" timeToIdleSeconds="1800"/>
 
     <cache name="productService-productByIdList" maxElementsInMemory="2000" overflowToDisk="false"
@@ -264,6 +267,9 @@
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-distinctBrands" maxElementsInMemory="500" overflowToDisk="false"
+           eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
+
+    <cache name="productService-brandById" maxElementsInMemory="500" overflowToDisk="false"
            eternal="false" timeToLiveSeconds="86400" timeToIdleSeconds="7200"/>
 
     <cache name="productService-productQtyByCategoryId" maxElementsInMemory="2000" overflowToDisk="false"

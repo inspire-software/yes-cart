@@ -39,6 +39,7 @@ public class DefaultOrderAddressFormatterImplTest {
         final Address address = context.mock(Address.class, "address");
 
         context.checking(new Expectations() {{
+            allowing(address).getSalutation(); will(returnValue("S"));
             allowing(address).getFirstname(); will(returnValue("N1"));
             allowing(address).getMiddlename(); will(returnValue("N2"));
             allowing(address).getLastname(); will(returnValue("N3"));
@@ -61,13 +62,13 @@ public class DefaultOrderAddressFormatterImplTest {
         }});
 
         final DefaultOrderAddressFormatterImpl formatter = new DefaultOrderAddressFormatterImpl(
-                "{{firstname}} {{middlename}} {{lastname}} " +
+                "{{salutation}} {{firstname}} {{middlename}} {{lastname}} " +
                 "{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}} " +
                 "{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} " +
                 "{{email1}} {{email2}} " +
                 "{{custom1}} {{custom2}} {{custom3}} {{custom4}}");
 
-        assertEquals("N1 N2 N3 L1 L2 PC C CC SC P1 P2 M1 M2 E1 E2 C1 C2 C3 C4", formatter.formatAddress(address));
+        assertEquals("S N1 N2 N3 L1 L2 PC C CC SC P1 P2 M1 M2 E1 E2 C1 C2 C3 C4", formatter.formatAddress(address));
         assertEquals("N1 N3", formatter.formatAddress(address, "{{firstname}} {{lastname}}"));
         assertEquals("N1 N3 N2", formatter.formatAddress(address, "{{firstname}} {{lastname}} {{middlename}}"));
 

@@ -89,8 +89,10 @@ public class CustomerRegistrationMessageListener implements Runnable {
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("password", registrationMessage.getPassword());
         model.put("authToken", registrationMessage.getAuthToken());
+        model.put("salutation", registrationMessage.getSalutation());
         model.put("firstName", registrationMessage.getFirstname());
         model.put("lastName", registrationMessage.getLastname());
+        model.put("middleName", registrationMessage.getMiddlename());
         model.put("shopUrl", registrationMessage.getShopUrl());
         model.put("shopName", registrationMessage.getShopName());
         model.put("additionalData", registrationMessage.getAdditionalData());

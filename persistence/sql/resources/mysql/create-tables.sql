@@ -10,6 +10,7 @@
         STATE_CODE varchar(64),
         PHONE1 varchar(255),
         PHONE2 varchar(255),
+        SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
@@ -238,11 +239,15 @@
         CUSTOMER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         EMAIL varchar(255) not null,
+        GUEST_EMAIL varchar(255),
+        GUEST bit not null default 0,
+        SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
         PASSWORD varchar(255) not null,
         PUBLICKEY varchar(255),
+        CUSTOMERTYPE varchar(255),
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY datetime,
         TAG varchar(255) comment 'Set of customer tags',
@@ -275,6 +280,11 @@
         PG_LABEL varchar(255) comment 'Payment gateway label',
         ORDERNUM varchar(255) comment 'Depends from order num producer.',
         CART_GUID varchar(36) not null,
+        EMAIL varchar(255) not null,
+        SALUTATION varchar(24),
+        FIRSTNAME varchar(128) not null,
+        LASTNAME varchar(128) not null,
+        MIDDLENAME varchar(128),
         CURRENCY varchar(3) not null,
         LOCALE varchar(5) not null,
         PRICE decimal(19,2) not null,
@@ -472,6 +482,7 @@
         MANAGER_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         EMAIL varchar(255) not null unique,
+        SALUTATION varchar(24),
         FIRSTNAME varchar(128) not null,
         LASTNAME varchar(128) not null,
         MIDDLENAME varchar(128),
@@ -795,6 +806,7 @@
         VERSION bigint not null default 0,
         URL longtext not null,
         THEME_CHAIN longtext,
+        PRIMARY_URL bit not null default 0,
         SHOP_ID bigint not null,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
@@ -1230,6 +1242,7 @@
 
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
+    create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
 
     alter table TCUSTOMERORDER
         add index FK_ORDER_BILLADDR (BILL_ADDRESS_ID),

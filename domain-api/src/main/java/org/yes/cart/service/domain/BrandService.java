@@ -26,7 +26,7 @@ import org.yes.cart.domain.entity.Brand;
 public interface BrandService extends GenericService<Brand> {
 
     /**
-     * Find by name of guid.
+     * Find by name or guid.
      *
      * @param nameOrGuid name or guid
      *

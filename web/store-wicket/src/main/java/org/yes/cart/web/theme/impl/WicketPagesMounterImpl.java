@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
 
     private ClassProvider<IRequestablePage> loginPage;
     private ClassProvider<IRequestablePage> homePage;
+    private Map<String, ClassProvider<IRequestablePage>> pageByUri = new HashMap<String, ClassProvider<IRequestablePage>>();
 
     public WicketPagesMounterImpl(final IPageParametersEncoder encoder,
                                   final Map<String, Map<String, Class<IRequestablePage>>> pageMapping,
@@ -94,6 +96,7 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
                     log.info("This is a home url");
                 }
             }
+            pageByUri.put(url, classProvider);
         }
     }
 
@@ -105,5 +108,10 @@ public class WicketPagesMounterImpl implements WicketPagesMounter {
     /** {@inheritDoc} */
     public ClassProvider<IRequestablePage> getLoginPageProvider() {
         return loginPage;
+    }
+
+    /** {@inheritDoc} */
+    public ClassProvider<IRequestablePage> getPageProviderByUri(final String uri) {
+        return pageByUri.get(uri);
     }
 }

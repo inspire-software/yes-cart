@@ -49,7 +49,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE); will(returnValue(null));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -103,7 +103,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -159,7 +159,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -215,7 +215,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -270,7 +270,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -324,7 +324,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -390,7 +390,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -454,7 +454,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -521,7 +521,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.67")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -587,7 +587,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.67")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -654,7 +654,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -718,7 +718,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("16.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -785,7 +785,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("13.33")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -851,7 +851,7 @@ public class ProductServiceFacadeImplTest {
             allowing(priceModel).getTaxAmount(); will(returnValue(new BigDecimal("13.33")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, priceService, calculator, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
@@ -906,7 +906,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -983,7 +983,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1058,7 +1058,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1134,7 +1134,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1217,7 +1217,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1298,7 +1298,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1380,7 +1380,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1462,7 +1462,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel modelPrice = facade.getSkuPrice(cart, item, false);
@@ -1535,7 +1535,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1588,7 +1588,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1639,7 +1639,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1689,7 +1689,7 @@ public class ProductServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1757,7 +1757,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1825,7 +1825,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1887,7 +1887,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -1949,7 +1949,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2017,7 +2017,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2085,7 +2085,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2147,7 +2147,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2209,7 +2209,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2278,7 +2278,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2347,7 +2347,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2409,7 +2409,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2471,7 +2471,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2541,7 +2541,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2609,7 +2609,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2672,7 +2672,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2734,7 +2734,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, shopService, null);
 
 
         final ProductPriceModel model = facade.getCartItemsTotal(cart);
@@ -2769,7 +2769,7 @@ public class ProductServiceFacadeImplTest {
         final PromotionService promotionService = context.mock(PromotionService.class, "promotionService");
 
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
         final Map<String, ProductPromotionModel> model = facade.getPromotionModel(null);
 
@@ -2788,7 +2788,7 @@ public class ProductServiceFacadeImplTest {
             allowing(promotionService).findByParameters("CODE1", null, null, null, null, null, Boolean.TRUE); will(returnValue(Collections.emptyList()));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
         final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1");
 
@@ -2822,7 +2822,7 @@ public class ProductServiceFacadeImplTest {
             allowing(code1).getEnabledTo(); will(returnValue(end));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
         final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1");
 
@@ -2868,7 +2868,7 @@ public class ProductServiceFacadeImplTest {
             allowing(code1).getEnabledTo(); will(returnValue(end));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
         final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE1:COUPON1");
 
@@ -2971,7 +2971,7 @@ public class ProductServiceFacadeImplTest {
             will(returnValue(end));
         }});
 
-        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null);
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, promotionService, null, null, null);
 
         final Map<String, ProductPromotionModel> model = facade.getPromotionModel("CODE2:COUPON2,CODE1,CODE0");
 

@@ -63,6 +63,9 @@ public class AddressRO implements Serializable {
     private String stateName;
     private String stateLocalName;
 
+    @DtoField(value = "salutation", readOnly = true)
+    private String salutation;
+
     @DtoField(value = "firstname", readOnly = true)
     private String firstname;
 
@@ -211,6 +214,14 @@ public class AddressRO implements Serializable {
 
     public void setStateLocalName(final String stateLocalName) {
         this.stateLocalName = stateLocalName;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getFirstname() {

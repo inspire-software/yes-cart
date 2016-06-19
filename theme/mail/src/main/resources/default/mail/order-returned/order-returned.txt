@@ -1,4 +1,4 @@
-Dear $customer.firstname $customer.lastname!
+Dear $root.firstname $root.lastname!
 Return for order $root.ordernum at $shop.name was processed.
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

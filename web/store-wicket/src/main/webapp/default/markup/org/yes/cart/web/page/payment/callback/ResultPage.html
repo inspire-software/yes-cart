@@ -54,18 +54,16 @@
 
     <div class="container">
 
-        <div class="col-xs-12">
-            <h2><wicket:message key="orderPayment">[Order payment]</wicket:message></h2>
+        <div class="row">
+            <div class="col-xs-12" wicket:id="feedback">[feedback panel]</div>
         </div>
 
-        <div class="col-xs-12" wicket:id="feedback">[feedback panel]</div>
-
-        <div class="col-xs-12">
-            <wicket:link>
-                <a href="HomePage.html" class="btn btn-primary" rel="bookmark">
-                    <wicket:message key="home">[Home Page]</wicket:message>
-                </a>
-            </wicket:link>
+        <div class="row">
+            <div class="col-xs-12 payment-result-holder">
+                <wicket:container wicket:id="resultMessage">
+                    [result message]
+                </wicket:container>
+            </div>
         </div>
 
     </div>

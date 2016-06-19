@@ -35,6 +35,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     public final static String PRODUCT_MULTISKU = "multisku";
 
     public final static String PRODUCT_CREATED_FIELD = "createdTimestamp"; //for projections only
+    public final static String PRODUCT_UPDATED_FIELD = "updatedTimestamp"; //for projections only
     public final static String PRODUCT_FEATURED_FIELD = "featured"; //for projections only
     public final static String PRODUCT_AVAILABILITY_FROM_FIELD = "availablefrom"; //for projections only
     public final static String PRODUCT_AVAILABILITY_TO_FIELD = "availableto"; //for projections only

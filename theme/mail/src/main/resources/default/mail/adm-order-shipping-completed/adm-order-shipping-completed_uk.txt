@@ -1,5 +1,5 @@
 Доставка $deliveryNum для замовлення $root.ordernum на $shop.name виконана
-для $customer.firstname $customer.lastname $customer.email
+для $root.firstname $root.lastname $root.email
 Метод доставки: $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";

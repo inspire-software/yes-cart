@@ -172,6 +172,16 @@
             }
         }
 
+        private function onRefreshAttributeValueClick(event:Event):void {
+            onRefreshView();
+        }
+
+        /**
+         * Hook for refreshing the view (say if we have stale data)
+         */
+        protected function onRefreshView():void {
+
+        }
 
         /**
          * Hook for sub classes for the new attribute value functionality
@@ -253,6 +263,7 @@
     <mx:Boolean id="canDelete">false</mx:Boolean>
     <mx:Boolean id="canAdd">false</mx:Boolean>
     <mx:Boolean id="canCreate">false</mx:Boolean>
+    <mx:Boolean id="canRefresh">false</mx:Boolean>
 
     <mx:VBox paddingLeft="2" paddingTop="2" paddingRight="2" paddingBottom="2" width="100%" height="100%">
 
@@ -274,6 +285,12 @@
                     toolTip="@Resource(bundle='AttributesManagementPanel',key='createAttributeHint')"
                     enabled="{canCreate}" visible="{canCreate}" includeInLayout="{canCreate}"
                     click="onCreateAttributeValueClick(event)"
+                    />
+            <mx:Button id="refreshAttrValueBtn"
+                    label="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                    toolTip="@Resource(bundle='ShopManagerApplication',key='refresh')"
+                       enabled="{canRefresh}" visible="{canRefresh}" includeInLayout="{canRefresh}"
+                    click="onRefreshAttributeValueClick(event)"
                     />
 
         </mx:HBox>

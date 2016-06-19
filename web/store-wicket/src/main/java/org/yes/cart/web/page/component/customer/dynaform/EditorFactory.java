@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.page.component.customer.dynaform;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -34,6 +35,7 @@ import org.yes.cart.web.page.component.customer.dynaform.editor.SingleChoiceEdit
 import org.yes.cart.web.page.component.customer.dynaform.editor.StringEditor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EditorFactory implements Serializable {
@@ -67,6 +69,8 @@ public class EditorFactory implements Serializable {
                 attrValue.getAttribute().getDisplayName(),
                 attrValue.getAttribute().getName());
 
+        final String prop = attrValue.getAttribute().getVal();
+
         final IModel<String> labelModel = new AbstractReadOnlyModel<String>() {
 
             private final I18NModel m = nameModel;
@@ -74,7 +78,14 @@ public class EditorFactory implements Serializable {
             @Override
             public String getObject() {
                 final String lang = markupContainer.getLocale().getLanguage();
-                return m.getValue(lang);
+                final String name = m.getValue(lang);
+                if (StringUtils.isNotBlank(name)) {
+                    return name;
+                }
+                if (StringUtils.isNotBlank(prop)) {
+                    return markupContainer.getLocalizer().getString(prop, markupContainer);
+                }
+                return null;
             }
         };
         final String bType = attrValue.getAttribute().getEtype().getBusinesstype();
@@ -91,12 +102,15 @@ public class EditorFactory implements Serializable {
 
                 public List<Pair<String, String>> getObject() {
                     final String lang = markupContainer.getLocale().getLanguage();
-                    return (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
+                    final List<Pair<String, String>> list = (List<Pair<String, String>>) CONVERSION_SERVICE.convert(
                             choices.getValue(lang),
                             TypeDescriptor.valueOf(String.class),
                             TypeDescriptor.valueOf(List.class)
                     );
-
+                    if (list == null) {
+                        return new ArrayList<Pair<String, String>>();
+                    }
+                    return list;
                 }
             };
             if (attrValue.getAttribute().isAllowduplicate()) {

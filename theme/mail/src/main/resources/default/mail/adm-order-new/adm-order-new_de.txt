@@ -1,5 +1,5 @@
 Neue Bestellung <b>$root.ordernum</b> bei $shop.name ist erstellt
-für $customer.firstname $customer.lastname $customer.email
+für $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

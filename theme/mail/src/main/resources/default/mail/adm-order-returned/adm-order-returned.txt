@@ -1,4 +1,4 @@
-Order $root.ordernum returned at $shop.name for $customer.firstname $customer.lastname $customer.email
+Order $root.ordernum returned at $shop.name for $root.firstname $root.lastname $root.email
 <%
 def lineDelimiter = "|-------------------------------------------------------------------------------|";
 try {

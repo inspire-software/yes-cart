@@ -17,11 +17,10 @@
 package org.yes.cart.domain.entity.impl;
 
 
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueBrand;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -129,6 +128,46 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
 
     public void setVersion(final long version) {
         this.version = version;
+    }
+
+    public Collection<AttrValue> getAllAttributes() {
+        return new ArrayList<AttrValue>(attributes);
+    }
+
+    public Map<String, AttrValue> getAllAttributesAsMap() {
+        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
+        for (AttrValue attrValue : getAllAttributes()) {
+            if (attrValue != null && attrValue.getAttribute() != null) {
+                rez.put(attrValue.getAttribute().getCode(), attrValue);
+            }
+        }
+        return rez;
+    }
+
+    public Collection getAttributesByCode(final String attributeCode) {
+        final Collection<AttrValueBrand> result = new ArrayList<AttrValueBrand>();
+        if (attributeCode != null && this.attributes != null) {
+            for (AttrValueBrand attrValue : this.attributes) {
+                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
+                    result.add(attrValue);
+                }
+            }
+        }
+        return result;
+    }
+
+    public AttrValue getAttributeByCode(final String attributeCode) {
+        if (attributeCode == null) {
+            return null;
+        }
+        if (this.attributes != null) {
+            for (AttrValueBrand attrValue : this.attributes) {
+                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
+                    return attrValue;
+                }
+            }
+        }
+        return null;
     }
 }
 

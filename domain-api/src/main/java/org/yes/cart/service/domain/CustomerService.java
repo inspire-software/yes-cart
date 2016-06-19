@@ -16,10 +16,12 @@
 
 package org.yes.cart.service.domain;
 
+import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,14 +35,15 @@ public interface CustomerService extends GenericService<Customer> {
      * Find customer by given search criteria. Search will be performed using like operation.
      *
      *
-     * @param email      optional email
-     * @param firstname  optional first name
-     * @param lastname   optional last name
-     * @param middlename optional middle name
-     * @param tag        optional tag
+     * @param email        optional email
+     * @param firstname    optional first name
+     * @param lastname     optional last name
+     * @param middlename   optional middle name
+     * @param tag          optional tag
+     * @param customerType optional customer type
      * @return list of persons, that match search criteria or empty list if nobody found or null if no search criteria provided.
      */
-    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag);
+    List<Customer> findCustomer(String email, String firstname, String lastname, String middlename, String tag, String customerType);
 
     /**
      * Get customer by email.
@@ -158,5 +161,13 @@ public interface CustomerService extends GenericService<Customer> {
      */
     void addAttribute(Customer customer, String attributeCode, String attributeValue);
 
+    /**
+     * Find all guest accounts created before date.
+     *
+     * @param date creation date
+     *
+     * @return guest accounts
+     */
+    ResultsIterator<Customer> findGuestsBefore(Date date);
 
 }

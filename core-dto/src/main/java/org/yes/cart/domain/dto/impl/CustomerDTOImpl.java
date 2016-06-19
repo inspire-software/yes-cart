@@ -42,6 +42,9 @@ public class CustomerDTOImpl implements CustomerDTO {
     @DtoField(value = "email")
     private String email;
 
+    @DtoField(value = "salutation")
+    private String salutation;
+
     @DtoField(value = "firstname")
     private String firstname;
 
@@ -53,6 +56,9 @@ public class CustomerDTOImpl implements CustomerDTO {
 
     @DtoField(value = "tag")
     private String tag;
+
+    @DtoField(value = "customerType")
+    private String customerType;
 
     @DtoCollection(
             value="attributes",
@@ -123,6 +129,16 @@ public class CustomerDTOImpl implements CustomerDTO {
     }
 
     /** {@inheritDoc} */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /** {@inheritDoc} */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    /** {@inheritDoc} */
     public Set<AttrValueCustomerDTO> getAttributes() {
         return attributes;
     }
@@ -142,15 +158,27 @@ public class CustomerDTOImpl implements CustomerDTO {
         this.tag = tag;
     }
 
+    /** {@inheritDoc} */
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
+    }
+
     @Override
     public String toString() {
         return "CustomerDTOImpl{" +
                 "customerId=" + customerId +
                 ", email='" + email + '\'' +
+                ", salutation='" + salutation + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +
                 ", tag='" + tag + '\'' +
+                ", customerType='" + customerType + '\'' +
                 ", attribute=" + attributes +
                 '}';
     }

@@ -192,6 +192,9 @@
         <wicket:container wicket:id="loginView">
             [Login for existing user]
         </wicket:container>
+        <wicket:container wicket:id="guestView">
+            [Guest checkout]
+        </wicket:container>
     </div>
     <div class="col-xs-12 col-sm-6">
         <wicket:container wicket:id="registerView">
@@ -325,12 +328,13 @@
                         <input style="width: 40px; height: 40px;" wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint" type="checkbox">
                     </div>
                 </div>
-                <div class="col-xs-12 no-padding form-group">
-                    <label class="control-label col-xs-12 col-sm-3 col-md-2">
-                        <wicket:message key="paymentGatewayLabel">[Payment method]</wicket:message>
-                    </label>
-                    <div class="col-xs-12 col-sm-9 col-md-6">
-                        <select class="form-control" wicket:id="paymentGateway"/>
+                <div class="clearfix"></div>
+                <div wicket:id="paymentGateway" class="col-xs-12 no-padding form-group">
+                    <div wicket:id="pgList" class="radio">
+                        <label class="radio"><input type="radio" wicket:id="pgListLabel">
+                            <span wicket:id="pgListName">[line 1]</span>
+                        </label>
+                        <span wicket:id="pgInfo"></span>
                     </div>
                 </div>
             </form>

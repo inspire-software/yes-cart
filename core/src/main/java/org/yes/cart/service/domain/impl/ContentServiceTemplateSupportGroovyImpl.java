@@ -16,12 +16,9 @@
 
 package org.yes.cart.service.domain.impl;
 
-import groovy.text.SimpleTemplateEngine;
-import groovy.text.Template;
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.service.domain.TemplateSupport;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +29,14 @@ import java.util.Map;
  */
 public class ContentServiceTemplateSupportGroovyImpl implements ContentServiceTemplateSupport {
 
-    private final SimpleTemplateEngine engine = new SimpleTemplateEngine();
-
     private final Map<String, FunctionProvider> functions = new HashMap<String, FunctionProvider>();
     private final Map<String, FunctionProvider> functionsCtx = new HashMap<String, FunctionProvider>();
+
+    private final TemplateSupport templateSupport;
+
+    public ContentServiceTemplateSupportGroovyImpl(final TemplateSupport templateSupport) {
+        this.templateSupport = templateSupport;
+    }
 
     /**
      * {@inheritDoc}
@@ -43,33 +44,18 @@ public class ContentServiceTemplateSupportGroovyImpl implements ContentServiceTe
     @Override
     public String processTemplate(final String template, final String locale, final Map<String, Object> context) {
 
-        try {
+        final StringBuilder templateWithFuncs = new StringBuilder();
+        appendCustomFunctions(templateWithFuncs);
+        templateWithFuncs.append(template);
 
-            final StringBuilder templateWithFuncs = new StringBuilder();
-            appendCustomFunctions(templateWithFuncs);
-            templateWithFuncs.append(template);
+        // Add context as variable to allow smuggling in object into template
+        final Map<String, Object> fullContext = new HashMap<String, Object>(context);
+        fullContext.put("locale", locale);
+        fullContext.putAll(functionsCtx);
+        fullContext.put("context", fullContext);
 
-            // Add context as variable to allow smuggling in object into template
-            final Map<String, Object> fullContext = new HashMap<String, Object>(context);
-            fullContext.put("locale", locale);
-            fullContext.putAll(functionsCtx);
-            fullContext.put("context", fullContext);
+        return this.templateSupport.get(templateWithFuncs.toString()).make(fullContext);
 
-            final Template tmp = engine.createTemplate(templateWithFuncs.toString());
-
-            return tmp.make(fullContext).toString();
-
-        } catch (ClassNotFoundException cnfe) {
-
-            ShopCodeContext.getLog(this).error("Unable to process template: " + cnfe.getMessage() + "\n" + template, cnfe);
-
-        } catch (IOException ioe) {
-
-            ShopCodeContext.getLog(this).error("Unable to process template: " + ioe.getMessage() + "\n" + template, ioe);
-
-        }
-
-        return ""; // Nothing
     }
 
     /**

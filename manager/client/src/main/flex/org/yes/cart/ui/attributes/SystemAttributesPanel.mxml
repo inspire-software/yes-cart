@@ -37,7 +37,12 @@
         import org.yes.cart.util.DomainUtils;
 
         public function init():void {
+            canRefresh = true;
+            onRefreshView();
+        }
 
+
+        override protected function onRefreshView():void {
             this.attrValues.removeAll();
             onEntitySet(AttributeGroupNames.SYSTEM);
 
@@ -69,9 +74,9 @@
             /* Not supported for now
              var pk:Number = selectedItem != null ? selectedItem.attrvalueId : 0;
              if (!isNaN(pk) && pk > 0) {
-                remoteService.deleteAttributeValue(selectedItem.attrvalueId);
-                selectedItem.attrvalueId = Number.NaN;
-                selectedItem.val = null;
+             remoteService.deleteAttributeValue(selectedItem.attrvalueId);
+             selectedItem.attrvalueId = Number.NaN;
+             selectedItem.val = null;
              }
              */
         }

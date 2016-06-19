@@ -17,6 +17,7 @@
 package org.yes.cart.payment.impl;
 
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.payment.service.ConfigurablePaymentGateway;
@@ -153,7 +154,9 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
         final StringBuilder all = new StringBuilder();
         for (final Map.Entry<String, String> entry : params.entrySet()) {
 
-            all.append(entry.getKey().toUpperCase()).append("=").append(entry.getValue()).append(secret);
+            if (StringUtils.isNotBlank(entry.getValue())) {
+                all.append(entry.getKey().toUpperCase()).append("=").append(entry.getValue()).append(secret);
+            }
 
         }
         try {

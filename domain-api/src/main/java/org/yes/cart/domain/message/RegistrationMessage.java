@@ -216,6 +216,36 @@ public interface RegistrationMessage extends Serializable {
     void setLastname(String lastname);
 
     /**
+     * Get middle name
+     *
+     * @return middle name
+     */
+    String getMiddlename();
+
+
+    /**
+     * Get salutation
+     *
+     * @return salutation
+     */
+    String getSalutation();
+
+    /**
+     * Set salutation
+     *
+     * @param salutation value to set
+     */
+    void setSalutation(String salutation);
+
+
+    /**
+     * Set middle name
+     *
+     * @param middlename value to set
+     */
+    void setMiddlename(String middlename);
+
+    /**
      * Additional data for registration message.
      *
      * @return additional data

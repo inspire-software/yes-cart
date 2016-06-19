@@ -67,6 +67,8 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
                 map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(customerOrder.getShop().getShopId()));
                 map.put(StandardMessageListener.SHOP, customerOrder.getShop());
                 map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
+                map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
+                map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
                 map.put(StandardMessageListener.TEMPLATE_NAME, emailTemplateName);
                 map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 

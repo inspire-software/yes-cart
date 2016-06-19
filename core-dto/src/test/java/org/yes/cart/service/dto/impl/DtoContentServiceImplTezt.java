@@ -234,7 +234,7 @@ public class DtoContentServiceImplTezt extends BaseCoreDBTestCase {
         final List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(10105);
         for (AttrValueDTO dto : list) {
             if (dto.getAttributeDTO().getCode().equals("CATEGORY_ITEMS_PER_PAGE")) {
-                assertEquals("10,20,50", dto.getVal());
+                assertFalse("5,15,35".equals(dto.getVal()));
                 dto.setVal("5,15,35");
                 AttrValueDTO dtoUpdated = dtoService.updateEntityAttributeValue(dto);
                 assertEquals("5,15,35", dtoUpdated.getVal());

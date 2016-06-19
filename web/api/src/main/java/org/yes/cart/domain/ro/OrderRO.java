@@ -78,16 +78,19 @@ public class OrderRO implements Serializable {
     @DtoField(value = "orderTimestamp", readOnly = true)
     private Date orderTimestamp;
 
-    @DtoField(value = "customer.email", readOnly = true)
+    @DtoField(value = "email", readOnly = true)
     private String email;
 
-    @DtoField(value = "customer.firstname", readOnly = true)
+    @DtoField(value = "salutation", readOnly = true)
+    private String salutation;
+
+    @DtoField(value = "firstname", readOnly = true)
     private String firstname;
 
-    @DtoField(value = "customer.lastname", readOnly = true)
+    @DtoField(value = "lastname", readOnly = true)
     private String lastname;
 
-    @DtoField(value = "customer.middlename", readOnly = true)
+    @DtoField(value = "middlename", readOnly = true)
     private String middlename;
 
     @DtoField(value = "customer.customerId", readOnly = true)
@@ -238,6 +241,14 @@ public class OrderRO implements Serializable {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getFirstname() {

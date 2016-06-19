@@ -164,7 +164,9 @@
                     firstNameFilterValue.text,
                     lastNameFilterValue.text,
                     null,
-                    tagFilterValue.text);
+                    tagFilterValue.text,
+                    typeFilterValue.text
+            );
         }
 
         private function onTabClick(event:IndexChangedEvent):void {
@@ -223,6 +225,10 @@
                                                   toolTip="@Resource(bundle='CustomerManagementPanel',key='lastNameFilter')"/>
                                 </mx:GridItem>
                                 <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
+                                    <mx:TextInput id="emailFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
                                     <mx:Button label="@Resource(bundle='Common',key='findBtnToggleOn')"
                                                click="onApplyFilterShowClick(event)"
                                             />
@@ -237,8 +243,8 @@
                                     <mx:TextInput id="firstNameFilterValue" width="150"/>
                                 </mx:GridItem>
                                 <mx:GridItem>
-                                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='emailFilter')"/>
-                                    <mx:TextInput id="emailFilterValue" width="150"/>
+                                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='typeFilter')"/>
+                                    <mx:TextInput id="typeFilterValue" width="150"/>
                                 </mx:GridItem>
                                 <mx:GridItem>
                                     <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='tagFilter')"/>
@@ -263,6 +269,10 @@
                                            dataField="customerId"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='email')"
                                            dataField="email"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='customerType')"
+                                           dataField="customerType"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='salutation')"
+                                           dataField="salutation"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"
                                            dataField="lastname"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='firstname')"

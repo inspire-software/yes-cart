@@ -25,6 +25,8 @@ public class CustomerDTOImpl {
 
     public var email:String;
 
+    public var salutation:String;
+
     public var firstname:String;
 
     public var lastname:String;
@@ -34,6 +36,8 @@ public class CustomerDTOImpl {
     public var attributes:ArrayCollection;
 
     public var tag : String;
+
+    public var customerType : String;
 
     public function CustomerDTOImpl() {
     }

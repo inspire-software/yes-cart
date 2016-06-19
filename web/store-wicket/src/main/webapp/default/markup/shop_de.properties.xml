@@ -38,7 +38,7 @@
     <entry key="UrlValidator">'${input}' ist keine gültige URL</entry>
     <entry key="EqualInputValidator">'${input0}' von ${label0} und '${input1}' von ${label1} muss gleich sein</entry>
     <entry key="EqualPasswordInputValidator">${label0} und ${label1} muss gleich sein</entry>
-    <entry key="null">Wählen Sie eines</entry>
+    <entry key="null">Bitte wählen</entry>
     <entry key="nullValid"></entry>
     <entry key="PagingNavigator.first">Gehe zur ersten Seite</entry>
     <entry key="PagingNavigator.previous">Gehe zur vorgehenden Seite</entry>
@@ -59,7 +59,7 @@
     <entry key="qty">Anzahl</entry>
     <entry key="login">Login</entry>
     <entry key="registration">Registrieren</entry>
-    <entry key="save">Speicher</entry>
+    <entry key="save">Speichern</entry>
     <entry key="email">E-Mail</entry>
     <entry key="password">Passwort</entry>
     <entry key="firstname">Vorname</entry>
@@ -71,9 +71,9 @@
     <entry key="sale">Abverkauf</entry>
     <entry key="newArrivals">Neu eingetroffen</entry>
     <entry key="addToCart">In den Warenkorb</entry>
-    <entry key="preorderCart">Preorder</entry>
+    <entry key="preorderCart">Vorbestellen</entry>
     <entry key="viewAllVariants">Alle anzeigen</entry>
-    <entry key="skuCode">Artikel Nummer</entry>
+    <entry key="skuCode">Artikel Nr.</entry>
     <entry key="areYouSure">Sind Sie sicher</entry>
     <entry key="yes">Ja</entry>
     <entry key="no">Nein</entry>
@@ -97,17 +97,24 @@
     <entry key="checkoutTitle">Checkout</entry>
     <entry key="selectAddr">Bitte geben Sie Versand- und Rechnungsadresse an</entry>
     <entry key="selectPayment">Zahlung</entry>
+    <entry key="selectDeliveryAddress">Bitte geben Sie Ihre Versandadresse ein bevor Sie die Versandart wählen</entry>
+    <entry key="selectBillingAddress">Bitte geben Sie die Rechnungsadresse ein bevor Sie die Versandart wählen</entry>
 
     <!-- ContactPage -->
-    <entry key="contact">Kontakt Informationen</entry>
+    <entry key="contact">Kontaktinformationen</entry>
+    <entry key="name">Name</entry>
+    <entry key="subject">Gegenstand</entry>
+    <entry key="message">Nachricht</entry>
+    <entry key="send">Senden</entry>
+    <entry key="emailSend">Sie Nachricht wurde gesendet</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Ihre Daten</entry>
     <entry key="ordersSummary">Ihre Bestellungen</entry>
     <entry key="customerSummary">Pflichtfelder</entry>
     <entry key="orderInfo">Bestellungen</entry>
-    <entry key="wishlist">Wunschliste</entry>
-    <entry key="addresses">Addressbuch</entry>
+    <entry key="wishlist">Merkliste</entry>
+    <entry key="addresses">Adressbuch</entry>
     <entry key="viewOrdersFor">Bestellungen anzeigen</entry>
     <entry key="viewOrdersForWeek">von dieser Woche</entry>
     <entry key="viewOrdersForMonth">von diesem Monat</entry>
@@ -123,10 +130,10 @@
 
     <!-- PaymentPage -->
     <entry key="orderPayment">Bezahlen</entry>
-    <entry key="negativePaymentNotes">Ein Problem ist beim Bezahlen aufgetreten</entry>
+    <entry key="negativePaymentNotes">Beim Bezahlen ist ein Problem aufgetreten</entry>
     <entry key="positivePaymentNotes">Bezahlung ist erfolgreich</entry>
     <entry key="checkStatus">Status der Bestellung überprüfen</entry>
-    <entry key="negativeItemAllocationNotes">Leider ist der Artikel nicht in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.</entry>
+    <entry key="negativeItemAllocationNotes">Leider ist der Artikel in der gewünschten Anzahl ${product} mit Artikel Nummer ${sku} nicht an Lager. Versuchen Sie ein vergleichbares Produkt zu kaufen.</entry>
 
     <!-- RegistrationPage -->
 
@@ -167,7 +174,7 @@
     <entry key="grandTotalTax">MwSt</entry>
     <entry key="grandTotalAmount">Totalbetrag (inkl. MwSt.)</entry>
     <entry key="billingAddress">Adresse</entry>
-    <entry key="orderVerification">Bestellung überprüfen und Zahlungsmethode wählen</entry>
+    <entry key="orderVerification">Bestellung überprüfen und Zahlungsart wählen</entry>
 
     <!-- ShoppingCartView -->
     <entry key="product">Produkt</entry>
@@ -201,12 +208,16 @@
     <entry key="firstName">Vorname</entry>
     <entry key="lastName">Name</entry>
     <entry key="line1">Adresse</entry>
+    <entry key="addrline1">Adresse</entry>
     <entry key="line2">Adresszusatz</entry>
+    <entry key="addrline2">Adresszusatz</entry>
     <entry key="city">Stadt</entry>
     <entry key="country">Land</entry>
+    <entry key="countryCode">Land</entry>
     <entry key="state">Kanton</entry>
+    <entry key="stateCode">Kanton</entry>
     <entry key="postcode">PLZ</entry>
-    <entry key="phoneList">Telefon</entry>
+    <entry key="phone1">Telefon</entry>
     <entry key="create">Speichern</entry>
     <entry key="cancel">Abbrechen</entry>
     <entry key="createEditAddress">Adressen verwalten</entry>
@@ -215,8 +226,8 @@
     <entry key="create">Erstellen</entry>
     <entry key="delete">Löschen</entry>
     <entry key="edit">Ändern</entry>
-    <entry key="addressTypeS">Versand Adresse</entry>
-    <entry key="addressTypeB">Rechnungs Adresse</entry>
+    <entry key="addressTypeS">Versandadresse</entry>
+    <entry key="addressTypeB">Rechnungsadresse</entry>
 
     <!-- LoginPanel -->
     <entry key="wrongPassword">Falsches Passwort</entry>
@@ -226,10 +237,14 @@
     <entry key="restorePassword">Passwort zurücksetzen</entry>
     <entry key="tryRestorePassword">Passwort vergessen?</entry>
     <entry key="signIn">Anmelden</entry>
-    <entry key="tryToRestore">Password zurückholen. Es wird Ihnen an Ihre E-Mail Adresse gesandt.</entry>
-    <entry key="newPasswordRequestEmailSent">Neues Passwort wurde an diese E-Mail Adresse gesendet ${email}. Schauen Sie in Ihre Mails.</entry>
+    <entry key="tryToRestore">Neues Passwort erstellen. Es wird Ihnen an Ihre E-Mail Adresse gesandt.</entry>
+    <entry key="newPasswordRequestEmailSent">Neues Passwort wurde an diese E-Mail Adresse gesendet ${email}. Schauen Sie in Ihre E-Mails.</entry>
     <entry key="newPasswordEmailSent">Neues Passwort zugestellt. Bitte schauen Sie in Ihre Mails</entry>
     <entry key="newPasswordInvalidToken">Ungültiger Token. Das Passwort kann nicht zurückgesetzt werden.</entry>
+
+    <!-- GuestPanel -->
+    <entry key="guestUser">Gast Kasse</entry>
+    <entry key="canNotGuestCheckout">Unfähig Gast Kasse durchführen</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">Neuer Kunde</entry>
@@ -243,7 +258,7 @@
     <entry key="logoffTitle">${customer} klicken Sie hier um sich von Ihrem Konto abzumelden</entry>
 
     <!-- NewsletterPanel -->
-    <entry key="newsletterEmailSent">Vielen Dank für unseren Newsletter Anmeldung</entry>
+    <entry key="newsletterEmailSent">Vielen Dank für die Anmeldung zu unserem Newsletter </entry>
 
     <!-- CustomerOrderPanel -->
     <!-- order statuses from CustomerOrder interface -->
@@ -270,27 +285,27 @@
     <entry key="orderNoTitle">Bestellung ${ordernum}</entry>
 
     <!-- PasswordPanel -->
-    <entry key="changePassword">Neue Passwort Anfrage wird an Ihre E-Mail Adresse gesendet nach der Eingabe von "Passwort ändern" gesendet</entry>
+    <entry key="changePassword">Ein neues Passwort wird an Ihre E-Mail Adresse gesendet nach Klick auf "Passwort ändern"</entry>
     <entry key="changePasswordBtn">Passwort ändern</entry>
     <entry key="newPasswordSent">Ein neues Passwort wurde gesendet</entry>
 
     <!-- SummaryPanel -->
-    <entry key="customerSummary">Muss Eingaben</entry>
+    <entry key="customerSummary">Konto anlegen</entry>
     <entry key="profileUpdated">Ihr Profil wurde aktualisiert</entry>
 
     <!-- WishListView -->
     <entry key="wishlistItems">Wunschliste</entry>
     <entry key="wishlistNoItems">Ihre Wunschliste ist leer. Sie können Artikel zufügen mit Klick auf "Der Wunschliste zufügen" bei den Produkteseiten.</entry>
     <entry key="addToCartWlBtn">Dem Warenkorb zufügen (${quantity})</entry>
-    <entry key="preorderCartWlBtn">Vorgestellung (${quantity})</entry>
+    <entry key="preorderCartWlBtn">Vorbestellung (${quantity})</entry>
     <entry key="removeFromWishlist">Artikel entfernen</entry>
     <entry key="wishListPriceIncreased">Preiserhöhung ${delta}%</entry>
     <entry key="wishListPriceDecreased">Preisnachlass ${delta}%</entry>
     <entry key="wishListPriceOnSaleNow">Abverkauf. ${delta}% Rabatt</entry>
     <entry key="wishListShare">Dieser Artikel ist nur für Sie sichtbar.  Klicken Sie das Icon an um ihn zu teilen.</entry>
-    <entry key="wishListHide">Dieser Artikel ist für jederman über den Teilen-Link. Klicken Sie diese Icon an um den Link auszublenden.</entry>
+    <entry key="wishListHide">Dieser Artikel ist für jederman über den Teilen-Link. Klicken Sie dieses Icon an um den Link auszublenden.</entry>
     <entry key="wishListNotFound">Die Wunschliste wurde nicht gefunden.</entry>
-    <entry key="wishlistTagsInfo">Verwenden Sie dieses Eingabefeld um Tags zuzufügen. Mit den Tags können Sie Filter setzen beim Teilen Ihrer Liste.</entry>
+    <entry key="wishlistTagsInfo">Verwenden Sie dieses Eingabefeld um Tags zuzufügen. Mit den Tags können Sie Filter beim Teilen Ihrer Liste setzen.</entry>
     <entry key="wishlistTagLinkOffInfo">Klicken Sie auf diesen Link um nur die mit Tags versehenen Produkte anzuzeigen (Sie könnenn eine beliebige Anzahl Tags wählen).</entry>
     <entry key="wishlistTagLinkOnInfo">Klicken Sie auf diesen Link um Tags abzuwählen.</entry>
     <entry key="wishlistTagShareLinkInfo">Kopieren Sie diesen Link um die Wunschliste zu teilen. Nur geteilte Artikel werden sichtbar angezeigt.</entry>
@@ -317,7 +332,7 @@
     <entry key="specialOffer">Sonderangebot</entry>
     <entry key="demoMultiSku">Artikel Varianten</entry>
     <entry key="demoPreorder">Vorbestellung</entry>
-    <entry key="demoBackorder">Backorder</entry>
+    <entry key="demoBackorder">Rückstand</entry>
     <entry key="demoAlways">Always</entry>
     <entry key="demoShowroom">Showroom</entry>
     <entry key="demoMultiBuy">Mengenrabatt</entry>
@@ -353,9 +368,9 @@
     <entry key="searchHolder">Suchen...</entry>
 
     <!-- ShippingView -->
-    <entry key="carrier">Spediteur</entry>
+    <entry key="carrier">Versender</entry>
     <entry key="carrierSla">Versandart</entry>
-    <entry key="carrierSelect">Wählen Sie den Spediteur und die Versandart</entry>
+    <entry key="carrierSelect">Wählen Sie Versandart</entry>
 
     <!-- Currency -->
     <entry key="currency">Währung</entry>
@@ -365,12 +380,13 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Artikel</entry>
+    <entry key="noResultsFound">Keine Artikel gefunden die Ihrer Suche entsprechen</entry>
 
     <!-- SkuCentralView -->
-    <entry key="addToWishlist">Auf Wunschliste</entry>
+    <entry key="addToWishlist">Auf Merkliste</entry>
     <entry key="saveForLater">Speichern und entfernen</entry>
-    <entry key="wishListItemAddedW">Produkt ${sku} der Wunschliste zugefügt. Sie können die Liste in Ihrer Profilseite ändern.</entry>
-    <entry key="wishListItemAddedC">Produkt ${sku} gespeichert für spätere Nutzung. Sie sehen die gespeicherten Artikel in Ihrem Warenkorb.</entry>
+    <entry key="wishListItemAddedW">Produkt ${sku} der Merkliste zugefügt. Sie können die Liste in Ihrer Profilseite ändern.</entry>
+    <entry key="wishListItemAddedC">Produkt ${sku} gespeichert. Sie sehen die gespeicherten Artikel in Ihrem Warenkorb.</entry>
     <entry key="description">Beschreibung</entry>
     <entry key="details">Spezifikation</entry>
     <entry key="accessories">Zubehör</entry>
@@ -394,7 +410,7 @@
     <entry key="resultPageTitle">Abschluss der Zahlung</entry>
     <entry key="paymentWasFailed">Fehler bei der Zahlung</entry>
     <entry key="paymentResult">Resultat der Zahlung</entry>
-    <entry key="orderErrorCancelled">Die Bestellung wurde annuliert oder Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</entry>
+    <entry key="orderErrorCancelled">Die Bestellung wurde annuliert oder die Artikel ist nicht mehr an Lager. Das kann der Grund für den Abbruch der Zahlung sein</entry>
     <entry key="orderErrorNotFound">Bestellung nicht gefunden</entry>
     <entry key="orderSuccess">Bestellung erfolgreich getätigt</entry>
 

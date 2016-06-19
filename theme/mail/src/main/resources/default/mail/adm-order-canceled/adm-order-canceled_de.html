@@ -34,7 +34,7 @@
                     <td width="2%">&nbsp;</td>
                     <td>
                         Bestellung <b>$root.ordernum</b> at <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> wurde annuliert <br>
-                        für $customer.firstname $customer.lastname $customer.email. <br>
+                        für $root.firstname $root.lastname $root.email. <br>
                         <% if (root.orderStatus.endsWith("waiting.payment")) { %>
                             Rückvergütung wurde nicht ausgeführt. Benötigt manuelle Verarbeitung.
                         <% } %>

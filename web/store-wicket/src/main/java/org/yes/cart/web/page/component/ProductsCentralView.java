@@ -137,6 +137,8 @@ public class ProductsCentralView extends AbstractCentralView {
             setResponsePage(getPage().getClass(), params);
         }
 
+        final boolean hasResults = products.getTotalHits() > 0L;
+
         final SortableProductDataProvider dataProvider = new SortableProductDataProvider(products);
 
         final GridView<ProductSearchResultDTO> productDataView = new GridView<ProductSearchResultDTO>(PRODUCT_LIST, dataProvider) {
@@ -160,11 +162,15 @@ public class ProductsCentralView extends AbstractCentralView {
         productDataView.setRows(selectedItemPerPage / columns);
         productDataView.setCurrentPage(currentPageIdx);
 
-        add(new ProductSorter(SORTER, pageSortingValues));
-        add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()));
-        add(new URLPagingNavigator(PAGINATOR2, productDataView, getPage().getPageParameters()));
-        add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues));
-        add(productDataView);
+        add(new ProductSorter(SORTER, pageSortingValues).setVisible(hasResults));
+        add(new URLPagingNavigator(PAGINATOR, productDataView, getPage().getPageParameters()).setVisible(hasResults));
+        add(new URLPagingNavigator(PAGINATOR2, productDataView, getPage().getPageParameters()).setVisible(hasResults));
+        add(new ProductPerPageListView(ITEMS_PER_PAGE_LIST, itemsPerPageValues).setVisible(hasResults));
+        add(productDataView.setVisible(hasResults));
+
+        if (!hasResults) {
+            info(getLocalizer().getString("noResultsFound", this));
+        }
 
         super.onBeforeRender();
     }

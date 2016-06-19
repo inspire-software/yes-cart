@@ -97,9 +97,16 @@
     <entry key="checkoutTitle">Оформлення покупки</entry>
     <entry key="selectAddr">Вкажіть адресу для доставки і рахунку</entry>
     <entry key="selectPayment">Оплата</entry>
+    <entry key="selectDeliveryAddress">Вкажіть адресу для доставки</entry>
+    <entry key="selectBillingAddress">Вкажіть адресу для рахунку</entry>
 
     <!-- ContactPage -->
     <entry key="contact">Контактна інформація</entry>
+    <entry key="name">Iм'я</entry>
+    <entry key="subject">Тема</entry>
+    <entry key="message">Повідомлення</entry>
+    <entry key="send">Відправити</entry>
+    <entry key="emailSend">Ваше повідомлення було відправлено</entry>
 
     <!-- ProfilePage -->
     <entry key="profileSummary">Ваш профіль</entry>
@@ -201,10 +208,14 @@
     <entry key="firstName">Ім'я</entry>
     <entry key="lastName">Прізвище</entry>
     <entry key="line1">Рядок адреси 1</entry>
+    <entry key="addrline1">Рядок адреси 1</entry>
     <entry key="line2">Рядок адреси 2</entry>
+    <entry key="addrline2">Рядок адреси 2</entry>
     <entry key="city">Місто</entry>
     <entry key="country">Країна</entry>
+    <entry key="countryCode">Країна</entry>
     <entry key="state">Область</entry>
+    <entry key="stateCode">Область</entry>
     <entry key="postcode">Індекс</entry>
     <entry key="phone1">Телефон</entry>
     <entry key="create">Зберегти</entry>
@@ -230,6 +241,10 @@
     <entry key="newPasswordRequestEmailSent">Запит на новий пароль відправлено на пошту ${email}</entry>
     <entry key="newPasswordEmailSent">Новий пароль відправлено на пошту</entry>
     <entry key="newPasswordInvalidToken">Невірний код авторизації. Неможливо згенерувати новий пароль.</entry>
+
+    <!-- GuestPanel -->
+    <entry key="guestUser">Замовити без реєстрації</entry>
+    <entry key="canNotGuestCheckout">Неможливо виконати замовлення без реєстрації</entry>
 
     <!-- RegisterPanel -->
     <entry key="newUser">Новий покупець</entry>
@@ -355,7 +370,7 @@
     <!-- ShippingView -->
     <entry key="carrier">Перевізник</entry>
     <entry key="carrierSla">Спосіб доставки</entry>
-    <entry key="carrierSelect">Виберіть перевізника та спосіб доставки</entry>
+    <entry key="carrierSelect">Виберіть спосіб доставки</entry>
 
     <!-- Currency -->
     <entry key="currency">Валюта</entry>
@@ -365,6 +380,7 @@
 
     <!-- ProductsCentralView -->
     <entry key="items">Товарів</entry>
+    <entry key="noResultsFound">Не знайдено товарів, які відповідають вашому запиту</entry>
 
     <!-- SkuCentralView -->
     <entry key="addToWishlist">До побажань</entry>

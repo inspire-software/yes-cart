@@ -60,6 +60,8 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setOrdernum(String ordernum);
 
+
+
     /**
      * Get payment gateway label.
      *
@@ -264,6 +266,21 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setMiddlename(String middlename);
 
+
+
+    /**
+     * Get salutation
+     *
+     * @return salutation
+     */
+    String getSalutation();
+
+    /**
+     * Set salutation
+     *
+     * @param salutation value to set
+     */
+    void setSalutation(String salutation);
 
     /**
      * Get customer primary key.

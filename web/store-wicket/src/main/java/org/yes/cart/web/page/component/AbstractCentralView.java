@@ -25,6 +25,7 @@ import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.entity.decorator.impl.CategorySeoableDecoratorImpl;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 
 /**
@@ -117,7 +118,11 @@ public abstract class AbstractCentralView extends BaseComponent {
      * @return main seo object for given page
      */
     protected Seoable getSeoObject() {
-        return getCategory();
+        final Category cat = getCategory();
+        if (cat != null) {
+            return new CategorySeoableDecoratorImpl(cat, getPage().getLocale().getLanguage());
+        }
+        return null;
     }
 
 

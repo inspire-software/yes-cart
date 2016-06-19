@@ -1173,6 +1173,10 @@ fieldset[disabled] .btn-primary2.active {
     margin-top: 0;
 }
 
+.shipping-cost {
+    margin-top: 10px;
+}
+
 .shipping-form .form-group > label {
     text-align: left;
 }

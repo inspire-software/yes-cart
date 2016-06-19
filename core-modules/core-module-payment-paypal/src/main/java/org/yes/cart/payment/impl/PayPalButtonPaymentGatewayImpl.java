@@ -26,9 +26,12 @@ import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.dto.PaymentLine;
 import org.yes.cart.payment.dto.impl.PaymentGatewayFeatureImpl;
 import org.yes.cart.payment.dto.impl.PaymentImpl;
+import org.yes.cart.service.payment.PaymentLocaleTranslator;
+import org.yes.cart.service.payment.impl.PaymentLocaleTranslatorImpl;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -64,6 +67,8 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
     static final String PPB_NOTIFYURL = "PPB_NOTIFYURL";
     static final String PPB_RETURNURL = "PPB_RETURNURL";
     static final String PPB_CANCELURL = "PPB_CANCELURL";
+
+    private final PaymentLocaleTranslator paymentLocaleTranslator = new PaymentLocaleTranslatorImpl();
 
 
     /**
@@ -109,11 +114,14 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
 
         final IPNMessage ipn = createIPNMessage(privateCallBackParameters);
         if (ipn.validate()) {
+            ShopCodeContext.getLog(this).debug("Signature is valid");
             final String invoice = ipn.getIpnValue("invoice");
             if (StringUtils.isBlank(invoice)) {
                 return ipn.getIpnValue("custom");
             }
             return invoice;
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return null;
     }
@@ -128,11 +136,15 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         final IPNMessage ipn = createIPNMessage(request);
         if (ipn.validate()) {
 
+            ShopCodeContext.getLog(this).debug("Signature is valid");
+
             final String paymentStatus = ipn.getIpnValue("payment_status");
 
             final boolean settled = "Completed".equals(paymentStatus);
 
             return settled ? CallbackResult.OK : CallbackResult.UNSETTLED;
+        } else {
+            ShopCodeContext.getLog(this).debug("Signature is not valid");
         }
         return CallbackResult.FAILED;
 
@@ -240,12 +252,13 @@ public class PayPalButtonPaymentGatewayImpl extends AbstractPayPalPaymentGateway
         form.append(getHiddenFieldValue("invoice", orderReference));
         form.append(getHiddenFieldValue("custom", orderReference));
 
+        form.append(getHiddenFieldValue("lc", paymentLocaleTranslator.translateLocale(this, locale)));
+        form.append(getHiddenFieldValue("charset", "UTF-8"));
+
         if (payment.getBillingAddress() != null) {
             form.append(getHiddenFieldValue("first_name", payment.getBillingAddress().getFirstname()));
             form.append(getHiddenFieldValue("last_name", payment.getBillingAddress().getLastname()));
             form.append(getHiddenFieldValue("email", payment.getBillingEmail()));
-            form.append(getHiddenFieldValue("lc", locale));
-            form.append(getHiddenFieldValue("charset", "UTF-8"));
         }
         if (payment.getShippingAddress() != null) {
             form.append(getHiddenFieldValue("address1", payment.getShippingAddress().getAddrline1()));

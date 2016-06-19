@@ -75,15 +75,16 @@ $(document).ready(function() {
         var _val = $('.js-search-input').val();
         console.log('searching for "' + _val + '"');
         if (!isBlank(_val)) {
+            var _safeval = _val.replace(/\//g, ' '); // replace forward slashes
             var _loc = '';
             if (ctx.page.indexOf('HomePage') != -1 && ctx.url.indexOf('/product/') == -1 && ctx.url.indexOf('/sku/') == -1) {
                 if ((window.location.href.lastIndexOf("/") == window.location.href.length - 1)) {
-                    _loc = window.location.href + 'query/' + _val;
+                    _loc = window.location.href + 'query/' + _safeval;
                 } else {
-                    _loc = window.location.href + '/query/' + _val;
+                    _loc = window.location.href + '/query/' + _safeval;
                 }
             } else {
-                _loc = ctx.root + '/query/' + _val;
+                _loc = ctx.root + '/query/' + _safeval;
             }
             console.log('location "' + _loc + '"');
             window.location.href = _loc;

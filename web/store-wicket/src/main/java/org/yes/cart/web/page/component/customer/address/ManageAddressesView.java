@@ -39,11 +39,11 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
-import org.yes.cart.web.page.ProfilePage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
+import org.yes.cart.web.theme.WicketPagesMounter;
 
 import java.util.*;
 
@@ -68,11 +68,7 @@ public class ManageAddressesView extends BaseComponent {
     private final static String DELETE_LINK = "deleteLink";
     private final static String ADDRESS_LABEL = "addressTitle";
 
-    private final static String LINE1 = "addrLine1";
-    private final static String LINE2 = "addrLine2";
-    private final static String LINE3 = "addrLine3";
-    private final static String LINE4 = "addrLine4";
-    private final static String LINE5 = "addrLine5";
+    private final static String FORMATTED_ADDRESS = "formattedAddress";
 
     // ------------------------------------- MARKUP IDs END ---------------------------------- //
 
@@ -81,6 +77,10 @@ public class ManageAddressesView extends BaseComponent {
 
     @SpringBean(name = ServiceSpringKeys.CART_COMMAND_FACTORY)
     private ShoppingCartCommandFactory shoppingCartCommandFactory;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.WICKET_PAGES_MOUNTER)
+    private WicketPagesMounter wicketPagesMounter;
+
 
     /**
      * Create panel to manage addresses
@@ -93,7 +93,7 @@ public class ManageAddressesView extends BaseComponent {
     public ManageAddressesView(final String panelId, final IModel<Customer> customerModel,
                                final String addressType, final boolean returnToCheckout) {
 
-        super(panelId);
+        super(panelId, customerModel);
 
         final List<Address> allowed = determineAllowedAddresses(customerModel, addressType);
 
@@ -168,13 +168,16 @@ public class ManageAddressesView extends BaseComponent {
      */
     protected void populateAddress(final ListItem<Address> addressListItem, final Address address, final boolean returnToCheckout) {
 
+        final String addressString = addressBookFacade.formatAddressFor(
+                address,
+                ApplicationDirector.getCurrentShop(),
+                (Customer) getDefaultModelObject(),
+                getLocale().getLanguage()
+        );
+
         addressListItem
                 .add(new Radio<Address>(ADDRESS_RADIO, new Model<Address>(address)))
-                .add(new Label(LINE1, address.getFirstname() + ", " + address.getLastname()))
-                .add(new Label(LINE2, address.getAddrline1()))
-                .add(new Label(LINE3, StringUtils.isBlank(address.getAddrline2()) ? StringUtils.EMPTY : address.getAddrline1()))
-                .add(new Label(LINE4, address.getCity() + ", " + address.getStateCode()))
-                .add(new Label(LINE5, address.getPostcode() + ", " + address.getCountryCode()))
+                .add(new Label(FORMATTED_ADDRESS, makeHtml(addressString)).setEscapeModelStrings(false))
                 .add(
                         new SubmitLink(EDIT_LINK) {
                             @Override
@@ -193,7 +196,11 @@ public class ManageAddressesView extends BaseComponent {
                             @Override
                             public void onSubmit() {
                                 addressBookFacade.remove(address);
-                                setResponsePage(ProfilePage.class);
+                                if (returnToCheckout) {
+                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/checkout").get());
+                                } else {
+                                    setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/profile").get());
+                                }
                             }
                         }.setDefaultFormProcessing(false)
                 );
@@ -213,7 +220,7 @@ public class ManageAddressesView extends BaseComponent {
                                                                                final long addressId,
                                                                                final String addressType) {
 
-        final Class<? extends Page> successfulPage = CreateEditAddressPage.class;
+        final Class<? extends Page> successfulPage = (Class) wicketPagesMounter.getPageProviderByUri("/address").get();
         final PageParameters parameters = new PageParameters();
 
         parameters.add(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL,
@@ -225,4 +232,7 @@ public class ManageAddressesView extends BaseComponent {
     }
 
 
+    private String makeHtml(final String address) {
+        return address.trim().replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>");
+    }
 }

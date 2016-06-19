@@ -57,38 +57,35 @@ public class AddressSupportMixin extends RoMappingMixin {
                                               final String addressType) {
 
         final List<AddressRO> ros = new ArrayList<AddressRO>();
-        if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
-            final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
-            if (customer != null) {
+        if (customer != null) {
 
-                final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode(), addressType);
+            final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode(), addressType);
 
 
-                final List<Address> addresses = new ArrayList<Address>(addressBookFacade.getAddresses(customer, shop, addressType));
+            final List<Address> addresses = new ArrayList<Address>(addressBookFacade.getAddresses(customer, shop, addressType));
 
-                for (final Address address : addresses) {
+            for (final Address address : addresses) {
 
-                    final AddressRO ro = map(address, AddressRO.class, Address.class);
+                final AddressRO ro = map(address, AddressRO.class, Address.class);
 
-                    for (final Country cnt : countries) {
-                        if (cnt.getCountryCode().equals(ro.getCountryCode())) {
-                            ro.setCountryName(cnt.getName());
-                            ro.setCountryLocalName(cnt.getDisplayName());
-                            final List<State> states = addressBookFacade.getStatesByCountry(ro.getCountryCode());
-                            for (final State state : states) {
-                                if (state.getStateCode().equals(ro.getStateCode())) {
-                                    ro.setStateName(state.getName());
-                                    ro.setStateLocalName(state.getDisplayName());
-                                    ros.add(ro);
-                                    break;
-                                }
+                for (final Country cnt : countries) {
+                    if (cnt.getCountryCode().equals(ro.getCountryCode())) {
+                        ro.setCountryName(cnt.getName());
+                        ro.setCountryLocalName(cnt.getDisplayName());
+                        final List<State> states = addressBookFacade.getStatesByCountry(ro.getCountryCode());
+                        for (final State state : states) {
+                            if (state.getStateCode().equals(ro.getStateCode())) {
+                                ro.setStateName(state.getName());
+                                ro.setStateLocalName(state.getDisplayName());
+                                ros.add(ro);
+                                break;
                             }
-                            break;
                         }
+                        break;
                     }
-
                 }
 
             }

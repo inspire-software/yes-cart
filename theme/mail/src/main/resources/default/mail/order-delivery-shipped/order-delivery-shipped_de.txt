@@ -1,4 +1,4 @@
-Guten Tag $customer.firstname $customer.lastname!
+Guten Tag $root.firstname $root.lastname!
 Lieferung $deliveryNum für Bestellung $root.ordernum bei $shop.name ist versandt worden
 by $deliveryCarrierName $deliveryCarrierSlaName <% out.print(deliveryExtNum == null ? "" : deliveryExtNum) %>.
 <%

@@ -111,7 +111,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                     entry.getKey(),
                     idx);
 
-            if (order.getCustomer() == null || CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())) {
+            if (CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())) {
                 // this is electronic delivery
                 customerOrderDelivery.setPrice(BigDecimal.ZERO);
                 customerOrderDelivery.setListPrice(BigDecimal.ZERO);

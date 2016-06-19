@@ -57,4 +57,11 @@ public interface ShopUrlDTO extends Identifiable {
 
     void setThemeChain(String themeChain);
 
+    /**
+     * @return flag to indicate primary URL mapping
+     */
+    boolean isPrimary();
+
+    void setPrimary(boolean primary);
+
 }

@@ -116,9 +116,14 @@
                 <div class="text-right clearfix">
                     <wicket:container wicket:id="deliveryCostAmount">[delivery amount]</wicket:container>
                 </div>
-                <div class="pull-left clearfix">
-                    <wicket:container wicket:id="deliveryAddress">[delivery address]</wicket:container>
-                </div>
+                <wicket:enclosure child="deliveryAddress">
+                    <div class="pull-left">
+                        <label><wicket:message key="deliveryAddress">[Delivery address]</wicket:message></label>
+                    </div>
+                    <div class="pull-left clearfix">
+                        <wicket:container wicket:id="deliveryAddress">[delivery address]</wicket:container>
+                    </div>
+                </wicket:enclosure>
             </div>
         </div>
     </div>
@@ -145,10 +150,10 @@
                     [grand total amount]
                 </wicket:container>
             </div>
-            <div class="pull-left">
+            <div class="">
                 <label><wicket:message key="billingAddress">[Billing address]</wicket:message></label>
             </div>
-            <div class="text-right clearfix">
+            <div class="clearfix">
                 <wicket:container wicket:id="billingAddress">[billing address]</wicket:container>
             </div>
         </div>

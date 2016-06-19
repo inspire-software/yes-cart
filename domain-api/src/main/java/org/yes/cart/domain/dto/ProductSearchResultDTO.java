@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Brand;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entityindexer.StoredAttributes;
 
@@ -67,6 +68,43 @@ public interface ProductSearchResultDTO extends Identifiable {
      * @param code manufacturer code
      */
     void setManufacturerCode(String code);
+
+    /**
+     * Get the space separated product tags. For example
+     * sale specialoffer, newarrival etc.
+     *
+     * This tags should not be shown to customer, just for query navigation.
+     *
+     * @return space separated product tags
+     */
+    String getTag();
+
+    /**
+     * Set space separated product tags.
+     *
+     * @param tag space separated product tags.
+     */
+    void setTag(String tag);
+
+
+    /**
+     * Get the {@link Brand} of product.
+     *
+     * NOTE: this is search index value, which lower case
+     *
+     * @return {@link Brand} of product.
+     */
+    String getBrand();
+
+    /**
+     * Set {@link Brand} of product.
+     *
+     * NOTE: this is search index value, which lower case
+     *
+     * @param brand {@link Brand} of product.
+     */
+    void setBrand(String brand);
+
 
     /**
      * Get multi SKU flag.
@@ -306,6 +344,27 @@ public interface ProductSearchResultDTO extends Identifiable {
      * @param attributes stored attributes
      */
     void setAttributes(StoredAttributes attributes);
+
+
+    /**
+     * @return created timestamp.
+     */
+    Date getCreatedTimestamp();
+
+    /**
+     * @param createdTimestamp set created timestamp.
+     */
+    void setCreatedTimestamp(Date createdTimestamp);
+
+    /**
+     * @return updated timestamp.
+     */
+    Date getUpdatedTimestamp();
+
+    /**
+     * @param updatedTimestamp set updated timestamp.
+     */
+    void setUpdatedTimestamp(Date updatedTimestamp);
 
     /**
      * Creates copy of this object

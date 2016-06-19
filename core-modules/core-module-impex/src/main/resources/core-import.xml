@@ -92,7 +92,15 @@
                 <property name="cacheKey" ref="importCsvColumnLookUpQueryCacheKeyStrategy"/>
                 <property name="valueDataAdapter" ref="importCsvImportValueAdapter"/>
                 <property name="valueStringAdapter" ref="importCsvPlainStringValueAdapter"/>
+                <lookup-method name="getSelf" bean="csvBulkImportService"/>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- Import -->
+                <prop key="doSingleFileImport*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
         </property>
     </bean>
 
@@ -141,6 +149,13 @@
                     </array>
                 </constructor-arg>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- Import -->
+                <prop key="doImport*">PROPAGATION_REQUIRED,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
         </property>
     </bean>
 

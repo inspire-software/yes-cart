@@ -45,8 +45,14 @@ public class CustomerRO implements Serializable {
     @DtoField(value = "customerId", readOnly = true)
     private long customerId;
 
+    @DtoField(value = "customerType", readOnly = true)
+    private String customerType;
+
     @DtoField(value = "email")
     private String email;
+
+    @DtoField(value = "salutation", readOnly = true)
+    private String salutation;
 
     @DtoField(value = "firstname")
     private String firstname;
@@ -86,6 +92,23 @@ public class CustomerRO implements Serializable {
 
     public void setEmail(final String email) {
         this.email = email;
+    }
+
+    @XmlElement(name = "customer-type")
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(final String customerType) {
+        this.customerType = customerType;
+    }
+
+    public String getSalutation() {
+        return salutation;
+    }
+
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
     }
 
     public String getFirstname() {

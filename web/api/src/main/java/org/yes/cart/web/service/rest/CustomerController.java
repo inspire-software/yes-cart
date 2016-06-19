@@ -395,7 +395,7 @@ public class CustomerController {
                 valuesInThisUpdate.put(avRO.getAttributeCode(), avRO);
             }
 
-            final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList();
+            final List<String> readonly = shop.getSupportedProfileFormReadOnlyAttributesAsList(customer.getCustomerType());
             for (final Pair<AttrValueCustomer, Boolean> av : customerServiceFacade.getCustomerProfileAttributes(shop, customer)) {
 
                 final Attribute attr = av.getFirst().getAttribute();
@@ -437,9 +437,11 @@ public class CustomerController {
 
         }
 
-
+        customer.setSalutation(update.getSalutation());
         customer.setFirstname(update.getFirstname());
         customer.setLastname(update.getLastname());
+        customer.setMiddlename(update.getMiddlename());
+
         customerServiceFacade.updateCustomerAttributes(shop, customer, valuesToUpdate);
 
         result.setCustomer(viewSummary(request, response));
@@ -856,14 +858,19 @@ public class CustomerController {
 
     private List<AddressRO> updateAddressbookInternal(final String type, final AddressRO address) {
 
-        cartMixin.throwSecurityExceptionIfNotLoggedIn();
-
-        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
-        final Customer customer = customerServiceFacade.getCustomerByEmail(shop, cart.getCustomerEmail());
+        final Shop shop = cartMixin.getCurrentShop();
+
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
+        if (customer == null) {
+            cartMixin.throwSecurityExceptionIfNotLoggedIn();
+        }
 
         final Address addressEntity = addressBookFacade.getAddress(customer, String.valueOf(address.getAddressId()), type);
 
+        if (StringUtils.isNotBlank(address.getSalutation())) {
+            addressEntity.setSalutation(address.getSalutation());
+        }
         if (StringUtils.isNotBlank(address.getFirstname())) {
             addressEntity.setFirstname(address.getFirstname());
         }
@@ -2270,7 +2277,7 @@ public class CustomerController {
             final List<OrderRO> ros = new ArrayList<OrderRO>();
             for (final CustomerOrder order : orders) {
 
-                final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(cart.getCurrencyCode());
+                final Pair<String, Boolean> symbol = currencySymbolService.getCurrencySymbol(order.getCurrency());
                 final String cartCurrencySymbol = symbol.getFirst();
                 final String cartCurrencySymbolPosition = symbol.getSecond() != null && symbol.getSecond() ? "after" : "before";
 

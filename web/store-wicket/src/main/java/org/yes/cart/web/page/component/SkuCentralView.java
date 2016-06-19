@@ -41,6 +41,8 @@ import org.yes.cart.web.page.component.social.AddAnyButton;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.ObjectDecorator;
+import org.yes.cart.web.support.entity.decorator.impl.ProductSeoableDecoratorImpl;
+import org.yes.cart.web.support.entity.decorator.impl.ProductSkuSeoableDecoratorImpl;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
@@ -453,7 +455,10 @@ public class SkuCentralView extends AbstractCentralView {
 
     @Override
     protected Seoable getSeoObject() {
-        return isProduct ? product : sku;
+        if (isProduct) {
+            return new ProductSeoableDecoratorImpl(product, getPage().getLocale().getLanguage());
+        }
+        return new ProductSkuSeoableDecoratorImpl(product, sku, getPage().getLocale().getLanguage());
     }
 
 }

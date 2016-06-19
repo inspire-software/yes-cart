@@ -76,6 +76,8 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
             } catch (Exception exp) {
                 ShopCodeContext.getLog(this).error("Invalid item id in remove from wish list command", exp);
             }
+        } else if (strId instanceof Number) {
+            return ((Number) strId).longValue();
         }
         return null;
     }

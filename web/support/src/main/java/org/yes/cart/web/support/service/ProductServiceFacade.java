@@ -252,6 +252,19 @@ public interface ProductServiceFacade {
     SkuPrice getSkuPrice(Long productId, String skuCode, BigDecimal quantity, String currency, long shopId);
 
     /**
+     * Get price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param cart      current cart
+     * @param item      item to create price model for
+     *
+     * @return price (or blank object)
+     */
+    Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(ShoppingCart cart, CustomerWishList item);
+
+
+    /**
      * Get currently active SKU price (or blank object) with respect to current shop tax display settings.
      *
      * If tax info is enabled then prices can shown as net or gross.
@@ -292,6 +305,20 @@ public interface ProductServiceFacade {
      * @return price (or blank object)
      */
     ProductPriceModel getSkuPrice(ShoppingCart cart, CartItem item, boolean total);
+
+    /**
+     * Get price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can shown as net or gross.
+     *
+     * @param shopId    shop id for this price
+     * @param currency  currency of this price
+     * @param item      item to create price model for
+     * @param total     true indicates that we what total amount, false indicates list and sale price
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getSkuPrice(long shopId, String currency, CartItem item, boolean total);
 
     /**
      * Get prices for all SKU quantity tiers.
@@ -337,5 +364,14 @@ public interface ProductServiceFacade {
      * @return map code to model in order specified by applied promo
      */
     Map<String, ProductPromotionModel> getPromotionModel(String appliedPromo);
+
+    /**
+     * Brand are lazily initialised. This method allows to retrieve brand by name and cache it for later use.
+     *
+     * @param brandId brand PK
+     *
+     * @return brand
+     */
+    Brand getBrandById(long brandId);
 
 }

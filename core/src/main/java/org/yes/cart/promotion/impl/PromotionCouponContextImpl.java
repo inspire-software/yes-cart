@@ -63,6 +63,7 @@ public class PromotionCouponContextImpl implements PromotionCouponContext {
                 put(PromotionCondition.VAR_REGISTERED, customer != null);
                 put(PromotionCondition.VAR_CUSTOMER, customer);
                 put(PromotionCondition.VAR_CUSTOMER_TAGS, getCustomerTags(customer));
+                put(PromotionCondition.VAR_CUSTOMER_TYPE, customer != null ? customer.getCustomerType() : null);
                 put(PromotionCondition.VAR_CART, cart);
                 put(PromotionCondition.VAR_CART_ITEM_TOTAL, orderTotal);
                 put(PromotionCondition.VAR_TMP_TOTAL, new TotalImpl().add(orderTotal));

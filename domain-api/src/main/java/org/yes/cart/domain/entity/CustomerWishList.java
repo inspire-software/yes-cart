@@ -173,6 +173,39 @@ public interface CustomerWishList extends Auditable {
      */
     void setRegularPriceCurrencyWhenAdded(String regularPriceCurrencyWhenAdded);
 
+    /**
+     * Wish list price change types
+     */
+    enum PriceChangeType {
+        NOCHANGE, // No change
+        ONSALE, // No change but it is on sale
+        DECREASED, // price dropped
+        INCRSEASED, // price increased
+        DIFFCURRENCY, // wishlist is in different currency
+        OFFLINE // product no longer has price in this shop
+    }
+
+    /**
+     * Price change model for wish list to support price comparison
+     */
+    class PriceChange {
+
+        private final PriceChangeType type;
+        private final BigDecimal delta;
+
+        public PriceChange(final PriceChangeType type, final BigDecimal delta) {
+            this.type = type;
+            this.delta = delta;
+        }
+
+        public PriceChangeType getType() {
+            return type;
+        }
+
+        public BigDecimal getDelta() {
+            return delta;
+        }
+    }
 
 }
 

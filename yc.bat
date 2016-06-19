@@ -14,8 +14,8 @@ if "x%YC_HOME:~-1%".=="x\". (
     set YC_HOME=%YC_HOME:~0,-1%
 )
 
-set MVN=%M2_HOME%\bin\mvn.bat
-rem set MVN=%M3_HOME%\bin\mvn3.bat
+set MVN="%M2_HOME%\bin\mvn.bat"
+rem set MVN="%M3_HOME%\bin\mvn3.bat"
 
 rem Default come back label
 set comeBack=finish
@@ -24,92 +24,92 @@ if %1.==help. (
 	goto show_help
 )
 if %1.==env. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=env
     goto show_env;
 :env
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==i3rd. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=i3rd
     goto add_mvn_extra_dep
 :i3rd
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==cpres. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=cpres
     goto cp_resources_to_webapp
 :cpres
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==dbimysql. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=dbimysql
     goto init_db_mysql
 :dbimysql
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==dbiderby. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=dbiderby
     goto init_db_derby
 :dbiderby
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==derbygo. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=derbygo
     goto db_derby_go
 :derbygo
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==derbygob. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=derbygob
     goto db_derby_gob
 :derbygob
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==derbyend. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=derbyend
     goto db_derby_end
 :derbyend
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==derbycon. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=derbycon
     goto db_derby_connect
 :derbycon
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 if %1.==luke. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=luke
     goto start_luke
 :luke
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 
 if %1.==nullsmtp. (
-    call cd %YC_HOME%
+    call cd "%YC_HOME%"
 	set comeBack=nullsmtp
     goto start_nullsmtp
 :nullsmtp
-    call cd %RUNDIR%
+    call cd "%RUNDIR%"
 	goto finish
 )
 
@@ -168,10 +168,11 @@ rem Sub routines below this comment
     echo ================================================
     echo Adding extra dependencies...
 
-    call cd %YC_HOME%\env\setup\lib3rdparty
+ rem   call cd "%YC_HOME%\env\setup\lib3rdparty"
 
-    call cd %YC_HOME%
+ rem   call cd "%YC_HOME%"
 
+    echo All dependencies are setup
     echo ================================================
 	goto %comeBack%
 	
@@ -183,16 +184,16 @@ rem Sub routines below this comment
     echo ================================================
 
     echo  copying resources... manager/server
-    call cd %YC_HOME%\manager\server
-    call %MVN% validate -Ptemplates
+    call cd "%YC_HOME%\manager\server"
+    call "%MVN%" validate -Ptemplates
 
     echo  copying resources... web/store
-    call cd %YC_HOME%\web\store
-    call %MVN% validate -Ptemplates
+    call cd "%YC_HOME%\web\store"
+    call "%MVN%" validate -Ptemplates
 
     echo  copying resources... web/api
-    call cd %YC_HOME%\web\api
-    call %MVN% validate -Ptemplates
+    call cd "%YC_HOME%\web\api"
+    call "%MVN%" validate -Ptemplates
 
 	goto %comeBack%
 
@@ -203,9 +204,9 @@ rem Sub routines below this comment
     echo  Initialise MySQL database                      
     echo ================================================
 
-    set DBINITSCRIPT=%YC_HOME%\env\setup\dbi\mysql\dbinit.sql
+    set "DBINITSCRIPT=%YC_HOME%\env\setup\dbi\mysql\dbinit.sql"
     echo Running init script as root user %DBINITSCRIPT%
-    call mysql -uroot -p < %DBINITSCRIPT%
+    call mysql -uroot -p < "%DBINITSCRIPT%"
 
     echo Initialisation complete.
 	goto %comeBack%
@@ -220,9 +221,9 @@ rem Sub routines below this comment
     echo ================================================
 
 	echo %YC_HOME%
-    set DERBY_INSTALL=%YC_HOME%\env\derby
-    set CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;.
-    call cd %DERBY_INSTALL%\lib
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
+    call cd "%DERBY_INSTALL%\lib"
 
     call java -jar derbyrun.jar server start
 	goto %comeBack%
@@ -235,9 +236,9 @@ rem Sub routines below this comment
     echo  Starting Derby database (background mode)      
     echo ================================================
 
-    set DERBY_INSTALL=%YC_HOME%\env\derby
-    set CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;.
-    call cd %DERBY_INSTALL%\lib
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH="%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
+    call cd "%DERBY_INSTALL%\lib"
 
     start java -jar derbyrun.jar server start
 
@@ -257,9 +258,9 @@ rem Sub routines below this comment
     echo  Stopping Derby database                        
     echo ================================================
 
-    set DERBY_INSTALL=%YC_HOME%\env\derby
-    set CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;.
-    call cd %DERBY_INSTALL%\lib
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
+    call cd "%DERBY_INSTALL%\lib"
 
     call java -jar derbyrun.jar server shutdown
 
@@ -275,17 +276,17 @@ rem Sub routines below this comment
     echo ================================================
     
     echo Setting Derby environment variables
-    set DERBY_INSTALL=%YC_HOME%\env\derby
-    set CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;.
-    call cd %DERBY_INSTALL%\lib
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
+    call cd "%DERBY_INSTALL%\lib"
 
 rem   call java org.apache.derby.tools.sysinfo
-    set DBINITSCRIPT=%YC_HOME%\env\setup\dbi\derby\dbinit.sql
+    set "DBINITSCRIPT=%YC_HOME%\env\setup\dbi\derby\dbinit.sql"
     echo Running init script %DBINITSCRIPT%
-    call java -Dderby.system.home=%YC_HOME% -Dij.outfile=%YC_HOME%\derbyinit.log -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij %DBINITSCRIPT%
-rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITSCRIPT%
+    call java -Dderby.system.home="%YC_HOME%" -Dij.outfile="%YC_HOME%\derbyinit.log" -Dderby.ui.codeset=UTF8 org.apache.derby.tools.ij "%DBINITSCRIPT%"
+rem   call java -Dderby.system.home="%YC_HOME%" org.apache.derby.tools.ij "%DBINITSCRIPT%"
     
-    call cd %YC_HOME%;
+    call cd "%YC_HOME%;"
     echo Initialisation complete. See log: %YC_HOME%\derbyinit.log
 	goto %comeBack%
 
@@ -297,9 +298,9 @@ rem   call java -Dderby.system.home=%YC_HOME% org.apache.derby.tools.ij %DBINITS
     echo  Starting Derby client                          
     echo ================================================
 
-    set DERBY_INSTALL=%YC_HOME%\env\derby
-    set CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;.
-    call cd %DERBY_INSTALL%\lib
+    set "DERBY_INSTALL=%YC_HOME%\env\derby"
+    set "CLASSPATH=%DERBY_INSTALL%\lib\derby.jar;%DERBY_INSTALL%\lib\derbytools.jar;%DERBY_INSTALL%\lib\derbyclient.jar;%DERBY_INSTALL%\lib\derbynet.jar;"
+    call cd "%DERBY_INSTALL%\lib"
 
     echo Working directory is
     echo %CD%

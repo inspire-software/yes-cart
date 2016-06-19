@@ -55,17 +55,24 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
         OBJECT_IMAGES_CACHE = cacheManager.getCache("web.imageService-objectImages");
     }
 
+    /**
+     * Sub classes should define which attribute key must be used for attributable.
+     *
+     * Default implementation takes attributable ID and converts it to String.
+     *
+     * NOTE: that for image service that serves more than one entity a more complex key
+     * must be used
+     *
+     * @param attributable attributable entity
+     *
+     * @return additional key
+     */
+    protected String getEntityObjectCacheKey(Attributable attributable) {
+        return String.valueOf(attributable.getId());
+    }
 
-    private Integer createCacheHash(final String ... params) {
-        final int prime = 31;
-        int result = 1;
-        for( String param : params) {
-            if (param == null) {
-                continue;
-            }
-            result = result * prime + param.hashCode();
-        }
-        return result;
+    private String createCacheKey(final String... params) {
+        return StringUtils.join(params, '-');
     }
 
     private <T> T getFromValueWrapper(final Cache.ValueWrapper wrapper) {
@@ -147,8 +154,8 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
 
         final String urlPattern = getImageRepositoryUrlPattern(attributable);
 
-        final Integer hash = createCacheHash(String.valueOf(attributable.getId()), urlPattern, locale, width, height, attrName, attrVal);
-        String image = getFromValueWrapper(IMAGE_URI_CACHE.get(hash));
+        final String cacheKey = createCacheKey(getEntityObjectCacheKey(attributable), urlPattern, locale, width, height, attrName, attrVal);
+        String image = getFromValueWrapper(IMAGE_URI_CACHE.get(cacheKey));
 
         if (image == null) {
             if (StringUtils.isBlank(attrVal)) {
@@ -156,7 +163,7 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
             }
 
             image = getImageURI(attributable, httpServletContextPath, locale, width, height, attrVal);
-            IMAGE_URI_CACHE.put(hash, image);
+            IMAGE_URI_CACHE.put(cacheKey, image);
         }
         return image;
     }
@@ -171,11 +178,11 @@ public abstract class AbstractImageServiceImpl implements AttributableImageServi
     public List<Pair<String, String>> getImageAttributeFileNames(final Attributable attributable, final String lang) {
 
         final String prefix = getImageAttributePrefix(attributable);
-        final Integer hash = createCacheHash(String.valueOf(attributable.getId()), prefix, lang);
-        List<Pair<String, String>> images = getFromValueWrapper(OBJECT_IMAGES_CACHE.get(hash));
+        final String cacheKey = createCacheKey(getEntityObjectCacheKey(attributable), prefix, lang);
+        List<Pair<String, String>> images = getFromValueWrapper(OBJECT_IMAGES_CACHE.get(cacheKey));
         if (images == null) {
             images = getImageAttributeFileNamesInternal(attributable, lang, prefix);
-            OBJECT_IMAGES_CACHE.put(hash, images);
+            OBJECT_IMAGES_CACHE.put(cacheKey, images);
         }
         return images;
     }

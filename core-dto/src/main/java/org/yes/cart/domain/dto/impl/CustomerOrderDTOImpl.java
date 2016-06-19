@@ -70,16 +70,19 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "orderIp", readOnly = true)
     private String orderIp;
 
-    @DtoField(value = "customer.email", readOnly = true)
+    @DtoField(value = "email", readOnly = true)
     private String email;
 
-    @DtoField(value = "customer.firstname", readOnly = true)
+    @DtoField(value = "salutation")
+    private String salutation;
+
+    @DtoField(value = "firstname", readOnly = true)
     private String firstname;
 
-    @DtoField(value = "customer.lastname", readOnly = true)
+    @DtoField(value = "lastname", readOnly = true)
     private String lastname;
 
-    @DtoField(value = "customer.middlename", readOnly = true)
+    @DtoField(value = "middlename", readOnly = true)
     private String middlename;
     
     @DtoField(value = "customer.customerId", readOnly = true)
@@ -456,6 +459,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     /**
      * {@inheritDoc}
      */
+    public String getSalutation() {
+        return salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSalutation(final String salutation) {
+        this.salutation = salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public long getCustomerId() {
         return customerId;
     }
@@ -508,6 +525,7 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
                 ", multipleShipmentOption=" + multipleShipmentOption +
                 ", orderTimestamp=" + orderTimestamp +
                 ", email='" + email + '\'' +
+                ", salutation='" + salutation + '\'' +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", middlename='" + middlename + '\'' +

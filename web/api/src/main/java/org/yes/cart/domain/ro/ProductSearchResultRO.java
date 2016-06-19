@@ -64,6 +64,10 @@ public class ProductSearchResultRO implements Serializable {
     @DtoField(readOnly = true, converter = "i18nStringConverter")
     private Map<String, String> displayDescription;
     @DtoField(readOnly = true)
+    private String tag;
+    @DtoField(readOnly = true)
+    private String brand;
+    @DtoField(readOnly = true)
     private Date availablefrom;
     @DtoField(readOnly = true)
     private Date availableto;
@@ -95,6 +99,12 @@ public class ProductSearchResultRO implements Serializable {
 
     @DtoField(readOnly = true, converter = "storedAttributesConverter")
     private List<ProductSearchResultAttributeRO> attributes;
+
+    @DtoField(readOnly = true)
+    private Date createdTimestamp;
+    @DtoField(readOnly = true)
+    private Date updatedTimestamp;
+
 
     @XmlElement(name = "default-image")
     public String getDefaultImage() {
@@ -228,6 +238,21 @@ public class ProductSearchResultRO implements Serializable {
         this.displayDescription = displayDescription;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(final String brand) {
+        this.brand = brand;
+    }
 
     public Boolean getFeatured() {
         return featured;
@@ -290,5 +315,23 @@ public class ProductSearchResultRO implements Serializable {
 
     public void setAttributes(final List<ProductSearchResultAttributeRO> attributes) {
         this.attributes = attributes;
+    }
+
+    @XmlElement(name = "created-timestamp")
+    public Date getCreatedTimestamp() {
+        return createdTimestamp;
+    }
+
+    public void setCreatedTimestamp(final Date createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
+    }
+
+    @XmlElement(name = "updated-timestamp")
+    public Date getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+
+    public void setUpdatedTimestamp(final Date updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
     }
 }
