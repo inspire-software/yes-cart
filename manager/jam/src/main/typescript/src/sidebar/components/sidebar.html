@@ -16,6 +16,16 @@
     </ul>
   </accordion-group>
 
+
+  <accordion-group>
+    <div accordion-heading> Master catalogue </div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/Products']">Products</a>
+      </li>
+    </ul>
+  </accordion-group>
+
   <accordion-group>
     <div accordion-heading> Shops  </div>
     <shoplist (shopEditTask)="selectCurrentShop($event)"></shoplist>

@@ -65,7 +65,5 @@ export class ShopPage implements OnInit, AfterContentInit {
   tabSelected(tab:Tab) {
     console.debug('tabSelected ' + tab);
   }
-  /*onShopRefreshEvent(event) {
-    console.debug('onShopRefreshEvent evt ' + JSON.stringify(event));
-  }*/
+
 }

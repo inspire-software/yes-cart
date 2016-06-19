@@ -9,6 +9,7 @@ import {AboutCmp} from '../../about/components/about';
 import {NameList} from '../../shared/services/name_list';
 import {Sidebar} from '../../sidebar/components/sidebar';
 import {ShopPage} from '../../components/shop/shop_page';
+import {ProductPage} from '../../components/products/product_page';
 import {ShopEventBus} from '../../service/shop_event_bus';
 
 @Component({
@@ -24,7 +25,8 @@ import {ShopEventBus} from '../../service/shop_event_bus';
 @RouteConfig([
   { path: '/', component: HomeCmp, name: 'Home' },
   { path: '/about', component: AboutCmp, name: 'About' },
-  { path: '/shop', component: ShopPage, name: 'Shop' }
+  { path: '/shop', component: ShopPage, name: 'Shop' },
+  { path: '/products', component: ProductPage, name: 'Products' },
 ])
 export class AppCmp {
 

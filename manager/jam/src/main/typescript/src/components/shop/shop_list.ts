@@ -27,7 +27,6 @@ export class ShopList implements OnInit, OnDestroy {
   constructor (private _shopService : ShopService) {
     console.debug('Shop list constructed selectedShop ' + this.selectedShop);
     AppCmp.getShopEventBus().shopUpdated$.subscribe(shopevt => {
-      console.debug('>>>>>>>>>>>>>>>>>>> onShopRefreshEvent evt ' + JSON.stringify(shopevt));
       this.reloadShopList(shopevt);
     });
   }

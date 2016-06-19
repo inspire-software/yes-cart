@@ -458,7 +458,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <!--<execution>
+                    <execution>
                       <id>exec-npm-install</id>
                       <phase>generate-sources</phase>
                       <configuration>
@@ -471,7 +471,7 @@
                       <goals>
                         <goal>exec</goal>
                       </goals>
-                    </execution>-->
+                    </execution>
                     <execution>
                         <id>exec-npm-build</id>
                         <phase>process-sources</phase>

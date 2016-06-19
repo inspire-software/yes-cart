@@ -33,6 +33,9 @@ import {Modal, ModalResult, ModalAction} from '../common/modal';
   providers: [HTTP_PROVIDERS, ShopService, CategoryService]
 })
 
+/**
+ * Manage categories assigned to shop.
+ */
 export class ShopCatalogue implements OnInit {
 
   changed:boolean = false;
@@ -46,23 +49,28 @@ export class ShopCatalogue implements OnInit {
   categories:Array<CategoryVO>;
   assigned:Array<CategoryVO>;
 
-
+  /**
+   * Construct shop catalogues panel.
+   * @param _categoryService
+   * @param _shopService
+   * @param _routeParams
+   */
   constructor(private _categoryService:CategoryService,
               private _shopService:ShopService,
               private _routeParams:RouteParams) {
     console.debug('Shop catalogue');
-
   }
 
+  /** {@inheritDoc}*/
   ngOnInit() {
-
     let shopId = this._routeParams.get('shopId');
-
     console.debug('ngOnInit shopId from params is ' + shopId);
-
     this.loadData();
   }
 
+  /**
+   * Load data and adapt time.
+   */
   loadData() {
     let shopId = this._routeParams.get('shopId');
     this._categoryService.getAllCategories().subscribe(
@@ -73,7 +81,6 @@ export class ShopCatalogue implements OnInit {
         this.newCategoryName = null;
       }
     );
-
     this._shopService.getShopCategories(+shopId).subscribe(
       cats => {
         this.assigned = cats;
@@ -81,6 +88,11 @@ export class ShopCatalogue implements OnInit {
     );
   };
 
+  /**
+   * Adapt given list of categories to tree items for representation.
+   * @param vo
+   * @returns {Array<ITreeNode>}
+     */
   adapt(vo:Array<CategoryVO>):Array<ITreeNode> {
     var rez:Array<ITreeNode> = new Array();
     for (var idx = 0; idx < vo.length; idx++) {
@@ -115,6 +127,12 @@ export class ShopCatalogue implements OnInit {
     }
   }
 
+  /**
+   * Find category by id in the tree.
+   * @param vo
+   * @param catId
+   * @returns {CategoryVO}
+     */
   findCategoryById(vo:Array<CategoryVO>, catId:number) : CategoryVO {
     var rez : CategoryVO = null;
     for (var catVo of vo) {
@@ -132,7 +150,7 @@ export class ShopCatalogue implements OnInit {
   }
 
   /**
-   * Unassign from shop.
+   * Un-assign from shop.
    * @param cat category
      */
   onAssignedClick(cat:CategoryVO) {
@@ -176,6 +194,10 @@ export class ShopCatalogue implements OnInit {
     this.editNewCategoryName = modal;
   }
 
+  /**
+   * Handle result of new category modal dialog.
+   * @param modalresult
+     */
   editNewCategoryNameModalResult(modalresult:ModalResult) {
     console.debug('editNewCategoryNameModalResult modal result is ' + JSON.stringify(modalresult));
     if (ModalAction.POSITIVE === modalresult.action) {
@@ -191,12 +213,26 @@ export class ShopCatalogue implements OnInit {
           };
           this.selectedNode.children.push(node);
           this.newCategoryName = null;
+
+          //load new tree
+          //let shopId = this._routeParams.get('shopId');
+          this._categoryService.getAllCategories().subscribe(
+            cats => {
+              this.categories = cats;
+              this.nodes = this.adapt(cats);
+              this.selectedNode = null;
+              this.newCategoryName = null;
+            }
+          );
         }
       );
 
     }
   }
 
+  /**
+   * Save assigned categories.
+   */
   onSaveHandler() {
     let shopId = this._routeParams.get('shopId');
     console.debug('Save handler for shop id ' + shopId);
@@ -208,6 +244,9 @@ export class ShopCatalogue implements OnInit {
     this.changed = false;
   }
 
+  /**
+   * Discard changes.
+   */
   onDiscardEventHandler() {
     console.debug('Discard handler for shop id ');
     this.nodes = this.adapt(this.categories);
@@ -215,6 +254,9 @@ export class ShopCatalogue implements OnInit {
     this.changed = false;
   }
 
+  /**
+   * Load fresh data.
+   */
   onRefreshHandler() {
     let shopId = this._routeParams.get('shopId');
     console.debug('Refresh handler ' + shopId);

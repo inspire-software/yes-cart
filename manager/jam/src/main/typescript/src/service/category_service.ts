@@ -17,7 +17,6 @@
 
 import {Injectable} from 'angular2/core';
 import {Http, Response, Headers, RequestOptions} from 'angular2/http';
-//import {Util} from './util';
 import {CategoryVO} from '../model/category';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -48,6 +47,12 @@ export class CategoryService {
       .catch(this.handleError);
   }
 
+  /**
+   * Create category on the fly.
+   * @param name name of category
+   * @param parentId parent id
+   * @returns {Observable<R>}
+     */
   createCategory(name:string, parentId : number) {
     var cat = {'name' : name, 'parentId' : parentId };
     let body = JSON.stringify(cat);

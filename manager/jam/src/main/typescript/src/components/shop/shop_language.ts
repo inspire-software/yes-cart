@@ -52,7 +52,6 @@ export class ShopLanguage implements OnInit {
   onSaveHandler() {
     console.debug('Save handler for shop id ');
     this._shopService.saveShopLanguages(this.lang).subscribe(shopLanguagesVo => {
-      console.debug('>>> ' + JSON.stringify(shopLanguagesVo));
       this.shopLanguagesVO  = Util.clone(shopLanguagesVo);
       this.lang  = Util.clone(shopLanguagesVo);
       this.lang.all = this.lang.all.filter( obj => { return this.lang.supported.indexOf(obj.first) === -1; } );
