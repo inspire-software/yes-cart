@@ -261,15 +261,47 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindProductIdsByCodeOrManufacturerCode() throws Exception {
+    public void testFindProductIdsByManufacturerCode() throws Exception {
 
-        final List<Long> idsExist = productService.findProductIdsByCodeOrManufacturerCode("BENDER-ua");
+        final List<Long> idsExist = productService.findProductIdsByManufacturerCode("BENDER-ua");
 
         assertNotNull(idsExist);
         assertEquals(1, idsExist.size());
         assertEquals(Long.valueOf(9998L), idsExist.get(0));
 
-        final List<Long> idsNone = productService.findProductIdsByCodeOrManufacturerCode("asdfasdooooo");
+        final List<Long> idsNone = productService.findProductIdsByManufacturerCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByBarCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByBarCode("001234567905");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByBarCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByPimCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByPimCode("ICE00001");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByPimCode("asdfasdooooo");
 
         assertNotNull(idsNone);
         assertEquals(0, idsNone.size());

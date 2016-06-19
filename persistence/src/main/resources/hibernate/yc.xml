@@ -1070,9 +1070,14 @@
                 <comment>Product or product sku code</comment>
             </column>
         </property>
-        <property name="manufacturerCode" type="string" length="255" not-null="false">
+        <property name="manufacturerCode" type="string" length="255" index="PRODUCT_MCODE" not-null="false">
             <column name="MANUFACTURER_CODE" length="255" not-null="false">
                 <comment>Product or product sku code</comment>
+            </column>
+        </property>
+        <property name="pimCode" type="string" length="255" index="PRODUCT_PCODE" not-null="false">
+            <column name="PIM_CODE" length="255" not-null="false">
+                <comment>Product code in PIM</comment>
             </column>
         </property>
         <property name="availablefrom" type="timestamp" not-null="false">
@@ -1211,7 +1216,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
-        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" not-null="false"/>
+        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" index="SKU_MCODE" not-null="false"/>
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>
@@ -1233,7 +1238,7 @@
             </column>
         </property>
 
-        <property name="barCode" length="128" type="string">
+        <property name="barCode" length="128" type="string" index="SKU_BCODE">
             <column name="BARCODE" length="128"/>
         </property>
 
@@ -3122,9 +3127,21 @@
         ]]>
     </query>
 
-    <query name="PRODUCT.IDS.BY.CODE.OR.MANUFACTURER.CODE">
+    <query name="PRODUCT.IDS.BY.MANUFACTURER.CODE">
         <![CDATA[
-                 select p.productId from ProductEntity p   where p.code = ?1 or p.manufacturerCode = ?1
+                 select p.productId from ProductEntity p   where p.manufacturerCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.PIM.CODE">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.pimCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.SKU.BARCODE">
+        <![CDATA[
+                 select s.product.productId from ProductSkuEntity s   where s.barCode = ?1
         ]]>
     </query>
 

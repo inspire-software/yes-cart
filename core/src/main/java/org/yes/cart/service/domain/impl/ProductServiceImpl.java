@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
@@ -878,8 +879,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Long> findProductIdsByCodeOrManufacturerCode(final String code) {
-        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.CODE.OR.MANUFACTURER.CODE", code);
+    public List<Long> findProductIdsByManufacturerCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.MANUFACTURER.CODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByBarCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.SKU.BARCODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByPimCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.PIM.CODE", code);
     }
 
     /**
@@ -1075,7 +1090,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
         if (StringUtils.isNotBlank(code)) {
-            criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
+            criterionList.add(Restrictions.or(
+                    Restrictions.like("code", code, MatchMode.ANYWHERE),
+                    Restrictions.like("manufacturerCode", code, MatchMode.ANYWHERE),
+                    Restrictions.eq("pimCode", code),
+                    Restrictions.eq("guid", code),
+                    Restrictions.eq("productId", NumberUtils.toLong(code))
+            ));
         }
         if (StringUtils.isNotBlank(name)) {
             criterionList.add(Restrictions.like("name", name, MatchMode.ANYWHERE));

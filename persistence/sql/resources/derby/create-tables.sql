@@ -572,6 +572,7 @@
         VERSION bigint not null DEFAULT 0,
         CODE varchar(255) not null  unique,
         MANUFACTURER_CODE varchar(255),
+        PIM_CODE varchar(255),
         AVAILABLEFROM timestamp,
         AVAILABLETO timestamp,
         NAME varchar(255) not null,
@@ -1489,9 +1490,10 @@
         references TWAREHOUSE;
 
 
-
-
-
+    create index PRODUCT_MCODE on TPRODUCT (MANUFACTURER_CODE);
+    create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
+    create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
+    create index SKU_BCODE on TSKU (BARCODE);
 
 
     alter table TSKU 

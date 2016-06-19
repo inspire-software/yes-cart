@@ -31,6 +31,8 @@ public class ProductDTOImpl {
 
     public var manufacturerCode : String;
 
+    public var pimCode : String;
+
     public var tag : String;
 
     public var availablefrom:Date ;

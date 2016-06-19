@@ -596,7 +596,9 @@
               MAX_ORDER_QUANTITY="100000.00"
               STEP_ORDER_QUANTITY="1.00"
               AVAILABLEFROM="2010-04-08 11:15:17.451" AVAILABLETO="2040-04-08 11:15:17.451"
-              TAG="sale newarrival specialpromo"/>
+              TAG="sale newarrival specialpromo"
+              MANUFACTURER_CODE="BENDER-ua"
+              PIM_CODE="ICE00001"/>
 
 
     <TSKU VERSION="0" SKU_ID="9998"
@@ -604,7 +606,8 @@
           CODE="BENDER-ua" GUID="BENDER-ua"
           NAME="Бендер Згинач Родріґес"
           DESCRIPTION="Бендер — комічний антигерой, п'яниця, лихослов і завзятий курець, шанувальник порнографії для роботів (у вигляді електричних схем), злодій-рецидивіст (вірніше, клептоман), кухар (хоча, зважаючи на відсутність відчуття смаку, його їжа в переважній більшості випадків щонайменше неїстівна, ба навіть небезпечна для життя)."
-          RANK="1"/>
+          RANK="1"
+          BARCODE="001234567905"/>
 
     <TPRODUCTATTRVALUE VERSION="0" ATTRVALUE_ID="9996" GUID="9996_TPRODUCTATTRVALUE" CODE="WEIGHT" VAL="1.15" PRODUCT_ID="9998"/>
     <TPRODUCTSKUATTRVALUE VERSION="0" ATTRVALUE_ID="9996" GUID="9996_TPRODUCTSKUATTRVALUE" CODE="WEIGHT" VAL="1.16" SKU_ID="9998"/>

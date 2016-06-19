@@ -42,4 +42,14 @@ alter table TSKUPRICE add column PRICINGPOLICY varchar(255);
 
 create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
 
+--
+-- YC-724 Search products and sku by manufacturing code optimizations
+--
+
+alter table TPRODUCT add column PIM_CODE varchar(255);
+
+create index PRODUCT_MCODE on TPRODUCT (MANUFACTURER_CODE);
+create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
+create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
+create index SKU_BCODE on TSKU (BARCODE);
 

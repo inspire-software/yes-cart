@@ -50,6 +50,9 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "manufacturerCode")
     private String manufacturerCode;
 
+    @DtoField(value = "pimCode")
+    private String pimCode;
+
     @DtoField(value = "tag")
     private String tag;
 
@@ -202,6 +205,20 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getPimCode() {
+        return pimCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPimCode(final String pimCode) {
+        this.pimCode = pimCode;
     }
 
     /**

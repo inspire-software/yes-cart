@@ -97,6 +97,20 @@ public interface Product extends Auditable, Attributable, Seoable, Codable, Tagg
     void setManufacturerCode(String code);
 
     /**
+     * PIM external reference (e.g. IceCat, CNet etc)
+     *
+     * @return external reference
+     */
+    String getPimCode();
+
+    /**
+     * PIM external reference (e.g. IceCat, CNet etc)
+     *
+     * @param pimCode external reference
+     */
+    void setPimCode(String pimCode);
+
+    /**
      * Get start of product availability.
      * Null - product has not start date, means no limitation.
      *

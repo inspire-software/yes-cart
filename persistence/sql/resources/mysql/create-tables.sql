@@ -554,6 +554,7 @@
         VERSION bigint not null default 0,
         CODE varchar(255) not null comment 'Product or product sku code' unique,
         MANUFACTURER_CODE varchar(255),
+        PIM_CODE varchar(255),
         AVAILABLEFROM datetime comment 'AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders',
         AVAILABLETO datetime,
         NAME varchar(255) not null,
@@ -1516,7 +1517,10 @@
         foreign key (PRODUCT_ID) 
         references TPRODUCT (PRODUCT_ID);
 
-
+    create index PRODUCT_MCODE on TPRODUCT (MANUFACTURER_CODE);
+    create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
+    create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
+    create index SKU_BCODE on TSKU (BARCODE);
 
     alter table TSKUPRICE
         add index FK_SP_SHOP (SHOP_ID), 

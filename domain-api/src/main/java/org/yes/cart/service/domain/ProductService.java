@@ -374,10 +374,26 @@ public interface ProductService extends GenericService<Product> {
     /**
      * Get product id by given code
      *
-     * @param code given code or manufacturer code
+     * @param code given manufacturer code
      * @return product id if found otherwise null
      */
-    List<Long> findProductIdsByCodeOrManufacturerCode(String code);
+    List<Long> findProductIdsByManufacturerCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given barcode (EAN/UPC)
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByBarCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given code in PIM
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByPimCode(String code);
 
     /**
      * Get product id by given code
