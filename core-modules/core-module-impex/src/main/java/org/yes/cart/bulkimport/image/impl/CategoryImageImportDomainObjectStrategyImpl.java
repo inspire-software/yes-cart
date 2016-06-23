@@ -17,8 +17,6 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -41,8 +39,6 @@ import java.util.List;
  * Time: 22:26
  */
 public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
-
-    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final CategoryService categoryService;
     private final AttributeService attributeService;
@@ -69,7 +65,6 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
         if (category == null) {
             final String warn = MessageFormat.format("category with code {0} not found.", code);
             statusListener.notifyWarning(warn);
-            LOG.warn(warn);
             return false;
         }
 
@@ -89,7 +84,6 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
-                LOG.warn(warn);
                 return false;
             }
             imageAttributeValue = categoryService.getGenericDao().getEntityFactory().getByIface(AttrValueCategory.class);
@@ -103,15 +97,13 @@ public class CategoryImageImportDomainObjectStrategyImpl extends AbstractImageIm
         final String info = MessageFormat.format("file {0} attached as {1} to category {2}", fileName, attributeCode, category.getName());
         statusListener.notifyMessage(info);
 
-        LOG.info(info);
         try {
             categoryService.update(category);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for category with code {1} could not be added (db error).", fileName, category.getGuid());
-            LOG.error(err, e);
-            statusListener.notifyError(err);
+            statusListener.notifyError(err, e);
             return false;
 
         }

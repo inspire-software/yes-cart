@@ -70,6 +70,13 @@ public interface JobStatusListener {
     void notifyError(String error);
 
     /**
+     * Notify of an error message
+     * @param error error message
+     * @param exp exception that caused the error
+     */
+    void notifyError(String error, Exception exp);
+
+    /**
      * Notify completion
      */
     void notifyCompleted();

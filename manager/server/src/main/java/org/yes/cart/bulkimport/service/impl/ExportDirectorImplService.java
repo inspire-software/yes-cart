@@ -36,6 +36,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -44,6 +45,7 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.io.File;
@@ -58,8 +60,6 @@ import java.util.*;
  * Time: 11:56
  */
 public class ExportDirectorImplService extends SingletonJobRunner implements ExportDirectorService {
-
-    private final Logger LOG = LoggerFactory.getLogger(ExportDirectorImplService.class);
 
     private final String pathToExportDirectory;
 
@@ -127,7 +127,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         final String rootPath = resolveExportDirectory();
         final String absFile = resolveExportFile(fileName);
 
-        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(logSize, timeout),
+        return doJob(new JobContextImpl(async, new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(logSize, timeout), ShopCodeContext.getLog(this)),
                 new HashMap<String, Object>() {{
                     put(JobContextKeys.EXPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.EXPORT_FILE, absFile);
@@ -164,13 +164,17 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
                     listener.notifyCompleted();
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
-                    LOG.error(ioe.getMessage(), ioe);
-                    listener.notifyError(ioe.getMessage());
+                    listener.notifyError(ioe.getMessage(), ioe);
                     listener.notifyMessage("Export Job completed but there was an IO error: " + ioe.getMessage());
                     listener.notifyCompleted();
-                } catch (Throwable trw) {
+                } catch (Exception exp) {
                     // something very wrong
-                    LOG.error(trw.getMessage(), trw);
+                    listener.notifyError(exp.getMessage(), exp);
+                    listener.notifyMessage("Export Job was terminated. Error: " + exp.getMessage());
+                    listener.notifyCompleted();
+                } catch (Throwable trw) {
+                    // something very, very wrong
+                    ShopCodeContext.getLog(this).error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyMessage("Export Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted();

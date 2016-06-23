@@ -17,8 +17,6 @@
 package org.yes.cart.remote.service.impl;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
 import org.yes.cart.cluster.node.Node;
@@ -35,6 +33,7 @@ import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
 import java.util.HashMap;
@@ -46,8 +45,6 @@ import java.util.Map;
  * Time: 17:22:15
  */
 public class ReindexServiceImpl extends SingletonJobRunner implements ReindexService {
-
-    private final Logger LOG = LoggerFactory.getLogger(ReindexServiceImpl.class);
 
     private final RemoteBackdoorService remoteBackdoorService;
 
@@ -177,7 +174,7 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     listener.notifyMessage("\nIndexing completed (" + ((finish - start) / 1000) + "s)");
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
-                    LOG.error(trw.getMessage(), trw);
+                    ShopCodeContext.getLog(this).error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyCompleted();
                 } finally {

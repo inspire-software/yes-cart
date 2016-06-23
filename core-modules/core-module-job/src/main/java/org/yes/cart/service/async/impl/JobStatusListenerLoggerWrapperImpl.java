@@ -54,6 +54,11 @@ public class JobStatusListenerLoggerWrapperImpl implements JobStatusListener {
     }
 
     /** {@inheritDoc} */
+    public void notifyError(final String error, final Exception exp) {
+        logger.error(error, exp);
+    }
+
+    /** {@inheritDoc} */
     public void notifyCompleted() {
 
     }

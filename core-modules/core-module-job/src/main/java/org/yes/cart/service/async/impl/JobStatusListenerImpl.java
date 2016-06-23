@@ -20,6 +20,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.util.misc.ExceptionUtil;
 
 import java.util.UUID;
 
@@ -139,6 +140,12 @@ public class JobStatusListenerImpl implements JobStatusListener {
         ShopCodeContext.getLog(this).error(error);
         notifyPing();
         err++;
+    }
+
+    /** {@inheritDoc} */
+    public void notifyError(final String error, final Exception exp) {
+        final String stack = ExceptionUtil.stackTraceToString(exp);
+        notifyError(error + "\n" + stack);
     }
 
     /** {@inheritDoc} */

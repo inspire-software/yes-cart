@@ -16,86 +16,102 @@
 
 package org.yes.cart.service.async.impl;
 
+import org.slf4j.Logger;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
-import org.yes.cart.service.async.model.impl.JobStatusImpl;
-
-import java.util.UUID;
 
 /**
- * Null listener is effective a factory for generating null status objects
- *
  * User: denispavlov
- * Date: 12-07-30
- * Time: 9:50 AM
+ * Date: 23/06/2016
+ * Time: 08:34
  */
-public class JobStatusListenerNullImpl implements JobStatusListener {
+public class JobStatusListenerWithLoggerImpl implements JobStatusListener {
 
-    private final UUID token;
-    private final String message;
+    private final JobStatusListener wrapped;
+    private final JobStatusListener logger;
 
-    public JobStatusListenerNullImpl(final String message) {
-        token = UUID.randomUUID();
-        this.message = message;
+    public JobStatusListenerWithLoggerImpl(final JobStatusListener listener, final Logger log) {
+        this.wrapped = listener;
+        this.logger = new JobStatusListenerLoggerWrapperImpl(log);
     }
 
-    /** {@inheritDoc} */
-    public String getJobToken() {
-        return token.toString();
-    }
 
     /** {@inheritDoc} */
+    @Override
     public JobStatus getLatestStatus() {
-        return  new JobStatusImpl(getJobToken(), JobStatus.State.UNDEFINED, JobStatus.Completion.ERROR, message);
+        return wrapped.getLatestStatus();
     }
 
     /** {@inheritDoc} */
+    @Override
+    public String getJobToken() {
+        return wrapped.getJobToken();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public void notifyPing() {
-        // nothing
+        this.wrapped.notifyPing();
+        this.logger.notifyPing();
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyPing(final String msg) {
-        // nothing
+        this.wrapped.notifyPing(msg);
+        this.logger.notifyPing(msg);
     }
 
     /** {@inheritDoc} */
-    public void notifyMessage(final String message) {
-        throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
+    @Override
+    public void notifyMessage(final String msg) {
+        this.wrapped.notifyMessage(msg);
+        this.logger.notifyMessage(msg);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyWarning(final String warning) {
-        throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
+        this.wrapped.notifyWarning(warning);
+        this.logger.notifyWarning(warning);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error) {
-        throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
+        this.wrapped.notifyError(error);
+        this.logger.notifyError(error);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyError(final String error, final Exception exp) {
-        throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
+        this.wrapped.notifyError(error, exp);
+        this.logger.notifyError(error, exp);
     }
 
     /** {@inheritDoc} */
+    @Override
     public void notifyCompleted() {
-        throw new IllegalArgumentException("Job is UNDEFINED and cannot be updated");
+        this.wrapped.notifyCompleted();
+        this.logger.notifyCompleted();
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isCompleted() {
-        return true;
+        return wrapped.isCompleted();
     }
 
     /** {@inheritDoc} */
+    @Override
     public long getTimeoutValue() {
-        return 0;
+        return wrapped.getTimeoutValue();
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isTimedOut() {
-        return false;
+        return wrapped.isTimedOut();
     }
 }

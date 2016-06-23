@@ -60,7 +60,6 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
      */
     public BulkExportResult doExport(final JobContext context) {
 
-        final Logger log = ShopCodeContext.getLog(this);
         final JobStatusListener statusListener = context.getListener();
 
         final CsvExportDescriptor imageExportDescriptor = context.getAttribute(JobContextKeys.EXPORT_DESCRIPTOR);
@@ -81,7 +80,6 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
                         final String msgErr = MessageFormat.format(
                                 "export file already exists: {0}",
                                 fileToExport);
-                        log.error(msgErr);
                         statusListener.notifyError(msgErr);
                         return BulkExportResult.ERROR;
                     }
@@ -93,10 +91,8 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
                     imageExportDescriptorName,
                     fileToExport);
             statusListener.notifyMessage(msgInfo);
-            log.info(msgInfo);
             if (imageExportDescriptor.getSelectSql() == null) {
                 final String msgErr = "export can not be started, because select-sql is empty";
-                log.error(msgErr);
                 statusListener.notifyError(msgErr);
                 return ExportService.BulkExportResult.ERROR;
             }
@@ -116,8 +112,7 @@ public class ImagesBulkExportServiceImpl extends AbstractExportService implement
             final String msgError = MessageFormat.format(
                     "unexpected error {0}",
                     e.getMessage());
-            log.error(msgError, e);
-            statusListener.notifyError(msgError);
+            statusListener.notifyError(msgError, e);
             return ExportService.BulkExportResult.ERROR;
         }
         return ExportService.BulkExportResult.OK;

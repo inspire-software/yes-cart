@@ -19,7 +19,6 @@ package org.yes.cart.bulkimport.csv.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,8 +44,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.util.misc.ExceptionUtil;
 
 import java.beans.PropertyDescriptor;
 import java.io.File;
@@ -97,8 +94,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      */
     public BulkImportResult doImport(final JobContext context) {
 
-
-        final Logger log = ShopCodeContext.getLog(this);
         final JobStatusListener statusListener = context.getListener();
         final Set<String> importedFiles = context.getAttribute(JobContextKeys.IMPORT_FILE_SET);
         final String fileName = context.getAttribute(JobContextKeys.IMPORT_FILE);
@@ -113,7 +108,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         "no files with mask {0} to import",
                         csvImportDescriptor.getImportFileDescriptor().getFileNameMask());
                 statusListener.notifyWarning(msgWarn);
-                log.warn(msgWarn);
             } else {
                 final String msgInfo = MessageFormat.format(
                         "Import descriptor {0} has {1} file(s) with mask {2} to import",
@@ -121,10 +115,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         filesToImport.length,
                         csvImportDescriptor.getImportFileDescriptor().getFileNameMask());
                 statusListener.notifyMessage(msgInfo);
-                log.info(msgInfo);
                 if (csvImportDescriptor.getSelectSql() == null) {
                     final String msgErr = "import can not be started, because select-sql is empty";
-                    log.error(msgErr);
                     statusListener.notifyError(msgErr);
                     return BulkImportResult.ERROR;
                 }
@@ -189,11 +181,9 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             final Map<String, Object> entityCache = new HashMap<String, Object>();
 
-            final Logger log = ShopCodeContext.getLog(this);
             final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
             final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
             statusListener.notifyMessage(msgInfoImp);
-            log.info(msgInfoImp);
 
             CsvFileReader csvFileReader = new CsvFileReaderImpl();
             try {
@@ -219,7 +209,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 final String msgInfoLines = MessageFormat.format("total data lines : {0}",
                         (csvImportDescriptor.getImportFileDescriptor().isIgnoreFirstLine() ? csvFileReader.getRowsRead() - 1 : csvFileReader.getRowsRead()));
                 statusListener.notifyMessage(msgInfoLines);
-                log.info(msgInfoLines);
 
                 csvFileReader.close();
             } catch (FileNotFoundException e) {
@@ -227,22 +216,19 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         "can not find the file : {0} {1}",
                         fileToImport.getAbsolutePath(),
                         e.getMessage());
-                log.error(msgErr);
-                statusListener.notifyError(msgErr);
+                statusListener.notifyError(msgErr, e);
             } catch (UnsupportedEncodingException e) {
                 final String msgErr = MessageFormat.format(
                         "wrong file encoding in xml descriptor : {0} {1}",
                         csvImportDescriptor.getImportFileDescriptor().getFileEncoding(),
                         e.getMessage());
-                log.error(msgErr);
-                statusListener.notifyError(msgErr);
+                statusListener.notifyError(msgErr, e);
 
             } catch (IOException e) {
                 final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
                         fileToImport.getAbsolutePath(),
                         e.getMessage());
-                log.error(msgErr);
-                statusListener.notifyError(msgErr);
+                statusListener.notifyError(msgErr, e);
             }
 
         } catch (Exception e) {
@@ -259,8 +245,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             final String msgError = MessageFormat.format(
                     "unexpected error {0}",
                     e.getMessage());
-            ShopCodeContext.getLog(this).error(msgError, e);
-            statusListener.notifyError(msgError);
+            statusListener.notifyError(msgError, e);
             return BulkImportResult.ERROR;
         }
 
@@ -276,7 +261,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                         final String csvImportDescriptorName,
                         final CsvImportDescriptor descriptor) throws Exception {
         List<Object> objects = null;
-        final Logger log = ShopCodeContext.getLog(this);
         try {
 
 
@@ -323,8 +307,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     csvImportDescriptorName,
                     objects
             );
-            log.error(message, ade);
-            statusListener.notifyError(message);
+            statusListener.notifyError(message, ade);
             genericDAO.clear();
 
             throw new Exception(message, ade);
@@ -334,16 +317,14 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             String additionalInfo = e.getMessage();
             String message = MessageFormat.format(
-                    "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5}",
+                    "during import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4}",
                     tuple,
                     csvImportDescriptorName,
                     e.getMessage(),
-                    ExceptionUtil.stackTraceToString(e),
                     additionalInfo,
                     objects
             );
-            log.error(message, e);
-            statusListener.notifyError(message);
+            statusListener.notifyError(message, e);
             genericDAO.clear();
 
             throw new Exception(message, e);
@@ -362,7 +343,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                        final Object masterObject,
                        final Map<String, Object> entityCache) throws Exception {
         Object object = null;
-        final Logger log = ShopCodeContext.getLog(this);
         try {
 
 
@@ -420,7 +400,6 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                     object,
                     masterObject
             );
-            log.error(message, ade);
             statusListener.notifyError(message);
             genericDAO.clear();
 
@@ -431,17 +410,15 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             String additionalInfo = e.getMessage();
             String message = MessageFormat.format(
-                    "during import row : {0} \ndescriptor {1} \nerror {2}\n{3} \nadditional info {4} \nobject is {5} \nmaster object is {6}",
+                    "during import row : {0} \ndescriptor {1} \nerror {2} \nadditional info {3} \nobject is {4} \nmaster object is {5}",
                     tuple,
                     csvImportDescriptorName,
                     e.getMessage(),
-                    ExceptionUtil.stackTraceToString(e),
                     additionalInfo,
                     object,
                     masterObject
             );
-            log.error(message, e);
-            statusListener.notifyError(message);
+            statusListener.notifyError(message, e);
             genericDAO.clear();
 
             throw new Exception(message, e);

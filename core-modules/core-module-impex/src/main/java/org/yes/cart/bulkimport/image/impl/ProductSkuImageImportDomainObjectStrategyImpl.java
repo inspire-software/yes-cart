@@ -17,8 +17,6 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -41,8 +39,6 @@ import java.util.List;
  * Time: 22:44
  */
 public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
-
-    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final ProductSkuService productSkuService;
 
@@ -71,7 +67,6 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
         if (productSku == null) {
             final String warn = MessageFormat.format("product sku with code {0} not found.", code);
             statusListener.notifyWarning(warn);
-            LOG.warn(warn);
             return false;
         }
 
@@ -91,7 +86,6 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
-                LOG.warn(warn);
                 return false;
             }
             imageAttibute = productSkuService.getGenericDao().getEntityFactory().getByIface(AttrValueProductSku.class);
@@ -107,15 +101,13 @@ public class ProductSkuImageImportDomainObjectStrategyImpl extends AbstractImage
                 attributeCode,
                 productSku.getCode());
         statusListener.notifyMessage(info);
-        LOG.info(info);
 
         try {
             productSkuService.update(productSku);
             return true;
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for product sku with code {1} could not be added (db error).", fileName, productSku.getCode());
-            LOG.error(err, e);
-            statusListener.notifyError(err);
+            statusListener.notifyError(err, e);
             return false;
         }
     }

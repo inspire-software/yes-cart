@@ -16,7 +16,6 @@
 
 package org.yes.cart.bulkexport.image.impl;
 
-import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.bulkexport.image.ImageExportDomainObjectStrategy;
 import org.yes.cart.dao.ResultsIterator;
@@ -25,7 +24,6 @@ import org.yes.cart.service.domain.ImageService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.image.ImageNameStrategy;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.io.*;
 import java.text.MessageFormat;
@@ -73,8 +71,6 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
     public boolean doImageExport(final JobStatusListener statusListener,
                                  final String fileName) {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final ResultsIterator<T> result = getAllObjects();
 
         final String base = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -101,7 +97,6 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     final String msg = MessageFormat.format(
                             "Creating images zip: {0}",
                             zip);
-                    log.info(msg);
                     statusListener.notifyMessage(msg);
 
                 }
@@ -116,7 +111,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     try {
                         is = new BufferedInputStream(getObjectImageAsBytes(next, image));
                     } catch (Exception exp) {
-                        statusListener.notifyError("Unable to add " + image + " to zip file\n" + exp.getMessage());
+                        statusListener.notifyError("Unable to add " + image + " to zip file\n" + exp.getMessage(), exp);
                         continue;
                     }
 
@@ -140,7 +135,6 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
                     final String msg = MessageFormat.format(
                             "Created images zip: {0}",
                             zip);
-                    log.info(msg);
                     statusListener.notifyMessage(msg);
                 }
 
@@ -153,8 +147,7 @@ public abstract class AbstractImageExportDomainObjectStrategyImpl<T> implements 
             }
         } catch (Exception exp) {
 
-            log.error(exp.getMessage(), exp);
-            statusListener.notifyError(exp.getMessage());
+            statusListener.notifyError(exp.getMessage(), exp);
 
         }
 

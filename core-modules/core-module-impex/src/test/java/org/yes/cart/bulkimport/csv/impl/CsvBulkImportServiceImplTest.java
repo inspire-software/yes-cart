@@ -792,8 +792,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")), with(any(Exception.class)));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")), with(any(Exception.class)));
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();
