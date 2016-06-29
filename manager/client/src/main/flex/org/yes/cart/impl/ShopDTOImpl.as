@@ -44,6 +44,7 @@ public class ShopDTOImpl {
 
     public var displayMetadescriptions:Object;
 
+    public var disabled:Boolean = false;
 
     public function ShopDTOImpl() {
         shopId = 0;

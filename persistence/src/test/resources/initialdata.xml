@@ -317,19 +317,19 @@
                       VAL="testPaymentGatewayLabel,courierPaymentGatewayLabel,testExtFormPaymentGatewayLabel"
                       SYSTEM_ID="100"/>
 
-    <TSHOP VERSION="0" SHOP_ID="10" GUID="SHOIP1" CODE="SHOIP1" NAME="Gadget universe" DESCRIPTION="Gadget universe shop" FSPOINTER="gadget"/>
-    <TSHOP VERSION="0" SHOP_ID="20" GUID="SHOIP2" CODE="SHOIP2" NAME="Mobile universe" DESCRIPTION="Mobile universe shop" FSPOINTER="mobile"/>
-    <TSHOP VERSION="0" SHOP_ID="30" GUID="SHOIP3" CODE="SHOIP3" NAME="Game universe" DESCRIPTION="Game universe shop" FSPOINTER="game"/>
+    <TSHOP VERSION="0" SHOP_ID="10" GUID="SHOIP1" CODE="SHOIP1" NAME="Gadget universe" DESCRIPTION="Gadget universe shop" FSPOINTER="gadget" DISABLED="0"/>
+    <TSHOP VERSION="0" SHOP_ID="20" GUID="SHOIP2" CODE="SHOIP2" NAME="Mobile universe" DESCRIPTION="Mobile universe shop" FSPOINTER="mobile" DISABLED="0"/>
+    <TSHOP VERSION="0" SHOP_ID="30" GUID="SHOIP3" CODE="SHOIP3" NAME="Game universe" DESCRIPTION="Game universe shop" FSPOINTER="game" DISABLED="0"/>
     <TSHOP VERSION="0" SHOP_ID="40" GUID="SHOIP4" CODE="SHOIP4" NAME="Shop without assigned categories"
-           DESCRIPTION="Shop without assigned categories used in test" FSPOINTER="/dev/none"/>
+           DESCRIPTION="Shop without assigned categories used in test" FSPOINTER="/dev/none" DISABLED="0"/>
     <TSHOP VERSION="0" SHOP_ID="50" GUID="SHOIP5" CODE="SHOIP5" NAME="Shop with limited assigned categories"
-           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"/>
+           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none" DISABLED="0"/>
     <TSHOP VERSION="0" SHOP_ID="60" GUID="JEWEL_SHOP" CODE="JEWEL_SHOP" NAME="To pass bulk import test"
-           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none"/>
+           DESCRIPTION="Shop with limited assigned categories used in test" FSPOINTER="/dev/none" DISABLED="0"/>
     <TSHOP VERSION="0" SHOP_ID="70" GUID="SHOIP7" CODE="SHOIP7" NAME="Shop with virtual assigned category"
-           DESCRIPTION="Shop with linked assigned categories used in test" FSPOINTER="/dev/none"/>
+           DESCRIPTION="Shop with linked assigned categories used in test" FSPOINTER="/dev/none" DISABLED="0"/>
     <TSHOP VERSION="0" SHOP_ID="80" GUID="SHOIP8" CODE="SHOIP8" NAME="Shop with master assigned category"
-           DESCRIPTION="Shop with master assigned categories used in test" FSPOINTER="/dev/none"/>
+           DESCRIPTION="Shop with master assigned categories used in test" FSPOINTER="/dev/none" DISABLED="0"/>
 
 
     <TSHOPATTRVALUE VERSION="0" ATTRVALUE_ID="10" VAL="EUR,UAH,RUB,USD" GUID="10_CURRENCY" CODE="CURRENCY" SHOP_ID="10"/>

@@ -153,6 +153,19 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isB2BProfileActive();
 
+    /**
+     * Flag to denote if shop is disabled on not.
+     *
+     * @return true if shop is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Flag to denote if shop is disabled on not.
+     *
+     * @param disabled true if shop is disabled
+     */
+    void setDisabled(boolean disabled);
 
     /**
      * Get default shop url. localhost will never be return.

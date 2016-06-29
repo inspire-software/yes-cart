@@ -430,6 +430,10 @@
                 var panel:StoresManagementPanel = new StoresManagementPanel();
                 panel.shopDTOImpl = shop;
                 panel.title = shop.name;
+                panel.newShopCallBack = function (shop:ShopDTOImpl):void {
+                    shops['shop_' + shop.shopId] = shop;
+                    onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+                };
                 panelCache[key] = panel;
                 mainPanel.addChild(panelCache[key]);
             }
@@ -461,6 +465,7 @@
             panel.newShopCallBack = function (shop:ShopDTOImpl):void {
                 shops['shop_' + shop.shopId] = shop;
                 onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+                panel.title = shop.name;
             };
             panelCache['StoresManagementPanel'] = panel;
             mainPanel.addChild(panelCache['StoresManagementPanel']);
@@ -678,7 +683,7 @@
                 var shop:ShopDTOImpl = this.shops[shopProp];
                 shopCodes.addItem({
                     id: shopProp,
-                    label: shop.code + (shop.name != null && shop.name.length > 0 ? ': ' + shop.name : ''),
+                    label: (shop.disabled ? '*** ' : '') + shop.code + (shop.name != null && shop.name.length > 0 ? ': ' + shop.name : ''),
                     code: shop.code,
                     name: shop.name
                 });

@@ -742,6 +742,7 @@
         NAME varchar(64) not null,
         DESCRIPTION varchar(4000),
         FSPOINTER varchar(4000) not null,
+        DISABLED smallint not null default 0,
         URI varchar(255),
         TITLE varchar(255),
         METAKEYWORDS varchar(255),

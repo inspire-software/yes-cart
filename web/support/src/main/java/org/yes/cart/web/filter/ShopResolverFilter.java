@@ -78,6 +78,14 @@ public class ShopResolverFilter extends AbstractFilter implements Filter, Servle
             }
             ((HttpServletResponse) servletResponse).sendRedirect(url);
             return null;
+        } else if (shop.isDisabled()) {
+            final String url = systemService.getDefaultShopURL();
+            final Logger log = ShopCodeContext.getLog(this);
+            if (log.isWarnEnabled()) {
+                log.warn("Shop is disabled. For server name [" + serverDomainName + "] Redirect to : [" + url + "]" );
+            }
+            ((HttpServletResponse) servletResponse).sendRedirect(url);
+            return null;
         }
 
         ApplicationDirector.setCurrentDomain(serverDomainName);

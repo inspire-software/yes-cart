@@ -53,3 +53,9 @@ create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
 create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
 create index SKU_BCODE on TSKU (BARCODE);
 
+--
+-- YC-727 Disable shops
+--
+
+alter table TSHOP add column DISABLED bit not null default 0;
+-- alter table TSHOP add column DISABLED smallint not null default 0;

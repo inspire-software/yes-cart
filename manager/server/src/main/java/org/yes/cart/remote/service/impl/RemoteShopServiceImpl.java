@@ -189,6 +189,13 @@ public class RemoteShopServiceImpl
     /**
      * {@inheritDoc}
      */
+    public ShopDTO updateDisabledFlag(final long shopId, final boolean disabled) {
+        return ((DtoShopService) getGenericDTOService()).updateDisabledFlag(shopId, disabled);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<? extends AttrValueDTO> getEntityAttributes(final long entityPk) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (federationFacade.isManageable(entityPk, ShopDTO.class)) {
             return ((DtoShopService) getGenericDTOService()).getEntityAttributes(entityPk);

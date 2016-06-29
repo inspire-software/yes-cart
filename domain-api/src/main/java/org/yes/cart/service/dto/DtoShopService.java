@@ -105,4 +105,13 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
      * @return shop dto if found otherwise null.
      */
     ShopDTO getShopDtoByDomainName(String serverDomainName);
+
+    /**
+     * Update the shop disabled flag.
+     *
+     * @param shopId shop PK
+     * @param disabled true if shop is disabled
+     * @return shop dto if found otherwise null.
+     */
+    ShopDTO updateDisabledFlag(long shopId, boolean disabled);
 }
