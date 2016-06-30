@@ -439,7 +439,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             }
         }
 
-        final BigDecimal listPriceRemove = prices.listPrice.negate();
+        final BigDecimal salePriceRemove = prices.salePrice.negate();
 
         final Total draftDeliveryCostRemove = new TotalImpl(
                 Total.ZERO,
@@ -451,16 +451,16 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 Total.ZERO,
                 Total.ZERO,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove,
+                salePriceRemove,
+                salePriceRemove,
                 false,
                 null,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove,
+                salePriceRemove,
+                salePriceRemove,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove
+                salePriceRemove,
+                salePriceRemove
         );
 
         final Total deliveryCost = new TotalImpl(

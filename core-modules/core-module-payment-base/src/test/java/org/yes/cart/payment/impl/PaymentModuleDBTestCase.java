@@ -59,20 +59,19 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
 
     protected CarrierSla createCarrierSla() {
         CarrierSla carrierSla = new CarrierSlaEntity();
+        carrierSla.setGuid("NDD_4321");
         carrierSla.setCarrierslaId(4321);
         carrierSla.setName("Next dey delivery");
-        carrierSla.setPrice(new BigDecimal("13.99"));
-        carrierSla.setCurrency("USD");
         return carrierSla;
     }
 
     protected CustomerOrderDelivery createDelivery0(String orderNum) {
         CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
-        delivery.setPrice(delivery.getCarrierSla().getPrice());
-        delivery.setNetPrice(delivery.getCarrierSla().getPrice());
-        delivery.setGrossPrice(delivery.getCarrierSla().getPrice());
-        delivery.setListPrice(delivery.getCarrierSla().getPrice());
+        delivery.setPrice(new BigDecimal("13.99"));
+        delivery.setNetPrice(new BigDecimal("13.99"));
+        delivery.setGrossPrice(new BigDecimal("13.99"));
+        delivery.setListPrice(new BigDecimal("13.99"));
         delivery.setPromoApplied(false);
         delivery.setDeliveryNum(orderNum + "-0");
         delivery.getDetail().add(
@@ -87,9 +86,10 @@ public abstract class PaymentModuleDBTestCase extends BasePaymentModuleDBTestCas
     protected CustomerOrderDelivery createDelivery1(String orderNum) {
         CustomerOrderDelivery delivery = new CustomerOrderDeliveryEntity();
         delivery.setCarrierSla(createCarrierSla());
-        delivery.setPrice(delivery.getCarrierSla().getPrice());
-        delivery.setNetPrice(delivery.getCarrierSla().getPrice());
-        delivery.setGrossPrice(delivery.getCarrierSla().getPrice());
+        delivery.setPrice(new BigDecimal("13.99"));
+        delivery.setNetPrice(new BigDecimal("13.99"));
+        delivery.setGrossPrice(new BigDecimal("13.99"));
+        delivery.setListPrice(new BigDecimal("13.99"));
         delivery.setDeliveryNum(orderNum + "-1");
         delivery.getDetail().add(
                 createDeliveryItem("product sku 1", "skuCode2", new BigDecimal("25.00"), new BigDecimal("2"))

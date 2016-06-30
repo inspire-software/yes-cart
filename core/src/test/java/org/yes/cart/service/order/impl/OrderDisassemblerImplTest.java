@@ -357,7 +357,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(shipping.isGift());
         assertFalse(shipping.isPromoApplied());
         assertNull(shipping.getAppliedPromo());
-        assertEquals("1", shipping.getProductSkuCode());
+        assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
 
         assertEquals(0, reassembledCart.getCoupons().size());
 
@@ -497,7 +497,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(shipping.isGift());
         assertFalse(shipping.isPromoApplied());
         assertNull(shipping.getAppliedPromo());
-        assertEquals("1", shipping.getProductSkuCode());
+        assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
 
         assertEquals(0, reassembledCart.getCoupons().size());
 

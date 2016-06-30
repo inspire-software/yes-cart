@@ -187,7 +187,7 @@ public class ShippingView extends BaseComponent {
                         contentParams.put("carrierSla", carrierSla);
 
                         shippingItem.add(new Label("shippingInfo", contentServiceFacade.getDynamicContentBody("checkout_shipping_"
-                                        + shippingItem.getModelObject().getCarrierslaId(),
+                                        + shippingItem.getModelObject().getGuid(),
                                 ShopCodeContext.getShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false).setVisible(infoVisible));
 
                     }

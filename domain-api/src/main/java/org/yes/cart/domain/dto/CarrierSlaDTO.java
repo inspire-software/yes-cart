@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Codable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
@@ -28,7 +29,7 @@ import java.util.Map;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface CarrierSlaDTO extends Identifiable {
+public interface CarrierSlaDTO extends Identifiable, Codable {
 
 
     /**
@@ -120,78 +121,6 @@ public interface CarrierSlaDTO extends Identifiable {
      */
     void setDisplayDescriptions(Map<String, String> names);
 
-
-    /**
-     * Get price.
-     *
-     * @return price.
-     */
-    BigDecimal getPrice();
-
-    /**
-     * Set price.
-     *
-     * @param price price.
-     */
-    void setPrice(BigDecimal price);
-
-    /**
-     * Get percent.
-     *
-     * @return percent.
-     */
-    BigDecimal getPercent();
-
-    /**
-     * Set percent.
-     *
-     * @param percent percent.
-     */
-    void setPercent(BigDecimal percent);
-
-
-    /**
-     * Get minimal cost for delivery.
-     *
-     * @return minimal cost for delivery.
-     */
-    BigDecimal getPriceNotLess();
-
-    /**
-     * Set minimal cost for delivery.
-     *
-     * @param priceNotLess minimal cost for delivery.
-     */
-    void setPriceNotLess(BigDecimal priceNotLess);
-
-    /**
-     * Get minimal amount  for precent.
-     *
-     * @return minimal amount  for precent.
-     */
-    BigDecimal getPercentNotLess();
-
-    /**
-     * Set minimal amount  for precent.
-     *
-     * @param percentNotLess minimal amount  for precent.
-     */
-    void setPercentNotLess(BigDecimal percentNotLess);
-
-    /**
-     * Get minimal delivery cost.
-     *
-     * @return minimal delivery cost.     *
-     */
-    BigDecimal getCostNotLess();
-
-    /**
-     * Set minimal delivery cost.
-     *
-     * @param costNotLess minimal delivery cost.
-     */
-    void setCostNotLess(BigDecimal costNotLess);
-
     /**
      * Get external script to calculate delivery cost.
      *
@@ -206,22 +135,6 @@ public interface CarrierSlaDTO extends Identifiable {
      */
 
     void setScript(String script);
-
-
-    /**
-     * Get currency.
-     *
-     * @return currency.
-     */
-    String getCurrency();
-
-    /**
-     * Set currency.
-     *
-     * @param currency currency.
-     */
-    void setCurrency(String currency);
-
 
     /**
      * Get max deys delivery.

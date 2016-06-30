@@ -20,22 +20,21 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
-import java.util.Collections;
-
 import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
- * Date: 07/11/2014
- * Time: 11:39
+ * Date: 29/06/2016
+ * Time: 18:28
  */
-public class DefaultDeliveryCostCalculationStrategyTest {
+public class ExternalDeliveryCostCalculationStrategyTest {
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -45,15 +44,13 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId();
-            will(returnValue(null));
+            allowing(cart).getCarrierSlaId(); will(returnValue(null));
             one(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new ExternalDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
         assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
         assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
@@ -84,7 +81,6 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(123L));
@@ -92,7 +88,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             one(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new ExternalDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
         assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
         assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
@@ -118,65 +114,32 @@ public class DefaultDeliveryCostCalculationStrategyTest {
     }
 
     @Test
-    public void testCalculateStrategy() throws Exception {
+    public void testCalculateExternal() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
-        final Total strategyTotal = context.mock(Total.class, "strategyTotal");
+        final ApplicationContext applicationContext = context.mock(ApplicationContext.class, "applicationContext");
+        final DeliveryCostCalculationStrategy customStrategy = context.mock(DeliveryCostCalculationStrategy.class, "customStrategy");
+        final Total customStrategyTotal = context.mock(Total.class, "customStrategyTotal");
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(123L));
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
+            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.EXTERNAL));
+            one(carrierSla).getScript(); will(returnValue("customStrategy"));
             one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
+            one(applicationContext).getBean("customStrategy"); will(returnValue(customStrategy));
+            one(customStrategy).calculate(cart); will(returnValue(customStrategyTotal));
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final ExternalDeliveryCostCalculationStrategy strategy = new ExternalDeliveryCostCalculationStrategy(carrierSlaService);
+        strategy.setApplicationContext(applicationContext);
+        final Total delTotal = strategy.calculate(cart);
 
-        assertSame(strategyTotal, delTotal);
+        assertSame(customStrategyTotal, delTotal);
 
         context.assertIsSatisfied();
     }
 
-    @Test
-    public void testCalculateNoStrategy() throws Exception {
-
-        final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
-        final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
-
-        context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            allowing(carrierSla).getSlaType(); will(returnValue("S"));
-            one(cart).removeShipping();
-        }});
-
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.EMPTY_MAP).calculate(cart);
-
-        assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getNonSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getPriceSubTotal().toPlainString());
-        assertFalse(delTotal.isOrderPromoApplied());
-        assertNull(delTotal.getAppliedOrderPromo());
-        assertEquals("0.00", delTotal.getSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryListCost().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCost().toPlainString());
-        assertFalse(delTotal.isDeliveryPromoApplied());
-        assertNull(delTotal.getAppliedDeliveryPromo());
-        assertEquals("0.00", delTotal.getDeliveryTax().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCostAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotal().toPlainString());
-        assertEquals("0.00", delTotal.getTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getListTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotalAmount().toPlainString());
-
-        context.assertIsSatisfied();
-    }
 }

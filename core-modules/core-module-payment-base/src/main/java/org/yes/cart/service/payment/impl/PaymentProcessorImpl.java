@@ -609,7 +609,7 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     private void fillPaymentShipment(final CustomerOrder order, final CustomerOrderDelivery delivery, final Payment payment) {
         payment.getOrderItems().add(
                 new PaymentLineImpl(
-                        delivery.getCarrierSla() == null ? "N/A" : String.valueOf(delivery.getCarrierSla().getCarrierslaId()),
+                        delivery.getCarrierSla() == null ? "N/A" : String.valueOf(delivery.getCarrierSla().getGuid()),
                         delivery.getCarrierSla() == null ? "No SLA" :
                                 new FailoverStringI18NModel(
                                         delivery.getCarrierSla().getDisplayName(),

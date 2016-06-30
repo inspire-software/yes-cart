@@ -16,6 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
@@ -23,25 +26,20 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.Map;
-
 /**
  * User: denispavlov
  * Date: 13-10-20
  * Time: 6:07 PM
  */
-public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
+public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy, ApplicationContextAware {
 
     private static final Total ZERO_TOTAL = new TotalImpl();
 
     private final CarrierSlaService carrierSlaService;
+    private ApplicationContext applicationContext;
 
-    private final Map<String, DeliveryCostCalculationStrategy> subStrategies;
-
-    public DefaultDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService,
-                                                  final Map<String, DeliveryCostCalculationStrategy> subStrategies) {
+    public ExternalDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService) {
         this.carrierSlaService = carrierSlaService;
-        this.subStrategies = subStrategies;
     }
 
     /** {@inheritDoc} */
@@ -51,23 +49,27 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
 
         if (cart.getCarrierSlaId() != null) {
             final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-            if (carrierSla != null) {
+            if (carrierSla != null && CarrierSla.EXTERNAL.equals(carrierSla.getSlaType())) {
 
-                final DeliveryCostCalculationStrategy strategy = subStrategies.get(carrierSla.getSlaType());
-                if (strategy == null) {
+                final Object strategy = applicationContext.getBean(carrierSla.getScript());
+                if (strategy instanceof DeliveryCostCalculationStrategy) {
 
-                    ShopCodeContext.getLog(this).error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
+                    return ((DeliveryCostCalculationStrategy) strategy).calculate(cart);
 
                 } else {
 
-                    return strategy.calculate(cart);
+                    ShopCodeContext.getLog(this).error("CarrierSla.script [{}] is not a bean of type DeliveryCostCalculationStrategy", carrierSla.getScript());
 
                 }
 
             }
         }
         return ZERO_TOTAL;
-
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void setApplicationContext(final ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 }

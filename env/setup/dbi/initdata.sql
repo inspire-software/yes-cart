@@ -1245,6 +1245,7 @@ carriershopnames-demo.xml,
 carrierslanames-demo.xml,
 promotionnames-demo.xml,
 promotioncouponnames-demo.xml,
+skuprices-demo.xml,
 taxnames-demo.xml,
 taxconfignames-demo.xml');
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (1001, 'YC DEMO: IceCat Catalog', 'IMPORT', '

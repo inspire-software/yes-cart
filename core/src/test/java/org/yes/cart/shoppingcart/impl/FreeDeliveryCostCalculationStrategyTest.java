@@ -22,20 +22,20 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
+import org.yes.cart.shoppingcart.MutableOrderInfo;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
-import java.util.Collections;
+import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
- * Date: 07/11/2014
- * Time: 11:39
+ * Date: 29/06/2016
+ * Time: 18:21
  */
-public class DefaultDeliveryCostCalculationStrategyTest {
+public class FreeDeliveryCostCalculationStrategyTest {
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -45,15 +45,13 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId();
-            will(returnValue(null));
+            allowing(cart).getCarrierSlaId(); will(returnValue(null));
             one(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new FreeDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
         assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
         assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
@@ -84,7 +82,6 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(123L));
@@ -92,7 +89,7 @@ public class DefaultDeliveryCostCalculationStrategyTest {
             one(cart).removeShipping();
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new FreeDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
         assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
         assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
@@ -118,44 +115,71 @@ public class DefaultDeliveryCostCalculationStrategyTest {
     }
 
     @Test
-    public void testCalculateStrategy() throws Exception {
+    public void testCalculateSingle() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
+        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
-        final DeliveryCostCalculationStrategy strategy = context.mock(DeliveryCostCalculationStrategy.class, "strategy");
-        final Total strategyTotal = context.mock(Total.class, "strategyTotal");
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(123L));
+            one(cart).getOrderInfo(); will(returnValue(orderInfo));
+            one(orderInfo).isMultipleDelivery(); will(returnValue(false));
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            one(carrierSla).getSlaType(); will(returnValue("S"));
+            one(carrierSla).getGuid(); will(returnValue("CS001"));
+            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FREE));
             one(cart).removeShipping();
-            one(strategy).calculate(cart); will(returnValue(strategyTotal));
+            one(cart).addShippingToCart("CS001", new BigDecimal("1.00"));
+            one(cart).setShippingPrice("CS001", new BigDecimal("0.00"), new BigDecimal("0.00"));
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.singletonMap("S", strategy)).calculate(cart);
+        final Total delTotal = new FreeDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
-        assertSame(strategyTotal, delTotal);
+        assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
+        assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
+        assertEquals("0.00", delTotal.getNonSaleSubTotal().toPlainString()); // only A-001 was not on sale
+        assertEquals("0.00", delTotal.getPriceSubTotal().toPlainString());
+        assertFalse(delTotal.isOrderPromoApplied());
+        assertNull(delTotal.getAppliedOrderPromo());
+        assertEquals("0.00", delTotal.getSubTotal().toPlainString());
+        assertEquals("0.00", delTotal.getSubTotalTax().toPlainString());
+        assertEquals("0.00", delTotal.getSubTotalAmount().toPlainString());
+        assertEquals("0.00", delTotal.getDeliveryListCost().toPlainString());
+        assertEquals("0.00", delTotal.getDeliveryCost().toPlainString());
+        assertFalse(delTotal.isDeliveryPromoApplied());
+        assertNull(delTotal.getAppliedDeliveryPromo());
+        assertEquals("0.00", delTotal.getDeliveryTax().toPlainString());
+        assertEquals("0.00", delTotal.getDeliveryCostAmount().toPlainString());
+        assertEquals("0.00", delTotal.getTotal().toPlainString());
+        assertEquals("0.00", delTotal.getTotalTax().toPlainString());
+        assertEquals("0.00", delTotal.getListTotalAmount().toPlainString());
+        assertEquals("0.00", delTotal.getTotalAmount().toPlainString());
 
         context.assertIsSatisfied();
     }
 
     @Test
-    public void testCalculateNoStrategy() throws Exception {
+    public void testCalculateMulti() throws Exception {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
+        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
 
         context.checking(new Expectations() {{
             allowing(cart).getCarrierSlaId(); will(returnValue(123L));
+            one(cart).getOrderInfo(); will(returnValue(orderInfo));
+            one(orderInfo).isMultipleDelivery(); will(returnValue(true));
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
-            allowing(carrierSla).getSlaType(); will(returnValue("S"));
+            one(carrierSla).getGuid(); will(returnValue("CS001"));
+            one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FREE));
             one(cart).removeShipping();
+            one(cart).addShippingToCart("CS001", new BigDecimal("2.00"));
+            one(cart).setShippingPrice("CS001", new BigDecimal("0.00"), new BigDecimal("0.00"));
         }});
 
-        final Total delTotal = new DefaultDeliveryCostCalculationStrategy(carrierSlaService, Collections.EMPTY_MAP).calculate(cart);
+        final Total delTotal = new FreeDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
         assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
         assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
@@ -179,4 +203,6 @@ public class DefaultDeliveryCostCalculationStrategyTest {
 
         context.assertIsSatisfied();
     }
+
+
 }

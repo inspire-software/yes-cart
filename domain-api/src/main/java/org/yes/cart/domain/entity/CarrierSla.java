@@ -27,34 +27,11 @@ import java.util.List;
  * Represent carrier SLA, that can be quite complex. At this moment
  * several strategies(types) are supported:
  * <p/>
- * 1. E - External
- * 2. R - Free
+ * 1. E - External (uses script property which should specify Spring bean that implements DeliveryCostStrategy)
+ * 2. R - Free (simply puts 0 delivery cost)
  * <p/>
- * 3. F - Fixed
- * 4. O - Per Order
- * 5. P - Per package
+ * 3. F - Fixed (uses price lists where SKU is the CarrierSla.GUID)
  * <p/>
- * Each FOP stategy has destination flag. It mean that price and percent will be selected as
- * single values in case of F - fixed strategy
- * or
- * null delivery cost in case of free shipping
- * or
- * maximum from destination-weight / destination-volume matrix for Per Order or Per Package.
- * <p/>
- * <p/>
- * This this not represent the actual shipping rates for delivery but price for customer.
- * <p/>
- * Total delivery cost can be limited as well as price and percent
- * <p/>
- * When price ant percent are obtained cost calculation
- * will be following:
- * <p/>
- * (F)ixed
- * delivery cost = 1 * price + max(order_sub_total * percent, percent_not_less)
- * (O) Per Order
- * delivery cost = max( 1 * price                                 + max(order_sub_total * percent, percent_not_less), cost_not_less)
- * (P) Per package
- * delivery cost = max( max(packages qty * price, price_not_less) + max(     item_price * percent, percent_not_less), cost_not_less)
  */
 public interface CarrierSla extends Auditable {
 
@@ -72,16 +49,6 @@ public interface CarrierSla extends Auditable {
      * Fixed price, percent
      */
     String FIXED = "F";
-
-    /**
-     * Per order price, percent
-     */
-    String PER_ORDER = "O";
-
-    /**
-     * Per package price, percent
-     */
-    String PER_PACKAGE = "P";
 
     /**
      * Get pk value.
@@ -169,79 +136,6 @@ public interface CarrierSla extends Auditable {
      */
     void setDisplayDescription(String description);
 
-
-    /**
-     * Get price. This is for internal usage only. Not a part of api.
-     * Price of delivery must be obtained from service.
-     *
-     * @return price.
-     */
-    BigDecimal getPrice();
-
-    /**
-     * Set price. This is for internal usage only.
-     *
-     * @param price price.
-     */
-    void setPrice(BigDecimal price);
-
-    /**
-     * Get percent.
-     *
-     * @return percent.
-     */
-    BigDecimal getPercent();
-
-    /**
-     * Set percent.
-     *
-     * @param percent percent.
-     */
-    void setPercent(BigDecimal percent);
-
-
-    /**
-     * Get minimal cost for delivery.
-     *
-     * @return minimal cost for delivery.
-     */
-    BigDecimal getPriceNotLess();
-
-    /**
-     * Set minimal cost for delivery.
-     *
-     * @param priceNotLess minimal cost for delivery.
-     */
-    void setPriceNotLess(BigDecimal priceNotLess);
-
-    /**
-     * Get minimal amount  for percent.
-     *
-     * @return minimal amount  for percent.
-     */
-    BigDecimal getPercentNotLess();
-
-    /**
-     * Set minimal amount  for percent.
-     *
-     * @param percentNotLess minimal amount  for percent.
-     */
-    void setPercentNotLess(BigDecimal percentNotLess);
-
-    /**
-     * Get minimal delivery cost.
-     *
-     * @return minimal delivery cost.
-     */
-    BigDecimal getCostNotLess();
-
-    /**
-     * Set minimal delivery cost.
-     *
-     * @param costNotLess minimal delivery cost.
-     */
-    void setCostNotLess(BigDecimal costNotLess);
-
     /**
      * Get external script to calculate delivery cost.
      *
@@ -256,21 +150,6 @@ public interface CarrierSla extends Auditable {
      */
 
     void setScript(String script);
-
-
-    /**
-     * Get currency.
-     *
-     * @return currency.
-     */
-    String getCurrency();
-
-    /**
-     * Set currency.
-     *
-     * @param currency currency.
-     */
-    void setCurrency(String currency);
 
 
     /**

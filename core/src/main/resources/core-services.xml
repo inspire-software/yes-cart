@@ -823,8 +823,33 @@
         <constructor-arg index="4" ref="shopService"/>
     </bean>
 
+    <bean id="defaultDeliveryCostRegionalPriceResolver" class="org.yes.cart.shoppingcart.impl.DeliveryCostRegionalPriceResolverImpl">
+        <constructor-arg index="0" ref="priceService"/>
+    </bean>
+
     <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy"> <!-- CPOINT delivery calculation strategy -->
         <constructor-arg index="0" ref="carrierSlaService"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="R">
+                    <bean class="org.yes.cart.shoppingcart.impl.FreeDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                    </bean>
+                </entry>
+                <entry key="E">
+                    <bean class="org.yes.cart.shoppingcart.impl.ExternalDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                    </bean>
+                </entry>
+                <entry key="F">
+                    <bean class="org.yes.cart.shoppingcart.impl.PriceListDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                        <constructor-arg index="1" ref="pricingPolicyProvider"/>
+                        <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">

@@ -59,3 +59,29 @@ create index SKU_BCODE on TSKU (BARCODE);
 
 alter table TSHOP add column DISABLED bit not null default 0;
 -- alter table TSHOP add column DISABLED smallint not null default 0;
+
+
+--
+-- YC-694 Change SLA pricing to use price lists
+--
+
+alter table TCARRIERSLA drop column PRICE;
+alter table TCARRIERSLA drop column PER_CENT;
+alter table TCARRIERSLA drop column PRICE_NOTLESS;
+alter table TCARRIERSLA drop column PERCENT_NOTLESS;
+alter table TCARRIERSLA drop column COST_NOTLESS;
+alter table TCARRIERSLA drop column COST_NOTLESS;
+alter table TCARRIERSLA drop column CURRENCY;
+
+UPDATE TDATAGROUP SET DESCRIPTORS = '
+shopcurrencies-demo.xml,
+countrynames-demo.xml,
+statenames-demo.xml,
+carriernames-demo.xml,
+carriershopnames-demo.xml,
+carrierslanames-demo.xml,
+promotionnames-demo.xml,
+promotioncouponnames-demo.xml,
+skuprices-demo.xml,
+taxnames-demo.xml,
+taxconfignames-demo.xml' WHERE NAME = 'YC DEMO: Initial Data';

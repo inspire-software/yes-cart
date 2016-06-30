@@ -34,14 +34,14 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "carrierslaId", readOnly = true)
     private long carrierslaId;
 
+    @DtoField(value = "guid")
+    private String code;
+
     @DtoField(value = "name")
     private String name;
 
     @DtoField(value = "description")
     private String description;
-
-    @DtoField(value = "currency")
-    private String currency;
 
     @DtoField(value = "maxDays")
     private Integer maxDays;
@@ -49,24 +49,8 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "slaType")
     private String slaType;
 
-    @DtoField(value = "price")
-    private BigDecimal price;
-
-    @DtoField(value = "percent")
-    private BigDecimal percent;
-
     @DtoField(value = "script")
     private String script;
-
-    @DtoField(value = "priceNotLess")
-    private BigDecimal priceNotLess;
-
-    @DtoField(value = "percentNotLess")
-    private BigDecimal percentNotLess;
-
-    @DtoField(value = "costNotLess")
-    private BigDecimal costNotLess;
-
 
     @DtoField(
             value = "carrier",
@@ -107,6 +91,20 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setCarrierslaId(final long carrierslaId) {
         this.carrierslaId = carrierslaId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setCode(final String code) {
+        this.code = code;
     }
 
     /**
@@ -168,20 +166,6 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
-    public String getCurrency() {
-        return currency;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setCurrency(final String currency) {
-        this.currency = currency;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public Integer getMaxDays() {
         return maxDays;
     }
@@ -210,34 +194,6 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     /**
      * {@inheritDoc}
      */
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getPercent() {
-        return percent;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPercent(final BigDecimal percent) {
-        this.percent = percent;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public String getScript() {
         return script;
     }
@@ -247,48 +203,6 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setScript(final String script) {
         this.script = script;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getPriceNotLess() {
-        return priceNotLess;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPriceNotLess(final BigDecimal priceNotLess) {
-        this.priceNotLess = priceNotLess;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getPercentNotLess() {
-        return percentNotLess;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setPercentNotLess(final BigDecimal percentNotLess) {
-        this.percentNotLess = percentNotLess;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public BigDecimal getCostNotLess() {
-        return costNotLess;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setCostNotLess(final BigDecimal costNotLess) {
-        this.costNotLess = costNotLess;
     }
 
     /**
@@ -351,17 +265,12 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     public String toString() {
         return "CarrierSlaDTOImpl{" +
                 "carrierslaId=" + carrierslaId +
+                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", currency='" + currency + '\'' +
                 ", maxDays=" + maxDays +
                 ", slaType='" + slaType + '\'' +
-                ", price=" + price +
-                ", percent=" + percent +
                 ", script='" + script + '\'' +
-                ", priceNotLess=" + priceNotLess +
-                ", percentNotLess=" + percentNotLess +
-                ", costNotLess=" + costNotLess +
                 ", carrierId=" + carrierId +
                 '}';
     }
