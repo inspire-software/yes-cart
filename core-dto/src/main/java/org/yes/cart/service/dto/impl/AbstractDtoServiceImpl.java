@@ -95,6 +95,7 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
         if (entity != null) {
             final DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, converters, dtoFactory);
+            assemblyPostProcess(dto, entity);
             return dto;
         }
         return null;
@@ -139,9 +140,21 @@ public abstract class AbstractDtoServiceImpl<DTOIFACE extends Identifiable, DTOI
         for (IFACE entity : entities) {
             DTOIFACE dto = (DTOIFACE) dtoFactory.getByIface(getDtoIFace());
             assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+            assemblyPostProcess(dto, entity);
             dtos.add(dto);
         }
     }
+
+    /**
+     * Use this hook in subclasses to enhance DTO after main mapping had been applied.
+     *
+     * @param dto dto
+     * @param entity entity
+     */
+    protected void assemblyPostProcess(DTOIFACE dto, IFACE entity) {
+        // extension hook
+    }
+
 
     /**
      * Get the converters repository.

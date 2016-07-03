@@ -48,7 +48,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     private final ProductService productService;
     private final NodeService nodeService;
 
-    private int batchSize = 20;
+    private int batchSize = 100;
 
     public ProductInventoryChangedProcessorImpl(final SkuWarehouseService skuWarehouseService,
                                                 final ProductService productService,
@@ -98,11 +98,10 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                     //flush a batch of updates and release memory:
                     productService.getGenericDao().flush();
                     productService.getGenericDao().clear();
+                    log.info("Reindexed {} SKU", count);
                 }
 
             }
-
-            log.info("Reindexed {} SKU", count);
 
         }
 

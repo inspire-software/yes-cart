@@ -21,12 +21,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Carrier;
-import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierService;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -56,40 +54,13 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
      * {@inheritDoc}
      */
     @Cacheable("carrierService-getCarriersByShopIdAndCurrency")
-    public List<Carrier> getCarriersByShopIdAndCurrency(final long shopId, final String currency) {
+    public List<Carrier> getCarriersByShopId(final long shopId) {
         // This method must be READONLY transaction since we are modifying the list of SLA
         final List<Carrier> rez  = findCarriersByShopId(shopId);
         if (CollectionUtils.isEmpty(rez)) {
             return Collections.emptyList();
         }
-        final List<Carrier> filtered = new ArrayList<Carrier>(rez);
-        filterByCurrency(filtered, currency);
-        return filtered;
-    }
-
-    /**
-     * Filter list of carriers and their SLA by currency.
-     *
-     * @param currency currency to filter
-     * @param carriers to filter
-     */
-    void filterByCurrency(final List<Carrier> carriers,  final String currency) {
-
-        final Iterator<Carrier> carrierIt = carriers.iterator();
-        while (carrierIt.hasNext()) {
-            final Carrier carrier = carrierIt.next();
-            final Iterator<CarrierSla> slaIt = carrier.getCarrierSla().iterator();
-            while (slaIt.hasNext()) {
-                final CarrierSla carrierSla = slaIt.next();
-                if (!currency.equals(carrierSla.getCurrency())) {
-                    slaIt.remove();
-                }
-            }
-            if (carrier.getCarrierSla().isEmpty()) {
-                carrierIt.remove();
-            }
-        }
-
+        return new ArrayList<Carrier>(rez);
     }
 
     /** {@inheritDoc} */

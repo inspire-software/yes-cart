@@ -435,18 +435,16 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             assertEquals(1312L + cntBeforeProdTypeAttrs, cntProdTypeAttrs);   // 1312 new + 3 from initialdata.xml
 
             rs = getConnection().getConnection().createStatement().executeQuery (
-                    "select CODE, PRODUCTTYPE_ID, NAV, NAV_TYPE, RANGE_NAV from TPRODUCTTYPEATTR where GUID = '1496'");
+                    "select CODE, PRODUCTTYPE_ID, NAV_TYPE, RANGE_NAV from TPRODUCTTYPEATTR where GUID = '1496'");
             rs.next();
             assertFalse(rs.isAfterLast());
             String prodAttrCode = rs.getString("CODE");
             long prodAttrPtypeId = rs.getLong("PRODUCTTYPE_ID");
-            boolean prodAttrNav = rs.getBoolean("NAV");
             String prodAttrNavType = rs.getString("NAV_TYPE");
             String prodAttrNavRange = rs.getString("RANGE_NAV");
             rs.close();
             assertEquals("1496", prodAttrCode);
             assertEquals(ptypeId, prodAttrPtypeId);
-            assertFalse(prodAttrNav);
             assertEquals("S", prodAttrNavType);
             assertEquals("", prodAttrNavRange);
 
@@ -794,8 +792,8 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
             allowing(listenerCarrierSla).notifyPing();
             allowing(listenerCarrierSla).notifyPing(with(any(String.class)));
             allowing(listenerCarrierSla).notifyMessage(with(any(String.class)));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")));
-            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("during import row : CsvImportTupleImpl{sid=carrierslanames.csv:1, line=[NEW_V 1 day,,,New Vasuki express 1")), with(any(Exception.class)));
+            one(listenerCarrierSla).notifyError(with(aStringStartingWith("unexpected error during import")), with(any(Exception.class)));
         }});
 
         Set<String> importedFilesSet = new HashSet<String>();

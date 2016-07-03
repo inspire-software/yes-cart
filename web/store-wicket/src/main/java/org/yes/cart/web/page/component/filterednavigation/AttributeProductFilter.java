@@ -17,8 +17,8 @@
 package org.yes.cart.web.page.component.filterednavigation;
 
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 
 /**
@@ -57,13 +57,13 @@ public class AttributeProductFilter extends AbstractProductFilter {
 
             filteredNavigationByAttribute = getCategory().getNavigationByAttributes() == null ? false : getCategory().getNavigationByAttributes();
 
-            final ProductType productType = getCategory().getProductType();
+            final Long productType = categoryServiceFacade.getCategoryProductTypeId(categoryId, ShopCodeContext.getShopId());
 
             if (filteredNavigationByAttribute && productType != null) {
 
                 setNavigationRecords(
                         attributeFilteredNavigationSupport.getFilteredNavigationRecords(
-                                getNavigationContext(), selectedLocale, productType.getProducttypeId())
+                                getNavigationContext(), selectedLocale, productType)
                 );
 
             }

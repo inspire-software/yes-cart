@@ -159,4 +159,18 @@ public interface CustomerDTO extends Identifiable {
     void setCustomerType(String customerType);
 
 
+    /**
+     * Get price type. Price type defines customer segment that has access to this price.
+     *
+     * @return price type
+     */
+    String getPricingPolicy();
+
+    /**
+     * Set price type. Price type defines customer segment that has access to this price.
+     *
+     * @param priceType price type
+     */
+    void setPricingPolicy(String priceType);
+
 }

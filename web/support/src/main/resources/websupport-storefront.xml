@@ -47,7 +47,7 @@
 
     <!-- ################################### cart persistence start ################################# -->
 
-    <bean id="cookieTuplizer" class="org.yes.cart.web.support.shoppingcart.cookiedriven.impl.CookieTuplizerImpl"
+    <bean id="cookieTuplizer" class="org.yes.cart.shoppingcart.support.cookiedriven.impl.CookieTuplizerImpl"
           scope="prototype">
         <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
         <constructor-arg index="1" value="2048"/>
@@ -65,12 +65,12 @@
         <property name="minIdle" value="5"/>
     </bean>
 
-    <bean id="cookieShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+    <bean id="cookieShoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.WebShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="cookieTuplizerPool"/>
     </bean>
 
 
-    <bean id="headerTuplizer" class="org.yes.cart.web.support.shoppingcart.headerdriven.impl.HeaderTuplizerImpl"
+    <bean id="headerTuplizer" class="org.yes.cart.shoppingcart.support.headerdriven.impl.RequestHeaderTuplizerImpl"
           scope="prototype">
         <constructor-arg index="0" value="CHANGE_PASSWORD_ON_PRODUCTION"/>
         <constructor-arg index="1" value="256"/>
@@ -86,17 +86,17 @@
         <property name="minIdle" value="5"/>
     </bean>
 
-    <bean id="headerShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+    <bean id="headerShoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.WebShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="headerTuplizerPool"/>
     </bean>
 
-    <bean id="cartRepository" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ResilientCartRepositoryImpl">
+    <bean id="cartRepository" class="org.yes.cart.shoppingcart.support.tokendriven.impl.ResilientCartRepositoryImpl">
         <constructor-arg index="0" ref="shoppingCartStateService"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2">
             <bean parent="txProxyTemplate">
                 <property name="target">
-                    <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.CartUpdateProcessorImpl">
+                    <bean class="org.yes.cart.shoppingcart.support.tokendriven.impl.CartUpdateProcessorImpl">
                         <constructor-arg index="0" ref="shoppingCartStateService"/>
                         <constructor-arg index="1" ref="addressService"/>
                         <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
@@ -108,7 +108,7 @@
                                  appear we can always switch back to Java SDK serialisation, just swap
                                  the commented out bean.
                             -->
-                            <bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ShoppingCartStateSerializerJacksonImpl"/>
+                            <bean class="org.yes.cart.shoppingcart.support.tokendriven.impl.ShoppingCartStateSerializerJacksonImpl"/>
                             <!--<bean class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.ShoppingCartStateSerializerSdkImpl"/>-->
                         </constructor-arg>
                     </bean>
@@ -130,7 +130,7 @@
         <!--</constructor-arg>-->
     </bean>
 
-    <bean id="tokenTuplizer" class="org.yes.cart.web.support.shoppingcart.tokendriven.impl.TokenTuplizerImpl"
+    <bean id="tokenTuplizer" class="org.yes.cart.shoppingcart.support.tokendriven.impl.WebTokenTuplizerImpl"
           scope="prototype">
         <constructor-arg index="0" ref="cartRepository"/>
         <constructor-arg index="1" value="yc"/>
@@ -144,21 +144,21 @@
         <property name="minIdle" value="5"/>
     </bean>
 
-    <bean id="tokenShoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterImpl">
+    <bean id="tokenShoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.WebShoppingCartPersisterImpl">
         <constructor-arg index="0" ref="tokenTuplizerPool"/>
     </bean>
 
     <!-- Decorators for default tuplizers and persisters -->
-    <bean id="tuplizerPool" class="org.yes.cart.web.support.shoppingcart.impl.TuplizerPoolDecoratorImpl">
+    <bean id="tuplizerPool" class="org.yes.cart.shoppingcart.support.impl.TuplizerPoolDecoratorImpl">
         <constructor-arg index="0" ref="tokenTuplizerPool"/>
     </bean>
 
-    <bean id="shoppingCartPersister" class="org.yes.cart.web.support.shoppingcart.impl.ShoppingCartPersisterDecoratorImpl">
+    <bean id="shoppingCartPersister" class="org.yes.cart.shoppingcart.support.impl.ShoppingCartPersisterDecoratorImpl">
         <constructor-arg index="0" ref="tokenShoppingCartPersister"/>
     </bean>
 
 
-    <bean id="commandConfig" class="org.yes.cart.web.shoppingcart.impl.CommandConfigImpl">
+    <bean id="commandConfig" class="org.yes.cart.shoppingcart.support.impl.CommandConfigImpl">
         <property name="cmdKeys">
             <list>
                 <value>addToCartCmd</value>
@@ -180,11 +180,15 @@
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
                 <value>setQuantityToCartCmd</value>
+                <value>setPriceCmd</value>
+                <value>recalculatePriceCmd</value>
                 <value>qty</value>
                 <value>type</value>
                 <value>wlv</value>
                 <value>sku</value>
                 <value>wla</value>
+                <value>cip</value>
+                <value>aup</value>
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
@@ -205,6 +209,8 @@
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
+                <value>setPriceCmd</value>
+                <value>recalculatePriceCmd</value>
             </list>
         </property>
     </bean>
@@ -228,13 +234,16 @@
                     <constructor-arg index="0" ref="productService"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverSearchImpl">
-                    <constructor-arg index="0" ref="attributeService"/>
-                    <constructor-arg index="1" ref="categoryService"/>
+                    <constructor-arg index="0" ref="shopService"/>
+                    <constructor-arg index="1" ref="attributeService"/>
+                    <constructor-arg index="2" ref="categoryService"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverCategoryImpl">
-                    <constructor-arg index="0" ref="categoryService"/>
-                    <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="luceneQueryFactory"/>
+                    <constructor-arg index="0" ref="shopService"/>
+                    <constructor-arg index="1" ref="categoryService"/>
+                    <constructor-arg index="2" ref="shopSearchSupportService"/>
+                    <constructor-arg index="3" ref="productService"/>
+                    <constructor-arg index="4" ref="luceneQueryFactory"/>
                 </bean>
                 <bean class="org.yes.cart.web.support.service.impl.CentralViewResolverContentImpl">
                     <constructor-arg index="0" ref="contentService"/>

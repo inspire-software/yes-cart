@@ -15,24 +15,6 @@
   -->
 
 <html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<wicket:head>
-    <wicket:link>
-        <script src="../../../../../../js/responsive-tabs.js" type="text/javascript"></script>
-    </wicket:link>
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#productDetailsTabs a').click(function(e) {
-                e.preventDefault();
-                $( this ).tab( 'show' );
-            });
-
-            fakewaffle.responsiveTabs([ 'xs', 'sm' ]);
-
-        });
-    </script>
-
-</wicket:head>
 <body>
 
 <wicket:panel>
@@ -182,6 +164,22 @@
         </div>
 
     </div>
+
+    <wicket:link>
+        <script src="../../../../../../js/responsive-tabs.js" type="text/javascript"></script>
+    </wicket:link>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#productDetailsTabs a').click(function(e) {
+                e.preventDefault();
+                $( this ).tab( 'show' );
+            });
+
+            fakewaffle.responsiveTabs([ 'xs', 'sm' ]);
+
+        });
+    </script>
 
 </wicket:panel>
 

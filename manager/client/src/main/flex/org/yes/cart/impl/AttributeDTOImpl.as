@@ -52,6 +52,13 @@ public class AttributeDTOImpl {
 
     public var choiceData:Object;
 
+    public var store:Boolean;
+
+    public var primary:Boolean;
+
+    public var search:Boolean;
+
+    public var navigation:Boolean;
 
 
     public function AttributeDTOImpl() {

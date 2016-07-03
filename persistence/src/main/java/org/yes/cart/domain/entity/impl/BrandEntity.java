@@ -169,6 +169,20 @@ public class BrandEntity implements org.yes.cart.domain.entity.Brand, java.io.Se
         }
         return null;
     }
+
+
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
+
+
 }
 
 

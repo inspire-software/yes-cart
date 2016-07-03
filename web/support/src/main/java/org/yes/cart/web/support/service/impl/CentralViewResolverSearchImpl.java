@@ -18,10 +18,11 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -39,12 +40,15 @@ public class CentralViewResolverSearchImpl implements CentralViewResolver {
 
     private static final Pair<String, String> DEFAULT = new Pair<String, String>(CentralViewLabel.SEARCH_LIST, CentralViewLabel.SEARCH_LIST);
 
+    private final ShopService shopService;
     private final AttributeService attributeService;
     private final CategoryService categoryService;
 
 
-    public CentralViewResolverSearchImpl(final AttributeService attributeService,
+    public CentralViewResolverSearchImpl(final ShopService shopService,
+                                         final AttributeService attributeService,
                                          final CategoryService categoryService) {
+        this.shopService = shopService;
         this.attributeService = attributeService;
         this.categoryService = categoryService;
     }
@@ -69,12 +73,12 @@ public class CentralViewResolverSearchImpl implements CentralViewResolver {
             if (parameters.containsKey(WebParametersKeys.CATEGORY_ID)) {
                 final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
                 if (categoryId > 0L) {
-                    final Category category = categoryService.getById(categoryId);
-                    if (category != null && category.getProductType() != null) {
-                        final String searchTemplate = category.getProductType().getUisearchtemplate();
-                        if (StringUtils.isNotBlank(searchTemplate)) {
-                            return new Pair<String, String>(searchTemplate, CentralViewLabel.SEARCH_LIST);
-                        }
+
+                    final long shopId = ShopCodeContext.getShopId();
+
+                    final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
+                    if (StringUtils.isNotBlank(searchTemplate)) {
+                        return new Pair<String, String>(searchTemplate, CentralViewLabel.SEARCH_LIST);
                     }
                 }
             }

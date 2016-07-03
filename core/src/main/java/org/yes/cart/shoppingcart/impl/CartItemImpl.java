@@ -53,6 +53,7 @@ public class CartItemImpl implements CartItem {
 
     private boolean gift;
     private boolean promoApplied;
+    private boolean fixedPrice;
     private String appliedPromo;
 
     /**
@@ -257,6 +258,20 @@ public class CartItemImpl implements CartItem {
      */
     public void setGift(final boolean gift) {
         this.gift = gift;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isFixedPrice() {
+        return fixedPrice;
+    }
+
+    /**
+     * Fixed price flag.
+     *
+     * @param fixedPrice fixed price
+     */
+    public void setFixedPrice(final boolean fixedPrice) {
+        this.fixedPrice = fixedPrice;
     }
 
     /** {@inheritDoc} */

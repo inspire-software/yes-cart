@@ -39,6 +39,8 @@ public class CustomerDTOImpl {
 
     public var customerType : String;
 
+    public var pricingPolicy : String;
+
     public function CustomerDTOImpl() {
     }
 }

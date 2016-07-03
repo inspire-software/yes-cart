@@ -36,6 +36,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String name;
     private String description;
     private String fspointer;
+    private boolean disabled;
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
@@ -93,6 +94,14 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setFspointer(String fspointer) {
         this.fspointer = fspointer;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public Set<ShopUrl> getShopUrl() {
@@ -417,6 +426,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     public String getAttributeValueByCode(final String attributeCode) {
         final AttrValueShop val = getAttributeByCode(attributeCode);
         return val != null ? val.getVal() : null;
+    }
+
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValueShop val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
     }
 
     @Override

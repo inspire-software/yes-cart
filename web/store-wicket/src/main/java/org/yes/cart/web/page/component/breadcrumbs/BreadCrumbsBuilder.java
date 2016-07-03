@@ -41,6 +41,7 @@ public interface BreadCrumbsBuilder {
      * 2. attributive filters, for example ip phones [price range, brands, weight, ect]
      *
      * @param locale                locale
+     * @param shopId                current shop id
      * @param categoryId            current category id
      * @param pageParameters        current query string
      * @param shopCategoryIds       all categoryIds, that belong to shop
@@ -52,6 +53,7 @@ public interface BreadCrumbsBuilder {
      * @return list of crumbs
      */
     List<Crumb> getBreadCrumbs(String locale,
+                               long shopId,
                                long categoryId,
                                PageParameters pageParameters,
                                Set<Long> shopCategoryIds,

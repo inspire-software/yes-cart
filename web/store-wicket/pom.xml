@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>web</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.3.0-SNAPSHOT</version>
     </parent>
     <artifactId>yes-shop-wicket</artifactId>
     <packaging>war</packaging>
@@ -401,9 +401,6 @@
                 <includes>
                     <include>**/websupport-cluster.xml</include>
                     <include>**/websupport-persistence.xml</include>
-                    <include>**/yc-ws-cluster.xml</include>
-                    <include>**/yc-jgroups-udp.xml</include>
-                    <include>**/logback.xml</include>
                 </includes>
             </resource>
             <resource>
@@ -412,9 +409,6 @@
                 <excludes>
                     <exclude>**/websupport-cluster.xml</exclude>
                     <exclude>**/websupport-persistence.xml</exclude>
-                    <exclude>**/yc-ws-cluster.xml</exclude>
-                    <exclude>**/yc-jgroups-udp.xml</exclude>
-                    <exclude>**/logback.xml</exclude>
                 </excludes>
             </resource>
             <resource>
@@ -422,6 +416,18 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
+                    <include>yc-jgroups-udp.xml</include>
+                    <include>yc-ws-cluster.xml</include>
+                    <include>yc-config.properties</include>
+                    <include>yc-license.txt</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}/YES</directory>
+                <includes>
+                    <include>logback.xml</include>
+                    <include>logging.properties</include>
                 </includes>
             </resource>
         </resources>

@@ -19,8 +19,6 @@ package org.yes.cart.bulkimport.service.impl;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.bulkcommon.service.DataDescriptorResolver;
 import org.yes.cart.bulkcommon.service.ImportDirectorService;
@@ -37,6 +35,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
+import org.yes.cart.service.async.impl.JobStatusListenerWithLoggerImpl;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -45,6 +44,7 @@ import org.yes.cart.service.async.model.impl.JobContextImpl;
 import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ZipUtils;
 import org.yes.cart.web.service.ws.client.AsyncFlexContextImpl;
 
@@ -63,8 +63,6 @@ import java.util.*;
  * Time: 14:12:54
  */
 public class ImportDirectorImplService extends SingletonJobRunner implements ImportDirectorService {
-
-    private final Logger LOG = LoggerFactory.getLogger(ImportDirectorImplService.class);
 
     private final String pathToArchiveDirectory;
 
@@ -140,7 +138,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
 
         final String rootPath = resolveImportDirectory(fileName);
 
-        return doJob(new JobContextImpl(async, new JobStatusListenerImpl(logSize, timeout),
+        return doJob(new JobContextImpl(async, new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(logSize, timeout), ShopCodeContext.getLog(this)),
                 new HashMap<String, Object>() {{
                     put(JobContextKeys.IMPORT_DESCRIPTOR_GROUP, descriptorGroup);
                     put(JobContextKeys.IMPORT_FILE, fileName);
@@ -188,13 +186,17 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     listener.notifyCompleted();
                 } catch (IOException ioe) {
                     // if we are here this is probably due images failure
-                    LOG.error(ioe.getMessage(), ioe);
-                    listener.notifyError(ioe.getMessage());
+                    listener.notifyError(ioe.getMessage(), ioe);
                     listener.notifyMessage("Import Job completed but there was an IO error: " + ioe.getMessage());
                     listener.notifyCompleted();
-                } catch (Throwable trw) {
+                } catch (Exception exp) {
                     // something very wrong
-                    LOG.error(trw.getMessage(), trw);
+                    listener.notifyError(exp.getMessage(), exp);
+                    listener.notifyMessage("Import Job was terminated. Error: " + exp.getMessage());
+                    listener.notifyCompleted();
+                } catch (Throwable trw) {
+                    // something very, very wrong
+                    ShopCodeContext.getLog(this).error(trw.getMessage(), trw);
                     listener.notifyError(trw.getMessage());
                     listener.notifyMessage("Import Job was terminated. Error: " + trw.getMessage());
                     listener.notifyCompleted();
@@ -202,7 +204,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     try {
                         moveImportFilesToArchive((Set<String>) context.getAttribute(JobContextKeys.IMPORT_FILE_SET));
                     } catch (Exception exp) {
-                        LOG.error("Exception occurred while archiving import files." + exp.getMessage(), exp);
+                        ShopCodeContext.getLog(this).error("Exception occurred while archiving import files." + exp.getMessage(), exp);
                     }
                     ThreadLocalAsyncContextUtils.clear();
                 }
@@ -259,7 +261,7 @@ public class ImportDirectorImplService extends SingletonJobRunner implements Imp
                     }
                     importFile.delete();
                 } catch (IOException e) {
-                    LOG.error(
+                    ShopCodeContext.getLog(this).error(
                             MessageFormat.format("Cant move file {0} to folder {1}", importFileName, dir.getAbsolutePath()),
                             e
                     );

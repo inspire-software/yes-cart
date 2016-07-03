@@ -20,12 +20,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
+import org.yes.cart.dao.EntityFactory;
+import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopCategoryService;
 import org.yes.cart.service.domain.ShopService;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -62,5 +65,39 @@ public class ShopCategoryServiceImplTest extends BaseCoreDBTestCase {
         assertNull(shopCategoryService.findByShopCategory(
                 shopService.getById(10L),
                 categoryService.findById(133L)));
+    }
+
+    @Test
+    public void testAssignUnassignCategoryToShop() {
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        EntityFactory entityFactory = shopService.getGenericDao().getEntityFactory();
+        Category rootCategory = categoryService.getRootCategory();
+        Category category = entityFactory.getByIface(Category.class);
+        category.setName("test category");
+        category.setParentId(rootCategory.getCategoryId());
+        category = categoryService.create(category);
+        assertNotNull(category);
+        Shop shop = shopService.getById(10L); //SHOIP1
+        ShopCategory shopCategory = shopCategoryService.assignToShop(category.getCategoryId(), shop.getShopId());
+        assertNotNull(shopCategory);
+        shop = shopService.getById(10L); //SHOIP1
+        boolean found = false;
+        for (ShopCategory sc : shop.getShopCategory()) {
+            if (sc.getShopCategoryId() == shopCategory.getShopCategoryId()) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
+        shopCategoryService.unassignFromShop(category.getCategoryId(), shop.getShopId());
+        shop = shopService.getById(10L); //SHOIP1
+        found = false;
+        for (ShopCategory sc : shop.getShopCategory()) {
+            if (sc.getShopCategoryId() == shopCategory.getShopCategoryId()) {
+                found = true;
+                break;
+            }
+        }
+        assertFalse(found);
     }
 }

@@ -63,6 +63,10 @@
         DESCRIPTION longtext,
         ETYPE_ID bigint not null,
         ATTRIBUTEGROUP_ID bigint not null,
+        STORE bit comment 'Will attribute be stored in FT index',
+        SEARCH bit comment 'Will attribute be used for searching',
+        SEARCHPRIMARY bit comment 'Will attribute be used for exact searching',
+        NAV bit comment 'Will be used in filtered navigation',
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -139,15 +143,9 @@
         DISPLAYNAME longtext,
         DESCRIPTION longtext,
         DISPLAYDESCRIPTION longtext,
-        CURRENCY varchar(3) not null,
         MAX_DAYS integer,
         SLA_TYPE varchar(1) not null,
-        PRICE decimal(19,2),
-        PER_CENT decimal(19,2),
         SCRIPT longtext,
-        PRICE_NOTLESS decimal(19,2),
-        PERCENT_NOTLESS decimal(19,2),
-        COST_NOTLESS decimal(19,2),
         BILLING_ADDRESS_NOT_REQUIRED bit not null,
         DELIVERY_ADDRESS_NOT_REQUIRED bit not null,
         SUPPORTED_PGS varchar(255),
@@ -178,6 +176,7 @@
         CATEGORY_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
         PARENT_ID bigint,
+        LINKTO_ID bigint,
         RANK integer comment 'What the default order of child category in parent ?',
         PRODUCTTYPE_ID bigint comment 'Default product type in category, can be null if category contains different product types',
         NAME varchar(255) not null,
@@ -248,6 +247,7 @@
         PASSWORD varchar(255) not null,
         PUBLICKEY varchar(255),
         CUSTOMERTYPE varchar(255),
+        PRICINGPOLICY varchar(255),
         AUTHTOKEN varchar(255),
         AUTHTOKENEXPIRY datetime,
         TAG varchar(255) comment 'Set of customer tags',
@@ -352,6 +352,7 @@
         TAX_CODE varchar(255) not null,
         IS_GIFT  bit not null default 0,
         IS_PROMO_APPLIED bit not null default 0,
+        IS_FIXED_PRICE bit not null default 0,
         APPLIED_PROMO varchar(255),
         CODE varchar(255) not null,
         PRODUCTNAME longtext not null,
@@ -378,6 +379,7 @@
         TAX_CODE varchar(255) not null,
         IS_GIFT  bit not null default 0,
         IS_PROMO_APPLIED bit not null default 0,
+        IS_FIXED_PRICE bit not null default 0,
         APPLIED_PROMO varchar(255),
         CODE varchar(255) not null,
         PRODUCTNAME longtext not null,
@@ -546,6 +548,7 @@
         VERSION bigint not null default 0,
         CODE varchar(255) not null comment 'Product or product sku code' unique,
         MANUFACTURER_CODE varchar(255),
+        PIM_CODE varchar(255),
         AVAILABLEFROM datetime comment 'AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders',
         AVAILABLETO datetime,
         NAME varchar(255) not null,
@@ -661,9 +664,6 @@
         RANK integer default 500 comment 'What order for filtered navigation',
         VISIBLE bit comment 'Is attribute visible on storefront',
         SIMILARITY bit comment 'Will attribute be used for calculate products similarity',
-        STORE bit comment 'Will attribute be stored in FT index',
-        SEARCH bit comment 'Will attribute be used for searching',
-        SEARCHPRIMARY bit comment 'Will attribute be used for exact searching',
         NAV bit comment 'Will be used in filtered navigation',
         NAV_TYPE varchar(1) default 'S' comment 'S - single, R- range',
         RANGE_NAV longtext comment 'In case of range navigation hold the ranges values',
@@ -711,6 +711,7 @@
         NAME varchar(64) not null,
         DESCRIPTION longtext,
         FSPOINTER longtext not null comment 'Point to jsps',
+        DISABLED bit not null default 0,
         URI varchar(255),
         TITLE varchar(255),
         METAKEYWORDS varchar(255),
@@ -869,6 +870,7 @@
         SALE_FROM datetime,
         SALE_TO datetime,
         TAG varchar(45),
+        PRICINGPOLICY varchar(255),
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),
@@ -1063,6 +1065,7 @@
         CART_STATE varbinary(16384),
         EMPTY bit not null,
         CUSTOMER_EMAIL varchar(255),
+        ORDERNUM varchar(255),
         primary key (TSHOPPINGCARTSTATE_ID)
     );
 
@@ -1509,7 +1512,10 @@
         foreign key (PRODUCT_ID) 
         references TPRODUCT (PRODUCT_ID);
 
-
+    create index PRODUCT_MCODE on TPRODUCT (MANUFACTURER_CODE);
+    create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
+    create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
+    create index SKU_BCODE on TSKU (BARCODE);
 
     alter table TSKUPRICE
         add index FK_SP_SHOP (SHOP_ID), 
@@ -1518,6 +1524,7 @@
         references TSHOP (SHOP_ID);
 
     create index SKUPRICE_SKUCODE on TSKUPRICE (SKU_CODE);
+    create index SKUPRICE_PRICINGPOLICY on TSKUPRICE (PRICINGPOLICY);
 
 
     alter table TSKUWAREHOUSE 

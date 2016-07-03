@@ -19,9 +19,12 @@ package org.yes.cart.web.page.component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
 /**
@@ -72,4 +75,13 @@ public class ContentCentralView extends AbstractCentralView {
         return category;
     }
 
+    @Override
+    protected String getRelCanonical(final Seo seo, final String language) {
+
+        final String uri = getBookmarkService().saveBookmarkForContent(String.valueOf(getCategory().getCategoryId()));
+
+        return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                + WebParametersKeys.CONTENT_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
+
+    }
 }

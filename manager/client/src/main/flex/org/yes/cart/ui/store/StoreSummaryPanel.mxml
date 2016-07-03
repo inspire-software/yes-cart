@@ -76,6 +76,16 @@
 
             initWatchers();
 
+            initDisabledFlag();
+
+        }
+
+        private function initDisabledFlag():void {
+            if (!newStoreFlag) {
+                var _online:Boolean = (this._shopDTOImpl.disabled == false);
+                onlineCheckBox.selected = _online;
+                activateButton.label = resourceManager.getString('StoreSummaryPanel', _online ? 'deactivate' : 'activate');
+            }
         }
 
         private function clearWatchers():void {
@@ -112,6 +122,13 @@
                 remoteShopService.create(_shopDTOImpl);
             } else {
                 remoteShopService.update(_shopDTOImpl);
+            }
+        }
+
+        private function onActivateClick(event:flash.events.MouseEvent):void {
+
+            if (!newStoreFlag) {
+                remoteShopService.updateDisabledFlag(_shopDTOImpl.shopId, !_shopDTOImpl.disabled);
             }
         }
 
@@ -156,12 +173,24 @@
         <mx:method id="update" name="update"
                    result="onUpdateResult(event)"
                    fault="onRpcMethodFault(event)"/>
+        <mx:method id="updateDisabledFlag" name="updateDisabledFlag"
+                   result="onUpdateResult(event)"
+                   fault="onRpcMethodFault(event)"/>
 
     </mx:RemoteObject>
 
     <mx:Form>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='code')">
             <mx:TextInput id="codeTextInput" width="300"/>
+        </mx:FormItem>
+        <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='onlineStatus')"
+                     visible="{!newStoreFlag}" includeInLayout="{!newStoreFlag}">
+            <mx:HBox>
+                <mx:CheckBox id="onlineCheckBox" enabled="false"/>
+                <mx:Button id="activateButton"
+                           label="@Resource(bundle='StoreSummaryPanel',key='deactivate')"
+                           click="onActivateClick(event)"/>
+            </mx:HBox>
         </mx:FormItem>
         <mx:FormItem label="@Resource(bundle='StoreSummaryPanel',key='name')">
             <mx:TextInput id="nameTextInput" width="300"/>

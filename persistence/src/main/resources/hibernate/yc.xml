@@ -261,6 +261,28 @@
             <column name="ATTRIBUTEGROUP_ID" not-null="true"/>
         </many-to-one>
 
+        <property name="store" type="boolean">
+            <column name="STORE">
+                <comment>Will attribute be stored in FT index</comment>
+            </column>
+        </property>
+        <property name="search" type="boolean">
+            <column name="SEARCH">
+                <comment>Will attribute be used for searching</comment>
+            </column>
+        </property>
+        <property name="primary" type="boolean">
+            <column name="SEARCHPRIMARY">
+                <comment>Will attribute be used for exact searching</comment>
+            </column>
+        </property>
+
+        <property name="navigation" type="boolean">
+            <column name="NAV">
+                <comment>Will be used in filtered navigation</comment>
+            </column>
+        </property>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -770,27 +792,7 @@
                 <comment>Will attribute be used for calculate products similarity</comment>
             </column>
         </property>
-        <property name="store" type="boolean">
-            <column name="STORE">
-                <comment>Will attribute be stored in FT index</comment>
-            </column>
-        </property>
-        <property name="search" type="boolean">
-            <column name="SEARCH">
-                <comment>Will attribute be used for searching</comment>
-            </column>
-        </property>
-        <property name="primary" type="boolean">
-            <column name="SEARCHPRIMARY">
-                <comment>Will attribute be used for exact searching</comment>
-            </column>
-        </property>
 
-        <property name="navigation" type="boolean">
-            <column name="NAV">
-                <comment>Will be used in filtered navigation</comment>
-            </column>
-        </property>
         <property name="navigationType" type="string" length="1">
             <column name="NAV_TYPE" default="'S'" length="1">
                 <comment>S - single, R- range</comment>
@@ -943,6 +945,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="parentId" column="PARENT_ID" type="long"/>
+        <property name="linkToId" column="LINKTO_ID" type="long" not-null="false"/>
         <property name="rank" type="int" not-null="false">
             <column name="RANK">
                 <comment>
@@ -1067,9 +1070,14 @@
                 <comment>Product or product sku code</comment>
             </column>
         </property>
-        <property name="manufacturerCode" type="string" length="255" not-null="false">
+        <property name="manufacturerCode" type="string" length="255" index="PRODUCT_MCODE" not-null="false">
             <column name="MANUFACTURER_CODE" length="255" not-null="false">
                 <comment>Product or product sku code</comment>
+            </column>
+        </property>
+        <property name="pimCode" type="string" length="255" index="PRODUCT_PCODE" not-null="false">
+            <column name="PIM_CODE" length="255" not-null="false">
+                <comment>Product code in PIM</comment>
             </column>
         </property>
         <property name="availablefrom" type="timestamp" not-null="false">
@@ -1208,7 +1216,7 @@
         <version name="version" column="VERSION" type="long"/>
 
         <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
-        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" not-null="false"/>
+        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" index="SKU_MCODE" not-null="false"/>
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>
@@ -1230,7 +1238,7 @@
             </column>
         </property>
 
-        <property name="barCode" length="128" type="string">
+        <property name="barCode" length="128" type="string" index="SKU_BCODE">
             <column name="BARCODE" length="128"/>
         </property>
 
@@ -1307,6 +1315,7 @@
                 </comment>
             </column>
         </property>
+        <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" index="SKUPRICE_PRICINGPOLICY" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1471,6 +1480,7 @@
                 </comment>
             </column>
         </property>
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true"/>
         <set name="shopUrl" inverse="true" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="true"/>
@@ -1752,6 +1762,7 @@
         <property name="authTokenExpiry" type="timestamp" column="AUTHTOKENEXPIRY" not-null="false"/>
         <property name="publicKey" length="255" type="java.lang.String" column="PUBLICKEY" not-null="false"/>
         <property name="customerType" length="255" type="java.lang.String" column="CUSTOMERTYPE" not-null="false"/>
+        <property name="pricingPolicy" length="255" type="java.lang.String" column="PRICINGPOLICY" not-null="false"/>
 
         <property name="tag" type="string" length="255">
             <column name="TAG">
@@ -2032,6 +2043,7 @@
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
@@ -2136,6 +2148,7 @@
 
         <property name="gift" column="IS_GIFT" type="boolean" length="1" not-null="true"/>
         <property name="promoApplied" column="IS_PROMO_APPLIED" type="boolean" length="1" not-null="true"/>
+        <property name="fixedPrice" column="IS_FIXED_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
@@ -2208,19 +2221,11 @@
         <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="displayDescription" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
 
-        <property name="currency" column="CURRENCY" type="string" length="3" not-null="true"/>
         <property name="maxDays" column="MAX_DAYS" type="java.lang.Integer"/>
 
         <property name="slaType"  column="SLA_TYPE" type="string" length="1" not-null="true"/>
-        <property name="price"    column="PRICE"    type="java.math.BigDecimal" not-null="true"/>
-        <property name="percent"  column="PER_CENT" type="java.math.BigDecimal" not-null="true"/>
         <property name="script"   column="SCRIPT"   type="string" length="4000"/>
 
-
-        <property name="priceNotLess"    column="PRICE_NOTLESS"   type="java.math.BigDecimal"/>
-        <property name="percentNotLess"  column="PERCENT_NOTLESS" type="java.math.BigDecimal"/>
-        <property name="costNotLess"     column="COST_NOTLESS"    type="java.math.BigDecimal"/>
-        
         <property name="billingAddressNotRequired" column="BILLING_ADDRESS_NOT_REQUIRED" type="boolean" not-null="true"/>
         <property name="deliveryAddressNotRequired" column="DELIVERY_ADDRESS_NOT_REQUIRED" type="boolean" not-null="true"/>
 
@@ -2409,6 +2414,7 @@
         <property name="customerEmail" column="CUSTOMER_EMAIL" type="string" length="255" index="SHOPPINGCARTSTATE_EMAIL"/>
         <property name="empty" column="EMPTY" type="boolean" />
         <property name="state" column="CART_STATE" type="byte[]" length="16384" not-null="true"/>
+        <property name="ordernum" column="ORDERNUM" type="string" length="16" not-null="false"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2544,7 +2550,13 @@
 
     <query name="SHOPPINGCARTSTATE.BY.EMAIL">
         <![CDATA[
-       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1
+       select scs from ShoppingCartStateEntity scs where scs.customerEmail  = ?1 and scs.ordernum IS NULL
+       ]]>
+    </query>
+
+    <query name="SHOPPINGCARTSTATE.BY.ORDERNUM">
+        <![CDATA[
+       select scs from ShoppingCartStateEntity scs where scs.ordernum  = ?1
        ]]>
     </query>
 
@@ -2569,37 +2581,21 @@
        ]]>
     </query>
 
-    <query name="TOPCATEGORIES.BY.SHOPID">
-        <![CDATA[
-       select c from CategoryEntity c, ShopCategoryEntity sc
-       where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by sc.rank, sc.shopCategoryId
-       ]]>
-    </query>
-
     <query name="ALL.TOPCATEGORIES.BY.SHOPID">
         <![CDATA[
-       select c from CategoryEntity c, ShopCategoryEntity sc
-       where c.categoryId = sc.category.categoryId and sc.shop.shopId = ?1
-       order by sc.rank, sc.shopCategoryId
+       select sc from ShopCategoryEntity sc where sc.shop.shopId = ?1
        ]]>
     </query>
 
-    <query name="ROOTCATEORY">
+    <query name="LINKED.CATEGORY.IDS.BY.ID">
+        <![CDATA[
+       select l.categoryId from CategoryEntity l where l.linkToId = ?1
+       ]]>
+    </query>
+
+    <query name="ROOTCATEGORY">
         <![CDATA[
        select c from CategoryEntity c WHERE c.categoryId = c.parentId 
-       ]]>
-    </query>
-
-    <query name="CATEGORIES.BY.PARENTID">
-        <![CDATA[
-       select c from CategoryEntity c where c.parentId = ?1
-       and c.categoryId <> c.parentId 
-       and (c.availablefrom < ?2 OR c.availablefrom IS NULL)
-       and (c.availableto > ?2 OR c.availableto IS NULL)
-       order by c.rank 
        ]]>
     </query>
 
@@ -2614,9 +2610,7 @@
 
     <query cacheable="true" name="CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING">
         <![CDATA[
-       select c from CategoryEntity c where c.parentId = ?1
-       and c.categoryId <> c.parentId
-       order by c.rank
+       select c from CategoryEntity c where c.parentId = ?1 and c.categoryId <> c.parentId
        ]]>
     </query>
 
@@ -2824,15 +2818,23 @@
           <![CDATA[
        select pta
        from  ProductTypeAttrEntity pta
-            where pta.producttype.producttypeId = ?1 and pta.navigation = ?2
+            where pta.producttype.producttypeId = ?1 and pta.visible = ?2 and pta.attribute.navigation = ?3
        ]]>
     </query>
 
     <query name="PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID">
-          <![CDATA[
-       select attr
-       from  ProductTypeAttrEntity pta  inner join pta.attribute attr
+        <![CDATA[
+       select pta.attribute
+       from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
+       ]]>
+    </query>
+
+    <query name="PRODUCT.TYPE.BY.ATTRIBUTE.CODE">
+          <![CDATA[
+       select pta.producttype
+       from  ProductTypeAttrEntity pta
+            where pta.attribute.code = ?1
        ]]>
     </query>
 
@@ -2875,16 +2877,14 @@
     <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
        select a.attribute.code, a.val, a.displayVal from  AttrValueEntityProduct a
-       where a.attribute.code in (?1) and a.product.producttype.producttypeId = ?2
-            group by a.attribute.code, a.val, a.displayVal
+       where a.attribute.code in (?1) group by a.attribute.code, a.val, a.displayVal
        ]]>
     </query>
 
     <query name="PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES">
         <![CDATA[
        select a.attribute.code, a.val, a.displayVal from AttrValueEntityProductSku a
-       where a.attribute.code in (?1) and a.productSku.product.producttype.producttypeId = ?2
-            group by a.attribute.code, a.val, a.displayVal
+       where a.attribute.code in (?1) group by a.attribute.code, a.val, a.displayVal
        ]]>
     </query>
 
@@ -2895,18 +2895,17 @@
        from  ProductTypeAttrEntity pta
             where pta.producttype.producttypeId = ?1
             and pta.navigationType = 'R'
-            and pta.navigation = ?2
-            order by pta.rank
+            and pta.attribute.navigation = ?2
+            and pta.visible = ?3
        ]]>
     </query>
 
-    <query name="PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES">
+    <query name="PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES">
         <![CDATA[
        select distinct b.name, b.name, b.name, 0
        from ProductCategoryEntity pc, ProductEntity p inner join p.brand b
        where p.productId = pc.product.productId
         and pc.category.categoryId in (?1)
-        order by b.name
        ]]>
     </query>
 
@@ -2926,25 +2925,25 @@
 
     <query name="ATTRIBUTE.CODES.NAVIGATION.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.navigation = ?1
+       select distinct a.code from AttributeEntity a where a.navigation = ?1
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.SEARCH.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.navigation = ?2
+       select distinct a.code from AttributeEntity a where a.search = ?1 and a.navigation = ?2
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.STORE.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.store = ?1
+       select distinct a.code from AttributeEntity a where a.store = ?1
        ]]>
     </query>
 
     <query name="ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE">
         <![CDATA[
-       select distinct pt.attribute.code from ProductTypeAttrEntity pt where pt.search = ?1 and pt.primary = ?2
+       select distinct a.code from AttributeEntity a where a.search = ?1 and a.primary = ?2
        ]]>
     </query>
 
@@ -2952,8 +2951,9 @@
         <![CDATA[
        select distinct pt.attribute.code, pt.rank from ProductTypeAttrEntity pt
        where pt.producttype.producttypeId = ?1
-         and pt.navigation = ?2
+         and pt.attribute.navigation = ?2
          and pt.navigationType = 'S'
+         and pt.visible = ?3
        ]]>
     </query>
 
@@ -3085,7 +3085,7 @@
 
     <query name="SEO.URI.BY.CATEGORY.ID">
         <![CDATA[
-                  select c.seoInternal.uri from CategoryEntity c  where c.categoryId = ?1
+                  select c.seoInternal.uri, c.categoryId from CategoryEntity c  where c.categoryId = ?1
        ]]>
     </query>
 
@@ -3120,9 +3120,33 @@
         ]]>
     </query>
 
+    <query name="PRODUCT.IDS.BY.MANUFACTURER.CODE">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.manufacturerCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.PIM.CODE">
+        <![CDATA[
+                 select p.productId from ProductEntity p   where p.pimCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.SKU.BARCODE">
+        <![CDATA[
+                 select s.product.productId from ProductSkuEntity s   where s.barCode = ?1
+        ]]>
+    </query>
+
+    <query name="PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE">
+        <![CDATA[
+                 select avp.product.productId from AttrValueEntityProduct avp   where avp.attribute.code = ?1 and avp.val = ?2
+        ]]>
+    </query>
+
     <query name="SEO.URI.BY.PRODUCT.ID">
         <![CDATA[
-                 select p.seoInternal.uri from ProductEntity p   where p.productId = ?1
+                 select p.seoInternal.uri, p.productId from ProductEntity p   where p.productId = ?1
         ]]>
     </query>
 
@@ -3153,7 +3177,7 @@
 
     <query name="SEO.URI.BY.SKU.ID">
         <![CDATA[
-                 select ps.seoInternal.uri from ProductSkuEntity ps   where ps.skuId = ?1
+                 select ps.seoInternal.uri, ps.skuId from ProductSkuEntity ps   where ps.skuId = ?1
         ]]>
     </query>
 
@@ -3302,28 +3326,28 @@
     <query name="BRAND.NAME.AND.GUID.BY.IMAGE.NAME">
         <![CDATA[
             select a.brand.name, a.brand.guid from AttrValueEntityBrand a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="CATEGORY.URI.AND.GUID.BY.IMAGE.NAME">
         <![CDATA[
             select a.category.seoInternal.uri, a.category.guid from AttrValueEntityCategory a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="PRODUCT.CODE.BY.IMAGE.NAME">
         <![CDATA[
             select a.product.code from AttrValueEntityProduct a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
     <query name="SKU.CODE.BY.IMAGE.NAME">
         <![CDATA[
             select a.productSku.code from AttrValueEntityProductSku a
-            where a.val = ?1
+            where a.attribute.code like ?2 and a.val = ?1
         ]]>
     </query>
 
@@ -3408,7 +3432,14 @@
     <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP">
         <![CDATA[
             select sp from SkuPriceEntity sp
-            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3
+            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '')
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP.AND.POLICY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode = ?1 and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
         ]]>
     </query>
 
@@ -3423,7 +3454,15 @@
         <![CDATA[
             select sp from SkuPriceEntity sp
             where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
-                and sp.currency = ?2 and sp.shop.shopId = ?3
+                and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '')
+        ]]>
+    </query>
+
+    <query name="SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP.AND.POLICY">
+        <![CDATA[
+            select sp from SkuPriceEntity sp
+            where sp.skuCode in (select s.code from ProductSkuEntity s where s.product.productId = ?1)
+                and sp.currency = ?2 and sp.shop.shopId = ?3 and (sp.pricingPolicy is null or sp.pricingPolicy = '' or sp.pricingPolicy = ?4)
         ]]>
     </query>
 
@@ -3445,7 +3484,7 @@
 
     <query name="SKUPRICE.BY.SKUCODE.ALL">
         <![CDATA[
-            select sp from SkuPriceEntity sp where sp.skuCode  = ?1
+            select sp from SkuPriceEntity sp where sp.skuCode  = ?1 and (sp.pricingPolicy is NULL or sp.pricingPolicy = '')
         ]]>
     </query>
 

@@ -84,27 +84,6 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>DECIMAL</data-type>
-            <name>price</name>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>DECIMAL</data-type>
-            <name>percent</name>
-            <value-constant>0.00</value-constant>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>7</column-index>
-            <field-type>FIELD</field-type>
-            <name>currency</name>
-        </column-descriptor>
-
-        <column-descriptor>
             <column-index>8</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Carrier</entity-type>

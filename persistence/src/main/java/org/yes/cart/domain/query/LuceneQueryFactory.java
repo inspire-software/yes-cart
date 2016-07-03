@@ -66,6 +66,6 @@ public interface LuceneQueryFactory {
      * @param categories            given category ids
      * @return ordered by cookie name list of cookies
      */
-    NavigationContext getFilteredNavigationQueryChain(Long shopId, List<Long> categories, Map<String, List> requestParameters);
+    NavigationContext getFilteredNavigationQueryChain(long shopId, List<Long> categories, Map<String, List> requestParameters);
 
 }

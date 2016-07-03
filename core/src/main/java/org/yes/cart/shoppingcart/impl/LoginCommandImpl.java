@@ -18,12 +18,13 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -36,7 +37,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class LoginCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101026L;
 
@@ -48,11 +49,17 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
      * @param registry shopping cart command registry
      * @param customerService customer service
      * @param shopService shop service
+     * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
+     * @param productService product service
      */
     public LoginCommandImpl(final ShoppingCartCommandRegistry registry,
                             final CustomerService customerService,
-                            final ShopService shopService) {
-        super(registry);
+                            final ShopService shopService,
+                            final PriceService priceService,
+                            final PricingPolicyProvider pricingPolicyProvider,
+                            final ProductService productService) {
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.customerService = customerService;
         this.shopService = shopService;
     }
@@ -86,6 +93,7 @@ public class LoginCommandImpl extends AbstractCartCommandImpl implements Shoppin
                 shoppingCart.getShoppingContext().setCustomerName(customerService.formatNameFor(customer, current));
                 shoppingCart.getShoppingContext().setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(shoppingCart, customer);
+                recalculatePricesInCart(shoppingCart);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {

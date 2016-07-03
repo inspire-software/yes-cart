@@ -240,6 +240,22 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      */
     void setPromoApplied(boolean promoApplied);
 
+
+    /**
+     * Returns true if this item has been added as fixed price offer.
+     * {@link #getAppliedPromo()} will contain authorisation code
+     *
+     * @return true if this is a fixed price offer
+     */
+    boolean isFixedPrice();
+
+    /**
+     * Fixed price flag.
+     *
+     * @param fixedPrice fixed price
+     */
+    void setFixedPrice(boolean fixedPrice);
+
     /**
      * Comma separated list of promotion codes that have been applied
      * for this cart item.

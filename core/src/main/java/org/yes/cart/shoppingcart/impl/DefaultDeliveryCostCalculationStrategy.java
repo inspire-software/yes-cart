@@ -16,16 +16,14 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -34,17 +32,16 @@ import java.math.RoundingMode;
  */
 public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
 
-    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
-    private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-
     private static final Total ZERO_TOTAL = new TotalImpl();
 
     private final CarrierSlaService carrierSlaService;
 
-    public DefaultDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService) {
+    private final Map<String, DeliveryCostCalculationStrategy> subStrategies;
+
+    public DefaultDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService,
+                                                  final Map<String, DeliveryCostCalculationStrategy> subStrategies) {
         this.carrierSlaService = carrierSlaService;
+        this.subStrategies = subStrategies;
     }
 
     /** {@inheritDoc} */
@@ -55,38 +52,22 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
         if (cart.getCarrierSlaId() != null) {
             final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
             if (carrierSla != null) {
-                // TODO: YC-154 at this moment fixed or zero delivery prices are supported, so just return the price from sla
-                final String carrierSlaId = String.valueOf(carrierSla.getCarrierslaId());
-                final BigDecimal listPrice = MoneyUtils.notNull(carrierSla.getPrice(), ZERO);
-                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
-                cart.addShippingToCart(carrierSlaId, qty);
-                cart.setShippingPrice(carrierSlaId, listPrice, listPrice);
-                final BigDecimal deliveryListCost = listPrice.multiply(qty).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
-                return new TotalImpl(
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        false,
-                        null,
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost,
-                        false,
-                        null,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost
-                );
+                final DeliveryCostCalculationStrategy strategy = subStrategies.get(carrierSla.getSlaType());
+                if (strategy == null) {
+
+                    ShopCodeContext.getLog(this).error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
+
+                } else {
+
+                    return strategy.calculate(cart);
+
+                }
+
             }
         }
         return ZERO_TOTAL;
+
     }
 
 }

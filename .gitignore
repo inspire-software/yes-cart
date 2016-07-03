@@ -76,6 +76,14 @@ core-modules/core-module-reports/core-module-reports.iml
 
 core-modules/core-module-reports/target/**
 
+core-modules/core-module-cart/core-module-cart.iml
+
+core-modules/core-module-cart/target/**
+
+core-modules/core-module-cart-websupport/core-module-cart-websupport.iml
+
+core-modules/core-module-cart-websupport/target/**
+
 core-modules/core-modules.iml
 
 core-modules/target/**

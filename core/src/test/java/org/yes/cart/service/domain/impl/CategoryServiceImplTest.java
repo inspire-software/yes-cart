@@ -83,40 +83,6 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testAssignUnassignCategoryToShop() {
-        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
-        EntityFactory entityFactory = shopService.getGenericDao().getEntityFactory();
-        Category rootCategory = categoryService.getRootCategory();
-        Category category = entityFactory.getByIface(Category.class);
-        category.setName("test category");
-        category.setParentId(rootCategory.getCategoryId());
-        category = categoryService.create(category);
-        assertNotNull(category);
-        Shop shop = shopService.getById(10L); //SHOIP1
-        ShopCategory shopCategory = categoryService.assignToShop(category.getCategoryId(), shop.getShopId());
-        assertNotNull(shopCategory);
-        shop = shopService.getById(10L); //SHOIP1
-        boolean found = false;
-        for (ShopCategory sc : shop.getShopCategory()) {
-            if (sc.getShopCategoryId() == shopCategory.getShopCategoryId()) {
-                found = true;
-                break;
-            }
-        }
-        assertTrue(found);
-        categoryService.unassignFromShop(category.getCategoryId(), shop.getShopId());
-        shop = shopService.getById(10L); //SHOIP1
-        found = false;
-        for (ShopCategory sc : shop.getShopCategory()) {
-            if (sc.getShopCategoryId() == shopCategory.getShopCategoryId()) {
-                found = true;
-                break;
-            }
-        }
-        assertFalse(found);
-    }
-
-    @Test
     public void testGetCategoryAttributeRecursive() {
         String val = categoryService.getCategoryAttributeRecursive(null, 105L, "SOME_NOT_EXISTING_ATTR", null);
         assertNull(val);
@@ -176,6 +142,52 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testGetChildCategoriesRecursiveIdsTest() {
+        Set<Long> categoryIds = new HashSet<Long>();
+        categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIds(101L);
+        assertEquals(categoryIds.size(), categories.size());
+        assertTrue(categoryIds.containsAll(categories));
+    }
+
+    @Test
+    public void testGetChildCategoriesRecursiveIdsWithLinksTest() {
+        Set<Long> categoryIds = new HashSet<Long>();
+        categoryIds.addAll(Arrays.asList(101L, 102L, 103L, 104L, 105L, 143L, 144L));
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsWithLinks(101L);
+        assertEquals(categoryIds.size(), categories.size());
+        assertTrue(categoryIds.containsAll(categories));
+    }
+
+    @Test
+    public void testGetChildCategoriesRecursiveLinkedTest() {
+        Set<Long> categoryIds = new HashSet<Long>();
+        categoryIds.addAll(Arrays.asList(401L, 411L, 313L));
+        Set<Category> categories = categoryService.getChildCategoriesRecursive(401L);
+        for (Category category : categories) {
+            assertTrue(categoryIds.contains(category.getCategoryId()));
+        }
+    }
+
+    @Test
+    public void testGetChildCategoriesRecursiveIdsLinkedTest() {
+        Set<Long> categoryIds = new HashSet<Long>();
+        categoryIds.addAll(Arrays.asList(401L, 411L, 313L));
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIds(401L);
+        assertEquals(categoryIds.size(), categories.size());
+        assertTrue(categoryIds.containsAll(categories));
+    }
+
+    @Test
+    public void testGetChildCategoriesRecursiveIdsWithLinksLinkedTest() {
+        Set<Long> categoryIds = new HashSet<Long>();
+        categoryIds.addAll(Arrays.asList(401L, 411L, 312L, 313L));
+        List<Long> categories = categoryService.getChildCategoriesRecursiveIdsWithLinks(401L);
+        assertEquals(categoryIds.size(), categories.size());
+        assertTrue(categoryIds.containsAll(categories));
+    }
+
+    @Test
     public void testGetChildCategoriesRecursiveNullTest() {
         Set<Category> categories = categoryService.getChildCategoriesRecursive(0l);
         assertTrue(categories.isEmpty());
@@ -184,6 +196,11 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
     @Test
     public void testIsCategoryHasChildrenTrue() throws Exception {
         assertTrue(categoryService.isCategoryHasChildren(101L));
+    }
+
+    @Test
+    public void testIsCategoryHasChildrenLinkedTrue() throws Exception {
+        assertTrue(categoryService.isCategoryHasChildren(411L));
     }
 
     @Test
@@ -210,5 +227,6 @@ public class CategoryServiceImplTest extends BaseCoreDBTestCase {
         assertFalse(categoryService.isCategoryHasSubcategory(50, 98));      // not existing root   and given sub category
         assertFalse(categoryService.isCategoryHasSubcategory(300, 98));      // existing root   and not existing given sub category
         assertFalse(categoryService.isCategoryHasSubcategory(304, 300)); //reverse
+        assertFalse(categoryService.isCategoryHasSubcategory(411, 313)); //linked
     }
 }

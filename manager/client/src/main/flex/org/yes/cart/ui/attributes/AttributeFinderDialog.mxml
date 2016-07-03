@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
+                title="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+  <mx:Script><![CDATA[
+    import mx.collections.ArrayCollection;
+    import mx.events.ListEvent;
+    import mx.managers.PopUpManager;
+    import mx.rpc.events.FaultEvent;
+    import mx.rpc.events.ResultEvent;
+
+    import org.yes.cart.impl.AttributeDTOImpl;
+
+    import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+    public function get attributeSelection():Array {
+      return attributesGrid.selectedItems;
+    }
+
+    protected function onRpcMethodFault(event:FaultEvent):void {
+      ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+    }
+
+    private function onFindByAttributeGroupCodeResult(event:ResultEvent):void {
+      hasSelection = false;
+
+      var _attributesCollection:ArrayCollection = event.result as ArrayCollection;
+      _attributesCollection.filterFunction = function(item:AttributeDTOImpl):Boolean {
+
+        var _search:String = attributeTextInput.text;
+        if (_search == null || _search == '') {
+          return true;
+        }
+        return item != null && (
+                item.code.indexOf(_search) != -1 ||
+                item.name.indexOf(_search) != -1
+                );
+
+      }
+      _attributesCollection.refresh();
+
+      attributesCollection = _attributesCollection;
+    }
+
+
+    private function onRefreshAttributesClick(event:MouseEvent):void {
+      attributesCollection.refresh();
+    }
+
+
+    private function onAttributeSelected(event:ListEvent):void {
+      hasSelection = attributesGrid.selectedItem != null;
+    }
+
+    private function init():void {
+      remoteAttributeService.findByAttributeGroupCode('PRODUCT');
+    }
+
+    ]]></mx:Script>
+
+  <mx:Boolean id="hasSelection">false</mx:Boolean>
+  <mx:ArrayCollection id="attributesCollection"/>
+
+  <mx:RemoteObject showBusyCursor="true" id="remoteAttributeService" destination="remoteAttributeService"
+                   channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+    <mx:method id="findByAttributeGroupCode" name="findByAttributeGroupCode"
+               result="onFindByAttributeGroupCodeResult(event)"
+               fault="onRpcMethodFault(event)"/>
+
+  </mx:RemoteObject>
+
+  <mx:VBox width="100%" height="100%"
+           paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
+
+    <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
+
+      <mx:Label text="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+      <mx:TextInput id="attributeTextInput" width="100" toolTip="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+
+      <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                 toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                 click="onRefreshAttributesClick(event)"  height="100%"/>
+
+
+    </mx:HBox>
+    <mx:DataGrid width="100%" height="90%" id="attributesGrid" dataProvider="{attributesCollection}"
+                 itemClick="onAttributeSelected(event)">
+      <mx:columns>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='attribute_id')"
+                           dataField="attributeId" width="30"
+                />
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='code')"
+                           dataField="code" width="100"
+                />
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='name')"
+                           dataField="name"/>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='etype')"
+                           dataField="etypeName"/>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='navigation')"
+                           dataField="navigation" width="100" textAlign="center">
+          <mx:itemRenderer>
+            <mx:Component>
+              <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.navigation}"/></mx:HBox>
+            </mx:Component>
+          </mx:itemRenderer>
+        </mx:DataGridColumn>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='search')"
+                           dataField="search" width="100" textAlign="center">
+          <mx:itemRenderer>
+            <mx:Component>
+              <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.search}"/></mx:HBox>
+            </mx:Component>
+          </mx:itemRenderer>
+        </mx:DataGridColumn>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='store')"
+                           dataField="store" width="100" textAlign="center">
+          <mx:itemRenderer>
+            <mx:Component>
+              <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.store}"/></mx:HBox>
+            </mx:Component>
+          </mx:itemRenderer>
+        </mx:DataGridColumn>
+        <mx:DataGridColumn headerText="@Resource(bundle='AttributesManagementPanel',key='primary')"
+                           dataField="primary" width="100" textAlign="center">
+          <mx:itemRenderer>
+            <mx:Component>
+              <mx:HBox horizontalAlign="center"><mx:CheckBox enabled="false" selected="{data.primary}"/></mx:HBox>
+            </mx:Component>
+          </mx:itemRenderer>
+        </mx:DataGridColumn>
+      </mx:columns>
+    </mx:DataGrid>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+      <mx:Button id="selectAttributeButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
+                 enabled="{hasSelection}"/>
+      <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
+                 click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+  </mx:VBox>
+
+</mx:TitleWindow>

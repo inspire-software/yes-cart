@@ -1,0 +1,37 @@
+<h2>Order Payment</h2>
+
+<% if (result) { %>
+
+    <p>
+        Your order has been successfully created. You will receive confirmation by e-mail.
+    </p>
+
+    <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Continue shopping</a>
+
+    <% if (binding.hasVariable('order') && order.customer != null) { %>
+
+        <a href="/yes-shop/orders" class="btn btn-primary" rel="nofollow">Check order status</a>
+
+    <% } %>
+
+<% } else {
+
+    if (missingStock !=null) { %>
+
+        <p>
+            Item ${product} with code ${sku} has just gone out of stock. Please try to buy similar product.
+        </p>
+
+        <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+
+    <% } else if (exception !=null) { %>
+
+        <p>
+            An error occurred while trying to create your order. Please try again.
+        </p>
+
+        <a href="/yes-shop" class="btn btn-primary2" rel="bookmark">Back to Home page</a>
+
+    <% } %>
+
+<% } %>

@@ -44,6 +44,18 @@
             <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='description')">
                 <mx:TextArea  width="100%" height="120" id="description"/>
             </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='store')">
+                <mx:CheckBox  id="store"/>
+            </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='navigation')">
+                <mx:CheckBox  id="navigation"/>
+            </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='search')">
+                <mx:CheckBox  id="search"/>
+            </mx:FormItem>
+            <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='primary')">
+                <mx:CheckBox  id="primary"/>
+            </mx:FormItem>
         </mx:Form>
         <mx:Form>
             <mx:FormItem  width="100%" label="@Resource(bundle='AttributeCreateEditDialog',key='mandatory')">
@@ -111,6 +123,10 @@
             BindingUtils.bindProperty(_attrbuteDTO, "name", attrName, "text");
             BindingUtils.bindProperty(_attrbuteDTO, "description", description, "text");
             BindingUtils.bindProperty(_attrbuteDTO, "val", val, "text");
+            BindingUtils.bindProperty(_attrbuteDTO, "navigation", navigation, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "store", store, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "primary", primary, "selected");
+            BindingUtils.bindProperty(_attrbuteDTO, "search", search, "selected");
             BindingUtils.bindProperty(_attrbuteDTO, "mandatory", mandatory, "selected");
             BindingUtils.bindProperty(_attrbuteDTO, "allowduplicate", multiple, "selected");
             BindingUtils.bindProperty(_attrbuteDTO, "allowfailover", failover, "selected");
@@ -125,6 +141,10 @@
             this.attrName.text = attrbuteDTO.name;
             this.description.text = attrbuteDTO.description;
             this.val.text = attrbuteDTO.val;
+            this.navigation.selected = attrbuteDTO.navigation;
+            this.store.selected = attrbuteDTO.store;
+            this.primary.selected = attrbuteDTO.primary;
+            this.search.selected = attrbuteDTO.search;
             this.mandatory.selected = attrbuteDTO.mandatory;
             this.failover.selected = attrbuteDTO.allowfailover;
             this.multiple.selected = attrbuteDTO.allowduplicate;

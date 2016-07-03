@@ -24,14 +24,14 @@
 
     <mx:Form width="100%">
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='name')">
-            <mx:ComboBox
-                    id="attributeComboBox"
-                    change="attributeChangeEvt(event)"
-                    width="200"
-                    labelField="name"
-                    prompt="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
-                    rowCount="10"
-                    />
+            <mx:HBox>
+                <mx:TextInput id="attributeName" width="200" editable="false"/>
+                <mx:Button
+                        label="..." width="30"
+                        toolTip="@Resource(bundle='AttributeCreateEditDialog',key='selectAttribute')"
+                        click="onAssignAttributeClick(event)"
+                        />
+            </mx:HBox>
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='visible')">
@@ -46,30 +46,30 @@
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='store')">
-            <mx:CheckBox id="storeCheckBox"
+            <mx:CheckBox id="storeCheckBox" enabled="false"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='storeHint')"
                     />
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='primary')">
-            <mx:CheckBox id="primaryCheckBox"
+            <mx:CheckBox id="primaryCheckBox"  enabled="false"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='primaryHint')"
                     />
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='search')">
-            <mx:CheckBox id="searchCheckBox"
+            <mx:CheckBox id="searchCheckBox"  enabled="false"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='searchHint')"
                     />
         </mx:FormItem>
 
         <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigation')">
-            <mx:CheckBox id="navigationCheckBox"
+            <mx:CheckBox id="navigationCheckBox"  enabled="false"
                          toolTip="@Resource(bundle='ProductTypeManagementPanel',key='navigationHint')"
                     />
         </mx:FormItem>
 
-        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')">
+        <mx:FormItem label="@Resource(bundle='ProductTypeManagementPanel',key='navigationType')" visible="{navigationEnabled}">
             <mx:RadioButtonGroup id="navtype" itemClick="onNavigationTypeClick(event);" selectedValue="S"/>
             <mx:RadioButton id="navTypeSingle" groupName="navtype" value="S"
                             label="@Resource(bundle='ProductTypeManagementPanel',key='singleValueNavigation')"
@@ -103,6 +103,7 @@
     </mx:ControlBar>
 
     <mx:Boolean id="navigationTypeRangeEditEnabled">false</mx:Boolean>
+    <mx:Boolean id="navigationEnabled">false</mx:Boolean>
 
 
 
@@ -119,6 +120,8 @@
         import mx.events.ItemClickEvent;
         import mx.managers.PopUpManager;
 
+        import org.yes.cart.ui.attributes.AttributeFinderDialog;
+
         import org.yes.cart.util.DomainUtils;
 
 
@@ -127,37 +130,26 @@
 
         private var rangeNavigationDialog:RangeNavigationDialog;
 
+        private var attributeFinderPopUp:AttributeFinderDialog;
+
         private function init():void {
 
             BindingUtils.bindProperty(rankTextInput, "text", productTypeAttr, "rank");
             BindingUtils.bindProperty(visibleCheckBox, "selected", productTypeAttr, "visible");
             BindingUtils.bindProperty(similarityCheckBox, "selected", productTypeAttr, "similarity");
-            BindingUtils.bindProperty(storeCheckBox, "selected", productTypeAttr, "store");
-            BindingUtils.bindProperty(primaryCheckBox, "selected", productTypeAttr, "primary");
-            BindingUtils.bindProperty(searchCheckBox, "selected", productTypeAttr, "search");
-            BindingUtils.bindProperty(navigationCheckBox, "selected", productTypeAttr, "navigation");
 
             BindingUtils.bindProperty(productTypeAttr, "rank", rankTextInput, "text");
             BindingUtils.bindProperty(productTypeAttr, "visible", visibleCheckBox, "selected");
             BindingUtils.bindProperty(productTypeAttr, "similarity", similarityCheckBox, "selected");
-            BindingUtils.bindProperty(productTypeAttr, "store", storeCheckBox, "selected");
-            BindingUtils.bindProperty(productTypeAttr, "primary", primaryCheckBox, "selected");
-            BindingUtils.bindProperty(productTypeAttr, "search", searchCheckBox, "selected");
-            BindingUtils.bindProperty(productTypeAttr, "navigation", navigationCheckBox, "selected");
 
             if (DomainUtils.isPersistentPK(productTypeAttr.productTypeAttrId)) {
                 //edit so set the combo boxes and radio buttons
+
+                updateAttributeData();
+
                 navTypeSingle.selected = (productTypeAttr.navigationType == "S");
                 navigationTypeRangeEditEnabled = navTypeRange.selected = (productTypeAttr.navigationType == "R");
 
-                for (var i:int = 0; i < attributeComboBox.dataProvider.length; i++) {
-                    var candidate:Object = attributeComboBox.dataProvider[i];
-                    if (candidate.attributeId == productTypeAttr.attributeDTO.attributeId) {
-                        attributeComboBox.selectedItem = candidate;
-                        attributeComboBox.selectedIndex = i;
-                        break;
-                    }
-                }
             }
         }
 
@@ -166,9 +158,6 @@
             productTypeAttr.navigationType = event.currentTarget.selectedValue;
         }
 
-        private function attributeChangeEvt(event:Event):void {
-            productTypeAttr.attributeDTO = AttributeDTOImpl(event.currentTarget.selectedItem);
-        }
 
         private function editRangeNavigationXml(event:flash.events.MouseEvent):void {
             rangeNavigationDialog = RangeNavigationDialog(PopUpManager.createPopUp(
@@ -182,6 +171,36 @@
             productTypeAttr.rangeNavigation = rangeNavigationDialog.getXmlString();
             PopUpManager.removePopUp(rangeNavigationDialog);
             rangeNavigationDialog = null;
+        }
+
+        private function onAssignAttributeClick(event:MouseEvent):void {
+            attributeFinderPopUp = AttributeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeFinderDialog, true));
+            attributeFinderPopUp.selectAttributeButton.addEventListener(MouseEvent.CLICK, onAssignSelectedAttributeConfirm);
+            PopUpManager.centerPopUp(attributeFinderPopUp);
+        }
+
+        private function onAssignSelectedAttributeConfirm(event:Event):void {
+            if (attributeFinderPopUp != null) {
+                var attributes:Array = attributeFinderPopUp.attributeSelection;
+                if (attributes.length > 0) {
+                    productTypeAttr.attributeDTO = AttributeDTOImpl(attributes[0]);
+                    updateAttributeData();
+                }
+                attributeFinderPopUp.selectAttributeButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedAttributeConfirm);
+                PopUpManager.removePopUp(attributeFinderPopUp);
+                attributeFinderPopUp = null;
+            }
+        }
+
+        private function updateAttributeData():void {
+
+            attributeName.text = productTypeAttr.attributeDTO.name + ' (' + productTypeAttr.attributeDTO.code + ')';
+
+            storeCheckBox.selected = productTypeAttr.attributeDTO.store;
+            primaryCheckBox.selected = productTypeAttr.attributeDTO.primary;
+            searchCheckBox.selected = productTypeAttr.attributeDTO.search;
+            navigationCheckBox.selected = productTypeAttr.attributeDTO.navigation;
+            navigationEnabled = productTypeAttr.attributeDTO.navigation;
         }
         ]]></mx:Script>
 </mx:TitleWindow>

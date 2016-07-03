@@ -89,7 +89,7 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
                     sku,
                     cart.getShoppingContext().getShopId(),
                     cart.getCurrencyCode(),
-                    BigDecimal.ONE);
+                    BigDecimal.ONE, null);
         } catch (Exception exp) {
             ShopCodeContext.getLog(this).error(
                     "Unable top find price for gift for promotion action context: {}", sku);

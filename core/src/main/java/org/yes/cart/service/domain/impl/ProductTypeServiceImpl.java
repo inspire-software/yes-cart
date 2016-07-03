@@ -20,6 +20,8 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductType;
 import org.yes.cart.service.domain.ProductTypeService;
 
+import java.util.List;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -33,5 +35,13 @@ public class ProductTypeServiceImpl extends BaseGenericServiceImpl<ProductType> 
      */
     public ProductTypeServiceImpl(final GenericDAO<ProductType, Long> productTypeDao) {
         super(productTypeDao);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductType> findByAttributeCode(final String code) {
+        return getGenericDao().findByNamedQuery("PRODUCT.TYPE.BY.ATTRIBUTE.CODE", code);
     }
 }

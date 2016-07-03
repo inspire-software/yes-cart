@@ -92,7 +92,7 @@ public class Language extends BaseComponent {
         final String activeLanguageName = languageService.resolveLanguageName(activeLocal);
         final List<String> supportedLanguages = languageService.getSupportedLanguages(ShopCodeContext.getShopCode());
 
-        add(new Label(ACTIVE_LANGUAGE_NAME, activeLanguageName));
+        add(new Label(ACTIVE_LANGUAGE_NAME, activeLanguageName).setEscapeModelStrings(false));
         add(new ListView<String>(LANGUAGE_LIST, supportedLanguages) {
 
             @Override

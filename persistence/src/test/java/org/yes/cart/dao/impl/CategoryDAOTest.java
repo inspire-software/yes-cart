@@ -27,7 +27,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -56,36 +55,31 @@ public class CategoryDAOTest extends AbstractTestDAO {
      * and thea are ranked.
      */
     @Test
-    public void resovleCategoriesbyShop() {
+    public void resolveCategoriesbyShop() {
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
                 assertNotNull("Shop must be resolved by URL", shop);
-                List<Category> assignedCategories =
-                        categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
+                List<ShopCategory> assignedCategories =
+                        (List) categoryDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shop.getShopId());
                 assertNotNull("Test shop must have assigned categories", assignedCategories);
                 assertFalse("Assigned categories not empty", assignedCategories.isEmpty());
                 int currentRank = Integer.MIN_VALUE;
                 Iterator<ShopCategory> shopCategoryIterator = shop.getShopCategory().iterator();
-                Iterator<Category> categoryIterator = assignedCategories.iterator();
+                Iterator<ShopCategory> categoryIterator = assignedCategories.iterator();
                 // because categories can be out of available scope
                 // assertTrue(assignedCategories.size() == shop.getShopCategory().size());
                 List<Long> allAssignedCategories = new ArrayList<Long>();
                 for (ShopCategory allShopCat : shop.getShopCategory()) {
-                    allAssignedCategories.add(allShopCat.getCategory().getCategoryId());
+                    allAssignedCategories.add(allShopCat.getShopCategoryId());
                 }
                 List<Long> allAssignedAvailableCategories = new ArrayList<Long>();
-                for (Category allShopCat : assignedCategories) {
-                    allAssignedAvailableCategories.add(allShopCat.getCategoryId());
+                for (ShopCategory allShopCat : assignedCategories) {
+                    allAssignedAvailableCategories.add(allShopCat.getShopCategoryId());
                 }
                 assertTrue(allAssignedCategories.containsAll(allAssignedAvailableCategories));
-                while (shopCategoryIterator.hasNext()) {
-                    ShopCategory sc = shopCategoryIterator.next();
-                    assertTrue("Assigned category is ranked ", currentRank <= sc.getRank());
-                    currentRank = sc.getRank();
-                }
 
                 status.setRollbackOnly();
 
@@ -95,30 +89,4 @@ public class CategoryDAOTest extends AbstractTestDAO {
 
     }
 
-    /**
-     * Test, that available from and available to work correctly
-     */
-    @Test
-    public void availableCriteriaTest() {
-
-        getTx().execute(new TransactionCallbackWithoutResult() {
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-
-                Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.URL", "gadget.yescart.org");
-                assertNotNull("Shop must be resolved by URL", shop);
-                List<Category> assignedCategories =
-                        categoryDao.findByNamedQuery("TOPCATEGORIES.BY.SHOPID", shop.getShopId(), new Date());
-                Date date = new Date();
-                for (Category category : assignedCategories) {
-                    assertTrue((category.getAvailablefrom() == null) || (category.getAvailablefrom().getTime() > date.getTime()));
-                    assertTrue((category.getAvailableto() == null) || (category.getAvailableto().getTime() < date.getTime()));
-                }
-
-                status.setRollbackOnly();
-
-            }
-        });
-
-
-    }
 }

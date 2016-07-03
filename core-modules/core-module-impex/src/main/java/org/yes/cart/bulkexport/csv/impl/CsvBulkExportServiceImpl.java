@@ -1,7 +1,6 @@
 package org.yes.cart.bulkexport.csv.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.yes.cart.bulkcommon.model.ImpExColumn;
@@ -23,7 +22,6 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
 import org.yes.cart.service.federation.FederationFacade;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.util.misc.ExceptionUtil;
 
 import java.io.File;
@@ -59,7 +57,6 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
      */
     public BulkExportResult doExport(final JobContext context) {
 
-        final Logger log = ShopCodeContext.getLog(this);
         final JobStatusListener statusListener = context.getListener();
 
         final CsvExportDescriptor csvExportDescriptor = context.getAttribute(JobContextKeys.EXPORT_DESCRIPTOR);
@@ -84,7 +81,6 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                         final String msgErr = MessageFormat.format(
                                 "export file already exists: {0}",
                                 fileToExport);
-                        log.error(msgErr);
                         statusListener.notifyError(msgErr);
                         return BulkExportResult.ERROR;
                     }
@@ -96,10 +92,8 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     csvExportDescriptorName,
                     fileToExport);
             statusListener.notifyMessage(msgInfo);
-            log.info(msgInfo);
             if (csvExportDescriptor.getSelectSql() == null) {
                 final String msgErr = "export can not be started, because select-sql is empty";
-                log.error(msgErr);
                 statusListener.notifyError(msgErr);
                 return ExportService.BulkExportResult.ERROR;
             }
@@ -119,8 +113,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             final String msgError = MessageFormat.format(
                     "unexpected error {0}",
                     e.getMessage());
-            log.error(msgError, e);
-            statusListener.notifyError(msgError);
+            statusListener.notifyError(msgError, e);
             return ExportService.BulkExportResult.ERROR;
         }
         return ExportService.BulkExportResult.OK;
@@ -141,11 +134,8 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                   final String csvExportDescriptorName,
                   final CsvExportDescriptor csvExportDescriptor, final String fileToExport) throws Exception {
 
-        final Logger log = ShopCodeContext.getLog(this);
-
         final String msgInfoImp = MessageFormat.format("export file : {0}", fileToExport);
         statusListener.notifyMessage(msgInfoImp);
-        log.info(msgInfoImp);
 
         CsvFileWriter csvFileWriter = new CsvFileWriterImpl();
         try {
@@ -173,22 +163,19 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
             final String msgInfoLines = MessageFormat.format("total data lines : {0}",
                     (csvExportDescriptor.getExportFileDescriptor().isPrintHeader() ? csvFileWriter.getRowsWritten() - 1 : csvFileWriter.getRowsWritten()));
             statusListener.notifyMessage(msgInfoLines);
-            log.info(msgInfoLines);
 
         } catch (UnsupportedEncodingException e) {
             final String msgErr = MessageFormat.format(
                     "wrong file encoding in xml descriptor : {0} {1}",
                     csvExportDescriptor.getExportFileDescriptor().getFileEncoding(),
                     e.getMessage());
-            log.error(msgErr);
-            statusListener.notifyError(msgErr);
+            statusListener.notifyError(msgErr, e);
 
         } catch (IOException e) {
             final String msgErr = MessageFormat.format("cannot write the csv file : {0} {1}",
                     fileToExport,
                     e.getMessage());
-            log.error(msgErr);
-            statusListener.notifyError(msgErr);
+            statusListener.notifyError(msgErr, e);
         } finally {
             try {
                 csvFileWriter.close();
@@ -196,8 +183,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                 final String msgErr = MessageFormat.format("cannot close the csv file : {0} {1}",
                         fileToExport,
                         ioe.getMessage());
-                log.error(msgErr);
-                statusListener.notifyError(msgErr);
+                statusListener.notifyError(msgErr, ioe);
             }
         }
 
@@ -214,7 +200,6 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                            final Object masterObject) throws Exception {
 
         Object object = tuple.getData();
-        final Logger log = ShopCodeContext.getLog(this);
         try {
 
             if (masterObject == null) {
@@ -229,7 +214,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                             csvExportDescriptorName,
                             object
                     );
-                    log.debug(message, ade);  // debug only, no error
+                    statusListener.notifyWarning(message);
                     return null;
                 }
             }
@@ -301,8 +286,7 @@ public class CsvBulkExportServiceImpl extends AbstractExportService implements E
                     object,
                     masterObject
             );
-            log.error(message, e);
-            statusListener.notifyError(message);
+            statusListener.notifyError(message, e);
             genericDAO.clear();
 
             throw new Exception(message, e);

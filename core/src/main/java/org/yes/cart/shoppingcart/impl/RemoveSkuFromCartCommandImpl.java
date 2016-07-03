@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -48,16 +49,18 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      * @param productQuantityStrategy product quantity strategy
      */
     public RemoveSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
                                         final PriceService priceService,
+                                        final PricingPolicyProvider pricingPolicyProvider,
                                         final ProductService productService,
                                         final ShopService shopService,
                                         final ProductQuantityStrategy productQuantityStrategy) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
         this.productQuantityStrategy = productQuantityStrategy;
     }
 
@@ -70,8 +73,12 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
 
     private BigDecimal getQuantityValue(final ProductSku productSku, final BigDecimal quantityInCart) {
 
-        final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
-        return pqm.getValidRemoveQty(null);
+        if (productSku != null) {
+            final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(quantityInCart, productSku);
+            return pqm.getValidRemoveQty(null);
+        }
+
+        return BigDecimal.ONE;
 
     }
 
@@ -80,16 +87,26 @@ public class RemoveSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl{
      */
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
-                           final ProductSku productSku, final Map<String, Object> parameters) {
+                           final ProductSku productSku,
+                           final String skuCode,
+                           final Map<String, Object> parameters) {
         if (productSku != null) {
-            final String skuCode = productSku.getCode();
             if(!shoppingCart.removeCartItemQuantity(productSku.getCode(),
                     getQuantityValue(productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())))) {
+                ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
+                        productSku.getCode());
+            }
+
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
+        } else {
+            if(!shoppingCart.removeCartItemQuantity(skuCode,
+                    getQuantityValue(null, shoppingCart.getProductSkuQuantity(skuCode)))) {
                 ShopCodeContext.getLog(this).warn("Can not remove one sku with code {} from cart",
                         skuCode);
             }
 
-            recalculatePrice(shoppingCart, productSku);
+            recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
         }
     }

@@ -22,6 +22,7 @@
     <meta wicket:id="description" name="description" content=""/>
     <meta wicket:id="keywords" name="keywords" content=""/>
     <meta wicket:id="created" name="date" content=""/>
+    <link wicket:id="relCanonical" rel="canonical" href=""/>
 
     <meta http-equiv="x-ua-compatible" content="ie=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1"/>
@@ -32,20 +33,12 @@
 
         <script type="text/javascript" src="../../../../../js/jquery-1.10.2.min.js"></script>
         <script type="text/javascript" src="../../../../../js/jquery-migrate-1.1.0.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
-        <!--[if lt IE 9]>
-        <script src="../../../../../js/html5.js"></script>
-        <![endif]-->
         <link rel="stylesheet" href="../../../../../style/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../../../../style/bootstrap-theme.min.css"/>
         <link rel="stylesheet" href="../../../../../style/bootstrap-tagsinput.css"/>
         <link rel="stylesheet" href="../../../../../style/fonts.css"/>
         <link rel="stylesheet" href="../../../../../style/yc.css"/>
 
-        <script type="text/javascript" src="../../../../../js/bootstrap-tagsinput.min.js"></script>
-        <script type="text/javascript" src="../../../../../js/yc.js"></script>
-
-        <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
     </wicket:link>
     <wicket:container wicket:id="serverSideJs">[Server side JavaScript data]</wicket:container>
     <wicket:container wicket:id="headerInclude">
@@ -126,6 +119,19 @@
     </div>
 
     <span wicket:id="footer">[footer]</span>
+
+    <wicket:link>
+        <script type="text/javascript" src="../../../../../js/bootstrap.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="../../../../../js/html5.js"></script>
+        <![endif]-->
+
+        <script type="text/javascript" src="../../../../../js/bootstrap-tagsinput.min.js"></script>
+
+        <script type="text/javascript" src="../../../../../js/yc.js"></script>
+    </wicket:link>
+    <script type="text/javascript" src="//static.addtoany.com/menu/page.js"></script>
+
 
 </body>
 </html>

@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.image.impl;
 
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValueProduct;
@@ -34,6 +35,8 @@ import org.yes.cart.service.misc.LanguageService;
  * Time: 14:12:54
  */
 public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl {
+
+    private static final String ATTR_CODE_LIKE = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + '%';
 
     private final GenericDAO<AttrValueProduct, Long> attrValueEntityProductDao;
     private final GenericDAO<AttrValueProductSku, Long> attrValueEntityProductSkuDao;
@@ -64,12 +67,12 @@ public class ProductImageNameStrategyImpl extends AbstractImageNameStrategyImpl 
         final String val = resolveFileName(url);
 
         final String productCode =
-                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val);
+                attrValueEntityProductDao.findSingleByNamedQuery("PRODUCT.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
         if (productCode != null) {
             return productCode;
         }
 
-        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val);
+        return attrValueEntityProductSkuDao.findSingleByNamedQuery("SKU.CODE.BY.IMAGE.NAME", val, ATTR_CODE_LIKE);
 
     }
 

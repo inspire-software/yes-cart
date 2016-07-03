@@ -24,6 +24,7 @@
         import mx.rpc.events.FaultEvent;
 
         import org.yes.cart.impl.AttributeDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
 
         import mx.controls.Alert;
@@ -37,6 +38,7 @@
 
         private var newAttrGroupPopUp:AttributeGroupCreateEditDialog;
         private var newAttrPopUp:AttributeCreateEditDialog;
+        private var usagePopUp:AttributeProductTypeDialog;
 
         private function onPanelInit():void {
             remoteAttributeGroupService.getAll();
@@ -46,8 +48,10 @@
         private function onAttributeGroupSelected(event:ListEvent):void {
             groupSelected = attributeGroupsGrid.selectedItem != null;
             if (groupSelected) {
-                remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
+                groupSelectedCode = attributeGroupsGrid.selectedItem.code;
+                remoteAttributeService.findByAttributeGroupCode(groupSelectedCode);
                 attributeSelected = false;
+                productAttributeSelected = false;
             }
         }
 
@@ -115,6 +119,7 @@
 
         private function onAttributeSelected(event:ListEvent):void {
             attributeSelected = attributesGrid.selectedItem != null;
+            productAttributeSelected = attributeSelected && ('PRODUCT' == groupSelectedCode);
         }
 
         private function onCreateAttributeClick(event:MouseEvent):void {
@@ -138,6 +143,7 @@
                 PopUpManager.removePopUp(newAttrPopUp);
                 newAttrPopUp = null;
                 attributeSelected = false;
+                productAttributeSelected = false;
             }
         }
 
@@ -175,6 +181,15 @@
             }
         }
 
+        private function onShowTypesAttributeClick(event:Event):void {
+            if (attributeSelected && attributesGrid.selectedItem != null) {
+                var currentAttributeDTO:AttributeDTOImpl = AttributeDTOImpl(CloneUtil.clone(attributesGrid.selectedItem));
+                usagePopUp = AttributeProductTypeDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), AttributeProductTypeDialog, true));
+                usagePopUp.attributeCode = currentAttributeDTO.code;
+                PopUpManager.centerPopUp(usagePopUp);
+            }
+        }
+
         private function onDeleteAttributeClick(event:MouseEvent):void {
             if (attributeSelected && attributesGrid.selectedItem != null) {
                 Alert.show(
@@ -192,6 +207,7 @@
                     remoteAttributeService.remove(attributesGrid.selectedItem.attributeId);
                 }
                 attributeSelected = false;
+                productAttributeSelected = false;
             }
         }
 
@@ -201,12 +217,15 @@
 
         private function onGetAllGroupsResult(event:ResultEvent):void {
             groupSelected = false;
+            groupSelectedCode = null;
             attributeGroupsGrid.dataProvider = event.result;
         }
 
         private function onCreateOrUpdateGroupResult(event:ResultEvent):void {
             groupSelected = false;
+            groupSelectedCode = null;
             attributeSelected = false;
+            productAttributeSelected = false;
             remoteAttributeGroupService.getAll();
         }
 
@@ -217,14 +236,33 @@
                     resourceManager.getString('ShopManagerApplication', 'info'));
 
             groupSelected = false;
+            groupSelectedCode = null;
             attributeSelected = false;
+            productAttributeSelected = false;
             remoteAttributeGroupService.getAll();
 
         }
 
         private function onFindByAttributeGroupCodeResult(event:ResultEvent):void {
             attributeSelected = false;
-            attributesGrid.dataProvider = event.result;
+            productAttributeSelected = false;
+
+            var _attributesCollection:ArrayCollection = event.result as ArrayCollection;
+            _attributesCollection.filterFunction = function(item:AttributeDTOImpl):Boolean {
+
+                var _search:String = attributeTextInput.text;
+                if (_search == null || _search == '') {
+                    return true;
+                }
+                return item != null && (
+                        item.code.indexOf(_search) != -1 ||
+                        item.name.indexOf(_search) != -1
+                        );
+
+            }
+            _attributesCollection.refresh();
+
+            attributesCollection = _attributesCollection;
         }
 
         private function onGetAllETypesResult(event:ResultEvent):void {
@@ -236,6 +274,7 @@
                 remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
             }
             attributeSelected = false;
+            productAttributeSelected = false;
         }
 
         private function onRemoveAttributeResult(event:ResultEvent):void {
@@ -248,13 +287,24 @@
                 remoteAttributeService.findByAttributeGroupCode(attributeGroupsGrid.selectedItem.code);
             }
             attributeSelected = false;
+            productAttributeSelected = false;
         }
+
+
+        private function onRefreshAttributesClick(event:MouseEvent):void {
+            attributesCollection.refresh();
+        }
+
+
         ]]>
     </mx:Script>
 
 
     <mx:Boolean id="groupSelected">false</mx:Boolean>
+    <mx:String id="groupSelectedCode"/>
     <mx:Boolean id="attributeSelected">false</mx:Boolean>
+    <mx:Boolean id="productAttributeSelected">false</mx:Boolean>
+    <mx:ArrayCollection id="attributesCollection"/>
 
     <mx:ArrayCollection id="etypesList"/>
 
@@ -315,7 +365,7 @@
 
     <mx:VDividedBox id="attributesManagementPanel" width="100%"
                     height="100%">
-        <mx:VBox width="100%" height="50%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%" height="25%" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNewGroup')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewGroupHint')"
@@ -346,7 +396,7 @@
                 </mx:columns>
             </mx:DataGrid>
         </mx:VBox>
-        <mx:VBox width="100%" height="50%" visible="{groupSelected}" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
+        <mx:VBox width="100%" height="75%" visible="{groupSelected}" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
             <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='addNew')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='addNewHint')"
@@ -363,14 +413,28 @@
                            enabled="{attributeSelected}"
                            click="onUpdateAttributeClick(event)"
                         />
+                <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='showTypes')"
+                           toolTip="@Resource(bundle='AttributesManagementPanel',key='showTypesHint')"
+                           enabled="{productAttributeSelected}"
+                           click="onShowTypesAttributeClick(event)"
+                        />
                 <mx:Button label="@Resource(bundle='AttributesManagementPanel',key='delete')"
                            toolTip="@Resource(bundle='AttributesManagementPanel',key='deleteHint')"
                            enabled="{attributeSelected}"
                            click="onDeleteAttributeClick(event)"
 
                         />
+
+                <mx:Label text="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+                <mx:TextInput id="attributeTextInput" width="100" toolTip="@Resource(bundle='AttributesManagementPanel',key='name')"/>
+
+                <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                           toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                           click="onRefreshAttributesClick(event)"  height="100%"/>
+
+
             </mx:HBox>
-            <mx:DataGrid width="100%" height="90%" id="attributesGrid"
+            <mx:DataGrid width="100%" height="90%" id="attributesGrid" dataProvider="{attributesCollection}"
                          doubleClickEnabled="true"
                          itemDoubleClick="onUpdateAttributeClick(event)"
                          itemClick="onAttributeSelected(event)">

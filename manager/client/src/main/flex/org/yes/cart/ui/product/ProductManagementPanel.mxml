@@ -97,8 +97,6 @@
                            width="100%"
                            height="100%">
                     <prod:ProductSummaryPanel id="summaryPanel"
-                                              brands="{brandsList}"
-                                              productTypes="{productTypesList}"
                                               productAvailability="{productAvailability}"
                                               creationComplete="initSummaryPanelListeners()"/>
                 </mx:Canvas>
@@ -274,8 +272,6 @@
 
         private function onCreateBtnClick(event:MouseEvent):void {
             productCreateDialog = ProductCreateDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductCreateDialog, true));
-            productCreateDialog.brandComboBox.dataProvider = brandsList;
-            productCreateDialog.productTypeComboBox.dataProvider = productTypesList;
             productCreateDialog.productAvailabilityComboBox.dataProvider = productAvailability;
             productCreateDialog.saveBtn.addEventListener(MouseEvent.CLICK, onCreateNewProductSaveClick);
             PopUpManager.centerPopUp(productCreateDialog);
@@ -306,8 +302,8 @@
                 var product:ProductDTOImpl = new ProductDTOImpl();
                 product.code = productCreateDialog.codeTextInput.text;
                 product.name = productCreateDialog.nameTextImput.text;
-                product.productTypeDTO = ProductTypeDTOImpl(productCreateDialog.productTypeComboBox.selectedItem);
-                product.brandDTO = BrandDTOImpl(productCreateDialog.brandComboBox.selectedItem);
+                product.productTypeDTO = productCreateDialog.productTypeDTO;
+                product.brandDTO = productCreateDialog.brandDTO;
                 product.availability = productCreateDialog.productAvailabilityComboBox.selectedItem.data;
                 product.productCategoryDTOs = new ArrayCollection();
                 product.productCategoryDTOs.addItem(productCreateDialog.categoryDTO);

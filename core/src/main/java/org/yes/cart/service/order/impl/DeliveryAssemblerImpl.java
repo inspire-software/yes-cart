@@ -126,7 +126,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
                 final Total cartTotal = shoppingCart.getTotal();
 
-                final String shippingSlaId = String.valueOf(customerOrderDelivery.getCarrierSla().getCarrierslaId());
+                final String shippingSlaId = customerOrderDelivery.getCarrierSla().getGuid();
                 final int index = shoppingCart.indexOfShipping(shippingSlaId);
                 final CartItem shipping = index > -1 ? shoppingCart.getShippingList().get(index) : null;
 
@@ -183,6 +183,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setListPrice(orderDet.getListPrice());
         deliveryDet.setGift(orderDet.isGift());
         deliveryDet.setPromoApplied(orderDet.isPromoApplied());
+        deliveryDet.setFixedPrice(orderDet.isFixedPrice());
         deliveryDet.setAppliedPromo(orderDet.getAppliedPromo());
         deliveryDet.setNetPrice(orderDet.getNetPrice());
         deliveryDet.setGrossPrice(orderDet.getGrossPrice());

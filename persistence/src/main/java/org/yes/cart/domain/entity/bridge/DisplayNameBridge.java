@@ -17,6 +17,7 @@
 package org.yes.cart.domain.entity.bridge;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -36,11 +37,20 @@ public class DisplayNameBridge implements TwoWayFieldBridge/*FieldBridge*/ {
     public void set(final String name, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
         if (value instanceof String) {
-            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)) {
+            if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_FIELD.equals(name)
+                    || ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD.equals(name)) {
                 final I18NModel model = new StringI18NModel((String) value);
                 for (String displayName : model.getAllValues().values()) {
                     // add all names to index
                     luceneOptions.addFieldToDocument(name, displayName, document);
+                    // stems
+                    document.add(new Field(
+                            name + "_stem",
+                            displayName,
+                            Field.Store.NO,
+                            Field.Index.ANALYZED,
+                            luceneOptions.getTermVector()
+                    ));
                 }
             } else if (ProductSearchQueryBuilder.PRODUCT_DISPLAYNAME_ASIS_FIELD.equals(name)) {
                 luceneOptions.addFieldToDocument(name, (String) value, document);

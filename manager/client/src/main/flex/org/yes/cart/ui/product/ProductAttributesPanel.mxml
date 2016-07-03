@@ -43,9 +43,9 @@
         }
 
         public function set product(value:ProductDTOImpl):void {
-            if (_product != null && value != null && _product.productId == value.productId) {
-                return;
-            }
+//            if (_product != null && value != null && _product.productId == value.productId) {
+//                return;
+//            }
             _product = value;
             entityCode = value != null ? value.code : null;
 

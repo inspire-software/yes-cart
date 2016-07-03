@@ -148,6 +148,16 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    public ShopDTO updateDisabledFlag(final long shopId, final boolean disabled) {
+        final Shop shop = service.findById(shopId);
+        shop.setDisabled(disabled);
+        service.update(shop);
+        final ShopDTO dto = (ShopDTO) dtoFactory.getByIface(getDtoIFace());
+        getAssembler().assembleDto(dto, shop, getAdaptersRepository(), getAssemblerDtoFactory());
+        return dto;
+    }
+
+    /** {@inheritDoc} */
     public Class<ShopDTO> getDtoIFace() {
         return ShopDTO.class;
     }

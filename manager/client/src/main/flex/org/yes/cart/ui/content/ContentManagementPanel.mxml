@@ -255,6 +255,17 @@
         }
 
         private function onUriChange(event:Event):void {
+
+            // "'$&+,/:;=?@<>#%{} |\^~[]`
+            var invalid:RegExp = /(["'\$&\+,\/:;=\?@<>#%\{\} \|\\^~\[\]`])/g;
+
+            if (invalid.test(uriNameTextInput.text)) {
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'urlInvalid', [uriNameTextInput.text]);
+                return;
+            } else {
+                uriNameTextInput.errorString = '';
+            }
+
             remoteContentService.isUriAvailableForContent(uriNameTextInput.text, selectedCategoryDTOImpl.categoryId);
         }
 

@@ -42,6 +42,8 @@
     <bean id="brandLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductBrandSearchQueryBuilder"/>
     <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
     <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
+    <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
+    <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
     <bean id="productIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductIdSearchQueryBuilder"/>
     <bean id="productCodeLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuCodeSearchQueryBuilder"/>
     <bean id="productSkuIdLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductSkuIdSearchQueryBuilder"/>
@@ -51,7 +53,7 @@
     <bean id="luceneQueryFactory" class="org.yes.cart.domain.query.impl.LuceneQueryFactoryImpl">
         <constructor-arg index="0" type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
         <constructor-arg index="1" type="org.yes.cart.service.domain.ProductService" ref="productService"/>
-        <constructor-arg index="2" type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
+        <constructor-arg index="2" type="org.yes.cart.domain.query.ShopSearchSupportService" ref="shopSearchSupportService"/>
         <constructor-arg index="3">
             <map>
                 <!-- Direct sku from URL or in code -->
@@ -72,10 +74,12 @@
                 <entry key="attribute.attribute"           value-ref="attributeLuceneQueryBuilder"/>
                 <entry key="productCategory.category"      value-ref="productCategoryLuceneQueryBuilder"/>
                 <entry key="productShopId"                 value-ref="productShopLuceneQueryBuilder"/>
+                <entry key="productInStockShopId"          value-ref="productShopInStockLuceneQueryBuilder"/>
+                <entry key="productHasPriceShopId"         value-ref="productShopHasPriceLuceneQueryBuilder"/>
                 <entry key="featured"                      value-ref="featuredProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
-        <constructor-arg>
+        <constructor-arg index="4">
             <map>
                 <!-- Direct sku from URL or in code -->
                 <entry key="sku"            value-ref="noopLuceneQueryBuilder"/>
@@ -105,6 +109,11 @@
         </constructor-arg>
     </bean>
 
+    <bean id="shopSearchSupportService" class="org.yes.cart.domain.query.impl.ShopSearchSupportServiceImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="categoryService"/>
+    </bean>
+
     <bean id="systemService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.SystemServiceImpl">
@@ -123,6 +132,7 @@
                 <constructor-arg type="org.yes.cart.service.domain.CategoryService" ref="categoryService"/>
                 <constructor-arg type="org.yes.cart.service.domain.ContentService" ref="contentService"/>
                 <constructor-arg type="org.yes.cart.service.domain.AttributeService" ref="attributeService"/>
+                <lookup-method name="getSelf" bean="shopService"/>
             </bean>
         </property>
     </bean>
@@ -150,8 +160,6 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.CategoryServiceImpl">
                 <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
-                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <lookup-method name="getSelf" bean="categoryService"/>
             </bean>
         </property>
@@ -381,6 +389,12 @@
                 -->
                 <constructor-arg type="int" value="100"/>
                 <!--
+                    replaceFilesModeOn if set to true will overwrite existing file if name is
+                    the same. Recommended setting is 'true' because the import service refers to the
+                    original filename and thus does not save the rolling filename.
+                 -->
+                <constructor-arg type="boolean" value="true"/>
+                <!--
                     IO operations abstraction
                  -->
                 <constructor-arg type="org.yes.cart.stream.io.IOProvider" ref="ioProviderFactory"/>
@@ -388,6 +402,8 @@
                     System Service allows to provide system wide settings
                  -->
                 <lookup-method name="getSystemService" bean="systemService"/>
+
+                <property name="config" value="classpath:yc-config.properties"/>
 
             </bean>
         </property>
@@ -443,6 +459,8 @@
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ShopCategoryServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopCategoryDao"/>
+                <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                <constructor-arg index="2" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
             </bean>
         </property>
     </bean>
@@ -780,9 +798,13 @@
 
     <bean id="mailComposer" class="org.yes.cart.service.mail.impl.MailComposerImpl">
         <constructor-arg index="0" ref="mailTemplateResourcesProvider"/>
-        <constructor-arg>
-            <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
-                <constructor-arg ref="cacheManager"/>
+        <constructor-arg index="1">
+            <bean class="org.yes.cart.service.mail.impl.MailComposerTemplateSupportGroovyImpl">
+                <constructor-arg>
+                    <bean class="org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl">
+                        <constructor-arg ref="cacheManager"/>
+                    </bean>
+                </constructor-arg>
             </bean>
         </constructor-arg>
     </bean>
@@ -801,14 +823,45 @@
         <constructor-arg index="4" ref="shopService"/>
     </bean>
 
+    <bean id="defaultDeliveryCostRegionalPriceResolver" class="org.yes.cart.shoppingcart.impl.DeliveryCostRegionalPriceResolverImpl">
+        <constructor-arg index="0" ref="priceService"/>
+    </bean>
+
     <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy"> <!-- CPOINT delivery calculation strategy -->
         <constructor-arg index="0" ref="carrierSlaService"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="R">
+                    <bean class="org.yes.cart.shoppingcart.impl.FreeDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                    </bean>
+                </entry>
+                <entry key="E">
+                    <bean class="org.yes.cart.shoppingcart.impl.ExternalDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                    </bean>
+                </entry>
+                <entry key="F">
+                    <bean class="org.yes.cart.shoppingcart.impl.PriceListDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                        <constructor-arg index="1" ref="pricingPolicyProvider"/>
+                        <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
+                    </bean>
+                </entry>
+            </map>
+        </constructor-arg>
     </bean>
 
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
         <constructor-arg index="0" ref="taxService"/>
         <constructor-arg index="1" ref="taxConfigService"/>
     </bean>
+
+    <bean id="pricingPolicyProvider" class="org.yes.cart.shoppingcart.impl.PricingPolicyProviderImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
 
     <bean id="orderNumberGenerator" class="org.yes.cart.service.order.impl.DefaultOrderNumberGeneratorImpl">
         <constructor-arg index="0" ref="customerOrderDao"/>
@@ -837,7 +890,14 @@
         </property>
     </bean>
 
-
+    <bean id="orderDisassembler" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.OrderDisassemblerImpl">
+                <constructor-arg index="0" ref="amountCalculationStrategy"/>
+                <constructor-arg index="1" ref="customerService"/>
+            </bean>
+        </property>
+    </bean>
 
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">
         <constructor-arg index="0" ref="warehouseService"/>
@@ -883,44 +943,15 @@
     <bean id="passwordHashHelper" class="org.springframework.aop.framework.ProxyFactoryBean">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.MD5HashHelperImpl">
-                <property name="salt" value="YCPWSALT"/>
+                <property name="config" value="classpath:yc-config.properties"/>
                 <lookup-method name="getSelf" bean="passwordHashHelper"/>
             </bean>
         </property>
     </bean>
 
     <bean id="languageService" class="org.yes.cart.service.misc.impl.LanguageServiceImpl">
-        <constructor-arg index="0">
-            <map>
-                <entry key="en" value="Eng"/>
-                <entry key="de" value="Deu"/>
-                <entry key="ru" value="&#x0420;&#x0443;&#x0441;"/>
-                <entry key="uk" value="&#x0423;&#x043A;&#x0440;"/>
-            </map>
-        </constructor-arg>
-        <constructor-arg index="1">
-            <map>
-                <entry key="DEFAULT">
-                    <list>
-                        <!-- by convention the 0th element is the default language -->
-                        <value>en</value>
-                        <value>de</value>
-                        <value>ru</value>
-                        <value>uk</value>
-                    </list>
-                </entry>
-                <entry key="SHOP10">
-                    <list>
-                        <!-- by convention the 0th element is the default language -->
-                        <value>en</value>
-                        <value>de</value>
-                        <value>ru</value>
-                        <value>uk</value>
-                    </list>
-                </entry>
-            </map>
-        </constructor-arg>
-        <constructor-arg index="2" ref="shopService"/>
+        <constructor-arg index="0" value="classpath:yc-config.properties"/>
+        <constructor-arg index="1" ref="shopService"/>
     </bean>
 
     <!-- ########################################## WS support ########################## -->

@@ -38,6 +38,7 @@ public class PriceListFilterImpl implements PriceListFilter {
     private Boolean tagExact = Boolean.FALSE;
     private Date from;
     private Date to;
+    private String pricingPolicy;
 
     /** {@inheritDoc} */
     public ShopDTO getShop() {
@@ -112,6 +113,15 @@ public class PriceListFilterImpl implements PriceListFilter {
     }
 
     /** {@inheritDoc} */
+    public String getPricingPolicy() {
+        return pricingPolicy;
+    }
+
+    public void setPricingPolicy(final String pricingPolicy) {
+        this.pricingPolicy = pricingPolicy;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "PriceListFilterImpl{" +
@@ -123,6 +133,7 @@ public class PriceListFilterImpl implements PriceListFilter {
                 ", tagExact=" + tagExact +
                 ", from=" + from +
                 ", to=" + to +
+                ", pricingPolicy='" + pricingPolicy + '\'' +
                 '}';
     }
 }

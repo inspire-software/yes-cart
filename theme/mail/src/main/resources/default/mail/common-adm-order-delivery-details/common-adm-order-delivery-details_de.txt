@@ -1,0 +1,22 @@
+<%
+def lineDelimiter = "|-------------------------------------------------------------------------------|";
+try {
+      def deliverySum = 0;
+      out.println(lineDelimiter);
+      out.println(("| Lieferung " + delivery.deliveryNum).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(lineDelimiter);
+      for(Object deliveryItem : delivery.getDetail()) {
+          def lineTotal =  (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+          def line = "| " + deliveryItem.productSkuCode  + " - " + deliveryItem.productName   + "    " +  deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP)   + " * " + deliveryItem.price.setScale(2, BigDecimal.ROUND_HALF_UP) + "=" + lineTotal  + " " + root.currency;
+          deliverySum += lineTotal;
+          out.println(line.padRight(lineDelimiter.length() -1 ) + "|");
+      }
+      out.println(lineDelimiter);
+      out.println(("| Subtotal Lieferung     " + deliverySum + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(("| Versandkosten          " + delivery.price + " " + root.currency).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(("| Total Lieferung        " + (delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + root.currency ).padRight(lineDelimiter.length() -1 ) + "|");
+      out.println(lineDelimiter);
+} catch (Exception e) {
+    out.print(e.getMessage());
+}
+%>

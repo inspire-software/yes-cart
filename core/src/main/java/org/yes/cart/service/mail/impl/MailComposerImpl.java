@@ -25,8 +25,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
-import org.yes.cart.service.domain.TemplateSupport;
 import org.yes.cart.service.mail.MailComposer;
+import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
 
 import javax.mail.MessagingException;
@@ -62,7 +62,7 @@ public class MailComposerImpl implements MailComposer {
 
     private Pattern resourcePattern;
 
-    private final TemplateSupport templateSupport;
+    private final MailComposerTemplateSupport templateSupport;
 
     private final MailTemplateResourcesProvider mailTemplateResourcesProvider;
 
@@ -73,25 +73,38 @@ public class MailComposerImpl implements MailComposer {
      * @param mailTemplateResourcesProvider mail resources provider
      */
     public MailComposerImpl(final MailTemplateResourcesProvider mailTemplateResourcesProvider,
-                            final TemplateSupport templateSupport) throws ClassNotFoundException {
+                            final MailComposerTemplateSupport templateSupport) throws ClassNotFoundException {
         this.mailTemplateResourcesProvider = mailTemplateResourcesProvider;
         final ClassLoader classLoader = this.getClass().getClassLoader();
         classLoader.loadClass(DecimalFormat.class.getName());
         this.templateSupport = templateSupport;
-    }
 
-    /**
-     * Merge model with template.
-     *
-     * @param view  groovy string template
-     * @param model model
-     * @return merged view.
-     * @throws java.io.IOException    in case of inline resources can not be found
-     * @throws ClassNotFoundException in case if something wrong with template engine
-     */
-    String merge(final String view, final Map<String, Object> model)
-            throws IOException, ClassNotFoundException {
-        return templateSupport.get(view).make(model);
+        this.templateSupport.registerFunction("include", new MailComposerTemplateSupport.FunctionProvider() {
+            @Override
+            public Object doAction(final Object... params) {
+
+                if (params != null && params.length == 3) {
+
+                    final String uri = String.valueOf(params[0]);
+
+                    final String locale = String.valueOf(params[1]);
+                    final Map<String, Object> context = (Map<String, Object>) params[2];
+
+                    final Map<String, Object> mailComposer = (Map<String, Object>) context.get("MailComposer");
+                    final List<String> mailTemplateChain = (List<String>) mailComposer.get("mailTemplateChain");
+                    final String shopCode = (String) mailComposer.get("shopCode");
+                    final String ext = (String) mailComposer.get("ext");
+                    final Map<String, Object> model = (Map<String, Object>) mailComposer.get("model");
+
+                    return processTemplate(mailTemplateChain, shopCode, locale, uri, ext, model, true);
+
+                }
+
+                return "";
+            }
+        });
+
+
     }
 
     void composeMessage(final MimeMessage message,
@@ -122,9 +135,9 @@ public class MailComposerImpl implements MailComposer {
         }
 
 
-        final String textTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties");
+        final String textContent = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt", model);
+        final String htmlContent = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".html", model);
+        final String propString = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties", model);
         final Properties prop = new Properties();
         if (propString != null) {
             prop.load(new StringReader(propString));
@@ -137,7 +150,7 @@ public class MailComposerImpl implements MailComposer {
             helper.setFrom(from);
         }
 
-        composeMessage(helper, textTemplate, htmlTemplate, mailTemplateChain, shopCode, locale, templateName, model);
+        composeMessage(helper, textContent, htmlContent, mailTemplateChain, shopCode, locale, templateName);
 
     }
 
@@ -146,44 +159,39 @@ public class MailComposerImpl implements MailComposer {
      * Fill mail message. At least one of the templates must be given.
      *
      * @param helper          mail message helper
-     * @param textTemplate    optional text template
-     * @param htmlTemplate    optional html template
+     * @param textContent       optional text template
+     * @param htmlContent       optional html template
      * @param mailTemplateChain path to template folder
      * @param shopCode        shop code
      * @param locale          locale
      * @param templateName    template name
-     * @param model           model
      *
      * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
      */
     void composeMessage(final MimeMessageHelper helper,
-                        final String textTemplate,
-                        final String htmlTemplate,
+                        final String textContent,
+                        final String htmlContent,
                         final List<String> mailTemplateChain,
                         final String shopCode,
                         final String locale,
-                        final String templateName,
-                        final Map<String, Object> model)
+                        final String templateName)
             throws MessagingException, ClassNotFoundException, IOException {
 
-        if (textTemplate == null || htmlTemplate == null) {
-            if (textTemplate != null) {
-                helper.setText(merge(textTemplate, model), false);
+        if (textContent == null || htmlContent == null) {
+            if (textContent != null) {
+                helper.setText(textContent, false);
             }
 
-            if (htmlTemplate != null) {
-                helper.setText(merge(htmlTemplate, model), true);
-                inlineResources(helper, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
+            if (htmlContent != null) {
+                helper.setText(htmlContent, true);
+                inlineResources(helper, htmlContent, mailTemplateChain, shopCode, locale, templateName);
             }
 
         } else {
-            helper.setText(
-                    merge(textTemplate, model),
-                    merge(htmlTemplate, model)
-            );
-            inlineResources(helper, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
+            helper.setText(textContent, htmlContent);
+            inlineResources(helper, htmlContent, mailTemplateChain, shopCode, locale, templateName);
         }
 
     }
@@ -291,17 +299,63 @@ public class MailComposerImpl implements MailComposer {
      * @param locale            locale
      * @param fileName          file name
      * @param ext               file extension
+     * @param model             model for email
      *
      * @return template if exists
      */
-    String getTemplate(final List<String> mailTemplateChain,
-                       final String shopCode,
-                       final String locale,
-                       final String fileName,
-                       final String ext) {
+    String processTemplate(final List<String> mailTemplateChain,
+                           final String shopCode,
+                           final String locale,
+                           final String fileName,
+                           final String ext,
+                           final Map<String, Object> model) {
 
+        return processTemplate(mailTemplateChain, shopCode, locale, fileName, ext, model, false);
+    }
+
+    /**
+     * Get template as string.
+     *
+     * @param mailTemplateChain path to template folder
+     * @param shopCode          shop code
+     * @param locale            locale
+     * @param fileName          file name
+     * @param ext               file extension
+     * @param model             model for email
+     * @param include           true if this is include processing
+     *
+     * @return template if exists
+     */
+    String processTemplate(final List<String> mailTemplateChain,
+                           final String shopCode,
+                           final String locale,
+                           final String fileName,
+                           final String ext,
+                           final Map<String, Object> model,
+                           final boolean include) {
         try {
-            return mailTemplateResourcesProvider.getTemplate(mailTemplateChain, shopCode, locale, fileName, ext);
+            // Get top level template
+            final String template = mailTemplateResourcesProvider.getTemplate(mailTemplateChain, shopCode, locale, fileName, ext);
+
+            final Map<String, Object> enhancedModel = new HashMap<String, Object>(model);
+            final Map<String, Object> mailComposer = new HashMap<String, Object>();
+            enhancedModel.put("MailComposer", mailComposer);
+            mailComposer.put("mailTemplateChain", mailTemplateChain);
+            mailComposer.put("shopCode", shopCode);
+            mailComposer.put("locale", locale);
+            mailComposer.put("fileName", fileName);
+            mailComposer.put("ext", ext);
+            mailComposer.put("model", model);
+
+            // Process the top level template (which will cascade includes)
+            final String content = templateSupport.processTemplate(template, locale, enhancedModel);
+
+            if (!include) {
+                LOG.debug("Processed template for locale {}, template: {}, ext: {}\n{}", new Object[]{locale, fileName, ext, content});
+            }
+
+            return content;
+
         } catch (IOException e) {
             LOG.warn("No template found for locale {}, template: {}, ext: {}", new Object[] { locale, fileName, ext });
             return null;
@@ -334,9 +388,9 @@ public class MailComposerImpl implements MailComposer {
             mail.setBcc(bccEmail);
         }
 
-        final String textTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt");
-        final String htmlTemplate = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".html");
-        final String propString = getTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties");
+        final String textContent = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".txt", model);
+        final String htmlContent = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".html", model);
+        final String propString = processTemplate(mailTemplateChain, shopCode, locale, templateName, ".properties", model);
         final Properties prop = new Properties();
         if (propString != null) {
 
@@ -357,15 +411,7 @@ public class MailComposerImpl implements MailComposer {
         }
 
 
-        composeMessage(mail,
-                textTemplate,
-                htmlTemplate,
-                mailTemplateChain,
-                shopCode,
-                locale,
-                templateName,
-                model);
-
+        composeMessage(mail, textContent, htmlContent, mailTemplateChain, shopCode, locale, templateName);
 
     }
 
@@ -374,41 +420,39 @@ public class MailComposerImpl implements MailComposer {
      * Fill mail message. At least one of the templates must be given.
      *
      * @param mail            mail message
-     * @param textTemplate    optional text template
-     * @param htmlTemplate    optional html template
+     * @param textContent       optional text template
+     * @param htmlContent       optional html template
      * @param mailTemplateChain path to template folder
      * @param shopCode        shop code
      * @param locale          locale
      * @param templateName    template name
-     * @param model           model
      *
      * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
      */
     void composeMessage(final Mail mail,
-                        final String textTemplate,
-                        final String htmlTemplate,
+                        final String textContent,
+                        final String htmlContent,
                         final List<String> mailTemplateChain,
                         final String shopCode,
                         final String locale,
-                        final String templateName,
-                        final Map<String, Object> model)
+                        final String templateName)
             throws MessagingException, ClassNotFoundException, IOException {
 
-        if (textTemplate == null || htmlTemplate == null) {
-            if (textTemplate != null) {
-                mail.setTextVersion(merge(textTemplate, model));
+        if (textContent == null || htmlContent == null) {
+            if (textContent != null) {
+                mail.setTextVersion(textContent);
             }
-            if (htmlTemplate != null) {
-                mail.setHtmlVersion(merge(htmlTemplate, model));
-                inlineResources(mail, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
+            if (htmlContent != null) {
+                mail.setHtmlVersion(htmlContent);
+                inlineResources(mail, htmlContent, mailTemplateChain, shopCode, locale, templateName);
             }
 
         } else {
-            mail.setTextVersion(merge(textTemplate, model));
-            mail.setHtmlVersion(merge(htmlTemplate, model));
-            inlineResources(mail, htmlTemplate, mailTemplateChain, shopCode, locale, templateName);
+            mail.setTextVersion(textContent);
+            mail.setHtmlVersion(htmlContent);
+            inlineResources(mail, htmlContent, mailTemplateChain, shopCode, locale, templateName);
         }
 
     }
@@ -488,10 +532,7 @@ public class MailComposerImpl implements MailComposer {
             }
 
         } else {
-            helper.setText(
-                    textTemplate,
-                    htmlTemplate
-            );
+            helper.setText(textTemplate, htmlTemplate);
             inlineResources(helper, mail);
         }
 

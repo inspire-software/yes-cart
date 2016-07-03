@@ -16,9 +16,9 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Attributable;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
@@ -54,13 +54,13 @@ public class CategoryImageRetrieveStrategyRandomProductImpl implements CategoryI
     public String getImageName(final Attributable category, final String attributeCodeHint, final String locale) {
         Product product = productService.getRandomProductByCategory((Category)category);
         if (product != null) {
-            AttrValue attrValue = product.getAttributeByCode(attributeCode + "_" + locale);
-            if (attrValue != null) {
-                return attrValue.getVal();
+            String attrValue = product.getAttributeValueByCode(attributeCode + "_" + locale);
+            if (StringUtils.isNotBlank(attrValue)) {
+                return attrValue;
             } else {
-                attrValue = product.getAttributeByCode(attributeCode);
-                if (attrValue != null) {
-                    return attrValue.getVal();
+                attrValue = product.getAttributeValueByCode(attributeCode);
+                if (StringUtils.isNotBlank(attrValue)) {
+                    return attrValue;
                 }
             }
         }

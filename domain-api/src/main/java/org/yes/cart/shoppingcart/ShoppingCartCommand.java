@@ -48,6 +48,12 @@ public interface ShoppingCartCommand extends Serializable {
     String CMD_SETQTYSKU = "setQuantityToCartCmd";
     String CMD_SETQTYSKU_P_QTY = "qty";
 
+    String CMD_RECALCULATEPRICE = "recalculatePriceCmd";
+
+    String CMD_SETPRICE = "setPriceCmd";
+    String CMD_SETPRICE_P_PRICE = "cip";
+    String CMD_SETPRICE_P_AUTH = "aup";
+
     String CMD_SEPARATEBILLING = "setBillingAddressSeparateCmd";
 
     String CMD_SETADDRESES = "setAddressesCmd";

@@ -19,7 +19,7 @@
 <langpack>
 
     <str id="JDKPathPanel.intro" txt=""/>
-    <str id="JDKPathPanel.info" txt="Вкажіть розташування JDK версії 1.6 або новіше"/>
+    <str id="JDKPathPanel.info" txt="Вкажіть розташування JDK версії 1.7 або новіше"/>
 
     <str id="WebServerConfigurationPanel.title" txt="Налаштування веб-сервера"/>
     <str id="WebServerConfigurationPanel.http.port" txt="HTTP порт"/>

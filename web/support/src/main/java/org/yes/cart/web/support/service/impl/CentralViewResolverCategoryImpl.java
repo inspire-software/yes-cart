@@ -16,22 +16,22 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
+import org.yes.cart.domain.query.ShopSearchSupportService;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -46,14 +46,20 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
     private static final Pair<String, String> DEFAULT_PL = new Pair<String, String>(CentralViewLabel.PRODUCTS_LIST, CentralViewLabel.PRODUCTS_LIST);
     private static final Pair<String, String> DEFAULT_SC = new Pair<String, String>(CentralViewLabel.SUBCATEGORIES_LIST, CentralViewLabel.SUBCATEGORIES_LIST);
 
+    private final ShopService shopService;
     private final CategoryService categoryService;
+    private final ShopSearchSupportService shopSearchSupportService;
     private final ProductService productService;
     private final LuceneQueryFactory luceneQueryFactory;
 
-    public CentralViewResolverCategoryImpl(final CategoryService categoryService,
+    public CentralViewResolverCategoryImpl(final ShopService shopService,
+                                           final CategoryService categoryService,
+                                           final ShopSearchSupportService shopSearchSupportService,
                                            final ProductService productService,
                                            final LuceneQueryFactory luceneQueryFactory) {
+        this.shopService = shopService;
         this.categoryService = categoryService;
+        this.shopSearchSupportService = shopSearchSupportService;
         this.productService = productService;
         this.luceneQueryFactory = luceneQueryFactory;
     }
@@ -81,33 +87,29 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
             final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
             if (categoryId > 0L) {
 
+                final long shopId = ShopCodeContext.getShopId();
+
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
-                final String template = categoryService.getCategoryTemplate(categoryId);
+                final String template = shopService.getShopCategoryTemplate(shopId, categoryId);
                 if (StringUtils.isNotBlank(template)) {
                     return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
                 }
 
-                // If template is not set try to figure out the view
-                final boolean lookInSubCats = categoryService.isSearchInSubcategory(categoryId, ShopCodeContext.getShopId());
+                final List<Long> catIds = determineSearchCategories(categoryId, shopId);
 
-                final List<Long> catIds;
-                if (lookInSubCats) {
-                    catIds = new ArrayList<Long>(categoryService.getChildCategoriesRecursiveIds(categoryId));
-                } else {
-                    catIds = Collections.singletonList(categoryId);
+
+                if (CollectionUtils.isEmpty(catIds)) {
+                    return DEFAULT; // Must never be empty, as we should have at least current category
                 }
 
-                // Do not use shopId as it will bring all products
-                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(0L, catIds, null);
+                // shopId will be used for inStock check, because we have category IDs will always look in those
+                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, catIds, null);
 
                 if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
 
-                    final Category category = categoryService.getById(categoryId);
-                    if (category != null && category.getProductType() != null) {
-                        final String searchTemplate = category.getProductType().getUisearchtemplate();
-                        if (StringUtils.isNotBlank(searchTemplate)) {
-                            return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
-                        }
+                    final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
+                    if (StringUtils.isNotBlank(searchTemplate)) {
+                        return new Pair<String, String>(searchTemplate, CentralViewLabel.PRODUCTS_LIST);
                     }
 
                     return DEFAULT_PL;
@@ -120,5 +122,11 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
         }
 
         return null;
+    }
+
+    private List<Long> determineSearchCategories(final long categoryId, final long shopId) {
+
+        return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
+
     }
 }

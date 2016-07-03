@@ -69,6 +69,22 @@ public interface Category extends Auditable, Attributable, Seoable  {
      */
     void setParentId(long parentId);
 
+
+    /**
+     * Get link to pk value.
+     *
+     * @return link to pk value.
+     */
+    Long getLinkToId();
+
+    /**
+     * Set link to pk value.
+     *
+     * @param linkToId link to pk value.
+     */
+    void setLinkToId(Long linkToId);
+
+
     /**
      * Get category rank inside parent category.
      *

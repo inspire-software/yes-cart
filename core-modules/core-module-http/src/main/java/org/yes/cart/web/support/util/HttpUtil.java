@@ -92,6 +92,96 @@ public class HttpUtil {
 
 
     /**
+     * Ensure that encoded URI parameters are properly decoded.
+     *
+     * Uses URLDecoder as a work horse but accounts for '+' being a plus character and not space as per
+     * form encoding standards.
+     *
+     * @param value string value either encoded or not.
+     *
+     * @return decoded value
+     */
+    public static String decodeUtf8UriParam(final String value) {
+
+        if (value != null) {
+
+            if (value.indexOf('%') == -1) {
+                // no encoded characters here
+                return value;
+            }
+
+            // URI must have spaces encoded as %2B, '+' must remain as '+'
+            final String uri = value.replace("+", "%2B");
+
+            try {
+                return URLDecoder.decode(uri, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        return null;
+
+    }
+
+
+    /**
+     * Encodes parameter values.
+     *
+     * Modern browsers will do the encoding of UTF-8 characters automatically, so we need to account
+     * only for special characters to preserve readable url's. Ref: RFC 1738
+     *
+     * @param value value to encode
+     *
+     * @return partially encoded value.
+     */
+    public static String encodeUtf8UriParam(final String value) {
+
+        if (value != null) {
+
+            final StringBuilder safe = new StringBuilder(value.length() * 3);
+
+            boolean changed = false;
+
+            for (int i = 0; i < value.length(); i++) {
+
+                char c = value.charAt(i);
+
+                int b = c;
+
+                if (b <= 31 || b == 127) {
+                    changed = true;
+                    continue; // Do not print control characters
+                }
+
+                if ("\"'$&+,/:;=?@<>#%{} |\\^~[]`".indexOf(c) != -1) {
+                    // Need to escape
+                    changed = true;
+                    safe.append('%');
+                    char hex1 = Character.toUpperCase(Character.forDigit((b >> 4) & 0xF, 16));
+                    char hex2 = Character.toUpperCase(Character.forDigit(b & 0xF, 16));
+                    safe.append(hex1);
+                    safe.append(hex2);
+                } else {
+                    safe.append(c);
+                }
+
+            }
+
+            if (changed) { // saves us from creating new string.
+                return safe.toString();
+            }
+            return value;
+
+        }
+
+        return null;
+
+    }
+
+
+    /**
      * GET request parameters as map.
      *
      * @param requestURL request URL {@link HttpServletRequest#getRequestURL()}
@@ -120,40 +210,15 @@ public class HttpUtil {
 
         final Map<String, List<String>> parameters = new LinkedHashMap<String, List<String>>();
 
-        try {
-            final String[] request = StringUtils.splitPreserveAllTokens(requestURL, '?');
+        final String[] request = StringUtils.splitPreserveAllTokens(requestURL, '?');
 
-            String key = null;
+        String key = null;
 
-            if (request != null && request.length > 0) {
-                final String[] pathPairs = StringUtils.splitPreserveAllTokens(request[0], '/');
+        if (request != null && request.length > 0) {
+            final String[] pathPairs = StringUtils.splitPreserveAllTokens(request[0], '/');
 
-                for (String pathItem : pathPairs) {
-                    if (key != null) {
-                        final List<String> values;
-                        if (!parameters.containsKey(key)) {
-                            values = new LinkedList<String>();
-                            parameters.put(key, values);
-                        } else {
-                            values = parameters.get(key);
-                        }
-                        final String value = URLDecoder.decode(pathItem, "UTF-8");
-                        if (!removeDuplicates || !values.contains(value)) {
-                            values.add(value);
-                        }
-                        key = null;
-                    } else if (pathVariables.contains(pathItem)) {
-                        key = pathItem; // next path is value
-                    }
-                }
-            }
-
-            if (request != null && request.length > 1) {
-
-                final String[] parameterPairs = StringUtils.splitPreserveAllTokens(request[1], '&');
-                for (String parameterPair : parameterPairs) {
-                    final int idx = parameterPair.indexOf("=");
-                    key = idx > 0 ? URLDecoder.decode(parameterPair.substring(0, idx), "UTF-8") : parameterPair;
+            for (String pathItem : pathPairs) {
+                if (key != null) {
                     final List<String> values;
                     if (!parameters.containsKey(key)) {
                         values = new LinkedList<String>();
@@ -161,16 +226,37 @@ public class HttpUtil {
                     } else {
                         values = parameters.get(key);
                     }
-                    final String value = idx > 0 && parameterPair.length() > idx + 1 ? URLDecoder.decode(parameterPair.substring(idx + 1), "UTF-8") : null;
+                    final String value = decodeUtf8UriParam(pathItem);
                     if (!removeDuplicates || !values.contains(value)) {
                         values.add(value);
                     }
+                    key = null;
+                } else if (pathVariables.contains(pathItem)) {
+                    key = pathItem; // next path is value
                 }
             }
-
-        } catch (UnsupportedEncodingException uee) {
-            throw new RuntimeException(uee);
         }
+
+        if (request != null && request.length > 1) {
+
+            final String[] parameterPairs = StringUtils.splitPreserveAllTokens(request[1], '&');
+            for (String parameterPair : parameterPairs) {
+                final int idx = parameterPair.indexOf("=");
+                key = idx > 0 ? decodeUtf8UriParam(parameterPair.substring(0, idx)) : parameterPair;
+                final List<String> values;
+                if (!parameters.containsKey(key)) {
+                    values = new LinkedList<String>();
+                    parameters.put(key, values);
+                } else {
+                    values = parameters.get(key);
+                }
+                final String value = idx > 0 && parameterPair.length() > idx + 1 ? decodeUtf8UriParam(parameterPair.substring(idx + 1)) : null;
+                if (!removeDuplicates || !values.contains(value)) {
+                    values.add(value);
+                }
+            }
+        }
+
         return parameters;
 
     }

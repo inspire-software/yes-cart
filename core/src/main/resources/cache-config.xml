@@ -139,11 +139,35 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategoryParentId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-categoryTemplate"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="categoryService-searchInSubcategory"/>
+            <constructor-arg index="0" value="shopService-shopCategoryTemplate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categorySearchTemplate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategorySearchTemplate"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryProductTypeId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopCategoryProductTypeId"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-searchCategoriesIds"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -176,6 +200,14 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIds"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIdsWithLinks"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryIdsWithLinks"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -272,6 +304,14 @@
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIds"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-childCategoriesRecursiveIdsWithLinks"/>
+            <constructor-arg index="1" value="key"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="categoryService-categoryIdsWithLinks"/>
             <constructor-arg index="1" value="key"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
@@ -652,6 +692,10 @@
             <constructor-arg index="0" value="mailSenderBuilder-buildJavaMailSender"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="priceService-determinePricingPolicy"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:map id="ShopCUD">
@@ -749,7 +793,27 @@
         <entry key="Delete" value-ref="SystemAll"/>
     </util:map>
 
+    <!-- ###################### Customer  ################################################################################################################## -->
 
+    <util:set id="CustomerAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="customerService-customerByEmail"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="priceService-determinePricingPolicy"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="CustomerCUD">
+        <entry key="Create" value-ref="CustomerAll"/>
+        <entry key="Update" value-ref="CustomerAll"/>
+        <entry key="Delete" value-ref="CustomerAll"/>
+    </util:map>
+
+
+    <!-- ###################### Config  ################################################################################################################## -->
 
     <util:map id="evictionConfig">
         <entry key="AttributeEntity"        value-ref="AttributeCUD"/>
@@ -765,6 +829,7 @@
         <entry key="TaxEntity"              value-ref="TaxCUD"/>
         <entry key="CarrierEntity"          value-ref="CarrierCUD"/>
         <entry key="CarrierSlaEntity"       value-ref="CarrierSlaCUD"/>
+        <entry key="CustomerEntity"         value-ref="CustomerCUD"/>
     </util:map>
 
 

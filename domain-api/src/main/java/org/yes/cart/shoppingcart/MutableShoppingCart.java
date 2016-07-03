@@ -131,12 +131,25 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * sale price as final price and clear all promotion data and gift items.
      *
      * This method only acts upon promotions at the item level. Note that this method should
-     * not be used manually as it puts the cart total in out of sync. The purpose of this method
+     * not be used manually as it puts the cart total out of sync. The purpose of this method
      * is clearing up cart by amount calculation strategy before it starts calculating cart.
      *
      * @return  true if promotions have been removed, false if item was not present in the cart.
      */
     boolean removeItemPromotions();
+
+    /**
+     * Remove all cart offers, which effectively removes offer prices and reinstates
+     * sale price as final price and clear all offer data.
+     *
+     * This method only acts upon offers (fixed price) at the item level. Note that this method should
+     * not be used manually as it puts the cart total out of sync. The purpose of this method
+     * is clearing up cart by expired cart command to invalidate offer prices as these are not
+     * recalculated.
+     *
+     * @return  true if promotions have been removed, false if item was not present in the cart.
+     */
+    boolean removeItemOffers();
 
     /**
      * Set product sku price and clear all promotion details
@@ -177,6 +190,16 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @return true if price has been set
      */
     boolean setProductSkuPromotion(String productSkuCode, BigDecimal promoPrice, String promoCode);
+
+    /**
+     * Set product sku offer details
+     *
+     * @param productSkuCode product sku
+     * @param fixedPrice     price to set
+     * @param authCode       authorisation code that activated this discount
+     * @return true if price has been set
+     */
+    boolean setProductSkuOffer(String productSkuCode, BigDecimal fixedPrice, String authCode);
 
     /**
      * Set shipping promotion details
@@ -267,5 +290,20 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @param promotionsDisabled true if this cart should ignore promotions
      */
     void setPromotionsDisabled(boolean promotionsDisabled);
+
+    /**
+     * Order number for order amendment cart.
+     *
+     * @return order number
+     */
+    String getOrdernum();
+
+    /**
+     * Set order number.
+     *
+     * @param ordernum order number to set.
+     */
+    void setOrdernum(String ordernum);
+
 
 }

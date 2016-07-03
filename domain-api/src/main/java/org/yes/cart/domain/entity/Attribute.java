@@ -242,6 +242,63 @@ public interface Attribute extends Auditable, Rankable, Codable, Cloneable {
 
 
     /**
+     * Store data in the FT index.
+     *
+     * @return store in FT index.
+     */
+    boolean isStore();
+
+    /**
+     * Store data in the FT index.
+     *
+     * @param store store in FT index.
+     */
+    void setStore(boolean store);
+
+    /**
+     * Use for attribute searching.
+     *
+     * @return true if attribute used for attribute search.
+     */
+    boolean isSearch();
+
+    /**
+     * Set to true if attribute will be used for attribute search.
+     *
+     * @param search true if attribute used for attribute search.
+     */
+    void setSearch(boolean search);
+
+    /**
+     * Use for attribute searching as primary key, forcing exact matches.
+     *
+     * @return true if attribute used for attribute exact search.
+     */
+    boolean isPrimary();
+
+    /**
+     * Set to true if attribute will be used for attribute exact search.
+     *
+     * @param primary true if attribute used for attribute exact search.
+     */
+    void setPrimary(boolean primary);
+
+    /**
+     * Use for attribute navigation.
+     *
+     * @return true if attribute used for attribute navigation.
+     */
+    boolean isNavigation();
+
+    /**
+     * Set to true if attribute will be used for filtered navigation.
+     *
+     * @param navigation true if attribute will be used for filtered navigation.
+     */
+    void setNavigation(boolean navigation);
+
+
+    /**
      * Create copy of current object;
      * @return copy of current object.
      */

@@ -46,16 +46,14 @@
         import org.yes.cart.impl.CategoryDTOImpl;
         import org.yes.cart.impl.ProductCategoryDTOImpl;
         import org.yes.cart.impl.ProductDTOImpl;
+        import org.yes.cart.impl.ProductTypeDTOImpl;
         import org.yes.cart.impl.SeoDTOImpl;
         import org.yes.cart.shopmanager.ShopManagerGlobal;
         import org.yes.cart.ui.CategoryTreeDescriptor;
         import org.yes.cart.ui.attributes.EntityAttributeValuesManagementPanel;
         import org.yes.cart.ui.product.ProductFinderDialog;
-        import org.yes.cart.util.DataModelUtils;
+        import org.yes.cart.ui.producttype.ProductTypeFinderDialog;
         import org.yes.cart.util.DomainUtils;
-
-        import spark.collections.Sort;
-        import spark.collections.SortField;
 
         private var TAB_SUMMARY_IDX:int = 0;
         private var TAB_SEO_IDX:int = 1;
@@ -69,29 +67,31 @@
 
         private var newCategoryPopUp:CategoryCreateDialog;
         private var productFinderPopUp:ProductFinderDialog;
+        private var productTypeFinderPopUp:ProductTypeFinderDialog;
+        private var categoryFinderPopUp:CategoryFinderDialog;
         private var categoryPropertyChangeWatchers:ArrayList = new ArrayList();
 
         private var attrValuePanel:EntityAttributeValuesManagementPanel;
 
         public function init():void {
-            remoteProductTypeService.getAll();
             remoteCategoryService.getAll();
         }
 
         private function onCategorySelected(event:ListEvent):void {
             // category only selected when we have tree selection and parent which is not itself (root case)
-            categorySelected = this.categoryTree.selectedItem != null && !DomainUtils.isRootCategory(this.categoryTree.selectedItem);
-            categoryOrRootSelected = this.categoryTree.selectedItem != null;
+            var _cat:CategoryDTOImpl = this.categoryTree.selectedItem as CategoryDTOImpl;
+            categorySelected = _cat != null && !DomainUtils.isRootCategory(_cat);
+            categoryOrRootSelected = _cat != null && (isNaN(_cat.linkToId) || _cat.linkToId == 0);
             categorySelectedAndChanged = categorySelected && this.categoryTree.selectedItem.changed;
             Debug.trace("Selected category dto name is :" + (categoryOrRootSelected ?
                     this.categoryTree.selectedItem.name : "null"));
             unbindMain();
             unbindSeo();
             if (categorySelected) {
-                this.selectedCategoryDTOImpl = this.categoryTree.selectedItem as CategoryDTOImpl;
+                this.selectedCategoryDTOImpl = _cat;
                 initTabs(categoryTabNavigator.selectedIndex);
             } else if (categoryOrRootSelected) {
-                this.selectedCategoryDTOImpl = this.categoryTree.selectedItem as CategoryDTOImpl;
+                this.selectedCategoryDTOImpl = _cat;
             } else {
                 this.selectedCategoryDTOImpl = null;
             }
@@ -102,14 +102,6 @@
 
             if (categorySelected && categoryTree.selectedItem != null) {
 
-                categoryProductTypeComboBox.selectedItem = null;
-                categoryProductTypeComboBox.selectedIndex = -1;
-                categoryProductTypeClearButton.visible = false;
-
-                if (DomainUtils.isPersistent(categoryTree.selectedItem, 'productTypeId')) {
-                    categoryProductTypeClearButton.visible =
-                            DataModelUtils.selectCombo(categoryProductTypeComboBox, categoryTree.selectedItem, 'productTypeId', 'producttypeId');
-                }
                 bingCategoryDataMain();
             }
         }
@@ -178,7 +170,6 @@
             if (uriNameTextInput != null) {
                 uriNameTextInput.errorString = '';
             }
-            categoryProductTypeComboBox.removeEventListener(Event.CHANGE, onCategoryProductTypeChanged);
         }
 
         private function unbindSeo():void {
@@ -221,7 +212,10 @@
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByBrand", categoryFNByBrandsCheckBox, "selected"));
             categoryPropertyChangeWatchers.addItem(BindingUtils.bindProperty(this.selectedCategoryDTOImpl, "navigationByPrice", categoryFNByPriceCheckBox, "selected"));
 
-            categoryProductTypeComboBox.addEventListener(Event.CHANGE, onCategoryProductTypeChanged);
+            categoryProductTypeName.text = this.selectedCategoryDTOImpl.productTypeId > 0 ? this.selectedCategoryDTOImpl.productTypeName : '';
+            categoryProductTypeClearButton.visible = this.selectedCategoryDTOImpl.productTypeId > 0;
+            categoryLinkName.text = this.selectedCategoryDTOImpl.linkToId > 0 ? this.selectedCategoryDTOImpl.linkToName : '';
+            categoryLinkClearButton.visible = this.selectedCategoryDTOImpl.linkToId > 0;
 
             // if (!saveBtnVisible) {
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "guid", categoryDtoChanged));
@@ -235,6 +229,7 @@
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByBrand", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "navigationByPrice", categoryDtoChanged));
             categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "productTypeId", categoryDtoChanged));
+            categoryPropertyChangeWatchers.addItem(ChangeWatcher.watch(this.selectedCategoryDTOImpl, "linkToId", categoryDtoChanged));
             // }
 
         }
@@ -270,6 +265,17 @@
         }
 
         private function onUriChange(event:Event):void {
+
+            // "'$&+,/:;=?@<>#%{} |\^~[]`
+            var invalid:RegExp = /(["'\$&\+,\/:;=\?@<>#%\{\} \|\\^~\[\]`])/g;
+
+            if (invalid.test(uriNameTextInput.text)) {
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'urlInvalid');
+                return;
+            } else {
+                uriNameTextInput.errorString = '';
+            }
+
             remoteCategoryService.isUriAvailableForCategory(uriNameTextInput.text, selectedCategoryDTOImpl.categoryId);
         }
 
@@ -280,7 +286,7 @@
             if (_available) {
                 uriNameTextInput.errorString = '';
             } else {
-                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [ uriNameTextInput.text ]);
+                uriNameTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'seoUriIsNotAvailable', [uriNameTextInput.text]);
             }
 
         }
@@ -296,7 +302,7 @@
             if (_available) {
                 categoryGUIDTextInput.errorString = '';
             } else {
-                categoryGUIDTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'guidIsNotAvailable', [ categoryGUIDTextInput.text ]);
+                categoryGUIDTextInput.errorString = resourceManager.getString('CategoryManagementPanel', 'guidIsNotAvailable', [categoryGUIDTextInput.text]);
             }
 
         }
@@ -317,21 +323,63 @@
             categoryTree.validateNow();
         }
 
-        private function onCategoryProductTypeChanged(event:Event):void {
-            if (categoryProductTypeComboBox.selectedItem != null) {
-                categoryProductTypeClearButton.visible = true;
-                selectedCategoryDTOImpl.productTypeId = categoryProductTypeComboBox.selectedItem.producttypeId;
-            } else {
-                categoryProductTypeClearButton.visible = false;
-                selectedCategoryDTOImpl.productTypeId = 0;
+
+        private function onAssignProductTypeClick(event:MouseEvent):void {
+            productTypeFinderPopUp = ProductTypeFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), ProductTypeFinderDialog, true));
+            productTypeFinderPopUp.selectProductTypeButton.addEventListener(MouseEvent.CLICK, onAssignSelectedProductTypeConfirm);
+            PopUpManager.centerPopUp(productTypeFinderPopUp);
+        }
+
+        private function onAssignSelectedProductTypeConfirm(event:Event):void {
+            if (productTypeFinderPopUp != null && this.selectedCategoryDTOImpl != null) {
+                var types:Array = productTypeFinderPopUp.productTypeSelection;
+                if (types.length > 0) {
+                    var _type:ProductTypeDTOImpl = ProductTypeDTOImpl(types[0]);
+                    selectedCategoryDTOImpl.productTypeId = _type.producttypeId;
+                    selectedCategoryDTOImpl.productTypeName = _type.name;
+                    categoryProductTypeName.text = _type.name;
+                }
+                productTypeFinderPopUp.selectProductTypeButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedProductTypeConfirm);
+                PopUpManager.removePopUp(productTypeFinderPopUp);
+                productTypeFinderPopUp = null;
             }
+            categoryProductTypeClearButton.visible = selectedCategoryDTOImpl.productTypeId > 0;
         }
 
         private function onCategoryProductTypeClear(event:Event):void {
             categoryProductTypeClearButton.visible = false;
-            categoryProductTypeComboBox.selectedItem = null;
-            categoryProductTypeComboBox.selectedIndex = -1;
             selectedCategoryDTOImpl.productTypeId = 0;
+            selectedCategoryDTOImpl.productTypeName = '';
+            categoryProductTypeName.text = '';
+        }
+
+        private function onAssignCategoryLinkClick(event:MouseEvent):void {
+            categoryFinderPopUp = CategoryFinderDialog(PopUpManager.createPopUp(DisplayObject(FlexGlobals.topLevelApplication), CategoryFinderDialog, true));
+            categoryFinderPopUp.selectProductButton.addEventListener(MouseEvent.CLICK, onAssignSelectedCategoryLinkConfirm);
+            PopUpManager.centerPopUp(categoryFinderPopUp);
+        }
+
+
+        private function onAssignSelectedCategoryLinkConfirm(event:Event):void {
+            if (categoryFinderPopUp != null && this.selectedCategoryDTOImpl != null) {
+                var _cat:CategoryDTOImpl = categoryFinderPopUp.selectedCategoryDTOImpl;
+                if (_cat != null) {
+                    selectedCategoryDTOImpl.linkToId = _cat.categoryId;
+                    selectedCategoryDTOImpl.linkToName = _cat.name;
+                    categoryLinkName.text = _cat.name;
+                }
+                categoryFinderPopUp.selectProductButton.removeEventListener(MouseEvent.CLICK, onAssignSelectedCategoryLinkConfirm);
+                PopUpManager.removePopUp(categoryFinderPopUp);
+                categoryFinderPopUp = null;
+            }
+            categoryLinkClearButton.visible = selectedCategoryDTOImpl.linkToId > 0;
+        }
+
+        private function onCategoryLinkClear(event:Event):void {
+            categoryLinkClearButton.visible = false;
+            selectedCategoryDTOImpl.linkToId = 0;
+            selectedCategoryDTOImpl.linkToName = '';
+            categoryLinkName.text = '';
         }
 
 
@@ -364,7 +412,7 @@
         private function onDeleteCategoryClick(event:MouseEvent):void {
             if (categorySelected && this.selectedCategoryDTOImpl != null) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'deleteCategoryConfirm', [ this.selectedCategoryDTOImpl.name ]),
+                        resourceManager.getString('CategoryManagementPanel', 'deleteCategoryConfirm', [this.selectedCategoryDTOImpl.name]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, onDeleteSelectedCategoryConfirm, null, Alert.OK);
             }
@@ -389,7 +437,7 @@
             if (!categoryOrRootSelected || categoryTree.selectedItem == null ||
                     DomainUtils.isNew(categoryTree.selectedItem, 'categoryId')) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'canNotAddtoUnsavedCategory', [ categoryTree.selectedItem.name ]),
+                        resourceManager.getString('CategoryManagementPanel', 'canNotAddtoUnsavedCategory', [categoryTree.selectedItem.name]),
                         resourceManager.getString('ShopManagerApplication', 'info'));
 
             } else {
@@ -515,7 +563,7 @@
         private function onRemoveProductFromCategoryClick(event:MouseEvent):void {
             if (productSelected && assignedProductsGrid.selectedItem != null) {
                 Alert.show(
-                        resourceManager.getString('CategoryManagementPanel', 'deleteProductFromCategoryConfirm', [ assignedProductsGrid.selectedItem.code ]),
+                        resourceManager.getString('CategoryManagementPanel', 'deleteProductFromCategoryConfirm', [assignedProductsGrid.selectedItem.code]),
                         resourceManager.getString('ShopManagerApplication', 'warning'),
                         Alert.OK | Alert.CANCEL, this, removeSelectedProductFromCategory, null, Alert.OK);
             }
@@ -579,21 +627,10 @@
             categoryTree.dataProvider = event.result;
             categoryTree.dataDescriptor = new CategoryTreeDescriptor(null);
             if (categoryTree.dataProvider.length > 0) {
-                categoryTree.openItems = [ categoryTree.dataProvider.getItemAt(0) ];
+                categoryTree.openItems = [categoryTree.dataProvider.getItemAt(0)];
                 categoryTree.expandItem(categoryTree.dataProvider.getItemAt(0), true);
                 categoryTree.validateNow();
             }
-        }
-
-        private function onGetAllProductTypesResult(event:ResultEvent):void {
-
-            var _types:ArrayCollection = event.result as ArrayCollection;
-            var _sort:Sort = new Sort();
-            _sort.fields = [ new SortField('name') ];
-            _types.sort = _sort;
-            _types.refresh();
-            this.categoryProductTypeList = _types;
-
         }
 
         private function onCreateCategoriesResult(event:ResultEvent):void {
@@ -682,15 +719,6 @@
 
     </mx:RemoteObject>
 
-    <mx:RemoteObject showBusyCursor="true" id="remoteProductTypeService" destination="remoteProductTypeService"
-                     channelSet="{ShopManagerGlobal.instance.channelSet}">
-
-        <mx:method id="getAllProductTypes" name="getAll"
-                   result="onGetAllProductTypesResult(event)"
-                   fault="onRpcMethodFault(event)"/>
-
-    </mx:RemoteObject>
-
 
     <mx:RemoteObject showBusyCursor="true" id="remoteProductCategoryService" destination="remoteProductCategoryService"
                      channelSet="{ShopManagerGlobal.instance.channelSet}">
@@ -710,8 +738,6 @@
     <mx:Boolean id="categoryOrRootSelected">false</mx:Boolean>
     <mx:Boolean id="categorySelectedAndChanged">false</mx:Boolean>
     <mx:Boolean id="productSelected">false</mx:Boolean>
-
-    <mx:ArrayCollection id="categoryProductTypeList"/>
 
     <mx:Panel width="100%" height="100%" title="@Resource(bundle='CategoryManagementPanel',key='categories')"
               paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2">
@@ -771,6 +797,23 @@
                                                       width="300"/>
                                     </mx:FormItem>
                                     <mx:FormItem width="100%"
+                                                 label="@Resource(bundle='CategoryManagementPanel',key='link')">
+                                        <mx:HBox>
+                                            <mx:TextInput id="categoryLinkName" width="180" editable="false"/>
+                                            <mx:Button
+                                                    label="..." width="30"
+                                                    toolTip="@Resource(bundle='CategoryManagementPanel',key='selectLinkPropmt')"
+                                                    click="onAssignCategoryLinkClick(event)"
+                                                    />
+                                            <mx:Button id="categoryLinkClearButton"
+                                                       label="@Resource(bundle='CategoryManagementPanel',key='clearLink')"
+                                                       toolTip="@Resource(bundle='CategoryManagementPanel',key='clearLinkHint')"
+                                                       visible="false"
+                                                       click="onCategoryLinkClear(event)"
+                                                    />
+                                        </mx:HBox>
+                                    </mx:FormItem>
+                                    <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='templateVariation')">
                                         <mx:TextInput id="categoryTemplateTextInput" width="300"/>
                                     </mx:FormItem>
@@ -828,11 +871,11 @@
                                     <mx:FormItem width="100%"
                                                  label="@Resource(bundle='CategoryManagementPanel',key='productType')">
                                         <mx:HBox>
-                                            <mx:ComboBox id="categoryProductTypeComboBox" width="300"
-                                                         dataProvider="{categoryProductTypeList}"
-                                                         labelField="name"
-                                                         data="producttypeId"
-                                                         prompt="@Resource(bundle='CategoryManagementPanel',key='selectTypePropmt')"
+                                            <mx:TextInput id="categoryProductTypeName" width="180" editable="false"/>
+                                            <mx:Button
+                                                    label="..." width="30"
+                                                    toolTip="@Resource(bundle='CategoryManagementPanel',key='selectTypePropmt')"
+                                                    click="onAssignProductTypeClick(event)"
                                                     />
                                             <mx:Button id="categoryProductTypeClearButton"
                                                     label="@Resource(bundle='CategoryManagementPanel',key='clearType')"

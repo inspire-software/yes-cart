@@ -22,6 +22,8 @@ public class CarrierSlaDTOImpl {
 
     public var carrierslaId:Number;
 
+    public var code:String;
+
     public var name:String;
 
     public var displayNames:Object;
@@ -30,23 +32,11 @@ public class CarrierSlaDTOImpl {
 
     public var displayDescriptions:Object;
 
-    public var currency:String;
-
     public var maxDays:Number;
 
     public var slaType:String;
 
-    public var price:Number;
-
-    public var percent:Number;
-
     public var script:String;
-
-    public var priceNotLess:Number;
-
-    public var percentNotLess:Number;
-
-    public var costNotLess:Number;
 
     public var billingAddressNotRequired:Boolean;
 

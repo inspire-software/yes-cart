@@ -72,6 +72,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     private boolean promotionsDisabled = false;
 
+    private String ordernum;
+
     private transient AmountCalculationStrategy calculationStrategy;
 
 
@@ -92,6 +94,10 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public void markDirty() {
         this.modifiedTimestamp = System.currentTimeMillis();
+        if (!isModified()) {
+            // New carts need artificial time lag.
+            this.modifiedTimestamp += 1;
+        }
     }
 
     /** {@inheritDoc} */
@@ -312,6 +318,24 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         return removed;
     }
 
+
+    /** {@inheritDoc} */
+    public boolean removeItemOffers() {
+        boolean removed = false;
+
+        for (final CartItemImpl item : getItems()) {
+            if (item.isFixedPrice()) {
+                // reinstate sale price
+                removed = true;
+                item.setPrice(item.getSalePrice());
+                item.setAppliedPromo(null);
+                item.setFixedPrice(false);
+            }
+        }
+        return removed;
+    }
+
+
     /** {@inheritDoc} */
     public boolean removeShipping() {
         if (getShipping().isEmpty()) {
@@ -336,12 +360,24 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         final int skuIndex = indexOfProductSku(skuCode);
         if (skuIndex != -1) {
             final CartItemImpl cartItem = getItems().get(skuIndex);
-            cartItem.setPrice(salePrice);
-            cartItem.setSalePrice(salePrice);
-            cartItem.setListPrice(listPrice);
-            // clear promotion as we effectively changed the base price for promo calculations
-            cartItem.setAppliedPromo(null);
-            cartItem.setPromoApplied(false);
+            if (cartItem.isFixedPrice()) {
+                if (MoneyUtils.isFirstBiggerThanSecond(salePrice, cartItem.getPrice())) {
+                    // Do not overwrite the offers, only base prices
+                    cartItem.setSalePrice(salePrice);
+                    cartItem.setListPrice(listPrice);
+                } else {
+                    // else fixed price is more than sale do not show sale price
+                    cartItem.setSalePrice(cartItem.getPrice());
+                    cartItem.setListPrice(cartItem.getPrice());
+                }
+            } else {
+                cartItem.setPrice(salePrice);
+                cartItem.setSalePrice(salePrice);
+                cartItem.setListPrice(listPrice);
+                // clear promotion as we effectively changed the base price for promo calculations
+                cartItem.setAppliedPromo(null);
+                cartItem.setPromoApplied(false);
+            }
             return true;
         }
         return false;
@@ -389,6 +425,20 @@ public class ShoppingCartImpl implements MutableShoppingCart {
             final CartItemImpl cartItem = getItems().get(skuIndex);
             cartItem.setPrice(promoPrice);
             addPromoCode(cartItem, promoCode);
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setProductSkuOffer(final String skuCode, final BigDecimal fixedPrice, final String authCode) {
+        final int skuIndex = indexOfProductSku(skuCode);
+        if (skuIndex != -1) {
+            final CartItemImpl cartItem = getItems().get(skuIndex);
+            cartItem.setPrice(fixedPrice);
+            cartItem.setAppliedPromo(authCode); // Only one Auth code for offer
+            cartItem.setPromoApplied(false); // This is not promotion, promotions are removed every time we recalculate
+            cartItem.setFixedPrice(true); // Offers do not participate in promotions
             return true;
         }
         return false;
@@ -617,6 +667,17 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     public void setPromotionsDisabled(final boolean promotionsDisabled) {
         this.promotionsDisabled = promotionsDisabled;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public String getOrdernum() {
+        return ordernum;
+    }
+
+    /** {@inheritDoc} */
+    public void setOrdernum(final String ordernum) {
+        this.ordernum = ordernum;
     }
 
     /** {@inheritDoc} */

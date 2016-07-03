@@ -20,6 +20,9 @@
 
     <mx:HBox>
         <mx:Form>
+            <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='code')">
+                <mx:TextInput width="195" id="ccode" editable="false"/>
+            </mx:FormItem>
             <mx:FormItem width="100%" label="@Resource(bundle='CarrierManagementPanel',key='name')">
                 <mx:TextInput width="195" id="cname"/>
             </mx:FormItem>
@@ -95,6 +98,7 @@
             displayNames.setSourceObject(_carrierSlaDTOImpl, 'displayNames');
             displayDescriptions.setSourceObject(_carrierSlaDTOImpl, 'displayDescriptions');
 
+            _binding.push(BindingUtils.bindProperty(this.ccode, "text", _carrierSlaDTOImpl, "code"));
             _binding.push(BindingUtils.bindProperty(this.cname, "text", _carrierSlaDTOImpl, "name"));
             _binding.push(BindingUtils.bindProperty(this.description, "text", _carrierSlaDTOImpl, "description"));
             _binding.push(BindingUtils.bindProperty(this.maxDays, "text", _carrierSlaDTOImpl, "maxDays"));

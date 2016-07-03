@@ -69,4 +69,12 @@ public interface PriceListFilter {
      */
     Boolean getTagExact();
 
+
+    /**
+     * Get price type. Price type defines customer segment that has access to this price.
+     *
+     * @return price type
+     */
+    String getPricingPolicy();
+
 }

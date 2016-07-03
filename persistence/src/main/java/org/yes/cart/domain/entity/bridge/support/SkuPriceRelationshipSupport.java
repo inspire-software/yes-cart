@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.entity.bridge.support;
 
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 
 import java.util.List;
@@ -26,6 +27,13 @@ import java.util.List;
  * Time: 08:00
  */
 public interface SkuPriceRelationshipSupport {
+
+    /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    List<Shop> getAll();
 
     /**
      * Get prices for given sku on all shops.

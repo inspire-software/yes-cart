@@ -34,6 +34,7 @@ public class PriceListFilter {
     public var tagExact:Boolean;
     public var from:Date;
     public var to:Date;
+    public var pricingPolicy:String;
 
     public function PriceListFilter() {
     }

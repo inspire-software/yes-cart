@@ -1126,9 +1126,11 @@
             statuses.addItem(createStatusObject("os.waiting.payment"));
             statuses.addItem(createStatusObject("os.in.progress"));
             statuses.addItem(createStatusObject("os.cancelled"));
+            statuses.addItem(createStatusObject("os.cancelled.waiting.payment"));
             statuses.addItem(createStatusObject("os.partially.shipped"));
             statuses.addItem(createStatusObject("os.completed"));
             statuses.addItem(createStatusObject("os.returned"));
+            statuses.addItem(createStatusObject("os.returned.waiting.payment"));
 
             remoteCustomerOrderService.getOrderPgLabels(resourceManager.getString('Common', 'localeFilter'));
 

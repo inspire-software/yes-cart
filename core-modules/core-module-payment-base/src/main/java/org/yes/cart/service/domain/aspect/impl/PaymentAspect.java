@@ -28,10 +28,7 @@ import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.domain.*;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.theme.ThemeService;
@@ -51,7 +48,7 @@ import java.util.Map;
 @Aspect
 public class PaymentAspect extends BaseNotificationAspect {
 
-    private final ProductService productService;
+    private final ProductSkuService productSkuService;
 
     private final MailService mailService;
 
@@ -80,7 +77,7 @@ public class PaymentAspect extends BaseNotificationAspect {
      *
      */
     public PaymentAspect(final TaskExecutor taskExecutor,
-                         final ProductService productService,
+                         final ProductSkuService productService,
                          final MailService mailService,
                          final MailComposer mailComposer,
                          final CustomerService customerService,
@@ -89,7 +86,7 @@ public class PaymentAspect extends BaseNotificationAspect {
                          final ThemeService themeService,
                          final PaymentModulesManager paymentModulesManager) {
         super(taskExecutor);
-        this.productService = productService;
+        this.productSkuService = productService;
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.shopService = shopService;
@@ -106,6 +103,7 @@ public class PaymentAspect extends BaseNotificationAspect {
                 mailService,
                 mailComposer,
                 customerService,
+                productSkuService,
                 shopService,
                 serializableMessage);
 

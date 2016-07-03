@@ -126,6 +126,14 @@ public interface ProductTypeAttrDTO extends Identifiable {
      */
     void setStore(boolean store);
 
+
+    /**
+     * true if attribute will be used for attribute search.
+     *
+     * @return true if attribute used for attribute search.
+     */
+    boolean isSearch();
+
     /**
      * Set to true if attribute will be used for attribute search.
      *

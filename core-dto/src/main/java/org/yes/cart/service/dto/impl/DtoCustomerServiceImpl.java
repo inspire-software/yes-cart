@@ -155,6 +155,8 @@ public class DtoCustomerServiceImpl
                     attrValueCategoryDTO.setVal(customerDTO.getLastname());
                 } else if ("customertype".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
                     attrValueCategoryDTO.setVal(customerDTO.getCustomerType());
+                } else if ("pricingpolicy".equals(attrValueCategoryDTO.getAttributeDTO().getCode())) {
+                    attrValueCategoryDTO.setVal(customerDTO.getPricingPolicy());
                 }
                 result.add(attrValueCategoryDTO);
             }
@@ -210,6 +212,8 @@ public class DtoCustomerServiceImpl
                 customer.setCustomerType(attrValueDTO.getVal());
             }
             getService().update(customer);
+        }  else if ("pricingpolicy".equals(atr.getCode())) {
+            customer.setPricingPolicy(attrValueDTO.getVal());
         } else {
             if (!multivalue) {
                 for (final AttrValueCustomer avp : customer.getAttributes()) {
@@ -251,8 +255,9 @@ public class DtoCustomerServiceImpl
                                           final String lastname,
                                           final String middlename,
                                           final String tag,
-                                          final String customerType) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag, customerType);
+                                          final String customerType,
+                                          final String pricingPolicy) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Customer> entities = ((CustomerService)service).findCustomer(email, firstname, lastname, middlename, tag, customerType, pricingPolicy);
         final List<CustomerDTO> dtos  = new ArrayList<CustomerDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

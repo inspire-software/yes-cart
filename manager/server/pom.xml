@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.3.0-SNAPSHOT</version>
     </parent>
     <artifactId>yes-manager</artifactId>
     <packaging>war</packaging>
@@ -32,7 +32,7 @@
         <repository>
             <id>spring-maven-external</id>
             <name>Springframework Maven External Repository</name>
-            <url>http://maven.springframework.org/external</url>
+            <url>http://repo.spring.io/plugins-release/</url>
             <snapshots><enabled>false</enabled></snapshots>
         </repository>
     </repositories>
@@ -70,6 +70,11 @@
         <dependency>
             <groupId>org.yes</groupId>
             <artifactId>core-module-job</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
+            <artifactId>core-module-cart</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -487,6 +492,18 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
+                    <include>yc-jgroups-udp.xml</include>
+                    <include>yc-ws-cluster.xml</include>
+                    <include>yc-config.properties</include>
+                    <include>yc-license.txt</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}/YUM</directory>
+                <includes>
+                    <include>logback.xml</include>
+                    <include>logging.properties</include>
                 </includes>
             </resource>
         </resources>

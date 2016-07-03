@@ -22,13 +22,15 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.GridView;
 import org.yes.cart.domain.entity.Category;
+import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
+import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,4 +130,21 @@ public class SubCategoriesCentralView extends AbstractCentralView {
 
         super.onBeforeRender();
     }
+
+
+    @Override
+    protected String getRelCanonical(final Seo seo, final String language) {
+
+        if (getCategoryId() > 0L) {
+
+            final String uri = getBookmarkService().saveBookmarkForContent(String.valueOf(getCategoryId()));
+
+            return getWicketUtil().getHttpServletRequest().getContextPath() + "/"
+                    + WebParametersKeys.CATEGORY_ID + "/" + uri + "/" + ShoppingCartCommand.CMD_CHANGELOCALE + "/" + language;
+
+        }
+
+        return super.getRelCanonical(seo, language);
+    }
+
 }

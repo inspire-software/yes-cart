@@ -17,6 +17,7 @@
 
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
                 xmlns:controls="controls.*"
+                xmlns:license="org.yes.cart.ui.license.*"
                 usePreloader="true"
                 layout="absolute"
                 minWidth="800"
@@ -62,6 +63,7 @@
         import org.yes.cart.impl.CustomerOrderDTOImpl;
         import org.yes.cart.impl.CustomerOrderDeliveryDTOImpl;
         import org.yes.cart.impl.CustomerOrderDeliveryDetailDTOImpl;
+        import org.yes.cart.impl.CustomerOrderDetailDTOImpl;
         import org.yes.cart.impl.InventoryDTOImpl;
         import org.yes.cart.impl.JobStatusImpl;
         import org.yes.cart.impl.PriceListDTOImpl;
@@ -99,6 +101,7 @@
         import org.yes.cart.ui.category.CategoryManagementPanel;
         import org.yes.cart.ui.content.ContentManagementPanel;
         import org.yes.cart.ui.customer.CustomerManagementPanel;
+        import org.yes.cart.ui.license.LicensePanel;
         import org.yes.cart.ui.location.LocationManagementPanel;
         import org.yes.cart.ui.monitoring.ClusterPanel;
         import org.yes.cart.ui.monitoring.CachePanel;
@@ -154,6 +157,7 @@
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl", CustomerOrderDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl", CustomerOrderDeliveryDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl", CustomerOrderDeliveryDetailDTOImpl);
+            registerClassAlias("org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl", CustomerOrderDetailDTOImpl);
             registerClassAlias("org.yes.cart.service.async.model.impl.JobStatusImpl", JobStatusImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProdTypeAttributeViewGroupDTOImpl", ProdTypeAttributeViewGroupDTOImpl);
             registerClassAlias("org.yes.cart.domain.dto.impl.ProductAssociationDTOImpl", ProductAssociationDTOImpl);
@@ -242,10 +246,31 @@
         private function loginResult(event:ResultEvent, token:AsyncToken):void {
             ShopManagerGlobal.instance.amfChannel = myamf;
             ShopManagerGlobal.instance.channelSet = channelSet;
-            currentState = "userAuthenticated";
+
             /*This call pass  the password to flex session, because after new spring security impossible to
              * get user credentials using FlexContext.getUserPrincipal()).getCredentials() on java side.*/
             remoteFlexSupportService.setSessionInfo("pwd", password.text);
+
+            remoteLicenseService.isAgreedToLicense();
+        }
+
+        private function onIsAgreedToLicense(event:ResultEvent):void {
+
+            var _agreed:Boolean = event.result as Boolean;
+
+            currentState = _agreed ? "userAuthenticated" : "userAgreeToLicense";
+
+        }
+
+        private function agree():void {
+
+            remoteLicenseService.agreeToLicense();
+
+        }
+
+        private function onAgreeToLicense(event:ResultEvent):void {
+
+            currentState = "userAuthenticated";
 
         }
 
@@ -297,7 +322,16 @@
             showMainPanelSection(panelCache['ReportPanel']);
         }
 
-        private function onHelpClick(event:MouseEvent):void {
+        private function onLicenseClick(event:MouseEvent):void {
+            setFontWeight(licenseBtn);
+            if (!panelCache.hasOwnProperty('LicensePanel')) {
+                panelCache['LicensePanel'] = new LicensePanel();
+                mainPanel.addChild(panelCache['LicensePanel']);
+            }
+            showMainPanelSection(panelCache['LicensePanel']);
+        }
+
+        private function onAboutClick(event:MouseEvent):void {
 
             var _appName:String = resourceManager.getString('ShopManagerApplication', 'appName');
 //            var _appName:String = resourceManager.getString('ShopManagerApplication', 'revLabel') + resourceManager.getString('ShopManagerApplication', 'rev') + "\n" +
@@ -396,6 +430,10 @@
                 var panel:StoresManagementPanel = new StoresManagementPanel();
                 panel.shopDTOImpl = shop;
                 panel.title = shop.name;
+                panel.newShopCallBack = function (shop:ShopDTOImpl):void {
+                    shops['shop_' + shop.shopId] = shop;
+                    onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+                };
                 panelCache[key] = panel;
                 mainPanel.addChild(panelCache[key]);
             }
@@ -427,6 +465,7 @@
             panel.newShopCallBack = function (shop:ShopDTOImpl):void {
                 shops['shop_' + shop.shopId] = shop;
                 onInitStoresButtons(storesButtons, 'storesBtn', onStoreManagementClick);
+                panel.title = shop.name;
             };
             panelCache['StoresManagementPanel'] = panel;
             mainPanel.addChild(panelCache['StoresManagementPanel']);
@@ -644,7 +683,7 @@
                 var shop:ShopDTOImpl = this.shops[shopProp];
                 shopCodes.addItem({
                     id: shopProp,
-                    label: shop.code + (shop.name != null && shop.name.length > 0 ? ': ' + shop.name : ''),
+                    label: (shop.disabled ? '*** ' : '') + shop.code + (shop.name != null && shop.name.length > 0 ? ': ' + shop.name : ''),
                     code: shop.code,
                     name: shop.name
                 });
@@ -707,6 +746,21 @@
     </mx:RemoteObject>
 
 
+    <mx:RemoteObject showBusyCursor="true" id="remoteLicenseService"
+                     destination="remoteLicenseService"
+                     channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+        <mx:method id="isAgreedToLicense" name="isAgreedToLicense"
+                   result="onIsAgreedToLicense(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+        <mx:method id="agreeToLicense" name="agreeToLicense"
+                   result="onAgreeToLicense(event)"
+                   fault="onRpcMethodFault(event)"/>
+
+
+    </mx:RemoteObject>
+
     <mx:states>
         <mx:State name="inProgressState">
             <mx:RemoveChild target="{loginPanel}"/>
@@ -759,8 +813,29 @@
                 </mx:target>
             </mx:AddChild>
         </mx:State>
+        <mx:State name="userAgreeToLicense">
+            <mx:RemoveChild target="{loginPanel}"/>
+            <mx:AddChild>
+                <mx:target>
+                    <!-- License Form -->
+                    <mx:VBox horizontalAlign="center" verticalAlign="middle" height="100%" width="100%" id="licensePanel">
+                        <mx:HBox horizontalAlign="center" verticalAlign="middle" height="90%" width="100%"
+                                 paddingLeft="5" paddingRight="5" paddingBottom="5" paddingTop="5"
+                                 horizontalScrollPolicy="off">
+                            <license:LicensePanel/>
+                        </mx:HBox>
+                        <mx:HBox horizontalAlign="center" verticalAlign="middle" height="10%" width="100%">
+                            <mx:Button id="agreeButton"
+                                       label="@Resource(bundle='ShopManagerApplication',key='licenseAgree')"
+                                       click="agree()"/>
+                        </mx:HBox>
+                    </mx:VBox>
+                </mx:target>
+            </mx:AddChild>
+        </mx:State>
         <mx:State name="userAuthenticated">
             <mx:RemoveChild target="{inProgress}"/>
+            <mx:RemoveChild target="{licensePanel}"/>
             <mx:AddChild>
                 <mx:target>
                     <!-- The main frame -->
@@ -1023,9 +1098,14 @@
                                            width="100%" height="100%"  horizontalScrollPolicy="off">
                                     <mx:VBox x="0" y="0" height="100%" width="100%">
                                         <mx:Spacer height="10"/>
+                                        <mx:LinkButton id="licenseBtn" width="100%"
+                                                       label="@Resource(bundle='ShopManagerApplication',key='license')"
+                                                       click="onLicenseClick(event)"
+                                                />
+                                        <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%"
                                                        label="@Resource(bundle='ShopManagerApplication',key='about')"
-                                                       click="onHelpClick(event)"
+                                                       click="onAboutClick(event)"
                                                 />
                                         <mx:Spacer height="10"/>
                                         <mx:LinkButton width="100%"

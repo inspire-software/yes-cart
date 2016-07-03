@@ -44,6 +44,8 @@ public class SkuPriceDTOImpl {
     public var skuName:String;
 
     public var tag:String;
+
+    public var pricingPolicy:String;
     
     
     public function SkuPriceDTOImpl() {
@@ -62,7 +64,8 @@ public class SkuPriceDTOImpl {
                ",currency=" + String(currency) +
                ",skuCode=" + String(skuCode) +
                ",skuName=" + String(skuName) +
-               ",tag=" + String(tag) + "}";
+               ",tag=" + String(tag) +
+               ",pricingPolicy=" + String(pricingPolicy) + "}";
     }
 }
 }

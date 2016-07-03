@@ -40,10 +40,6 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     private int rank;
     private boolean visible;
     private boolean similarity;
-    private boolean store;
-    private boolean search;
-    private boolean primary;
-    private boolean navigation;
     private String navigationType;
     private String rangeNavigation;
     private Date createdTimestamp;
@@ -97,35 +93,35 @@ public class ProductTypeAttrEntity implements org.yes.cart.domain.entity.Product
     }
 
     public boolean isStore() {
-        return store;
+        return attribute.isStore();
     }
 
     public void setStore(final boolean store) {
-        this.store = store;
+        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
     public boolean isSearch() {
-        return search;
+        return attribute.isSearch();
     }
 
     public void setSearch(final boolean search) {
-        this.search = search;
+        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
     public boolean isPrimary() {
-        return primary;
+        return attribute.isPrimary();
     }
 
     public void setPrimary(final boolean primary) {
-        this.primary = primary;
+        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
     public boolean isNavigation() {
-        return this.navigation;
+        return attribute.isNavigation();
     }
 
     public void setNavigation(boolean navigation) {
-        this.navigation = navigation;
+        throw new UnsupportedOperationException("Set this attribute on AttributeEntity");
     }
 
     public String getNavigationType() {

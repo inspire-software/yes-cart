@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<!--
+  - Copyright 2009 Denys Pavlov, Igor Azarnyi
+  -
+  -    Licensed under the Apache License, Version 2.0 (the "License");
+  -    you may not use this file except in compliance with the License.
+  -    You may obtain a copy of the License at
+  -
+  -        http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -    Unless required by applicable law or agreed to in writing, software
+  -    distributed under the License is distributed on an "AS IS" BASIS,
+  -    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -    See the License for the specific language governing permissions and
+  -    limitations under the License.
+  -->
+
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="780" height="500"
+                title="@Resource(bundle='ProductManagementPanel',key='find')"
+                showCloseButton="true"
+                close="PopUpManager.removePopUp(this)"
+                creationComplete="init();"
+        >
+
+  <mx:Script><![CDATA[
+      import mx.collections.ArrayCollection;
+      import mx.events.ListEvent;
+      import mx.managers.PopUpManager;
+      import mx.rpc.events.FaultEvent;
+      import mx.rpc.events.ResultEvent;
+
+      import org.yes.cart.impl.AttributeDTOImpl;
+
+      import org.yes.cart.shopmanager.ShopManagerGlobal;
+
+      public function get brandSelection():Array {
+          return brandsGrid.selectedItems;
+      }
+
+      protected function onRpcMethodFault(event:FaultEvent):void {
+          ShopManagerGlobal.instance.defaultOnRpcMethodFault(event);
+      }
+
+      private function onFindBrandsResult(event:ResultEvent):void {
+          hasSelection = false;
+
+          brandsCollection = event.result as ArrayCollection;
+      }
+
+
+      private function onRefreshBrandsClick(event:MouseEvent):void {
+          remoteBrandService.findBrands(brandTextInput.text);
+      }
+
+
+      private function onAttributeSelected(event:ListEvent):void {
+          hasSelection = brandsGrid.selectedItem != null;
+      }
+
+      private function init():void {
+
+      }
+      ]]></mx:Script>
+
+  <mx:Boolean id="hasSelection">false</mx:Boolean>
+  <mx:ArrayCollection id="brandsCollection"/>
+
+  <mx:RemoteObject showBusyCursor="true" id="remoteBrandService" destination="remoteBrandService"
+                   channelSet="{ShopManagerGlobal.instance.channelSet}">
+
+    <mx:method id="findBrands" name="findBrands"
+               result="onFindBrandsResult(event)"
+               fault="onRpcMethodFault(event)"/>
+
+  </mx:RemoteObject>
+
+  <mx:VBox width="100%" height="100%"
+           paddingLeft="2" paddingRight="2" paddingBottom="2" paddingTop="2">
+
+    <mx:HBox paddingLeft="5" paddingTop="5" width="100%">
+
+        <mx:Label text="@Resource(bundle='BrandManagementPanel',key='name')"/>
+        <mx:TextInput id="brandTextInput" width="100" toolTip="@Resource(bundle='BrandManagementPanel',key='name')"/>
+
+      <mx:Button label="@Resource(bundle='ProductManagementPanel',key='findBtn')"
+                 toolTip="@Resource(bundle='ProductManagementPanel',key='findBtnHint')"
+                 click="onRefreshBrandsClick(event)"  height="100%"/>
+
+
+    </mx:HBox>
+    <mx:DataGrid width="100%" height="90%" id="brandsGrid" dataProvider="{brandsCollection}"
+                 itemClick="onAttributeSelected(event)">
+      <mx:columns>
+          <mx:DataGridColumn width="80" headerText="@Resource(bundle='BrandManagementPanel',key='id')"
+                             dataField="brandId"/>
+          <mx:DataGridColumn width="300" headerText="@Resource(bundle='BrandManagementPanel',key='name')"
+                             dataField="name"/>
+          <mx:DataGridColumn headerText="@Resource(bundle='BrandManagementPanel',key='description')"
+                             dataField="description"/>
+      </mx:columns>
+    </mx:DataGrid>
+    <mx:ControlBar width="100%" horizontalAlign="right">
+      <mx:Button id="selectBrandButton" label="@Resource(bundle='ProductManagementPanel',key='select')"
+                 enabled="{hasSelection}"/>
+      <mx:Button label="@Resource(bundle='ShopManagerApplication',key='close')"
+                 click="PopUpManager.removePopUp(this)"/>
+    </mx:ControlBar>
+  </mx:VBox>
+
+</mx:TitleWindow>

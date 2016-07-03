@@ -20,34 +20,32 @@ import org.hamcrest.CustomMatchers;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
+import org.yes.cart.domain.entity.ShoppingCartState;
 import org.yes.cart.domain.ro.AddressOptionRO;
 import org.yes.cart.domain.ro.OrderDeliveryOptionRO;
 import org.yes.cart.domain.ro.PaymentGatewayOptionRO;
 import org.yes.cart.domain.ro.ShippingOptionRO;
+import org.yes.cart.service.domain.ShoppingCartStateService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.support.tokendriven.CartRepository;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.YcMockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * User: denispavlov
@@ -56,15 +54,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:testApplicationContext.xml")
-@WebAppConfiguration
+@WebAppConfiguration(value = "src/test/webapp")
 public class CheckoutSuiteTest extends AbstractSuiteTest {
 
     private final Locale locale = Locale.ENGLISH;
-    private final Pattern UUID_JSON = Pattern.compile("\"uuid\":\"([0-9a-zA-Z\\-]*)\"");
+
     private final Pattern ADDRESS_ID_JSON = Pattern.compile("\"addressId\":([0-9]*),");
-    private final Pattern UUID_XML = Pattern.compile("uuid>([0-9a-zA-Z\\-]*)</uuid");
     private final Pattern ADDRESS_ID_XML = Pattern.compile("address-id=\"([0-9]*)\"");
 
+    @Autowired
+    private ShoppingCartStateService shoppingCartStateService;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Test
     public void testCheckoutJson() throws Exception {
@@ -86,9 +88,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final Matcher matcher = UUID_JSON.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertEquals("bob.doe@yc-checkout-json.com", state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertEquals("bob.doe@yc-checkout-json.com", cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -376,8 +384,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("\"authenticated\":false")))
                 .andReturn();
 
-        final String uuid = authResult.getResponse().getCookie("yc").getValue();
+        final String uuid = authResult.getResponse().getHeader("yc");
 
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertNull(state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertNull(cart.getCustomerEmail());
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
@@ -659,9 +674,17 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final Matcher matcher = UUID_JSON.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
+
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertNull(state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertNull(cart.getCustomerEmail());
+
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -933,9 +956,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                     .andReturn();
 
-        final Matcher matcher = UUID_XML.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertEquals("bob.doe@yc-checkout-xml.com", state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertEquals("bob.doe@yc-checkout-xml.com", cart.getCustomerEmail());
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -1224,9 +1253,15 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("<authenticated>false</authenticated>")))
                 .andReturn();
 
-        final String uuid = authResult.getResponse().getCookie("yc").getValue();
+        final String uuid = authResult.getResponse().getHeader("yc");
 
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertNull(state.getCustomerEmail());
 
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertNull(cart.getCustomerEmail());
 
         final byte[] shippingAddress = toJsonBytesAddressDetails("UA-UA", "UA");
 
@@ -1495,9 +1530,16 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                         .andExpect(header().string("yc", CustomMatchers.isNotBlank()))
                         .andReturn();
 
-        final Matcher matcher = UUID_XML.matcher(regResult.getResponse().getContentAsString());
-        matcher.find();
-        final String uuid = matcher.group(1);
+        final String uuid = regResult.getResponse().getHeader("yc");
+
+        final ShoppingCartState state = shoppingCartStateService.findByGuid(uuid);
+        assertNotNull(uuid, state);
+        assertNull(state.getCustomerEmail());
+
+        final ShoppingCart cart = cartRepository.getShoppingCart(uuid);
+        assertNotNull(uuid, cart);
+        assertNull(cart.getCustomerEmail());
+
 
         mockMvc.perform(get("/auth/check")
                 .contentType(MediaType.APPLICATION_JSON)

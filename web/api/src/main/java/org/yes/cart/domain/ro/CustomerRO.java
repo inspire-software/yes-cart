@@ -48,6 +48,9 @@ public class CustomerRO implements Serializable {
     @DtoField(value = "customerType", readOnly = true)
     private String customerType;
 
+    @DtoField(value = "pricingPolicy", readOnly = true)
+    private String pricingPolicy;
+
     @DtoField(value = "email")
     private String email;
 
@@ -101,6 +104,15 @@ public class CustomerRO implements Serializable {
 
     public void setCustomerType(final String customerType) {
         this.customerType = customerType;
+    }
+
+    @XmlElement(name = "pricing-policy")
+    public String getPricingPolicy() {
+        return pricingPolicy;
+    }
+
+    public void setPricingPolicy(final String pricingPolicy) {
+        this.pricingPolicy = pricingPolicy;
     }
 
     public String getSalutation() {

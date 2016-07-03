@@ -25,7 +25,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,8 +36,6 @@ import java.util.List;
  * Time: 8:54 PM
  */
 public class BaseFilterView extends BaseComponent {
-
-    private final static int RECORD_LIMITS = 12;
 
     // ------------------------------------- MARKUP IDs BEGIN ---------------------------------- //
     private final static String HEAD = "head";
@@ -60,14 +57,16 @@ public class BaseFilterView extends BaseComponent {
      * @param code     attribute code
      * @param head     the head of widget
      * @param linkList the content of filtering widget.
+     * @param recordLimit max number of records to display
      */
     public BaseFilterView(
             final String id,
             final String code,
             final String head,
-            final List<Pair<Pair<String, Integer>, PageParameters>> linkList) {
+            final List<Pair<Pair<String, Integer>, PageParameters>> linkList,
+            final int recordLimit) {
         super(id);
-        this.linkList = cutTheTail(linkList);
+        this.linkList = cutTheTail(linkList, recordLimit);
         this.code = code;
         this.head = head;
     }
@@ -78,9 +77,9 @@ public class BaseFilterView extends BaseComponent {
      * @param navigationList list to reduce
      * @return  reduced nav list.
      */
-    private List<Pair<Pair<String, Integer>, PageParameters>> cutTheTail(final List<Pair<Pair<String, Integer>, PageParameters>> navigationList) {
+    private List<Pair<Pair<String, Integer>, PageParameters>> cutTheTail(final List<Pair<Pair<String, Integer>, PageParameters>> navigationList, final int recordLimit) {
 
-        if (navigationList.size() > RECORD_LIMITS) {
+        if (navigationList.size() > recordLimit && recordLimit > 0) {
             Collections.sort(
                     navigationList,
                     new Comparator<Pair<Pair<String, Integer>, PageParameters>>() {
@@ -91,7 +90,7 @@ public class BaseFilterView extends BaseComponent {
                     }
             );
 
-            return navigationList.subList(0, RECORD_LIMITS -1);
+            return navigationList.subList(0, recordLimit);
 
         }
         return navigationList;

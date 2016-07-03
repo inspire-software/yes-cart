@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.PricingPolicyProvider;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -44,14 +45,16 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
      *
      * @param registry shopping cart command registry
      * @param priceService price service
+     * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
      */
     public RemoveAllSkuFromCartCommandImpl(final ShoppingCartCommandRegistry registry,
                                            final PriceService priceService,
+                                           final PricingPolicyProvider pricingPolicyProvider,
                                            final ProductService productService,
                                            final ShopService shopService) {
-        super(registry, priceService, productService, shopService);
+        super(registry, priceService, pricingPolicyProvider, productService, shopService);
     }
 
     /** {@inheritDoc} */
@@ -63,16 +66,15 @@ public class RemoveAllSkuFromCartCommandImpl extends AbstractSkuCartCommandImpl 
     @Override
     protected void execute(final MutableShoppingCart shoppingCart,
                            final ProductSku productSku,
+                           final String skuCode,
                            final Map<String, Object> parameters) {
-        if (productSku != null) {
-            if(!shoppingCart.removeCartItem(productSku.getCode())) {
-                ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
-                        productSku.getCode());
+        if(!shoppingCart.removeCartItem(skuCode)) {
+            ShopCodeContext.getLog(this).warn("Cannot remove all skus with code {} from cart",
+                    skuCode);
 
-            } else  {
-                recalculatePrice(shoppingCart, null);
-                markDirty(shoppingCart);
-            }
+        } else  {
+            recalculatePricesInCart(shoppingCart);
+            markDirty(shoppingCart);
         }
     }
 

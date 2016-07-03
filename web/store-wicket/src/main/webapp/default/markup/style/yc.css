@@ -99,6 +99,11 @@ a {
     white-space:pre-wrap;
 }
 
+.form-horizontal input[type='checkbox'] {
+    width: 30px;
+    height: 30px;
+}
+
 /*===================================================================================*/
 /*	TOP NAVIGATION MENU, CHECKOUT TOP MENU
 /*===================================================================================*/
@@ -485,6 +490,11 @@ fieldset[disabled] .btn-primary2.active {
     text-align: right;
     color: #3d3d3d;
     min-height: 67px;
+}
+
+.product-price-holder .glyphicon.glyphicon-info-sign,
+.product-detail-price .glyphicon.glyphicon-info-sign {
+    margin-left: 3px;
 }
 
 .regular-price-currency,
@@ -904,6 +914,11 @@ fieldset[disabled] .btn-primary2.active {
     color: #3498db;
 }
 
+.cart-items-holder .glyphicon.glyphicon-info-sign {
+    color: #ffffff;
+    margin-left: 3px;
+}
+
 .cart-items-holder .wishlist-btn {
     margin-top: 5px;
 }
@@ -983,6 +998,11 @@ fieldset[disabled] .btn-primary2.active {
 
 .shopping-cart-sidebar a > .glyphicon:hover {
     color: #3498db;
+}
+
+.shopping-cart-sidebar a > .glyphicon.glyphicon-info-sign {
+    color: #ffffff;
+    margin-left: 3px;
 }
 
 .shopping-cart-sidebar .checkout-btn {

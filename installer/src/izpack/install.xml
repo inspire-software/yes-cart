@@ -8,13 +8,13 @@
             <author name="Igor Azarny" email="igor.azarny@yes-cart.org"/>
             <author name="Denis Pavlov" email="denis.pavlov@yes-cart.org"/>
         </authors>
-        <url>http://code.google.com/p/yes-cart</url>
+        <url>http://yes-cart.org/</url>
         <uninstaller write="yes"/>
-        <javaversion>1.6</javaversion>
+        <javaversion>1.7</javaversion>
     </info>
 
     <variables>
-        <variable name="JDKPathPanel.minVersion" value="1.6.0" />
+        <variable name="JDKPathPanel.minVersion" value="1.7.0" />
         <variable name="JDKPathPanel.skipIfValid" value="yes" />
     </variables>
 

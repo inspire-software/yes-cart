@@ -230,4 +230,11 @@ public interface ShoppingCart extends Serializable {
      */
     Total getTotal();
 
+    /**
+     * Order number for order amendment cart.
+     *
+     * @return order number
+     */
+    String getOrdernum();
+
 }

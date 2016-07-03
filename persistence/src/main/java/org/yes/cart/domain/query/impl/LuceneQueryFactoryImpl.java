@@ -24,12 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.domain.query.SearchQueryBuilder;
+import org.yes.cart.domain.query.ShopSearchSupportService;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.queryobject.impl.NavigationContextImpl;
 import org.yes.cart.service.domain.AttributeService;
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 
 import java.util.*;
@@ -45,7 +45,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private final AttributeService attributeService;
     private final ProductService productService;
-    private final CategoryService categoryService;
+    private final ShopSearchSupportService shopSearchSupportService;
 
     private final Map<String, SearchQueryBuilder> productBuilders;
     private final Map<String, SearchQueryBuilder> skuBuilders;
@@ -53,35 +53,38 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
 
     private final SearchQueryBuilder productCategoryBuilder;
     private final SearchQueryBuilder productShopBuilder;
+    private final SearchQueryBuilder productShopStockBuilder;
+    private final SearchQueryBuilder productShopPriceBuilder;
     private final SearchQueryBuilder productAttributeBuilder;
     private final SearchQueryBuilder productTagBuilder;
     private final SearchQueryBuilder skuAttributeBuilder;
 
     /**
      * Construct query builder factory.
-     *
      * @param attributeService attribute service to filter not allowed page parameters during filtered navigation
      * @param productService   product service
-     * @param categoryService  category service
+     * @param shopSearchSupportService shop search support
      * @param productBuilders  map of builders to provide parts of navigation query
      * @param skuBuilders      map of builders to provide parts of navigation query
      * @param useQueryRelaxation set of parameters names that are allowed to be relaxed to avoid no search results
      */
     public LuceneQueryFactoryImpl(final AttributeService attributeService,
                                   final ProductService productService,
-                                  final CategoryService categoryService,
+                                  final ShopSearchSupportService shopSearchSupportService,
                                   final Map<String, SearchQueryBuilder> productBuilders,
                                   final Map<String, SearchQueryBuilder> skuBuilders,
                                   final Set<String> useQueryRelaxation) {
 
         this.attributeService = attributeService;
         this.productService = productService;
-        this.categoryService = categoryService;
+        this.shopSearchSupportService = shopSearchSupportService;
 
         this.productBuilders = productBuilders;
         this.skuBuilders = skuBuilders;
         this.productCategoryBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD);
         this.productShopBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD);
+        this.productShopStockBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD);
+        this.productShopPriceBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD);
         this.productAttributeBuilder = productBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
         this.productTagBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD);
         this.skuAttributeBuilder = skuBuilders.get(ProductSearchQueryBuilder.ATTRIBUTE_CODE_FIELD);
@@ -191,7 +194,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     /**
      * {@inheritDoc}
      */
-    public NavigationContext getFilteredNavigationQueryChain(final Long shopId,
+    public NavigationContext getFilteredNavigationQueryChain(final long shopId,
                                                              final List<Long> categories,
                                                              final Map<String, List> requestParameters) {
 
@@ -202,18 +205,6 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         final List<Query> productQueryChainRelaxed = new ArrayList<Query>();
         final List<Query> skuQueryChainStrict = new ArrayList<Query>();
         final List<Query> skuQueryChainRelaxed = new ArrayList<Query>();
-
-        final Query cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
-        if (cats != null) {
-            // Every category belongs to a store, so no need to add store query too
-            productQueryChainStrict.add(cats);
-            productQueryChainRelaxed.add(cats);
-        } else {
-            // If we have no category criteria need to ensure we only view products that belong to current store
-            final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
-            productQueryChainStrict.add(store);
-            productQueryChainRelaxed.add(store);
-        }
 
         final Map<String, List<String>> navigationParameters = new HashMap<String, List<String>>();
         if (requestParameters != null) {
@@ -233,6 +224,11 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                         }
 
                         final boolean tag = prodBuilder == productTagBuilder;
+
+                        final List<Query> productQueryChainStrictClauses = new ArrayList<Query>();
+                        final List<Query> productQueryChainRelaxedClauses = new ArrayList<Query>();
+                        final List<Query> skuQueryChainStrictClauses = new ArrayList<Query>();
+                        final List<Query> skuQueryChainRelaxedClauses = new ArrayList<Query>();
 
                         for (final Object valueItem : value) {
 
@@ -255,39 +251,94 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
                             }
                             paramValues.add(String.valueOf(valueItem)); // record original value as string
 
-                            productQueryChainStrict.add(strictProdQuery);
+                            productQueryChainStrictClauses.add(strictProdQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
                                 final Query relaxedProdQuery = prodBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
                                 if (relaxedProdQuery == null) {
                                     continue; // no valid criteria
                                 }
-                                productQueryChainRelaxed.add(relaxedProdQuery);
+                                productQueryChainRelaxedClauses.add(relaxedProdQuery);
                             } else {
-                                productQueryChainRelaxed.add(strictProdQuery);
+                                productQueryChainRelaxedClauses.add(strictProdQuery);
                             }
 
                             final Query strictSkuQuery = skuBuilder.createStrictQuery(shopId, decodedKeyName, searchValue);
                             if (strictSkuQuery == null) {
                                 continue; // no valid criteria
                             }
-                            skuQueryChainStrict.add(strictSkuQuery);
+                            skuQueryChainStrictClauses.add(strictSkuQuery);
 
                             if (useQueryRelaxation.contains(decodedKeyName)) {
                                 final Query relaxedSkuQuery = skuBuilder.createRelaxedQuery(shopId, decodedKeyName, searchValue);
                                 if (relaxedSkuQuery == null) {
                                     continue; // no valid criteria
                                 }
-                                skuQueryChainRelaxed.add(relaxedSkuQuery);
+                                skuQueryChainRelaxedClauses.add(relaxedSkuQuery);
                             } else {
-                                skuQueryChainRelaxed.add(strictSkuQuery);
+                                skuQueryChainRelaxedClauses.add(strictSkuQuery);
                             }
 
+                        }
+
+                        if (productQueryChainStrictClauses.size() == 1) {
+                            productQueryChainStrict.add(productQueryChainStrictClauses.get(0));
+                        } else if (productQueryChainStrictClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            productQueryChainStrict.add(join(productQueryChainStrictClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (productQueryChainRelaxedClauses.size() == 1) {
+                            productQueryChainRelaxed.add(productQueryChainRelaxedClauses.get(0));
+                        } else if (productQueryChainRelaxedClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            productQueryChainRelaxed.add(join(productQueryChainRelaxedClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (skuQueryChainStrictClauses.size() == 1) {
+                            skuQueryChainStrict.add(skuQueryChainStrictClauses.get(0));
+                        } else if (skuQueryChainStrictClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            skuQueryChainStrict.add(join(skuQueryChainStrictClauses, BooleanClause.Occur.SHOULD));
+                        }
+
+                        if (skuQueryChainRelaxedClauses.size() == 1) {
+                            skuQueryChainRelaxed.add(skuQueryChainRelaxedClauses.get(0));
+                        } else if (skuQueryChainRelaxedClauses.size() > 1) {
+                            // Multivalues are OR'ed
+                            skuQueryChainRelaxed.add(join(skuQueryChainRelaxedClauses, BooleanClause.Occur.SHOULD));
                         }
 
                     }
                 }
             }
+        }
+
+        // Mandatory fields are last for better scoring
+        final Query cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
+        if (cats != null) {
+            // Every category belongs to a store, so no need to add store query too
+            productQueryChainStrict.add(cats);
+            productQueryChainRelaxed.add(cats);
+        } else {
+            // If we have no category criteria need to ensure we only view products that belong to current store
+            final Query store = productShopBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD, shopId);
+            productQueryChainStrict.add(store);
+            productQueryChainRelaxed.add(store);
+        }
+
+        // Enforce in stock products
+        final  Query inStock = productShopStockBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD, shopId);
+        if (inStock != null) {
+            productQueryChainStrict.add(inStock);
+            productQueryChainRelaxed.add(inStock);
+        }
+
+        // Enforce products with price
+        final  Query hasPrice = productShopPriceBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD, shopId);
+        if (hasPrice != null) {
+            productQueryChainStrict.add(hasPrice);
+            productQueryChainRelaxed.add(hasPrice);
         }
 
         Query prod = join(productQueryChainStrict, BooleanClause.Occur.MUST);
@@ -309,12 +360,15 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     }
 
     private Date earliestNewArrivalDate(final Long shopId, final List<Long> categories) {
+
         Date beforeDays = new Date();
         if (CollectionUtils.isEmpty(categories)) {
-            beforeDays = categoryService.getCategoryNewArrivalDate(0L, shopId);
+
+            beforeDays = shopSearchSupportService.getCategoryNewArrivalDate(0L, shopId);
+
         } else {
             for (final Long categoryId : categories) {
-                Date catBeforeDays = categoryService.getCategoryNewArrivalDate(categoryId, shopId);
+                Date catBeforeDays = shopSearchSupportService.getCategoryNewArrivalDate(categoryId, shopId);
                 if (catBeforeDays.before(beforeDays)) {
                     beforeDays = catBeforeDays; // get the earliest
                 }

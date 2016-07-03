@@ -165,7 +165,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
                                        final String lastname,
                                        final String middlename,
                                        final String tag,
-                                       final String customerType) {
+                                       final String customerType, final String pricingPolicy) {
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
 
@@ -191,6 +191,10 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
 
         if (StringUtils.isNotBlank(customerType)) {
             criterionList.add(Restrictions.like("customerType", customerType, MatchMode.ANYWHERE));
+        }
+
+        if (StringUtils.isNotBlank(pricingPolicy)) {
+            criterionList.add(Restrictions.like("pricingPolicy", pricingPolicy, MatchMode.ANYWHERE));
         }
 
         if (criterionList.isEmpty()) {

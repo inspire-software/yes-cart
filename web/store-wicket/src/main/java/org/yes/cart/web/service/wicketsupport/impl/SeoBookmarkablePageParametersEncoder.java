@@ -155,7 +155,7 @@ public class SeoBookmarkablePageParametersEncoder implements IPageParametersEnco
     private void decodeSegment(final PageParameters pageParameters, final String idName, final String idValueToDecode) {
 
         String seoId = idValueToDecode;
-        if (seoEnabled && !NumberUtils.isDigits(idValueToDecode)) {
+        if (seoEnabled) {
             if (WebParametersKeys.CATEGORY_ID.equals(idName)) {
                 final String id = bookmarkService.getCategoryForURI(idValueToDecode);
                 if (id != null) {

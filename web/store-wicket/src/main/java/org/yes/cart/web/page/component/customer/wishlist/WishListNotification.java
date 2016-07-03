@@ -28,7 +28,7 @@ public class WishListNotification extends BaseComponent {
         add(new Label("jsWishListItemAddedMsg",
                 WicketUtil.createStringResourceModel(this, "wishListItemAdded" + wishListType,
                         Collections.<String, Object>singletonMap("sku", wishListSkuAdded))));
-        add(new Label("jsWishListItemAdded", "<script type=\"text/javascript\"> $(document).ready(function() {ctx.showModalWindow($('.jsWishListItemAddedMsg'));});</script>")
+        add(new Label("jsWishListItemAdded", "<script type=\"text/javascript\"> $(document).ready(ctx.showModalWindowCall = function(func) {func($('.jsWishListItemAddedMsg'));});</script>")
                 .setEscapeModelStrings(false));
 
         setVisible(wishListAdded);

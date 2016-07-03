@@ -153,6 +153,19 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isB2BProfileActive();
 
+    /**
+     * Flag to denote if shop is disabled on not.
+     *
+     * @return true if shop is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Flag to denote if shop is disabled on not.
+     *
+     * @param disabled true if shop is disabled
+     */
+    void setDisabled(boolean disabled);
 
     /**
      * Get default shop url. localhost will never be return.
@@ -168,14 +181,6 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      * @return single {@link AttrValue} or null if not found.
      */
     AttrValueShop getAttributeByCode(String attributeCode);
-
-    /**
-     * Get single attribute value.
-     *
-     * @param attributeCode code of attribute
-     * @return single value or null if not found or not set.
-     */
-    String getAttributeValueByCode(String attributeCode);
 
 
     /**

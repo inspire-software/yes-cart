@@ -20,6 +20,7 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.hibernate.search.bridge.FieldBridge;
 import org.hibernate.search.bridge.LuceneOptions;
+import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.ProductCategory;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
@@ -30,11 +31,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Product category bridge determines allows to track immediate categories to which this product is
+ * linked to.
+ *
+ * It also infers the relationship between product and shop if the product is reachable via
+ * shop category assigned branch.
+ *
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 2/4/12
  * Time: 1:33 PM
  */
 public class ProductCategoryBridge implements FieldBridge {
+
+    private final DisplayNameBridge displayNameBridge = new DisplayNameBridge();
 
     /**
      * {@inheritDoc}
@@ -43,19 +52,6 @@ public class ProductCategoryBridge implements FieldBridge {
 
         if (value instanceof Collection) {
 
-            for (Object obj : (Collection) value) {
-
-                ProductCategory productCategory = (ProductCategory) obj;
-
-                document.add(new Field(
-                        "productCategory.category",
-                        String.valueOf(productCategory.getCategory().getCategoryId()),
-                        Field.Store.NO,
-                        Field.Index.NOT_ANALYZED,
-                        Field.TermVector.NO
-                ));
-
-            }
 
             /*
              * We use service here as this is a heavy DB operation to scan all categories.
@@ -70,6 +66,46 @@ public class ProductCategoryBridge implements FieldBridge {
              */
 
             final ShopCategoryRelationshipSupport support = getShopCategoryRelationshipSupport();
+
+            for (Object obj : (Collection) value) {
+
+                ProductCategory productCategory = (ProductCategory) obj;
+
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD,
+                        String.valueOf(productCategory.getCategory().getCategoryId()),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+                final Category category = support.getCategoryById(productCategory.getCategory().getCategoryId());
+
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
+                        category.getName(),
+                        Field.Store.NO,
+                        Field.Index.NOT_ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+                document.add(new Field(
+                        ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_STEM_FIELD,
+                        category.getName(),
+                        Field.Store.NO,
+                        Field.Index.ANALYZED,
+                        luceneOptions.getTermVector()
+                ));
+
+                displayNameBridge.set(
+                        ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
+                        category.getDisplayName(),
+                        document,
+                        luceneOptions
+                );
+
+
+            }
 
             final List<Shop> shops = support.getAll();
 

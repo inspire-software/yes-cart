@@ -44,6 +44,7 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
 
     private boolean gift;
     private boolean promoApplied;
+    private boolean fixedPrice;
     private String appliedPromo;
 
     private String productSkuCode;
@@ -213,6 +214,14 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
 
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
+    }
+
+    public boolean isFixedPrice() {
+        return fixedPrice;
+    }
+
+    public void setFixedPrice(final boolean fixedPrice) {
+        this.fixedPrice = fixedPrice;
     }
 
     public String getAppliedPromo() {

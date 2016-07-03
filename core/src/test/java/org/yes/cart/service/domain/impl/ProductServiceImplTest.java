@@ -206,6 +206,32 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
+    public void testCompareAttributesView() throws Exception {
+
+        // bender vs bender-ua sku
+        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> attrs =
+                productService.getCompareAttributes("en", Arrays.asList(9999L), Arrays.asList(9998L));
+
+        assertNotNull(attrs);
+        assertFalse(attrs.isEmpty());
+        final Pair<String, String> dvdKey = new Pair<String, String>("3", "DVD Players view group");
+        assertTrue(attrs.containsKey(dvdKey));
+        final Pair<String, String> weightKey = new Pair<String, String>("WEIGHT", "Weight");
+        assertTrue(attrs.get(dvdKey).containsKey(weightKey));
+        final Map<String, List<Pair<String, String>>> products = attrs.get(dvdKey).get(weightKey);
+        assertEquals(2, products.size());
+
+        final List<Pair<String, String>> values9998 = products.get("s_9998");
+        assertEquals(1, values9998.size());
+        assertEquals("1.16", values9998.get(0).getSecond());
+
+        final List<Pair<String, String>> values9999 = products.get("p_9999");
+        assertEquals(1, values9999.size());
+        assertEquals("1.1", values9999.get(0).getSecond());
+
+    }
+
+    @Test
     public void testGetProductSearchResultDTOByQuery() {
 
 
@@ -215,7 +241,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
                 productService.getGenericDao().fullTextSearchReindex(false);
 
-                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(0L, Arrays.asList(101L), null);
+                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context.getProductQuery(),
                         0,
@@ -234,4 +260,73 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
 
     }
 
+    @Test
+    public void testFindProductIdsByManufacturerCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByManufacturerCode("BENDER-ua");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByManufacturerCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByBarCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByBarCode("001234567905");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByBarCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByPimCode() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByPimCode("ICE00001");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByPimCode("asdfasdooooo");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+    }
+
+    @Test
+    public void testFindProductIdsByAttributeValue() throws Exception {
+
+        final List<Long> idsExist = productService.findProductIdsByAttributeValue("WEIGHT", "1.15");
+
+        assertNotNull(idsExist);
+        assertEquals(1, idsExist.size());
+        assertEquals(Long.valueOf(9998L), idsExist.get(0));
+
+        final List<Long> idsNone = productService.findProductIdsByAttributeValue("WEIGHT", "zzzz");
+
+        assertNotNull(idsNone);
+        assertEquals(0, idsNone.size());
+
+        // Sku attributes are not considered
+        final List<Long> idsSku = productService.findProductIdsByAttributeValue("WEIGHT", "1.16");
+
+        assertNotNull(idsSku);
+        assertEquals(0, idsSku.size());
+
+    }
 }

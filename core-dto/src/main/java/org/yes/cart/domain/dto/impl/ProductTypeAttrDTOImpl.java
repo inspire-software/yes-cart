@@ -59,16 +59,16 @@ public class ProductTypeAttrDTOImpl implements ProductTypeAttrDTO {
     @DtoField(value = "similarity")
     private boolean similarity;
 
-    @DtoField(value = "store")
+    @DtoField(value = "store", readOnly = true)
     private boolean store;
 
-    @DtoField(value = "search")
+    @DtoField(value = "search", readOnly = true)
     private boolean search;
 
-    @DtoField(value = "primary")
+    @DtoField(value = "primary", readOnly = true)
     private boolean primary;
 
-    @DtoField(value = "navigation")
+    @DtoField(value = "navigation", readOnly = true)
     private boolean navigation;
 
     @DtoField(value = "navigationType")

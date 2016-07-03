@@ -96,7 +96,12 @@ public class TopCategories extends BaseComponent {
                 // if this content does not have sub content, display parent's menu
                 final Category category = categoryServiceFacade.getCategory(categoryId, shopId);
                 if (category != null) {
-                    categories = categoryServiceFacade.getCurrentCategoryMenu(category.getParentId(), shopId, lang);
+                    final Long parentId = categoryServiceFacade.getCategoryParentId(categoryId, shopId);
+                    if (parentId != null) {
+                        categories = categoryServiceFacade.getCurrentCategoryMenu(parentId, shopId, lang);
+                    } else {
+                        categories = categoryMenu;
+                    }
                 } else {
                     categories = categoryMenu;
                 }

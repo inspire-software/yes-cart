@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import junit.framework.Assert;
 import org.apache.commons.io.FileUtils;
 import org.dbunit.util.Base64;
 import org.hibernate.criterion.Criterion;
@@ -70,7 +71,7 @@ public class ImageServiceTest {
     @Test
     public void testResizeImageJPEG() throws Exception {
 
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, ioProvider);
 
 
         final String originalFileName = "src/test/resources/imgrepo/a/arbuz/speli_arbuz_arbuz_a.jpeg";
@@ -89,7 +90,7 @@ public class ImageServiceTest {
     @Test
     public void testResizeImageJPEG2() throws Exception {
 
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, ioProvider);
 
         final String originalFileName = "src/test/resources/imgrepo/C/C01-00002-7B/C01-00002-7B_a.jpeg";
         final String destinationFileName = "target/test/resources/imgrepo/200x200/C/C01-00002-7B/C01-00002-7B_a.jpeg";
@@ -103,7 +104,7 @@ public class ImageServiceTest {
     @Test
     public void testResizeImagePNG() throws Exception {
 
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, ioProvider);
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, ioProvider);
 
         final String originalFileName = "src/test/resources/imgrepo/a/aron/aron_a.png";
         final String destinationFileName = "target/test/resources/imgrepo/50x150/a/aron/aron_a.png";
@@ -124,7 +125,7 @@ public class ImageServiceTest {
             will(returnValue(Arrays.asList("en", "uk", "ru")));
         }});
 
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, new IOProvider() {
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, new IOProvider() {
             @Override
             public boolean supports(final String uri) {
                 return true;
@@ -167,7 +168,7 @@ public class ImageServiceTest {
         final File destination2 = new File("target/product/P/PRODUCT1/" + save2);
         assertTrue(destination2.exists());
         assertTrue("At least some info must be in the file" , destination2.length() > 1000);
-        assertFalse(save1.equals(save2));
+        assertTrue(save1.equals(save2));
     }
 
     @Test
@@ -184,7 +185,7 @@ public class ImageServiceTest {
             will(returnValue("PRODUCT2"));
         }});
 
-        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, new IOProvider() {
+        imageService = new ImageServiceImpl(seoImageDao, imageNameStrategyResolver, "50x150", 255, 255, 255, false, 50, true, new IOProvider() {
             @Override
             public boolean supports(final String uri) {
                 return true;
@@ -227,7 +228,7 @@ public class ImageServiceTest {
         final String saved2 = imageService.addImageToRepository(tmpFileName, "PRODUCT2", image, Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/");
         final File destination2 = new File("target/product/P/PRODUCT2/" + saved2);
         assertTrue(imageService.deleteImage(destination2.getName(), Constants.PRODUCT_IMAGE_REPOSITORY_URL_PATTERN, "target/"));
-        assertTrue(destination1.exists());
+        assertFalse(destination1.exists());
         assertFalse(destination2.exists());
     }
 }

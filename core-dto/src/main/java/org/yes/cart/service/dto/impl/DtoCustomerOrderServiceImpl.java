@@ -25,13 +25,16 @@ import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
+import org.yes.cart.domain.dto.CustomerOrderDetailDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
+import org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -61,6 +64,7 @@ public class DtoCustomerOrderServiceImpl
         implements DtoCustomerOrderService {
 
     protected final Assembler orderDeliveryDetailAssembler;
+    protected final Assembler orderDetailAssembler;
     protected final Assembler orderDeliveryAssembler;
     protected final PaymentModulesManager paymentModulesManager;
     protected final CustomerOrderTransitionService transitionService;
@@ -88,6 +92,7 @@ public class DtoCustomerOrderServiceImpl
         this.customerOrderPaymentService = customerOrderPaymentService;
         orderDeliveryDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDetailDTOImpl.class, CustomerOrderDeliveryDet.class);
         orderDeliveryAssembler = DTOAssembler.newAssembler(CustomerOrderDeliveryDTOImpl.class, CustomerOrderDelivery.class);
+        orderDetailAssembler = DTOAssembler.newAssembler(CustomerOrderDetailDTOImpl.class, CustomerOrderDet.class);
         this.paymentModulesManager = paymentModulesManager;
     }
 
@@ -505,10 +510,19 @@ public class DtoCustomerOrderServiceImpl
             }
             final List<CustomerOrderDeliveryDetailDTO> rez = new ArrayList<CustomerOrderDeliveryDetailDTO>(allDeliveryDet.size());
 
-            for (CustomerOrderDeliveryDet entity : allDeliveryDet) {
-                CustomerOrderDeliveryDetailDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDetailDTO.class);
-                orderDeliveryDetailAssembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
-                rez.add(dto);
+            if (CollectionUtils.isNotEmpty(allDeliveryDet)) {
+                for (CustomerOrderDeliveryDet entity : allDeliveryDet) {
+                    CustomerOrderDeliveryDetailDTO dto = dtoFactory.getByIface(CustomerOrderDeliveryDetailDTO.class);
+                    orderDeliveryDetailAssembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+                    rez.add(dto);
+                }
+            } else {
+                // RFQ and drafts
+                for (CustomerOrderDet entity : customerOrder.getOrderDetail()) {
+                    CustomerOrderDeliveryDetailDTO dto = dtoFactory.getByIface(CustomerOrderDetailDTO.class);
+                    orderDetailAssembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
+                    rez.add(dto);
+                }
             }
 
             return rez;

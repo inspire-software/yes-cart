@@ -17,8 +17,6 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -42,8 +40,6 @@ import java.util.List;
  */
 public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
 
-    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
-
     private final ProductService productService;
     private final AttributeService attributeService;
 
@@ -65,17 +61,29 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
     @Override
     public boolean doImageImport(final JobStatusListener statusListener, final String fileName, final String code, final String suffix, final String locale) {
 
-        final Product product = productService.getProductBySkuCode(code);
+        Product product = null;
+
+        final Long id = productService.findProductIdByCode(code);
+
+        if (id != null) {
+            product = productService.getProductById(id, true);
+        }
+
         if (product == null) {
+
+            final Product productBySku = productService.getProductBySkuCode(code);
+            if (productBySku != null) {
+                return false; // SKU specific
+            }
+
             final String warn = MessageFormat.format("product with code {0} not found.", code);
             statusListener.notifyWarning(warn);
-            LOG.warn(warn);
             return false;
         }
 
         validateAccessBeforeUpdate(product, Product.class);
 
-        final Product productWithAttrs = productService.getProductById(product.getProductId(), true);
+        final Product productWithAttrs = product;
         final String attributeCode = AttributeNamesKeys.Product.PRODUCT_IMAGE_ATTR_NAME_PREFIX + suffix + (StringUtils.isNotEmpty(locale) ? "_" + locale : "");
         AttrValueProduct imageAttributeValue = (AttrValueProduct) productWithAttrs.getAttributeByCode(attributeCode);
         if (imageAttributeValue == null) {
@@ -90,7 +98,6 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
-                LOG.warn(warn);
                 return false;
             }
             imageAttributeValue = productService.getGenericDao().getEntityFactory().getByIface(AttrValueProduct.class);
@@ -104,15 +111,13 @@ public class ProductImageImportDomainObjectStrategyImpl extends AbstractImageImp
         final String info = MessageFormat.format("file {0} attached as {1} to product {2}", fileName, attributeCode, productWithAttrs.getCode());
         statusListener.notifyMessage(info);
 
-        LOG.info(info);
         try {
             productService.update(productWithAttrs);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for product with code {1} could not be added (db error).", fileName, product.getCode());
-            LOG.error(err, e);
-            statusListener.notifyError(err);
+            statusListener.notifyError(err, e);
             return false;
 
         }

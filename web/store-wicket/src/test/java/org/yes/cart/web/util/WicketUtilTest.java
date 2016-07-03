@@ -22,10 +22,8 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.web.shoppingcart.CommandConfig;
-import org.yes.cart.web.shoppingcart.impl.CommandConfigImpl;
+import org.yes.cart.shoppingcart.support.CommandConfig;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;

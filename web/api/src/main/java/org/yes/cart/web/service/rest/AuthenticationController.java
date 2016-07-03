@@ -1206,7 +1206,7 @@ public class AuthenticationController {
 
 
         final Shop shop = cartMixin.getCurrentShop();
-        customerServiceFacade.registerEmailRequest(shop, email, new HashMap<String, Object>());
+        customerServiceFacade.registerEmailRequest(shop, email, data);
 
         return new AuthenticationResultRO();
 

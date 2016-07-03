@@ -218,6 +218,10 @@ public interface AttributeNamesKeys {
          */
         String CATEGORY_NEW_ARRIVAL_DAYS_OFFSET = "CATEGORY_NEW_ARRIVAL_DAYS_OFFSET";
 
+        /**
+         * Limit of how many filter nav values to display in a block
+         */
+        String CATEGORY_FILTERNAV_LIMIT = "CATEGORY_FILTERNAV_LIMIT";
 
     }
 
@@ -391,6 +395,11 @@ public interface AttributeNamesKeys {
         String SHOP_CATEGORY_ITEMS_NEW_ARRIVAL = "SHOP_CATEGORY_ITEMS_NEW_ARRIVAL";
 
         /**
+         * Limit of how many filter nav values to display in a block
+         */
+        String SHOP_CATEGORY_FILTERNAV_LIMIT = "SHOP_CATEGORY_FILTERNAV_LIMIT";
+
+        /**
          * Setting for whether to show coupons or not
          */
         String CART_UPDATE_ENABLE_COUPONS = "SHOP_CHECKOUT_ENABLE_COUPONS";
@@ -469,6 +478,11 @@ public interface AttributeNamesKeys {
          * Custom mail sender configurations - Use TLS to encrypt.
          */
         String SHOP_MAIL_SERVER_STARTTLS_ENABLE = "SHOP_MAIL_SERVER_STARTTLS_ENABLE";
+
+        /**
+         * Prefix for regional pricing. The format is SHOP_REGIONAL_PRICING_[COUNTRY_CODE]_[STATE_CODE]
+         */
+        String SHOP_REGIONAL_PRICING_PREFIX = "SHOP_REGIONAL_PRICING_";
 
     }
 

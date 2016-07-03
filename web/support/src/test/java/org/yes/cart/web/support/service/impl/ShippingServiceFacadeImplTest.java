@@ -52,7 +52,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -106,7 +106,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -161,7 +161,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -215,7 +215,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -268,7 +268,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -338,7 +338,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -406,7 +406,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -474,7 +474,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -537,7 +537,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -601,7 +601,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -664,7 +664,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -734,7 +734,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -802,7 +802,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -870,7 +870,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -935,7 +935,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1000,7 +1000,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1062,7 +1062,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1132,7 +1132,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1200,7 +1200,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1268,7 +1268,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1331,7 +1331,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1395,7 +1395,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1457,7 +1457,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1527,7 +1527,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1595,7 +1595,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1664,7 +1664,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping4).getTaxRate(); will(returnValue(new BigDecimal("12.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1728,7 +1728,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1792,7 +1792,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);
@@ -1855,7 +1855,7 @@ public class ShippingServiceFacadeImplTest {
             allowing(shipping2).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
         }});
 
-        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService);
+        final ShippingServiceFacade facade = new ShippingServiceFacadeImpl(null, null, shopService, null, null);
 
 
         final ProductPriceModel model = facade.getCartShippingTotal(cart);

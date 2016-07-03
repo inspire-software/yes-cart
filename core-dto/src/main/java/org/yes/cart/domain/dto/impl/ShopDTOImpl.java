@@ -50,6 +50,9 @@ public class ShopDTOImpl implements ShopDTO {
     @DtoField(value = "fspointer")
     private String fspointer;
 
+    @DtoField(value = "disabled", readOnly = true)
+    private boolean disabled;
+
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
@@ -144,6 +147,20 @@ public class ShopDTOImpl implements ShopDTO {
      */
     public void setFspointer(final String fspointer) {
         this.fspointer = fspointer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public long getShopId() {

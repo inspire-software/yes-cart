@@ -28,6 +28,7 @@ import org.yes.cart.service.domain.CarrierService;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
 
@@ -44,18 +45,13 @@ public class CarrierSlaServiceImplTest extends BaseCoreDBTestCase {
     }
 
     @Test
-    public void testFindCarriersFilterByCurrency() {
+    public void testFindCarriersFilterByShop() {
         List<Carrier> carriers;
-        carriers = carrierService.getCarriersByShopIdAndCurrency(20L, "USD"); // no shop 20
+        carriers = carrierService.getCarriersByShopId(20L); // no shop 20
         assertEquals(0, carriers.size());
-        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "USD"); // 2 USD Carriers
+        carriers = carrierService.getCarriersByShopId(10L); // 2 Carriers
         assertEquals(2, carriers.size());
-        assertEquals(1, carriers.get(0).getCarrierSla().size());
-        assertEquals(1, carriers.get(1).getCarrierSla().size());
-        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "RUB"); // 1 RUB Carrier
-        assertEquals(1, carriers.size());
-        assertEquals(1, carriers.get(0).getCarrierSla().size());
-        carriers = carrierService.getCarriersByShopIdAndCurrency(10L, "MWZ"); // no web money carriers
-        assertEquals(0, carriers.size());
+        assertFalse(carriers.get(0).getCarrierSla().isEmpty());
+        assertFalse(carriers.get(1).getCarrierSla().isEmpty());
     }
 }

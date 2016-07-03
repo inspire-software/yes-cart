@@ -64,7 +64,7 @@ public class CategoryImageImportDomainObjectStrategyImplTest extends BaseCoreDBT
         category = categoryService.getById(101L);
         assertNotNull(category);
         assertNotNull(category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE)); // image was imported
-        assertEquals("im-image-file_101_a.jpeg", category.getAttributeByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE).getVal());
+        assertEquals("im-image-file_101_a.jpeg", category.getAttributeValueByCode(AttributeNamesKeys.Category.CATEGORY_IMAGE));
 
         mockery.assertIsSatisfied();
 

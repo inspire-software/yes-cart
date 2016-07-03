@@ -19,6 +19,9 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -189,5 +192,27 @@ public class DtoBrandServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<BrandDTO> findBrands(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<Brand> entities;
+        if (StringUtils.isNotBlank(name)) {
+            entities = service.getGenericDao().findByCriteria(
+                    Restrictions.or(
+                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                    )
+            );
+        } else {
+            entities = service.findAll();
+        }
+        final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
+
     }
 }

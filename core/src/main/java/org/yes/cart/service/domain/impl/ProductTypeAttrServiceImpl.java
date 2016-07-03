@@ -74,7 +74,7 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     /** {@inheritDoc} */
     @Cacheable(value = "productTypeAttrService-navigatableByProductTypeId")
     public List<ProductTypeAttr> getNavigatableByProductTypeId(final long productTypeId) {
-        final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID", productTypeId, Boolean.TRUE);
+        final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID", productTypeId, Boolean.TRUE, Boolean.TRUE);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
         Collections.sort(attrs, new Comparator<ProductTypeAttr>() {
             @Override

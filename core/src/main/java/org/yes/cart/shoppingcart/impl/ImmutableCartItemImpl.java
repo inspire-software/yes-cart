@@ -96,6 +96,13 @@ public class ImmutableCartItemImpl implements CartItem {
     /**
      * {@inheritDoc}
      */
+    public boolean isFixedPrice() {
+        return cartItem.isFixedPrice();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getAppliedPromo() {
         return cartItem.getAppliedPromo();
     }

@@ -165,7 +165,8 @@
                     lastNameFilterValue.text,
                     null,
                     tagFilterValue.text,
-                    typeFilterValue.text
+                    typeFilterValue.text,
+                    pricingPolicyValue.text
             );
         }
 
@@ -242,9 +243,15 @@
                                     <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='firstNameFilter')"/>
                                     <mx:TextInput id="firstNameFilterValue" width="150"/>
                                 </mx:GridItem>
+                            </mx:GridRow>
+                            <mx:GridRow>
                                 <mx:GridItem>
                                     <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='typeFilter')"/>
                                     <mx:TextInput id="typeFilterValue" width="150"/>
+                                </mx:GridItem>
+                                <mx:GridItem>
+                                    <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='pricingPolicy')"/>
+                                    <mx:TextInput id="pricingPolicyValue" width="150"/>
                                 </mx:GridItem>
                                 <mx:GridItem>
                                     <mx:Label text="@Resource(bundle='CustomerManagementPanel',key='tagFilter')"/>
@@ -271,6 +278,8 @@
                                            dataField="email"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='customerType')"
                                            dataField="customerType"/>
+                        <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='pricingPolicy')"
+                                           dataField="pricingPolicy"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='salutation')"
                                            dataField="salutation"/>
                         <mx:DataGridColumn headerText="@Resource(bundle='CustomerManagementPanel',key='lastname')"

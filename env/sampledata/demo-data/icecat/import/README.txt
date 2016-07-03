@@ -16,3 +16,7 @@ IceCat data originally was downloaded with permission to use from icecat develop
 This was done using the utility module util/icecat.
 However to make the demo better some data was handcrafted since then so please do not
 blindly re-generate the files as you will loose some important demo data.
+
+Navigatable attributes can be grep'ed like so:
+1120|11381|1585|1766|2196|427|436|7|771|7861|8480|9018|909|9215|944
+((.*)"(1120|11381|1585|1766|2196|427|436|7|771|7861|8480|9018|909|9215|944)"(.*))

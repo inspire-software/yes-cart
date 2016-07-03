@@ -17,8 +17,6 @@
 package org.yes.cart.bulkimport.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.yes.cart.bulkimport.image.ImageImportDomainObjectStrategy;
 import org.yes.cart.constants.AttributeGroupNames;
@@ -42,8 +40,6 @@ import java.util.List;
  * Time: 22:26
  */
 public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImportDomainObjectStrategyImpl implements ImageImportDomainObjectStrategy {
-
-    private final Logger LOG = LoggerFactory.getLogger(ImagesBulkImportServiceImpl.class);
 
     private final BrandService brandService;
     private final AttributeService attributeService;
@@ -70,7 +66,6 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         if (brand == null) {
             final String warn = MessageFormat.format("brand with code {0} not found.", code);
             statusListener.notifyWarning(warn);
-            LOG.warn(warn);
             return false;
         }
 
@@ -100,7 +95,6 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
             if (attribute == null) {
                 final String warn = MessageFormat.format("attribute with code {0} not found.", attributeCode);
                 statusListener.notifyWarning(warn);
-                LOG.warn(warn);
                 return false;
             }
             imageAttributeValue = brandService.getGenericDao().getEntityFactory().getByIface(AttrValueBrand.class);
@@ -114,15 +108,13 @@ public class BrandImageImportDomainObjectStrategyImpl extends AbstractImageImpor
         final String info = MessageFormat.format("file {0} attached as {1} to brand {2}", fileName, attributeCode, brand.getName());
         statusListener.notifyMessage(info);
 
-        LOG.info(info);
         try {
             brandService.update(brand);
             return true;
 
         } catch (DataIntegrityViolationException e) {
             final String err = MessageFormat.format("image {0} for brand with name {1} could not be added (db error).", fileName, brand.getName());
-            LOG.error(err, e);
-            statusListener.notifyError(err);
+            statusListener.notifyError(err, e);
             return false;
 
         }

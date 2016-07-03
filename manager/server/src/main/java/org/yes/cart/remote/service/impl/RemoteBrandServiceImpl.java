@@ -82,4 +82,11 @@ public class RemoteBrandServiceImpl
     public AttrValueDTO createAndBindAttrVal(long entityPk, String attrName, String attrValue) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<BrandDTO> findBrands(final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return dtoBrandService.findBrands(name);
+    }
 }

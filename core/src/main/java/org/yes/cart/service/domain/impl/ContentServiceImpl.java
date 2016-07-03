@@ -27,6 +27,7 @@ import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
+import org.yes.cart.util.DomainApiUtils;
 
 import java.util.*;
 
@@ -285,18 +286,30 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
      * {@inheritDoc}
      */
     public List<Category> findChildContentWithAvailability(final long contentId, final boolean withAvailability) {
+
+        final List<Category> cats = new ArrayList<Category>(categoryDao.findByNamedQuery(
+                "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
+                contentId
+        ));
         if (withAvailability) {
-            return categoryDao.findByNamedQuery(
-                    "CATEGORIES.BY.PARENTID",
-                    contentId,
-                    new Date()
-            );
-        } else {
-            return categoryDao.findByNamedQuery(
-                    "CATEGORIES.BY.PARENTID.WITHOUT.DATE.FILTERING",
-                    contentId
-            );
+
+            final Date now = new Date();
+            final Iterator<Category> it = cats.iterator();
+            while (it.hasNext()) {
+
+                final Category cat = it.next();
+
+                if (!DomainApiUtils.isObjectAvailableNow(true, cat.getAvailablefrom(), cat.getAvailableto(), now)) {
+
+                    it.remove();
+
+                }
+
+            }
+
         }
+        return cats;
+
     }
 
 
@@ -375,10 +388,11 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     public String findSeoUriByContentId(final Long contentId) {
         List<Object> list = categoryDao.findQueryObjectByNamedQuery("SEO.URI.BY.CATEGORY.ID", contentId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }

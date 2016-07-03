@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Customer;
@@ -201,11 +202,16 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
     public Total calculate(final CustomerOrder order) {
 
         Total deliveriesTotal = new TotalImpl();
-        for (final CustomerOrderDelivery delivery : order.getDelivery()) {
+        if (CollectionUtils.isNotEmpty(order.getDelivery())) {
+            for (final CustomerOrderDelivery delivery : order.getDelivery()) {
 
-            final Total deliveryTotal = calculate(delivery);
+                final Total deliveryTotal = calculate(delivery);
+                deliveriesTotal = deliveriesTotal.add(deliveryTotal);
+
+            }
+        } else {
+            final Total deliveryTotal = calculateItemTotal(new ArrayList<CartItem>(order.getOrderDetail()));
             deliveriesTotal = deliveriesTotal.add(deliveryTotal);
-
         }
 
         final boolean orderPromoApplied = order.isPromoApplied();
@@ -433,7 +439,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
             }
         }
 
-        final BigDecimal listPriceRemove = prices.listPrice.negate();
+        final BigDecimal salePriceRemove = prices.salePrice.negate();
 
         final Total draftDeliveryCostRemove = new TotalImpl(
                 Total.ZERO,
@@ -445,16 +451,16 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 Total.ZERO,
                 Total.ZERO,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove,
+                salePriceRemove,
+                salePriceRemove,
                 false,
                 null,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove,
+                salePriceRemove,
+                salePriceRemove,
                 Total.ZERO,
-                listPriceRemove,
-                listPriceRemove
+                salePriceRemove,
+                salePriceRemove
         );
 
         final Total deliveryCost = new TotalImpl(

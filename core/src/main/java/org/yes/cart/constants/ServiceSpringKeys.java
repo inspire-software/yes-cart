@@ -256,6 +256,11 @@ public interface ServiceSpringKeys {
     String DELIVERY_ASSEMBLER = "deliveryAssembler";
 
     /**
+     * Order assembler.
+     */
+    String ORDER_DISASSEMBLER = "orderDisassembler";
+
+    /**
      * Order number generator .
      */
     String ORDER_NUMBER_GENERATOR = "orderNumberGenerator";

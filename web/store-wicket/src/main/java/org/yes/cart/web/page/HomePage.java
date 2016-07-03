@@ -115,7 +115,7 @@ public class HomePage extends AbstractWebPage {
                 (Map) mapParams
         );
 
-        addOrReplace(new BreadCrumbsView("breadCrumbs", categoryId, shopService.getShopAllCategoriesIds(shop.getShopId())));
+        addOrReplace(new BreadCrumbsView("breadCrumbs", shop.getShopId(), categoryId));
 
 
         addOrReplace(new RecentlyViewedProducts("recentlyViewed"));
@@ -250,6 +250,23 @@ public class HomePage extends AbstractWebPage {
             return rez;
         }
         return super.getKeywords();
+    }
+
+    /**
+     * Get rel-canonical link.
+     *
+     * @return link
+     */
+    public IModel<String> getRelCanonical() {
+        final AbstractCentralView centralPanel = getCentralPanel();
+        if (centralPanel != null) {
+            final IModel<String> rez = centralPanel.getRelCanonical();
+            if (rez == null) {
+                return super.getRelCanonical();
+            }
+            return rez;
+        }
+        return super.getRelCanonical();
     }
 
 

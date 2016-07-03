@@ -16,7 +16,9 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 
@@ -29,10 +31,19 @@ import java.util.List;
  */
 public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupport {
 
+    private final GenericDAO<Shop, Long> shopDao;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
-    public SkuPriceRelationshipSupportImpl(final GenericDAO<SkuPrice, Long> skuPriceDao) {
+    public SkuPriceRelationshipSupportImpl(final GenericDAO<Shop, Long> shopDao,
+                                           final GenericDAO<SkuPrice, Long> skuPriceDao) {
+        this.shopDao = shopDao;
         this.skuPriceDao = skuPriceDao;
+    }
+
+    /** {@inheritDoc} */
+    @Cacheable(value = "shopService-allShops")
+    public List<Shop> getAll() {
+        return this.shopDao.findAll();
     }
 
     /** {@inheritDoc} */

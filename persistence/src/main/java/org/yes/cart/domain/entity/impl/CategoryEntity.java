@@ -38,6 +38,7 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
     private long version;
 
     private long parentId;
+    private Long linkToId;
     private int rank;
     private ProductType productType;
     private String name;
@@ -71,6 +72,14 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
 
     public void setParentId(long parentId) {
         this.parentId = parentId;
+    }
+
+    public Long getLinkToId() {
+        return linkToId;
+    }
+
+    public void setLinkToId(final Long linkToId) {
+        this.linkToId = linkToId;
     }
 
     @Field(index = Index.YES, analyze = Analyze.NO, norms = Norms.NO, store = Store.YES)
@@ -322,6 +331,21 @@ public class CategoryEntity implements org.yes.cart.domain.entity.Category, java
         }
         return null;
     }
+
+
+
+    public String getAttributeValueByCode(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null ? val.getVal() : null;
+    }
+
+
+    public boolean isAttributeValueByCodeTrue(final String attributeCode) {
+        final AttrValue val = getAttributeByCode(attributeCode);
+        return val != null && Boolean.valueOf(val.getVal());
+    }
+
+
 
     public Map<String, AttrValue> getAllAttributesAsMap() {
         final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();

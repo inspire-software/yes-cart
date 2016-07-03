@@ -355,7 +355,7 @@
     <entry key="discountRule">Buy more than one item and get discount</entry>
 
     <!-- PriceView -->
-    <entry key="savePercent">Discount ${discount}%</entry>
+    <entry key="savePercent">${discount}% &lt;span class="glyphicon glyphicon-info-sign"&gt;&lt;/span&gt;</entry>
     <entry key="savePercentTitle">On sale now</entry>
     <entry key="taxNoteNet">excl. ${tax} ${code}</entry>
     <entry key="taxNoteGross">inc. ${tax} ${code}</entry>

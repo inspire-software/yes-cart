@@ -80,6 +80,20 @@ public interface ProductDTO extends Identifiable, Guidable {
     void setManufacturerCode(String code);
 
     /**
+     * PIM external reference (e.g. IceCat, CNet etc)
+     *
+     * @return external reference
+     */
+    String getPimCode();
+
+    /**
+     * PIM external reference (e.g. IceCat, CNet etc)
+     *
+     * @param pimCode external reference
+     */
+    void setPimCode(String pimCode);
+
+    /**
      * Get the {@link org.yes.cart.domain.entity.Brand} of product.
      *
      * @return {@link org.yes.cart.domain.entity.Brand} of product.

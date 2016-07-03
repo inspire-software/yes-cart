@@ -83,6 +83,19 @@ public class AttributeDTOImpl implements AttributeDTO {
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
 
+    @DtoField(value = "store")
+    private boolean store;
+
+    @DtoField(value = "search")
+    private boolean search;
+
+    @DtoField(value = "primary")
+    private boolean primary;
+
+    @DtoField(value = "navigation")
+    private boolean navigation;
+
+
     /** {@inheritDoc} */
     public int getRank() {
         return rank;
@@ -247,6 +260,45 @@ public class AttributeDTOImpl implements AttributeDTO {
     /** {@inheritDoc} */
     public void setRegexp(final String regexp) {
         this.regexp = regexp;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isStore() {
+        return store;
+    }
+
+    /** {@inheritDoc} */
+    public void setStore(final boolean store) {
+        this.store = store;
+    }
+
+    public boolean isSearch() {
+        return search;
+    }
+
+    /** {@inheritDoc} */
+    public void setSearch(final boolean search) {
+        this.search = search;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    /** {@inheritDoc} */
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isNavigation() {
+        return navigation;
+    }
+
+    /** {@inheritDoc} */
+    public void setNavigation(final boolean navigation) {
+        this.navigation = navigation;
     }
 
     @Override

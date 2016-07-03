@@ -107,6 +107,54 @@ public interface ProductService extends GenericService<Product> {
                                                                                                           long skuId,
                                                                                                           long productTypeId);
 
+
+    /**
+     * Get the grouped product attributes, with values. The result can be represented in following form:
+     *
+     *                   Prod A    SKU B    Prod C
+     * Shipment details:
+     * weight:            17 Kg    15kg      14kg
+     * length:            15 Cm    15 Cm     15 Cm
+     * height:            20 Cm    20 Cm     20 Cm
+     * width:             35 Cm    35 Cm     35 Cm
+     * Power:
+     * Charger:           200/110            200/115
+     * Battery type:      Lithium  Lithium
+     *
+     * So the hierarchy returned for the above example will be:
+     * Map
+     *    Entry[1001, Shipment details] =>
+     *      Map
+     *          Entry [10010, weight] =>
+     *               Map
+     *                  Entry[ p_10001 =>
+     *                      List
+     *                         [100001, 17 Kg]
+     *                  ]
+     *                  Entry[ s_10001 =>
+     *                      List
+     *                         [100001, 15 Kg]
+     *                  ]
+     *                  Entry[ p_10002 =>
+     *                      List
+     *                         [100001, 14 Kg]
+     *                  ]
+     *  ... etc
+     *
+     *  If this is SKU then it should inherit the attributes of the product,
+     *  If this is just product then we only display product attributes
+     *
+     * @param locale locale
+     * @param productId  product ID
+     * @param skuId sku ID
+     * @return hierarchy of attributes for this product or sku.
+     */
+    Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(String locale,
+                                                                                                                       List<Long> productId,
+                                                                                                                       List<Long> skuId);
+
+
+
     /**
      *
      * @param locale locale
@@ -154,16 +202,6 @@ public interface ProductService extends GenericService<Product> {
     List<Product> getProductByCategory(long categoryId,
                                        int firstResult,
                                        int maxResults);
-
-    /**
-     * Get the list of unique attribute values by given product type
-     * and attribute code.
-     *
-     * @param productTypeId product type id
-     * @param code          attribute code
-     * @return list of distinct attib values
-     */
-    List<Object> getDistinctAttributeValues(long productTypeId, String code);
 
     /**
      * Get list of products by id list.
@@ -332,6 +370,39 @@ public interface ProductService extends GenericService<Product> {
      * @return product id if found otherwise null
      */
     Long findProductIdByCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given manufacturer code
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByManufacturerCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given barcode (EAN/UPC)
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByBarCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param code given code in PIM
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByPimCode(String code);
+
+    /**
+     * Get product id by given code
+     *
+     * @param attrCode attribute code
+     * @param attrValue attribute value
+     * @return product id if found otherwise null
+     */
+    List<Long> findProductIdsByAttributeValue(String attrCode, String attrValue);
 
     /**
      * Get product SEO uri id by given id

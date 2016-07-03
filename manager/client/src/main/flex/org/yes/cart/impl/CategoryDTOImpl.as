@@ -25,6 +25,10 @@ public class CategoryDTOImpl {
 
     public var parentId:Number;
 
+    public var linkToId:Number;
+
+    public var linkToName:String;
+
     public var rank:int;
 
     public var productTypeId:Number;
@@ -91,7 +95,8 @@ public class CategoryDTOImpl {
     public function toString():String {
         return "CategoryDTOImpl{categoryId=" + String(categoryId)
                 + ",parentId=" + String(parentId)
-                + ",rankLint=" + String(rank)
+                + ",linkToId=" + String(linkToId)
+                + ",rank=" + String(rank)
                 + ",productTypeId=" + String(productTypeId)
                 + ",name=" + String(name)
                 + ",description=" + String(description)

@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductAvailabilityModel;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
@@ -187,8 +186,7 @@ public class ProductInListView extends BaseComponent {
     private String getDisplaySkuCode(final Shop shop, final ProductSearchResultDTO product) {
 
         if (StringUtils.isNotBlank(product.getManufacturerCode())) {
-            final AttrValue displayAttrValue = shop.getAttributeByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE);
-            if (displayAttrValue != null && displayAttrValue.getVal() != null && Boolean.valueOf(displayAttrValue.getVal())) {
+            if (shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE)) {
                 return product.getManufacturerCode();
             }
         }

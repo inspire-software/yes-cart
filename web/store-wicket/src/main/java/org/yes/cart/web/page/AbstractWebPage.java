@@ -46,7 +46,7 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.DecoratorFacade;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
-import org.yes.cart.web.support.shoppingcart.ShoppingCartPersister;
+import org.yes.cart.shoppingcart.support.ShoppingCartPersister;
 import org.yes.cart.web.util.WicketUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -86,17 +86,26 @@ public class AbstractWebPage extends WebPage {
     private WicketSupportFacade wicketSupportFacade;
 
 
-    /** Page title. */
-    public static final String PAGE_TITLE="pageTitle";
-    /** Meta created. */
-    public static final String CREATED="created";
-    /** Meta description. */
-    public static final String DESCRIPTION="description";
-    /** Meta keywords. */
-    public static final String KEYWORDS="keywords";
-
-
-
+    /**
+     * Page title.
+     */
+    public static final String PAGE_TITLE = "pageTitle";
+    /**
+     * Meta created.
+     */
+    public static final String CREATED = "created";
+    /**
+     * Meta description.
+     */
+    public static final String DESCRIPTION = "description";
+    /**
+     * Meta keywords.
+     */
+    public static final String KEYWORDS = "keywords";
+    /**
+     * Meta keywords.
+     */
+    public static final String CANONICAL = "relCanonical";
 
 
     /**
@@ -131,17 +140,27 @@ public class AbstractWebPage extends WebPage {
                 PAGE_TITLE,
                 getPageTitle()));
 
-        Label desc = new Label(DESCRIPTION,"");
-        desc.add( new AttributeAppender("content", getDescription(), " "));
+        final Label desc = new Label(DESCRIPTION, "");
+        final IModel<String> descModel = getDescription();
+        desc.add(new AttributeAppender("content", descModel, " "));
         addOrReplace(desc);
+        desc.setVisible(descModel != null);
 
-        Label keywords = new Label(KEYWORDS,"");
-        keywords.add( new AttributeAppender("content", getKeywords(), " "));
+        final Label keywords = new Label(KEYWORDS, "");
+        final IModel<String> keywordsModel = getKeywords();
+        keywords.add(new AttributeAppender("content", keywordsModel, " "));
         addOrReplace(keywords);
+        keywords.setVisible(keywordsModel != null);
 
-        Label created = new Label(CREATED,"");
-        created.add( new AttributeAppender("content", getCreated(), " "));
+        Label created = new Label(CREATED, "");
+        created.add(new AttributeAppender("content", getCreated(), " "));
         addOrReplace(created);
+
+        final Label relCanonical = new Label(CANONICAL, "");
+        final IModel<String> relCanonicalModel = getRelCanonical();
+        relCanonical.add(new AttributeAppender("href", relCanonicalModel, " "));
+        addOrReplace(relCanonical);
+        relCanonical.setVisible(relCanonicalModel != null);
 
         if (!isPageStateless() && Application.get().getConfigurationType() == RuntimeConfigurationType.DEVELOPMENT) {
             determineStatefulComponent();
@@ -168,9 +187,9 @@ public class AbstractWebPage extends WebPage {
      * Executes Http commands that are posted via http and are available from
      * this.getPageParameters() method. This method should be the first thing that
      * is executed if a page is using shopping cart.
-     *
+     * <p/>
      * This method DOES NOT persist the cart to cookies.
-     *
+     * <p/>
      * This method should only be called once per page request.
      */
     public void executeHttpPostedCommands() {
@@ -261,6 +280,7 @@ public class AbstractWebPage extends WebPage {
 
     /**
      * Get page title.
+     *
      * @return page title
      */
     public IModel<String> getPageTitle() {
@@ -288,6 +308,7 @@ public class AbstractWebPage extends WebPage {
 
     /**
      * Get page description
+     *
      * @return description
      */
     public IModel<String> getDescription() {
@@ -314,6 +335,7 @@ public class AbstractWebPage extends WebPage {
 
     /**
      * Get keywords.
+     *
      * @return keywords
      */
     public IModel<String> getKeywords() {
@@ -330,11 +352,13 @@ public class AbstractWebPage extends WebPage {
 
     /**
      * Get created date time.
+     *
      * @return page created
      */
     public IModel<String> getCreated() {
         return new Model<String>(new Date().toString());
     }
+
     protected String getKeywords(final Seo seo, final String language) {
         if (seo != null) {
             final String desc = getI18NSupport().getFailoverModel(seo.getDisplayMetakeywords(), seo.getMetakeywords()).getValue(language);
@@ -343,6 +367,17 @@ public class AbstractWebPage extends WebPage {
             }
         }
         return null;
+    }
+
+    /**
+     * Get rel-canonical link.
+     *
+     * @return link
+     */
+    public IModel<String> getRelCanonical() {
+
+        return null;
+
     }
 
 }

@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.search.Query;
 import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
@@ -31,7 +32,6 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
-import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSearchResultPageDTOImpl;
 import org.yes.cart.domain.entity.*;
@@ -320,6 +320,89 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return map;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> getCompareAttributes(final String locale,
+                                                                                                                              final List<Long> productId,
+                                                                                                                              final List<Long> skuId) {
+
+        final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view =
+                new TreeMap<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>>(BY_SECOND);
+
+        for (final Long id : productId) {
+
+            final Product product = proxy().getProductById(id, true);
+            if (product != null) {
+
+                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
+                        proxy().getProductAttributes(locale, id, 0L, product.getProducttype().getProducttypeId());
+
+                mergeCompareView(view, productView, "p_" + id);
+            }
+
+        }
+
+        for (final Long id : skuId) {
+
+            final ProductSku sku = proxy().getSkuById(id, true);
+            if (sku != null) {
+
+                final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> productView =
+                        proxy().getProductAttributes(locale, sku.getProduct().getProductId(), id, sku.getProduct().getProducttype().getProducttypeId());
+
+                mergeCompareView(view, productView, "s_" + id);
+
+            }
+
+        }
+
+        return view;
+
+    }
+
+
+    private void mergeCompareView(final Map<Pair<String, String>, Map<Pair<String, String>, Map<String, List<Pair<String, String>>>>> view,
+                                  final Map<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> add,
+                                  final String id) {
+
+        for (final Map.Entry<Pair<String, String>, Map<Pair<String, String>, List<Pair<String, String>>>> group : add.entrySet()) {
+
+            Map<Pair<String, String>, Map<String, List<Pair<String, String>>>> attributesInGroup = view.get(group.getKey());
+
+            if (attributesInGroup == null) {
+
+                attributesInGroup = new TreeMap<Pair<String, String>, Map<String, List<Pair<String, String>>>>(BY_SECOND);
+                view.put(group.getKey(), attributesInGroup);
+
+            }
+
+            for (final Map.Entry<Pair<String, String>, List<Pair<String, String>>> attribute : group.getValue().entrySet()) {
+
+                Map<String, List<Pair<String, String>>> valueByProduct = attributesInGroup.get(attribute.getKey());
+
+                if (valueByProduct == null) {
+
+                    valueByProduct = new HashMap<String, List<Pair<String, String>>>();
+                    attributesInGroup.put(attribute.getKey(), valueByProduct);
+
+                }
+
+                valueByProduct.put(id, new ArrayList<Pair<String, String>>(attribute.getValue()));
+
+
+            }
+
+
+        }
+
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "productService-productAttribute")
     public Pair<String, String> getProductAttribute(final String locale, final long productId, final long skuId, final String attributeCode) {
         if (skuId > 0L) {
@@ -347,6 +430,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Cacheable(value = "productService-allProductsAttributeValues")
     public Map<Long, String> getAllProductsAttributeValues(final String attributeCode) {
         final List<Object[]> values = (List) getGenericDao().findByNamedQuery("ALL.PRODUCT.ATTR.VALUE", attributeCode);
@@ -437,7 +523,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 ProductSearchQueryBuilder.PRODUCT_CREATED_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_UPDATED_FIELD,
                 ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
-                ProductSearchQueryBuilder.BRAND_FIELD
+                ProductSearchQueryBuilder.BRAND_NAME_FIELD
 
                 );
 
@@ -509,17 +595,6 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productService-distinctAttributeValues")
-    public List<Object> getDistinctAttributeValues(final long productTypeId, final String code) {
-        return productDao.findQueryObjectByNamedQuery(
-                "PRODUCTS.ATTRIBUTE.VALUES.BY.CODE.PRODUCTTYPEID",
-                productTypeId,
-                code);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Cacheable(value = "productService-productByIdList")
     public List<Product> getProductByIdList(final List idList) {
         if (idList == null || idList.isEmpty()) {
@@ -534,9 +609,22 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     @Cacheable(value = "productService-distinctBrands")
     public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
         List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.ATTR.CODE.VALUES.BY.ASSIGNED.CATEGORIES",
+                "PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES",
                 categories);
-        return constructBrandFilteredNavigationRecords(list);
+
+        final List<FilteredNavigationRecord> records = constructBrandFilteredNavigationRecords(list);
+        Collections.sort(
+                records,
+                new Comparator<FilteredNavigationRecord>() {
+                    public int compare(final FilteredNavigationRecord record1, final FilteredNavigationRecord record2) {
+                        int rez = record1.getName().compareTo(record2.getName());
+                        if (rez == 0) {
+                            rez = record1.getValue().compareTo(record2.getValue());
+                        }
+                        return rez;
+                    }
+                });
+        return records;
     }
 
 
@@ -560,7 +648,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                         int rez = record1.getRank() - record2.getRank();
                         if (rez == 0) {
                             rez = record1.getName().compareTo(record2.getName());
-                            if (rez == 0) {
+                            if (rez == 0 && !"R".equals(record1.getType())) {
                                 rez = record1.getValue().compareTo(record2.getValue());
                             }
                         }
@@ -585,12 +673,29 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
         if (!singleNavAttrCodes.isEmpty()) {
             final Map<String, I18NModel> attrNames = attributeService.getAllAttributeNames();
 
+            /*
+                Attribute values can be used by many different product types. However we cannot enforce usage of
+                product types in determination of distinct values since we want to use product type definitions
+                in polymorphic fashion.
+
+                For example Category can define pseudo type PC which has attribute PROCESSOR. However we may want to
+                refine PC into Notebook product type. Nootebooks may also reside in this category. Thefore when we
+                access filtered navigation for Category PC we want distinct values of PROCESSOR for both
+                PCs and Notebooks.
+
+                Therefore distinct grouping must only be done on Attribute.CODE.
+
+                However a causion must be taken here because this means that values for attribute must be consistent
+                accross all product types, otherwise there is no guarantee on what displayable name will appear in
+                filtered navigation.
+             */
+
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
+                    "PRODUCTS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
 
             list = productDao.findQueryObjectsByNamedQuery(
-                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet(), productTypeId);
+                    "PRODUCTSKUS.ATTR.CODE.VALUES.BY.ATTRCODES", singleNavAttrCodes.keySet());
             appendFilteredNavigationRecords(records, locale, list, attrNames, singleNavAttrCodes);
         }
         return new ArrayList<FilteredNavigationRecord>(records.values());
@@ -608,7 +713,7 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         final List<ProductTypeAttr> rangeNavigationInType = productTypeAttrDao.findByNamedQuery(
                 "PRODUCTS.RANGE.ATTR.CODE.VALUES.BY.PRODUCTTYPEID",
-                productTypeId, Boolean.TRUE);
+                productTypeId, Boolean.TRUE, Boolean.TRUE);
 
 
         final List<FilteredNavigationRecord> records = new ArrayList<FilteredNavigationRecord>();
@@ -774,13 +879,42 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    public List<Long> findProductIdsByManufacturerCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.MANUFACTURER.CODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByBarCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.SKU.BARCODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByPimCode(final String code) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.PIM.CODE", code);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Long> findProductIdsByAttributeValue(final String attrCode, final String attrValue) {
+        return (List) productDao.findQueryObjectByNamedQuery("PRODUCT.IDS.BY.ATTRIBUTE.CODE.AND.VALUE", attrCode, attrValue);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String findSeoUriByProductId(final Long productId) {
         List<Object> list = productDao.findQueryObjectByNamedQuery("SEO.URI.BY.PRODUCT.ID", productId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }
@@ -833,10 +967,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     public String findSeoUriByProductSkuId(final Long skuId) {
         List<Object> list = productSkuService.getGenericDao().findQueryObjectByNamedQuery("SEO.URI.BY.SKU.ID", skuId);
         if (list != null && !list.isEmpty()) {
-            final Object uri = list.get(0);
-            if (uri instanceof String) {
-                return (String) uri;
+            final Object[] uriAndId = (Object[]) list.get(0);
+            if (uriAndId[0] instanceof String) {
+                return (String) uriAndId[0];
             }
+            return String.valueOf(uriAndId[1]);
         }
         return null;
     }
@@ -955,7 +1090,13 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
 
         final List<Criterion> criterionList = new ArrayList<Criterion>();
         if (StringUtils.isNotBlank(code)) {
-            criterionList.add(Restrictions.like("code", code, MatchMode.ANYWHERE));
+            criterionList.add(Restrictions.or(
+                    Restrictions.like("code", code, MatchMode.ANYWHERE),
+                    Restrictions.like("manufacturerCode", code, MatchMode.ANYWHERE),
+                    Restrictions.eq("pimCode", code),
+                    Restrictions.eq("guid", code),
+                    Restrictions.eq("productId", NumberUtils.toLong(code))
+            ));
         }
         if (StringUtils.isNotBlank(name)) {
             criterionList.add(Restrictions.like("name", name, MatchMode.ANYWHERE));

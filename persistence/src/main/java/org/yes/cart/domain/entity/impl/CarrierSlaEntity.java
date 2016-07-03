@@ -19,7 +19,6 @@ package org.yes.cart.domain.entity.impl;
 
 import org.yes.cart.domain.entity.Carrier;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -39,15 +38,9 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private String displayName;
     private String description;
     private String displayDescription;
-    private String currency;
     private Integer maxDays;
     private String slaType;
-    private BigDecimal price;
-    private BigDecimal percent;
     private String script;
-    private BigDecimal priceNotLess;
-    private BigDecimal percentNotLess;
-    private BigDecimal costNotLess;
     private String supportedPaymentGateways;
     private List<String> supportedPaymentGatewaysAsList;
     private boolean billingAddressNotRequired;
@@ -97,14 +90,6 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.displayDescription = displayDescription;
     }
 
-    public String getCurrency() {
-        return this.currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public Integer getMaxDays() {
         return this.maxDays;
     }
@@ -121,52 +106,12 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
         this.slaType = slaType;
     }
 
-    public BigDecimal getPrice() {
-        return this.price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getPercent() {
-        return this.percent;
-    }
-
-    public void setPercent(BigDecimal percent) {
-        this.percent = percent;
-    }
-
     public String getScript() {
         return this.script;
     }
 
     public void setScript(String script) {
         this.script = script;
-    }
-
-    public BigDecimal getPriceNotLess() {
-        return this.priceNotLess;
-    }
-
-    public void setPriceNotLess(BigDecimal priceNotLess) {
-        this.priceNotLess = priceNotLess;
-    }
-
-    public BigDecimal getPercentNotLess() {
-        return this.percentNotLess;
-    }
-
-    public void setPercentNotLess(BigDecimal percentNotLess) {
-        this.percentNotLess = percentNotLess;
-    }
-
-    public BigDecimal getCostNotLess() {
-        return this.costNotLess;
-    }
-
-    public void setCostNotLess(BigDecimal costNotLess) {
-        this.costNotLess = costNotLess;
     }
 
     public String getSupportedPaymentGateways() {

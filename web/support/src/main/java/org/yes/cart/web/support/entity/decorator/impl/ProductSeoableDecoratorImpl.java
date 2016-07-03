@@ -18,7 +18,6 @@ package org.yes.cart.web.support.entity.decorator.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
 
@@ -52,11 +51,11 @@ public class ProductSeoableDecoratorImpl extends AbstractSeoableDecoratorImpl<Pr
             @Override
             protected String getDisplayMetadescription(final Product seoable) {
 
-                final AttrValue av = seoable.getAttributeByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + lang);
+                final String av = seoable.getAttributeValueByCode(AttributeNamesKeys.Product.PRODUCT_DESCRIPTION_PREFIX + lang);
 
-                if (av != null && StringUtils.isNotBlank(av.getVal())) {
+                if (StringUtils.isNotBlank(av)) {
                     final Map<String, String> values = new HashMap<String, String>();
-                    values.put(lang, removeTags(av.getVal()));
+                    values.put(lang, removeTags(av));
                     return new StringI18NModel(values).toString();
                 }
                 return null;

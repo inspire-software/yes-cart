@@ -25,6 +25,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.util.DomainApiUtils;
 
 import java.util.*;
 
@@ -152,8 +153,8 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     @Cacheable(value = "shopService-shopAllCategoriesIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
         final Set<Long> all = new HashSet<Long>();
-        all.addAll(getShopCategoriesIds(shopId));
-        all.addAll(getShopContentIds(shopId));
+        all.addAll(proxy().getShopCategoriesIds(shopId));
+        all.addAll(proxy().getShopContentIds(shopId));
         final Category root = contentService.getRootContent(shopId);
         if (root != null) {
             all.add(root.getCategoryId());
@@ -185,12 +186,139 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return new ArrayList<>(currencies);
     }
 
+    /**
+     * Get the top level categories assigned to shop.
+     *
+     * @param shopId given shop
+     * @return list of assigned top level categories
+     */
+    @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
+    public Set<Category> getTopLevelCategories(final Long shopId) {
 
+        final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
+        final Set<Category> cats = new HashSet<Category>();
+        final Date now = new Date();
+        for (final ShopCategory shopCategory : top) {
+            final Category category = categoryService.getById(shopCategory.getCategory().getCategoryId());
+            if (DomainApiUtils.isObjectAvailableNow(true, category.getAvailablefrom(), category.getAvailableto(), now)) {
+                cats.add(category);
+            }
+        }
+        return cats;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<Category> findAllByShopId(final long shopId) {
+
+        final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
+        final Set<Category> cats = new HashSet<Category>();
+        for (final ShopCategory shopCategory : top) {
+            final Category category = categoryService.findById(shopCategory.getCategory().getCategoryId());
+            cats.add(category);
+        }
+        return cats;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategoryParentId")
+    public Long getShopCategoryParentId(final long shopId, final long categoryId) {
+
+        final Set<Long> shopCatIds = proxy().getShopCategoriesIds(shopId);
+
+        if (shopCatIds.contains(categoryId)) {
+
+            final Category category = categoryService.getById(categoryId);
+            if (category != null && !category.isRoot()) {
+
+                final List<Long> links = categoryService.getCategoryLinks(category.getParentId());
+                if (!links.isEmpty()) {
+
+                    for (final Long linkId : links) {
+                        if (shopCatIds.contains(linkId)) {
+                            // We have a symlink for current shop
+                            return linkId;
+                        }
+                    }
+                }
+
+                // Use master catalog parent
+                return category.getParentId();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategoryTemplate")
+    public String getShopCategoryTemplate(final long shopId, final long categoryId) {
+        final Category category = categoryService.getById(categoryId);
+        if (category != null && !category.isRoot()) {
+            if (StringUtils.isBlank(category.getUitemplate())) {
+
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                if (parentId != null) {
+                    return proxy().getShopCategoryTemplate(shopId, parentId);
+                }
+            } else {
+                return category.getUitemplate();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategorySearchTemplate")
+    public String getShopCategorySearchTemplate(final long shopId, final long categoryId) {
+        final Category category = categoryService.getById(categoryId);
+        if (category != null && !category.isRoot()) {
+
+            final String template = category.getProductType() != null ? category.getProductType().getUisearchtemplate() : null;
+
+            if (StringUtils.isBlank(template)) {
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                if (parentId != null) {
+                    return proxy().getShopCategorySearchTemplate(shopId, parentId);
+                }
+            } else {
+                return template;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-shopCategoryProductTypeId")
+    public Long getShopCategoryProductTypeId(final long shopId, final long categoryId) {
+        final Category category = categoryService.getById(categoryId);
+        if (category != null && !category.isRoot()) {
+            if (category.getProductType() == null) {
+                final Long parentId = proxy().getShopCategoryParentId(shopId, categoryId);
+                if (parentId != null) {
+                    return proxy().getShopCategoryProductTypeId(shopId, parentId);
+                }
+            } else {
+                return category.getProductType().getProducttypeId();
+            }
+        }
+        return null;
+    }
 
 
     /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.
-     * TODO makes sense to move it into abstract generic
+     *
      * @param shopId shop id
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
@@ -276,4 +404,25 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     public void delete(Shop instance) {
         super.delete(instance);
     }
+
+
+    private ShopService proxy;
+
+    private ShopService proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * @return self proxy to reuse AOP caching
+     */
+    public ShopService getSelf() {
+        // Spring lookup method to get self proxy
+        return null;
+    }
+
+
+
 }

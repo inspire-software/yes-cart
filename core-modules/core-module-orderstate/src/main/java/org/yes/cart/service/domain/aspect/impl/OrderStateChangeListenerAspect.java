@@ -95,6 +95,7 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
                 mailService,
                 mailComposer,
                 customerService,
+                productSkuService,
                 shopService,
                 serializableMessage);
 

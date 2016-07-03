@@ -64,6 +64,9 @@
             storeSummaryPanel.shopDTOImpl = _shopDTOImpl;
             storeSummaryPanel.saveCallBack = function (shop:ShopDTOImpl):void {
                 shopDTOImpl = shop;
+                if (_newShopCallBack != null) {
+                    _newShopCallBack(shop);
+                }
             };
             summaryTab.addChild(storeSummaryPanel);
             initTab(shopTabNavigator.selectedIndex);

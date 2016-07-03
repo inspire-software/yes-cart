@@ -44,6 +44,7 @@
 
         override protected function onRefreshView():void {
             this.attrValues.removeAll();
+            this.attrValues.refresh(); // this helps with index exception in removeAll caused by grid component sorting
             onEntitySet(AttributeGroupNames.SYSTEM);
 
             remoteSystemService.getEntityAttributes(100);

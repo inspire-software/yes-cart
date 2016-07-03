@@ -43,6 +43,7 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
     private String tag;
     private String publicKey;
     private String customerType;
+    private String pricingPolicy;
 
     private Collection<CustomerOrder> orders = new ArrayList<CustomerOrder>(0);
     private Collection<CustomerWishList> wishList = new ArrayList<CustomerWishList>(0);
@@ -169,6 +170,14 @@ public class CustomerEntity implements org.yes.cart.domain.entity.Customer, java
 
     public void setCustomerType(final String customerType) {
         this.customerType = customerType;
+    }
+
+    public String getPricingPolicy() {
+        return pricingPolicy;
+    }
+
+    public void setPricingPolicy(final String pricingPolicy) {
+        this.pricingPolicy = pricingPolicy;
     }
 
     public Collection<CustomerOrder> getOrders() {

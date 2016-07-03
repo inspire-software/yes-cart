@@ -19,6 +19,7 @@ package org.yes.cart.web.support.service;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,15 @@ import java.util.List;
  * Time: 00:06
  */
 public interface CategoryServiceFacade {
+
+    /**
+     * Get the category parent ID for given shop.
+     *
+     * @param shopId shop id
+     * @param categoryId given category PK
+     * @return parent ID (or symlink parent)
+     */
+    Long getCategoryParentId(long categoryId, long shopId);
 
     /**
      * Get category if it belongs to given shop.
@@ -113,6 +123,18 @@ public interface CategoryServiceFacade {
      */
     int getNewArrivalListSizeConfig(long categoryId, long shopId);
 
+
+    /**
+     * Number of days that counts towards newarrival products
+     *
+     * @param categoryId current category
+     * @param shopId current shop
+     *
+     * @return max number of days
+     */
+    Date getCategoryNewArrivalDate(long categoryId, long shopId);
+
+
     /**
      * Get pagination options configuration.
      *
@@ -152,5 +174,29 @@ public interface CategoryServiceFacade {
      * @return category columns options
      */
     int getCategoryListColumnOptionsConfig(long categoryId, long shopId);
+
+
+    /**
+     * Get category type with failover mechanism. Uses category product type if set, otherwise
+     * looks up parent category product type, until one is found
+     *
+     * @param categoryId category id
+     * @param shopId     current shop
+     *
+     * @return product type for this category
+     */
+    Long getCategoryProductTypeId(long categoryId, long shopId);
+
+
+    /**
+     * Get number of values to display in a filter nav block.
+     *
+     * @param categoryId category PK
+     * @param shopId     current shop
+     *
+     * @return filter nav options limit
+     */
+    int getCategoryFilterLimitConfig(long categoryId, long shopId);
+
 
 }

@@ -21,6 +21,7 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.SeoImage;
@@ -41,6 +42,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Image service to resize and store resized image.
@@ -55,10 +57,12 @@ public class ImageServiceImpl
 
     private String allowedSizes;
 
-    private final boolean cropToFit;
-    private final int forceCropToFitOnSize;
+    private boolean cropToFit;
+    private int forceCropToFitOnSize;
 
-    private final Color defaultBorder;
+    private boolean replaceFilesModeOn;
+
+    private Color defaultBorder;
     private final Color alphaBorder = new Color(0, 0, 0, 0);
 
     private final ImageNameStrategyResolver imageNameStrategyResolver;
@@ -85,6 +89,8 @@ public class ImageServiceImpl
      * @param forceCropToFitOnSize forcefully use cropping if scale is below given size
      *                             This option is very useful for small thumbs (<100px)
      *                             as you really cannot see much with added padding for
+     * @param replaceFilesModeOn if set to true will overwrite existing file if name is
+     *                           the same. Recommended setting is 'true'.
      * @param ioProvider IO provider
      */
     public ImageServiceImpl(final GenericDAO<SeoImage, Long> seoImageDao,
@@ -95,6 +101,7 @@ public class ImageServiceImpl
                             final int borderColorB,
                             final boolean cropToFit,
                             final int forceCropToFitOnSize,
+                            final boolean replaceFilesModeOn,
                             final IOProvider ioProvider) {
 
         super(seoImageDao);
@@ -103,10 +110,29 @@ public class ImageServiceImpl
         this.imageNameStrategyResolver = imageNameStrategyResolver;
         this.allowedSizes = allowedSizes;
         this.ioProvider = ioProvider;
-        defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
+        this.defaultBorder = new Color(borderColorR, borderColorG, borderColorB);
 
         this.cropToFit = cropToFit;
         this.forceCropToFitOnSize = forceCropToFitOnSize;
+
+        this.replaceFilesModeOn = replaceFilesModeOn;
+    }
+
+    public void setConfig(final Resource config) throws IOException {
+
+        final Properties properties = new Properties();
+        properties.load(config.getInputStream());
+
+        this.allowedSizes = properties.getProperty("imagevault.resize.allowed.sizes", this.allowedSizes);
+        this.cropToFit = Boolean.valueOf(properties.getProperty("imagevault.resize.crop.to.fit", String.valueOf(this.cropToFit)));
+        this.forceCropToFitOnSize = NumberUtils.toInt(properties.getProperty("imagevault.resize.force.crop.to.fit.on.size"), this.forceCropToFitOnSize);
+
+        this.defaultBorder = new Color(
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.R"), this.defaultBorder.getRed()),
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.G"), this.defaultBorder.getGreen()),
+                NumberUtils.toInt(properties.getProperty("imagevault.resize.border.color.B"), this.defaultBorder.getBlue())
+        );
+
     }
 
     /**
@@ -401,6 +427,9 @@ public class ImageServiceImpl
                                       final String code,
                                       final String suffix,
                                       final String locale) {
+        if (this.replaceFilesModeOn) {
+            return fileName;
+        }
         if (ioProvider.exists(fileName, Collections.EMPTY_MAP)) {
             final String newFileName = strategy.createRollingFileName(fileName, code, suffix, locale);
             return createRepositoryUniqueName(newFileName, ioProvider, strategy, code, suffix, locale);

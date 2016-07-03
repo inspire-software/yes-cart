@@ -19,10 +19,6 @@ package org.yes.cart.domain.interceptor;
 import org.hibernate.search.indexes.interceptor.EntityIndexingInterceptor;
 import org.hibernate.search.indexes.interceptor.IndexingOverride;
 import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.ProductSku;
-import org.yes.cart.domain.entity.SkuWarehouse;
-import org.yes.cart.domain.entity.bridge.HibernateSearchBridgeStaticLocator;
-import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
 import org.yes.cart.util.DomainApiUtils;
 
 import java.util.Date;
@@ -66,24 +62,17 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
                     return DomainApiUtils.isObjectAvailableNow(true, null, entity.getAvailableto(), new Date());
                 case Product.AVAILABILITY_STANDARD:
                 default:
-                    // For standard make sure product is in availability date range
-                    if (DomainApiUtils.isObjectAvailableNow(true, entity.getAvailablefrom(), entity.getAvailableto(), new Date())) {
+                    /*
+                     * For standard check only available date.
+                     *
+                     * Checking inventory in a multistore environment does not work as even if one shop has this product it will
+                     * show up in all stored. Instead an inventoty flag field needs to be used. This also gives option for
+                     * implementing "only in stock / all products" navigation feature.
+                     *
+                     */
+                    return DomainApiUtils.isObjectAvailableNow(true, entity.getAvailablefrom(), entity.getAvailableto(), new Date());
 
-                        if (checkInventory) {
-                            // select causes transaction flush - must be used only for update, never for insert
-                            SkuWarehouseRelationshipSupport support = getSkuWarehouseRelationshipSupport();
 
-                            // and has at least one inventory record that is available
-                            for (final ProductSku sku : entity.getSku()) {
-                                for (final SkuWarehouse inventory : support.getQuantityOnWarehouse(sku.getCode())) {
-                                    if (inventory.isAvailableToSell()) {
-                                        return true; // has stock
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    return false; // no
             }
 
         }
@@ -117,9 +106,5 @@ public class ProductEntityIndexingInterceptor implements EntityIndexingIntercept
                 :IndexingOverride.REMOVE;
     }
 
-
-    private SkuWarehouseRelationshipSupport getSkuWarehouseRelationshipSupport() {
-        return HibernateSearchBridgeStaticLocator.getSkuWarehouseRelationshipSupport();
-    }
 
 }

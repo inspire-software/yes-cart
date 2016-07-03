@@ -28,11 +28,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
@@ -44,7 +41,6 @@ import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,11 +98,9 @@ public class ShoppingCartView extends BaseComponent {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
-        final AttrValue valCoupons = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
-        final boolean allowCoupons = valCoupons != null && valCoupons.getVal() != null && Boolean.valueOf(valCoupons.getVal());
+        final boolean allowCoupons = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
 
-        final AttrValue valMessage = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
-        final boolean allowMessages = valMessage != null && valMessage.getVal() != null && Boolean.valueOf(valMessage.getVal());
+        final boolean allowMessages = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
 
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
@@ -217,13 +211,11 @@ public class ShoppingCartView extends BaseComponent {
         String subTotalInclude = getContentInclude(shopId, "shopping_cart_checkout_include", lang, dynaCtx);
         form.get(SUBTOTAL_INCLUDE).replaceWith(new Label(SUBTOTAL_INCLUDE, subTotalInclude).setVisible(cartIsNotEmpty).setEscapeModelStrings(false));
 
-        final AttrValue valCoupons = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
-        final boolean allowCoupons = valCoupons != null && valCoupons.getVal() != null && Boolean.valueOf(valCoupons.getVal());
+        final boolean allowCoupons = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
         String couponsInclude = getContentInclude(shopId, "shopping_cart_coupons_include", lang, dynaCtx);
         form.get(COUPON_INCLUDE).replaceWith(new Label(COUPON_INCLUDE, couponsInclude).setEscapeModelStrings(false).setVisible(allowCoupons));
 
-        final AttrValue valMessage = shop.getAttributeByCode(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
-        final boolean allowMessages = valMessage != null && valMessage.getVal() != null && Boolean.valueOf(valMessage.getVal());
+        final boolean allowMessages = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
         String messageInclude = getContentInclude(shopId, "shopping_cart_message_include", lang, dynaCtx);
         form.get(ORDERMSG_INCLUDE).replaceWith(new Label(ORDERMSG_INCLUDE, messageInclude).setEscapeModelStrings(false).setVisible(allowMessages));
 

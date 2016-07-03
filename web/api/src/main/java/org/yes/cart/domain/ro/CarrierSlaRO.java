@@ -25,7 +25,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -42,38 +41,20 @@ public class CarrierSlaRO implements Serializable {
     @DtoField(value = "carrierslaId", readOnly = true)
     private long carrierslaId;
 
+    @DtoField(value = "guid", readOnly = true)
+    private String code;
+
     @DtoField(value = "name", readOnly = true)
     private String name;
 
     @DtoField(value = "description", readOnly = true)
     private String description;
 
-    @DtoField(value = "currency", readOnly = true)
-    private String currency;
-
     @DtoField(value = "maxDays", readOnly = true)
     private Integer maxDays;
 
     @DtoField(value = "slaType", readOnly = true)
     private String slaType;
-
-    @DtoField(value = "price", readOnly = true)
-    private BigDecimal price;
-
-    @DtoField(value = "percent", readOnly = true)
-    private BigDecimal percent;
-
-    @DtoField(value = "script", readOnly = true)
-    private String script;
-
-    @DtoField(value = "priceNotLess", readOnly = true)
-    private BigDecimal priceNotLess;
-
-    @DtoField(value = "percentNotLess", readOnly = true)
-    private BigDecimal percentNotLess;
-
-    @DtoField(value = "costNotLess", readOnly = true)
-    private BigDecimal costNotLess;
 
     @DtoField(value = "carrier.carrierId", readOnly = true)
     private long carrierId;
@@ -102,6 +83,14 @@ public class CarrierSlaRO implements Serializable {
         this.carrierslaId = carrierslaId;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(final String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
@@ -116,15 +105,6 @@ public class CarrierSlaRO implements Serializable {
 
     public void setDescription(final String description) {
         this.description = description;
-    }
-
-    @XmlAttribute(name = "currency")
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(final String currency) {
-        this.currency = currency;
     }
 
     @XmlAttribute(name = "max-days")
@@ -143,54 +123,6 @@ public class CarrierSlaRO implements Serializable {
 
     public void setSlaType(final String slaType) {
         this.slaType = slaType;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(final BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getPercent() {
-        return percent;
-    }
-
-    public void setPercent(final BigDecimal percent) {
-        this.percent = percent;
-    }
-
-    public String getScript() {
-        return script;
-    }
-
-    public void setScript(final String script) {
-        this.script = script;
-    }
-
-    public BigDecimal getPriceNotLess() {
-        return priceNotLess;
-    }
-
-    public void setPriceNotLess(final BigDecimal priceNotLess) {
-        this.priceNotLess = priceNotLess;
-    }
-
-    public BigDecimal getPercentNotLess() {
-        return percentNotLess;
-    }
-
-    public void setPercentNotLess(final BigDecimal percentNotLess) {
-        this.percentNotLess = percentNotLess;
-    }
-
-    public BigDecimal getCostNotLess() {
-        return costNotLess;
-    }
-
-    public void setCostNotLess(final BigDecimal costNotLess) {
-        this.costNotLess = costNotLess;
     }
 
     @XmlAttribute(name = "carrier-id")
