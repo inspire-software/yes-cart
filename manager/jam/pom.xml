@@ -1,4 +1,20 @@
 <?xml version="1.0"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -6,14 +22,11 @@
     <parent>
         <groupId>org.yes</groupId>
         <artifactId>manager</artifactId>
-        <version>3.1.0-SNAPSHOT</version>
+        <version>3.3.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.yes</groupId>
     <artifactId>jam</artifactId>
     <packaging>war</packaging>
-    <version>3.1.0-SNAPSHOT</version>
     <name>jam</name>
-    <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -355,7 +368,6 @@
         </profile>
     </profiles>
 
-
     <build>
 
         <filters>
@@ -366,16 +378,10 @@
             <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
-            <filter>
-                ${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties
-            </filter>
-            <filter>
-                ${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties
-            </filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
             <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
-            <filter>
-                ${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties
-            </filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
         </filters>
 
         <testResources>
@@ -415,10 +421,23 @@
                 <directory>${basedir}/../../env/maven/${env}</directory>
                 <includes>
                     <include>ehcache.xml</include>
+                    <include>yc-jgroups-udp.xml</include>
+                    <include>yc-ws-cluster.xml</include>
+                    <include>yc-config.properties</include>
+                    <include>yc-license.txt</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}/../../env/maven/${env}/YUM</directory>
+                <includes>
+                    <include>logback.xml</include>
+                    <include>logging.properties</include>
                 </includes>
             </resource>
         </resources>
 
+        <finalName>${webapp.yum.war.name}</finalName>
 
         <pluginManagement>
             <plugins>
