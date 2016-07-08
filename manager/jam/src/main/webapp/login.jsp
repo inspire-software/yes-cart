@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%--
   ~ Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
   ~
@@ -18,55 +19,62 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Login page</title>
-    <link href="<c:url value='resources/assets/bootstrap.min.css' />" rel="stylesheet"></link>
+    <title>YC - pure eCommerce</title>
+    <link href="<c:url value='resources/assets/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/assets/font-awesome.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/assets/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/assets/login.css' />" rel="stylesheet"/>
     <style type="text/css">
-        .vertical-center {
-            min-height: 100%;
-            min-height: 100vh;
-
-            display: flex;
-            align-items: center;
-        }
 
     </style>
 </head>
 
 <body>
-<div class="container vertical-center">
-    <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <form name='loginForm' action='<c:url value="/j_spring_security_check"/>' method='POST'>
-                <div class="">
-                    <p><h2>JAM Login.</h2></p>
+<div class="container gear-top">
+    <div class="row gear-bottom">
+        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
+            <form class="whitebg" name='loginForm' action='<c:url value="/j_spring_security_check"/>' method='POST'>
+                <div class="text-center clearfix">
+                    <a href="http://yes-cart.org" target="_blank">
+                        <img border="0" src="<c:url value='resources/assets/img/logo-button-100x100.png'/>"/>
+                    </a>
                 </div>
                 <c:if test="${param.error != null}">
                     <div class="alert alert-danger">
-                        <p>Invalid username and/or password.</p>
+                        <p><spring:message code="login.invalid.credentials"/></p>
                     </div>
                 </c:if>
                 <c:if test="${param.logout != null}">
                     <div class="alert alert-success">
-                        <p>You have been logged out successfully.</p>
+                        <p><spring:message code="login.logout.success"/></p>
                     </div>
                 </c:if>
                 <div class="input-group input-sm">
                     <label class="input-group-addon" for="j_username"><i class="fa fa-user"></i></label>
                     <input type="text" class="form-control" id="j_username" name="j_username"
-                           placeholder="Enter Username" value="admin@yes-cart.com"
+                           placeholder="<spring:message code="login.form.placeholder.user"/>"
+                           value="<spring:message code="login.prefill.user"/>"
                            required>
                 </div>
                 <div class="input-group input-sm">
                     <label class="input-group-addon" for="j_password"><i class="fa fa-lock"></i></label>
                     <input type="password" class="form-control" id="j_password" name="j_password"
-                           placeholder="Enter Password" value="1234567"
+                           placeholder="<spring:message code="login.form.placeholder.pass"/>"
+                           value="<spring:message code="login.prefill.pass"/>"
                            required>
                 </div>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                <div class="">
-                    <input type="submit"
-                           class="btn btn-block btn-primary btn-default" value="Log in">
+                <div class="input-group input-sm pull-right">
+                    <button type="submit"
+                            class="btn btn-block btn-primary">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+
+                <div class="input-group input-sm">
+                    Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
+                    &copy; YesCart.org 2009 - <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>
                 </div>
             </form>
         </div>

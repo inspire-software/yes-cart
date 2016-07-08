@@ -112,9 +112,9 @@ public class VoShopServiceImpl implements VoShopService {
     final ShopDTO shopDTO = dtoShopService.getById(shopId);
     final VoShopLocale voShopLocale = new VoShopLocale();
     simpleVoShopLocaleAssembler.assembleDto(voShopLocale, shopDTO, null, null);
-    voShopLocale.setDisplayTitles(adaptMapToPairs(shopDTO.getDisplayTitles().entrySet()));
-    voShopLocale.setDisplayMetadescriptions(adaptMapToPairs(shopDTO.getDisplayMetadescriptions().entrySet()));
-    voShopLocale.setDisplayMetakeywords(adaptMapToPairs(shopDTO.getDisplayMetakeywords().entrySet()));
+    voShopLocale.setDisplayTitles(adaptMapToPairs(shopDTO.getDisplayTitles()));
+    voShopLocale.setDisplayMetadescriptions(adaptMapToPairs(shopDTO.getDisplayMetadescriptions()));
+    voShopLocale.setDisplayMetakeywords(adaptMapToPairs(shopDTO.getDisplayMetakeywords()));
     return voShopLocale;
   }
 
@@ -202,7 +202,7 @@ public class VoShopServiceImpl implements VoShopService {
       final VoShopLanguages voShopLanguages = new VoShopLanguages();
       String lng = dtoShopService.getSupportedLanguages(shopId);
       voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() :   Arrays.asList(lng.split(",")));
-      voShopLanguages.setAll(adaptMapToPairs(languageService.getLanguageName().entrySet()));
+      voShopLanguages.setAll(adaptMapToPairs(languageService.getLanguageName()));
       voShopLanguages.setShopId(shopId);
       return voShopLanguages;
     }
@@ -229,7 +229,8 @@ public class VoShopServiceImpl implements VoShopService {
   }
 
 
-  private List<MutablePair<String, String>> adaptMapToPairs(Set<Map.Entry<String, String>> es) {
+  private List<MutablePair<String, String>> adaptMapToPairs(Map<String, String> map) {
+    final Set<Map.Entry<String, String>> es = map != null ? map.entrySet() : Collections.EMPTY_SET;
     List<MutablePair<String, String>> rez = new ArrayList<MutablePair<String, String>>(es.size());
     for(Map.Entry ent : es) {
       rez.add(MutablePair.of(ent.getKey(), ent.getValue()));

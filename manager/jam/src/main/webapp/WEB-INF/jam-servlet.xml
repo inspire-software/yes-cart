@@ -48,4 +48,10 @@ http://www.springframework.org/schema/mvc http://www.springframework.org/schema/
 
   <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
 
+  <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="defaultEncoding" value="UTF-8"/>
+    <property name="basename" value="jam" />
+  </bean>
+
 </beans>
