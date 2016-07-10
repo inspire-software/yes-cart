@@ -445,7 +445,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             return file.getAbsolutePath();
 
         } else {
-            throw new IOException("Unable to write to directory (derectory does not exist): " + importDirectory.getAbsolutePath());
+            throw new IOException("Unable to write to directory (directory does not exist): " + importDirectory.getAbsolutePath());
         }
 
 
