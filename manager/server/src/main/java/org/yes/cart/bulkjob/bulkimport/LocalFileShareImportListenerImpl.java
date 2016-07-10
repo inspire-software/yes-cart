@@ -324,6 +324,10 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                                 final boolean reindex = Boolean.valueOf(groupData.get("reindex"));
                                 if (reindex) {
+                                    
+                                    defaultLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
+                                    shopLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
+
                                     Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
                                     final String indexToken = reindexService.reindexShopProducts(ShopCodeContext.getShopId());
                                     while (true) {
