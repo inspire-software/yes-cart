@@ -555,7 +555,7 @@
                 <version>1.5.2</version>
                 <executions>
                     <execution>
-                        <id>replace-main.css</id>
+                        <id>replace-assets</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>replace</goal>
@@ -567,34 +567,10 @@
                                     <token>href=".*assets\/main.css.*"</token> <!--TODO check how to build with correct path delimiter-->
                                     <value>href="assets/main.css"</value>
                                 </replacement>
-                            </replacements>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>replace-bootstrap.css</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                        <configuration>
-                            <file>${basedir}/src/main/webapp/resources/index.html</file>
-                            <replacements>
                                 <replacement>
                                     <token>href=".*assets\/bootstrap.min.css.*"</token>
                                     <value>href="assets/bootstrap.min.css"</value>
                                 </replacement>
-                            </replacements>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>replace-font-awesome.min.css</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                        <configuration>
-                            <file>${basedir}/src/main/webapp/resources/index.html</file>
-                            <replacements>
                                 <replacement>
                                     <token>href=".*assets\/font-awesome.min.css.*"</token>
                                     <value>href="assets/font-awesome.min.css"</value>
