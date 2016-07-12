@@ -143,7 +143,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
-        if (cart.getCarrierSlaId() == null) {
+        if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
             return Collections.emptyList();
         }
         final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());

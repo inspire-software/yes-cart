@@ -77,6 +77,7 @@ public class PriceServiceImpl
                                     final long shopId,
                                     final String currencyCode,
                                     final BigDecimal quantity,
+                                    final boolean enforceTier,
                                     final String pricingPolicy) {
 
         final List<Pair<String, SkuPrice>> skuPrices;
@@ -88,10 +89,13 @@ public class PriceServiceImpl
             skuPrices = Collections.emptyList();
         }
 
-        return getMinimalSkuPrice(skuPrices, selectedSku, quantity);
+        return getMinimalSkuPrice(skuPrices, selectedSku, quantity, enforceTier);
     }
 
-    private SkuPrice getMinimalSkuPrice(List<Pair<String, SkuPrice>> skuPrices, final String selectedSku, final BigDecimal quantity) {
+    private SkuPrice getMinimalSkuPrice(List<Pair<String, SkuPrice>> skuPrices,
+                                        final String selectedSku,
+                                        final BigDecimal quantity,
+                                        final boolean enforceTier) {
 
         skuPrices = getSkuPricesFilteredByTimeFrame(skuPrices);
 
@@ -103,13 +107,37 @@ public class PriceServiceImpl
 
 
         BigDecimal overallMinimalRegularPrice = null;
+        BigDecimal overallMinimalRegularPriceTier = null;
         Pair<String, SkuPrice> rez = null;
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
             if ((selectedSku == null || skuPrice.getFirst().equals(selectedSku))) {
                 final BigDecimal minPrice = MoneyUtils.minPositive(skuPrice.getSecond().getRegularPrice(), skuPrice.getSecond().getSalePrice());
-                if (overallMinimalRegularPrice == null ||
-                        MoneyUtils.isFirstBiggerThanSecond(overallMinimalRegularPrice, minPrice)) {
+                if (
+                        // Starting point of search
+                        overallMinimalRegularPrice == null
+                        ||
+                        // We do not enforce tier and we look for cheapest price
+                        (
+                                !enforceTier &&
+                                MoneyUtils.isFirstBiggerThanSecond(overallMinimalRegularPrice, minPrice)
+                        )
+                        ||
+                        // We enforce tier and look for largest tier with cheapest price
+                        (
+                                enforceTier &&
+                                (
+                                        // Tier is higher, so enforce
+                                        MoneyUtils.isFirstBiggerThanSecond(skuPrice.getSecond().getQuantity(), overallMinimalRegularPriceTier)
+                                )
+                                ||
+                                (
+                                        // Tier is same but cheaper price
+                                        MoneyUtils.isFirstEqualToSecond(skuPrice.getSecond().getQuantity(), overallMinimalRegularPriceTier) &&
+                                        MoneyUtils.isFirstBiggerThanSecond(overallMinimalRegularPrice, minPrice)
+                                )
+                        )) {
                     overallMinimalRegularPrice = minPrice;
+                    overallMinimalRegularPriceTier = skuPrice.getSecond().getQuantity();
                     rez = skuPrice;
                 }
             }

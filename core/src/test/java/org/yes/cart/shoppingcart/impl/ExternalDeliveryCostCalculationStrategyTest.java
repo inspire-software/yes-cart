@@ -52,25 +52,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         final Total delTotal = new ExternalDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
-        assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getNonSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getPriceSubTotal().toPlainString());
-        assertFalse(delTotal.isOrderPromoApplied());
-        assertNull(delTotal.getAppliedOrderPromo());
-        assertEquals("0.00", delTotal.getSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryListCost().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCost().toPlainString());
-        assertFalse(delTotal.isDeliveryPromoApplied());
-        assertNull(delTotal.getAppliedDeliveryPromo());
-        assertEquals("0.00", delTotal.getDeliveryTax().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCostAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotal().toPlainString());
-        assertEquals("0.00", delTotal.getTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getListTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotalAmount().toPlainString());
+        assertNull(delTotal);
 
         context.assertIsSatisfied();
     }
@@ -90,25 +72,7 @@ public class ExternalDeliveryCostCalculationStrategyTest {
 
         final Total delTotal = new ExternalDeliveryCostCalculationStrategy(carrierSlaService).calculate(cart);
 
-        assertEquals("0.00", delTotal.getListSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getNonSaleSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getPriceSubTotal().toPlainString());
-        assertFalse(delTotal.isOrderPromoApplied());
-        assertNull(delTotal.getAppliedOrderPromo());
-        assertEquals("0.00", delTotal.getSubTotal().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getSubTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryListCost().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCost().toPlainString());
-        assertFalse(delTotal.isDeliveryPromoApplied());
-        assertNull(delTotal.getAppliedDeliveryPromo());
-        assertEquals("0.00", delTotal.getDeliveryTax().toPlainString());
-        assertEquals("0.00", delTotal.getDeliveryCostAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotal().toPlainString());
-        assertEquals("0.00", delTotal.getTotalTax().toPlainString());
-        assertEquals("0.00", delTotal.getListTotalAmount().toPlainString());
-        assertEquals("0.00", delTotal.getTotalAmount().toPlainString());
+        assertNull(delTotal);
 
         context.assertIsSatisfied();
     }

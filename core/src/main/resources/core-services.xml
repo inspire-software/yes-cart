@@ -834,6 +834,8 @@
                 <entry key="R">
                     <bean class="org.yes.cart.shoppingcart.impl.FreeDeliveryCostCalculationStrategy">
                         <constructor-arg index="0" ref="carrierSlaService"/>
+                        <constructor-arg index="1" ref="pricingPolicyProvider"/>
+                        <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
                     </bean>
                 </entry>
                 <entry key="E">
@@ -846,6 +848,14 @@
                         <constructor-arg index="0" ref="carrierSlaService"/>
                         <constructor-arg index="1" ref="pricingPolicyProvider"/>
                         <constructor-arg index="2" ref="defaultDeliveryCostRegionalPriceResolver"/>
+                    </bean>
+                </entry>
+                <entry key="W">
+                    <bean class="org.yes.cart.shoppingcart.impl.WeightBasedPriceListDeliveryCostCalculationStrategy">
+                        <constructor-arg index="0" ref="carrierSlaService"/>
+                        <constructor-arg index="1" ref="productService"/>
+                        <constructor-arg index="2" ref="pricingPolicyProvider"/>
+                        <constructor-arg index="3" ref="defaultDeliveryCostRegionalPriceResolver"/>
                     </bean>
                 </entry>
             </map>

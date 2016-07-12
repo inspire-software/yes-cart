@@ -51,6 +51,11 @@ public interface CarrierSla extends Auditable {
     String FIXED = "F";
 
     /**
+     * Weight and/or volume based
+     */
+    String WEIGHT_VOLUME = "W";
+
+    /**
      * Get pk value.
      *
      * @return pk value

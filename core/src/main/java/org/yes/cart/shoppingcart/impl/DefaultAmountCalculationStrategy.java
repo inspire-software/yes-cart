@@ -62,6 +62,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
 
     private static final BigDecimal ZERO = MoneyUtils.ZERO;
     private static final BigDecimal HUNDRED = MoneyUtils.HUNDRED;
+    private static final Total ZERO_TOTAL = new TotalImpl();
 
     private final TaxProvider taxProvider;
     private final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy;
@@ -118,7 +119,7 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
         final Total deliveryCostTotalNoTax = deliveryCostCalculationStrategy.calculate(cart);
 
         // 4. Create dummy total for items + delivery cost
-        final Total draftOrderTotal = itemTotal.add(deliveryCostTotalNoTax);
+        final Total draftOrderTotal = deliveryCostTotalNoTax != null ? itemTotal.add(deliveryCostTotalNoTax) : itemTotal.add(ZERO_TOTAL);
 
         // 5. Use current cart + dummy item total to calculate order level promotions
         final Total orderTotal = applyOrderLevelPromotions(customer, cart, draftOrderTotal, promoCtx);

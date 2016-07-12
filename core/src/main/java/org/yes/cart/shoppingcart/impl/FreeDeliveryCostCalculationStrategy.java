@@ -18,10 +18,9 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.shoppingcart.DeliveryCostCalculationStrategy;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 
@@ -37,12 +36,16 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
     private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
     private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    private static final Total ZERO_TOTAL = new TotalImpl();
-
     private final CarrierSlaService carrierSlaService;
+    private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;
+    private final PricingPolicyProvider pricingPolicyProvider;
 
-    public FreeDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService) {
+    public FreeDeliveryCostCalculationStrategy(final CarrierSlaService carrierSlaService,
+                                               final PricingPolicyProvider pricingPolicyProvider,
+                                               final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver) {
         this.carrierSlaService = carrierSlaService;
+        this.deliveryCostRegionalPriceResolver = deliveryCostRegionalPriceResolver;
+        this.pricingPolicyProvider = pricingPolicyProvider;
     }
 
     /** {@inheritDoc} */
@@ -55,36 +58,59 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
             if (carrierSla != null && CarrierSla.FREE.equals(carrierSla.getSlaType())) {
 
                 final String carrierSlaId = carrierSla.getGuid();
-                final BigDecimal listPrice = ZERO;
-                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
-                cart.addShippingToCart(carrierSlaId, qty);
-                cart.setShippingPrice(carrierSlaId, listPrice, listPrice);
-                final BigDecimal deliveryListCost = ZERO;
 
-                return new TotalImpl(
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        false,
-                        null,
-                        Total.ZERO,
-                        Total.ZERO,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost,
-                        false,
-                        null,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost,
-                        Total.ZERO,
-                        deliveryListCost,
-                        deliveryListCost
+                final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
+                        cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
+                        cart.getShoppingContext().getCountryCode(),
+                        cart.getShoppingContext().getStateCode()
                 );
+
+                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
+
+                final SkuPrice price = getSkuPrice(cart, carrierSlaId, policy, qty);
+
+                if (price != null && price.getSkuPriceId() > 0L) {
+
+                    // Price acts only as a marker for regional availability
+
+                    final BigDecimal listPrice = ZERO;
+                    cart.addShippingToCart(carrierSlaId, qty);
+                    cart.setShippingPrice(carrierSlaId, listPrice, listPrice);
+                    final BigDecimal deliveryListCost = ZERO;
+
+                    return new TotalImpl(
+                            Total.ZERO,
+                            Total.ZERO,
+                            Total.ZERO,
+                            Total.ZERO,
+                            false,
+                            null,
+                            Total.ZERO,
+                            Total.ZERO,
+                            Total.ZERO,
+                            deliveryListCost,
+                            deliveryListCost,
+                            false,
+                            null,
+                            Total.ZERO,
+                            deliveryListCost,
+                            deliveryListCost,
+                            Total.ZERO,
+                            deliveryListCost,
+                            deliveryListCost
+                    );
+
+                }
+
             }
         }
-        return ZERO_TOTAL;
+        return null;
+    }
+
+    protected SkuPrice getSkuPrice(final MutableShoppingCart cart, final String carrierSlaId, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {
+
+        return deliveryCostRegionalPriceResolver.getSkuPrice(cart, carrierSlaId, policy, qty);
+
     }
 
 }

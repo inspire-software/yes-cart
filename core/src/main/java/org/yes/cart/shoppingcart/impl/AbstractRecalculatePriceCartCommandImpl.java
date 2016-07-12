@@ -134,6 +134,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                     shop.getShopId(),
                     shoppingCart.getCurrencyCode(),
                     qty,
+                    false,
                     policy.getID());
 
             if (skuPrice.getRegularPrice() != null) {
@@ -159,6 +160,7 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
                 shop.getShopId(),
                 shoppingCart.getCurrencyCode(),
                 qty,
+                false,
                 policy.getID());
 
         if (!shoppingCart.setProductSkuPrice(

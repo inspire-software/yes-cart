@@ -361,7 +361,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty, policy.getID());
+        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty, false, policy.getID());
         final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
 
         final String addedPriceCurr = item.getRegularPriceCurrencyWhenAdded();
@@ -438,7 +438,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity, policy.getID());
+        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity, false, policy.getID());
 
         if (resolved != null) {
 

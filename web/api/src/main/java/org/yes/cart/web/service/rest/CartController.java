@@ -2326,6 +2326,16 @@ public class CartController {
             return review;
         }
 
+        if (cart.getShippingList().isEmpty()) {
+            // Must select a carrier
+            final OrderPreviewRO review = new OrderPreviewRO();
+            review.setSuccess(false);
+            final Map<String, String> problems = new HashMap<String, String>();
+            problems.put("SHIPPING_METHOD", "INVALID");
+            review.setProblems(problems);
+            return review;
+        }
+
         if (StringUtils.isBlank(cart.getOrderInfo().getPaymentGatewayLabel())) {
             // Must select a PG
             final OrderPreviewRO review = new OrderPreviewRO();

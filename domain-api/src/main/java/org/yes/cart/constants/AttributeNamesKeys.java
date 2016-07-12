@@ -241,6 +241,16 @@ public interface AttributeNamesKeys {
          * Default image attribute name.
          */
         String PRODUCT_DEFAULT_IMAGE_ATTR_NAME = PRODUCT_IMAGE_ATTR_NAME_PREFIX + "0";
+
+        /**
+         * Product weight in KG (This attribute is used by Logistics operations)
+         */
+        String PRODUCT_WEIGHT_KG = "PRODUCT_WEIGHT_KG";
+
+        /**
+         * Product volume in m3 (This attribute is used by Logistics operations)
+         */
+        String PRODUCT_VOLUME_M3 = "PRODUCT_VOLUME_M3";
     }
 
     interface Shop {

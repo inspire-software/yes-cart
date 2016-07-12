@@ -275,7 +275,7 @@ public class CheckoutPage extends AbstractWebPage {
                 setResponsePage(this.getClass(), parameters);
                 return createAddressFragment();
             }
-            if (cart.getCarrierSlaId() == null) {
+            if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
                 // Must select a carrier
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_SHIPMENT);
