@@ -1,5 +1,11 @@
 <wrapper *ngIf="shop">
 
+  <div class="row">
+    <div class="col-lg-6">
+      <h1 class="page-header">{{shop.name}}</h1>
+    </div>
+  </div>
+
   <tabset>
 
     <tab heading="Main"  (select)="tabSelected('Main')">
