@@ -16,6 +16,8 @@
 
 package org.yes.cart.domain.query;
 
+import org.yes.cart.domain.misc.Pair;
+
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +37,9 @@ public interface ShopSearchSupportService {
      * @param categoryId current category PK
      * @param shopId     current shop
      *
-     * @return list of searchable categories
+     * @return list of searchable categories,
      */
-    List<Long> getSearchCategoriesIds(long categoryId, long shopId);
+    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long shopId);
 
     /**
      * Number of days that counts towards newarrival products

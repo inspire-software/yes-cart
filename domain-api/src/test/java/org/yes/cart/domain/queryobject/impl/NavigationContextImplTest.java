@@ -21,9 +21,7 @@ import org.yes.cart.domain.queryobject.impl.NavigationContextImpl;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
@@ -36,21 +34,21 @@ public class NavigationContextImplTest {
     @Test
     public void testCategoriesCanBeNull() throws Exception {
 
-        new NavigationContextImpl(10L, null, Collections.EMPTY_MAP, null, null);
+        assertNull(new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null).getCategories());
 
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testParametersCannotBeNull() throws Exception {
+    @Test
+    public void testParametersCanBeNull() throws Exception {
 
-        new NavigationContextImpl(10L, null, null, null, null);
+        assertNotNull(new NavigationContextImpl(10L, null, false, null, null, null).getFilterParameters());
 
     }
 
     @Test
     public void testEqualsNull() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(null));
 
     }
@@ -58,8 +56,8 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByShopId() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -69,8 +67,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByShopId() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(11L, null, (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(11L, null, false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -79,10 +77,21 @@ public class NavigationContextImplTest {
 
 
     @Test
+    public void testNotEqualsByInclusion() throws Exception {
+
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, true, Collections.EMPTY_MAP, null, null);
+        assertFalse(ctx1.equals(ctx2));
+        assertFalse(ctx2.equals(ctx1));
+        assertFalse(ctx1.hashCode() == ctx2.hashCode());
+        assertTrue(ctx1.hashCode() != 0L);
+    }
+
+    @Test
     public void testEqualsByCategories1() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -92,8 +101,8 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByCategories2() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -103,8 +112,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories1() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(11L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(11L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -114,8 +123,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories2() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -126,8 +135,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories3() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -137,8 +146,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories4() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -148,8 +157,8 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByCategories5() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L, 11L)), false, Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, new ArrayList<Long>(Arrays.asList(10L)), false, Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -160,8 +169,8 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByParams1() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, (Map) Collections.singletonMap("p1", null), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, (Map) Collections.singletonMap("p1", null), null, null);
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false, (Map) Collections.singletonMap("p1", null), null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false, (Map) Collections.singletonMap("p1", null), null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
         assertEquals(ctx1.hashCode(), ctx2.hashCode());
@@ -172,9 +181,9 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByParams2() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
                 (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
                 (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
         assertTrue(ctx1.equals(ctx2));
         assertTrue(ctx2.equals(ctx1));
@@ -186,12 +195,12 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByParams3() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
                 (Map) new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
                     put("p2", new ArrayList<String>(Arrays.asList("3", "4")));
                 }}, null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
                 (Map)  new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
                     put("p2", new ArrayList<String>(Arrays.asList("3", "4")));
@@ -206,9 +215,9 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByParams1() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
-                (Map) Collections.emptyMap(), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
+                Collections.EMPTY_MAP, null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
                 (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
@@ -220,10 +229,10 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByParams2() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
                 (Map) Collections.singletonMap("p1", new ArrayList<String>(Arrays.asList("1", "2"))), null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
-                (Map) Collections.emptyMap(), null, null);
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
+                Collections.EMPTY_MAP, null, null);
         assertFalse(ctx1.equals(ctx2));
         assertFalse(ctx2.equals(ctx1));
         assertFalse(ctx1.hashCode() == ctx2.hashCode());
@@ -235,11 +244,11 @@ public class NavigationContextImplTest {
     @Test
     public void testNotEqualsByParams3() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
                 (Map) new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
                 }}, null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
                 (Map)  new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "3")));
                 }}, null, null);
@@ -253,12 +262,12 @@ public class NavigationContextImplTest {
     @Test
     public void testEqualsByParams4() throws Exception {
 
-        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx1 = new NavigationContextImpl(10L, null, false,
                 (Map) new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
                     put("p2", new ArrayList<String>(Arrays.asList("4", "3")));
                 }}, null, null);
-        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null,
+        final NavigationContextImpl ctx2 = new NavigationContextImpl(10L, null, false,
                 (Map)  new HashMap() {{
                     put("p1", new ArrayList<String>(Arrays.asList("1", "2")));
                     put("p2", new ArrayList<String>(Arrays.asList("3", "4")));

@@ -62,10 +62,11 @@ public interface LuceneQueryFactory {
      * otherwise need to use all sub categories, that belong to given category list.
      *
      * @param shopId                the current shop id
-     * @param requestParameters     web request parameters
      * @param categories            given category ids
+     * @param searchSubCategories   if categories are specified this flag determines if this search should include all sub categories as well
+     * @param requestParameters     web request parameters
      * @return ordered by cookie name list of cookies
      */
-    NavigationContext getFilteredNavigationQueryChain(long shopId, List<Long> categories, Map<String, List> requestParameters);
+    NavigationContext getFilteredNavigationQueryChain(long shopId, List<Long> categories, boolean searchSubCategories, Map<String, List> requestParameters);
 
 }

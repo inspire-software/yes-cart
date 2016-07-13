@@ -57,9 +57,9 @@ public interface CategoryServiceFacade {
      * @param categoryId current category PK
      * @param shopId     current shop
      *
-     * @return list of searchable categories
+     * @return list of searchable categories with flag to indicate if subcategories to be included
      */
-    List<Long> getSearchCategoriesIds(long categoryId, long shopId);
+    Pair<List<Long>, Boolean> getSearchCategoriesIds(long categoryId, long shopId);
 
     /**
      * Get current category menu, or top categories if category is not specified or does

@@ -41,6 +41,7 @@
     </bean>
     <bean id="brandLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductBrandSearchQueryBuilder"/>
     <bean id="productCategoryLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategorySearchQueryBuilder"/>
+    <bean id="productCategoryIncludingParentsLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductCategoryIncludingParentsSearchQueryBuilder"/>
     <bean id="productShopLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopSearchQueryBuilder"/>
     <bean id="productShopInStockLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopInStockSearchQueryBuilder"/>
     <bean id="productShopHasPriceLuceneQueryBuilder" class="org.yes.cart.domain.query.impl.ProductShopHasPriceSearchQueryBuilder"/>
@@ -71,12 +72,13 @@
                 <entry key="price"          value-ref="priceLuceneQueryBuilder"/>
 
                 <!-- Internal -->
-                <entry key="attribute.attribute"           value-ref="attributeLuceneQueryBuilder"/>
-                <entry key="productCategory.category"      value-ref="productCategoryLuceneQueryBuilder"/>
-                <entry key="productShopId"                 value-ref="productShopLuceneQueryBuilder"/>
-                <entry key="productInStockShopId"          value-ref="productShopInStockLuceneQueryBuilder"/>
-                <entry key="productHasPriceShopId"         value-ref="productShopHasPriceLuceneQueryBuilder"/>
-                <entry key="featured"                      value-ref="featuredProductLuceneQueryBuilder"/>
+                <entry key="attribute.attribute"                    value-ref="attributeLuceneQueryBuilder"/>
+                <entry key="productCategory.category"               value-ref="productCategoryLuceneQueryBuilder"/>
+                <entry key="productCategory.category.inc.parents"   value-ref="productCategoryIncludingParentsLuceneQueryBuilder"/>
+                <entry key="productShopId"                          value-ref="productShopLuceneQueryBuilder"/>
+                <entry key="productInStockShopId"                   value-ref="productShopInStockLuceneQueryBuilder"/>
+                <entry key="productHasPriceShopId"                  value-ref="productShopHasPriceLuceneQueryBuilder"/>
+                <entry key="featured"                               value-ref="featuredProductLuceneQueryBuilder"/>
             </map>
         </constructor-arg>
         <constructor-arg index="4">

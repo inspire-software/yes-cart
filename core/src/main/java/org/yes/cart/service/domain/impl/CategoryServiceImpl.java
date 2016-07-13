@@ -470,6 +470,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-categoryParentsIds",
             "shopService-shopCategoriesIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
@@ -505,6 +506,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
             "categoryService-byId",
+            "categoryService-categoryParentsIds",
             "shopService-shopCategoriesIds",
             "shopService-shopAllCategoriesIds"
     }, allEntries = true)
@@ -539,7 +541,8 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             "categoryService-childCategoriesRecursiveIdsWithLinks",
             "categoryService-categoryIdsWithLinks",
             "categoryService-categoryHasSubcategory",
-            "categoryService-byId"
+            "categoryService-byId",
+            "categoryService-categoryParentsIds"
     }, allEntries = true)
     public void delete(Category instance) {
         super.delete(instance);

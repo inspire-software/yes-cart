@@ -235,13 +235,13 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
     public void testGetProductSearchResultDTOByQuery() {
 
 
-
+        // Single category
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
                 productService.getGenericDao().fullTextSearchReindex(false);
 
-                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), null);
+                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), false, null);
                 final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
                         context.getProductQuery(),
                         0,
@@ -250,9 +250,35 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                         false
                 );
                 assertEquals("Failed [" + context.toString() + "]", 2, searchRes.getResults().size());
-                ProductSearchResultDTO bernder = searchRes.getResults().get(0);
-                assertEquals("Бендер Згибатель Родригес", bernder.getName("ru"));
-                assertEquals("Бендер Згинач Родріґес", bernder.getName("ua"));
+                ProductSearchResultDTO bender = searchRes.getResults().get(0);
+                assertEquals("Бендер Згибатель Родригес", bender.getName("ru"));
+                assertEquals("Бендер Згинач Родріґес", bender.getName("ua"));
+
+            }
+        });
+
+        // Category with subs
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+
+                productService.getGenericDao().fullTextSearchReindex(false);
+
+                NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L), true, null);
+                final ProductSearchResultPageDTO searchRes = productService.getProductSearchResultDTOByQuery(
+                        context.getProductQuery(),
+                        0,
+                        100,
+                        ProductSearchQueryBuilder.PRODUCT_NAME_SORT_FIELD,
+                        false
+                );
+                assertTrue("Failed [" + context.toString() + "]", 2 < searchRes.getResults().size());
+
+                final Set<String> names = new HashSet<String>();
+                for (final ProductSearchResultDTO item : searchRes.getResults()) {
+                    names.add(item.getCode());
+                }
+
+                assertTrue("CC_TEST7 is from 104 with has parent 101", names.contains("CC_TEST7"));
 
             }
         });

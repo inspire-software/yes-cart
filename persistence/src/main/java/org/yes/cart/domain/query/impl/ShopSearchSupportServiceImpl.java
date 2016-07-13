@@ -22,13 +22,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ShopSearchSupportService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -50,7 +49,7 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
      * {@inheritDoc}
      */
     @Cacheable(value = "categoryService-searchCategoriesIds")
-    public List<Long> getSearchCategoriesIds(final long categoryId, final long shopId) {
+    public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
         // If template is not set try to figure out the view
 
         Boolean lookInSubCats = null;
@@ -76,13 +75,9 @@ public class ShopSearchSupportServiceImpl implements ShopSearchSupportService {
             lookInSubCats = shopService.getById(shopId).isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
         }
 
-        final List<Long> catIds;
-        if (lookInSubCats) {
-            catIds = categoryService.getChildCategoriesRecursiveIdsWithLinks(categoryId);
-        } else {
-            catIds = categoryService.getCategoryIdsWithLinks(categoryId);
-        }
-        return catIds;
+        final List<Long> catIds = categoryService.getCategoryIdsWithLinks(categoryId);
+
+        return new Pair<List<Long>, Boolean>(catIds, lookInSubCats);
     }
 
 

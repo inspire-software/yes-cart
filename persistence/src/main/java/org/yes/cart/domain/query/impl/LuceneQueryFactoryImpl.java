@@ -52,6 +52,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
     private final Set<String> useQueryRelaxation;
 
     private final SearchQueryBuilder productCategoryBuilder;
+    private final SearchQueryBuilder productCategoryIncludingParentsBuilder;
     private final SearchQueryBuilder productShopBuilder;
     private final SearchQueryBuilder productShopStockBuilder;
     private final SearchQueryBuilder productShopPriceBuilder;
@@ -82,6 +83,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         this.productBuilders = productBuilders;
         this.skuBuilders = skuBuilders;
         this.productCategoryBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD);
+        this.productCategoryIncludingParentsBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD);
         this.productShopBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_FIELD);
         this.productShopStockBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD);
         this.productShopPriceBuilder = productBuilders.get(ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD);
@@ -146,6 +148,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         return new NavigationContextImpl(
                     navigationContext.getShopId(),
                     navigationContext.getCategories(),
+                    navigationContext.isIncludeSubCategories(),
                     navigationParameters,
                     snowball,
                     navigationContext.getProductSkuQuery()
@@ -185,6 +188,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         return new NavigationContextImpl(
                 navigationContext.getShopId(),
                 navigationContext.getCategories(),
+                navigationContext.isIncludeSubCategories(),
                 navigationParameters,
                 navigationContext.getProductQuery(),
                 snowball
@@ -196,6 +200,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
      */
     public NavigationContext getFilteredNavigationQueryChain(final long shopId,
                                                              final List<Long> categories,
+                                                             final boolean includeSubCategories,
                                                              final Map<String, List> requestParameters) {
 
         final Set<String> allowedAttributeCodes = attributeService.getAllNavigatableAttributeCodes();
@@ -315,7 +320,12 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
         }
 
         // Mandatory fields are last for better scoring
-        final Query cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
+        final Query cats;
+        if (includeSubCategories) {
+            cats = productCategoryIncludingParentsBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_INC_PARENTS_FIELD, categories);
+        } else {
+            cats = productCategoryBuilder.createStrictQuery(shopId, ProductSearchQueryBuilder.PRODUCT_CATEGORY_FIELD, categories);
+        }
         if (cats != null) {
             // Every category belongs to a store, so no need to add store query too
             productQueryChainStrict.add(cats);
@@ -356,7 +366,7 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
             LOG.debug("Constructed nav sku  query: {}", sku );
         }
 
-        return new NavigationContextImpl(shopId, categories, navigationParameters, prod, sku);
+        return new NavigationContextImpl(shopId, categories, includeSubCategories, navigationParameters, prod, sku);
     }
 
     private Date earliestNewArrivalDate(final Long shopId, final List<Long> categories) {

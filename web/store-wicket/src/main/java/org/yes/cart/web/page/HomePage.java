@@ -107,11 +107,12 @@ public class HomePage extends AbstractWebPage {
 
         final Shop shop = ApplicationDirector.getCurrentShop();
 
-        final List<Long> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shop.getShopId());
+        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shop.getShopId());
 
         final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(
                 shop.getShopId(),
-                currentCategoriesIds,
+                currentCategoriesIds.getFirst(),
+                currentCategoriesIds.getSecond(),
                 (Map) mapParams
         );
 

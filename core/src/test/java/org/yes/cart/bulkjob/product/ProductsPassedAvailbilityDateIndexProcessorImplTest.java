@@ -54,7 +54,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
 
         productService.reindexProduct(product.getId());
 
-        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null,
+        final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, null, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD, (List) Arrays.asList("9998")));
 
         List<ProductSearchResultDTO> rez = productService.getProductSearchResultDTOByQuery(

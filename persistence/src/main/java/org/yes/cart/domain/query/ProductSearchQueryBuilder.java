@@ -69,6 +69,7 @@ public interface ProductSearchQueryBuilder extends SearchQueryBuilder {
     String ATTRIBUTE_VALUE_STORE_FIELD = "attribute.attrvalstore";
 
     String PRODUCT_CATEGORY_FIELD = "productCategory.category";
+    String PRODUCT_CATEGORY_INC_PARENTS_FIELD = "productCategory.category.inc.parents";
     String PRODUCT_SHOP_FIELD = "productShopId";
     String PRODUCT_SHOP_INSTOCK_FIELD = "productInStockShopId";
     String PRODUCT_SHOP_HASPRICE_FIELD = "productHasPriceShopId";

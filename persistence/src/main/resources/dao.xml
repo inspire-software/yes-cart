@@ -534,6 +534,7 @@
             <bean class="org.yes.cart.domain.entity.bridge.support.impl.ShopCategoryRelationshipSupportImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="categoryDao"/>
+                <lookup-method name="getSelf" bean="shopCategoryRelationshipSupport"/>
             </bean>
         </property>
     </bean>

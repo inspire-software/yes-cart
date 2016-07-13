@@ -49,6 +49,13 @@ public interface NavigationContext extends Serializable {
     List<Long> getCategories();
 
     /**
+     * Flag to include subcategories in search of {#getCategories()} categories
+     *
+     * @return true to include
+     */
+    boolean isIncludeSubCategories();
+
+    /**
      * Flag to determine if this context is global (i.e. across all shop or local to category branch)
      *
      * @return true if this is global context
