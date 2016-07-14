@@ -85,6 +85,22 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
                     map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSlaName.getValue(customerOrder.getLocale()));
                     map.put(StandardMessageListener.DELIVERY_NUM, delivery.getDeliveryNum());
                     map.put(StandardMessageListener.DELIVERY_EXTERNAL_NUM, delivery.getRefNo());
+                } else {
+                    final Map<String, String> carrier = new HashMap<String, String>();
+                    final Map<String, String> carrierSla = new HashMap<String, String>();
+                    for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+
+                        final I18NModel carrierName = new FailoverStringI18NModel(
+                                delivery.getCarrierSla().getCarrier().getDisplayName(),
+                                delivery.getCarrierSla().getCarrier().getName());
+                        carrier.put(delivery.getDeliveryNum(), carrierName.getValue(customerOrder.getLocale()));
+                        final I18NModel carrierSlaName = new FailoverStringI18NModel(
+                                delivery.getCarrierSla().getDisplayName(),
+                                delivery.getCarrierSla().getName());
+                        carrierSla.put(delivery.getDeliveryNum(), carrierSlaName.getValue(customerOrder.getLocale()));
+                    }
+                    map.put(StandardMessageListener.DELIVERY_CARRIER, carrier);
+                    map.put(StandardMessageListener.DELIVERY_CARRIER_SLA, carrierSla);
                 }
 
                 sendNotification(map);
