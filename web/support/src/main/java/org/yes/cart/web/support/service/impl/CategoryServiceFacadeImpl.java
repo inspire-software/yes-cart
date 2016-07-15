@@ -62,16 +62,18 @@ public class CategoryServiceFacadeImpl implements CategoryServiceFacade {
         return null;
     }
 
+    private final static Pair<List<Long>, Boolean> SHOP = new Pair<List<Long>, Boolean>(null, Boolean.FALSE);
+
     /**
      * {@inheritDoc}
      */
-    public List<Long> getSearchCategoriesIds(final long categoryId, final long shopId) {
+    public Pair<List<Long>, Boolean> getSearchCategoriesIds(final long categoryId, final long shopId) {
         if (categoryId > 0L && shopService.getShopCategoriesIds(shopId).contains(categoryId)) {
 
             return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
 
         }
-        return null;
+        return SHOP;
     }
 
     /**

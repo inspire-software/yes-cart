@@ -44,6 +44,7 @@ public interface PriceService extends GenericService<SkuPrice> {
      * @param shopId        shop
      * @param currencyCode  desirable currency
      * @param quantity      quantity tier
+     * @param enforceTier   force to pick closest tier price rather than cheapest
      * @param pricingPolicy optional pricing policy
      *
      * @return lowest available sku price
@@ -53,6 +54,7 @@ public interface PriceService extends GenericService<SkuPrice> {
                              final long shopId,
                              final String currencyCode,
                              final BigDecimal quantity,
+                             final boolean enforceTier,
                              final String pricingPolicy);
 
     /**

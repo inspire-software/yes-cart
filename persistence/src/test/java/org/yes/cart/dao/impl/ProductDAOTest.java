@@ -455,7 +455,7 @@ public class ProductDAOTest extends AbstractTestDAO {
     }
 
     /**
-     * Test for PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES named query
+     * Test for PRODUCTS.BRANDS.ALL named query
      */
     @Test
     public void testGetUniqueBrandsByCategoriesTest() throws InterruptedException {
@@ -466,30 +466,17 @@ public class ProductDAOTest extends AbstractTestDAO {
 
                 //productDao.fullTextSearchReindex(false);
 
-                ArrayList<Long> createdProducts = new ArrayList<Long>();
-                createdProducts.add(createProduct(102L, "LG_DVD_PLAYER", "product lg dvd player", 3L, 134L));
-
-                createdProducts.add(createProduct(104L, "SAM_DVD_PLAYER", "product sam mp3 player", 3L, 134L));
-                createdProducts.add(createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L));
-                createdProducts.add(createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L));
-                createdProducts.add(createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L));
-
-
-                List<Object> params = new ArrayList<Object>();
-                params.add(134L);
-                params.add(135L);
-                params.add(136L);
-                List<Object[]> brands = productDao.findQueryObjectsByNamedQuery(
-                        "PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES",
-                        params);
+                List<Object[]> brands = productDao.findQueryObjectsByNamedQuery("PRODUCTS.BRANDS.ALL");
 
                 assertNotNull(brands);
-                assertEquals(3, brands.size());
-                // test that list is alphabetically ordered
-                assertEquals("LG", brands.get(0)[0]);
-                assertEquals("Samsung", brands.get(1)[0]);
-                assertEquals("Sony", brands.get(2)[0]);
+                assertFalse(brands.isEmpty());
 
+                final Set<String> brandNames = new HashSet<String>();
+                for (final Object[] rec : brands) {
+                    brandNames.add(String.valueOf(rec[0]));
+                }
+
+                assertTrue(brandNames.containsAll(Arrays.asList("Unknown", "FutureRobots", "LG", "Sony", "Samsung", "cc tests", "PreorderCompany")));
 
                 status.setRollbackOnly();
 

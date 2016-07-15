@@ -33,6 +33,7 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -137,8 +138,8 @@ public class CentralViewResolverCategoryImplTest {
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(Arrays.asList(10L)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(false));
@@ -179,8 +180,8 @@ public class CentralViewResolverCategoryImplTest {
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(Arrays.asList(10L)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(0));
             one(categoryService).isCategoryHasChildren(10L); will(returnValue(true));
@@ -222,8 +223,8 @@ public class CentralViewResolverCategoryImplTest {
 
         context.checking(new Expectations() {{
             one(shopService).getShopCategoryTemplate(11L, 10L); will(returnValue(" "));
-            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(Arrays.asList(10L)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null); will(returnValue(hasProducts));
+            one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L); will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null); will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null); will(returnValue(1));
             one(shopService).getShopCategorySearchTemplate(11L, 10L); will(returnValue(null));
@@ -267,8 +268,8 @@ public class CentralViewResolverCategoryImplTest {
             one(shopService).getShopCategoryTemplate(11L, 10L);
             will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L);
-            will(returnValue(Arrays.asList(10L)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null);
+            will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), false)));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), false, null);
             will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null);
@@ -315,8 +316,8 @@ public class CentralViewResolverCategoryImplTest {
             one(shopService).getShopCategoryTemplate(11L, 10L);
             will(returnValue(" "));
             one(shopSearchSupportService).getSearchCategoriesIds(10L, 11L);
-            will(returnValue(Arrays.asList(10L)));
-            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), null);
+            will(returnValue(new Pair<List<Long>, Boolean>(Arrays.asList(10L), true)));
+            one(luceneQueryFactory).getFilteredNavigationQueryChain(11L, Arrays.asList(10L), true, null);
             will(returnValue(hasProducts));
             one(hasProducts).getProductQuery();
             one(productService).getProductQty(null);

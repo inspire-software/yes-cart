@@ -51,7 +51,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(null));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -107,7 +107,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -169,7 +169,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -233,7 +233,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -298,7 +298,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -360,7 +360,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -426,7 +426,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -498,7 +498,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -573,7 +573,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -647,7 +647,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -722,7 +722,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -794,7 +794,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -869,7 +869,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -943,7 +943,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));

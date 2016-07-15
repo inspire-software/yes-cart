@@ -32,8 +32,6 @@ import java.util.Map;
  */
 public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
 
-    private static final Total ZERO_TOTAL = new TotalImpl();
-
     private final CarrierSlaService carrierSlaService;
 
     private final Map<String, DeliveryCostCalculationStrategy> subStrategies;
@@ -66,7 +64,7 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
 
             }
         }
-        return ZERO_TOTAL;
+        return null;
 
     }
 

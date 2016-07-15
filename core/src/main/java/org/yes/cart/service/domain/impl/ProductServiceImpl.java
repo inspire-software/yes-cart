@@ -607,10 +607,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * {@inheritDoc}
      */
     @Cacheable(value = "productService-distinctBrands")
-    public List<FilteredNavigationRecord> getDistinctBrands(final String locale, final List categories) {
-        List<Object[]> list = productDao.findQueryObjectsByNamedQuery(
-                "PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES",
-                categories);
+    public List<FilteredNavigationRecord> getDistinctBrands(final String locale) {
+        List<Object[]> list = productDao.findQueryObjectsByNamedQuery("PRODUCTS.BRANDS.ALL");
 
         final List<FilteredNavigationRecord> records = constructBrandFilteredNavigationRecords(list);
         Collections.sort(

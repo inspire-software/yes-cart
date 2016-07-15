@@ -54,6 +54,7 @@
             slaTypes = {};
             slaTypes['F'] = new SlaType("F", resourceManager.getString('CarrierManagementPanel', 'slaTypeFixed'));
             slaTypes['R'] = new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree'));
+            slaTypes['W'] = new SlaType("W", resourceManager.getString('CarrierManagementPanel', 'slaTypeWeightVolume'));
             slaTypes['E'] = new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal'));
 
         }

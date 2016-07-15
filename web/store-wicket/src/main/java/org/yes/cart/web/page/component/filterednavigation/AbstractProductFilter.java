@@ -89,7 +89,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
         this.navigationContext = navigationContext;
         this.categoryId  = categoryId;
         final long shopId = ShopCodeContext.getShopId();
-        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId);
+        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId).getFirst();
         this.recordLimit = getCategoryFilterLimitConfig(categoryId, shopId);
     }
 

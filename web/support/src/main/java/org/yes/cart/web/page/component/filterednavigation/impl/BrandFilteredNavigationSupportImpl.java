@@ -57,7 +57,7 @@ public class BrandFilteredNavigationSupportImpl extends AbstractFilteredNavigati
 
         if (!navigationContext.isGlobal() && !navigationContext.isFilteredBy(ProductSearchQueryBuilder.BRAND_FIELD)) {
 
-            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale, navigationContext.getCategories());
+            final List<FilteredNavigationRecord> allNavigationRecordsTemplates = getProductService().getDistinctBrands(locale);
 
             final FilteredNavigationRecordRequest request = new FilteredNavigationRecordRequestImpl("brandFacet", ProductSearchQueryBuilder.BRAND_FIELD);
 

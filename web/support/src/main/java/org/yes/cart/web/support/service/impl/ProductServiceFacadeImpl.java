@@ -157,7 +157,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         if (productIds != null && !productIds.isEmpty()) {
 
-            final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
+            final NavigationContext assoc = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIds)));
 
@@ -183,7 +183,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
         final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
 
-        final NavigationContext featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories,
+        final NavigationContext featured = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_FEATURED_FIELD,
                         (List) Arrays.asList("true")));
 
@@ -205,7 +205,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
         } else {
             newArrivalCats = null;
         }
-        final NavigationContext newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats,
+        final NavigationContext newarrival = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, newArrivalCats, false,
                 Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
                         (List) Arrays.asList(ProductSearchQueryBuilder.TAG_NEWARRIVAL)));
 
@@ -229,7 +229,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 productIdsForCategory = productIds.subList(productIds.size() - limit, productIds.size());
             }
 
-            final NavigationContext recent = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null,
+            final NavigationContext recent = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, null, false,
                     Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_ID_FIELD,
                             (List) Arrays.asList(productIdsForCategory)));
 
@@ -361,7 +361,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty, policy.getID());
+        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty, false, policy.getID());
         final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
 
         final String addedPriceCurr = item.getRegularPriceCurrencyWhenAdded();
@@ -438,7 +438,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                 cart.getShoppingContext().getStateCode()
         );
 
-        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity, policy.getID());
+        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity, false, policy.getID());
 
         if (resolved != null) {
 

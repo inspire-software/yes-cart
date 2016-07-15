@@ -230,6 +230,7 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 shop.getShopId(),
                 shoppingCart.getCurrencyCode(),
                 quantity,
+                false,
                 policy.getID());
 
         final BigDecimal price = MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());

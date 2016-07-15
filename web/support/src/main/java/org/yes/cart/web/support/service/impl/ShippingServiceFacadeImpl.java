@@ -16,24 +16,26 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Carrier;
+import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierService;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.shoppingcart.impl.ShoppingCartShippingCostContainerImpl;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -45,19 +47,16 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     private final CarrierService carrierService;
     private final CarrierSlaService carrierSlaService;
     private final ShopService shopService;
-    private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;
-    private final PricingPolicyProvider pricingPolicyProvider;
+    private final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy;
 
     public ShippingServiceFacadeImpl(final CarrierService carrierService,
                                      final CarrierSlaService carrierSlaService,
                                      final ShopService shopService,
-                                     final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver,
-                                     final PricingPolicyProvider pricingPolicyProvider) {
+                                     final DeliveryCostCalculationStrategy deliveryCostCalculationStrategy) {
         this.carrierService = carrierService;
         this.carrierSlaService = carrierSlaService;
         this.shopService = shopService;
-        this.deliveryCostRegionalPriceResolver = deliveryCostRegionalPriceResolver;
-        this.pricingPolicyProvider = pricingPolicyProvider;
+        this.deliveryCostCalculationStrategy = deliveryCostCalculationStrategy;
     }
 
     /** {@inheritDoc} */
@@ -77,9 +76,22 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart) {
-        final List<Carrier> all = carrierService.getCarriersByShopId(shoppingCart.getShoppingContext().getShopId());
+        final List<Carrier> cached = carrierService.getCarriersByShopId(shoppingCart.getShoppingContext().getShopId());
+        final List<Carrier> all = deepCopyCarriers(cached);
         filterCarriersForShoppingCart(all, shoppingCart);
         return all;
+    }
+
+    private List<Carrier> deepCopyCarriers(final List<Carrier> cached) {
+
+        final List<Carrier> carriers = new ArrayList<Carrier>(cached.size());
+        for (final Carrier cache : cached) {
+
+            carriers.add((Carrier) SerializationUtils.clone(cache));
+
+        }
+
+        return carriers;
     }
 
     /*
@@ -87,12 +99,6 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
         // CPOINT: recommended approach is to create Carrier filter strategy bean and delegate filtering to it
      */
     private void filterCarriersForShoppingCart(final List<Carrier> all, final ShoppingCart shoppingCart) {
-
-        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
-                shoppingCart.getShoppingContext().getCountryCode(),
-                shoppingCart.getShoppingContext().getStateCode()
-        );
 
         final Iterator<Carrier> carrierIt = all.iterator();
         while (carrierIt.hasNext()) {
@@ -108,7 +114,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
                 // DeliveryCostCalculationStrategy, so this is just availability in region marker.
 
                 // If this is Fixed price then try to see if we have price for it
-                if (!isSlaAvailable(shoppingCart, carrierSla.getGuid(), policy)) {
+                if (!isSlaAvailable(shoppingCart, carrierSla.getCarrierslaId())) {
                     slaIt.remove(); // No price defined, so must not be available for given cart state
                 }
             }
@@ -120,10 +126,13 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     }
 
 
-    protected boolean isSlaAvailable(final ShoppingCart cart, final String carrierSlaId, final PricingPolicyProvider.PricingPolicy policy) {
+    protected boolean isSlaAvailable(final ShoppingCart cart, final Long carrierSlaId) {
 
-        final SkuPrice price = deliveryCostRegionalPriceResolver.getSkuPrice(cart, carrierSlaId, policy, BigDecimal.ONE);
-        return price != null && price.getSkuPriceId() > 0L;
+        final MutableShoppingCart changeShippingView = new ShoppingCartShippingCostContainerImpl(cart, carrierSlaId);
+
+        final Total cost = deliveryCostCalculationStrategy.calculate(changeShippingView);
+
+        return cost != null;
 
     }
 

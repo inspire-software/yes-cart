@@ -2900,12 +2900,9 @@
        ]]>
     </query>
 
-    <query name="PRODUCTS.BRANDS.BY.ASSIGNED.CATEGORIES">
+    <query name="PRODUCTS.BRANDS.ALL">
         <![CDATA[
-       select distinct b.name, b.name, b.name, 0
-       from ProductCategoryEntity pc, ProductEntity p inner join p.brand b
-       where p.productId = pc.product.productId
-        and pc.category.categoryId in (?1)
+       select b.name, b.name, b.name, 0 from BrandEntity b
        ]]>
     </query>
 

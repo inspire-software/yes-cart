@@ -33,8 +33,6 @@ import org.yes.cart.util.ShopCodeContext;
  */
 public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy, ApplicationContextAware {
 
-    private static final Total ZERO_TOTAL = new TotalImpl();
-
     private final CarrierSlaService carrierSlaService;
     private ApplicationContext applicationContext;
 
@@ -64,7 +62,7 @@ public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalc
 
             }
         }
-        return ZERO_TOTAL;
+        return null;
     }
 
     /** {@inheritDoc} */

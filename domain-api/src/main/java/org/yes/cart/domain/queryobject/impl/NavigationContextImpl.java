@@ -33,6 +33,7 @@ public class NavigationContextImpl implements NavigationContext {
 
     private final long shopId;
     private final List<Long> categories;
+    private final boolean includeSubCategories;
     private final Map<String, List<String>> navigationParameters;
 
     private final Query productQuery;
@@ -40,16 +41,19 @@ public class NavigationContextImpl implements NavigationContext {
 
     public NavigationContextImpl(final long shopId,
                                  final List<Long> categories,
+                                 final boolean includeSubCategories,
                                  final Map<String, List<String>> navigationParameters,
                                  final Query productQuery,
                                  final Query productSkuQuery) {
         this.shopId = shopId;
         this.categories = categories;
-        this.navigationParameters = navigationParameters;
-        this.productSkuQuery = productSkuQuery;
+        this.includeSubCategories = includeSubCategories;
         if (navigationParameters == null) {
-            throw new NullPointerException();
+            this.navigationParameters = Collections.EMPTY_MAP;
+        } else {
+            this.navigationParameters = navigationParameters;
         }
+        this.productSkuQuery = productSkuQuery;
         this.productQuery = productQuery;
     }
 
@@ -65,6 +69,13 @@ public class NavigationContextImpl implements NavigationContext {
      */
     public List<Long> getCategories() {
         return categories;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isIncludeSubCategories() {
+        return includeSubCategories;
     }
 
     /**
@@ -110,6 +121,7 @@ public class NavigationContextImpl implements NavigationContext {
         final NavigationContextImpl that = (NavigationContextImpl) o;
 
         if (shopId != that.shopId) return false;
+        if (includeSubCategories != that.includeSubCategories) return false;
         if (categories != null) {
             if (that.categories == null || categories.size() != that.categories.size()) return false;
             for (int i = 0; i < categories.size(); i++) {
@@ -134,6 +146,7 @@ public class NavigationContextImpl implements NavigationContext {
     @Override
     public int hashCode() {
         int result = (int) (shopId ^ (shopId >>> 32));
+        result = 31 * result + (includeSubCategories ? 1 : 0);
         if (categories != null) {
             for (final Long category : categories) {
                 result = 31 * result + category.hashCode();

@@ -204,7 +204,8 @@ public class ShippingView extends BaseComponent {
     }
 
     private void addShippingOptionFeedback() {
-        if (ApplicationDirector.getShoppingCart().getCarrierSlaId() == null) {
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
             info(getLocalizer().getString("carrierSelect", this));
         }
     }

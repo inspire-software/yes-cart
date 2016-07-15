@@ -36,8 +36,6 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
     private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
     private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    private static final Total ZERO_TOTAL = new TotalImpl();
-
     private final CarrierSlaService carrierSlaService;
     private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;
     private final PricingPolicyProvider pricingPolicyProvider;
@@ -105,7 +103,7 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
 
             }
         }
-        return ZERO_TOTAL;
+        return null;
     }
 
     protected SkuPrice getSkuPrice(final MutableShoppingCart cart, final String carrierSlaId, final PricingPolicyProvider.PricingPolicy policy, final BigDecimal qty) {

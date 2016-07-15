@@ -24,7 +24,10 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopCategory;
 import org.yes.cart.domain.entity.bridge.support.ShopCategoryRelationshipSupport;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Extra logic to determine relationship between categories and shops.
@@ -114,7 +117,24 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
         return cat;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "categoryService-categoryParentsIds"/*, key ="shop.getShopId()"*/)
+    public Set<Long> getCategoryParentsIds(final long categoryId) {
+        final Category category = proxy().getCategoryById(categoryId);
+        final Set<Long> parents = new HashSet<Long>();
+        if (category != null && !category.isRoot()) {
 
+            final Category parent = proxy().getCategoryById(category.getParentId());
+            if (parent != null && !parent.isRoot()) {
+                parents.add(category.getParentId());
+                parents.addAll((List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", category.getParentId()));
+            }
+
+        }
+        return parents;
+    }
 
     /**
      * {@inheritDoc}
@@ -125,11 +145,29 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     }
 
     public Set<Long> transform(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
+        final Set<Long> result = new HashSet<Long>(categories.size());
         for (Category category : categories) {
             result.add(category.getCategoryId());
         }
         return result;
+    }
+
+    private ShopCategoryRelationshipSupport proxy;
+
+    private ShopCategoryRelationshipSupport proxy() {
+        if (proxy == null) {
+            proxy = getSelf();
+        }
+        return proxy;
+    }
+
+    /**
+     * Spring IoC.
+     *
+     * @return self
+     */
+    public ShopCategoryRelationshipSupport getSelf() {
+        return null;
     }
 
 }

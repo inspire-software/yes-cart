@@ -224,10 +224,9 @@ public interface ProductService extends GenericService<Product> {
      * Get all distinct brands in given categories list
      *
      * @param locale locale
-     * @param categories categories id list
      * @return list of distinct brands
      */
-    List<FilteredNavigationRecord> getDistinctBrands(String locale, List categories);
+    List<FilteredNavigationRecord> getDistinctBrands(String locale);
 
 
     /**

@@ -95,15 +95,15 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                     return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
                 }
 
-                final List<Long> catIds = determineSearchCategories(categoryId, shopId);
+                final Pair<List<Long>, Boolean> catIds = determineSearchCategories(categoryId, shopId);
 
 
-                if (CollectionUtils.isEmpty(catIds)) {
+                if (CollectionUtils.isEmpty(catIds.getFirst())) {
                     return DEFAULT; // Must never be empty, as we should have at least current category
                 }
 
                 // shopId will be used for inStock check, because we have category IDs will always look in those
-                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, catIds, null);
+                final NavigationContext hasProducts = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, catIds.getFirst(), catIds.getSecond(), null);
 
                 if (productService.getProductQty(hasProducts.getProductQuery()) > 0) {
 
@@ -124,7 +124,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
         return null;
     }
 
-    private List<Long> determineSearchCategories(final long categoryId, final long shopId) {
+    private Pair<List<Long>, Boolean> determineSearchCategories(final long categoryId, final long shopId) {
 
         return shopSearchSupportService.getSearchCategoriesIds(categoryId, shopId);
 

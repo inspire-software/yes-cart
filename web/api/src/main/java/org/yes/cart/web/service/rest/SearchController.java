@@ -788,7 +788,7 @@ public class SearchController {
                                                       final long shopId,
                                                       final SearchResultRO result) {
 
-        final List<Long> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId);
+        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId);
 
         final Map<String, List> mapParams = new HashMap<String, List>();
 
@@ -798,7 +798,8 @@ public class SearchController {
 
         return luceneQueryFactory.getFilteredNavigationQueryChain(
                 shopId,
-                currentCategoriesIds,
+                currentCategoriesIds.getFirst(),
+                currentCategoriesIds.getSecond(),
                 mapParams
         );
 

@@ -103,6 +103,7 @@
             slaTypes = new Array();
             slaTypes.push(new SlaType("F", resourceManager.getString('CarrierManagementPanel', 'slaTypeFixed')));
             slaTypes.push(new SlaType("R", resourceManager.getString('CarrierManagementPanel', 'slaTypeFree')));
+            slaTypes.push(new SlaType("W", resourceManager.getString('CarrierManagementPanel', 'slaTypeWeightVolume')));
             slaTypes.push(new SlaType("E", resourceManager.getString('CarrierManagementPanel', 'slaTypeExternal')));
 
             if (newCarrierSlaFlag) {

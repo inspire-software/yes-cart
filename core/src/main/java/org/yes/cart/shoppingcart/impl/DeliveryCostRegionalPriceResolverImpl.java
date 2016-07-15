@@ -56,6 +56,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
                     cart.getShoppingContext().getShopId(),
                     cart.getCurrencyCode(),
                     qty,
+                    true,
                     policy.getID());
         }
 
@@ -70,6 +71,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
                     cart.getShoppingContext().getShopId(),
                     cart.getCurrencyCode(),
                     qty,
+                    true,
                     policy.getID());
         }
 
@@ -85,6 +87,7 @@ public class DeliveryCostRegionalPriceResolverImpl implements DeliveryCostRegion
                 cart.getShoppingContext().getShopId(),
                 cart.getCurrencyCode(),
                 qty,
+                true,
                 policy.getID());
 
     }
