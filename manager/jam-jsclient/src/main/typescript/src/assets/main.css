@@ -133,7 +133,6 @@ body {
     z-index: 1;
     position: absolute;
     width: 250px;
-    margin-top: 51px;
   }
 
   .navbar-top-links .dropdown-messages,
@@ -141,6 +140,13 @@ body {
   .navbar-top-links .dropdown-alerts {
     margin-left: auto;
   }
+}
+
+#sidebar-logo {
+  background: transparent url('img/logo-button-100x100.png') no-repeat left;
+  height: 100px;
+  padding: 30px 0 0 100px;
+  font-size: 90%
 }
 
 .btn-outline {
@@ -352,4 +358,23 @@ table.dataTable thead .sorting:after {
 
 .panel-yellow a:hover {
   color: #df8a13;
+}
+
+#overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: #fff;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+#loading {
+  width: 50px;
+  height: 57px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -28px 0 0 -25px;
 }

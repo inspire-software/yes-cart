@@ -33,6 +33,7 @@
   <modules>
     <module>jam-vo</module>
     <module>jam-services</module>
+    <module>jam-jsclient</module>
     <module>jam</module>
   </modules>
 

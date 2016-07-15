@@ -77,7 +77,7 @@ Default application server configuration
 var PORT             = 5555;
 var LIVE_RELOAD_PORT = 4002;
 var DOCS_PORT        = 4003;
-var APP_BASE         = '/jam/resources/';
+var APP_BASE         = '/yes-manager/resources/';
 ```
 
 Configure at runtime

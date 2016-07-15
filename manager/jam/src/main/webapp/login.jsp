@@ -24,9 +24,6 @@
     <link href="<c:url value='resources/assets/font-awesome.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='resources/assets/main.css' />" rel="stylesheet"/>
     <link href="<c:url value='resources/assets/login.css' />" rel="stylesheet"/>
-    <style type="text/css">
-
-    </style>
 </head>
 
 <body>

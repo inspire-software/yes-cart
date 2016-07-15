@@ -26,7 +26,8 @@
     </parent>
     <artifactId>jam</artifactId>
     <packaging>war</packaging>
-    <name>jam</name>
+    <name>Yes cart JAM: server</name>
+    <description>Yes cart manager server</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -85,6 +86,11 @@
         </dependency>
         <dependency>
             <groupId>org.yes</groupId>
+            <artifactId>core-module-cart</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yes</groupId>
             <artifactId>core</artifactId>
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
@@ -96,11 +102,6 @@
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yes</groupId>
-            <artifactId>domain-api</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -200,9 +201,7 @@
         </profile>
 
         <profile>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <id>derby</id>
             <dependencies>
                 <dependency>
@@ -235,9 +234,7 @@
         </profile>
 
         <profile>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
+            <activation><activeByDefault>true</activeByDefault></activation>
             <id>paymentAll</id>
             <dependencies>
                 <dependency>
@@ -360,12 +357,80 @@
                                         </resources>
                                     </configuration>
                                 </execution>
+                                <execution>
+                                    <id>copy-node-modules</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${basedir}/target/yes-manager/resources/node_modules</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <filtering>false</filtering>
+                                                <directory>${basedir}/../jam-jsclient/src/main/typescript/node_modules</directory>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>copy-node-dist</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${basedir}/target/yes-manager/resources</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <filtering>false</filtering>
+                                                <directory>${basedir}/../jam-jsclient/src/main/typescript/dist/dev</directory>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
                             </executions>
                         </plugin>
                     </plugins>
                 </pluginManagement>
             </build>
         </profile>
+
+        <profile>
+            <!--
+                    This is a utility profile to bridge NodeJS updates (from "npm start") so that exploded war directory
+                    is up to date for running from IDE (e.g. Intellij)
+              -->
+            <id>nodejs</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-resources-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>copy-node-dist</id>
+                                    <phase>validate</phase>
+                                    <goals>
+                                        <goal>copy-resources</goal>
+                                    </goals>
+                                    <configuration>
+                                        <outputDirectory>${basedir}/target/yes-manager/resources</outputDirectory>
+                                        <resources>
+                                            <resource>
+                                                <filtering>false</filtering>
+                                                <directory>${basedir}/../jam-jsclient/src/main/typescript/dist/dev</directory>
+                                            </resource>
+                                        </resources>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
     </profiles>
 
     <build>
@@ -462,128 +527,24 @@
                                 <filtering>false</filtering>
                                 <directory>../../theme/reports/src/main/resources</directory>
                             </resource>
+                            <resource>
+                                <filtering>false</filtering>
+                                <directory>../jam-jsclient/src/main/typescript/dist/dev</directory>
+                                <targetPath>resources</targetPath>
+                            </resource>
+                            <resource>
+                                <filtering>false</filtering>
+                                <directory>../jam-jsclient/src/main/typescript/node_modules</directory>
+                                <targetPath>resources/node_modules</targetPath>
+                            </resource>
                         </webResources>
                         <!-- web.xml is added to the project by other means, and shouldn't be packaged by default -->
                         <!--<packagingExcludes>WEB-INF/web.xml</packagingExcludes>-->
                     </configuration>
                 </plugin>
+
             </plugins>
         </pluginManagement>
-
-        <plugins>
-            <!-- Build node js application begin  -->
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                      <id>exec-npm-install</id>
-                      <phase>generate-sources</phase>
-                      <configuration>
-                        <executable>npm</executable>
-                        <arguments>
-                          <argument>install</argument>
-                        </arguments>
-                        <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
-                      </configuration>
-                      <goals>
-                        <goal>exec</goal>
-                      </goals>
-                    </execution>
-                    <execution>
-                        <id>exec-npm-build</id>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <executable>npm</executable>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>build.dev</argument>
-                            </arguments>
-                            <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.5</version>
-                <executions>
-                    <execution>
-                        <id>copy-node-modules</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/main/webapp/resources/node_modules</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/main/typescript/node_modules</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>copy-javascript</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/src/main/webapp/resources</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/main/typescript/dist/dev</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
-                <executions>
-                    <execution>
-                        <id>replace-assets</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                        <configuration>
-                            <file>${basedir}/src/main/webapp/resources/index.html</file>
-                            <replacements>
-                                <replacement>
-                                    <token>href=".*assets\/main.css.*"</token> <!--TODO check how to build with correct path delimiter-->
-                                    <value>href="assets/main.css"</value>
-                                </replacement>
-                                <replacement>
-                                    <token>href=".*assets\/bootstrap.min.css.*"</token>
-                                    <value>href="assets/bootstrap.min.css"</value>
-                                </replacement>
-                                <replacement>
-                                    <token>href=".*assets\/font-awesome.min.css.*"</token>
-                                    <value>href="assets/font-awesome.min.css"</value>
-                                </replacement>
-                            </replacements>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Build node js application end  -->
-
-        </plugins>
 
     </build>
 </project>

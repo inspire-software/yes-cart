@@ -17,6 +17,7 @@ export = () => {
 
 
 function inject(name?: string) {
+  //console.info('Injecting ' + name);
   return plugins.inject(gulp.src(getInjectablesDependenciesRef(name), { read: false }), {
     name,
     transform: transformPath()
@@ -30,6 +31,7 @@ function getInjectablesDependenciesRef(name?: string) {
 }
 
 function mapPath(dep) {
+  // console.info(dep);
   let envPath = dep.src;
   if (envPath.startsWith(APP_SRC)) {
     envPath = join(APP_DEST, dep.src.replace(APP_SRC, ''));
@@ -39,7 +41,16 @@ function mapPath(dep) {
 
 function transformPath() {
   return function (filepath) {
-    arguments[0] = join(APP_BASE, filepath) + `?${Date.now()}`;
+
+    let deps = DEV_DEPENDENCIES
+      .filter(dep => dep['dest'] && filepath.endsWith(dep['dest']));
+
+    if (deps.length > 0) {
+      arguments[0] = join(APP_BASE, deps[0]['dest']) + `?${Date.now()}`;
+    } else {
+      arguments[0] = join(APP_BASE, filepath) + `?${Date.now()}`;
+    }
+    console.log('Injecting ' + arguments[0]);
     return slash(plugins.inject.transform.apply(plugins.inject.transform, arguments));
   };
 }

@@ -16,7 +16,7 @@ export class SeedConfig {
   DEBUG                = argv['debug']                       || false;
   DOCS_PORT            = argv['docs-port']                   || 4003;
   COVERAGE_PORT        = argv['coverage-port']               || 4004;
-  APP_BASE             = argv['base']                        || '/jam/resources/';
+  APP_BASE             = argv['base']                        || '/yes-manager/resources/';
 
   ENABLE_HOT_LOADING   = argv['hot-loader'];
   HOT_LOADER_PORT      = 5578;
@@ -53,36 +53,34 @@ export class SeedConfig {
 
   // Declare NPM dependencies (Note that globs should not be injected).
   DEV_NPM_DEPENDENCIES: InjectableDependency[] = normalizeDependencies([
-    { src: 'systemjs/dist/system-polyfills.src.js', inject: 'shims' },
-    { src: 'reflect-metadata/Reflect.js', inject: 'shims' },
-    { src: 'es6-shim/es6-shim.js', inject: 'shims' },
-    { src: 'systemjs/dist/system.src.js', inject: 'shims' },
-    { src: 'angular2/bundles/angular2-polyfills.js', inject: 'shims' },
-    { src: 'rxjs/bundles/Rx.js', inject: 'libs' },
-    { src: 'angular2/bundles/angular2.js', inject: 'libs' },
-    { src: 'angular2/bundles/router.js', inject: 'libs' },
-    { src: 'angular2/bundles/http.dev.js', inject: 'libs' }
+    { src: 'systemjs/dist/system-polyfills.src.js', inject: 'shims', dest: '' },
+    { src: 'reflect-metadata/Reflect.js', inject: 'shims', dest: '' },
+    { src: 'es6-shim/es6-shim.js', inject: 'shims', dest: '' },
+    { src: 'systemjs/dist/system.src.js', inject: 'shims', dest: '' },
+    { src: 'angular2/bundles/angular2-polyfills.js', inject: 'shims', dest: '' },
+    { src: 'rxjs/bundles/Rx.js', inject: 'libs', dest: '' },
+    { src: 'angular2/bundles/angular2.js', inject: 'libs', dest: '' },
+    { src: 'angular2/bundles/router.js', inject: 'libs', dest: '' },
+    { src: 'angular2/bundles/http.dev.js', inject: 'libs', dest: '' }
   ]);
 
   PROD_NPM_DEPENDENCIES: InjectableDependency[] = normalizeDependencies([
-    { src: 'systemjs/dist/system-polyfills.src.js', inject: 'shims' },
-    { src: 'reflect-metadata/Reflect.js', inject: 'shims' },
-    { src: 'es6-shim/es6-shim.min.js', inject: 'shims' },
-    { src: 'systemjs/dist/system.js', inject: 'shims' },
-    { src: 'angular2/bundles/angular2-polyfills.min.js', inject: 'libs' }
+    { src: 'systemjs/dist/system-polyfills.src.js', inject: 'shims', dest: '' },
+    { src: 'reflect-metadata/Reflect.js', inject: 'shims', dest: '' },
+    { src: 'es6-shim/es6-shim.min.js', inject: 'shims', dest: '' },
+    { src: 'systemjs/dist/system.js', inject: 'shims', dest: '' },
+    { src: 'angular2/bundles/angular2-polyfills.min.js', inject: 'libs', dest: '' }
   ]);
 
   // Declare local files that needs to be injected
   APP_ASSETS: InjectableDependency[] = [
-    { src: `${this.ASSETS_SRC}/main.css`, inject: true },
-    { src: `${this.ASSETS_SRC}/bootstrap.min.css`, inject: true },
-    { src: `${this.ASSETS_SRC}/font-awesome.min.css`, inject: true }
+    { src: `${this.ASSETS_SRC}/main.css`, inject: true, dest: 'assets/main.css' },
+    { src: `${this.ASSETS_SRC}/bootstrap.min.css`, inject: true, dest: 'assets/bootstrap.min.css' },
+    { src: `${this.ASSETS_SRC}/font-awesome.min.css`, inject: true, dest: 'assets/font-awesome.min.css' }
   ];
-
 
   DEV_DEPENDENCIES = this.DEV_NPM_DEPENDENCIES.concat(this.APP_ASSETS);
   PROD_DEPENDENCIES = this.PROD_NPM_DEPENDENCIES.concat(this.APP_ASSETS);
-
 
   // ----------------
   // SystemsJS Configuration.

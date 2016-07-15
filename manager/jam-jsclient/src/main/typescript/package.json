@@ -1,9 +1,9 @@
 {
-  "name": "angular2-seed",
-  "version": "0.0.0",
-  "description": "Seed for Angular 2 apps",
+  "name": "yes-cart-jam",
+  "version": "3.3.0",
+  "description": "YC administration console",
   "repository": {
-    "url": "https://github.com/mgechev/angular2-seed"
+    "url": "https://github.com/inspire-software/yes-cart"
   },
   "scripts": {
     "build.dev": "gulp build.dev",
