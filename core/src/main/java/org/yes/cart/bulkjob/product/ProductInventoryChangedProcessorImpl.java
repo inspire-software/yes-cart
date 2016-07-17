@@ -18,6 +18,7 @@ package org.yes.cart.bulkjob.product;
 
 import org.slf4j.Logger;
 import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
+import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
@@ -40,13 +41,14 @@ import java.util.List;
  * Time: 15:42
  */
 public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDependentProcessorImpl
-        implements Runnable {
+        implements ProductInventoryChangedProcessorInternal {
 
     private static final String LAST_RUN_PREF = "JOB_PROD_INV_UPDATE_LAST_RUN_";
 
     private final SkuWarehouseService skuWarehouseService;
     private final ProductService productService;
     private final NodeService nodeService;
+    private final CacheBundleHelper productCacheHelper;
 
     private int batchSize = 100;
 
@@ -54,11 +56,13 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
                                                 final ProductService productService,
                                                 final NodeService nodeService,
                                                 final SystemService systemService,
-                                                final RuntimeAttributeService runtimeAttributeService) {
+                                                final RuntimeAttributeService runtimeAttributeService,
+                                                final CacheBundleHelper productCacheHelper) {
         super(systemService, runtimeAttributeService);
         this.skuWarehouseService = skuWarehouseService;
         this.productService = productService;
         this.nodeService = nodeService;
+        this.productCacheHelper = productCacheHelper;
     }
 
     /** {@inheritDoc} */
@@ -90,27 +94,51 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
             log.info("Inventory changed for {} since {}", productSkus.size(), lastRun);
 
-            int count = 0;
-            for (final String sku : productSkus) {
+            int fromIndex = 0;
+            int toIndex = 0;
+            while (fromIndex < productSkus.size()) {
 
-                productService.reindexProductSku(sku);
-                if (++count % this.batchSize == 0 ) {
-                    //flush a batch of updates and release memory:
-                    productService.getGenericDao().flush();
-                    productService.getGenericDao().clear();
-                    log.info("Reindexed {} SKU", count);
-                }
+                toIndex = fromIndex + batchSize > productSkus.size() ? productSkus.size() : fromIndex + batchSize;
+                final List<String> skuBatch = productSkus.subList(fromIndex, toIndex);
+                log.info("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
+
+                self().reindexBatch(skuBatch);
+
+                fromIndex = toIndex;
 
             }
 
+            flushCaches();
+
         }
 
+        log.info("Reindexing inventory updates on {}, reindexed {}", nodeId, productSkus.size());
 
         final long finish = System.currentTimeMillis();
 
         final long ms = (finish - start);
 
         log.info("Reindexing inventory updates on {} ... completed in {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+
+    }
+
+    protected void flushCaches() {
+
+        productCacheHelper.flushBundleCaches();
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reindexBatch(final List<String> skuCodes) {
+
+        for (final String sku : skuCodes) {
+
+            productService.reindexProductSku(sku);
+
+        }
 
     }
 
@@ -130,4 +158,18 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     public void setBatchSize(final int batchSize) {
         this.batchSize = batchSize;
     }
+
+    private ProductInventoryChangedProcessorInternal self;
+
+    private ProductInventoryChangedProcessorInternal self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public ProductInventoryChangedProcessorInternal getSelf() {
+        return null;
+    }
+
 }

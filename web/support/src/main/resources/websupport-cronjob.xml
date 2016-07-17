@@ -21,15 +21,33 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="sfProductCacheHelper" class="org.yes.cart.cache.impl.CacheBundleHelperImpl">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="caches">
+            <set>
+                <value>priceService-minimalPrice</value>
+                <value>priceService-allCurrentPrices</value>
+                <value>priceService-allPrices</value>
+                <value>productService-productById</value>
+                <value>productService-skuById</value>
+                <value>productService-productBySkuCode</value>
+                <value>productSkuService-productSkuBySkuCode</value>
+                <value>skuWarehouseService-productSkusOnWarehouse</value>
+                <value>skuWarehouseService-productOnWarehouse</value>
+                <value>web.bookmarkService-seoProductDecode</value>
+                <value>web.bookmarkService-seoProductEncode</value>
+                <value>web.bookmarkService-seoSkuDecode</value>
+                <value>web.bookmarkService-seoSkuEncode</value>
+            </set>
+        </property>
+    </bean>
+
     <!-- ################################ Regular Global/Discontinued products indexing  ####################### -->
 
-    <bean id="productsGlobalIndexProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
-                <constructor-arg index="0" ref="productService"/>
-                <constructor-arg index="1" ref="nodeService"/>
-            </bean>
-        </property>
+    <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
+        <constructor-arg index="0" ref="productService"/>
+        <constructor-arg index="1" ref="nodeService"/>
+        <constructor-arg index="2" ref="sfProductCacheHelper"/>
     </bean>
 
     <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -52,10 +70,22 @@
 
     <bean id="productsPassedAvailabilityDateIndexProcessor" parent="txJobProxyTemplate">
         <property name="target">
-            <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailbilityDateIndexProcessorImpl">
+            <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailabilityDateIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
                 <constructor-arg index="1" ref="nodeService"/>
+                <constructor-arg index="2" ref="sfProductCacheHelper"/>
+                <property name="batchSize" value="100"/>
+                <property name="numberOfDays" value="2"/>
+                <lookup-method name="getSelf" bean="productsPassedAvailabilityDateIndexProcessor"/>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- All job beans are Runnable, and they must run in isolation  -->
+                <prop key="findDiscontinuedProductsIds">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
         </property>
     </bean>
 
@@ -85,8 +115,17 @@
                 <constructor-arg index="2" ref="nodeService"/>
                 <constructor-arg index="3" ref="systemService"/>
                 <constructor-arg index="4" ref="runtimeAttributeService"/>
+                <constructor-arg index="5" ref="sfProductCacheHelper"/>
                 <property name="batchSize" value="100"/>
+                <lookup-method name="getSelf" bean="productInventoryChangedProcessor"/>
             </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- All job beans are Runnable, and they must run in isolation  -->
+                <prop key="reindexBatch">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
         </property>
     </bean>
 

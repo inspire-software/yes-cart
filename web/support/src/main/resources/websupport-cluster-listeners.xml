@@ -33,11 +33,32 @@
         <property name="nodeService" ref="nodeService"/>
     </bean>
 
+    <bean id="backDoorProductCacheHelper" class="org.yes.cart.cache.impl.CacheBundleHelperImpl">
+        <property name="cacheManager" ref="cacheManager"/>
+        <property name="caches">
+            <set>
+                <value>priceService-minimalPrice</value>
+                <value>priceService-allCurrentPrices</value>
+                <value>priceService-allPrices</value>
+                <value>productService-productById</value>
+                <value>productService-skuById</value>
+                <value>productService-productBySkuCode</value>
+                <value>productSkuService-productSkuBySkuCode</value>
+                <value>skuWarehouseService-productSkusOnWarehouse</value>
+                <value>skuWarehouseService-productOnWarehouse</value>
+                <value>web.bookmarkService-seoProductDecode</value>
+                <value>web.bookmarkService-seoProductEncode</value>
+                <value>web.bookmarkService-seoSkuDecode</value>
+                <value>web.bookmarkService-seoSkuEncode</value>
+            </set>
+        </property>
+    </bean>
+
     <bean id="backDoor" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
-                <property name="cacheManager" ref="cacheManager"/>
+                <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
                 <property name="warmUpService" ref="warmUpService"/>
                 <property name="nodeService" ref="nodeService"/>
                 <lookup-method name="getSelf" bean="backDoor"/>

@@ -28,10 +28,8 @@ import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
 import org.yes.cart.service.domain.ProductService;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -40,7 +38,7 @@ import static org.junit.Assert.*;
  * Date: 13/11/2013
  * Time: 16:29
  */
-public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCoreDBTestCase {
+public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCoreDBTestCase {
 
     @Test
     public void testRun() throws Exception {
@@ -62,11 +60,18 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         assertNotNull(rez);
         assertEquals(1, rez.size());
 
+        final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        final Calendar minus24h = Calendar.getInstance();
+        minus24h.add(Calendar.HOUR_OF_DAY, -24);
+
+        final String availableTo = format.format(minus24h.getTime());
+
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
                 // native update to bypass indexing on save!!
-                productService.getGenericDao().executeNativeUpdate("update TPRODUCT set AVAILABLETO = '1999-01-01 00:00:00' where PRODUCT_ID = 9998");
+                productService.getGenericDao().executeNativeUpdate("update TPRODUCT set AVAILABLETO = '" + availableTo + "' where PRODUCT_ID = 9998");
             }
         });
 
@@ -76,7 +81,7 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
         assertTrue(product.getAvailableto().before(new Date()));
 
 
-        final ProductsPassedAvailbilityDateIndexProcessorImpl processor = new ProductsPassedAvailbilityDateIndexProcessorImpl(productService, null) {
+        final ProductsPassedAvailabilityDateIndexProcessorImpl processor = new ProductsPassedAvailabilityDateIndexProcessorImpl(productService, null, null) {
             @Override
             protected String getNodeId() {
                 return "TEST";
@@ -86,7 +91,19 @@ public class ProductsPassedAvailbilityDateIndexProcessorImplTest extends BaseCor
             protected Boolean isLuceneIndexDisabled() {
                 return false;
             }
+
+            @Override
+            public ProductsPassedAvailabilityDateIndexProcessorInternal getSelf() {
+                return this;
+            }
+
+            @Override
+            protected void flushCaches() {
+
+            }
         };
+
+        processor.setNumberOfDays(2);
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override

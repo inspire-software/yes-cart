@@ -102,7 +102,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null) {
+                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null, null) {
                     @Override
                     protected String getNodeId() {
                         return "TEST";
@@ -111,6 +111,16 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                     @Override
                     protected Boolean isLuceneIndexDisabled() {
                         return false;
+                    }
+
+                    @Override
+                    public ProductInventoryChangedProcessorInternal getSelf() {
+                        return this;
+                    }
+
+                    @Override
+                    protected void flushCaches() {
+
                     }
                 }.doRun(new Date()); // this should reindex product and it will be removed as there is no inventory
             }
@@ -150,7 +160,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
-                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null) {
+                new ProductInventoryChangedProcessorImpl(skuWarehouseService, productService, null, null, null, null) {
                     @Override
                     protected String getNodeId() {
                         return "TEST";
@@ -159,6 +169,16 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                     @Override
                     protected Boolean isLuceneIndexDisabled() {
                         return false;
+                    }
+
+                    @Override
+                    public ProductInventoryChangedProcessorInternal getSelf() {
+                        return this;
+                    }
+
+                    @Override
+                    protected void flushCaches() {
+
                     }
                 }.doRun(new Date()); // this should reindex product and it will be removed as there is no inventory
             }

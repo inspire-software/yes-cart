@@ -17,6 +17,7 @@
 package org.yes.cart.bulkjob.product;
 
 import org.slf4j.Logger;
+import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.util.ShopCodeContext;
@@ -36,11 +37,14 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
     private final ProductService productService;
     private final NodeService nodeService;
+    private final CacheBundleHelper productCacheHelper;
 
     public ProductsGlobalIndexProcessorImpl(final ProductService productService,
-                                            final NodeService nodeService) {
+                                            final NodeService nodeService,
+                                            final CacheBundleHelper productCacheHelper) {
         this.productService = productService;
         this.nodeService = nodeService;
+        this.productCacheHelper = productCacheHelper;
     }
 
 
@@ -66,6 +70,10 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
         log.info("Reindexing all SKU on {}", nodeId);
 
         productService.reindexProductsSku();
+
+        log.info("Flushing product caches {}", nodeId);
+
+        productCacheHelper.flushBundleCaches();
 
         final long finish = System.currentTimeMillis();
 

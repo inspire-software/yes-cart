@@ -21,7 +21,7 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
+import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.Message;
 import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
@@ -50,7 +50,7 @@ public class BackdoorServiceImpl implements BackdoorService {
 
     private ProductService productService;
 
-    private CacheManager cacheManager;
+    private CacheBundleHelper productIndexCaches;
 
     private WarmUpService warmUpService;
 
@@ -61,20 +61,9 @@ public class BackdoorServiceImpl implements BackdoorService {
      * to enforce changes to take immediate effect on the storefront.
      */
     private void flushCache() {
-        safeFlushCache(cacheManager.getCache("priceService-minimalPrice"));
-        safeFlushCache(cacheManager.getCache("priceService-allCurrentPrices"));
-        safeFlushCache(cacheManager.getCache("priceService-allPrices"));
-        safeFlushCache(cacheManager.getCache("productService-productById"));
-        safeFlushCache(cacheManager.getCache("productService-skuById"));
-        safeFlushCache(cacheManager.getCache("productService-productBySkuCode"));
-        safeFlushCache(cacheManager.getCache("productSkuService-productSkuBySkuCode"));
-        safeFlushCache(cacheManager.getCache("skuWarehouseService-productSkusOnWarehouse"));
-        safeFlushCache(cacheManager.getCache("skuWarehouseService-productOnWarehouse"));
-        safeFlushCache(cacheManager.getCache("web.decoratorFacade-decorate"));
-        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductDecode"));
-        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoProductEncode"));
-        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoSkuDecode"));
-        safeFlushCache(cacheManager.getCache("web.bookmarkService-seoSkuEncode"));
+
+        productIndexCaches.flushBundleCaches();
+
     }
 
     private void safeFlushCache(final Cache cache) {
@@ -420,12 +409,12 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     /**
-     * IoC. Set cache manager service.
+     * IoC. Product index bundle helper
      *
-     * @param cacheManager cache manager
+     * @param productIndexCaches product index bundle helper
      */
-    public void setCacheManager(final CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
+    public void setProductIndexCaches(final CacheBundleHelper productIndexCaches) {
+        this.productIndexCaches = productIndexCaches;
     }
 
     @SuppressWarnings("unchecked")
