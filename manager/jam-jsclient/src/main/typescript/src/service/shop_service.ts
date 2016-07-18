@@ -66,7 +66,7 @@ export class ShopService {
    * @returns {Promise<ShopVO>}
    */
   createShop() {
-    var shopVOTemplate : ShopVO = {'shopId': 0, 'code' : '', 'name': '', 'description' : '', 'fspointer' : ''};
+    var shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'name': '', 'description' : '', 'fspointer' : ''};
     var newShop : ShopVO = Util.clone(shopVOTemplate);
     return Promise.resolve(newShop);
   }
@@ -94,6 +94,22 @@ export class ShopService {
     }
   }
 
+  /**
+   * Save or create given shop detal - the root of shop related information.
+   * @param shop
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  updateDisabledFlag(shop:ShopVO, state:boolean) {
+    console.debug('ShopService change state shop ' + shop.shopId + ' to ' + state ? 'online' : 'offline');
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._shopUrl + '/online/' + shop.shopId + '/' + state, null, options)
+      .map(res => <ShopVO> res.json())
+      .catch(this.handleError);
+  }
+
 
   /**
    * Get localization information for given shop id.
@@ -113,7 +129,7 @@ export class ShopService {
    * @returns {Promise<ShopLocaleVO>}
      */
   saveShopLocalization(shopLocaleVO:ShopLocaleVO) {
-    console.debug('ShopService save localization info ' + JSON.stringify(shopLocaleVO));
+    console.debug('ShopService save localization info', shopLocaleVO);
 
     let body = JSON.stringify(shopLocaleVO);
     let headers = new Headers({ 'Content-Type': 'application/json' });

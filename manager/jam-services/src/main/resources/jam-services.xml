@@ -29,9 +29,10 @@
 
     <bean id="voShopService" class="org.yes.cart.service.vo.impl.VoShopServiceImpl">
         <constructor-arg index="0" ref="languageService"/>
-        <constructor-arg index="1" ref="dtoShopUrlService"/>
-        <constructor-arg index="2" ref="dtoShopService"/>
-        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="1" ref="currencyService"/>
+        <constructor-arg index="2" ref="dtoShopUrlService"/>
+        <constructor-arg index="3" ref="dtoShopService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
     </bean>
 
     <bean id="voCategoryService" class="org.yes.cart.service.vo.impl.VoCategoryServiceImpl">

@@ -56,4 +56,8 @@ export class ShopList implements OnInit, OnDestroy {
    this.getAllShops();
   }
 
+  isShopDisabled(shop: ShopVO):boolean {
+    return shop.disabled;
+  }
+
 }

@@ -33,7 +33,6 @@ export class AppCmp {
   private static _shopEventBus:ShopEventBus;
 
   public static getShopEventBus() : ShopEventBus {
-    console.debug('Get evt bus instance ' + AppCmp._shopEventBus);
     return AppCmp._shopEventBus;
   }
 

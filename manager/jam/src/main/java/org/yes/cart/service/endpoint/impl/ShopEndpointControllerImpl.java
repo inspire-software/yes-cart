@@ -139,5 +139,10 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
         return voShopCategoryService.update(shopId, voCategories);
     }
 
-
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/online/{shopId}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    public @ResponseBody
+    VoShop updateDisabledFlag(@PathVariable("shopId") final long shopId, @PathVariable("state") final boolean state) throws Exception {
+        return voShopService.updateDisabledFlag(shopId, state);
+    }
 }

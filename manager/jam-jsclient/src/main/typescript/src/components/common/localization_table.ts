@@ -20,53 +20,85 @@ export class LocalizationTable implements OnInit {
 
   @Input()  title : string;
 
-  @Input()  data : Array<Pair<string, string>> ;
+  @Input()  source:Object;
 
-  @Input()  defaultvalue : string;
+  @Input()  i18n : string ;
+
+  @Input()  value : string;
 
   @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
+
+  dataI18n:Array<Pair<string, string>> = [];
+  dataValue:string = '';
 
   selectedRow:Pair<string,string> = new Pair('','');
 
   constructor() {
-    console.debug('Localization table constructed');
+    console.debug('Localization table ' + this.title + ' constructed');
   }
 
   ngOnInit() {
-    console.debug('ngOnInit');
+    console.debug('Values', this.source);
+    if (this.source[this.i18n] !== null) {
+      this.dataI18n = this.source[this.i18n];
+    }
+    if (this.source[this.value] !== null) {
+      this.dataValue = this.source[this.value];
+    }
   }
 
   onRowSelect(selectedRow:Pair<string,string>) {
-    console.debug('onRowSelect  ' + selectedRow);
+    console.debug('onRowSelect', selectedRow);
     this.selectedRow = Util.clone(selectedRow);
   }
 
   onRowDelete(selectedRow:Pair<string,string>) {
-    console.debug('onRowDelete  ' + selectedRow);
-    for(var idx = 0 ; idx < this.data.length; idx++) {
-      var pair = this.data[idx];
+    console.debug('onRowDelete', selectedRow);
+    for(var idx = 0 ; idx < this.dataI18n.length; idx++) {
+      var pair = this.dataI18n[idx];
       if(pair.first === selectedRow.first ) {
-        this.data.splice(idx,1);
+        this.dataI18n.splice(idx,1);
         this.dataChanged.emit(null);
+        console.debug('Removed ' + idx, this.i18n);
         return;
       }
     }
   }
 
-  onRowAdd() {
-    for(var idx = 0 ; idx < this.data.length; idx++) {
-      var pair = this.data[idx];
+  onRowAdd():void {
+    if (this.isBlank(this.selectedRow.second)) {
+      this.onRowDelete(this.selectedRow);
+      return;
+    }
+    for(var idx = 0 ; idx < this.dataI18n.length; idx++) {
+      var pair = this.dataI18n[idx];
       if(pair.first === this.selectedRow.first ) {
         pair.second = this.selectedRow.second;
         this.selectedRow = new Pair('','');
         this.dataChanged.emit(null);
+        console.debug('Replaced ' + idx, this.dataI18n);
         return;
       }
     }
 
-    this.data.push(this.selectedRow);
+    this.dataI18n.push(this.selectedRow);
     this.selectedRow = new Pair('','');
     this.dataChanged.emit(null);
+    console.debug('Added', this.dataI18n);
+  }
+
+  onDefaultValueChange():void {
+    console.debug('default value', this.dataValue);
+    if (!this.isBlank(this.dataValue)) {
+      this.source[this.value] = this.dataValue;
+    } else {
+      this.source[this.value] = null;
+    }
+    this.dataChanged.emit(null);
+  }
+
+  private isBlank(value:string):boolean {
+    return value === null || value === '' || /\s+/.test(value);
   }
 
 }

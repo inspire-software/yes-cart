@@ -1,20 +1,34 @@
 <wrapper *ngIf="shopLocalization">
 
-  <data-control [changed]="changed"
-                (saveEvent)="onSaveHandler()"
-                (discardEvent)="onDiscardEvent()"
-                (refreshEvent)="onRefreshHandler()"></data-control>
+  <div class="text-right data-control">
+    <data-control [changed]="changed"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEvent()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
 
-  <localization-table title="Window title"
-                      [data]="shopLocalization.displayTitles"
-                      (dataChanged)="onDataChanged()"></localization-table>
+  <div class="row">
+    <localization-table title="Window title"
+                        [source]="shopLocalization"
+                        value="title"
+                        i18n="displayTitles"
+                        (dataChanged)="onDataChanged()"></localization-table>
+  </div>
 
-  <localization-table title="Meta keywords"
-                      [data]="shopLocalization.displayMetakeywords"
-                      (dataChanged)="onDataChanged()"></localization-table>
+  <div class="row">
+    <localization-table title="Meta keywords"
+                        [source]="shopLocalization"
+                        value="metakeywords"
+                        i18n="displayMetakeywords"
+                        (dataChanged)="onDataChanged()"></localization-table>
+  </div>
 
-  <localization-table title="Description"
-                      [data]="shopLocalization.displayMetadescriptions"
-                      (dataChanged)="onDataChanged()"></localization-table>
+  <div class="row">
+    <localization-table title="Description"
+                        [source]="shopLocalization"
+                        value="metadescription"
+                        i18n="displayMetadescriptions"
+                        (dataChanged)="onDataChanged()"></localization-table>
+  </div>
 
 </wrapper>

@@ -25,6 +25,7 @@ import {Pair} from './common';
  */
 export interface ShopVO {
   shopId : number;
+  disabled : boolean;
   code : string;
   name :string;
   description : string;

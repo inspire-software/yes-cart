@@ -1,14 +1,15 @@
 <wrapper *ngIf="shopUrl">
 
-  <data-control [changed]="changed"
-                (saveEvent)="onSaveHandler()"
-                (discardEvent)="onDiscardEventHandler()"
-                (refreshEvent)="onRefreshHandler()"></data-control>
+  <div class="text-right data-control">
 
-  <div class="row">
-    <p align="right">
-      <button class="btn btn-primary" (click)="onRowNew()">N</button>
-    </p>
+    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <data-control [changed]="changed"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEventHandler()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
   </div>
 
 
@@ -26,16 +27,19 @@
 
   <wrapper *ngFor="#row of shopUrl.urls; #i = index">
     <div class="row"  *ngIf=" ( i >= (maxSize * (currentPage - 1)) ) && ( i < (maxSize * currentPage) )">
-      <div class="col-lg-5">
+      <div class="col-md-4">
         {{row.url}}
       </div>
-      <div class="col-lg-5">
+      <div class="col-md-4">
         {{row.theme}}
       </div>
-      <div class="col-lg-2" style="text-align: right">
-        <button class="btn btn-primary" (click)="onRowEdit(row)">E</button>
-        <button class="btn btn-danger" (click)="onRowDelete(row)">X</button>
-
+      <div class="col-md-2">
+        <button class="btn btn-circle btn-sm" (click)="onRowEdit(row)">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
+          <i class="fa fa-remove"></i>
+        </button>
       </div>
     </div>
   </wrapper>

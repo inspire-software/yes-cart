@@ -966,6 +966,11 @@
         <constructor-arg index="1" ref="shopService"/>
     </bean>
 
+    <bean id="currencyService" class="org.yes.cart.service.misc.impl.CurrencyServiceImpl">
+        <constructor-arg index="0" value="classpath:yc-config.properties"/>
+        <constructor-arg index="1" ref="shopService"/>
+    </bean>
+
     <!-- ########################################## WS support ########################## -->
 
     <bean id="wsAbstractFactoryClientFactory" class="org.yes.cart.web.service.ws.client.impl.WsClientAbstractFactoryImpl">

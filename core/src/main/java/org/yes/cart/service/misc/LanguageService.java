@@ -26,11 +26,11 @@ import java.util.Map;
  */
 public interface  LanguageService {
 
-     /**
+    /**
      * Get most appropriate  full language name.
      *
      * @param language to char language code.
-      *
+     *
      * @return language name
      */
     String resolveLanguageName(String language);

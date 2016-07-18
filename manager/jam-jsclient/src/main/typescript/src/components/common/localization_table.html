@@ -1,6 +1,4 @@
-<div>
-  <div class="col-lg-6">
-
+<div class="col-lg-9">
 
     <div class="panel-body">
 
@@ -12,57 +10,50 @@
           </div>
 
           <div class="row">
-            <div class="col-lg-3">
+            <div class="col-md-3">
               Default value
             </div>
-            <div class="col-lg-9">
-              <input class="form-control" placeholder="Default value" name="locale" type="text" [(ngModel)]="defaultvalue">
+            <div class="col-md-6">
+              <input class="form-control" placeholder="Default value" name="value" type="text" (change)="onDefaultValueChange()" [(ngModel)]="dataValue">
+            </div>
+          </div>
+
+          <div class="row" *ngFor="#row of dataI18n">
+            <div class="col-md-3">
+              {{row.first}}
+            </div>
+            <div class="col-md-6">
+              {{row.second}}
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
+                <i class="fa fa-remove"></i>
+              </button>
             </div>
           </div>
 
           <div class="row">
 
-            <div class="col-lg-3">
-              Locale
+            <div class="form-group col-md-3">
+              <input class="form-control" placeholder="Locale" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
             </div>
-            <div class="form-group col-lg-9">
-              <input class="form-control" placeholder="Locale" name="locale" type="text" [(ngModel)]="selectedRow.first">
+            <div class="form-group col-md-6">
+              <input class="form-control" placeholder="Value" name="selectedRow.second" type="text" autofocus [(ngModel)]="selectedRow.second">
             </div>
-
-            <div class="col-lg-3">
-              Value
-            </div>
-            <div class="form-group col-lg-9">
-              <input class="form-control" placeholder="Value" name="value" type="text" autofocus [(ngModel)]="selectedRow.second">
+            <div class="form-group col-md-3">
+              <button class="btn btn-circle btn-sm" (click)="onRowAdd()">
+                <i class="fa fa-plus"></i>
+              </button>
             </div>
 
           </div>
-
-          <p align="right">
-            <button class="btn" (click)="onRowAdd()">Add</button>
-          </p>
-
-          <table width="100%">
-            <tr>
-              <th>Locale</th>
-              <th>Value</th>
-              <th>&nbsp;</th>
-            </tr>
-            <tr *ngFor="#row of data" (click)="onRowSelect(row)">
-              <td style="width: 30pt">{{row.first}}</td>
-              <td>{{row.second}}</td>
-              <td style="width: 30pt" align="right">
-                <button class="btn btn-danger" (click)="onRowDelete(row)">X</button>
-              </td>
-            </tr>
-
-          </table>
 
 
         </fieldset>
       </form>
     </div>
 
-
-  </div>
 </div>

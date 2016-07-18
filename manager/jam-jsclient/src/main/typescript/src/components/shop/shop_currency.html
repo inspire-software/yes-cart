@@ -1,9 +1,11 @@
 <wrapper *ngIf="curr">
 
-  <data-control [changed]="changed"
-                (saveEvent)="onSaveHandler()"
-                (discardEvent)="onDiscardEventHandler()"
-                (refreshEvent)="onRefreshHandler()"></data-control>
+  <div class="text-right data-control">
+    <data-control [changed]="changed"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEventHandler()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
 
   <div class="row">
     <div class="col-lg-3">

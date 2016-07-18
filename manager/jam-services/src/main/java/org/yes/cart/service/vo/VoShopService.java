@@ -141,5 +141,13 @@ public interface VoShopService {
      */
     VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception;
 
+    /**
+     * Update the shop disabled flag.
+     *
+     * @param shopId shop PK
+     * @param disabled true if shop is disabled
+     * @return shop dto if found otherwise null.
+     */
+    VoShop updateDisabledFlag(long shopId, boolean disabled) throws Exception;
 
 }

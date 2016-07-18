@@ -1,12 +1,19 @@
 <wrapper *ngIf="shop">
 
-  <data-control [changed]="changed"
-                (saveEvent)="onSaveHandler()"
-                (discardEvent)="onDiscardEvent()"
-                (refreshEvent)="onRefreshHandler()"></data-control>
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onPowerOff()" [ngClass]="shopDisabled ? 'btn btn-danger btn-circle btn-xl':'btn btn-success btn-circle btn-xl'">
+      <i class="fa fa-power-off"></i>
+    </button>
+
+    <data-control [changed]="changed"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEvent()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
 
   <div>
-    <div class="col-lg-6">
+    <div class="col-md-9 col-lg-6">
       <div class="panel-body">
         <form role="form">
           <fieldset>

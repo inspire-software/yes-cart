@@ -17,13 +17,10 @@ package org.yes.cart.service.vo.impl;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.vo.VoShop;
@@ -32,7 +29,6 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoShopService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -50,7 +46,7 @@ public class VoShopServiceImplTest {
     context.checking(new Expectations() {{
       allowing(dss).getAll(); will(returnValue(createShops()));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, null, dss, ff);
     List<VoShop> voShops = voShopService.getAll();
     assertEquals(1, voShops.size());
     context.assertIsSatisfied();
@@ -63,7 +59,7 @@ public class VoShopServiceImplTest {
     context.checking(new Expectations() {{
       allowing(dss).getById(100); will(returnValue(createShop(100)));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, null, dss, ff);
     VoShop voShop = voShopService.getById(100);
     assertEquals("shopname_100", voShop.getName());
     assertEquals("shopdescr_100", voShop.getDescription());
@@ -82,7 +78,7 @@ public class VoShopServiceImplTest {
       allowing(dss).update(shopDTOOriginal); will(returnValue(shopDTOOriginal));
       allowing(dss).getById(100); will(returnValue(shopDTOOriginal));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, null, dss, ff);
     VoShop voShop = voShopService.getById(100);
     voShop.setName("new name");
     voShop = voShopService.update(voShop);
@@ -100,7 +96,7 @@ public class VoShopServiceImplTest {
       allowing(dss).create(shopDTOOriginal); will(returnValue(shopDTOOriginal));
       allowing(dss).getById(with(any(int.class))); will(returnValue(shopDTOOriginal));
     }});
-    final VoShopService voShopService = new VoShopServiceImpl(null, null, dss, ff);
+    final VoShopService voShopService = new VoShopServiceImpl(null, null, null, dss, ff);
     voShopService.create(new VoShop());
     context.assertIsSatisfied();
   }

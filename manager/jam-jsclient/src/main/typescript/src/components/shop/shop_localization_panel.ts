@@ -32,6 +32,7 @@ export class ShopLocalizationPanel implements OnInit {
     console.debug('shopId from params is ' + shopId);
 
     this._shopService.getShopLocalization(+shopId).subscribe(shopLocalization => {
+      console.debug('Get i18n', shopLocalization);
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });
@@ -45,14 +46,16 @@ export class ShopLocalizationPanel implements OnInit {
   onSaveHandler() {
     console.debug('Save handler for shop id ' + this.shopLocalization.shopId);
     this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
+      console.debug('Saved i18n', shopLocalization);
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });
   }
 
   onDiscardEvent() {
-    console.debug('Discard hander for shop id ' + this.shopLocalization.shopId);
+    console.debug('Discard handler for shop id ' + this.shopLocalization.shopId);
     this._shopService.getShopLocalization(this.shopLocalization.shopId).subscribe(shopLocalization => {
+      console.debug('Refreshed i18n', shopLocalization);
       this.shopLocalization = shopLocalization;
       this.changed = false;
     });

@@ -15,7 +15,7 @@
  */
 import {Injectable} from 'angular2/core';
 import {ShopVO} from '../model/shop';
-import {Subject}    from 'rxjs/Subject';
+import {BehaviorSubject}    from 'rxjs/subject/BehaviorSubject';
 import {Observable}    from 'rxjs/Observable';
 
 @Injectable()
@@ -23,17 +23,21 @@ export class ShopEventBus {
 
   shopUpdated$ : Observable<ShopVO>;
 
-  private _shopSource : Subject<ShopVO>;
+  private _shopSource : BehaviorSubject<ShopVO>;
 
   constructor() {
     console.debug('ShopEventBus constructed');
-    this._shopSource = new Subject<ShopVO>();
+    this._shopSource = new BehaviorSubject<ShopVO>(null);
     this.shopUpdated$ = this._shopSource.asObservable();
   }
 
   public emit(value: ShopVO): void {
     this._shopSource.next(value);
-    console.debug('submited ' + value);
+    console.debug('emit shop event', value);
+  }
+
+  public current():ShopVO {
+    return this._shopSource.getValue();
   }
 
 }

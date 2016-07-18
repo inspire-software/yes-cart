@@ -26,6 +26,7 @@ import {ShopCatalogue} from './shop_catalogue';
 import {ShopLocalizationPanel} from './shop_localization_panel';
 import {HTTP_PROVIDERS}    from 'angular2/http';
 import {ShopEventBus} from '../../service/shop_event_bus';
+import {AppCmp} from '../../app/components/app';
 
 
 @Component({
@@ -39,9 +40,13 @@ import {ShopEventBus} from '../../service/shop_event_bus';
 
 export class ShopPage implements OnInit, AfterContentInit {
   shop:ShopVO;
+
   constructor(private _shopService:ShopService,
               private _routeParams:RouteParams) {
     console.debug('Shop page constructed');
+    AppCmp.getShopEventBus().shopUpdated$.subscribe(shopevt => {
+      this.shop = shopevt;
+    });
   }
 
   ngOnInit() {
@@ -49,11 +54,13 @@ export class ShopPage implements OnInit, AfterContentInit {
     console.debug('shopId from params is ' + shopId);
     if (shopId === 'new') {
       this._shopService.createShop().then(shop => {
-        this.shop = shop;
+        console.debug('Creating new shop', shop);
+        AppCmp.getShopEventBus().emit(shop);
       });
     } else {
       this._shopService.getShop(+shopId).subscribe(shop => {
-        this.shop = shop;
+        console.debug('Retrieving existing shop', shop);
+        AppCmp.getShopEventBus().emit(shop);
       });
     }
   }

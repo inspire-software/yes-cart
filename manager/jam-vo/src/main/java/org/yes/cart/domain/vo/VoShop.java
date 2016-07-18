@@ -30,6 +30,9 @@ public class VoShop {
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
+    @DtoField(value = "disabled", readOnly = true)
+    private boolean disabled;
+
     @DtoField(value = "code")
     private String code;
 
@@ -56,6 +59,14 @@ public class VoShop {
 
     public void setShopId(long shopId) {
         this.shopId = shopId;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public String getCode() {

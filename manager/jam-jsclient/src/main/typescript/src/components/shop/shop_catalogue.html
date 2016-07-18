@@ -1,9 +1,11 @@
-<wrapper>
+<wrapper *ngIf="existingShop">
 
-  <data-control [changed]="changed"
-                (saveEvent)="onSaveHandler()"
-                (discardEvent)="onDiscardEventHandler()"
-                (refreshEvent)="onRefreshHandler()"></data-control>
+  <div class="text-right data-control">
+    <data-control [changed]="changed"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEventHandler()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
 
   <modal id="editNewCategoryName"
          [title]="'New category'"

@@ -39,6 +39,7 @@ import {Modal, ModalResult, ModalAction} from '../common/modal';
 export class ShopCatalogue implements OnInit {
 
   changed:boolean = false;
+  existingShop:boolean = false;
 
   newCategoryName:string;
   editNewCategoryName:Modal;
@@ -64,6 +65,7 @@ export class ShopCatalogue implements OnInit {
   /** {@inheritDoc}*/
   ngOnInit() {
     let shopId = this._routeParams.get('shopId');
+    this.existingShop = shopId !== 'new';
     console.debug('ngOnInit shopId from params is ' + shopId);
     this.loadData();
   }
@@ -73,19 +75,21 @@ export class ShopCatalogue implements OnInit {
    */
   loadData() {
     let shopId = this._routeParams.get('shopId');
-    this._categoryService.getAllCategories().subscribe(
-      cats => {
-        this.categories = cats;
-        this.nodes = this.adapt(cats);
-        this.selectedNode = null;
-        this.newCategoryName = null;
-      }
-    );
-    this._shopService.getShopCategories(+shopId).subscribe(
-      cats => {
-        this.assigned = cats;
-      }
-    );
+    if (this.existingShop) {
+      this._categoryService.getAllCategories().subscribe(
+          cats => {
+          this.categories = cats;
+          this.nodes = this.adapt(cats);
+          this.selectedNode = null;
+          this.newCategoryName = null;
+        }
+      );
+      this._shopService.getShopCategories(+shopId).subscribe(
+          cats => {
+          this.assigned = cats;
+        }
+      );
+    }
   };
 
   /**
