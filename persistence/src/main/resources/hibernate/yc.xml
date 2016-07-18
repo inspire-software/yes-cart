@@ -2671,10 +2671,10 @@
        ]]>
     </query>
 
-    <query name="DISCONTINUED.PRODUCTS.AFTER.DATE">
+    <query name="DISCONTINUED.PRODUCTS.AFTER.DATE.CHANGED.AFTER">
         <![CDATA[
        select p.productId from ProductEntity p
-            where p.availableto IS NOT NULL and p.availableto <= ?1
+            where p.availableto IS NOT NULL and p.availableto <= ?1 and  p.availableto > ?2
        ]]>
     </query>
 
