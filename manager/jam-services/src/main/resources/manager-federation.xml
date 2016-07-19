@@ -21,14 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:core-services.xml"/>
-    <import resource="classpath:core-dto-services.xml"/>
-
-    <bean id="shopFederationStrategy" class="org.yes.cart.service.federation.impl.ShopFederationStrategyImpl">
-        <constructor-arg index="0" ref="userManagementService"/>
-        <constructor-arg index="1" ref="cacheManager"/>
-    </bean>
-
+    <import resource="classpath:core-federation.xml"/>
 
     <bean id="managerFederationFilter" class="org.yes.cart.service.federation.impl.ManagerUiFederationFilterImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
