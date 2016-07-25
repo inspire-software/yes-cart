@@ -1,9 +1,0 @@
-<wrapper>
-  <form (submit)="addName()">
-    <input [(ngModel)]="newName">
-    <button type="submit">Add</button>
-  </form>
-  <ul>
-    <li *ngFor="#name of list.get()">{{name}}</li>
-  </ul>
-</wrapper>

@@ -1,0 +1,9 @@
+<button type="button" (click)="onRefresh()"  [disabled]="changed"   class="btn btn-info btn-circle btn-xl">
+  <i class="fa fa-refresh"></i>
+</button>
+<button type="button" (click)="onDiscard()"  [disabled]="!changed"  class="btn btn-info btn-circle btn-xl">
+  <i class="fa fa-reply"></i>
+</button>
+<button type="button" (click)="onSave()"     [disabled]="!changed || !valid"  [ngClass]="changed ? 'btn btn-success btn-circle btn-xl':'btn btn-info btn-circle btn-xl'">
+  <i class="fa fa-save"></i>
+</button>

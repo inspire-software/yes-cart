@@ -1,11 +1,17 @@
 import * as gulp from 'gulp';
 import * as gulpLoadPlugins from 'gulp-load-plugins';
-import {join} from 'path';
+import { join } from 'path';
 import * as slash from 'slash';
-import {APP_SRC, APP_DEST, APP_BASE, DEV_DEPENDENCIES} from '../../config';
-import {templateLocals} from '../../utils';
+
+import { APP_BASE, APP_DEST, APP_SRC, DEPENDENCIES, CSS_SRC, CSS_DEST, ASSETS_SRC } from '../../config';
+import { templateLocals } from '../../utils';
+
 const plugins = <any>gulpLoadPlugins();
 
+
+/**
+ * Executes the build process, injecting the shims and libs into the `index.hml` for the development environment.
+ */
 export = () => {
   return gulp.src(join(APP_SRC, 'index.html'))
     .pipe(inject('shims'))
@@ -15,7 +21,10 @@ export = () => {
     .pipe(gulp.dest(APP_DEST));
 };
 
-
+/**
+ * Injects the file with the given name.
+ * @param {string} name - The file to be injected.
+ */
 function inject(name?: string) {
   //console.info('Injecting ' + name);
   return plugins.inject(gulp.src(getInjectablesDependenciesRef(name), { read: false }), {
@@ -24,32 +33,42 @@ function inject(name?: string) {
   });
 }
 
+/**
+ * Returns the injectable dependency, mapping its filename to its path.
+ * @param {string} name - The dependency to be mapped.
+ */
 function getInjectablesDependenciesRef(name?: string) {
-  return DEV_DEPENDENCIES
+  return DEPENDENCIES
     .filter(dep => dep['inject'] && dep['inject'] === (name || true))
     .map(mapPath);
 }
 
-function mapPath(dep) {
+/**
+ * Maps the path of the given dependency to its path according to the applications environment.
+ * @param {any} dep - The dependency to be mapped.
+ */
+function mapPath(dep: any) {
   // console.info(dep);
   let envPath = dep.src;
-  if (envPath.startsWith(APP_SRC)) {
-    envPath = join(APP_DEST, dep.src.replace(APP_SRC, ''));
+  if (envPath.startsWith(APP_SRC) && !envPath.endsWith('.scss')) {
+    if (envPath.endsWith('.css')) {
+      envPath = envPath.replace(CSS_SRC, CSS_DEST);
+    } else {
+      envPath = join(APP_DEST, envPath.replace(APP_SRC, ''));
+    }
+  } else if (envPath.startsWith(APP_SRC) && envPath.endsWith('.scss')) {
+    envPath = envPath.replace(ASSETS_SRC, CSS_DEST).replace('.scss', '.css');
   }
   return envPath;
 }
 
+/**
+ * Transform the path of a dependency to its location within the `dist` directory according to the applications
+ * environment.
+ */
 function transformPath() {
-  return function (filepath) {
-
-    let deps = DEV_DEPENDENCIES
-      .filter(dep => dep['dest'] && filepath.endsWith(dep['dest']));
-
-    if (deps.length > 0) {
-      arguments[0] = join(APP_BASE, deps[0]['dest']) + `?${Date.now()}`;
-    } else {
-      arguments[0] = join(APP_BASE, filepath) + `?${Date.now()}`;
-    }
+  return function (filepath: string) {
+    arguments[0] = join(APP_BASE, filepath) + `?${Date.now()}`;
     console.log('Injecting ' + arguments[0]);
     return slash(plugins.inject.transform.apply(plugins.inject.transform, arguments));
   };

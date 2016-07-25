@@ -1,0 +1,35 @@
+<wrapper *ngIf="shopLocalization">
+
+  <div class="text-right data-control">
+    <data-control [changed]="changed"
+                  [valid]="true"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEvent()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
+
+  <div class="row">
+    <i18n-table title="Window title"
+                [source]="shopLocalization"
+                value="title"
+                i18n="displayTitles"
+                (dataChanged)="onDataChanged()"></i18n-table>
+  </div>
+
+  <div class="row">
+    <i18n-table title="Meta keywords"
+                [source]="shopLocalization"
+                value="metakeywords"
+                i18n="displayMetakeywords"
+                (dataChanged)="onDataChanged()"></i18n-table>
+  </div>
+
+  <div class="row">
+    <i18n-table title="Description"
+                [source]="shopLocalization"
+                value="metadescription"
+                i18n="displayMetadescriptions"
+                (dataChanged)="onDataChanged()"></i18n-table>
+  </div>
+
+</wrapper>

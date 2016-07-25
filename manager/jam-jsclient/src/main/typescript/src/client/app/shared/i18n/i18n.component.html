@@ -1,0 +1,59 @@
+<div class="col-lg-9">
+
+    <div class="panel-body">
+
+      <form role="form">
+        <fieldset>
+
+          <div class="row">
+            <h3>{{title}}</h3>
+          </div>
+
+          <div class="row">
+            <div class="col-md-3">
+              Default value
+            </div>
+            <div class="col-md-6">
+              <input class="form-control" placeholder="Default value" name="dataValue" type="text" (change)="onDefaultValueChange()" [(ngModel)]="dataValue">
+            </div>
+          </div>
+
+          <div class="row" *ngFor="let row of dataI18n">
+            <div class="col-md-3">
+              {{row.first}}
+            </div>
+            <div class="col-md-6">
+              {{row.second}}
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
+                <i class="fa fa-remove"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <div class="form-group col-md-3">
+              <input class="form-control" placeholder="Locale" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
+            </div>
+            <div class="form-group col-md-6">
+              <input class="form-control" placeholder="Value" name="selectedRow.second" type="text" autofocus [(ngModel)]="selectedRow.second">
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-circle btn-sm" (click)="onRowAdd()">
+                <i class="fa fa-plus"></i>
+              </button>
+            </div>
+
+          </div>
+
+
+        </fieldset>
+      </form>
+    </div>
+
+</div>

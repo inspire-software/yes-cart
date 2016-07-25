@@ -1,0 +1,26 @@
+<wrapper *ngIf="curr">
+
+  <div class="text-right data-control">
+    <data-control [changed]="changed"
+                  [valid]="true"
+                  (saveEvent)="onSaveHandler()"
+                  (discardEvent)="onDiscardEventHandler()"
+                  (refreshEvent)="onRefreshHandler()"></data-control>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-5">
+      <h3>Available</h3>
+      <wrapper *ngFor="let available of curr.all">
+        <a class="btn" (click)=onAvailableCurrencyClick(available)>{{available}} <i class="fa fa-plus"></i></a>
+      </wrapper>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <h3>Supported</h3>
+      <wrapper *ngFor="let supported of curr.supported">
+        <a class="btn" (click)=onSupportedCurrencyClick(supported)>{{supported}} <i class="fa fa-remove"></i></a>
+      </wrapper>
+    </div>
+  </div>
+
+</wrapper>

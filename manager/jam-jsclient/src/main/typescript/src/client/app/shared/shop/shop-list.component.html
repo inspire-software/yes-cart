@@ -1,0 +1,12 @@
+<ul class="nav nav-second-level shop-list">
+
+  <li>
+    <a [routerLink]="['/shop', 'new']" > <span class="label label-info"><i class="fa fa-plus"></i></span> Create new </a>
+  </li>
+
+  <li *ngFor="let shop of shops" (click)="onSelect(shop)">
+    <a [routerLink]="['/shop', shop.shopId ]" > <span [ngClass]="isShopDisabled(shop) ? 'label label-danger':'label label-success'">{{shop.code}}</span> {{shop.name}} </a>
+  </li>
+
+</ul>
+

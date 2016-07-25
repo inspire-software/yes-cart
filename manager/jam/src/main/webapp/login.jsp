@@ -20,10 +20,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>YC - pure eCommerce</title>
-    <link href="<c:url value='resources/assets/bootstrap.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/assets/font-awesome.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/assets/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/assets/login.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/font-awesome.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/main.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/login.css' />" rel="stylesheet"/>
 </head>
 
 <body>
