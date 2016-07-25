@@ -83,7 +83,7 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
 
         VoShopUrl voShopUrl = voShopService.getShopUrls(voShop.getShopId());
         assertTrue(voShopUrl.getUrls().isEmpty());
-        voShopUrl.getUrls().add(new VoShopUrlDetail(0, "url", "theme"));
+        voShopUrl.getUrls().add(new VoShopUrlDetail(0, "url", "theme", true));
 
         voShopUrl = voShopService.update(voShopUrl);
         assertThat(voShopUrl.getUrls().size(), equalTo(1));

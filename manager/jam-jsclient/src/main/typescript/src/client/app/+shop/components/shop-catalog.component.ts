@@ -188,7 +188,10 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
    */
   onSelectNode(node:ITreeNode) {
     console.debug('ShopCatalogComponent selected node', node);
-    this.selectedNode = node;
+    if (node.id !== '100' && node.disabled === false) {
+      node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
+      this.selectedNode = node;
+    }
   }
 
   onRequest(parent:ITreeNode) {

@@ -1,15 +1,16 @@
-<ul class="treenodes">
+<ul class="treenodes lvl-{{level}}">
   <li *ngFor="let node of nodes" class="treenode">
     <i class="nodebutton fa fa-{{node.children.length === 0 ?  'none' : (node.expanded ? 'minus' : 'plus') }}-square-o"
        (click)="onExpand(node)">
     </i>
 
-		<a class="nodetext {{node == selectedNode ? 'bg-info' : ''}} {{ isDisabled(node) ? 'disabled' : ''}}"
+		<a class="nodetext {{ isDisabled(node) ? 'bg-success' : (node == selectedNode ? 'bg-info' : '') }}"
        (click)="onSelectNode(node)">
 			{{node.name}}
 		</a>
 
-    <tree-view [nodes]="node.children"
+    <tree-view [level]="level+1"
+               [nodes]="node.children"
                [selectedNode]="selectedNode"
                (onSelectedChanged)="onSelectNode($event)"
                (onRequestNodes)="onRequest($event)"

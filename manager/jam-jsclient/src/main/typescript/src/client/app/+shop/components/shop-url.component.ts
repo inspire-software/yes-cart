@@ -49,12 +49,12 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   deleteConfirmationModalDialog:ModalComponent;
   editUrlModalDialog:ModalComponent;
 
+  selectedRow:UrlVO;
 
-  urlToDelete:string ;
-  urlToEdit:UrlVO = {'urlId': 0, 'url': '', 'theme' : ''} ;
+  urlToDelete:string;
+  urlToEdit:UrlVO = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false} ;
 
   shopUrlForm:any;
-  shopUrlListForm:any;
 
   /**
    * Construct shop url panel
@@ -68,11 +68,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.shopUrlForm = fb.group({
       'url': ['', Validators.compose([Validators.required, YcValidators.validDomainName])],
       'theme': [''],
+      'primary': [''],
     });
 
-    this.shopUrlListForm = fb.group({
-      'pager': [''],
-    })
   }
 
 
@@ -105,6 +103,12 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.deleteConfirmationModalDialog.show();
   }
 
+  protected onRowDeleteSelected() {
+    if (this.selectedRow != null) {
+      this.onRowDelete(this.selectedRow);
+    }
+  }
+
   protected onRowEdit(row:UrlVO) {
     console.debug('ShopUrlComponent onRowEdit handler', row);
     this.formReset();
@@ -113,11 +117,45 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.editUrlModalDialog.show();
   }
 
+  protected onRowEditSelected() {
+    if (this.selectedRow != null) {
+      this.onRowEdit(this.selectedRow);
+    }
+  }
+
+  protected onRowPrimary(row:UrlVO) {
+    console.debug('ShopUrlComponent onRowPrimary handler', row);
+    if (row.primary === false) {
+      for (var idx = 0; idx < this.shopUrl.urls.length; idx++) {
+        var url:UrlVO = this.shopUrl.urls[idx];
+        url.primary = (url.urlId === row.urlId || (url.urlId === 0 && url.url === row.url)); // Match by id and url
+      }
+    } else {
+      // do not allow unsetting because we need at least one primary for emails to reference shop url
+    }
+    this.changed = true;
+  }
+
+  protected onRowPrimarySelected() {
+    if (this.selectedRow != null) {
+      this.onRowPrimary(this.selectedRow);
+    }
+  }
+
+  protected onSelectRow(row:UrlVO) {
+    console.debug('ShopUrlComponent onRowPrimary handler', row);
+    if (row == this.selectedRow) {
+      this.selectedRow = null;
+    } else {
+      this.selectedRow = row;
+    }
+  }
+
   protected onRowNew() {
     console.debug('ShopUrlComponent onRowNew handler');
     this.formReset();
     this.validForSave = false;
-    this.urlToEdit = Util.clone({'urlId': 0, 'url': '', 'theme' : ''});
+    this.urlToEdit = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
     this.editUrlModalDialog.show();
   }
 
@@ -136,12 +174,13 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     if (this.shop.shopId > 0 && this.shopUrl) {
       var _sub:any = this._shopService.saveShopUrls(this.shopUrl).subscribe(
           rez => {
-          this.shopUrl = rez;
-          this.changed = false;
-          this.totalItems = this.shopUrl.urls.length;
-          this.currentPage = 1;
-          console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
-          _sub.unsubscribe();
+            this.shopUrl = rez;
+            this.changed = false;
+            this.selectedRow = null;
+            this.totalItems = this.shopUrl.urls.length;
+            this.currentPage = 1;
+            console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
+            _sub.unsubscribe();
         }
       );
     }
@@ -174,6 +213,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
       let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.url === this.urlToDelete;} );
       console.debug('ShopUrlComponent onDeleteConfirmationResult index in array of urls ' + idx);
       this.shopUrl.urls.splice(idx, 1);
+      this.selectedRow = null;
       this.changed = true;
     }
   }
@@ -190,6 +230,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
         let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.urlId === this.urlToEdit.urlId;} );
         this.shopUrl.urls[idx] = this.urlToEdit;
       }
+      this.selectedRow = this.urlToEdit;
       this.changed = true;
     }
   }
@@ -206,6 +247,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
         console.debug('ShopUrlComponent urls', this.shopUrl);
         this.shopUrl = shopUrl;
         this.changed = false;
+        this.selectedRow = null;
 
         this.totalItems = this.shopUrl.urls.length;
         this.currentPage = 1;
@@ -214,6 +256,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
       });
     } else {
       this.shopUrl = null;
+      this.selectedRow = null;
     }
   }
 

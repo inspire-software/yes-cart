@@ -57,6 +57,7 @@ export interface UrlVO {
   urlId : number;
   url : string;
   theme : string;
+  primary : boolean;
 }
 
 /**

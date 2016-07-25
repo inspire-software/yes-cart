@@ -5,6 +5,10 @@
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+/* Reset ul padding for bullet */
+ul {
+  padding-right: 0;
+}
 /* Box-sizing border-box */
 * {
   box-sizing: border-box;
@@ -13,7 +17,7 @@
 body {
   background-color: #f8f8f8;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,7 +32,7 @@ body {
   background-color: #fff;
 }
 
-@media(min-width:768px) {
+@media(min-width:992px) {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 250px;
@@ -137,7 +141,7 @@ body {
   padding-left: 52px;
 }
 
-@media(min-width:768px) {
+@media(min-width:992px) {
   .sidebar {
     z-index: 1;
     position: absolute;
@@ -417,3 +421,108 @@ table.dataTable thead .sorting:after {
 }
 
 /* **************** EOF FORM VALIDATION ********************************************** */
+
+/* **************** TREEVIEW ********************************************************* */
+
+ul.treenodes {
+  list-style-type: none;
+}
+
+.treenodes.lvl-1 {
+  padding-left: 0;
+}
+
+.treenodes.lvl-2 {
+  padding-left: 8px;
+}
+
+.treenodes.lvl-3 {
+  padding-left: 16px;
+}
+
+.treenodes.lvl-4 {
+  padding-left: 24px;
+}
+
+.treenodes.lvl-5 {
+  padding-left: 32px;
+}
+
+.treenodes.lvl-6 {
+  padding-left: 40px;
+}
+
+.treenodes .nodetext {
+  padding-left: 3px;
+  padding-right: 3px;
+  cursor: pointer;
+}
+
+/* **************** EOF TREEVIEW ****************************************************** */
+
+/* **************** RESPONSIVE TABLES ************************************************* */
+
+table {
+  width: 100%;
+}
+
+@media only screen and (max-width: 800px) {
+
+  /* Force table to not be like tables anymore */
+  section.no-more-tables table,
+  section.no-more-tables thead,
+  section.no-more-tables tbody,
+  section.no-more-tables th,
+  section.no-more-tables td,
+  section.no-more-tables tr {
+    display: block;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  section.no-more-tables thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  section.no-more-tables tr { border: 1px solid #ccc; }
+
+  section.no-more-tables td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align:left;
+  }
+
+  section.no-more-tables td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 35%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align:left;
+    font-weight: bold;
+  }
+
+  /*
+    Label the data
+    */
+  section.no-more-tables td:before { content: attr(data-title); }
+
+  /** Overwrite bootstrap default */
+  .table-condensed>tbody>tr>td {
+    padding: 5px 5px 5px 35%;
+  }
+}
+
+.table-striped>tbody>tr.active {
+  background-color:#d9edf7;
+}
+
+/* **************** EOF RESPONSIVE TABLES ************************************************ */

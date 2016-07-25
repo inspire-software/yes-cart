@@ -1,9 +1,20 @@
-<wrapper *ngIf="shopUrl">
+<template [ngIf]="shopUrl">
 
   <div class="text-right data-control">
 
+    <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-circle btn-xl">
+      <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}"></i>
+    </button>
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
     <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
     </button>
 
     <data-control [changed]="changed"
@@ -11,47 +22,35 @@
                   (saveEvent)="onSaveHandler()"
                   (discardEvent)="onDiscardEventHandler()"
                   (refreshEvent)="onRefreshHandler()"></data-control>
+
+
   </div>
 
-  <!--<form  role="form" [formGroup]="shopUrlListForm">-->
-    <div class="row">
-      <div class="col-lg-5">
-        Url
-      </div>
-      <div class="col-lg-5">
-        Theme
-      </div>
-      <div class="col-lg-2">
-        &nbsp;
-      </div>
-    </div>
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+        <tr>
+          <th>Url</th>
+          <th>Theme</th>
+          <th>Primary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of shopUrl.urls; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+          <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
+            <td data-title="Url"><a (click)="onSelectRow(row)">{{row.url}}</a></td>
+            <td data-title="Theme"><a (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
+            <td data-title="Primary"><a (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          </template>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-    <wrapper *ngFor="let row of shopUrl.urls; let i = index">
-      <div class="row"  *ngIf=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
-        <div class="col-md-4">
-          {{row.url}}
-        </div>
-        <div class="col-md-4">
-          {{row.theme}}
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-circle btn-sm" (click)="onRowEdit(row)">
-            <i class="fa fa-edit"></i>
-          </button>
-          <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
-            <i class="fa fa-remove"></i>
-          </button>
-        </div>
-      </div>
-    </wrapper>
-
-    <div class="row">
-        <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [(ngModel)]="currentPage" class="pagination-sm"
-                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
-        <!-- pagination [boundaryLinks]="true" [totalItems]="totalItems" formControlName="pager" [(ngModel)]="currentPage" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" class="pagination-sm"
-                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination -->
-    </div>
-  <!--</form>-->
+  <div class="row">
+      <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [(ngModel)]="currentPage" class="pagination-sm"
+                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
 
 
 
@@ -93,11 +92,18 @@
           <div class="col-lg-9">
             <input class="form-control" placeholder="Default value" formControlName="theme" type="text" [(ngModel)]="urlToEdit.theme" (ngModelChange)="onDataChange($event)">
           </div>
-
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            Primary
+          </div>
+          <div class="col-lg-9">
+            <input class="form-control" placeholder="Default value" formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
+          </div>
         </div>
       </fieldset>
     </form>
 
   </modal>
 
-</wrapper>
+</template>

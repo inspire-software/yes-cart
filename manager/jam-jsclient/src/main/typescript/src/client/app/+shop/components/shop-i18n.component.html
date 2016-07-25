@@ -1,4 +1,4 @@
-<wrapper *ngIf="shopLocalization">
+<template [ngIf]="shopLocalization">
 
   <div class="text-right data-control">
     <data-control [changed]="changed"
@@ -32,4 +32,4 @@
                 (dataChanged)="onDataChanged()"></i18n-table>
   </div>
 
-</wrapper>
+</template>

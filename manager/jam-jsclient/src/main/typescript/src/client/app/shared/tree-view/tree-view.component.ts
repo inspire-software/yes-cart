@@ -14,12 +14,12 @@ export interface ITreeNode {
   selector: 'tree-view',
   moduleId: module.id,
   templateUrl: 'tree-view.component.html',
-  styleUrls: ['tree-view.component.css'],
   directives: [TreeViewComponent]
 })
 
 export class TreeViewComponent {
 
+  @Input() level:number = 1;
   @Input() nodes:Array<ITreeNode>;
   @Input() selectedNode:ITreeNode;
 
@@ -28,9 +28,6 @@ export class TreeViewComponent {
 
   onSelectNode(node:ITreeNode):void {
     if (!node.disabled) {
-      if (node.expanded) {
-        node.expanded = false; // collapse on selection
-      }
       this.onSelectedChanged.emit(node);
     }
   }

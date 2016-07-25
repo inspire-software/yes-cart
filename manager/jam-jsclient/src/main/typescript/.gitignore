@@ -25,6 +25,7 @@ build/Release
 /node_modules/
 /typings/
 /dist/dev/
+/css/
 
 # Users Environment Variables
 .lock-wscript

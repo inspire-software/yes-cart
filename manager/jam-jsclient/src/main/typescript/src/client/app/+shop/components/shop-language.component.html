@@ -1,4 +1,4 @@
-<wrapper *ngIf="lang">
+<template [ngIf]="lang">
 
   <div class="text-right data-control">
     <data-control [changed]="changed"
@@ -11,16 +11,16 @@
   <div class="row">
     <div class="col-md-6 col-lg-5">
       <h3>Available</h3>
-      <wrapper *ngFor="let available of lang.all">
+      <span *ngFor="let available of lang.all">
         <a class="btn" (click)=onAvailableLanguageClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
-      </wrapper>
+      </span>
     </div>
     <div class="col-md-6 col-lg-5">
       <h3>Supported</h3>
-      <wrapper *ngFor="let supported of lang.supported">
+      <span *ngFor="let supported of lang.supported">
         <a class="btn" (click)=onSupportedLanguageClick(supported)>{{supported}} <i class="fa fa-remove"></i></a>
-      </wrapper>
+      </span>
     </div>
   </div>
 
-</wrapper>
+</template>

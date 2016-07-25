@@ -1,4 +1,4 @@
-<wrapper *ngIf="existingShop">
+<template [ngIf]="existingShop">
 
   <div class="text-right data-control">
 
@@ -50,10 +50,10 @@
     </div>
     <div class="col-md-6 col-lg-5">
       <h3>Assigned</h3>
-      <wrapper *ngFor="let cat of assigned">
-        <a class="btn" (click)=onAssignedClick(cat)>{{cat.name}} <i class="fa fa-remove"></i></a><br/>
-      </wrapper>
+      <ul class="treenodes lvl-1">
+        <li class="treenode" *ngFor="let cat of assigned">{{cat.name}} <a (click)=onAssignedClick(cat)> <i class="fa fa-remove"></i></a></li>
+      </ul>
     </div>
   </div>
 
-</wrapper>
+</template>

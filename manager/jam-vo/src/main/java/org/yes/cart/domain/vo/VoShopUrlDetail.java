@@ -34,16 +34,15 @@ public class VoShopUrlDetail {
     @DtoField(value = "themeChain")
     private String theme;
 
-    /**
-     * Construct url detail
-     * @param urlId
-     * @param url
-     * @param theme
-     */
-    public VoShopUrlDetail(long urlId, String url, String theme) {
+    @DtoField(value = "primary")
+    private boolean primary;
+
+
+    public VoShopUrlDetail(final long urlId, final String url, final String theme, final boolean primary) {
         this.urlId = urlId;
         this.url = url;
         this.theme = theme;
+        this.primary = primary;
     }
 
     public VoShopUrlDetail() {
@@ -71,6 +70,14 @@ public class VoShopUrlDetail {
 
     public void setTheme(String theme) {
         this.theme = theme;
+    }
+
+    public boolean isPrimary() {
+        return primary;
+    }
+
+    public void setPrimary(final boolean primary) {
+        this.primary = primary;
     }
 
     @Override
