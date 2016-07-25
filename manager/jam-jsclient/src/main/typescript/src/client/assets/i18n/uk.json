@@ -1,0 +1,46 @@
+{
+  "VALIDATION_REQUIRED": "Correct value is required",
+  "VALIDATION_URL": "Valid URL, IP or 'localhost' is required",
+
+  "MODAL_CONFIRM_TITLE": "Are you sure?",
+  "MODAL_CREATE_TITLE": "Create",
+  "MODAL_CONFIRM_DELETE": "Do you really want to delete {{value}} ?",
+  "MODAL_BUTTON_CANCEL": "Cancel",
+  "MODAL_BUTTON_OK": "OK",
+  "MODAL_BUTTON_DELETE": "Delete",
+  "MODAL_BUTTON_SAVE": "Save",
+  "MODAL_BUTTON_CREATE": "Create",
+
+  "NAME": "Name",
+  "DESCRIPTION": "Description",
+  "DEFAULT_VALUE": "Default value",
+  "CODE": "Code",
+  "ASSIGNED": "Assigned",
+  "AVAILABLE": "Available",
+  "LANGUAGE": "Language",
+  "VALUE": "Value",
+
+  "PANEL_CUSTOMER_SERVICE": "Customer service",
+  "PANEL_CUSTOMER_SERVICE_ORDERS": "Orders",
+  "PANEL_CUSTOMER_SERVICE_PAYMENTS": "Payments",
+  "PANEL_CUSTOMER_SERVICE_CUSTOMERS": "Customers",
+  "PANEL_PIM": "PIM & Master Catalog",
+  "PANEL_PIM_PRODUCTS": "Products",
+  "PANEL_SHOPS": "Shops",
+
+  "SEO_TITLE": "Window title",
+  "SEO_KEYWORDS": "Meta keywords",
+  "SEO_DESCRIPTION": "Meta description",
+
+  "HELLO": "hello {{value}}",
+  "SHOP_TAB_MAIN": "Main",
+  "SHOP_TAB_I18N": "Localization",
+  "SHOP_TAB_URL": "URL",
+  "SHOP_TAB_CURRENCY": "Currency",
+  "SHOP_TAB_LANGUAGE": "Language",
+  "SHOP_TAB_CATALOG": "Catalog",
+
+  "SHOP_URL": "URL",
+  "SHOP_URL_PRIMARY": "Primary",
+  "SHOP_THEME_CHAIN": "Theme chain"
+}

@@ -29,7 +29,7 @@ export class AppComponent {
     ShopEventBus.init(_shopEventBus);
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-    userLang = /(fr|en)/gi.test(userLang) ? userLang : 'en';
+    userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';
     console.log('AppComponent language', userLang);
     translate.setDefaultLang('en');
     translate.use(userLang);
