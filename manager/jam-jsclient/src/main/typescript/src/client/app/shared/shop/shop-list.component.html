@@ -1,7 +1,7 @@
 <ul class="nav nav-second-level shop-list">
 
   <li>
-    <a [routerLink]="['/shop', 'new']" > <span class="label label-info"><i class="fa fa-plus"></i></span> Create new </a>
+    <a [routerLink]="['/shop', 'new']" > <span class="label label-info"><i class="fa fa-plus"></i></span> {{ 'MODAL_BUTTON_CREATE' | translate }}</a>
   </li>
 
   <li *ngFor="let shop of shops" (click)="onSelect(shop)">

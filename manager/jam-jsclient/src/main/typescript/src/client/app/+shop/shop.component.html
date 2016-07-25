@@ -8,27 +8,27 @@
 
   <tabset>
 
-    <tab heading="Main"  (select)="tabSelected('Main')">
+    <tab heading="{{ 'SHOP_TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
       <shop-main></shop-main>
     </tab>
 
-    <tab heading="Localization" (select)="tabSelected('I18n')">
+    <tab heading="{{ 'SHOP_TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
       <shop-i18n [shop]="shop"></shop-i18n>
     </tab>
 
-    <tab heading="Urls" (select)="tabSelected('Urls')">
+    <tab heading="{{ 'SHOP_TAB_URL' | translate }}" (select)="tabSelected('Urls')">
       <shop-url [shop]="shop"></shop-url>
     </tab>
 
-    <tab heading="Currency" (select)="tabSelected('Currency')">
+    <tab heading="{{ 'SHOP_TAB_CURRENCY' | translate }}" (select)="tabSelected('Currency')">
       <shop-currency [shop]="shop"></shop-currency>
     </tab>
 
-    <tab heading="Language" (select)="tabSelected('Language')">
+    <tab heading="{{ 'SHOP_TAB_LANGUAGE' | translate }}" (select)="tabSelected('Language')">
       <shop-language [shop]="shop"></shop-language>
     </tab>
 
-    <tab heading="Catalogue" (select)="tabSelected('Catalogue')">
+    <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
       <shop-catalog [shop]="shop"></shop-catalog>
     </tab>
 

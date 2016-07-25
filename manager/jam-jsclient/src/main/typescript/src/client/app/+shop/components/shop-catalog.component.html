@@ -18,21 +18,30 @@
   </div>
 
   <modal id="editNewCategoryName"
-         [title]="'New category'"
-         [cancelLabel]="'Cancel'"
-         [positiveLabel]="'Save'"
-         [valid]="true"
+         title="{{ 'MODAL_CREATE_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+         [valid]="validForSave"
          (loaded)="editNewCategoryNameModalLoaded($event)"
          (closed)="editNewCategoryNameModalResult($event)">
-    <form role="form">
+    <form role="form" [formGroup]="newCategoryForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">
-            Name
-          </div>
+          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" placeholder="Name of new category"
-                   name="newCategoryName" type="text" [(ngModel)]="newCategoryName">
+            <input class="form-control" formControlName="name" name="newCategoryName" type="text" [(ngModel)]="newCategory.name" (ngModelChange)="onDataChange($event)">
+            <div [hidden]="newCategoryForm.controls['name'].valid || newCategoryForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'VALIDATION_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid" (ngModelChange)="onDataChange($event)">
+            <div [hidden]="newCategoryForm.controls['guid'].valid || newCategoryForm.controls['guid'].pristine" class="alert alert-danger">
+              {{ 'VALIDATION_REQUIRED' | translate }}
+            </div>
           </div>
         </div>
       </fieldset>
@@ -41,7 +50,7 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-5">
-      <h3>Catalog</h3>
+      <h3>{{ 'SHOP_TAB_CATALOG' | translate }}</h3>
       <tree-view [nodes]="nodes"
                  [selectedNode]="selectedNode"
                  (onSelectedChanged)="onSelectNode($event)"
@@ -49,7 +58,7 @@
       </tree-view>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>Assigned</h3>
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
       <ul class="treenodes lvl-1">
         <li class="treenode" *ngFor="let cat of assigned">{{cat.name}} <a (click)=onAssignedClick(cat)> <i class="fa fa-remove"></i></a></li>
       </ul>

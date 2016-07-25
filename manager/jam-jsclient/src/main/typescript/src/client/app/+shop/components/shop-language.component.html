@@ -10,13 +10,13 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-5">
-      <h3>Available</h3>
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
       <span *ngFor="let available of lang.all">
         <a class="btn" (click)=onAvailableLanguageClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
       </span>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>Supported</h3>
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
       <span *ngFor="let supported of lang.supported">
         <a class="btn" (click)=onSupportedLanguageClick(supported)>{{supported}} <i class="fa fa-remove"></i></a>
       </span>

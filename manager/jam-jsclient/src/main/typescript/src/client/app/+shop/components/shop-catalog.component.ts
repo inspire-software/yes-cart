@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ShopService, CategoryService, ShopEventBus, Util} from './../../shared/services/index';
-import {ShopVO, CategoryVO} from './../../shared/model/index';
+import {ShopVO, CategoryVO, BasicCategoryVO} from './../../shared/model/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
@@ -24,7 +25,7 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
   selector: 'shop-catalog',
   moduleId: module.id,
   templateUrl: 'shop-catalog.component.html',
-  directives: [DataControlComponent, TreeViewComponent, ModalComponent],
+  directives: [DataControlComponent, TreeViewComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
   providers: [ShopService, CategoryService]
 })
 
@@ -38,8 +39,11 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   changed:boolean = false;
   existingShop:boolean = false;
 
-  newCategoryName:string;
+  newCategory:BasicCategoryVO = { 'name': '', 'guid': '' };
   editNewCategoryName:ModalComponent;
+  newCategoryForm:any;
+
+  validForSave:boolean = false;
 
   nodes:Array<ITreeNode>;
   selectedNode:ITreeNode;
@@ -54,8 +58,32 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
    * @param _routeParams
    */
   constructor(private _categoryService:CategoryService,
-              private _shopService:ShopService) {
+              private _shopService:ShopService,
+              fb: FormBuilder) {
     console.debug('ShopCatalogComponent constructed');
+
+    this.newCategoryForm = fb.group({
+      'guid': ['', Validators.pattern('[A-Za-z0-9]+')],
+      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+    });
+  }
+
+
+  formReset():void {
+    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
+    for(let key in this.newCategoryForm.controls) {
+      this.newCategoryForm.controls[key]['_pristine'] = true;
+      this.newCategoryForm.controls[key]['_touched'] = false;
+    }
+  }
+
+  onDataChange(event:any) {
+    var _sub:any = this.newCategoryForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.newCategoryForm.valid;
+      console.debug('ShopCatalogComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
+      _sub.unsubscribe();
+    });
+    console.debug('ShopCatalogComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   ngOnInit() {
@@ -88,7 +116,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
                   this.categories = cats;
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
-                  this.newCategoryName = null;
+                  this.newCategory = { 'name': '', 'guid': '' };
                   this.changed = false;
                   _subc.unsubscribe();
               }
@@ -210,7 +238,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
 
 
   editNewCategoryNameModalLoaded(modal:ModalComponent) {
-    console.debug('ShopCatalogComponent editNewCategoryNameModalLoaded');
+    console.debug('ShopCatalogComponent editnewCategoryModalLoaded');
     this.editNewCategoryName = modal;
   }
 
@@ -221,7 +249,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   editNewCategoryNameModalResult(modalresult:ModalResult) {
     console.debug('ShopCatalogComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      this._categoryService.createCategory(this.newCategoryName, +this.selectedNode.id).subscribe(
+      this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
           this.onRefreshHandler();
         }
@@ -261,7 +289,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
 
             this.nodes = this.adaptToTree(this.categories, _assignedIds);
             this.selectedNode = null;
-            this.newCategoryName = null;
+            this.newCategory = { 'name': '', 'guid': '' };
             this.changed = false;
         }
       );

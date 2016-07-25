@@ -7,32 +7,32 @@
 <accordion [closeOthers]="true">
 
   <accordion-group>
-    <div accordion-heading> Customer service  </div>
+    <div accordion-heading>{{ 'PANEL_CUSTOMER_SERVICE' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/Home']">Orders</a>
+        <a [routerLink]="['/Home']">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">Payments</a>
+        <a [routerLink]="['/Home']">{{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">Customers</a>
+        <a [routerLink]="['/Home']">{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
 
 
   <accordion-group>
-    <div accordion-heading> Master catalogue </div>
+    <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/Home']">Products</a>
+        <a [routerLink]="['/Home']">{{ 'PANEL_PIM_PRODUCTS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
 
   <accordion-group>
-    <div accordion-heading> Shops  </div>
+    <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
     <shoplist (shopEditTask)="selectCurrentShop($event)"></shoplist>
   </accordion-group>
 

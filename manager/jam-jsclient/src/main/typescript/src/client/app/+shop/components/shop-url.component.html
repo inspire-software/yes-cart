@@ -30,9 +30,9 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
         <tr>
-          <th>Url</th>
-          <th>Theme</th>
-          <th>Primary</th>
+          <th>{{ 'SHOP_URL' | translate }}</th>
+          <th>{{ 'SHOP_THEME_CHAIN' | translate }}</th>
+          <th>{{ 'SHOP_URL_PRIMARY' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -55,19 +55,19 @@
 
 
   <modal id="deleteConfirmationModalDialog"
-         [title]="'Are you sure?'"
-         [cancelLabel]="'Cancel'"
-         [positiveLabel]="'OK'"
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
          [valid]="true"
          (loaded)="deleteConfirmationModalDialogLoaded($event)"
          (closed)="onDeleteConfirmationResult($event)">
-    Do you really want to delete url {{urlToDelete}} ?
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: urlToDelete} }}
   </modal>
 
   <modal id="editUrlModalDialog"
-         [title]="'Shop URL'"
-         [cancelLabel]="'Cancel'"
-         [positiveLabel]="'Save'"
+         title="{{ 'SHOP_TAB_URL' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
          [valid]="validForSave"
          (loaded)="editUrlModalLoaded($event)"
          (closed)="onEditUrlModalResult($event)">
@@ -75,30 +75,24 @@
     <form role="form" [formGroup]="shopUrlForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">
-            URL
-          </div>
+          <div class="col-lg-3">{{ 'SHOP_URL' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" placeholder="Default value" formControlName="url" type="text" [(ngModel)]="urlToEdit.url" (ngModelChange)="onDataChange($event)">
+            <input class="form-control" formControlName="url" type="text" [(ngModel)]="urlToEdit.url" (ngModelChange)="onDataChange($event)">
             <div [hidden]="shopUrlForm.controls['url'].valid || shopUrlForm.controls['url'].pristine" class="alert alert-danger">
-              url is not valid
+              {{ 'VALIDATION_URL' | translate }}
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-3">
-            Theme
-          </div>
+          <div class="col-lg-3">{{ 'SHOP_THEME_CHAIN' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" placeholder="Default value" formControlName="theme" type="text" [(ngModel)]="urlToEdit.theme" (ngModelChange)="onDataChange($event)">
+            <input class="form-control" formControlName="theme" type="text" [(ngModel)]="urlToEdit.theme" (ngModelChange)="onDataChange($event)">
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-3">
-            Primary
-          </div>
+          <div class="col-lg-3">{{ 'SHOP_URL_PRIMARY' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" placeholder="Default value" formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
+            <input class="form-control" formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
           </div>
         </div>
       </fieldset>

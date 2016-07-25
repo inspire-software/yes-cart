@@ -14,6 +14,14 @@
  *    limitations under the License.
  */
 
+export interface BasicCategoryVO {
+
+  name : string;
+
+  guid  : string;
+
+}
+
 export interface CategoryVO {
 
   categoryId : number;

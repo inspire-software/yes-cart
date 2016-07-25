@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CategoryVO} from '../model/index';
+import {CategoryVO, BasicCategoryVO} from '../model/index';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -50,12 +50,12 @@ export class CategoryService {
 
   /**
    * Create category on the fly.
-   * @param name name of category
+   * @param newCat name of category
    * @param parentId parent id
    * @returns {Observable<R>}
      */
-  createCategory(name:string, parentId : number) {
-    var cat = {'name' : name, 'parentId' : parentId };
+  createCategory(newCat:BasicCategoryVO, parentId : number) {
+    var cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
     let body = JSON.stringify(cat);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });

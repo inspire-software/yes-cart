@@ -10,13 +10,13 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-5">
-      <h3>Available</h3>
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
       <span *ngFor="let available of curr.all">
         <a class="btn" (click)=onAvailableCurrencyClick(available)>{{available}} <i class="fa fa-plus"></i></a>
       </span>
     </div>
     <div class="col-md-6 col-lg-5">
-      <h3>Supported</h3>
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
       <span *ngFor="let supported of curr.supported">
         <a class="btn" (click)=onSupportedCurrencyClick(supported)>{{supported}} <i class="fa fa-remove"></i></a>
       </span>

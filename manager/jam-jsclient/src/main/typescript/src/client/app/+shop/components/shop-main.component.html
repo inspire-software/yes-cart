@@ -19,22 +19,22 @@
         <form role="form" [formGroup]="shopMainForm">
           <fieldset>
             <div class="form-group">
-              <input class="form-control" placeholder="Shop-code" formControlName="code" name="code" type="text" [(ngModel)]="shop.code" (ngModelChange)="onDataChange($event)" [disabled]="shop.shopId > 0">
+              <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="shop.code" (ngModelChange)="onDataChange($event)" [disabled]="shop.shopId > 0">
               <div [hidden]="shopMainForm.controls['code'].valid || shopMainForm.controls['code'].pristine" class="alert alert-danger">
-                code is required
+                {{ 'VALIDATION_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
-              <input class="form-control" placeholder="Shop-name" formControlName="name" name="name" type="text"  autofocus  [(ngModel)]="shop.name" (ngModelChange)="onDataChange($event)">
+              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  autofocus  [(ngModel)]="shop.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="shopMainForm.controls['name'].valid || shopMainForm.controls['name'].pristine" class="alert alert-danger">
-                name is required
+                {{ 'VALIDATION_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
-              <textarea class="form-control"  placeholder="Shop-decription" formControlName="description" name="description" [(ngModel)]="shop.description" (ngModelChange)="onDataChange($event)"></textarea>
+              <textarea class="form-control"  placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" [(ngModel)]="shop.description" (ngModelChange)="onDataChange($event)"></textarea>
             </div>
             <div class="form-group">
-              <input class="form-control"  placeholder="Shop-fspointer" formControlName="fspointer" name="fspointer" type="text" [(ngModel)]="shop.fspointer" (ngModelChange)="onDataChange($event)">
+              <input class="form-control"  placeholder="{{ 'SHOP_THEME_CHAIN' | translate }}" formControlName="fspointer" name="fspointer" type="text" [(ngModel)]="shop.fspointer" (ngModelChange)="onDataChange($event)">
             </div>
           </fieldset>
         </form>

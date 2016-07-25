@@ -9,7 +9,7 @@
   </div>
 
   <div class="row">
-    <i18n-table title="Window title"
+    <i18n-table title="{{ 'SEO_TITLE' | translate }}"
                 [source]="shopLocalization"
                 value="title"
                 i18n="displayTitles"
@@ -17,7 +17,7 @@
   </div>
 
   <div class="row">
-    <i18n-table title="Meta keywords"
+    <i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
                 [source]="shopLocalization"
                 value="metakeywords"
                 i18n="displayMetakeywords"
@@ -25,7 +25,7 @@
   </div>
 
   <div class="row">
-    <i18n-table title="Description"
+    <i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
                 [source]="shopLocalization"
                 value="metadescription"
                 i18n="displayMetadescriptions"
