@@ -11,7 +11,7 @@ export interface ITreeNode {
 }
 
 @Component({
-  selector: 'tree-view',
+  selector: 'yc-tree-view',
   moduleId: module.id,
   templateUrl: 'tree-view.component.html',
   directives: [TreeViewComponent]

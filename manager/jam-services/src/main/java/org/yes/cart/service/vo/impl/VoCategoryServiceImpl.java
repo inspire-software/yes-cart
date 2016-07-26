@@ -18,12 +18,15 @@ package org.yes.cart.service.vo.impl;
 
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.collections.CollectionUtils;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.vo.VoCategory;
 import org.yes.cart.service.dto.DtoCategoryService;
+import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoCategoryService;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,23 +35,54 @@ import java.util.List;
 public class VoCategoryServiceImpl implements VoCategoryService {
 
     private final DtoCategoryService dtoCategoryService;
+    private final FederationFacade federationFacade;
+
     private final Assembler simpleVoCategoryAssembler;
 
     /**
      * Construct service.
      * @param dtoCategoryService dto service to use.
+     * @param federationFacade  access.
      */
-    public VoCategoryServiceImpl(final DtoCategoryService dtoCategoryService) {
+    public VoCategoryServiceImpl(final DtoCategoryService dtoCategoryService,
+                                 final FederationFacade federationFacade) {
         this.dtoCategoryService = dtoCategoryService;
+        this.federationFacade = federationFacade;
         this.simpleVoCategoryAssembler = DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class);
     }
 
     /** {@inheritDoc} */
     public List<VoCategory> getAll() throws Exception {
         final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAll();
+        for (final CategoryDTO root : categoryDTOs) {
+            applyFilterToCategoryTree(root);
+        }
         final List<VoCategory> voCategories = new ArrayList<>(categoryDTOs.size());
         adaptCategories(categoryDTOs, voCategories);
         return voCategories;
+    }
+
+    private boolean applyFilterToCategoryTree(final CategoryDTO root) {
+        if (!federationFacade.isManageable(root.getCategoryId(), CategoryDTO.class)) {
+            // This is not a manageable directory (but maybe children are)
+            if (CollectionUtils.isNotEmpty(root.getChildren())) {
+                final List<CategoryDTO> all = new ArrayList<CategoryDTO>(root.getChildren());
+                final Iterator<CategoryDTO> catIt = all.iterator();
+                while (catIt.hasNext()) {
+                    final CategoryDTO cat = catIt.next();
+                    if (applyFilterToCategoryTree(cat)) {
+                        catIt.remove();
+                    }
+                }
+                root.setChildren(all);
+                return all.isEmpty(); // Id we have at least one accessible descendant, we should see it
+
+            }
+            // This is not manageable
+            return true;
+        }
+        // Manageable
+        return false;
     }
 
     /**

@@ -10,11 +10,11 @@
       <i class="fa fa-plus"></i>
     </button>
 
-    <data-control [changed]="changed"
-                  [valid]="true"
-                  (saveEvent)="onSaveHandler()"
-                  (discardEvent)="onDiscardEventHandler()"
-                  (refreshEvent)="onRefreshHandler()"></data-control>
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
   <modal id="editNewCategoryName"
@@ -57,11 +57,11 @@
     </div>
     <div class="col-md-6 col-lg-5">
       <h3>{{ 'SHOP_TAB_CATALOG' | translate }}</h3>
-      <tree-view [nodes]="nodes"
-                 [selectedNode]="selectedNode"
-                 (onSelectedChanged)="onSelectNode($event)"
-                 (onRequestNodes)="onRequest($event)">
-      </tree-view>
+      <yc-tree-view [nodes]="nodes"
+                    [selectedNode]="selectedNode"
+                    (onSelectedChanged)="onSelectNode($event)"
+                    (onRequestNodes)="onRequest($event)">
+      </yc-tree-view>
     </div>
   </div>
 

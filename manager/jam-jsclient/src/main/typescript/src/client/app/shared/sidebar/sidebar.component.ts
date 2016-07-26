@@ -11,7 +11,6 @@ import {ShopListComponent} from '../shop/index';
   moduleId: module.id,
   templateUrl: 'sidebar.component.html',
   directives: [ROUTER_DIRECTIVES, ShopListComponent, ACCORDION_DIRECTIVES],
-  providers: [HTTP_PROVIDERS, ManagementService]
 })
 
 export class SidebarComponent implements OnInit {

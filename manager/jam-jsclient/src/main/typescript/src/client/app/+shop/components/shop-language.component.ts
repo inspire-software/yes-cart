@@ -20,11 +20,10 @@ import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 
 @Component({
-  selector: 'shop-language',
+  selector: 'yc-shop-language',
   moduleId: module.id,
   templateUrl: './shop-language.component.html',
   directives: [ NgIf, NgFor, DataControlComponent],
-  providers: [ShopService]
 })
 
 export class ShopLanguageComponent implements OnInit, OnChanges {

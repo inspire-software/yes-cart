@@ -24,7 +24,7 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
 import {YcValidators} from './../../shared/validation/validators';
 
 @Component({
-  selector: 'shop-url',
+  selector: 'yc-shop-url',
   moduleId: module.id,
   templateUrl: 'shop-url.component.html',
   directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
@@ -47,7 +47,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   validForSave:boolean = false;
 
   deleteConfirmationModalDialog:ModalComponent;
-  editUrlModalDialog:ModalComponent;
+  editModalDialog:ModalComponent;
 
   selectedRow:UrlVO;
 
@@ -114,7 +114,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.formReset();
     this.validForSave = false;
     this.urlToEdit = Util.clone(row) ;
-    this.editUrlModalDialog.show();
+    this.editModalDialog.show();
   }
 
   protected onRowEditSelected() {
@@ -156,7 +156,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.formReset();
     this.validForSave = false;
     this.urlToEdit = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
-    this.editUrlModalDialog.show();
+    this.editModalDialog.show();
   }
 
 
@@ -202,9 +202,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.deleteConfirmationModalDialog = modal;
   }
 
-  protected editUrlModalLoaded(modal: ModalComponent) {
-    console.debug('ShopUrlComponent editUrlModalLoaded');
-    this.editUrlModalDialog = modal;
+  protected editModalLoaded(modal: ModalComponent) {
+    console.debug('ShopUrlComponent editModalLoaded');
+    this.editModalDialog = modal;
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
@@ -218,15 +218,15 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     }
   }
 
-  protected onEditUrlModalResult(modalresult: ModalResult) {
-    console.debug('ShopUrlComponent onEditUrlModalResult modal result is ', modalresult);
+  protected onEditModalResult(modalresult: ModalResult) {
+    console.debug('ShopUrlComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.urlToEdit.urlId === 0) { // add new
-        console.debug('ShopUrlComponent onEditUrlModalResult add new url', this.shopUrl);
+        console.debug('ShopUrlComponent onEditModalResult add new url', this.shopUrl);
         this.shopUrl.urls.push(this.urlToEdit);
         this.totalItems++;
       } else { // edit existing
-        console.debug('ShopUrlComponent onEditUrlModalResult update existing', this.shopUrl);
+        console.debug('ShopUrlComponent onEditModalResult update existing', this.shopUrl);
         let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.urlId === this.urlToEdit.urlId;} );
         this.shopUrl.urls[idx] = this.urlToEdit;
       }

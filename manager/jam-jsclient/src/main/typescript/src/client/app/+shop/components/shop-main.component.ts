@@ -21,11 +21,10 @@ import {ShopEventBus, ShopService, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 
 @Component({
-  selector: 'shop-main',
+  selector: 'yc-shop-main',
   moduleId: module.id,
   templateUrl: 'shop-main.component.html',
   directives: [DataControlComponent, NgIf, REACTIVE_FORM_DIRECTIVES],
-  providers: [ShopService, ShopEventBus]
 })
 
 export class ShopMainComponent implements OnInit, OnDestroy {

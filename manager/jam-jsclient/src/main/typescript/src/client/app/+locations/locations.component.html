@@ -1,0 +1,38 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</h1>
+  </div>
+
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCountry == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
+    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCountry == null" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+  </div>
+
+
+  <div *ngIf="!countryEdit">
+    <yc-countries [selectedCountry]="selectedCountry" (dataSelected)="onCountrySelected($event)" (dataChange)="onCountryChange($event)"></yc-countries>
+  </div>
+
+  <div *ngIf="countryEdit">
+    <yc-country [country]="selectedCountry" (dataChanged)="onCountrySelected($event)"></yc-country>
+  </div>
+
+</div>

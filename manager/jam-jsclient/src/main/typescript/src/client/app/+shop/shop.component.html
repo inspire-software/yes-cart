@@ -9,27 +9,27 @@
   <tabset>
 
     <tab heading="{{ 'SHOP_TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
-      <shop-main></shop-main>
+      <yc-shop-main></yc-shop-main>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
-      <shop-i18n [shop]="shop"></shop-i18n>
+      <yc-shop-i18n [shop]="shop"></yc-shop-i18n>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_URL' | translate }}" (select)="tabSelected('Urls')">
-      <shop-url [shop]="shop"></shop-url>
+      <yc-shop-url [shop]="shop"></yc-shop-url>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CURRENCY' | translate }}" (select)="tabSelected('Currency')">
-      <shop-currency [shop]="shop"></shop-currency>
+      <yc-shop-currency [shop]="shop"></yc-shop-currency>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_LANGUAGE' | translate }}" (select)="tabSelected('Language')">
-      <shop-language [shop]="shop"></shop-language>
+      <yc-shop-language [shop]="shop"></yc-shop-language>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
-      <shop-catalog [shop]="shop"></shop-catalog>
+      <yc-shop-catalog [shop]="shop"></yc-shop-catalog>
     </tab>
 
   </tabset>

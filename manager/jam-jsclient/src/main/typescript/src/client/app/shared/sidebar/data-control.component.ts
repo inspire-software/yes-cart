@@ -2,7 +2,7 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {NgClass, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'data-control',
+  selector: 'yc-data-control',
   moduleId: module.id,
   templateUrl: 'data-control.component.html',
   directives: [NgClass, NgIf]

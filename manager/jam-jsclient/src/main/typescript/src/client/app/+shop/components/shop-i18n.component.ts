@@ -21,11 +21,10 @@ import {I18nComponent} from './../../shared/i18n/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 
 @Component({
-  selector: 'shop-i18n',
+  selector: 'yc-shop-i18n',
   moduleId: module.id,
   templateUrl: 'shop-i18n.component.html',
   directives: [ I18nComponent, NgIf, DataControlComponent],
-  providers: [ShopService]
 })
 
 export class ShopI18nComponent implements OnInit, OnChanges {

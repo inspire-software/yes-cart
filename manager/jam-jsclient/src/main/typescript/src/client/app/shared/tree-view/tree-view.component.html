@@ -9,12 +9,12 @@
 			{{node.name}}
 		</a>
 
-    <tree-view [level]="level+1"
-               [nodes]="node.children"
-               [selectedNode]="selectedNode"
-               (onSelectedChanged)="onSelectNode($event)"
-               (onRequestNodes)="onRequest($event)"
-               *ngIf="isExpanded(node)">
-    </tree-view>
+    <yc-tree-view [level]="level+1"
+                  [nodes]="node.children"
+                  [selectedNode]="selectedNode"
+                  (onSelectedChanged)="onSelectNode($event)"
+                  (onRequestNodes)="onRequest($event)"
+                  *ngIf="isExpanded(node)">
+    </yc-tree-view>
   </li>
 </ul>

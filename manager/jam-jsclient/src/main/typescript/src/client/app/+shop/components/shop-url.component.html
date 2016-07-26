@@ -5,6 +5,7 @@
     <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-circle btn-xl">
       <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}"></i>
     </button>
+
     <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
@@ -17,11 +18,11 @@
       <i class="fa fa-remove"></i>
     </button>
 
-    <data-control [changed]="changed"
-                  [valid]="true"
-                  (saveEvent)="onSaveHandler()"
-                  (discardEvent)="onDiscardEventHandler()"
-                  (refreshEvent)="onRefreshHandler()"></data-control>
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
 
 
   </div>
@@ -29,20 +30,20 @@
   <section class="no-more-tables">
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
-        <tr>
-          <th>{{ 'SHOP_URL' | translate }}</th>
-          <th>{{ 'SHOP_THEME_CHAIN' | translate }}</th>
-          <th>{{ 'SHOP_URL_PRIMARY' | translate }}</th>
-        </tr>
+      <tr>
+        <th>{{ 'SHOP_URL' | translate }}</th>
+        <th>{{ 'SHOP_THEME_CHAIN' | translate }}</th>
+        <th>{{ 'SHOP_URL_PRIMARY' | translate }}</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of shopUrl.urls; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-          <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
-            <td data-title="Url"><a (click)="onSelectRow(row)">{{row.url}}</a></td>
-            <td data-title="Theme"><a (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
-            <td data-title="Primary"><a (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
-          </template>
-        </tr>
+      <tr *ngFor="let row of shopUrl.urls; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
+          <td title="{{ 'SHOP_URL' | translate }}"><a (click)="onSelectRow(row)">{{row.url}}</a></td>
+          <td title="{{ 'SHOP_THEME_CHAIN' | translate }}"><a (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
+          <td title="{{ 'SHOP_URL_PRIMARY' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+        </template>
+      </tr>
       </tbody>
     </table>
   </section>
@@ -64,13 +65,13 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: urlToDelete} }}
   </modal>
 
-  <modal id="editUrlModalDialog"
+  <modal id="editModalDialog"
          title="{{ 'SHOP_TAB_URL' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
          [valid]="validForSave"
-         (loaded)="editUrlModalLoaded($event)"
-         (closed)="onEditUrlModalResult($event)">
+         (loaded)="editModalLoaded($event)"
+         (closed)="onEditModalResult($event)">
 
     <form role="form" [formGroup]="shopUrlForm">
       <fieldset>

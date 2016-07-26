@@ -22,7 +22,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
-import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
@@ -31,7 +30,10 @@ import org.yes.cart.service.misc.CurrencyService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.service.vo.VoShopService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by iazarnyi on 1/19/16.
@@ -88,7 +90,7 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShop getById(long id) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(id);
-        if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final VoShop voShop = new VoShop();
             simpleVoShopAssembler.assembleDto(voShop, shopDTO, null, null);
             return voShop;
@@ -101,7 +103,7 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShop update(VoShop voShop) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(voShop.getShopId());
-        if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             simpleVoShopAssembler.assembleEntity(voShop, shopDTO, null, null);
             dtoShopService.update(shopDTO);
         }
@@ -131,10 +133,12 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShopLocale getShopLocale(long shopId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         final VoShopLocale voShopLocale = new VoShopLocale();
-        simpleVoShopLocaleAssembler.assembleDto(voShopLocale, shopDTO, null, null);
-        voShopLocale.setDisplayTitles(adaptMapToPairs(shopDTO.getDisplayTitles()));
-        voShopLocale.setDisplayMetadescriptions(adaptMapToPairs(shopDTO.getDisplayMetadescriptions()));
-        voShopLocale.setDisplayMetakeywords(adaptMapToPairs(shopDTO.getDisplayMetakeywords()));
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+            simpleVoShopLocaleAssembler.assembleDto(voShopLocale, shopDTO, null, null);
+            voShopLocale.setDisplayTitles(VoUtils.adaptMapToPairs(shopDTO.getDisplayTitles()));
+            voShopLocale.setDisplayMetadescriptions(VoUtils.adaptMapToPairs(shopDTO.getDisplayMetadescriptions()));
+            voShopLocale.setDisplayMetakeywords(VoUtils.adaptMapToPairs(shopDTO.getDisplayMetakeywords()));
+        }
         return voShopLocale;
     }
 
@@ -143,11 +147,11 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopLocale update(final VoShopLocale voShopLocale) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(voShopLocale.getShopId());
-        if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             simpleVoShopLocaleAssembler.assembleEntity(voShopLocale, shopDTO, null, null);
-            shopDTO.setDisplayTitles(adaptPairsToMap(voShopLocale.getDisplayTitles()));
-            shopDTO.setDisplayMetakeywords(adaptPairsToMap(voShopLocale.getDisplayMetakeywords()));
-            shopDTO.setDisplayMetadescriptions(adaptPairsToMap(voShopLocale.getDisplayMetadescriptions()));
+            shopDTO.setDisplayTitles(VoUtils.adaptPairsToMap(voShopLocale.getDisplayTitles()));
+            shopDTO.setDisplayMetakeywords(VoUtils.adaptPairsToMap(voShopLocale.getDisplayMetakeywords()));
+            shopDTO.setDisplayMetadescriptions(VoUtils.adaptPairsToMap(voShopLocale.getDisplayMetadescriptions()));
             dtoShopService.update(shopDTO);
         }
         return getShopLocale(voShopLocale.getShopId());
@@ -157,7 +161,8 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopUrl getShopUrls(long shopId) throws Exception {
-        if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(shopId).getCode())) {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final List<ShopUrlDTO> shopUrlDTO = dtoShopUrlService.getAllByShopId(shopId);
             final List<VoShopUrlDetail> voShopUrlDetails = new ArrayList<>(shopUrlDTO.size());
             final VoShopUrl voShopUrl = new VoShopUrl();
@@ -173,7 +178,8 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopUrl update(VoShopUrl voShopUrl) throws Exception {
-        if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(voShopUrl.getShopId()).getCode())) {
+        final ShopDTO shopDTO = dtoShopService.getById(voShopUrl.getShopId());
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final List<ShopUrlDTO> originalShopUrlDTOs = dtoShopUrlService.getAllByShopId(voShopUrl.getShopId());
             for (VoShopUrlDetail urlDetail : voShopUrl.getUrls()) {
                 ShopUrlDTO shopUrlDTO = new ShopUrlDTOImpl();
@@ -198,7 +204,8 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
-        if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(shopId).getCode())) {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
             ssc.setShopId(shopId);
             ssc.setAll(getAvailableCurrencies());
@@ -215,7 +222,8 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception {
-        if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(supportedCurrencies.getShopId()).getCode())) {
+        final ShopDTO shopDTO = dtoShopService.getById(supportedCurrencies.getShopId());
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             dtoShopService.updateSupportedCurrencies(
                     supportedCurrencies.getShopId(),
                     StringUtils.join(supportedCurrencies.getSupported().toArray(), ",")
@@ -229,12 +237,12 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLanguages getShopLanguages(long shopId) throws Exception {
-        final String code = dtoShopService.getById(shopId).getCode();
-        if (federationFacade.isShopAccessibleByCurrentManager(code)) {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final VoShopLanguages voShopLanguages = new VoShopLanguages();
             String lng = dtoShopService.getSupportedLanguages(shopId);
             voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() : Arrays.asList(lng.split(",")));
-            voShopLanguages.setAll(adaptMapToPairs(languageService.getLanguageName()));
+            voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
             voShopLanguages.setShopId(shopId);
             return voShopLanguages;
         }
@@ -245,7 +253,8 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception {
-        if (federationFacade.isShopAccessibleByCurrentManager(dtoShopService.getById(voShopLanguages.getShopId()).getCode())) {
+        final ShopDTO shopDTO = dtoShopService.getById(voShopLanguages.getShopId());
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             dtoShopService.updateSupportedLanguages(voShopLanguages.getShopId(),
                     StringUtils.join(voShopLanguages.getSupported().toArray(), ","));
             return getShopLanguages(voShopLanguages.getShopId());
@@ -271,24 +280,6 @@ public class VoShopServiceImpl implements VoShopService {
                 break;
             }
         }
-    }
-
-
-    private List<MutablePair<String, String>> adaptMapToPairs(Map<String, String> map) {
-        final Set<Map.Entry<String, String>> es = map != null ? map.entrySet() : Collections.EMPTY_SET;
-        List<MutablePair<String, String>> rez = new ArrayList<MutablePair<String, String>>(es.size());
-        for (Map.Entry ent : es) {
-            rez.add(MutablePair.of(ent.getKey(), ent.getValue()));
-        }
-        return rez;
-    }
-
-    private Map<String, String> adaptPairsToMap(List<MutablePair<String, String>> pairs) {
-        Map<String, String> map = new HashMap<>(pairs.size());
-        for (MutablePair<String, String> pair : pairs) {
-            map.put(pair.getFirst(), pair.getSecond());
-        }
-        return map;
     }
 
     private List<String> getAvailableCurrencies() {

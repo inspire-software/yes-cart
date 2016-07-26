@@ -1,35 +1,35 @@
 <template [ngIf]="shopLocalization">
 
   <div class="text-right data-control">
-    <data-control [changed]="changed"
-                  [valid]="true"
-                  (saveEvent)="onSaveHandler()"
-                  (discardEvent)="onDiscardEvent()"
-                  (refreshEvent)="onRefreshHandler()"></data-control>
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEvent()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
   <div class="row">
-    <i18n-table title="{{ 'SEO_TITLE' | translate }}"
-                [source]="shopLocalization"
-                value="title"
-                i18n="displayTitles"
-                (dataChanged)="onDataChanged()"></i18n-table>
+    <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                   [source]="shopLocalization"
+                   value="title"
+                   i18n="displayTitles"
+                   (dataChanged)="onDataChanged()"></yc-i18n-table>
   </div>
 
   <div class="row">
-    <i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
-                [source]="shopLocalization"
-                value="metakeywords"
-                i18n="displayMetakeywords"
-                (dataChanged)="onDataChanged()"></i18n-table>
+    <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                   [source]="shopLocalization"
+                   value="metakeywords"
+                   i18n="displayMetakeywords"
+                   (dataChanged)="onDataChanged()"></yc-i18n-table>
   </div>
 
   <div class="row">
-    <i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
-                [source]="shopLocalization"
-                value="metadescription"
-                i18n="displayMetadescriptions"
-                (dataChanged)="onDataChanged()"></i18n-table>
+    <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                   [source]="shopLocalization"
+                   value="metadescription"
+                   i18n="displayMetadescriptions"
+                   (dataChanged)="onDataChanged()"></yc-i18n-table>
   </div>
 
 </template>

@@ -1,11 +1,11 @@
 <template [ngIf]="lang">
 
   <div class="text-right data-control">
-    <data-control [changed]="changed"
-                  [valid]="true"
-                  (saveEvent)="onSaveHandler()"
-                  (discardEvent)="onDiscardEventHandler()"
-                  (refreshEvent)="onRefreshHandler()"></data-control>
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
   <div class="row">

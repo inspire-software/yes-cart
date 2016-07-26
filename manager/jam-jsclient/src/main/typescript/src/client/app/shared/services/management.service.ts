@@ -31,7 +31,7 @@ export class ManagementService {
   private _serviceBaseUrl = Config.API + 'service/management';  // URL to web api
 
   /**
-   * Constrcut management service, which has methods to work with information related to shop(s).
+   * Construct management service, which has methods to work with information related to shop(s).
    * @param http http client.
    */
   constructor (private http: Http) {

@@ -24,11 +24,10 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import { ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent } from './components/index';
 
 @Component({
-  selector: 'shop',
+  selector: 'yc-shop',
   moduleId: module.id,
   templateUrl: 'shop.component.html',
   directives: [TAB_DIRECTIVES, NgIf, ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent],
-  providers: [HTTP_PROVIDERS, ShopService, ShopEventBus]
 })
 
 export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {

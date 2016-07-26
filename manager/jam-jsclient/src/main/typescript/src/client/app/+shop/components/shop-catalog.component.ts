@@ -22,11 +22,10 @@ import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 @Component({
-  selector: 'shop-catalog',
+  selector: 'yc-shop-catalog',
   moduleId: module.id,
   templateUrl: 'shop-catalog.component.html',
   directives: [DataControlComponent, TreeViewComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
-  providers: [ShopService, CategoryService]
 })
 
 /**

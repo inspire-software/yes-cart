@@ -25,6 +25,9 @@
   "PANEL_CUSTOMER_SERVICE_ORDERS": "Orders",
   "PANEL_CUSTOMER_SERVICE_PAYMENTS": "Payments",
   "PANEL_CUSTOMER_SERVICE_CUSTOMERS": "Customers",
+  "PANEL_SHIPPING": "Shipping",
+  "PANEL_SHIPPING_CARRIERS": "Carriers",
+  "PANEL_SHIPPING_LOCATIONS": "Locations",
   "PANEL_PIM": "PIM & Master Catalog",
   "PANEL_PIM_PRODUCTS": "Products",
   "PANEL_SHOPS": "Shops",
@@ -43,5 +46,10 @@
 
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",
-  "SHOP_THEME_CHAIN": "Theme chain"
+  "SHOP_THEME_CHAIN": "Theme chain",
+
+  "LOCATION_COUNRY_CODE": "ISO 3166-1-A2",
+  "LOCATION_COUNRY_ISO": "ISO 3166-1-N",
+  "LOCATION_COUNRY_NAME_LOCAL": "Name (Local)"
+
 }

@@ -31,7 +31,7 @@ export class CategoryService {
   private _serviceBaseUrl = Config.API + 'service/category';  // URL to web api
 
   /**
-   * Constrcut category service, which has methods to work with information related to shop(s).
+   * Construct category service, which has methods to work with information related to shop(s).
    * @param http http client.
    */
   constructor (private http: Http) {
@@ -39,7 +39,7 @@ export class CategoryService {
   }
 
   /**
-   * Get list of all shop, which are accesable to manage or view,
+   * Get list of all categories, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllCategories() {

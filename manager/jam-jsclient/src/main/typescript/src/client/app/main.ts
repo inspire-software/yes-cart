@@ -6,6 +6,8 @@ import { HTTP_PROVIDERS, Http } from '@angular/http';
 import { TRANSLATE_PROVIDERS, TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
+import { ShopEventBus, ShopService, CategoryService, LocationService, ManagementService } from './shared/services/index';
+
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';
 
@@ -23,14 +25,35 @@ bootstrap(AppComponent, [
     provide: APP_BASE_HREF,
     useValue: '<%= APP_BASE %>'
   },
+
   HTTP_PROVIDERS,
+
+  /*
+   * App wide i18n
+   *
+   * Use: {{ 'MODAL_CONFIRM_TITLE' | translate }} or formatted {{ 'MODAL_CONFIRM_DELETE' | translate:{value: urlToDelete} }}
+   */
   {
     provide: TranslateLoader,
     useFactory: (http: Http) => new TranslateStaticLoader(http, 'assets/i18n', '.json'),
     deps: [Http]
   },
   TranslateService,
-  {provide: PLATFORM_PIPES, useValue: TranslatePipe, multi: true}
+  {
+    provide: PLATFORM_PIPES,
+    useValue: TranslatePipe,
+    multi: true
+  },
+
+  /*
+   * App wide services singletons
+   * Do not put these as provider in components as this will cause creation of new instances
+   */
+  ShopEventBus,
+  ShopService,
+  CategoryService,
+  LocationService,
+  ManagementService
 ]);
 
 // In order to start the Service Worker located at "./worker.js"

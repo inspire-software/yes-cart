@@ -20,11 +20,10 @@ import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 
 @Component({
-  selector: 'shop-currency',
+  selector: 'yc-shop-currency',
   moduleId: module.id,
   templateUrl: 'shop-currency.component.html',
   directives: [ NgIf, NgFor, DataControlComponent],
-  providers: [ShopService]
 })
 
 export class ShopCurrencyComponent implements OnInit, OnChanges {

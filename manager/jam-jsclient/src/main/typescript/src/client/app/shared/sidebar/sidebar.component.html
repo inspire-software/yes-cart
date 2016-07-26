@@ -41,8 +41,20 @@
   </accordion-group>
 
   <accordion-group>
+    <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/carriers']">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/locations']">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
-    <shoplist (shopEditTask)="selectCurrentShop($event)"></shoplist>
+    <yc-shop-list (shopEditTask)="selectCurrentShop($event)"></yc-shop-list>
   </accordion-group>
 
 

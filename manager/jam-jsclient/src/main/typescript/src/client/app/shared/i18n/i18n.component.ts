@@ -6,7 +6,7 @@ import {Util} from '../services/index';
 
 
 @Component({
-  selector: 'i18n-table',
+  selector: 'yc-i18n-table',
   moduleId: module.id,
   templateUrl: 'i18n.component.html',
   directives: [NgClass, NgIf, NgFor]

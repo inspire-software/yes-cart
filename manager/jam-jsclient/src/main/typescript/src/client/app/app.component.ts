@@ -17,7 +17,6 @@ import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
   viewProviders: [HTTP_PROVIDERS],
   templateUrl: 'app.component.html',
   directives: [ROUTER_DIRECTIVES, SidebarComponent],
-  providers:  [ShopEventBus],
   pipes: [TranslatePipe]
 })
 export class AppComponent {
