@@ -50,18 +50,18 @@
 
   <div class="row">
     <div class="col-md-6 col-lg-5">
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
+      <ul class="treenodes lvl-1">
+        <li class="treenode" *ngFor="let cat of assigned">{{cat.name}} <a (click)=onAssignedClick(cat)> <i class="fa fa-remove"></i></a></li>
+      </ul>
+    </div>
+    <div class="col-md-6 col-lg-5">
       <h3>{{ 'SHOP_TAB_CATALOG' | translate }}</h3>
       <tree-view [nodes]="nodes"
                  [selectedNode]="selectedNode"
                  (onSelectedChanged)="onSelectNode($event)"
                  (onRequestNodes)="onRequest($event)">
       </tree-view>
-    </div>
-    <div class="col-md-6 col-lg-5">
-      <h3>{{ 'ASSIGNED' | translate }}</h3>
-      <ul class="treenodes lvl-1">
-        <li class="treenode" *ngFor="let cat of assigned">{{cat.name}} <a (click)=onAssignedClick(cat)> <i class="fa fa-remove"></i></a></li>
-      </ul>
     </div>
   </div>
 

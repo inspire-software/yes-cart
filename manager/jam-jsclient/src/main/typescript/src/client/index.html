@@ -16,7 +16,34 @@
 </head>
 <body>
 
-  <yc-app><div id="overlay"><img id="loading" src="<%= APP_BASE %>assets/img/ajax-loader.gif"></div></yc-app>
+  <yc-app>
+    <div class="container gear-top">
+      <div class="row gear-bottom">
+        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
+          <form class="whitebg" name="loginForm" action="" method="GET">
+
+          <div class="text-center clearfix">
+            <a href="http://yes-cart.org" target="_blank">
+              <img border="0" src="<%= APP_BASE %>assets/img/logo-button-100x100.png"/>
+            </a>
+          </div>
+
+          <div class="text-center clearfix">
+            <img border="0" src="<%= APP_BASE %>assets/img/ajax-loader.gif"/>
+          </div>
+
+          <div class="input-group input-sm">
+            Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
+            &copy; YesCart.org 2009 - <script>document.write(new Date().getFullYear())</script>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Plain spinner
+        <div id="overlay"><img id="loading" src="<%= APP_BASE %>assets/img/ajax-loader.gif"></div>
+     -->
+  </yc-app>
 
   <script>
   // function.name (all IE)

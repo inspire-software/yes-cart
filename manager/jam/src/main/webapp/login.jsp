@@ -18,14 +18,14 @@
   --%>
 <html>
 <head>
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>YC - pure eCommerce</title>
     <link href="<c:url value='resources/css/bootstrap.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='resources/css/font-awesome.min.css' />" rel="stylesheet"/>
     <link href="<c:url value='resources/css/main.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/css/login.css' />" rel="stylesheet"/>
+    <%--<link href="<c:url value='resources/css/login.css' />" rel="stylesheet"/>--%>
 </head>
-
 <body>
 <div class="container gear-top">
     <div class="row gear-bottom">

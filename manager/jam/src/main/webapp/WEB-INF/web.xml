@@ -67,6 +67,10 @@
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/j_spring_security_check</url-pattern>
   </filter-mapping>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/j_spring_security_logout</url-pattern>
+  </filter-mapping>
 
 
 
@@ -87,7 +91,10 @@
     <url-pattern>/service/*</url-pattern>
   </servlet-mapping>
 
-
+  <error-page>
+    <error-code>404</error-code>
+    <location>/pages/index.jsp</location>
+  </error-page>
 
 
   <welcome-file-list>

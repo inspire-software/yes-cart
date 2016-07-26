@@ -39,5 +39,9 @@
         <constructor-arg index="0" ref="dtoCategoryService"/>
     </bean>
 
+    <bean id="voManagementService" class="org.yes.cart.service.vo.impl.VoManagementServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+    </bean>
 
 </beans>

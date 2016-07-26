@@ -15,32 +15,56 @@
   ~    See the License for the specific language governing permissions and
   ~    limitations under the License.
   --%>
-
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>JAM Yes cart update manager</title>
-    <link href="<c:url value='/resources/assets/bootstrap.min.css' />" rel="stylesheet"></link>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>YC - pure eCommerce</title>
+    <link href="<c:url value='resources/css/bootstrap.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/font-awesome.min.css' />" rel="stylesheet"/>
+    <link href="<c:url value='resources/css/main.css' />" rel="stylesheet"/>
+    <%--<link href="<c:url value='resources/css/login.css' />" rel="stylesheet"/>--%>
 </head>
 <body>
-
-
 <script type="text/javascript">
     <!--
-    redirectToPage = "<c:url value='/pages/'/>";
-    setTimeout('redirectTo()', 1);
+    redirectToPage = "<c:url value='/resources/index.html'/>";
+    setTimeout('redirectTo()', 100);
     function redirectTo() {
         window.location = redirectToPage;
     }
     //-->
 </script>
 
-<div class="container">
-    <div class="inside">
-        <div class="lang lang-uk"><a class="btn btn-info" href="<c:url value='/pages/' />">Start</a></div>
+<div class="container gear-top">
+    <div class="row gear-bottom">
+        <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
+            <form class="whitebg" name='loginForm' action='<c:url value='/resources/index.html' />' method='GET'>
+
+                <div class="text-center clearfix">
+                    <a href="http://yes-cart.org" target="_blank">
+                        <img border="0" src="<c:url value='resources/assets/img/logo-button-100x100.png'/>"/>
+                    </a>
+                </div>
+
+                <div class="text-center clearfix">
+                    <img border="0" src="<c:url value='resources/assets/img/ajax-loader.gif'/>"/>
+                </div>
+
+                <div class="input-group input-sm pull-right">
+                    <button type="submit"
+                            class="btn btn-block btn-success btn-lg">
+                        <i class="fa fa-arrow-circle-right"></i>
+                    </button>
+                </div>
+
+                <div class="input-group input-sm">
+                    Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
+                    &copy; YesCart.org 2009 - <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-
 </body>
 </html>

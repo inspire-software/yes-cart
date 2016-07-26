@@ -4,6 +4,15 @@
   <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a>
 </div>
 
+
+<div id="sidebar-login">
+  <span>{{ 'LOGGED_IN' | translate: { user: currentUserName } }}</span>
+  <a href="../j_spring_security_logout">
+    <i class="fa fa-power-off "></i>
+  </a>
+</div>
+
+
 <accordion [closeOthers]="true">
 
   <accordion-group>
@@ -55,6 +64,8 @@
   </accordion-group>
 -->
 </accordion>
+
+
 
 <!--
 <ul class="nav in" [closeOthers]="oneAtATime">

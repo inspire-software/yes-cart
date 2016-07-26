@@ -1,0 +1,174 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.domain.vo;
+
+import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.dto.ManagerDTO;
+
+/**
+ * User: Igor Azarny iazarny@yahoo.com
+ * Date: 09-May-2011
+ * Time: 14:12:54
+ */
+@Dto
+public class VoManager {
+
+    private static final long serialVersionUID = 20100421L;
+
+    @DtoField(value = "email", readOnly = true)
+    private String email;
+
+    @DtoField(value = "managerId", readOnly = true)
+    private long managerId;
+
+    @DtoField(value = "firstName", readOnly = true)
+    private String firstName;
+
+    @DtoField(value = "lastName", readOnly = true)
+    private String lastName;
+
+    @DtoField(value = "enabled", readOnly = true)
+    private boolean enabled;
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getManagerId() {
+        return managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getId() {
+        return managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setManagerId(final long managerId) {
+        this.managerId = managerId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEmail(final String email) {
+        this.email = email;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setFirstName(final String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLastName(final String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean getEnabled() {
+        return enabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object otherObj) {
+        if (this == otherObj) {
+            return true;
+        }
+        if (otherObj == null || getClass() != otherObj.getClass()) {
+            return false;
+        }
+
+        final VoManager that = (VoManager) otherObj;
+
+        if (!email.equals(that.email)) {
+            return false;
+        }
+        if (!firstName.equals(that.firstName)) {
+            return false;
+        }
+        if (!lastName.equals(that.lastName)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        int result = email.hashCode();
+        result = 31 * result + firstName.hashCode();
+        result = 31 * result + lastName.hashCode();
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "ManagerDTOImpl{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+}

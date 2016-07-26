@@ -4,4 +4,5 @@
 export * from './shop-event-bus.service';
 export * from './shop.service';
 export * from './category.service';
+export * from './management.service';
 export * from './util';

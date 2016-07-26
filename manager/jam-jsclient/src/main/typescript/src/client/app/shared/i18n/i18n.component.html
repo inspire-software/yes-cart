@@ -11,19 +11,19 @@
 
           <div class="row">
             <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
-            <div class="col-md-6">
+            <div class="col-xs-8 col-md-6">
               <input class="form-control" name="dataValue" type="text" (change)="onDefaultValueChange()" [(ngModel)]="dataValue">
             </div>
           </div>
 
           <div class="row" *ngFor="let row of dataI18n">
-            <div class="col-md-3">
+            <div class="col-xs-3 col-md-3">
               {{row.first}}
             </div>
-            <div class="col-md-6">
+            <div class="col-xs-5 col-md-6">
               {{row.second}}
             </div>
-            <div class="col-md-3">
+            <div class="col-xs-4 col-md-3">
               <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
                 <i class="fa fa-edit"></i>
               </button>
@@ -35,13 +35,13 @@
 
           <div class="row">
 
-            <div class="form-group col-md-3">
+            <div class="form-group col-xs-3 col-md-3">
               <input class="form-control" placeholder="{{ 'LANGUAGE' | translate }}" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-xs-5 col-md-6">
               <input class="form-control" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" autofocus [(ngModel)]="selectedRow.second">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-xs-4 col-md-3">
               <button class="btn btn-circle btn-sm" (click)="onRowAdd()">
                 <i class="fa fa-plus"></i>
               </button>

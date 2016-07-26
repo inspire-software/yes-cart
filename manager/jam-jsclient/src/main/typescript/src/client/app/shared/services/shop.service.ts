@@ -28,7 +28,7 @@ import 'rxjs/Rx';
 @Injectable()
 export class ShopService {
 
-  private _shopUrl = Config.API + 'service/shop';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/shop';  // URL to web api
 
   /**
    * Construct shop service, which has methods to work with information related to shop(s).
@@ -43,7 +43,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getAllShops() {
-    return this.http.get(this._shopUrl + '/all')
+    return this.http.get(this._serviceBaseUrl + '/all')
       .map(res => <ShopVO[]> res.json())
       .catch(this.handleError);
   }
@@ -55,7 +55,7 @@ export class ShopService {
    */
   getShop(id:number) {
     console.debug('ShopService get shop by id ' + id);
-    return this.http.get(this._shopUrl + '/' + id)
+    return this.http.get(this._serviceBaseUrl + '/' + id)
       .map(res => <ShopVO> res.json())
       .catch(this.handleError);
   }
@@ -83,11 +83,11 @@ export class ShopService {
     let options = new RequestOptions({ headers: headers });
 
     if (shop.shopId === 0) {
-      return this.http.put(this._shopUrl, body, options)
+      return this.http.put(this._serviceBaseUrl, body, options)
         .map(res => <ShopVO> res.json())
         .catch(this.handleError);
     } else {
-      return this.http.post(this._shopUrl, body, options)
+      return this.http.post(this._serviceBaseUrl, body, options)
         .map(res => <ShopVO> res.json())
         .catch(this.handleError);
     }
@@ -104,7 +104,7 @@ export class ShopService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._shopUrl + '/online/' + shop.shopId + '/' + state, null, options)
+    return this.http.post(this._serviceBaseUrl + '/online/' + shop.shopId + '/' + state, null, options)
       .map(res => <ShopVO> res.json())
       .catch(this.handleError);
   }
@@ -117,7 +117,7 @@ export class ShopService {
    */
   getShopLocalization(shopId:number) {
     console.debug('ShopService get shop localization info ' + shopId);
-    return this.http.get(this._shopUrl + '/localization/' + shopId)
+    return this.http.get(this._serviceBaseUrl + '/localization/' + shopId)
       .map(res => <ShopLocaleVO> res.json())
       .catch(this.handleError);
   }
@@ -133,7 +133,7 @@ export class ShopService {
     let body = JSON.stringify(shopLocaleVO);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._shopUrl + '/localization', body, options)
+    return this.http.post(this._serviceBaseUrl + '/localization', body, options)
       .map(res => <ShopLocaleVO> res.json())
       .catch(this.handleError);
   }
@@ -144,7 +144,7 @@ export class ShopService {
    * @returns {Observable<R>}
      */
   getShopUrls(id:number) {
-    return this.http.get(this._shopUrl + '/urls/' + id)
+    return this.http.get(this._serviceBaseUrl + '/urls/' + id)
       .map(res => <ShopUrlVO> res.json())
       .catch(this.handleError);
   }
@@ -160,7 +160,7 @@ export class ShopService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._shopUrl + '/urls', body, options)
+    return this.http.post(this._serviceBaseUrl + '/urls', body, options)
       .map(res => <ShopUrlVO> res.json())
       .catch(this.handleError);
 
@@ -172,7 +172,7 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopCurrencies(id:number) {
-    return this.http.get(this._shopUrl + '/currencies/' + id)
+    return this.http.get(this._serviceBaseUrl + '/currencies/' + id)
       .map(res => <ShopSupportedCurrenciesVO> res.json())
       .catch(this.handleError);
   }
@@ -186,7 +186,7 @@ export class ShopService {
     let body = JSON.stringify(curr);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._shopUrl + '/currencies', body, options)
+    return this.http.post(this._serviceBaseUrl + '/currencies', body, options)
       .map(res => <ShopSupportedCurrenciesVO> res.json())
       .catch(this.handleError);
   }
@@ -198,7 +198,7 @@ export class ShopService {
    * @returns {Observable<R>}
    */
   getShopLanguages(id:number) {
-    return this.http.get(this._shopUrl + '/languages/' + id)
+    return this.http.get(this._serviceBaseUrl + '/languages/' + id)
       .map(res => <ShopLanguagesVO> res.json())
       .catch(this.handleError);
   }
@@ -209,7 +209,7 @@ export class ShopService {
    * @returns {Observable<R>}
      */
   getShopCategories(id:number) {
-    return this.http.get(this._shopUrl + '/categories/' + id)
+    return this.http.get(this._serviceBaseUrl + '/categories/' + id)
       .map(res => <CategoryVO[]> res.json())
       .catch(this.handleError);
   }
@@ -225,7 +225,7 @@ export class ShopService {
     console.debug('Save assigned categories ' + body);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._shopUrl + '/categories/' + shopId, body, options)
+    return this.http.post(this._serviceBaseUrl + '/categories/' + shopId, body, options)
       .map(res => <CategoryVO[]> res.json())
       .catch(this.handleError);
   }
@@ -239,7 +239,7 @@ export class ShopService {
     let body = JSON.stringify(curr);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this._shopUrl + '/languages', body, options)
+    return this.http.post(this._serviceBaseUrl + '/languages', body, options)
       .map(res => <ShopLanguagesVO> res.json())
       .catch(this.handleError);
   }
@@ -248,7 +248,10 @@ export class ShopService {
   private handleError (error: any) {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
-    console.error(error);
+    console.error('ShopService Server error: ' + error['message'], error);
+    if (error['message'].indexOf('JSON Parse error')) {
+      return Observable.throw(error['message'] || 'Server error');
+    }
     return Observable.throw(error.json().error || 'Server error');
   }
 

@@ -17,8 +17,6 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.*;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
 

@@ -46,6 +46,11 @@
       authentication-failure-url="/login.jsp?error"
       username-parameter="j_username"
       password-parameter="j_password" />
+
+    <security:logout
+      logout-success-url="/login.jsp?logout"
+      delete-cookies="JSESSIONID"
+      invalidate-session="true"/>
   </security:http>
 
   <!--<bean id="entryPoint"

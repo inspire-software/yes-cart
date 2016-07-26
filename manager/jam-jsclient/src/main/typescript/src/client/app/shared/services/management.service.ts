@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CategoryVO, BasicCategoryVO} from '../model/index';
+import {ManagerVO} from '../model/index';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -26,49 +26,33 @@ import 'rxjs/Rx';
  * Shop service has all methods to work with shop.
  */
 @Injectable()
-export class CategoryService {
+export class ManagementService {
 
-  private _serviceBaseUrl = Config.API + 'service/category';  // URL to web api
+  private _serviceBaseUrl = Config.API + 'service/management';  // URL to web api
 
   /**
-   * Constrcut category service, which has methods to work with information related to shop(s).
+   * Constrcut management service, which has methods to work with information related to shop(s).
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('CategoryService constructed');
+    console.debug('ManagementService constructed');
   }
 
   /**
-   * Get list of all shop, which are accesable to manage or view,
+   * Get current user info,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAllCategories() {
-    return this.http.get(this._serviceBaseUrl + '/all')
-      .map(res => <CategoryVO[]> res.json())
+  getMyself() {
+    return this.http.get(this._serviceBaseUrl + '/myself')
+      .map(res => <ManagerVO> res.json())
       .catch(this.handleError);
   }
 
-  /**
-   * Create category on the fly.
-   * @param newCat name of category
-   * @param parentId parent id
-   * @returns {Observable<R>}
-     */
-  createCategory(newCat:BasicCategoryVO, parentId : number) {
-    var cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
-    let body = JSON.stringify(cat);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.put(this._serviceBaseUrl, body, options)
-      .map(res => <CategoryVO> res.json())
-      .catch(this.handleError);
-  }
 
   private handleError (error:any) {
     // in a real world app, we may send the error to some remote logging infrastructure
     // instead of just logging it to the console
-    console.error('CategoryService Server error: ' + error['message'], error);
+    console.error('ManagementService Server error: ' + error['message'], error);
     if (error['message'].indexOf('JSON Parse error')) {
       return Observable.throw(error['message'] || 'Server error');
     }
