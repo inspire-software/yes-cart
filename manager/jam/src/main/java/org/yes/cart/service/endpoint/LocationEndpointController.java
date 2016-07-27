@@ -54,7 +54,7 @@ public interface LocationEndpointController {
     VoCountry updateCountry(@RequestBody VoCountry voCategory)  throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/country", method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/country/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeCountry(@PathVariable("id") long id) throws Exception;
 
@@ -82,7 +82,7 @@ public interface LocationEndpointController {
 
 
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/state", method = RequestMethod.DELETE,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/state/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeState(@PathVariable("id") long id) throws Exception;
 

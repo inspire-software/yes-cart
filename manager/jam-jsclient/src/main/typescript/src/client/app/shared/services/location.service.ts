@@ -61,32 +61,24 @@ export class LocationService {
 
   /**
    * Create country.
-   * @param newCountry country
-   * @returns {Observable<R>}
-     */
-  createCountry(newCountry:CountryVO) {
-    let body = JSON.stringify(newCountry);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.put(this._serviceBaseUrl + '/country', body, options)
-      .map(res => <CountryVO> res.json())
-      .catch(this.handleError);
-  }
-
-  /**
-   * Update country.
    * @param country country
    * @returns {Observable<R>}
-   */
-  updateCountry(country:CountryVO) {
+     */
+  saveCountry(country:CountryVO) {
+
     let body = JSON.stringify(country);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/country', body, options)
-      .map(res => <CountryVO> res.json())
-      .catch(this.handleError);
+    if (country.countryId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/country', body, options)
+        .map(res => <CountryVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/country', body, options)
+        .map(res => <CountryVO> res.json())
+        .catch(this.handleError);
+    }
   }
 
 
@@ -128,34 +120,24 @@ export class LocationService {
 
   /**
    * Create state.
-   * @param newState state
-   * @returns {Observable<R>}
-   */
-  createState(newState:StateVO) {
-    let body = JSON.stringify(newState);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-
-    return this.http.put(this._serviceBaseUrl + '/state', body, options)
-      .map(res => <StateVO> res.json())
-      .catch(this.handleError);
-  }
-
-  /**
-   * Update state.
    * @param state state
    * @returns {Observable<R>}
    */
-  updateState(state:StateVO) {
+  saveState(state:StateVO) {
     let body = JSON.stringify(state);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/state', body, options)
-      .map(res => <StateVO> res.json())
-      .catch(this.handleError);
+    if (state.stateId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/state', body, options)
+        .map(res => <StateVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/state', body, options)
+        .map(res => <StateVO> res.json())
+        .catch(this.handleError);
+    }
   }
-
 
   /**
    * Remove state.

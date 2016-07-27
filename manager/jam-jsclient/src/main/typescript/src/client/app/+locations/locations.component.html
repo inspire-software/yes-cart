@@ -1,25 +1,33 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</h1>
+    <h1 class="page-header">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }} {{ selectedCountry && (!countryEdit || countryEdit.countryId > 0) ? (' / ' + selectedCountry.name) : '' }}</h1>
   </div>
 
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCountry == null" class="btn btn-circle btn-xl">
+    <form class="pull-left">
+      <input class="filter-input" type="text" name="countryFilter" [(ngModel)]="countryFilter"/>
+    </form>
+
+    <button type="button" (click)="onBackToList()" [disabled]="countryEdit == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-backward"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || selectedCountry == null" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCountry == null" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCountry == null || (countryEdit != null && countryEdit.countryId === 0)" class="btn btn-danger btn-circle btn-xl" >
       <i class="fa fa-remove"></i>
     </button>
 
     <yc-data-control [changed]="changed"
-                     [valid]="true"
+                     [valid]="validForSave"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEventHandler()"
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
@@ -27,12 +35,22 @@
   </div>
 
 
-  <div *ngIf="!countryEdit">
-    <yc-countries [selectedCountry]="selectedCountry" (dataSelected)="onCountrySelected($event)" (dataChange)="onCountryChange($event)"></yc-countries>
+  <div [hidden]="countryEdit">
+    <yc-countries [countries]="countries" [filter]="countryFilter" (dataSelected)="onCountrySelected($event)"></yc-countries>
   </div>
 
-  <div *ngIf="countryEdit">
-    <yc-country [country]="selectedCountry" (dataChanged)="onCountrySelected($event)"></yc-country>
+  <modal id="deleteConfirmationModalDialog"
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+         [valid]="true"
+         (loaded)="deleteConfirmationModalDialogLoaded($event)"
+         (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedCountry ? selectedCountry.name : '') } }}
+  </modal>
+
+  <div [hidden]="!countryEdit">
+    <yc-country [country]="countryEdit" (dataChanged)="onCountryChanged($event)"></yc-country>
   </div>
 
 </div>

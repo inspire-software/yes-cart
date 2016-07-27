@@ -38,7 +38,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   changed:boolean = false;
   existingShop:boolean = false;
 
-  newCategory:BasicCategoryVO = { 'name': '', 'guid': '' };
+  newCategory:BasicCategoryVO;
   editNewCategoryName:ModalComponent;
   newCategoryForm:any;
 
@@ -61,12 +61,17 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
               fb: FormBuilder) {
     console.debug('ShopCatalogComponent constructed');
 
+    this.newCategory = this.newCategoryInstance();
+
     this.newCategoryForm = fb.group({
       'guid': ['', Validators.pattern('[A-Za-z0-9]+')],
       'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
     });
   }
 
+  newCategoryInstance():BasicCategoryVO {
+    return { 'name': '', 'guid': '' };
+  }
 
   formReset():void {
     // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
@@ -288,7 +293,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
 
             this.nodes = this.adaptToTree(this.categories, _assignedIds);
             this.selectedNode = null;
-            this.newCategory = { 'name': '', 'guid': '' };
+            this.newCategory = this.newCategoryInstance();
             this.changed = false;
         }
       );

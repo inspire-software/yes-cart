@@ -18,7 +18,6 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {CountryVO} from './../../shared/model/index';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LocationService} from './../../shared/services/index';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
@@ -32,13 +31,14 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
 
 export class CountriesComponent implements OnInit, OnDestroy {
 
-  private countries:Array<CountryVO>;
+  _countries:Array<CountryVO>;
+  _filter:string;
+
+  filteredCountries:Array<CountryVO>;
 
   @Input() selectedCountry:CountryVO;
 
   @Output() dataSelected: EventEmitter<CountryVO> = new EventEmitter<CountryVO>();
-
-  @Output() dataChange: EventEmitter<CountryVO> = new EventEmitter<CountryVO>();
 
   //paging
   maxSize:number = 5;
@@ -46,32 +46,49 @@ export class CountriesComponent implements OnInit, OnDestroy {
   totalItems:number = 0;
   currentPage:number = 1;
 
-  deleteConfirmationModalDialog:ModalComponent;
-  editModalDialog:ModalComponent;
-
-  constructor(private _locationService:LocationService) {
+  constructor() {
     console.debug('CountriesComponent constructed');
   }
 
   ngOnInit() {
     console.debug('CountriesComponent ngOnInit');
-    this.getAllLocations();
   }
 
-  getAllLocations() {
-    var _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
-      console.debug('CountriesComponent getAllCountries', allcountries);
-      this.countries = allcountries;
-      this.selectedCountry = null;
-      this.totalItems = this.countries.length;
+  @Input()
+  set countries(countries:Array<CountryVO>) {
+    this._countries = countries;
+    this.filterCountries();
+  }
+
+  @Input()
+  set filter(filter:string) {
+    this._filter = filter;
+    this.filterCountries();
+  }
+
+  private filterCountries() {
+    if (this._filter) {
+      this.filteredCountries = this._countries.filter(country =>
+          country.countryCode.indexOf(this._filter) !== -1 ||
+          country.name.indexOf(this._filter) !== -1 ||
+          country.displayName && country.displayName.indexOf(this._filter) !== -1
+      );
+    } else {
+      this.filteredCountries = this._countries;
+    }
+
+    // This causes Exception if page is > 1 in DEV mode, see https://github.com/angular/angular/issues/6005
+    let _total = this.filteredCountries.length;
+    if (_total < this.itemsPerPage * this.currentPage) {
       this.currentPage = 1;
-      _sub.unsubscribe();
-      this.dataSelected.emit(this.selectedCountry);
-    });
+    }
+    this.totalItems = _total;
   }
 
   ngOnDestroy() {
     console.debug('CountriesComponent ngOnDestroy');
+    this.selectedCountry = null;
+    this.dataSelected.emit(null);
   }
 
   protected onSelectRow(row:CountryVO) {
@@ -83,69 +100,5 @@ export class CountriesComponent implements OnInit, OnDestroy {
     }
     this.dataSelected.emit(this.selectedCountry);
   }
-
-  protected onRefreshHandler() {
-    console.debug('CountriesComponent refresh handler');
-    this.getAllLocations();
-  }
-
-
-  protected onRowNew() {
-    console.debug('CountriesComponent onRowNew handler');
-    //this.formReset();
-    //this.urlToEdit = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
-    this.editModalDialog.show();
-  }
-
-  protected onRowDelete(row:CountryVO) {
-    console.debug('CountriesComponent onRowDelete handler', row);
-    this.deleteConfirmationModalDialog.show();
-  }
-
-  protected onRowDeleteSelected() {
-    if (this.selectedCountry != null) {
-      this.onRowDelete(this.selectedCountry);
-    }
-  }
-
-
-  protected onRowEdit(row:CountryVO) {
-    console.debug('CountriesComponent onRowEdit handler', row);
-    //this.formReset();
-    //this.validForSave = false;
-    //this.urlToEdit = Util.clone(row) ;
-    this.editModalDialog.show();
-  }
-
-  protected onRowEditSelected() {
-    if (this.selectedCountry != null) {
-      this.onRowEdit(this.selectedCountry);
-    }
-  }
-
-  protected deleteConfirmationModalDialogLoaded(modal: ModalComponent) {
-    console.debug('CountriesComponent deleteConfirmationModalDialogLoaded');
-    // Here you get a reference to the modal so you can control it programmatically
-    this.deleteConfirmationModalDialog = modal;
-  }
-
-  protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('CountriesComponent onDeleteConfirmationResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      console.debug('ShopUrlComponent onDeleteConfirmationResult', this.selectedCountry);
-
-      var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe( res => {
-        console.debug('CountriesComponent removeCountry', this.selectedCountry);
-        let idx = this.countries.indexOf(this.selectedCountry);
-        this.countries.splice(idx, 1);
-        this.selectedCountry = null;
-        this.totalItems = this.countries.length;
-        this.currentPage = 1;
-        _sub.unsubscribe();
-        this.dataSelected.emit(this.selectedCountry);
-      });
-    }
-  }
-
 
 }

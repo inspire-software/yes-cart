@@ -15,31 +15,66 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
+import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CountryVO} from './../../shared/model/index';
 import {Router, ActivatedRoute} from '@angular/router';
-import {LocationService} from './../../shared/services/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 
 @Component({
   selector: 'yc-country',
   moduleId: module.id,
-  templateUrl: 'countries.component.html',
-  directives: [NgIf, PaginationComponent, ModalComponent],
+  templateUrl: 'country.component.html',
+  directives: [NgIf, REACTIVE_FORM_DIRECTIVES],
 })
 
 export class CountryComponent implements OnInit, OnDestroy {
 
-  countryEdit:CountryVO;
+  _country:CountryVO;
 
-  @Input() country:CountryVO;
+  @Output() dataChanged: EventEmitter<any> = new EventEmitter<any>();
 
-  @Output() dataChanged: EventEmitter<CountryVO> = new EventEmitter<CountryVO>();
+  validForSave:boolean = false;
 
-  constructor(private _locationService:LocationService) {
+  countryForm:any;
+
+  constructor(fb: FormBuilder) {
     console.debug('CountryComponent constructed');
+
+    this.countryForm = fb.group({
+      'countryCode': ['', Validators.compose([Validators.required, Validators.pattern('[A-Z]{2}')])],
+      'isoCode': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]{3}')])],
+      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'displayName': ['', Validators.pattern('\\S+.*\\S+')],
+    });
+
+  }
+
+  formReset():void {
+    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
+    for(let key in this.countryForm.controls) {
+      this.countryForm.controls[key]['_pristine'] = true;
+      this.countryForm.controls[key]['_touched'] = false;
+    }
+  }
+
+  @Input()
+  set country(country:CountryVO) {
+    this._country = country;
+    this.formReset();
+  }
+
+  get country():CountryVO {
+    return this._country;
+  }
+
+  onDataChange(event:any) {
+    var _sub:any = this.countryForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.countryForm.valid;
+      console.debug('CountryComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
+      _sub.unsubscribe();
+      this.dataChanged.emit({ country: this._country, valid: this.validForSave });
+    });
+    console.debug('CountryComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   ngOnInit() {
@@ -48,10 +83,6 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.debug('CountryComponent ngOnDestroy');
-  }
-
-  protected onRefreshHandler() {
-    console.debug('CountryComponent refresh handler');
   }
 
 }

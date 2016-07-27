@@ -51,8 +51,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
 
   selectedRow:UrlVO;
 
-  urlToDelete:string;
-  urlToEdit:UrlVO = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false} ;
+  urlToEdit:UrlVO;
 
   shopUrlForm:any;
 
@@ -65,6 +64,8 @@ export class ShopUrlComponent implements OnInit, OnChanges {
               fb: FormBuilder) {
     console.debug('ShopUrlComponent constructed');
 
+    this.urlToEdit = this.newUrlInstance();
+
     this.shopUrlForm = fb.group({
       'url': ['', Validators.compose([Validators.required, YcValidators.validDomainName])],
       'theme': [''],
@@ -73,6 +74,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
 
   }
 
+  newUrlInstance():UrlVO {
+    return {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
+  }
 
   formReset():void {
     // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
@@ -99,7 +103,6 @@ export class ShopUrlComponent implements OnInit, OnChanges {
    */
   protected onRowDelete(row:UrlVO) {
     console.debug('ShopUrlComponent onRowDelete handler', row);
-    this.urlToDelete = row.url;
     this.deleteConfirmationModalDialog.show();
   }
 
@@ -155,7 +158,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     console.debug('ShopUrlComponent onRowNew handler');
     this.formReset();
     this.validForSave = false;
-    this.urlToEdit = {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
+    this.urlToEdit = this.newUrlInstance();
     this.editModalDialog.show();
   }
 
@@ -210,7 +213,8 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
     console.debug('ShopUrlComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.url === this.urlToDelete;} );
+      let urlToDelete = this.selectedRow.url;
+      let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.url === urlToDelete;} );
       console.debug('ShopUrlComponent onDeleteConfirmationResult index in array of urls ' + idx);
       this.shopUrl.urls.splice(idx, 1);
       this.selectedRow = null;

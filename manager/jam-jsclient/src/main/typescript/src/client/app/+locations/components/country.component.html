@@ -1,48 +1,39 @@
-<div>
-
-  <div class="text-right data-control">
-
-
-  </div>
-
-  <section class="no-more-tables">
-    <table class="table-bordered table-striped table-condensed cf">
-      <thead class="cf">
-      <tr>
-        <th>{{ 'LOCATION_COUNRY_CODE' | translate }}</th>
-        <th>{{ 'LOCATION_COUNRY_ISO' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let row of countries; let i = index" class="{{row == selectedCountry ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
-          <td title="{{ 'LOCATION_COUNRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
-          <td title="{{ 'LOCATION_COUNRY_ISO' | translate }}"><a (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName == null || row.displayName == '' ? '-' : row.displayName}}</a></td>
-        </template>
-      </tr>
-      </tbody>
-    </table>
-  </section>
+<template [ngIf]="country">
 
   <div>
-    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [(ngModel)]="currentPage" class="pagination-sm"
-                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+    <div class="col-md-9 col-lg-6">
+      <div class="panel-body">
+        <form role="form" [formGroup]="countryForm">
+          <fieldset>
+            <div class="form-group">
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="country.countryCode" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['countryCode'].valid || countryForm.controls['countryCode'].pristine" class="alert alert-danger">
+                {{ 'VALIDATION_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_ISO' | translate }}" formControlName="isoCode" name="isoCode" type="text" [(ngModel)]="country.isoCode" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['isoCode'].valid || countryForm.controls['isoCode'].pristine" class="alert alert-danger">
+                {{ 'VALIDATION_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  autofocus  [(ngModel)]="country.name" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['name'].valid || countryForm.controls['name'].pristine" class="alert alert-danger">
+                {{ 'VALIDATION_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text"  autofocus  [(ngModel)]="country.displayName" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['displayName'].valid || countryForm.controls['displayName'].pristine" class="alert alert-danger">
+                {{ 'VALIDATION_REQUIRED' | translate }}
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
   </div>
 
-
-  <modal id="deleteConfirmationModalDialog"
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (loaded)="deleteConfirmationModalDialogLoaded($event)"
-         (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedCountry ? selectedCountry.name : '') } }}
-  </modal>
-
-
-</div>
+</template>

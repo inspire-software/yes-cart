@@ -11,7 +11,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of countries; let i = index" class="{{row == selectedCountry ? 'active' : ''}}">
+      <tr *ngFor="let row of filteredCountries; let i = index" class="{{row == selectedCountry ? 'active' : ''}}">
         <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
           <td title="{{ 'LOCATION_COUNRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
           <td title="{{ 'LOCATION_COUNRY_ISO' | translate }}"><a (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
@@ -27,17 +27,5 @@
     <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [(ngModel)]="currentPage" class="pagination-sm"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
   </div>
-
-
-  <modal id="deleteConfirmationModalDialog"
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (loaded)="deleteConfirmationModalDialogLoaded($event)"
-         (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedCountry ? selectedCountry.name : '') } }}
-  </modal>
-
 
 </div>

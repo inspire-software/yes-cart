@@ -18,7 +18,6 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.CountryDTO;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -26,7 +25,7 @@ import org.yes.cart.domain.dto.CountryDTO;
  * Time: 14:12:54
  */
 @Dto
-public class VoCountry implements CountryDTO {
+public class VoCountry {
 
     private static final long serialVersionUID = 20101108L;
 
@@ -46,90 +45,44 @@ public class VoCountry implements CountryDTO {
     private String displayName;
 
 
-    /**
-     * {@inheritDoc}
-     */
     public long getCountryId() {
         return countryId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public long getId() {
-        return countryId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void setCountryId(final long countryId) {
         this.countryId = countryId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getCountryCode() {
         return countryCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getIsoCode() {
         return isoCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setIsoCode(final String isoCode) {
         this.isoCode = isoCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setName(final String name) {
         this.name = name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getDisplayName() {
         return displayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
-    @Override
-    public String toString() {
-        return "CountryDTOImpl{" +
-                "countryId=" + countryId +
-                ", countryCode='" + countryCode + '\'' +
-                ", isoCode='" + isoCode + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }

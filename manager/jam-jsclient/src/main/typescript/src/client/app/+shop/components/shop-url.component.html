@@ -62,7 +62,7 @@
          [valid]="true"
          (loaded)="deleteConfirmationModalDialogLoaded($event)"
          (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: urlToDelete} }}
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.url : '') } }}
   </modal>
 
   <modal id="editModalDialog"

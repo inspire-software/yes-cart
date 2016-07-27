@@ -19,6 +19,11 @@ ul {
   box-sizing: border-box;
 }
 
+/* Make sure hidden is really hidden */
+[hidden] {
+  display: none !important;
+}
+
 body {
   background-color: #f8f8f8;
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -418,12 +423,29 @@ table.dataTable thead .sorting:after {
 /* **************** EOF LOADING SCREEN ********************************************** */
 
 
+/* **************** CONTROL BUTTONS ************************************************* */
+
 .data-control {
   margin: 5px 5px;
-  height: 80px;
+  min-height: 80px;
 }
 
-/* **************** FORM VALIDATION ********************************************** */
+.data-control .filter-input {
+  width: 200px;
+  height: 70px;
+  padding: 10px 16px;
+  border-radius: 35px;
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.data-control .filter-input:focus {
+  outline: none;
+}
+
+/* **************** EOF CONTROL BUTTONS ********************************************* */
+
+/* **************** FORM VALIDATION ************************************************* */
 
 .form-control.ng-valid,
 .ng-valid[required] {
@@ -505,8 +527,6 @@ table {
     left: -9999px;
   }
 
-  section.no-more-tables tr { border: 1px solid #ccc; }
-
   section.no-more-tables td {
     /* Behave  like a "row" */
     border: none;
@@ -516,6 +536,8 @@ table {
     white-space: normal;
     text-align:left;
   }
+
+  section.no-more-tables tr td:first-child { border-top: 3px solid #ccc; }
 
   section.no-more-tables td:before {
     /* Now like a table header */

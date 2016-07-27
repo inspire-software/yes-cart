@@ -26,7 +26,7 @@ import org.yes.cart.domain.dto.StateDTO;
  * Time: 14:12:54
  */
 @Dto
-public class VoState implements StateDTO {
+public class VoState {
 
     private static final long serialVersionUID = 20101108L;
 
@@ -45,77 +45,42 @@ public class VoState implements StateDTO {
     @DtoField(value = "displayName")
     private String displayName;
 
-    /**
-     * {@inheritDoc}
-     */
     public long getStateId() {
         return stateId;
     }
 
-    /** {@inheritDoc}*/
-    public long getId() {
-        return stateId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void setStateId(final long stateId) {
         this.stateId = stateId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getCountryCode() {
         return countryCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getStateCode() {
         return stateCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public String getDisplayName() {
         return displayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setDisplayName(final String displayName) {
         this.displayName = displayName;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public void setName(final String name) {
         this.name = name;
     }
