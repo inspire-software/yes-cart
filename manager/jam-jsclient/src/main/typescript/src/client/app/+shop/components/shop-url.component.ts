@@ -39,9 +39,15 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   itemsPerPage:number = 10;
   totalItems:number = 0;
   currentPage:number = 1;
+  // Must use separate variables (not currentPage) for table since that causes
+  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
+  pageStart:number = 0;
+  pageEnd:number = this.itemsPerPage;
 
 
   shopUrl:ShopUrlVO;
+  private urlFilter:string;
+  filteredShopUrl:Array<UrlVO>;
 
   changed:boolean = false;
   validForSave:boolean = false;
@@ -162,6 +168,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.editModalDialog.show();
   }
 
+  onFilterChange(event:any) {
+    this.filterUrls();
+  }
 
   onDataChange(event:any) {
     var _sub:any = this.shopUrlForm.valueChanges.subscribe((data:any) => {
@@ -180,8 +189,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
             this.shopUrl = rez;
             this.changed = false;
             this.selectedRow = null;
-            this.totalItems = this.shopUrl.urls.length;
-            this.currentPage = 1;
+            this.filterUrls();
             console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
             _sub.unsubscribe();
         }
@@ -217,6 +225,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
       let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.url === urlToDelete;} );
       console.debug('ShopUrlComponent onDeleteConfirmationResult index in array of urls ' + idx);
       this.shopUrl.urls.splice(idx, 1);
+      this.filterUrls();
       this.selectedRow = null;
       this.changed = true;
     }
@@ -236,6 +245,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
       }
       this.selectedRow = this.urlToEdit;
       this.changed = true;
+      this.filterUrls();
     }
   }
 
@@ -253,15 +263,60 @@ export class ShopUrlComponent implements OnInit, OnChanges {
         this.changed = false;
         this.selectedRow = null;
 
-        this.totalItems = this.shopUrl.urls.length;
-        this.currentPage = 1;
+        this.filterUrls();
         console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
 
       });
     } else {
       this.shopUrl = null;
+      this.filteredShopUrl = [];
       this.selectedRow = null;
     }
   }
+
+  private filterUrls() {
+    let _filter = this.urlFilter ? this.urlFilter.toLowerCase() : null;
+    if (_filter) {
+      this.filteredShopUrl = this.shopUrl.urls.filter(url =>
+        url.url.toLowerCase().indexOf(_filter) !== -1 ||
+        url.theme && url.theme.toLowerCase().indexOf(_filter) !== -1
+      );
+      console.debug('ShopUrlComponent filterUrls', _filter);
+    } else {
+      this.filteredShopUrl = this.shopUrl.urls;
+      console.debug('ShopUrlComponent filterUrls no filter');
+    }
+
+    if (this.filteredShopUrl === null) {
+      this.filteredShopUrl = [];
+    }
+
+    let _total = this.filteredShopUrl.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
+
+  resetLastPageEnd() {
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
+  onPageChanged(event:any) {
+    this.pageStart = (event.page - 1) * this.itemsPerPage;
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
 
 }

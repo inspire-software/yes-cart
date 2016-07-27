@@ -16,22 +16,28 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {Router, ActivatedRoute} from '@angular/router';
 import {LocationService, Util} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {CountriesComponent, CountryComponent} from './components/index';
+import {CountriesComponent, CountryComponent, StatesComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CountryVO} from './../shared/model/index';
+import {CountryVO, StateVO} from './../shared/model/index';
 
 @Component({
   selector: 'yc-locations',
   moduleId: module.id,
   templateUrl: 'locations.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, CountriesComponent, CountryComponent, ModalComponent, DataControlComponent ],
+  directives: [TAB_DIRECTIVES, NgIf, CountriesComponent, CountryComponent, StatesComponent, ModalComponent, DataControlComponent ],
 })
 
 export class LocationsComponent implements OnInit, OnDestroy {
+
+  private static COUNTRIES:string = 'countries';
+  private static COUNTRY:string = 'country';
+  private static STATES:string = 'states';
+  private static STATE:string = 'state';
+
+  private viewMode:string = LocationsComponent.COUNTRIES;
 
   private countries:Array<CountryVO> = [];
   private countryFilter:string;
@@ -42,6 +48,15 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   deleteConfirmationModalDialog:ModalComponent;
 
+  private states:Array<StateVO> = [];
+  private stateFilter:string;
+
+  private selectedState:StateVO;
+
+  private stateEdit:StateVO;
+
+  private deleteValue:String;
+
   constructor(private _locationService:LocationService) {
     console.debug('LocationsComponent constructed');
   }
@@ -51,6 +66,10 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   newCountryInstance():CountryVO {
     return { countryId: 0, countryCode: '',  isoCode: '', name: '', displayName: '' };
+  }
+
+  newStateInstance():StateVO {
+    return { stateId: 0, countryCode: '', stateCode: '', name: '', displayName: ''};
   }
 
   ngOnInit() {
@@ -69,20 +88,43 @@ export class LocationsComponent implements OnInit, OnDestroy {
       this.countries = allcountries;
       this.selectedCountry = null;
       this.countryEdit = null;
+      this.viewMode = LocationsComponent.COUNTRIES;
       this.changed = false;
       this.validForSave = false;
       _sub.unsubscribe();
     });
   }
 
-  protected onRefreshHandler() {
-    console.debug('LocationsComponent refresh handler');
-    this.getAllLocations();
+  getAllStates() {
+    if (this.selectedCountry != null) {
+      var _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
+        console.debug('LocationsComponent getAllStates', allstates);
+        this.states = allstates;
+        this.selectedState = null;
+        this.stateEdit = null;
+        this.viewMode = LocationsComponent.STATES;
+        this.changed = false;
+        this.validForSave = false;
+        _sub.unsubscribe();
+      });
+    }
   }
 
-  onCountrySelected(data:any) {
+  protected onRefreshHandler() {
+    console.debug('LocationsComponent refresh handler');
+    if (this.viewMode === LocationsComponent.COUNTRIES ||
+        this.viewMode === LocationsComponent.COUNTRY ||
+        this.selectedCountry == null) {
+      this.getAllLocations();
+    } else {
+      this.getAllStates();
+    }
+  }
+
+  onCountrySelected(data:CountryVO) {
     console.debug('LocationsComponent onCountrySelected', data);
     this.selectedCountry = data;
+    this.stateFilter = '';
   }
 
   onCountryChanged(data:any) {
@@ -92,40 +134,93 @@ export class LocationsComponent implements OnInit, OnDestroy {
     this.countryEdit = data.country;
   }
 
+  onStateSelected(data:StateVO) {
+    console.debug('LocationsComponent onStateSelected', data);
+    this.selectedState = data;
+  }
+
+  onStateChanged(data:any) {
+    console.debug('LocationsComponent onStateChanged', data);
+    this.changed = true;
+    this.validForSave = data.valid;
+    this.stateEdit = data.state;
+  }
+
   protected onBackToList() {
     console.debug('LocationsComponent onBackToList handler');
-    this.countryEdit = null;
+    if (this.viewMode === LocationsComponent.STATE) {
+      this.stateEdit = null;
+      this.viewMode = LocationsComponent.STATES;
+    } else if (this.viewMode === LocationsComponent.STATES) {
+      this.viewMode = LocationsComponent.COUNTRIES;
+    } else if (this.viewMode === LocationsComponent.COUNTRY) {
+      this.countryEdit = null;
+      this.viewMode = LocationsComponent.COUNTRIES;
+    }
   }
 
   protected onRowNew() {
     console.debug('LocationsComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
-    this.countryEdit = this.newCountryInstance();
+    if (this.viewMode === LocationsComponent.COUNTRIES) {
+      this.countryEdit = this.newCountryInstance();
+      this.viewMode = LocationsComponent.COUNTRY;
+    } else if (this.viewMode === LocationsComponent.STATES) {
+      this.stateEdit = this.newStateInstance();
+      this.viewMode = LocationsComponent.STATE;
+    }
   }
 
-  protected onRowDelete(row:CountryVO) {
+  protected onRowDelete(row:any) {
     console.debug('LocationsComponent onRowDelete handler', row);
+    this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
 
   protected onRowDeleteSelected() {
-    if (this.selectedCountry != null) {
+    if (this.selectedState != null) {
+      this.onRowDelete(this.selectedState);
+    } else if (this.selectedCountry != null) {
       this.onRowDelete(this.selectedCountry);
     }
   }
 
 
-  protected onRowEdit(row:CountryVO) {
-    console.debug('LocationsComponent onRowEdit handler', row);
-    this.countryEdit = Util.clone(this.selectedCountry);
+  protected onRowEditCountry(row:CountryVO) {
+    console.debug('LocationsComponent onRowEditCountry handler', row);
+    this.countryEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
+    this.viewMode = LocationsComponent.COUNTRY;
+  }
+
+  protected onRowEditState(row:StateVO) {
+    console.debug('LocationsComponent onRowEditState handler', row);
+    this.stateEdit = Util.clone(row);
+    this.changed = false;
+    this.validForSave = false;
+    this.viewMode = LocationsComponent.STATE;
   }
 
   protected onRowEditSelected() {
+    if (this.selectedState != null) {
+      this.onRowEditState(this.selectedState);
+    } else if (this.selectedCountry != null) {
+      this.onRowEditCountry(this.selectedCountry);
+    }
+  }
+
+
+  protected onRowList(row:CountryVO) {
+    console.debug('LocationsComponent onRowList handler', row);
+    this.getAllStates();
+  }
+
+
+  protected onRowListSelected() {
     if (this.selectedCountry != null) {
-      this.onRowEdit(this.selectedCountry);
+      this.onRowList(this.selectedCountry);
     }
   }
 
@@ -149,6 +244,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
               this.changed = false;
               this.selectedCountry = rez;
               this.countryEdit = null;
+              this.viewMode = LocationsComponent.COUNTRIES;
               _sub.unsubscribe();
             }
         );
@@ -173,17 +269,33 @@ export class LocationsComponent implements OnInit, OnDestroy {
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
     console.debug('LocationsComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      console.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
 
-      var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe( res => {
-        console.debug('LocationsComponent removeCountry', this.selectedCountry);
-        let idx = this.countries.indexOf(this.selectedCountry);
-        this.countries.splice(idx, 1);
-        this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
-        this.selectedCountry = null;
-        this.countryEdit = null;
-        _sub.unsubscribe();
-      });
+      if (this.selectedState != null) {
+        console.debug('LocationsComponent onDeleteConfirmationResult', this.selectedState);
+
+        var _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
+          console.debug('LocationsComponent removeState', this.selectedState);
+          let idx = this.states.indexOf(this.selectedState);
+          this.states.splice(idx, 1);
+          this.states = this.states.slice(0, this.states.length); // reset to propagate changes
+          this.selectedState = null;
+          this.stateEdit = null;
+          _sub.unsubscribe();
+        });
+
+      } else if (this.selectedCountry) {
+        console.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
+
+        var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
+          console.debug('LocationsComponent removeCountry', this.selectedCountry);
+          let idx = this.countries.indexOf(this.selectedCountry);
+          this.countries.splice(idx, 1);
+          this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
+          this.selectedCountry = null;
+          this.countryEdit = null;
+          _sub.unsubscribe();
+        });
+      }
     }
   }
 

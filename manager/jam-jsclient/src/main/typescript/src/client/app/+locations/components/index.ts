@@ -3,4 +3,5 @@
  */
 export * from './countries.component';
 export * from './country.component';
+export * from './states.component';
 

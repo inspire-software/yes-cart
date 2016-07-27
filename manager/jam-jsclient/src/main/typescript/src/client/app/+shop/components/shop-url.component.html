@@ -2,6 +2,10 @@
 
   <div class="text-right data-control">
 
+    <form class="pull-left">
+      <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="urlFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+    </form>
+
     <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-circle btn-xl">
       <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}"></i>
     </button>
@@ -37,8 +41,8 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let row of shopUrl.urls; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= (itemsPerPage * (currentPage - 1)) ) && ( i < (itemsPerPage * currentPage) )">
+      <tr *ngFor="let row of filteredShopUrl; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'SHOP_URL' | translate }}"><a (click)="onSelectRow(row)">{{row.url}}</a></td>
           <td title="{{ 'SHOP_THEME_CHAIN' | translate }}"><a (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
           <td title="{{ 'SHOP_URL_PRIMARY' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
@@ -48,9 +52,9 @@
     </table>
   </section>
 
-  <div class="row">
-      <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [(ngModel)]="currentPage" class="pagination-sm"
-                  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
   </div>
 
 

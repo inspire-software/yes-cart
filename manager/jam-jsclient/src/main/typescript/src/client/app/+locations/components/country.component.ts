@@ -17,7 +17,6 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CountryVO} from './../../shared/model/index';
-import {Router, ActivatedRoute} from '@angular/router';
 
 
 @Component({

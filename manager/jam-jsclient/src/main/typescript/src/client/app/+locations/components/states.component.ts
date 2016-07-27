@@ -16,29 +16,28 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {CountryVO} from './../../shared/model/index';
-import {Router, ActivatedRoute} from '@angular/router';
+import {StateVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 
 @Component({
-  selector: 'yc-countries',
+  selector: 'yc-states',
   moduleId: module.id,
-  templateUrl: 'countries.component.html',
+  templateUrl: 'states.component.html',
   directives: [NgIf, PaginationComponent, ModalComponent],
 })
 
-export class CountriesComponent implements OnInit, OnDestroy {
+export class StatesComponent implements OnInit, OnDestroy {
 
-  _countries:Array<CountryVO> = [];
+  _states:Array<StateVO> = [];
   _filter:string;
 
-  filteredCountries:Array<CountryVO>;
+  filteredStates:Array<StateVO>;
 
-  @Input() selectedCountry:CountryVO;
+  @Input() selectedState:StateVO;
 
-  @Output() dataSelected: EventEmitter<CountryVO> = new EventEmitter<CountryVO>();
+  @Output() dataSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
 
   //paging
   maxSize:number = 5;
@@ -51,43 +50,41 @@ export class CountriesComponent implements OnInit, OnDestroy {
   pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CountriesComponent constructed');
+    console.debug('StatesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('CountriesComponent ngOnInit');
+    console.debug('StatesComponent ngOnInit');
   }
 
   @Input()
-  set countries(countries:Array<CountryVO>) {
-    this._countries = countries;
-    this.filterCountries();
+  set states(countries:Array<StateVO>) {
+    this._states = countries;
+    this.filterStates();
   }
 
   @Input()
   set filter(filter:string) {
     this._filter = filter ? filter.toLowerCase() : null;
-    this.filterCountries();
+    this.filterStates();
   }
 
-  private filterCountries() {
+  private filterStates() {
     if (this._filter) {
-      this.filteredCountries = this._countries.filter(country =>
+      this.filteredStates = this._states.filter(country =>
           country.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
           country.name.toLowerCase().indexOf(this._filter) !== -1 ||
           country.displayName && country.displayName.toLowerCase().indexOf(this._filter) !== -1
       );
-      console.debug('CountriesComponent filterCountries', this._filter);
     } else {
-      this.filteredCountries = this._countries;
-      console.debug('CountriesComponent filterCountries no filter');
+      this.filteredStates = this._states;
     }
 
-    if (this.filteredCountries === null) {
-      this.filteredCountries = [];
+    if (this.filteredStates === null) {
+      this.filteredStates = [];
     }
 
-    let _total = this.filteredCountries.length;
+    let _total = this.filteredStates.length;
     this.totalItems = _total;
     if (_total > 0) {
       this.resetLastPageEnd();
@@ -95,8 +92,8 @@ export class CountriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('CountriesComponent ngOnDestroy');
-    this.selectedCountry = null;
+    console.debug('StatesComponent ngOnDestroy');
+    this.selectedState = null;
     this.dataSelected.emit(null);
   }
 
@@ -119,14 +116,14 @@ export class CountriesComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSelectRow(row:CountryVO) {
-    console.debug('CountriesComponent onSelectRow handler', row);
-    if (row == this.selectedCountry) {
-      this.selectedCountry = null;
+  protected onSelectRow(row:StateVO) {
+    console.debug('StatesComponent onSelectRow handler', row);
+    if (row == this.selectedState) {
+      this.selectedState = null;
     } else {
-      this.selectedCountry = row;
+      this.selectedState = row;
     }
-    this.dataSelected.emit(this.selectedCountry);
+    this.dataSelected.emit(this.selectedState);
   }
 
 }

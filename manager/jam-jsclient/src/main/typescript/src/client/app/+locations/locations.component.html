@@ -1,24 +1,32 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }} {{ selectedCountry && (!countryEdit || countryEdit.countryId > 0) ? (' / ' + selectedCountry.name) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }} {{ selectedCountry && (!countryEdit || countryEdit.countryId > 0) ? (' / ' + selectedCountry.name) + ( selectedState && (!stateEdit || stateEdit.stateId > 0) ? (' / ' + selectedState.name) : '' ) : '' }}</h1>
   </div>
 
 
   <div class="text-right data-control">
 
-    <form class="pull-left">
-      <input class="filter-input" type="text" name="countryFilter" [(ngModel)]="countryFilter"/>
+    <form class="pull-left" [hidden]="viewMode !== 'countries'">
+      <input class="filter-input" type="text" name="countryFilter" [(ngModel)]="countryFilter" autocomplete="off"/>
     </form>
 
-    <button type="button" (click)="onBackToList()" [disabled]="countryEdit == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-backward"></i>
+    <form class="pull-left" [hidden]="viewMode !== 'states'">
+      <input class="filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" autocomplete="off"/>
+    </form>
+
+    <button type="button" (click)="onBackToList()" [disabled]="viewMode === 'countries'" class="btn btn-circle btn-xl">
+      <i class="fa fa-chevron-left"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || selectedCountry == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCountry == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-list"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || stateEdit != null || (selectedCountry == null && selectedState == null)" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null || stateEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
     </button>
 
@@ -35,9 +43,18 @@
   </div>
 
 
-  <div [hidden]="countryEdit">
+  <div [hidden]="viewMode !== 'countries'">
     <yc-countries [countries]="countries" [filter]="countryFilter" (dataSelected)="onCountrySelected($event)"></yc-countries>
   </div>
+
+  <div [hidden]="viewMode !== 'country'">
+    <yc-country [country]="countryEdit" (dataChanged)="onCountryChanged($event)"></yc-country>
+  </div>
+
+  <div [hidden]="viewMode !== 'states'">
+    <yc-states [states]="states" [filter]="stateFilter" (dataSelected)="onStateSelected($event)"></yc-states>
+  </div>
+
 
   <modal id="deleteConfirmationModalDialog"
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
@@ -46,11 +63,8 @@
          [valid]="true"
          (loaded)="deleteConfirmationModalDialogLoaded($event)"
          (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedCountry ? selectedCountry.name : '') } }}
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </modal>
 
-  <div [hidden]="!countryEdit">
-    <yc-country [country]="countryEdit" (dataChanged)="onCountryChanged($event)"></yc-country>
-  </div>
 
 </div>
