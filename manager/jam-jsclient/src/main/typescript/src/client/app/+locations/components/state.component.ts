@@ -16,33 +16,33 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {CountryVO} from './../../shared/model/index';
+import {StateVO} from './../../shared/model/index';
 import {FormValidationEvent} from './../../shared/event/index';
 
 
 @Component({
-  selector: 'yc-country',
+  selector: 'yc-state',
   moduleId: module.id,
-  templateUrl: 'country.component.html',
+  templateUrl: 'state.component.html',
   directives: [NgIf, REACTIVE_FORM_DIRECTIVES],
 })
 
-export class CountryComponent implements OnInit, OnDestroy {
+export class StateComponent implements OnInit, OnDestroy {
 
-  _country:CountryVO;
+  _state:StateVO;
 
-  @Output() dataChanged: EventEmitter<FormValidationEvent<CountryVO>> = new EventEmitter<FormValidationEvent<CountryVO>>();
+  @Output() dataChanged: EventEmitter<FormValidationEvent<StateVO>> = new EventEmitter<FormValidationEvent<StateVO>>();
 
   validForSave:boolean = false;
 
-  countryForm:any;
+  stateForm:any;
 
   constructor(fb: FormBuilder) {
-    console.debug('CountryComponent constructed');
+    console.debug('StateComponent constructed');
 
-    this.countryForm = fb.group({
+    this.stateForm = fb.group({
       'countryCode': ['', Validators.compose([Validators.required, Validators.pattern('[A-Z]{2}')])],
-      'isoCode': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]{3}')])],
+      'stateCode': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
       'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
       'displayName': ['', Validators.pattern('\\S+.*\\S+')],
     });
@@ -51,38 +51,38 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   formReset():void {
     // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.countryForm.controls) {
-      this.countryForm.controls[key]['_pristine'] = true;
-      this.countryForm.controls[key]['_touched'] = false;
+    for(let key in this.stateForm.controls) {
+      this.stateForm.controls[key]['_pristine'] = true;
+      this.stateForm.controls[key]['_touched'] = false;
     }
   }
 
   @Input()
-  set country(country:CountryVO) {
-    this._country = country;
+  set state(state:StateVO) {
+    this._state = state;
     this.formReset();
   }
 
-  get country():CountryVO {
-    return this._country;
+  get state():StateVO {
+    return this._state;
   }
 
   onDataChange(event:any) {
-    var _sub:any = this.countryForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.countryForm.valid;
-      console.debug('CountryComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
+    var _sub:any = this.stateForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.stateForm.valid;
+      console.debug('StateComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
       _sub.unsubscribe();
-      this.dataChanged.emit({ source: this._country, valid: this.validForSave });
+      this.dataChanged.emit({ source: this._state, valid: this.validForSave });
     });
-    console.debug('CountryComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    console.debug('StateComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   ngOnInit() {
-    console.debug('CountryComponent ngOnInit');
+    console.debug('StateComponent ngOnInit');
   }
 
   ngOnDestroy() {
-    console.debug('CountryComponent ngOnDestroy');
+    console.debug('StateComponent ngOnDestroy');
   }
 
 }

@@ -6,6 +6,10 @@
 
   <div class="text-right data-control">
 
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'countries'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+
     <form class="pull-left" [hidden]="viewMode !== 'countries'">
       <input class="filter-input" type="text" name="countryFilter" [(ngModel)]="countryFilter" autocomplete="off"/>
     </form>
@@ -14,11 +18,7 @@
       <input class="filter-input" type="text" name="stateFilter" [(ngModel)]="stateFilter" autocomplete="off"/>
     </form>
 
-    <button type="button" (click)="onBackToList()" [disabled]="viewMode === 'countries'" class="btn btn-circle btn-xl">
-      <i class="fa fa-chevron-left"></i>
-    </button>
-
-    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCountry == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedCountry == null" [hidden]="viewMode === 'states' || viewMode === 'state'" class="btn btn-circle btn-xl">
       <i class="fa fa-list"></i>
     </button>
 
@@ -53,6 +53,10 @@
 
   <div [hidden]="viewMode !== 'states'">
     <yc-states [states]="states" [filter]="stateFilter" (dataSelected)="onStateSelected($event)"></yc-states>
+  </div>
+
+  <div [hidden]="viewMode !== 'state'">
+    <yc-state [state]="stateEdit" (dataChanged)="onStateChanged($event)"></yc-state>
   </div>
 
 
