@@ -2,6 +2,9 @@
   "VALIDATION_REQUIRED": "Correct value is required",
   "VALIDATION_URL": "Valid URL, IP or 'localhost' is required",
 
+  "MODAL_ERROR_TITLE": "ERROR",
+  "MODAL_ERROR_MESSAGE": "The following error had occured",
+  "MODAL_ERROR_LOGGED_OUT": "There was an error on server call, it could be that your session expired and you need to log in",
   "MODAL_CONFIRM_TITLE": "Are you sure?",
   "MODAL_CREATE_TITLE": "Create",
   "MODAL_CONFIRM_DELETE": "Do you really want to delete {{value}} ?",

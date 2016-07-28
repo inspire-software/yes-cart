@@ -19,6 +19,7 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
 import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, CategoryVO} from '../model/index';
+import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -244,15 +245,12 @@ export class ShopService {
       .catch(this.handleError);
   }
 
+  private handleError (error:any) {
 
-  private handleError (error: any) {
-    // in a real world app, we may send the error to some remote logging infrastructure
-    // instead of just logging it to the console
-    console.error('ShopService Server error: ' + error['message'], error);
-    if (error['message'].indexOf('JSON Parse error')) {
-      return Observable.throw(error['message'] || 'Server error');
-    }
-    return Observable.throw(error.json().error || 'Server error');
+    console.error('CategoryService Server error: ' + error['message'], error);
+    ErrorEventBus.getErrorEventBus().emit(error);
+    let message = Util.determineErrorMessage(error);
+    return Observable.throw(message || 'Server error');
   }
 
 }

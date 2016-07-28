@@ -34,4 +34,22 @@ export class Util {
     }
     return arr;
   }
+
+  public static determineErrorMessage(error:any):any {
+    if (error) {
+      let message = error.message;
+      if (message) {
+        return message;
+      }
+      if (typeof(error.json) === 'function') {
+        let json = error.json();
+        if (json && json.error) {
+          return json.error;
+        }
+      }
+      return JSON.stringify(error);
+    }
+    return null;
+  }
+
 }

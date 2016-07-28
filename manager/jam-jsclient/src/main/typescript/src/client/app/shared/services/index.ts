@@ -1,6 +1,7 @@
 /**
  * This barrel file provides the export for the shared NameListService.
  */
+export * from './error-event-bus.service';
 export * from './shop-event-bus.service';
 export * from './shop.service';
 export * from './category.service';

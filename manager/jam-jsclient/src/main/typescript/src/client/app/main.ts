@@ -6,7 +6,7 @@ import { HTTP_PROVIDERS, Http } from '@angular/http';
 import { TRANSLATE_PROVIDERS, TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
-import { ShopEventBus, ShopService, CategoryService, LocationService, ManagementService } from './shared/services/index';
+import { ErrorEventBus, ShopEventBus, ShopService, CategoryService, LocationService, ManagementService } from './shared/services/index';
 
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';
@@ -49,6 +49,7 @@ bootstrap(AppComponent, [
    * App wide services singletons
    * Do not put these as provider in components as this will cause creation of new instances
    */
+  ErrorEventBus,
   ShopEventBus,
   ShopService,
   CategoryService,

@@ -19,6 +19,8 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {CategoryVO, BasicCategoryVO} from '../model/index';
+import {ErrorEventBus} from './error-event-bus.service';
+import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
@@ -66,13 +68,11 @@ export class CategoryService {
   }
 
   private handleError (error:any) {
-    // in a real world app, we may send the error to some remote logging infrastructure
-    // instead of just logging it to the console
+
     console.error('CategoryService Server error: ' + error['message'], error);
-    if (error['message'].indexOf('JSON Parse error')) {
-      return Observable.throw(error['message'] || 'Server error');
-    }
-    return Observable.throw(error.json().error || 'Server error');
+    ErrorEventBus.getErrorEventBus().emit(error);
+    let message = Util.determineErrorMessage(error);
+    return Observable.throw(message || 'Server error');
   }
 
 }

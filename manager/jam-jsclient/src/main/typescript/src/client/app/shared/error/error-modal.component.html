@@ -1,0 +1,16 @@
+
+  <modal id="errorModalDialog"
+         title="{{ 'MODAL_ERROR_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true"
+         (loaded)="errorModalDialogLoaded($event)"
+         (closed)="onErrorResult($event)">
+    <div>
+      {{ 'MODAL_ERROR_MESSAGE' | translate }}
+    </div>
+    <div>
+      <pre style="max-height: 100px; overflow-y: auto">{{ errorString == 'AUTH' ? ( 'MODAL_ERROR_LOGGED_OUT' | translate ) : errorString }}</pre>
+    </div>
+  </modal>
+
