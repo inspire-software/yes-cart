@@ -27,6 +27,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.Mail;
+import org.yes.cart.domain.entity.MailPart;
 import org.yes.cart.domain.entity.impl.MailEntity;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.impl.GroovyGStringTemplateSupportImpl;
@@ -138,8 +139,10 @@ public class MailComposerImplTest {
         mockery.checking(new Expectations() {{
             allowing(provider).getTemplate(chain, shopCode, locale, fileName, ext);
             will(returnValue(template));
-            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
-            allowing(cache).get(includeFunc + template); will(returnValue(null));
+            allowing(cacheManager).getCache("contentService-templateSupport");
+            will(returnValue(cache));
+            allowing(cache).get(includeFunc + template);
+            will(returnValue(null));
             allowing(cache).put(with(equal(includeFunc + template)), with(any(Object.class)));
         }});
 
@@ -193,8 +196,9 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "Bender lives in theme park with blackjack poetess";
         String htmlTemplate = "<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>";
+        Map<String, byte[]> attachments = Collections.emptyMap();
         MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test");
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, attachments, Collections.EMPTY_LIST, "SHOP10", "en", "test");
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -205,6 +209,46 @@ public class MailComposerImplTest {
         assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
         mockery.assertIsSatisfied();
     }
+
+
+    @Test
+    public void testComposeMimeMessageInternalTextAndHtmlVersionWithAttach() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+        }});
+
+        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+
+        // of course you would use DI in any real-world cases
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost("localhost");
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        String textTemplate = "Bender lives in theme park with blackjack poetess";
+        String htmlTemplate = "<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>";
+        Map<String, byte[]> attachments = Collections.singletonMap("attachment:image/jpeg;myimage.jpg", new byte[]{1, 1, 1});
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, attachments, Collections.EMPTY_LIST, "SHOP10", "en", "test");
+        assertTrue(helper.isMultipart());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        helper.getMimeMessage().writeTo(byteArrayOutputStream);
+        String str = byteArrayOutputStream.toString("UTF-8");
+        assertNotNull(str);
+        // html and text present in mail message
+        assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
+        assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        // attachment
+        assertTrue(str.contains("Content-Type: image/jpeg; name=myimage.jpg"));
+        assertTrue(str.contains("Content-Transfer-Encoding: base64"));
+        assertTrue(str.contains("Content-Disposition: attachment; filename=myimage.jpg"));
+        assertTrue(str.contains("AQEB"));
+        mockery.assertIsSatisfied();
+    }
+
 
     /**
      * Text template only
@@ -230,8 +274,9 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = "Bender lives in theme park with blackjack poetess";
         String htmlTemplate = null;
+        Map<String, byte[]> attachments = Collections.emptyMap();
         MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test");
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, attachments, Collections.EMPTY_LIST, "SHOP10", "en", "test");
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -265,8 +310,9 @@ public class MailComposerImplTest {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         String textTemplate = null;
         String htmlTemplate = "<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>";
+        Map<String, byte[]> attachments = Collections.emptyMap();
         MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
-        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, Collections.EMPTY_LIST, "SHOP10", "en", "test");
+        mailComposer.composeMessage(helper, textTemplate, htmlTemplate, attachments, Collections.EMPTY_LIST, "SHOP10", "en", "test");
         assertTrue(helper.isMultipart());
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         helper.getMimeMessage().writeTo(byteArrayOutputStream);
@@ -344,6 +390,14 @@ public class MailComposerImplTest {
         Map<String, Object> model = new HashMap<String, Object>();
         model.put("name", "Bender");
         model.put("with", Arrays.asList("blackjack", "poetess"));
+        return model;
+    }
+
+    private Map<String, Object> createModelWithAttach() {
+        Map<String, Object> model = new HashMap<String, Object>();
+        model.put("name", "Bender");
+        model.put("with", Arrays.asList("blackjack", "poetess"));
+        model.put("attachment:image/jpeg;myimage.jpg", new byte[] { 1, 1, 1 });
         return model;
     }
 
@@ -600,6 +654,130 @@ public class MailComposerImplTest {
 
     }
 
+
+    /**
+     * html only
+     */
+    @Test
+    public void testConvertMailEntityToMimeMessageWithAttach() throws MessagingException, IOException, ClassNotFoundException {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+
+        // of course you would use DI in any real-world cases
+
+        final Mail mail = new MailEntity();
+        mail.setShopCode("SHOP10");
+        mail.setSubject("Тема письма");
+        mail.setFrom("test@localhost.lo");
+        mail.setRecipients("to@somedomain.com");
+        mail.setCc("cc@somedomain.com");
+        mail.setBcc("bcc@somedomain.com");
+        mail.setTextVersion("Bender lives in theme park with blackjack poetess");
+        mail.setHtmlVersion("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>");
+        final MailPart attach = mail.addPart();
+        attach.setFilename("myimage.jpg");
+        attach.setResourceId("attachment:image/jpeg;myimage.jpg");
+        attach.setData(new byte[] { 1, 1, 1 });
+
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setHost("localhost");
+        MimeMessage message = sender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        MailComposerImpl mailComposer = new MailComposerImpl(null, templates);
+        mailComposer.convertMessage(mail, message);
+
+        assertTrue(helper.isMultipart());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        helper.getMimeMessage().writeTo(byteArrayOutputStream);
+        String str = byteArrayOutputStream.toString("UTF-8");
+        assertNotNull(str);
+        // html and text present in mail message
+        assertTrue(str.contains("Bender lives in theme park with blackjack poetess"));
+        assertTrue(str.contains("<h2>Bender</h2> lives in theme park with:<br> blackjack<br>poetess<br>"));
+        assertTrue(str.contains("From: test@localhost.lo"));
+        assertTrue(str.contains("To: to@somedomain.com"));
+        assertTrue(str.contains("cc@somedomain.com"));
+        assertTrue(str.contains("Bcc: bcc@somedomain.com"));
+        assertEquals("Тема письма", message.getSubject());
+        // attachment
+        assertTrue(str.contains("Content-Type: image/jpeg; name=myimage.jpg"));
+        assertTrue(str.contains("Content-Transfer-Encoding: base64"));
+        assertTrue(str.contains("Content-Disposition: attachment; filename=myimage.jpg"));
+        assertTrue(str.contains("AQEB"));
+        mockery.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testCollectAttachments() throws Exception {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+
+        final MailComposerImpl composer = new MailComposerImpl(null, templates);
+
+        final Map<String, Object> model = createModelWithAttach();
+        final Map<String, byte[]> attach = composer.collectAttachments(model);
+
+        assertNotNull(attach);
+        assertFalse(attach.size() == model.size());
+        assertEquals(1, attach.size());
+        assertTrue(attach.entrySet().iterator().next().getKey().startsWith("attachment:"));
+
+    }
+
+    @Test
+    public void testConvertAttachmentKeyIntoContentTypeAndFilename() throws Exception {
+
+        final CacheManager cacheManager = mockery.mock(CacheManager.class);
+        final Cache cache = mockery.mock(Cache.class);
+
+        mockery.checking(new Expectations() {{
+            allowing(cacheManager).getCache("contentService-templateSupport"); will(returnValue(cache));
+            allowing(cache).get("<% \n %>${name} is awesome!"); will(returnValue(null));
+            allowing(cache).put(with(equal("<% \n %>${name} is awesome!")), with(any(Object.class)));
+        }});
+
+        final MailComposerTemplateSupport templates = new MailComposerTemplateSupportGroovyImpl(new GroovyGStringTemplateSupportImpl(cacheManager));
+
+        final MailComposerImpl composer = new MailComposerImpl(null, templates);
+
+        Pair<String, String> ctaf;
+
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename(null);
+        assertNull(ctaf);
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename("random");
+        assertNull(ctaf);
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename("not attach");
+        assertNull(ctaf);
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename("attachment:");
+        assertNull(ctaf);
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename("attachment:image/jpeg");
+        assertNull(ctaf);
+        ctaf = composer.convertAttachmentKeyIntoContentTypeAndFilename("attachment:application/pdf;myfile.pdf");
+        assertNotNull(ctaf);
+        assertEquals("application/pdf", ctaf.getFirst());
+        assertEquals("myfile.pdf", ctaf.getSecond());
+
+    }
 
     @Test
     public void testMergeWithIncludes() throws ClassNotFoundException, IOException {

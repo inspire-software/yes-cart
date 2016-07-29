@@ -17,6 +17,7 @@
 package org.yes.cart.service.mail.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.domain.entity.MailPart;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.service.mail.MailComposerTemplateSupport;
 import org.yes.cart.service.mail.MailTemplateResourcesProvider;
+import org.yes.cart.util.ShopCodeContext;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -52,6 +55,9 @@ import java.util.regex.Pattern;
 public class MailComposerImpl implements MailComposer {
 
     private final Logger LOG = LoggerFactory.getLogger(MailComposerImpl.class);
+
+    private static final String ATTACHMENT_PREFIX = "attachment:";
+    private static final String ATTACHMENT_SUFFIX = ";";
 
     /**
      * Default regular expression.
@@ -142,7 +148,7 @@ public class MailComposerImpl implements MailComposer {
         if (propString != null) {
             prop.load(new StringReader(propString));
         }
-        helper.setSubject(prop.getProperty("subject") );
+        helper.setSubject(prop.getProperty("subject"));
 
         if (from == null) {
             helper.setFrom(prop.getProperty("from"));
@@ -150,8 +156,39 @@ public class MailComposerImpl implements MailComposer {
             helper.setFrom(from);
         }
 
-        composeMessage(helper, textContent, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+        final Map<String, byte[]> attachments = collectAttachments(model);
 
+        composeMessage(helper, textContent, htmlContent, attachments, mailTemplateChain, shopCode, locale, templateName);
+
+    }
+
+    /**
+     * Collect attachments from model using key match
+     *
+     * @param model mail model
+     *
+     * @return map of attachments
+     */
+    Map<String, byte[]> collectAttachments(final Map<String, Object> model) {
+
+        final Map<String, byte[]> attachments = new HashMap<String, byte[]>();
+        for (final String key : model.keySet()) {
+            if (key.startsWith(ATTACHMENT_PREFIX)) {
+
+                final Object attachment = model.get(key);
+                if (attachment instanceof byte[]) {
+
+                    attachments.put(key, (byte[]) attachment);
+
+                } else {
+
+                    ShopCodeContext.getLog(this).error("Invalid attachment in model. Attachments must be of type 'byte[]'");
+
+                }
+
+            }
+        }
+        return attachments;
     }
 
 
@@ -161,11 +198,11 @@ public class MailComposerImpl implements MailComposer {
      * @param helper          mail message helper
      * @param textContent       optional text template
      * @param htmlContent       optional html template
+     * @param attachments       optional attachments
      * @param mailTemplateChain path to template folder
      * @param shopCode        shop code
      * @param locale          locale
      * @param templateName    template name
-     *
      * @throws MessagingException     in case if message can not be composed
      * @throws java.io.IOException    in case of inline resources can not be found
      * @throws ClassNotFoundException in case if something wrong with template engine
@@ -173,6 +210,7 @@ public class MailComposerImpl implements MailComposer {
     void composeMessage(final MimeMessageHelper helper,
                         final String textContent,
                         final String htmlContent,
+                        final Map<String, byte[]> attachments,
                         final List<String> mailTemplateChain,
                         final String shopCode,
                         final String locale,
@@ -187,11 +225,13 @@ public class MailComposerImpl implements MailComposer {
             if (htmlContent != null) {
                 helper.setText(htmlContent, true);
                 inlineResources(helper, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+                addAttachments(helper, attachments);
             }
 
         } else {
             helper.setText(textContent, htmlContent);
             inlineResources(helper, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+            addAttachments(helper, attachments);
         }
 
     }
@@ -233,6 +273,56 @@ public class MailComposerImpl implements MailComposer {
             }
         }
 
+    }
+
+    /**
+     * Convert model key into attachment meta data.
+     *
+     * Example:
+     * attachment:image/jpeg;myimage.jpg
+     *
+     * This produces:
+     * Content Type: image/jpeg
+     * Filename: myimage.jpg
+     *
+     * @param key model key, or null if format is invalid
+     *
+     * @return content type and filename
+     */
+    Pair<String, String> convertAttachmentKeyIntoContentTypeAndFilename(final String key) {
+        try {
+            final String[] contentTypeAndFile = key.substring(ATTACHMENT_PREFIX.length()).split(ATTACHMENT_SUFFIX);
+            return new Pair<String, String>(contentTypeAndFile[0], contentTypeAndFile[1]);
+        } catch (Exception exp) {
+            ShopCodeContext.getLog(this).error("Invalid attachment key {} ... attachment is skipped", key);
+            return null;
+        }
+    }
+
+    /**
+     * Add attachments.
+     *
+     * @param helper mime message helper
+     * @param attachments attachments from model
+     *
+     * @throws MessagingException
+     * @throws IOException
+     */
+    void addAttachments(final MimeMessageHelper helper,
+                        final Map<String, byte[]> attachments) throws MessagingException, IOException {
+
+        if (MapUtils.isNotEmpty(attachments)) {
+
+            for (final Map.Entry<String, byte[]> attach : attachments.entrySet()) {
+
+                final Pair<String, String> contentTypeAndFile = convertAttachmentKeyIntoContentTypeAndFilename(attach.getKey());
+                if (contentTypeAndFile != null) {
+                    helper.addAttachment(contentTypeAndFile.getSecond(), new ByteArrayResource(attach.getValue()), contentTypeAndFile.getFirst());
+                }
+
+            }
+
+        }
     }
 
     /**
@@ -410,8 +500,9 @@ public class MailComposerImpl implements MailComposer {
             mail.setFrom(from);
         }
 
+        final Map<String, byte[]> attachments = collectAttachments(model);
 
-        composeMessage(mail, textContent, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+        composeMessage(mail, textContent, htmlContent, attachments, mailTemplateChain, shopCode, locale, templateName);
 
     }
 
@@ -422,6 +513,7 @@ public class MailComposerImpl implements MailComposer {
      * @param mail            mail message
      * @param textContent       optional text template
      * @param htmlContent       optional html template
+     * @param attachments       optional attachments
      * @param mailTemplateChain path to template folder
      * @param shopCode        shop code
      * @param locale          locale
@@ -434,6 +526,7 @@ public class MailComposerImpl implements MailComposer {
     void composeMessage(final Mail mail,
                         final String textContent,
                         final String htmlContent,
+                        final Map<String, byte[]> attachments,
                         final List<String> mailTemplateChain,
                         final String shopCode,
                         final String locale,
@@ -447,15 +540,47 @@ public class MailComposerImpl implements MailComposer {
             if (htmlContent != null) {
                 mail.setHtmlVersion(htmlContent);
                 inlineResources(mail, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+                addAttachments(mail, attachments);
             }
 
         } else {
             mail.setTextVersion(textContent);
             mail.setHtmlVersion(htmlContent);
             inlineResources(mail, htmlContent, mailTemplateChain, shopCode, locale, templateName);
+            addAttachments(mail, attachments);
         }
 
     }
+
+    /**
+     * Add attachments.
+     *
+     * @param mail mail
+     * @param attachments attachments from model
+     *
+     * @throws MessagingException
+     * @throws IOException
+     */
+    void addAttachments(final Mail mail,
+                        final Map<String, byte[]> attachments) throws MessagingException, IOException {
+
+        if (MapUtils.isNotEmpty(attachments)) {
+
+            for (final Map.Entry<String, byte[]> attach : attachments.entrySet()) {
+
+                final Pair<String, String> contentTypeAndFile = convertAttachmentKeyIntoContentTypeAndFilename(attach.getKey());
+                if (contentTypeAndFile != null) {
+                    final MailPart part = mail.addPart();
+                    part.setFilename(contentTypeAndFile.getSecond());
+                    part.setResourceId(attach.getKey());
+                    part.setData(attach.getValue());
+                }
+
+            }
+
+        }
+    }
+
 
 
     /**
@@ -555,12 +680,19 @@ public class MailComposerImpl implements MailComposer {
             for (final MailPart part : mail.getParts()) {
                 final String fileName = part.getFilename();
                 final String resourceId = part.getResourceId();
-                helper.addInline(resourceId, new ByteArrayResource(part.getData()) {
-                    @Override
-                    public String getFilename() {
-                        return fileName;
+                if (resourceId.startsWith(ATTACHMENT_PREFIX)) {
+                    final Pair<String, String> contentTypeAndFile = convertAttachmentKeyIntoContentTypeAndFilename(resourceId);
+                    if (contentTypeAndFile != null) {
+                        helper.addAttachment(part.getFilename(), new ByteArrayResource(part.getData()), contentTypeAndFile.getFirst());
                     }
-                });
+                } else {
+                    helper.addInline(resourceId, new ByteArrayResource(part.getData()) {
+                        @Override
+                        public String getFilename() {
+                            return fileName;
+                        }
+                    });
+                }
             }
         }
 
