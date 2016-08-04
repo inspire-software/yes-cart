@@ -1,0 +1,49 @@
+<template [ngIf]="locs">
+
+  <div class="text-right data-control">
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+  </div>
+
+  <div class="row">
+    <h2>{{ 'BILLING' | translate }}</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
+      <span *ngFor="let supported of selectedBilling">
+        <a class="btn" (click)=onSupportedBillingClick(supported)>{{supported.second}} ( {{supported.first}} ) <i class="fa fa-remove"></i></a>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
+      <span *ngFor="let available of availableBilling">
+        <a class="btn" (click)=onAvailableBillingClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
+      </span>
+    </div>
+  </div>
+
+  <div class="row">
+    <h2>{{ 'SHIPPING' | translate }}</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
+      <span *ngFor="let supported of selectedShipping">
+        <a class="btn" (click)=onSupportedShippingClick(supported)>{{supported.second}} ( {{supported.first}} ) <i class="fa fa-remove"></i></a>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
+      <span *ngFor="let available of availableShipping">
+        <a class="btn" (click)=onAvailableShippingClick(available)>{{available.second}} ( {{available.first}} ) <i class="fa fa-plus"></i></a>
+      </span>
+    </div>
+  </div>
+
+</template>

@@ -88,3 +88,14 @@ export interface ShopLanguagesVO {
 }
 
 
+/**
+ * Represent supported locations by shop.
+ */
+export interface ShopLocationsVO {
+  shopId : number;
+  all : Array<Pair<string, string>>;
+  supportedBilling : Array<string>;
+  supportedShipping : Array<string>;
+}
+
+

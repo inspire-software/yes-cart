@@ -50,72 +50,82 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     }
 
     public @ResponseBody
-    VoShop getById(@PathVariable("id") long id) throws Exception {
+    VoShop getById(@PathVariable("id") final long id) throws Exception {
         return voShopService.getById(id);
     }
 
     public @ResponseBody
-    VoShop create(@RequestBody VoShop voShop) throws Exception {
+    VoShop create(@RequestBody final VoShop voShop) throws Exception {
         return voShopService.create(voShop);
     }
 
     public @ResponseBody
-    VoShop update(@RequestBody VoShop voShop) throws Exception {
+    VoShop update(@RequestBody final VoShop voShop) throws Exception {
         return voShopService.update(voShop);
     }
 
     public @ResponseBody
-    void remove(@PathVariable("id") long id) throws Exception {
+    void remove(@PathVariable("id") final long id) throws Exception {
         voShopService.remove(id);
     }
 
     public @ResponseBody
-    VoShopLocale getLocalization(@PathVariable("shopId") long shopId) throws Exception {
+    VoShopLocale getLocalization(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLocale(shopId);
     }
 
     public @ResponseBody
-    VoShopLocale update(@RequestBody VoShopLocale voShopLocale) throws Exception {
+    VoShopLocale update(@RequestBody final VoShopLocale voShopLocale) throws Exception {
         return voShopService.update(voShopLocale);
     }
 
     public @ResponseBody
-    VoShopUrl getUrl(@PathVariable("shopId") long shopId) throws Exception {
+    VoShopUrl getUrl(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopUrls(shopId);
     }
 
     public @ResponseBody
-    VoShopUrl update(@RequestBody VoShopUrl voShopUrl)  throws Exception {
+    VoShopUrl update(@RequestBody final VoShopUrl voShopUrl)  throws Exception {
         return voShopService.update(voShopUrl);
     }
 
     public @ResponseBody
-    VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") long shopId) throws Exception {
+    VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopCurrencies(shopId);
     }
 
     public @ResponseBody
-    VoShopSupportedCurrencies update(@RequestBody VoShopSupportedCurrencies supportedCurrencies) throws Exception {
+    VoShopSupportedCurrencies update(@RequestBody final VoShopSupportedCurrencies supportedCurrencies) throws Exception {
         return voShopService.update(supportedCurrencies);
     }
 
     public @ResponseBody
-    VoShopLanguages getLanguage(@PathVariable("shopId") long shopId) throws Exception {
+    VoShopLanguages getLanguage(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLanguages(shopId);
     }
 
     public @ResponseBody
-    VoShopLanguages update(@RequestBody VoShopLanguages langs) throws Exception {
+    VoShopLanguages update(@RequestBody final VoShopLanguages langs) throws Exception {
         return voShopService.update(langs);
     }
 
     public @ResponseBody
-    List<VoCategory> getCategories(@PathVariable("shopId") long shopId) throws Exception {
+    VoShopLocations getLocation(@PathVariable("shopId") final long shopId) throws Exception {
+        return voShopService.getShopLocations(shopId);
+    }
+
+    public @ResponseBody
+    VoShopLocations update(@RequestBody final VoShopLocations vo) throws Exception {
+        return voShopService.update(vo);
+    }
+
+    public @ResponseBody
+    List<VoCategory> getCategories(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopCategoryService.getAllByShopId(shopId);
     }
 
     public @ResponseBody
-    List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception {
+    List<VoCategory> update(@PathVariable("shopId") final long shopId, @RequestBody final List<VoCategory> voCategories) throws Exception {
         return voShopCategoryService.update(shopId, voCategories);
     }
 

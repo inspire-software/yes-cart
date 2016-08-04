@@ -46,10 +46,14 @@
   "SHOP_TAB_CURRENCY": "Currency",
   "SHOP_TAB_LANGUAGE": "Language",
   "SHOP_TAB_CATALOG": "Catalog",
+  "SHOP_TAB_LOCATIONS": "Locations",
 
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",
   "SHOP_THEME_CHAIN": "Theme chain",
+
+  "BILLING": "Billing",
+  "SHIPPING": "Shipping",
 
   "LOCATION_COUNRY_CODE": "ISO 3166-1-A2",
   "LOCATION_COUNRY_ISO": "ISO 3166-1-N",

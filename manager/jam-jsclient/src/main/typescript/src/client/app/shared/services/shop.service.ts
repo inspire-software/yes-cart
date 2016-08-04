@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, CategoryVO} from '../model/index';
+import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, CategoryVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -194,13 +194,25 @@ export class ShopService {
 
 
   /**
-   * Get urls for given shop id.
+   * Get languages for given shop id.
    * @param id
    * @returns {Observable<R>}
    */
   getShopLanguages(id:number) {
     return this.http.get(this._serviceBaseUrl + '/languages/' + id)
       .map(res => <ShopLanguagesVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get urls for given shop id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getShopLocations(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/locations/' + id)
+      .map(res => <ShopLocationsVO> res.json())
       .catch(this.handleError);
   }
 
@@ -232,16 +244,31 @@ export class ShopService {
   }
 
   /**
-   * Update supported currencies.
-   * @param curr
+   * Update supported languages.
+   * @param langs
    * @returns {Observable<R>}
      */
-  saveShopLanguages(curr:ShopLanguagesVO) {
-    let body = JSON.stringify(curr);
+  saveShopLanguages(langs:ShopLanguagesVO) {
+    let body = JSON.stringify(langs);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/languages', body, options)
       .map(res => <ShopLanguagesVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Update supported locations.
+   * @param locs
+   * @returns {Observable<R>}
+   */
+  saveShopLocations(locs:ShopLocationsVO) {
+    let body = JSON.stringify(locs);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._serviceBaseUrl + '/locations', body, options)
+      .map(res => <ShopLocationsVO> res.json())
       .catch(this.handleError);
   }
 

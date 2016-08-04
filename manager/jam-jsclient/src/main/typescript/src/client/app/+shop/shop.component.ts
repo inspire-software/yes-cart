@@ -21,13 +21,13 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {ShopEventBus, ShopService} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
-import { ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent } from './components/index';
+import { ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent, ShopLocationComponent } from './components/index';
 
 @Component({
   selector: 'yc-shop',
   moduleId: module.id,
   templateUrl: 'shop.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent],
+  directives: [TAB_DIRECTIVES, NgIf, ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent, ShopLocationComponent],
 })
 
 export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {

@@ -7,4 +7,5 @@ export * from './shop-currency.component';
 export * from './shop-language.component';
 export * from './shop-url.component';
 export * from './shop-catalog.component';
+export * from './shop-location.component';
 

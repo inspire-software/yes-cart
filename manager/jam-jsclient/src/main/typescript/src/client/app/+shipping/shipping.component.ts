@@ -286,11 +286,11 @@ export class ShippingComponent implements OnInit, OnDestroy {
               let idx = this.carriers.findIndex(rez => rez.carrierId == this.carrierEdit.carrierId);
               if (idx !== -1) {
                 this.carriers[idx] = rez;
+                this.carriers = this.carriers.slice(0, this.carriers.length); // reset to propagate changes
                 console.debug('ShippingComponent carrier changed', rez);
               }
             } else {
               this.carriers.push(rez);
-              this.carriers = this.carriers.slice(0, this.carriers.length); // reset to propagate changes
               this.carrierFilter = rez.name;
               console.debug('ShippingComponent carrier added', rez);
             }

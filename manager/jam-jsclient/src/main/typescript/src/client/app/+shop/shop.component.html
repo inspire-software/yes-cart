@@ -32,6 +32,10 @@
       <yc-shop-catalog [shop]="shop"></yc-shop-catalog>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_LOCATIONS' | translate }}" (select)="tabSelected('Locations')">
+      <yc-shop-location [shop]="shop"></yc-shop-location>
+    </tab>
+
   </tabset>
 
 </template>

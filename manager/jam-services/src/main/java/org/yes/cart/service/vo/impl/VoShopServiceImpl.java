@@ -22,8 +22,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
+import org.yes.cart.domain.entity.Country;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.domain.vo.converter.Converters;
+import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -48,22 +51,25 @@ public class VoShopServiceImpl implements VoShopService {
 
     private final LanguageService languageService;
     private final CurrencyService currencyService;
+    private final CountryService countryService;
 
     /**
      * Construct service.
-     *
      * @param languageService languages
      * @param currencyService currencies
+     * @param countryService  locations
      * @param dtoShopUrlService underlying service to work with shop urls.
      * @param dtoShopService    underlying service to use.
      * @param federationFacade  access.
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
+                             final CountryService countryService,
                              final DtoShopUrlService dtoShopUrlService,
                              final DtoShopService dtoShopService,
                              final FederationFacade federationFacade) {
         this.currencyService = currencyService;
+        this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
         this.dtoShopService = dtoShopService;
         this.federationFacade = federationFacade;
@@ -268,6 +274,51 @@ public class VoShopServiceImpl implements VoShopService {
             dtoShopService.updateSupportedLanguages(vo.getShopId(),
                     StringUtils.join(vo.getSupported().toArray(), ","));
             return getShopLanguages(vo.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoShopLocations getShopLocations(long shopId) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+            final VoShopLocations shopLocations = new VoShopLocations();
+
+            String billing = dtoShopService.getSupportedBillingCountries(shopId);
+            String shipping = dtoShopService.getSupportedShippingCountries(shopId);
+            shopLocations.setSupportedBilling(billing == null ? Collections.<String>emptyList() : Arrays.asList(billing.split(",")));
+            shopLocations.setSupportedShipping(shipping == null ? Collections.<String>emptyList() : Arrays.asList(shipping.split(",")));
+
+            final List<Country> countries = countryService.findAll();
+            final List<MutablePair<String, String>> all = new ArrayList<>();
+            for (final Country country : countries) {
+                all.add(MutablePair.of(
+                        country.getCountryCode(),
+                        country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : "")));
+            }
+
+            shopLocations.setAll(all);
+            shopLocations.setShopId(shopId);
+            return shopLocations;
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoShopLocations update(VoShopLocations vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+            dtoShopService.updateSupportedBillingCountries(vo.getShopId(),
+                    StringUtils.join(vo.getSupportedBilling().toArray(), ","));
+            dtoShopService.updateSupportedShippingCountries(vo.getShopId(),
+                    StringUtils.join(vo.getSupportedShipping().toArray(), ","));
+            return getShopLocations(vo.getShopId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }

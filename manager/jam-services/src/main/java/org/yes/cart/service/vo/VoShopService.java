@@ -126,7 +126,7 @@ public interface VoShopService {
 
     /**
      * Get supported languages by given shop
-     * @param shopId guven shop id
+     * @param shopId given shop id
      * @return langs
      * @throws Exception
      */
@@ -139,6 +139,22 @@ public interface VoShopService {
      * @throws Exception
      */
     VoShopLanguages update(VoShopLanguages vo) throws Exception;
+
+    /**
+     * Get supported locations by given shop
+     * @param shopId given shop id
+     * @return locations
+     * @throws Exception
+     */
+    VoShopLocations getShopLocations(long shopId) throws Exception;
+
+    /**
+     * Update supported locations.
+     * @param vo languages
+     * @return updated version of supported locations.
+     * @throws Exception
+     */
+    VoShopLocations update(VoShopLocations vo) throws Exception;
 
     /**
      * Update the shop disabled flag.
