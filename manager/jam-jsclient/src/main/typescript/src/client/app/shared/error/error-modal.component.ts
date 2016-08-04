@@ -40,10 +40,14 @@ export class ErrorModalComponent implements OnInit, OnDestroy {
 
     let message = Util.determineErrorMessage(event);
     console.debug('ErrorModalComponent setErrorString', message);
-    if (message && message.indexOf('JSON Parse error') != -1) {
-      this.errorString = 'AUTH';
+    if (message) {
+      if (message.indexOf('JSON Parse error') != -1) {
+        this.errorString = 'AUTH';
+      } else {
+        this.errorString = message;
+      }
     } else {
-      this.errorString = message;
+      this.errorString = 'Server error';
     }
 
   }
@@ -74,7 +78,8 @@ export class ErrorModalComponent implements OnInit, OnDestroy {
     // Here you get a reference to the modal so you can control it programmatically
     this.errorModalDialog = modal;
     this.errorSub = ErrorEventBus.getErrorEventBus().errorUpdated$.subscribe(event => {
-      if (event != null) {
+      console.debug('ErrorModalComponent error event', event);
+      if (event !== 'init') {
         this.setErrorString(event);
         this.showErrorModal();
       }

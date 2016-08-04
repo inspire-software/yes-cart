@@ -98,17 +98,18 @@ export class I18nComponent implements OnInit, OnChanges {
   }
 
   onDefaultValueChange():void {
-    console.debug('I18nComponent default value', this.dataValue);
     if (!this.isBlank(this.dataValue)) {
       this.source[this.value] = this.dataValue;
+      console.debug('I18nComponent default value is ' + this.dataValue + ' source', this.source);
     } else {
       this.source[this.value] = null;
+      console.debug('I18nComponent default value is blank source', this.source);
     }
     this.dataChanged.emit(null);
   }
 
   private isBlank(value:string):boolean {
-    return value === null || value === '' || /\s+/.test(value);
+    return value === null || value === '' || /^\s+$/.test(value);
   }
 
 }

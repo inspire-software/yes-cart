@@ -163,6 +163,7 @@
         VERSION bigint not null default 0,
         CARRIER_ID bigint not null,
         SHOP_ID bigint not null,
+        DISABLED bit default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

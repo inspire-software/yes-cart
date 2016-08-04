@@ -53,6 +53,24 @@
 
   "LOCATION_COUNRY_CODE": "ISO 3166-1-A2",
   "LOCATION_COUNRY_ISO": "ISO 3166-1-N",
-  "LOCATION_COUNRY_NAME_LOCAL": "Name (Local)"
+  "LOCATION_COUNRY_NAME_LOCAL": "Name (Local)",
+
+  "SLA_TAB_MAIN": "Main",
+  "SLA_TAB_I18N": "Localization",
+  "SLA_TAB_PG": "Payment Methods",
+
+  "CARRIERSLA_CODE": "SLA SKU",
+  "CARRIERSLA_MAXDAYS": "Max days",
+  "CARRIERSLA_SLATYPE": "SLA type",
+  "CARRIERSLA_SLATYPE_F": "Fixed",
+  "CARRIERSLA_SLATYPE_R": "Free",
+  "CARRIERSLA_SLATYPE_W": "Weight & Volume",
+  "CARRIERSLA_SLATYPE_E": "External price calculation",
+  "CARRIERSLA_SCRIPT": "Calculation ref",
+  "CARRIERSLA_BILL": "Billing",
+  "CARRIERSLA_NO_BILL": "Billing address optional",
+  "CARRIERSLA_SHIP": "Delivery",
+  "CARRIERSLA_NO_SHIP": "Delivery address optional",
+  "CARRIERSLA_PG": "Payment methods"
 
 }

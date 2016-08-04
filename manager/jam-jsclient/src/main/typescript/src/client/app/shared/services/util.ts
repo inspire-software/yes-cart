@@ -42,12 +42,27 @@ export class Util {
         return message;
       }
       if (typeof(error.json) === 'function') {
-        let json = error.json();
-        if (json && json.error) {
-          return json.error;
+        try {
+          let json = error.json();
+          if (json && json.error) {
+            return json.error;
+          }
+        } catch (err) {
+          console.debug('Unable to parse error.json()');
         }
       }
-      return JSON.stringify(error);
+      if (typeof(error.text) === 'function') {
+        try {
+          return error.text();
+        } catch (err) {
+          console.debug('Unable to get error.text()');
+        }
+      }
+      try {
+        return JSON.stringify(error);
+      } catch (err) {
+        console.debug('Unable to JSON.stringify(error)');
+      }
     }
     return null;
   }

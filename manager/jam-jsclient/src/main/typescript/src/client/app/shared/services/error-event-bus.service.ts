@@ -36,7 +36,7 @@ export class ErrorEventBus {
 
   constructor() {
     console.debug('ErrorEventBus constructed');
-    this._errorSource = new BehaviorSubject<any>(null);
+    this._errorSource = new BehaviorSubject<any>('init');
     this.errorUpdated$ = this._errorSource.asObservable();
   }
 

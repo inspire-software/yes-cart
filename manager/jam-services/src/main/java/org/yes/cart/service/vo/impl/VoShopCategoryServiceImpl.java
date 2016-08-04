@@ -16,8 +16,8 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.vo.VoCategory;
@@ -35,7 +35,6 @@ import java.util.List;
 public class VoShopCategoryServiceImpl implements VoShopCategoryService {
 
     private final DtoCategoryService dtoCategoryService;
-    private final Assembler simpleVoCategoryAssembler;
     private final FederationFacade federationFacade;
     private final DtoShopService dtoShopService;
 
@@ -50,7 +49,6 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
         this.dtoCategoryService = dtoCategoryService;
         this.federationFacade = federationFacade;
         this.dtoShopService = dtoShopService;
-        this.simpleVoCategoryAssembler = DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class);
     }
 
 
@@ -59,20 +57,21 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
     @Override
     public List<VoCategory> getAllByShopId(long shopId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAllByShopId(shopId);
             final List<VoCategory> voCategories = new ArrayList<>(categoryDTOs.size());
-            simpleVoCategoryAssembler.assembleDtos(voCategories, categoryDTOs, null ,null);
+            DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class).assembleDtos(voCategories, categoryDTOs, null, null);
             return voCategories;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /** {@inheritDoc} */
     @Override
     public List<VoCategory> update(long shopId, List<VoCategory> voCategories) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             List<VoCategory> oldAssigned = getAllByShopId(shopId);
             for (VoCategory cat : oldAssigned) {
                 dtoCategoryService.unassignFromShop(cat.getCategoryId(), shopId);
@@ -81,8 +80,9 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
                 dtoCategoryService.assignToShop(cat.getCategoryId(), shopId);
             }
             return getAllByShopId(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
 }

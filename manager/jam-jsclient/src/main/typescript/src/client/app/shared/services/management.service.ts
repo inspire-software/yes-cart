@@ -52,7 +52,7 @@ export class ManagementService {
 
   private handleError (error:any) {
 
-    console.error('CategoryService Server error: ' + error['message'], error);
+    console.error('CategoryService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message || 'Server error');

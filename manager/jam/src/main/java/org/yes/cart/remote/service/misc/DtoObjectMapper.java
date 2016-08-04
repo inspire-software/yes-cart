@@ -16,17 +16,19 @@
 package org.yes.cart.remote.service.misc;
 
 import org.codehaus.jackson.Version;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.module.SimpleModule;
 
 /**
- * Customzed object mapper to support creation of particular dto classes from json.
+ * Customized object mapper to support creation of particular dto classes from json.
  * Created by igor on 30.12.2015.
  */
 public class DtoObjectMapper extends ObjectMapper {
 
     public DtoObjectMapper() {
         super();
+        configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         SimpleModule module = new SimpleModule("dto", new Version(1,0,0,""));
         //module.addAbstractTypeMapping(ShopDTO.class, ShopDTOImpl.class);
         this.registerModule(module);

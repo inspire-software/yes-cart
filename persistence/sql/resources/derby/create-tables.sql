@@ -169,6 +169,7 @@
         VERSION bigint not null DEFAULT 0,
         CARRIER_ID bigint not null,
         SHOP_ID bigint not null,
+        DISABLED smallint DEFAULT 0,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

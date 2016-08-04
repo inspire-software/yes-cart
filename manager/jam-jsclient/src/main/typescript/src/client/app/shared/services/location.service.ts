@@ -65,7 +65,7 @@ export class LocationService {
    * Create country.
    * @param country country
    * @returns {Observable<R>}
-     */
+   */
   saveCountry(country:CountryVO) {
 
     let body = JSON.stringify(country);
@@ -156,7 +156,7 @@ export class LocationService {
 
   private handleError (error:any) {
 
-    console.error('CategoryService Server error: ' + error['message'], error);
+    console.error('CategoryService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message || 'Server error');

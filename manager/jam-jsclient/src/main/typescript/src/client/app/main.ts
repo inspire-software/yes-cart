@@ -6,7 +6,13 @@ import { HTTP_PROVIDERS, Http } from '@angular/http';
 import { TRANSLATE_PROVIDERS, TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
-import { ErrorEventBus, ShopEventBus, ShopService, CategoryService, LocationService, ManagementService } from './shared/services/index';
+import {
+  ErrorEventBus, ShopEventBus, I18nEventBus,
+  ShopService, CategoryService,
+  ShippingService, LocationService,
+  ManagementService,
+  PaymentService
+} from './shared/services/index';
 
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';
@@ -51,10 +57,13 @@ bootstrap(AppComponent, [
    */
   ErrorEventBus,
   ShopEventBus,
+  I18nEventBus,
   ShopService,
   CategoryService,
+  ShippingService,
   LocationService,
-  ManagementService
+  ManagementService,
+  PaymentService
 ]);
 
 // In order to start the Service Worker located at "./worker.js"

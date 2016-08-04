@@ -48,6 +48,19 @@
     <bean id="voLocationService" class="org.yes.cart.service.vo.impl.VoLocationServiceImpl">
         <constructor-arg index="0" ref="dtoCountryService"/>
         <constructor-arg index="1" ref="dtoStateService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+    </bean>
+
+    <bean id="voCarrierService" class="org.yes.cart.service.vo.impl.VoShippingServiceImpl">
+        <constructor-arg index="0" ref="dtoCarrierService"/>
+        <constructor-arg index="1" ref="dtoCarrierSlaService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+    </bean>
+
+    <bean id="voPaymentGatewayService" class="org.yes.cart.service.vo.impl.VoPaymentGatewayServiceImpl">
+        <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" ref="customerOrderPaymentService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
     </bean>
 
 </beans>

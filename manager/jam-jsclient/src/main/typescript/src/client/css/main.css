@@ -398,6 +398,10 @@ table.dataTable thead .sorting:after {
   color: #df8a13;
 }
 
+.text-strikethrough {
+  text-decoration: line-through;
+}
+
 /* **************** LOADING SCREEN ********************************************** */
 
 

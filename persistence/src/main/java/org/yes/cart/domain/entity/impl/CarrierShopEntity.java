@@ -30,6 +30,7 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
 
     private Carrier carrier;
     private Shop shop;
+    private boolean disabled;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -54,6 +55,14 @@ public class CarrierShopEntity implements CarrierShop, java.io.Serializable {
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public Date getCreatedTimestamp() {

@@ -6,9 +6,5 @@ export const LocationRoutes: RouterConfig = [
   {
     path: 'locations',
     component: LocationsComponent
-  },
-  {
-    path: 'location/:locationId',
-    component: LocationsComponent
-  },
+  }
 ];

@@ -29,7 +29,7 @@ public interface VoShopService {
      * Get all manageable shops.
      *
      * @return list of all manageble shops.
-     * @throwsException
+     * @throws Exception
      */
     List<VoShop> getAll() throws Exception;
 
@@ -38,27 +38,27 @@ public interface VoShopService {
      *
      * @param id
      * @return shop vo
-     * @throwsException
+     * @throws Exception
      */
     VoShop getById(long id) throws Exception;
 
     /**
      * Update given shop.
      *
-     * @param voShop shop to update
+     * @param vo shop to update
      * @return updated instance
-     * @throwsException
+     * @throws Exception
      */
-    VoShop update(VoShop voShop) throws Exception;
+    VoShop update(VoShop vo) throws Exception;
 
     /**
      * Create new shop
      *
-     * @param voShop given instance to persist
+     * @param vo given instance to persist
      * @return persisted instance
-     * @throwsException
+     * @throws Exception
      */
-    VoShop create(VoShop voShop) throws Exception;
+    VoShop create(VoShop vo) throws Exception;
 
     /**
      * Get shop by id.
@@ -74,24 +74,24 @@ public interface VoShopService {
      *
      * @param shopId given shop
      * @return localization information
-     * @throwsException
+     * @throws Exception
      */
     VoShopLocale getShopLocale(long shopId) throws Exception;
 
     /**
-     * Update localization infomation.
+     * Update localization information.
      *
-     * @param voShopLocale
+     * @param vo vo
      * @return localization information
      * @throws Exception
      */
-    VoShopLocale update(final VoShopLocale voShopLocale) throws Exception;
+    VoShopLocale update(final VoShopLocale vo) throws Exception;
 
     /**
      * Get urls for shop.
      *
-     * @param shopId
-     * @return
+     * @param shopId pk
+     * @return urls
      * @throws Exception
      */
     VoShopUrl getShopUrls(long shopId) throws Exception;
@@ -99,10 +99,11 @@ public interface VoShopService {
     /**
      * Update shop urls, that are belong to some shop
      *
-     * @param voShopUrl urls
+     * @param vo urls
      * @return updated version of shop urls
+     * @throws Exception
      */
-    VoShopUrl update(VoShopUrl voShopUrl) throws Exception;
+    VoShopUrl update(VoShopUrl vo) throws Exception;
 
     /**
      * GEt supprted currencies.
@@ -117,27 +118,27 @@ public interface VoShopService {
     /**
      * Update supported currencies.
      *
-     * @param supportedCurrencies
+     * @param vo currencies
      * @return updated version of supported currencies.
      * @throws Exception
      */
-    VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception;
+    VoShopSupportedCurrencies update(VoShopSupportedCurrencies vo) throws Exception;
 
     /**
      * Get supported languages by given shop
      * @param shopId guven shop id
-     * @return
+     * @return langs
      * @throws Exception
      */
     VoShopLanguages getShopLanguages(long shopId) throws Exception;
 
     /**
      * Update supported languages.
-     * @param voShopLanguages
+     * @param vo languages
      * @return updated version of supported langs.
      * @throws Exception
      */
-    VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception;
+    VoShopLanguages update(VoShopLanguages vo) throws Exception;
 
     /**
      * Update the shop disabled flag.
@@ -145,6 +146,7 @@ public interface VoShopService {
      * @param shopId shop PK
      * @param disabled true if shop is disabled
      * @return shop dto if found otherwise null.
+     * @throws Exception
      */
     VoShop updateDisabledFlag(long shopId, boolean disabled) throws Exception;
 

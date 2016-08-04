@@ -16,13 +16,14 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.domain.vo.converter.Converters;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -41,12 +42,10 @@ import java.util.List;
 public class VoShopServiceImpl implements VoShopService {
 
     private final DtoShopService dtoShopService;
-    private final FederationFacade federationFacade;
     private final DtoShopUrlService dtoShopUrlService;
 
-    private final Assembler simpleVoShopAssembler;
-    private final Assembler simpleVoShopLocaleAssembler;
-    private final Assembler simpleVoShopUrlDetailAssembler;
+    private final FederationFacade federationFacade;
+
     private final LanguageService languageService;
     private final CurrencyService currencyService;
 
@@ -68,9 +67,6 @@ public class VoShopServiceImpl implements VoShopService {
         this.dtoShopUrlService = dtoShopUrlService;
         this.dtoShopService = dtoShopService;
         this.federationFacade = federationFacade;
-        this.simpleVoShopAssembler = DTOAssembler.newAssembler(VoShop.class, ShopDTO.class);
-        this.simpleVoShopLocaleAssembler = DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class);
-        this.simpleVoShopUrlDetailAssembler = DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class);
         this.languageService = languageService;
     }
 
@@ -81,7 +77,7 @@ public class VoShopServiceImpl implements VoShopService {
         final List<ShopDTO> all = dtoShopService.getAll();
         federationFacade.applyFederationFilter(all, ShopDTO.class);
         final List<VoShop> rez = new ArrayList<>(all.size());
-        simpleVoShopAssembler.assembleDtos(rez, all, null, null);
+        DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleDtos(rez, all, null, null);
         return rez;
     }
 
@@ -92,39 +88,50 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO shopDTO = dtoShopService.getById(id);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final VoShop voShop = new VoShop();
-            simpleVoShopAssembler.assembleDto(voShop, shopDTO, null, null);
+            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleDto(voShop, shopDTO, null, null);
             return voShop;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public VoShop update(VoShop voShop) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(voShop.getShopId());
+    public VoShop update(VoShop vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            simpleVoShopAssembler.assembleEntity(voShop, shopDTO, null, null);
+            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleEntity(vo, shopDTO, null, null);
             dtoShopService.update(shopDTO);
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return getById(voShop.getShopId());
+        return getById(vo.getShopId());
     }
 
     /**
      * {@inheritDoc}
      */
-    public VoShop create(VoShop voShop) throws Exception {
-        ShopDTO shopDTO = dtoShopService.getNew();
-        simpleVoShopAssembler.assembleEntity(voShop, shopDTO, null, null);
-        shopDTO = dtoShopService.create(shopDTO);
-        return getById(shopDTO.getShopId());
+    public VoShop create(VoShop vo) throws Exception {
+        if (federationFacade.isCurrentUserSystemAdmin()) {
+            ShopDTO shopDTO = dtoShopService.getNew();
+            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleEntity(vo, shopDTO, null, null);
+            shopDTO = dtoShopService.create(shopDTO);
+            return getById(shopDTO.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void remove(long id) throws Exception {
-        dtoShopService.remove(id);
+        if (federationFacade.isCurrentUserSystemAdmin()) {
+            dtoShopService.remove(id);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 
     /**
@@ -134,10 +141,9 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         final VoShopLocale voShopLocale = new VoShopLocale();
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            simpleVoShopLocaleAssembler.assembleDto(voShopLocale, shopDTO, null, null);
-            voShopLocale.setDisplayTitles(VoUtils.adaptMapToPairs(shopDTO.getDisplayTitles()));
-            voShopLocale.setDisplayMetadescriptions(VoUtils.adaptMapToPairs(shopDTO.getDisplayMetadescriptions()));
-            voShopLocale.setDisplayMetakeywords(VoUtils.adaptMapToPairs(shopDTO.getDisplayMetakeywords()));
+            DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class).assembleDto(voShopLocale, shopDTO, Converters.BASIC, null);
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
         return voShopLocale;
     }
@@ -145,16 +151,15 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public VoShopLocale update(final VoShopLocale voShopLocale) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(voShopLocale.getShopId());
+    public VoShopLocale update(final VoShopLocale vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            simpleVoShopLocaleAssembler.assembleEntity(voShopLocale, shopDTO, null, null);
-            shopDTO.setDisplayTitles(VoUtils.adaptPairsToMap(voShopLocale.getDisplayTitles()));
-            shopDTO.setDisplayMetakeywords(VoUtils.adaptPairsToMap(voShopLocale.getDisplayMetakeywords()));
-            shopDTO.setDisplayMetadescriptions(VoUtils.adaptPairsToMap(voShopLocale.getDisplayMetadescriptions()));
+            DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class).assembleEntity(vo, shopDTO, Converters.BASIC, null);
             dtoShopService.update(shopDTO);
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return getShopLocale(voShopLocale.getShopId());
+        return getShopLocale(vo.getShopId());
     }
 
     /**
@@ -166,25 +171,26 @@ public class VoShopServiceImpl implements VoShopService {
             final List<ShopUrlDTO> shopUrlDTO = dtoShopUrlService.getAllByShopId(shopId);
             final List<VoShopUrlDetail> voShopUrlDetails = new ArrayList<>(shopUrlDTO.size());
             final VoShopUrl voShopUrl = new VoShopUrl();
-            simpleVoShopUrlDetailAssembler.assembleDtos(voShopUrlDetails, shopUrlDTO, null, null);
+            DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class).assembleDtos(voShopUrlDetails, shopUrlDTO, null, null);
             voShopUrl.setUrls(voShopUrlDetails);
             voShopUrl.setShopId(shopId);
             return voShopUrl;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public VoShopUrl update(VoShopUrl voShopUrl) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(voShopUrl.getShopId());
+    public VoShopUrl update(VoShopUrl vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            final List<ShopUrlDTO> originalShopUrlDTOs = dtoShopUrlService.getAllByShopId(voShopUrl.getShopId());
-            for (VoShopUrlDetail urlDetail : voShopUrl.getUrls()) {
+            final List<ShopUrlDTO> originalShopUrlDTOs = dtoShopUrlService.getAllByShopId(vo.getShopId());
+            for (VoShopUrlDetail urlDetail : vo.getUrls()) {
                 ShopUrlDTO shopUrlDTO = new ShopUrlDTOImpl();
-                simpleVoShopUrlDetailAssembler.assembleEntity(urlDetail, shopUrlDTO, null, null);
-                shopUrlDTO.setShopId(voShopUrl.getShopId());
+                DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class).assembleEntity(urlDetail, shopUrlDTO, null, null);
+                shopUrlDTO.setShopId(vo.getShopId());
                 if (urlDetail.getUrlId() == 0) {  //new one insert
                     dtoShopUrlService.create(shopUrlDTO);
                 } else { //update
@@ -195,9 +201,10 @@ public class VoShopServiceImpl implements VoShopService {
             for (ShopUrlDTO dto : originalShopUrlDTOs) {
                 dtoShopUrlService.remove(dto.getId());
             }
-            return getShopUrls(voShopUrl.getShopId());
+            return getShopUrls(vo.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
@@ -214,23 +221,25 @@ public class VoShopServiceImpl implements VoShopService {
                     curr == null ? Collections.<String>emptyList() : Arrays.asList(curr.split(","))
             );
             return ssc;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public VoShopSupportedCurrencies update(VoShopSupportedCurrencies supportedCurrencies) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(supportedCurrencies.getShopId());
+    public VoShopSupportedCurrencies update(VoShopSupportedCurrencies vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             dtoShopService.updateSupportedCurrencies(
-                    supportedCurrencies.getShopId(),
-                    StringUtils.join(supportedCurrencies.getSupported().toArray(), ",")
+                    vo.getShopId(),
+                    StringUtils.join(vo.getSupported().toArray(), ",")
             );
-            return getShopCurrencies(supportedCurrencies.getShopId());
+            return getShopCurrencies(vo.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
@@ -245,21 +254,23 @@ public class VoShopServiceImpl implements VoShopService {
             voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
             voShopLanguages.setShopId(shopId);
             return voShopLanguages;
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public VoShopLanguages update(VoShopLanguages voShopLanguages) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(voShopLanguages.getShopId());
+    public VoShopLanguages update(VoShopLanguages vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            dtoShopService.updateSupportedLanguages(voShopLanguages.getShopId(),
-                    StringUtils.join(voShopLanguages.getSupported().toArray(), ","));
-            return getShopLanguages(voShopLanguages.getShopId());
+            dtoShopService.updateSupportedLanguages(vo.getShopId(),
+                    StringUtils.join(vo.getSupported().toArray(), ","));
+            return getShopLanguages(vo.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     /**
@@ -269,8 +280,9 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO dto = dtoShopService.updateDisabledFlag(shopId, disabled);
         if (dto != null) {
             return getById(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
-        return null;
     }
 
     private void removeById(List<ShopUrlDTO> originalShopUrlDTOs, long storeUrlId) {

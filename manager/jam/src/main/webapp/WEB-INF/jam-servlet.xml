@@ -27,39 +27,38 @@
                             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
                             http://www.springframework.org/schema/security
                             http://www.springframework.org/schema/security/spring-security.xsd">
-  <!--
+    <!--
       Global security must be enabled here to allow @Secured in controllers, note that we need Interfaces for
       controllers as security creates proxies
-  -->
-  <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
+    -->
+    <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
 
-  <import resource="classpath:manager-federation.xml"/>
-  <import resource="classpath:jam-services.xml"/>
+    <import resource="classpath:manager-federation.xml"/>
+    <import resource="classpath:jam-services.xml"/>
 
-  <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
+    <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
 
-  <tx:annotation-driven />
+    <tx:annotation-driven />
 
-  <mvc:annotation-driven />
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="objectMapper" ref="dtoObjectMapper" />
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
-  <mvc:annotation-driven>
-    <mvc:message-converters>
-      <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-      <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
-      <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-        <property name="objectMapper" ref="dtoObjectMapper" />
-      </bean>
-    </mvc:message-converters>
-  </mvc:annotation-driven>
+    <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
 
-  <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
+    <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
 
-  <bean id="dtoObjectMapper" class="org.yes.cart.remote.service.misc.DtoObjectMapper"/>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="basename" value="jam" />
+    </bean>
 
-  <bean id="messageSource"
-        class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="defaultEncoding" value="UTF-8"/>
-    <property name="basename" value="jam" />
-  </bean>
 
 </beans>

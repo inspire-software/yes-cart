@@ -1,8 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { Config, SidebarComponent, ShopEventBus, ErrorEventBus } from './shared/index';
+import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus } from './shared/index';
 import { ErrorModalComponent } from './shared/error/index';
 
 import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
@@ -20,21 +20,39 @@ import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
   directives: [ROUTER_DIRECTIVES, SidebarComponent, ErrorModalComponent],
   pipes: [TranslatePipe]
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
+
+  private langSub:any;
 
   constructor(@Inject(ShopEventBus)  _shopEventBus:ShopEventBus,
               @Inject(ErrorEventBus) _errorEventBus:ErrorEventBus,
+              @Inject(I18nEventBus)  _i18nEventBus:I18nEventBus,
               translate: TranslateService) {
 
     console.log('AppComponent environment config', Config);
     ErrorEventBus.init(_errorEventBus);
     ShopEventBus.init(_shopEventBus);
+    I18nEventBus.init(_i18nEventBus);
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
     userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';     // TODO: move languages to config
     console.log('AppComponent language', userLang);
     translate.setDefaultLang('en');
-    translate.use(userLang);
+
+    this.langSub = I18nEventBus.getI18nEventBus().i18nUpdated$.subscribe(lang => {
+      translate.use(lang);
+    });
+    I18nEventBus.getI18nEventBus().emit(userLang);
+
   }
+
+
+  ngOnDestroy() {
+    console.debug('AppComponent ngOnDestroy');
+    if (this.langSub) {
+      this.langSub.unsubscribe();
+    }
+  }
+
 
 }

@@ -35,9 +35,10 @@ public interface CarrierService extends GenericService<Carrier> {
      * <p/>
      * @param shopId shop PK
      *
+     * @param includeDisabled
      * @return list of carries with filtered SLA, that satisfy to given search criteria.
      */
-    List<Carrier> findCarriersByShopId(long shopId);
+    List<Carrier> findCarriersByShopId(long shopId, final boolean includeDisabled);
 
     /**
      * Find carriers, that are applicable for given shop.

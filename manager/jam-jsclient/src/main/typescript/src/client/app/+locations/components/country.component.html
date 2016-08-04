@@ -6,7 +6,7 @@
         <form role="form" [formGroup]="countryForm">
           <fieldset>
             <div class="form-group">
-              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="country.countryCode" (ngModelChange)="onDataChange($event)">
+              <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="country.countryCode" (ngModelChange)="onDataChange($event)">
               <div [hidden]="countryForm.controls['countryCode'].valid || countryForm.controls['countryCode'].pristine" class="alert alert-danger">
                 {{ 'VALIDATION_REQUIRED' | translate }}
               </div>
@@ -18,13 +18,13 @@
               </div>
             </div>
             <div class="form-group">
-              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  autofocus  [(ngModel)]="country.name" (ngModelChange)="onDataChange($event)">
+              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="country.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="countryForm.controls['name'].valid || countryForm.controls['name'].pristine" class="alert alert-danger">
                 {{ 'VALIDATION_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
-              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text"  autofocus  [(ngModel)]="country.displayName" (ngModelChange)="onDataChange($event)">
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text" [(ngModel)]="country.displayName" (ngModelChange)="onDataChange($event)">
               <div [hidden]="countryForm.controls['displayName'].valid || countryForm.controls['displayName'].pristine" class="alert alert-danger">
                 {{ 'VALIDATION_REQUIRED' | translate }}
               </div>

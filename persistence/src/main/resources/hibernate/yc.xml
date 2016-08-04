@@ -2261,7 +2261,7 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3416,6 +3416,13 @@
         <![CDATA[
             select distinct a.carrier from CarrierShopEntity a
                 where a.shop.shopId = ?1
+        ]]>
+    </query>
+
+    <query name="CARRIER.BY.SHOPID.ENABLEDONLY">
+        <![CDATA[
+            select distinct a.carrier from CarrierShopEntity a
+                where a.shop.shopId = ?1 and a.disabled = ?2
         ]]>
     </query>
 

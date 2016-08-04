@@ -22,10 +22,7 @@ import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -53,9 +50,9 @@ public class CarrierUiFederationFilterImpl implements FederationFilter {
             final CarrierDTO carrier = carriersIt.next();
 
             try {
-                final List<ShopDTO> shops = carrierService.getAssignedCarrierShops(carrier.getCarrierId());
+                final Map<ShopDTO, Boolean> shops = carrierService.getAssignedCarrierShops(carrier.getCarrierId());
                 boolean manageable = false;
-                for (final ShopDTO shop : shops) {
+                for (final ShopDTO shop : shops.keySet()) {
                     if (manageableShopIds.contains(shop.getShopId())) {
                         manageable = true;
                         break;
@@ -78,8 +75,8 @@ public class CarrierUiFederationFilterImpl implements FederationFilter {
     public boolean isManageable(final Object object, final Class objectType) {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         try {
-            final List<ShopDTO> shops = carrierService.getAssignedCarrierShops((Long) object);
-            for (final ShopDTO shop : shops) {
+            final Map<ShopDTO, Boolean> shops = carrierService.getAssignedCarrierShops((Long) object);
+            for (final ShopDTO shop : shops.keySet()) {
                 if (manageableShopIds.contains(shop.getShopId())) {
                     return true;
                 }

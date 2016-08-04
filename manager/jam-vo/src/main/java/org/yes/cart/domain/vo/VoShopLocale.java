@@ -43,13 +43,13 @@ public class VoShopLocale {
     @DtoField(value = "metadescription")
     private String metadescription;
 
-    //@DtoField(value = "displayTitles")
+    @DtoField(value = "displayTitles", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayTitles;
 
-    //@DtoField(value = "displayMetakeywords")
+    @DtoField(value = "displayMetakeywords", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayMetakeywords;
 
-    //@DtoField(value = "displayMetadescriptions")
+    @DtoField(value = "displayMetadescriptions", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayMetadescriptions;
 
 

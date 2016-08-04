@@ -47,20 +47,20 @@ public interface VoLocationService {
 
     /**
      * Create new vo
-     * @param voCategory category
+     * @param vo vo
      * @return persistent version
      * @throws Exception
      */
-    VoCountry createCountry(VoCountry voCategory)  throws Exception;
+    VoCountry createCountry(VoCountry vo)  throws Exception;
 
 
     /**
-     * Create new vo
-     * @param voCategory category
+     * Update vo
+     * @param vo vo
      * @return persistent version
      * @throws Exception
      */
-    VoCountry updateCountry(VoCountry voCategory)  throws Exception;
+    VoCountry updateCountry(VoCountry vo)  throws Exception;
 
 
     /**
@@ -86,26 +86,26 @@ public interface VoLocationService {
      *
      * @param id state id
      * @return vo
-     * @throwsException
+     * @throws Exception
      */
     VoState getStateById(long id) throws Exception;
 
     /**
      * Create new vo
-     * @param voState state
+     * @param vo vo
      * @return persistent version
      * @throws Exception
      */
-    VoState createState(VoState voState)  throws Exception;
+    VoState createState(VoState vo)  throws Exception;
 
 
     /**
-     * Create new vo
-     * @param voState category
+     * Update vo
+     * @param vo vo
      * @return persistent version
      * @throws Exception
      */
-    VoState updateState(VoState voState)  throws Exception;
+    VoState updateState(VoState vo)  throws Exception;
 
 
     /**

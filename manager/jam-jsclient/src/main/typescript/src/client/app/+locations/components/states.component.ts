@@ -18,14 +18,13 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {StateVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 
 @Component({
   selector: 'yc-states',
   moduleId: module.id,
   templateUrl: 'states.component.html',
-  directives: [NgIf, PaginationComponent, ModalComponent],
+  directives: [NgIf, PaginationComponent],
 })
 
 export class StatesComponent implements OnInit, OnDestroy {
@@ -58,8 +57,8 @@ export class StatesComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set states(countries:Array<StateVO>) {
-    this._states = countries;
+  set states(states:Array<StateVO>) {
+    this._states = states;
     this.filterStates();
   }
 
@@ -71,10 +70,10 @@ export class StatesComponent implements OnInit, OnDestroy {
 
   private filterStates() {
     if (this._filter) {
-      this.filteredStates = this._states.filter(country =>
-          country.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
-          country.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          country.displayName && country.displayName.toLowerCase().indexOf(this._filter) !== -1
+      this.filteredStates = this._states.filter(state =>
+          state.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
+          state.name.toLowerCase().indexOf(this._filter) !== -1 ||
+          state.displayName && state.displayName.toLowerCase().indexOf(this._filter) !== -1
       );
     } else {
       this.filteredStates = this._states;

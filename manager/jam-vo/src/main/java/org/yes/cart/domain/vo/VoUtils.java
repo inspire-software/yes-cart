@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.vo.impl;
+package org.yes.cart.domain.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
 

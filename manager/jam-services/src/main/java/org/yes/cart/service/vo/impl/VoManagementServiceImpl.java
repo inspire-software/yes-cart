@@ -1,6 +1,5 @@
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.domain.dto.ManagerDTO;
@@ -21,13 +20,11 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     private final ManagementService managementService;
     private final FederationFacade federationFacade;
-    private final Assembler simpleVoManagerAssembler;
 
     public VoManagementServiceImpl(final ManagementService managementService,
                                    final FederationFacade federationFacade) {
         this.managementService = managementService;
         this.federationFacade = federationFacade;
-        this.simpleVoManagerAssembler = DTOAssembler.newAssembler(VoManager.class, ManagerDTO.class);
     }
 
     /** {@inheritDoc} */
@@ -36,7 +33,7 @@ public class VoManagementServiceImpl implements VoManagementService {
         final ManagerDTO me = getMyselfInternal();
         final VoManager meVo = new VoManager();
         if (me != null) {
-            simpleVoManagerAssembler.assembleDto(meVo, me, null, null);
+            DTOAssembler.newAssembler(VoManager.class, ManagerDTO.class).assembleDto(meVo, me, null, null);
         }
         return meVo;
     }

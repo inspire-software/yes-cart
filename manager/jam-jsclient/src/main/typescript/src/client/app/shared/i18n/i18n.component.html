@@ -12,7 +12,7 @@
           <div class="row">
             <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
             <div class="col-xs-8 col-md-6">
-              <input class="form-control" name="dataValue" type="text" (change)="onDefaultValueChange()" [(ngModel)]="dataValue">
+              <input class="form-control" name="dataValue" type="text" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()">
             </div>
           </div>
 
@@ -39,7 +39,7 @@
               <input class="form-control" placeholder="{{ 'LANGUAGE' | translate }}" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
             </div>
             <div class="form-group col-xs-5 col-md-6">
-              <input class="form-control" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" autofocus [(ngModel)]="selectedRow.second">
+              <input class="form-control" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" [(ngModel)]="selectedRow.second">
             </div>
             <div class="form-group col-xs-4 col-md-3">
               <button class="btn btn-circle btn-sm" (click)="onRowAdd()">

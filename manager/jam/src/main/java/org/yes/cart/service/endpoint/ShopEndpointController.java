@@ -47,12 +47,12 @@ public interface ShopEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(method = RequestMethod.PUT,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop create(@RequestBody VoShop voShop) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop update(@RequestBody VoShop voShop) throws Exception;
 
@@ -67,7 +67,7 @@ public interface ShopEndpointController {
     VoShopLocale getLocalization(@PathVariable("id") long id) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/localization", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/localization", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShopLocale update(@RequestBody VoShopLocale voShopLocale)  throws Exception;
 
@@ -77,7 +77,7 @@ public interface ShopEndpointController {
     VoShopUrl getUrl(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/urls", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/urls", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShopUrl update(@RequestBody VoShopUrl voShopUrl)  throws Exception;
 
@@ -87,7 +87,7 @@ public interface ShopEndpointController {
     VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/currencies", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/currencies", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShopSupportedCurrencies update(@RequestBody VoShopSupportedCurrencies supportedCurrencies) throws Exception;
 
@@ -97,7 +97,7 @@ public interface ShopEndpointController {
     VoShopLanguages getLanguage(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/languages", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/languages", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShopLanguages update(@RequestBody VoShopLanguages langs) throws Exception;
 
@@ -107,7 +107,7 @@ public interface ShopEndpointController {
     List<VoCategory> getCategories(@PathVariable("shopId") long shopId) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/categories/{shopId}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception;
 

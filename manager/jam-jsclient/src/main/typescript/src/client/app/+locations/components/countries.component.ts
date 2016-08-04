@@ -17,16 +17,14 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {CountryVO} from './../../shared/model/index';
-import {Router, ActivatedRoute} from '@angular/router';
 import {PaginationComponent} from './../../shared/pagination/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 
 @Component({
   selector: 'yc-countries',
   moduleId: module.id,
   templateUrl: 'countries.component.html',
-  directives: [NgIf, PaginationComponent, ModalComponent],
+  directives: [NgIf, PaginationComponent],
 })
 
 export class CountriesComponent implements OnInit, OnDestroy {

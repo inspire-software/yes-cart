@@ -37,6 +37,7 @@ public interface VoShopCategoryService {
      * Update categories assigned to shop.
      *
      * @param shopId shop id
+     * @param voCategories all shop categories
      * @return list of assigned categories
      */
     List<VoCategory> update(final long shopId, List<VoCategory> voCategories) throws Exception;

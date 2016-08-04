@@ -6,3 +6,5 @@ export * from './category.model';
 export * from './shop.model';
 export * from './manager.model';
 export * from './location.model';
+export * from './shipping.model';
+export * from './payment.model';

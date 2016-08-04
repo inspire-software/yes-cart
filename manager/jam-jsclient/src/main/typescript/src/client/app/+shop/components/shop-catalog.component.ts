@@ -64,7 +64,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
     this.newCategory = this.newCategoryInstance();
 
     this.newCategoryForm = fb.group({
-      'guid': ['', Validators.pattern('[A-Za-z0-9]+')],
+      'guid': ['', Validators.pattern('[A-Za-z0-9\-]+')],
       'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
     });
   }

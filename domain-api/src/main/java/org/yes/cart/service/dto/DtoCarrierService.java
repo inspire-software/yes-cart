@@ -22,6 +22,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -32,16 +33,28 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
 
 
     /**
-     * Get all assigned to shop carriers.
+     * Get all carriers and their shop assignments.
      *
-     * @param shopId shop id
-     * @return list of assigned categories
+     * @return list of carriers
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<CarrierDTO> findAllByShopId(final long shopId)
+    Map<CarrierDTO, Map<ShopDTO, Boolean>> getAllWithShops()
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get all assigned to shop carriers.
+     *
+     * @param shopId shop id
+     * @return list of assigned shops with corresponding disabled flag
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    Map<CarrierDTO, Boolean> findAllByShopId(final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
@@ -55,7 +68,7 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    List<ShopDTO> getAssignedCarrierShops(long carrierId)
+    Map<ShopDTO, Boolean> getAssignedCarrierShops(long carrierId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
@@ -77,16 +90,17 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
      *
      * @param carrierId user id
      * @param shopId  shop
+     * @param soft true disables the link, false enabled the link right away
      */
-    void assignToShop(long carrierId, long shopId);
+    void assignToShop(long carrierId, long shopId, final boolean soft);
 
     /**
      * Unassign shop from carrier.
-     *
      * @param carrierId user id
      * @param shopId  shop
+     * @param soft true disables the link but does not remove it, false removed the CarrierShop link completely
      */
-    void unassignFromShop(long carrierId, long shopId);
+    void unassignFromShop(long carrierId, long shopId, final boolean soft);
 
 
 }

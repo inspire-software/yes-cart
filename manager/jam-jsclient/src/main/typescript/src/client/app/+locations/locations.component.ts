@@ -245,6 +245,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
               let idx = this.states.findIndex(rez => rez.stateId == this.stateEdit.stateId);
               if (idx !== -1) {
                 this.states[idx] = rez;
+                this.states = this.states.slice(0, this.states.length); // reset to propagate changes
                 console.debug('LocationsComponent state changed', rez);
               }
             } else {
@@ -269,6 +270,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
               let idx = this.countries.findIndex(rez => rez.countryId == this.countryEdit.countryId);
               if (idx !== -1) {
                 this.countries[idx] = rez;
+                this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
                 console.debug('LocationsComponent country changed', rez);
               }
             } else {
