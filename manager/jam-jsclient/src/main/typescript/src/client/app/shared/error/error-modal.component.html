@@ -10,7 +10,7 @@
       {{ 'MODAL_ERROR_MESSAGE' | translate }}
     </div>
     <div>
-      <pre style="max-height: 100px; overflow-y: auto">{{ errorString == 'AUTH' ? ( 'MODAL_ERROR_LOGGED_OUT' | translate ) : errorString }}</pre>
+      <pre style="max-height: 100px; overflow-y: auto">{{ errorString == 'AUTH' ? ( 'MODAL_ERROR_LOGGED_OUT' | translate ) : (errorString == 'AUTH403' ? ( 'MODAL_ERROR_FORBIDDEN' | translate ) : errorString) }}</pre>
     </div>
   </modal>
 

@@ -56,6 +56,15 @@ public class UiFederationFacadeImpl implements FederationFacade {
         return shopFederationStrategy.isShopAccessibleByCurrentManager(shopCode);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isShopAccessibleByCurrentManager(final Long shopId) {
+        return shopFederationStrategy.isShopAccessibleByCurrentManager(shopId);
+    }
+
+
     /**
      * {@inheritDoc}
      */

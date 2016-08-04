@@ -59,6 +59,13 @@ public class ImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    public boolean isShopAccessibleByCurrentManager(final Long shopId) {
+        return shopFederationStrategy.isShopAccessibleByCurrentManager(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
     }

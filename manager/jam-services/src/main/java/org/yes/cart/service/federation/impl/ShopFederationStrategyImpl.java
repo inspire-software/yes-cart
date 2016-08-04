@@ -98,6 +98,17 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     /**
      * {@inheritDoc}
      */
+    public boolean isShopAccessibleByCurrentManager(final Long shopId) {
+        if (isCurrentUserSystemAdmin()) {
+            return true;
+        }
+        final Set<Long> currentAssigned = getAccessibleShopIdsByCurrentManager();
+        return currentAssigned.contains(shopId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
             return Collections.emptySet();

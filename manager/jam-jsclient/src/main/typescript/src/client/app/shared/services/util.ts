@@ -51,6 +51,10 @@ export class Util {
           console.debug('Unable to parse error.json()');
         }
       }
+      if (error.status && error.status == 403) {
+        console.debug('Received 403 status');
+        return "AUTH403";
+      }
       if (typeof(error.text) === 'function') {
         try {
           return error.text();

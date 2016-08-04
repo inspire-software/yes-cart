@@ -99,14 +99,14 @@ export class ShopLanguageComponent implements OnInit, OnChanges {
   }
 
   onAvailableLanguageClick(event:any) {
-    console.debug('ShopLanguageComponent onAvailableCurrencyClick', event);
+    console.debug('ShopLanguageComponent onAvailableLanguageClick', event);
     this.lang.supported.push(event.first);
     this.lang.all = this.lang.all.filter( obj => { return this.lang.supported.indexOf(obj.first) === -1; } );
     this.changed = true;
   }
 
   onSupportedLanguageClick(event:any) {
-    console.debug('ShopLanguageComponent onSupportedCurrencyClick', event);
+    console.debug('ShopLanguageComponent onSupportedLanguageClick', event);
     this.lang.supported = this.lang.supported.filter( obj => {return obj !== event;});
     this.lang.all = Util.clone(this.shopLanguagesVO.all);
     this.lang.all = this.lang.all.filter( obj => { return this.lang.supported.indexOf(obj.first) === -1; } );

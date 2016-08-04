@@ -36,6 +36,10 @@
       <yc-shop-location [shop]="shop"></yc-shop-location>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_CARRIERS' | translate }}" (select)="tabSelected('Carriers')">
+      <yc-shop-carrier [shop]="shop"></yc-shop-carrier>
+    </tab>
+
   </tabset>
 
 </template>

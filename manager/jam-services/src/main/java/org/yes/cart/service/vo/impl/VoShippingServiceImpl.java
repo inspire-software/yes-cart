@@ -77,7 +77,7 @@ public class VoShippingServiceImpl implements VoShippingService {
     @Override
     public List<VoShopCarrier> getShopCarriers(final long shopId) throws Exception {
 
-        if (federationFacade.getAccessibleShopIdsByCurrentManager().contains(shopId)) {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);
 
             final List<VoShopCarrier> vos = new ArrayList<>(all.size());
@@ -89,6 +89,7 @@ public class VoShippingServiceImpl implements VoShippingService {
                 link.setShopId(shopId);
                 link.setCarrierId(vo.getCarrierId());
                 link.setDisabled(dto.getValue());
+                vo.setCarrierShop(link);
                 vos.add(vo);
             }
             return vos;
@@ -163,13 +164,13 @@ public class VoShippingServiceImpl implements VoShippingService {
 
             final List<VoCarrierShopLink> existingLinks = existing.getCarrierShops();
             for (final VoCarrierShopLink link : existingLinks) {
-                if (federationFacade.getAccessibleShopIdsByCurrentManager().contains(link.getShopId())) {
+                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
                     dtoCarrierService.unassignFromShop(vo.getCarrierId(), link.getShopId(), false);
                 } // else skip updates for inaccessible shops
             }
 
             for (final VoCarrierShopLink link : vo.getCarrierShops()) {
-                if (federationFacade.getAccessibleShopIdsByCurrentManager().contains(link.getShopId())) {
+                if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
                     dtoCarrierService.assignToShop(vo.getCarrierId(), link.getShopId(), link.isDisabled());
                 } // else skip updates for inaccessible shops
             }
@@ -187,7 +188,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
             for (final VoShopCarrier shopCarrier : vo) {
                 final VoCarrierShopLink link = shopCarrier.getCarrierShop();
-                if (link != null && federationFacade.getAccessibleShopIdsByCurrentManager().contains(link.getShopId())) {
+                if (link != null && federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
                     if (link.isDisabled()) {
                         dtoCarrierService.unassignFromShop(link.getCarrierId(), link.getShopId(), true);
                     } else {

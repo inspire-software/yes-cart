@@ -46,6 +46,13 @@ public interface ShopFederationStrategy {
     boolean isShopAccessibleByCurrentManager(final String shopCode);
 
     /**
+     * @param shopId shop PK
+     *
+     * @return true if current manager has access to this shop
+     */
+    boolean isShopAccessibleByCurrentManager(final Long shopId);
+
+    /**
      * @return set of PK's of shops to which current manager has access
      */
     Set<Long> getAccessibleShopIdsByCurrentManager();
