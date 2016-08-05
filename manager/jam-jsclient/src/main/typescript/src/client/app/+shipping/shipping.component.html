@@ -48,7 +48,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'carrier'">
-    <yc-carrier [carrier]="carrierEdit" (dataChanged)="onCarrierChanged($event)"></yc-carrier>
+    <yc-carrier [carrier]="carrierEdit" [shops]="shops" (dataChanged)="onCarrierChanged($event)"></yc-carrier>
   </div>
 
   <div [hidden]="viewMode !== 'slas'">

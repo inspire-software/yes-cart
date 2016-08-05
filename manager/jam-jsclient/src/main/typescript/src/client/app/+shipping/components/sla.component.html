@@ -3,7 +3,7 @@
   <form role="form" [formGroup]="slaForm">
     <tabset>
 
-      <tab heading="{{ 'SLA_TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
         <div>
           <div class="col-md-9 col-lg-6">
             <div class="panel-body">
@@ -52,7 +52,7 @@
         </div>
       </tab>
 
-      <tab heading="{{ 'SLA_TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
 
         <div class="row">
           <yc-i18n-table title="{{ 'NAME' | translate }}"

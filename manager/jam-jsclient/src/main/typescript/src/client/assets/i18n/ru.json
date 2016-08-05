@@ -40,8 +40,9 @@
   "SEO_KEYWORDS": "Meta keywords",
   "SEO_DESCRIPTION": "Meta description",
 
-  "HELLO": "hello {{value}}",
-  "SHOP_TAB_MAIN": "Main",
+  "TAB_MAIN": "Main",
+  "TAB_I18N": "Localization",
+
   "SHOP_TAB_I18N": "Localization",
   "SHOP_TAB_URL": "URL",
   "SHOP_TAB_CURRENCY": "Currency",
@@ -61,8 +62,7 @@
   "LOCATION_COUNRY_ISO": "ISO 3166-1-N",
   "LOCATION_COUNRY_NAME_LOCAL": "Name (Local)",
 
-  "SLA_TAB_MAIN": "Main",
-  "SLA_TAB_I18N": "Localization",
+  "CARRIER_TAB_SHOPS": "Shops",
   "SLA_TAB_PG": "Payment Methods",
 
   "CARRIERSLA_CODE": "SLA SKU",

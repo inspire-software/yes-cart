@@ -8,11 +8,11 @@
 
   <tabset>
 
-    <tab heading="{{ 'SHOP_TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+    <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
       <yc-shop-main></yc-shop-main>
     </tab>
 
-    <tab heading="{{ 'SHOP_TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
+    <tab heading="{{ 'TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
       <yc-shop-i18n [shop]="shop"></yc-shop-i18n>
     </tab>
 

@@ -93,13 +93,10 @@ export class SlaComponent implements OnInit, OnDestroy {
 
   private getAvailablePGNames():Array<PaymentGatewayInfoVO> {
     let supported = this._sla.supportedPaymentGateways;
-    if (!supported) {
-      return [ ];
-    }
 
     let labels = <Array<PaymentGatewayInfoVO>>[];
     for (let key in this._pgs) {
-      if (supported.indexOf(key) == -1) {
+      if (!supported || supported.indexOf(key) == -1) {
         labels.push(this._pgs[key]);
       }
     }

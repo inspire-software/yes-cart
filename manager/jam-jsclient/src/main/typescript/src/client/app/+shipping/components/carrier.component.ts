@@ -16,23 +16,29 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {CarrierLocaleVO} from './../../shared/model/index';
+import {CarrierVO, CarrierShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';
+import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
 
 @Component({
   selector: 'yc-carrier',
   moduleId: module.id,
   templateUrl: 'carrier.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, I18nComponent],
+  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, I18nComponent],
 })
 
 export class CarrierComponent implements OnInit, OnDestroy {
 
-  _carrier:CarrierLocaleVO;
+  _carrier:CarrierVO;
 
-  @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierLocaleVO>> = new EventEmitter<FormValidationEvent<CarrierLocaleVO>>();
+  _shops:any = {};
+
+  availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
+  supportedShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
+
+  @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierVO>> = new EventEmitter<FormValidationEvent<CarrierVO>>();
 
   validForSave:boolean = false;
 
@@ -42,13 +48,99 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
 
   @Input()
-  set carrier(carrier:CarrierLocaleVO) {
-    this._carrier = carrier;
+  set shops(shops:Array<ShopVO>) {
+    shops.forEach(shop => {
+      this._shops['S' + shop.shopId] = shop;
+    });
+    console.debug('CarrierComponent mapped shops', this._shops);
   }
 
-  get carrier():CarrierLocaleVO {
+  @Input()
+  set carrier(carrier:CarrierVO) {
+    this._carrier = carrier;
+    this.recalculateShops();
+  }
+
+  get carrier():CarrierVO {
     return this._carrier;
   }
+
+  private recalculateShops():void {
+    if (this._carrier && this._carrier.carrierId > 0) {
+      this.availableShops = this.getAvailableShopNames();
+      this.supportedShops = this.getSupportedShopNames();
+    }
+  }
+
+  private getAvailableShopNames():Array<Pair<ShopVO, CarrierShopLinkVO>> {
+    let supported = this._carrier.carrierShops;
+    let skipKeys = <Array<string>>[];
+    if (supported) {
+      supported.forEach(carriershop => {
+        skipKeys.push('S' + carriershop.shopId);
+      });
+    }
+    console.debug('CarrierComponent supported', skipKeys);
+
+    let labels = <Array<Pair<ShopVO, CarrierShopLinkVO>>>[];
+    for (let key in this._shops) {
+      if (skipKeys.indexOf(key) == -1) {
+        let shop = this._shops[key];
+        labels.push({
+          first: shop,
+          second: { carrierId: this._carrier.carrierId, shopId: shop.shopId, disabled: false }
+        });
+      }
+    }
+
+    console.debug('CarrierComponent available', labels);
+    return labels;
+  }
+
+  private getSupportedShopNames():Array<Pair<ShopVO, CarrierShopLinkVO>> {
+    let supported = this._carrier.carrierShops;
+    let keepKeys = <Array<string>>[];
+    if (supported) {
+      supported.forEach(carriershop => {
+        keepKeys.push('S' + carriershop.shopId);
+      });
+    }
+    console.debug('CarrierComponent supported', keepKeys);
+
+    let labels = <Array<Pair<ShopVO, CarrierShopLinkVO>>>[];
+    for (let key in this._shops) {
+      let idx = keepKeys.indexOf(key);
+      if (idx != -1) {
+        let shop = this._shops[key];
+        let carrierShop = this._carrier.carrierShops[idx];
+        labels.push({ first: shop, second: carrierShop });
+      }
+    }
+
+    console.debug('CarrierComponent supported', labels);
+    return labels;
+  }
+
+
+  onSupportedShopClick(supported:Pair<ShopVO, CarrierShopLinkVO>) {
+    console.debug('SlaComponent remove supported', supported);
+    let idx = this._carrier.carrierShops.findIndex(link =>
+      link.shopId == supported.first.shopId
+    );
+    if (idx != -1) {
+      this._carrier.carrierShops.splice(idx, 1);
+      this.recalculateShops();
+      this.onDataChanged(supported);
+    }
+  }
+
+  onAvailableShopClick(available:Pair<ShopVO, CarrierShopLinkVO>) {
+    console.debug('SlaComponent add supported', available);
+    this._carrier.carrierShops.push(available.second);
+    this.recalculateShops();
+    this.onDataChanged(available);
+  }
+
 
   onDataChanged(event:any) {
     this.validForSave = (this._carrier.name != null) && (/\S+.*\S+/.test(this._carrier.name));
@@ -63,5 +155,11 @@ export class CarrierComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     console.debug('CarrierComponent ngOnDestroy');
   }
+
+  tabSelected(tab:any) {
+    console.debug('CarrierComponent tabSelected', tab);
+  }
+
+
 
 }
