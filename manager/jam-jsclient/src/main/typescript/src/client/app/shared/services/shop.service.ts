@@ -235,7 +235,7 @@ export class ShopService {
      */
   saveShopCategories(shopId:number, cats : CategoryVO[]) {
     let body = JSON.stringify(cats);
-    console.debug('Save assigned categories ' + body);
+    console.debug('Save assigned categories ', cats);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/categories/' + shopId, body, options)
