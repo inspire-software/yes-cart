@@ -28,12 +28,11 @@
     </div>
   </div>
 
-  <modal id="editNewCategoryName"
+  <modal #editNewCarrierName
          title="{{ 'MODAL_CREATE_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
          [valid]="validForSave"
-         (loaded)="editNewCarrierNameModalLoaded($event)"
          (closed)="editNewCarrierNameModalResult($event)">
     <form role="form" [formGroup]="newCarrierForm">
       <fieldset>

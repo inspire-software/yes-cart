@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {NgIf, NgFor} from '@angular/common';
 import {ShopVO, ShopCarrierVO, CarrierLocaleVO} from './../../shared/model/index';
@@ -39,6 +39,7 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
   changed:boolean = false;
 
   newCarrier:CarrierLocaleVO;
+  @ViewChild('editNewCarrierName')
   editNewCarrierName:ModalComponent;
   newCarrierForm:any;
 
@@ -127,12 +128,6 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
     console.debug('ShopCarrierComponent createNew');
     this.newCarrier = this.newCarrierInstance();
     this.editNewCarrierName.show();
-  }
-
-
-  editNewCarrierNameModalLoaded(modal:ModalComponent) {
-    console.debug('ShopCarrierComponent editNewCarrierNameModalLoaded');
-    this.editNewCarrierName = modal;
   }
 
   /**

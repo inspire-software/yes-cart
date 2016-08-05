@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {LocationService, Util} from './../shared/services/index';
@@ -47,6 +47,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   private countryEdit:CountryVO;
 
+  @ViewChild('deleteConfirmationModalDialog')
   deleteConfirmationModalDialog:ModalComponent;
 
   private states:Array<StateVO> = [];
@@ -307,12 +308,6 @@ export class LocationsComponent implements OnInit, OnDestroy {
         this.onRowNew();
       }
     }
-  }
-
-  protected deleteConfirmationModalDialogLoaded(modal: ModalComponent) {
-    console.debug('LocationsComponent deleteConfirmationModalDialogLoaded');
-    // Here you get a reference to the modal so you can control it programmatically
-    this.deleteConfirmationModalDialog = modal;
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {

@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ShopService, CategoryService, ShopEventBus, Util} from './../../shared/services/index';
 import {ShopVO, CategoryVO, BasicCategoryVO} from './../../shared/model/index';
@@ -39,6 +39,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   existingShop:boolean = false;
 
   newCategory:BasicCategoryVO;
+  @ViewChild('editNewCategoryName')
   editNewCategoryName:ModalComponent;
   newCategoryForm:any;
 
@@ -238,12 +239,6 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   createNew(parent:ITreeNode) {
     console.debug('ShopCatalogComponent createNew for parent', parent);
     this.editNewCategoryName.show();
-  }
-
-
-  editNewCategoryNameModalLoaded(modal:ModalComponent) {
-    console.debug('ShopCatalogComponent editnewCategoryModalLoaded');
-    this.editNewCategoryName = modal;
   }
 
   /**

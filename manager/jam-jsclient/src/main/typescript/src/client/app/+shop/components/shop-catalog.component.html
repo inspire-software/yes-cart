@@ -17,12 +17,11 @@
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
-  <modal id="editNewCategoryName"
+  <modal #editNewCategoryName
          title="{{ 'MODAL_CREATE_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
          [valid]="validForSave"
-         (loaded)="editNewCategoryNameModalLoaded($event)"
          (closed)="editNewCategoryNameModalResult($event)">
     <form role="form" [formGroup]="newCategoryForm">
       <fieldset>

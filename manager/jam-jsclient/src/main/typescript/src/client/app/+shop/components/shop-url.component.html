@@ -59,22 +59,20 @@
 
 
 
-  <modal id="deleteConfirmationModalDialog"
+  <modal #deleteConfirmationModalDialog
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
          [valid]="true"
-         (loaded)="deleteConfirmationModalDialogLoaded($event)"
          (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.url : '') } }}
   </modal>
 
-  <modal id="editModalDialog"
+  <modal #editModalDialog
          title="{{ 'SHOP_TAB_URL' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
          [valid]="validForSave"
-         (loaded)="editModalLoaded($event)"
          (closed)="onEditModalResult($event)">
 
     <form role="form" [formGroup]="shopUrlForm">

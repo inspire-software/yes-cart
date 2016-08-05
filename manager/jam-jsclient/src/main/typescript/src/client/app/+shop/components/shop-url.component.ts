@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
 import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../../shared/pagination/index';
@@ -52,7 +52,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   changed:boolean = false;
   validForSave:boolean = false;
 
+  @ViewChild('deleteConfirmationModalDialog')
   deleteConfirmationModalDialog:ModalComponent;
+  @ViewChild('editModalDialog')
   editModalDialog:ModalComponent;
 
   selectedRow:UrlVO;
@@ -205,17 +207,6 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   protected onRefreshHandler() {
     console.debug('ShopUrlComponent refresh handler', this.shop);
     this.getShopUrls();
-  }
-
-  protected deleteConfirmationModalDialogLoaded(modal: ModalComponent) {
-    console.debug('ShopUrlComponent deleteConfirmationModalDialogLoaded');
-    // Here you get a reference to the modal so you can control it programmatically
-    this.deleteConfirmationModalDialog = modal;
-  }
-
-  protected editModalLoaded(modal: ModalComponent) {
-    console.debug('ShopUrlComponent editModalLoaded');
-    this.editModalDialog = modal;
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {

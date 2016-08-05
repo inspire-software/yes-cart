@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild, AfterViewInit} from '@angular/core';
 import {ErrorEventBus, Util} from './../services/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 
@@ -24,8 +24,9 @@ import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
   directives: [ModalComponent]
 })
 
-export class ErrorModalComponent implements OnInit, OnDestroy {
+export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @ViewChild('errorModalDialog')
   errorModalDialog:ModalComponent;
 
   private errorString:string = '';
@@ -73,10 +74,9 @@ export class ErrorModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected errorModalDialogLoaded(modal: ModalComponent) {
-    console.debug('ErrorModalComponent errorModalDialogLoaded');
+  public ngAfterViewInit() {
+    console.debug('ErrorModalComponent ngAfterViewInit');
     // Here you get a reference to the modal so you can control it programmatically
-    this.errorModalDialog = modal;
     this.errorSub = ErrorEventBus.getErrorEventBus().errorUpdated$.subscribe(event => {
       console.debug('ErrorModalComponent error event', event);
       if (event !== 'init') {

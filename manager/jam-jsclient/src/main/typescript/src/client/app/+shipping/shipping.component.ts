@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {I18nEventBus, ShopService, ShippingService, PaymentService, Util} from './../shared/services/index';
@@ -47,6 +47,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   private carrierEdit:CarrierVO;
 
+  @ViewChild('deleteConfirmationModalDialog')
   deleteConfirmationModalDialog:ModalComponent;
 
   private slas:Array<CarrierSlaVO> = [];
@@ -332,12 +333,6 @@ export class ShippingComponent implements OnInit, OnDestroy {
         this.onRowNew();
       }
     }
-  }
-
-  protected deleteConfirmationModalDialogLoaded(modal: ModalComponent) {
-    console.debug('ShippingComponent deleteConfirmationModalDialogLoaded');
-    // Here you get a reference to the modal so you can control it programmatically
-    this.deleteConfirmationModalDialog = modal;
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {

@@ -1,10 +1,9 @@
 
-  <modal id="errorModalDialog"
+  <modal #errorModalDialog
          title="{{ 'MODAL_ERROR_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
          [valid]="true"
-         (loaded)="errorModalDialogLoaded($event)"
          (closed)="onErrorResult($event)">
     <div>
       {{ 'MODAL_ERROR_MESSAGE' | translate }}
