@@ -616,6 +616,9 @@
                         <mx:DataGridColumn width="80"
                                            headerText="@Resource(bundle='ProductTypeManagementPanel',key='id')"
                                            dataField="producttypeId"/>
+                        <mx:DataGridColumn width="80"
+                                           headerText="@Resource(bundle='ProductTypeManagementPanel',key='guid')"
+                                           dataField="guid"/>
                         <mx:DataGridColumn width="160"
                                            headerText="@Resource(bundle='ProductTypeManagementPanel',key='name')"
                                            dataField="name"/>

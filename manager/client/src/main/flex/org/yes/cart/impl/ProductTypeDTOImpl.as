@@ -27,6 +27,8 @@ public class ProductTypeDTOImpl implements IUID {
 
     public var name:String;
 
+    public var guid:String;
+
     public var description:String;
 
     public var uitemplate:String;
