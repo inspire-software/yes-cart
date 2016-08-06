@@ -20,6 +20,7 @@
 
 
 import {Pair} from './common.model';
+import {AttrValueVO} from './attribute.model';
 /**
  * Represent simple data about shop
  */
@@ -96,6 +97,12 @@ export interface ShopLocationsVO {
   all : Array<Pair<string, string>>;
   supportedBilling : Array<string>;
   supportedShipping : Array<string>;
+}
+
+export interface AttrValueShopVO extends AttrValueVO {
+
+  shopId : number;
+
 }
 
 

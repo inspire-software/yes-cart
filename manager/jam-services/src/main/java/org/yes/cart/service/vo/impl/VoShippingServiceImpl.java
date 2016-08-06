@@ -16,17 +16,15 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CarrierDTO;
 import org.yes.cart.domain.dto.CarrierSlaDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.vo.*;
-import org.yes.cart.domain.vo.converter.Converters;
 import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.dto.DtoCarrierSlaService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShippingService;
 
 import java.util.ArrayList;
@@ -44,24 +42,27 @@ public class VoShippingServiceImpl implements VoShippingService {
     private final DtoCarrierSlaService dtoCarrierSlaService;
 
     private final FederationFacade federationFacade;
+    private final VoAssemblySupport voAssemblySupport;
 
     public VoShippingServiceImpl(final DtoCarrierService dtoCarrierService,
                                  final DtoCarrierSlaService dtoCarrierSlaService,
-                                 final FederationFacade federationFacade) {
+                                 final FederationFacade federationFacade,
+                                 final VoAssemblySupport voAssemblySupport) {
         this.dtoCarrierService = dtoCarrierService;
         this.dtoCarrierSlaService = dtoCarrierSlaService;
         this.federationFacade = federationFacade;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
     @Override
     public List<VoCarrier> getAllCarriers() throws Exception {
         final Map<CarrierDTO, Map<ShopDTO, Boolean>> all = dtoCarrierService.getAllWithShops();
         federationFacade.applyFederationFilter(all.keySet(), CarrierDTO.class);
-        final Assembler asmC = DTOAssembler.newAssembler(VoCarrier.class, CarrierDTO.class);
+        final VoAssemblySupport.VoAssembler<VoCarrier, CarrierDTO> asmC =
+                voAssemblySupport.with(VoCarrier.class, CarrierDTO.class);
         final List<VoCarrier> vos = new ArrayList<>(all.size());
         for (final Map.Entry<CarrierDTO, Map<ShopDTO, Boolean>> dto : all.entrySet()) {
-            final VoCarrier vo = new VoCarrier();
-            asmC.assembleDto(vo, dto.getKey(), Converters.BASIC, null);
+            final VoCarrier vo = asmC.assembleVo(new VoCarrier(), dto.getKey());
             for (final Map.Entry<ShopDTO, Boolean> assign : dto.getValue().entrySet()) {
                 final VoCarrierShopLink link = new VoCarrierShopLink();
                 link.setCarrierId(vo.getCarrierId());
@@ -81,10 +82,10 @@ public class VoShippingServiceImpl implements VoShippingService {
             final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);
 
             final List<VoShopCarrier> vos = new ArrayList<>(all.size());
-            final Assembler asm = DTOAssembler.newAssembler(VoShopCarrier.class, CarrierDTO.class);
+            final VoAssemblySupport.VoAssembler<VoShopCarrier, CarrierDTO> asm =
+                    voAssemblySupport.with(VoShopCarrier.class, CarrierDTO.class);
             for (final Map.Entry<CarrierDTO, Boolean> dto : all.entrySet()) {
-                final VoShopCarrier vo = new VoShopCarrier();
-                asm.assembleDto(vo, dto.getKey(), Converters.BASIC, null);
+                final VoShopCarrier vo = asm.assembleVo(new VoShopCarrier(), dto.getKey());
                 final VoCarrierShopLink link = new VoCarrierShopLink();
                 link.setShopId(shopId);
                 link.setCarrierId(vo.getCarrierId());
@@ -104,9 +105,7 @@ public class VoShippingServiceImpl implements VoShippingService {
         if (federationFacade.isManageable(id, CarrierDTO.class)) {
 
             final CarrierDTO dto = dtoCarrierService.getById(id);
-            final Assembler asm = DTOAssembler.newAssembler(VoCarrier.class, CarrierDTO.class);
-            final VoCarrier vo = new VoCarrier();
-            asm.assembleDto(vo, dto, Converters.BASIC, null);
+            final VoCarrier vo = voAssemblySupport.assembleVo(VoCarrier.class, CarrierDTO.class, new VoCarrier(), dto);
             final Map<ShopDTO, Boolean> links = dtoCarrierService.getAssignedCarrierShops(id);
             for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
                 final VoCarrierShopLink link = new VoCarrierShopLink();
@@ -128,8 +127,9 @@ public class VoShippingServiceImpl implements VoShippingService {
         if (federationFacade.isCurrentUserSystemAdmin()) {
 
             CarrierDTO dto = dtoCarrierService.getNew();
-            DTOAssembler.newAssembler(VoCarrierLocale.class, CarrierDTO.class).assembleEntity(vo, dto, Converters.BASIC, null);
-            dto = dtoCarrierService.create(dto);
+            dto = dtoCarrierService.create(
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+            );
             return getCarrierById(dto.getCarrierId());
 
         } else {
@@ -142,8 +142,9 @@ public class VoShippingServiceImpl implements VoShippingService {
         if (federationFacade.isManageable(shopId, ShopDTO.class)) {
 
             CarrierDTO dto = dtoCarrierService.getNew();
-            DTOAssembler.newAssembler(VoCarrierLocale.class, CarrierDTO.class).assembleEntity(vo, dto, Converters.BASIC, null);
-            dto = dtoCarrierService.create(dto);
+            dto = dtoCarrierService.create(
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+            );
             dtoCarrierService.assignToShop(dto.getCarrierId(), shopId, false);
             return getCarrierById(dto.getCarrierId());
 
@@ -159,8 +160,9 @@ public class VoShippingServiceImpl implements VoShippingService {
             final VoCarrier existing = getCarrierById(vo.getCarrierId());
 
             CarrierDTO dto = dtoCarrierService.getById(vo.getCarrierId());
-            DTOAssembler.newAssembler(VoCarrierLocale.class, CarrierDTO.class).assembleEntity(vo, dto, Converters.BASIC, null);
-            dto = dtoCarrierService.update(dto);
+            dto = dtoCarrierService.update(
+                    voAssemblySupport.assembleDto(CarrierDTO.class, VoCarrierLocale.class, dto, vo)
+            );
 
             final List<VoCarrierShopLink> existingLinks = existing.getCarrierShops();
             for (final VoCarrierShopLink link : existingLinks) {
@@ -221,14 +223,7 @@ public class VoShippingServiceImpl implements VoShippingService {
     public List<VoCarrierSla> getCarrierSlas(final long carrierId) throws Exception {
         if (federationFacade.isManageable(carrierId, CarrierDTO.class)) {
             final List<CarrierSlaDTO> slas = dtoCarrierSlaService.findByCarrier(carrierId);
-            final Assembler asm = DTOAssembler.newAssembler(VoCarrierSla.class, CarrierSlaDTO.class);
-            final List<VoCarrierSla> vos = new ArrayList<>(slas.size());
-            for (final CarrierSlaDTO sla : slas) {
-                final VoCarrierSla vo = new VoCarrierSla();
-                asm.assembleDto(vo, sla, Converters.BASIC, null);
-                vos.add(vo);
-            }
-            return vos;
+            return voAssemblySupport.assembleVos(VoCarrierSla.class, CarrierSlaDTO.class, slas);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -240,9 +235,7 @@ public class VoShippingServiceImpl implements VoShippingService {
         final CarrierSlaDTO sla = dtoCarrierSlaService.getById(id);
         if (sla != null) {
             if (federationFacade.isManageable(sla.getCarrierId(), CarrierDTO.class)) {
-                final VoCarrierSla vo = new VoCarrierSla();
-                DTOAssembler.newAssembler(VoCarrierSla.class, CarrierSlaDTO.class).assembleDto(vo, sla, Converters.BASIC, null);
-                return vo;
+                return voAssemblySupport.assembleVo(VoCarrierSla.class, CarrierSlaDTO.class, new VoCarrierSla(), sla);
             } else {
                 throw new AccessDeniedException("Access is denied");
             }
@@ -254,9 +247,10 @@ public class VoShippingServiceImpl implements VoShippingService {
     public VoCarrierSla createCarrierSla(final VoCarrierSla vo) throws Exception {
         if (vo != null && federationFacade.isManageable(vo.getCarrierId(), CarrierDTO.class)) {
             CarrierSlaDTO sla = dtoCarrierSlaService.getNew();
-            DTOAssembler.newAssembler(VoCarrierSla.class, CarrierSlaDTO.class).assembleEntity(vo, sla, Converters.BASIC, null);
             sla.setCarrierId(vo.getCarrierId());
-            sla = dtoCarrierSlaService.create(sla);
+            sla = dtoCarrierSlaService.create(
+                    voAssemblySupport.assembleDto(CarrierSlaDTO.class, VoCarrierSla.class, sla, vo)
+            );
             return getCarrierSlaById(sla.getCarrierslaId());
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -267,8 +261,9 @@ public class VoShippingServiceImpl implements VoShippingService {
     public VoCarrierSla updateCarrierSla(final VoCarrierSla vo) throws Exception {
         final CarrierSlaDTO sla = dtoCarrierSlaService.getById(vo.getCarrierslaId());
         if (sla != null && federationFacade.isManageable(sla.getCarrierId(), CarrierDTO.class)) {
-            DTOAssembler.newAssembler(VoCarrierSla.class, CarrierSlaDTO.class).assembleEntity(vo, sla, Converters.BASIC, null);
-            dtoCarrierSlaService.update(sla);
+            dtoCarrierSlaService.update(
+                    voAssemblySupport.assembleDto(CarrierSlaDTO.class, VoCarrierSla.class, sla, vo)
+            );
             return getCarrierSlaById(sla.getCarrierslaId());
         } else {
             throw new AccessDeniedException("Access is denied");

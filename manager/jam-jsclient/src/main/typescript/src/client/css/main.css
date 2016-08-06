@@ -402,6 +402,10 @@ table.dataTable thead .sorting:after {
   text-decoration: line-through;
 }
 
+.text-force-break {
+  word-wrap: break-word;
+}
+
 /* **************** LOADING SCREEN ********************************************** */
 
 

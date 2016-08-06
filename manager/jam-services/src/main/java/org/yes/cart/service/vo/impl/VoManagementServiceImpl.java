@@ -1,11 +1,11 @@
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.service.dto.ManagementService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoManagementService;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -20,22 +20,24 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     private final ManagementService managementService;
     private final FederationFacade federationFacade;
+    private final VoAssemblySupport voAssemblySupport;
 
     public VoManagementServiceImpl(final ManagementService managementService,
-                                   final FederationFacade federationFacade) {
+                                   final FederationFacade federationFacade,
+                                   final VoAssemblySupport voAssemblySupport) {
         this.managementService = managementService;
         this.federationFacade = federationFacade;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
     /** {@inheritDoc} */
     @Override
     public VoManager getMyself() throws Exception {
         final ManagerDTO me = getMyselfInternal();
-        final VoManager meVo = new VoManager();
         if (me != null) {
-            DTOAssembler.newAssembler(VoManager.class, ManagerDTO.class).assembleDto(meVo, me, null, null);
+            return voAssemblySupport.assembleVo(VoManager.class, ManagerDTO.class, new VoManager(), me);
         }
-        return meVo;
+        return null;
     }
 
     private ManagerDTO getMyselfInternal() {

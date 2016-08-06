@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
 import java.util.List;
@@ -125,5 +126,18 @@ public interface ShopEndpointController {
     @RequestMapping(value = "/online/{shopId}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop updateDisabledFlag(@PathVariable("shopId") long shopId, @PathVariable("state") boolean state) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/attributes/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") long shopId) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueShop> update(@RequestBody List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
+
 
 }

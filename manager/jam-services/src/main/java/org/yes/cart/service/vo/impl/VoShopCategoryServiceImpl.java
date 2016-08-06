@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -24,9 +23,9 @@ import org.yes.cart.domain.vo.VoCategory;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShopCategoryService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,20 +34,19 @@ import java.util.List;
 public class VoShopCategoryServiceImpl implements VoShopCategoryService {
 
     private final DtoCategoryService dtoCategoryService;
-    private final FederationFacade federationFacade;
     private final DtoShopService dtoShopService;
 
-    /**
-     * Construct category shop service.
-     * @param dtoCategoryService dto service to use
-     * @param federationFacade federation service to use.
-     */
+    private final FederationFacade federationFacade;
+    private final VoAssemblySupport voAssemblySupport;
+
     public VoShopCategoryServiceImpl(final DtoCategoryService dtoCategoryService,
                                      final DtoShopService dtoShopService,
-                                     final FederationFacade federationFacade) {
+                                     final FederationFacade federationFacade,
+                                     final VoAssemblySupport voAssemblySupport) {
         this.dtoCategoryService = dtoCategoryService;
         this.federationFacade = federationFacade;
         this.dtoShopService = dtoShopService;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
 
@@ -59,9 +57,7 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAllByShopId(shopId);
-            final List<VoCategory> voCategories = new ArrayList<>(categoryDTOs.size());
-            DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class).assembleDtos(voCategories, categoryDTOs, null, null);
-            return voCategories;
+            return voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, categoryDTOs);
         } else {
             throw new AccessDeniedException("Access is denied");
         }

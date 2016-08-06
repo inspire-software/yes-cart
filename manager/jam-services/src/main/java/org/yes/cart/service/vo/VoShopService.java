@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 
 import java.util.List;
@@ -165,5 +166,25 @@ public interface VoShopService {
      * @throws Exception
      */
     VoShop updateDisabledFlag(long shopId, boolean disabled) throws Exception;
+
+
+    /**
+     * Get supported attributes by given shop
+     * @param shopId given shop id
+     * @return attributes
+     * @throws Exception
+     */
+    List<VoAttrValueShop> getShopAttributes(long shopId) throws Exception;
+
+
+    /**
+     * Update the shop attributes.
+     *
+     * @param vo shop attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @return shop attributes.
+     * @throws Exception
+     */
+    List<VoAttrValueShop> update(List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
+
 
 }

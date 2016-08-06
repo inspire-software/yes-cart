@@ -16,28 +16,27 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
+import org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
-import org.yes.cart.domain.vo.converter.Converters;
 import org.yes.cart.service.domain.CountryService;
+import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.misc.CurrencyService;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShopService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by iazarnyi on 1/19/16.
@@ -46,8 +45,10 @@ public class VoShopServiceImpl implements VoShopService {
 
     private final DtoShopService dtoShopService;
     private final DtoShopUrlService dtoShopUrlService;
+    private final DtoAttributeService dtoAttributeService;
 
     private final FederationFacade federationFacade;
+    private final VoAssemblySupport voAssemblySupport;
 
     private final LanguageService languageService;
     private final CurrencyService currencyService;
@@ -60,20 +61,26 @@ public class VoShopServiceImpl implements VoShopService {
      * @param countryService  locations
      * @param dtoShopUrlService underlying service to work with shop urls.
      * @param dtoShopService    underlying service to use.
+     * @param dtoAttributeService attribute service
      * @param federationFacade  access.
+     * @param voAssemblySupport vo support
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
                              final CountryService countryService,
                              final DtoShopUrlService dtoShopUrlService,
                              final DtoShopService dtoShopService,
-                             final FederationFacade federationFacade) {
+                             final DtoAttributeService dtoAttributeService,
+                             final FederationFacade federationFacade,
+                             final VoAssemblySupport voAssemblySupport) {
         this.currencyService = currencyService;
         this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
         this.dtoShopService = dtoShopService;
+        this.dtoAttributeService = dtoAttributeService;
         this.federationFacade = federationFacade;
         this.languageService = languageService;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
     /**
@@ -82,9 +89,7 @@ public class VoShopServiceImpl implements VoShopService {
     public List<VoShop> getAll() throws Exception {
         final List<ShopDTO> all = dtoShopService.getAll();
         federationFacade.applyFederationFilter(all, ShopDTO.class);
-        final List<VoShop> rez = new ArrayList<>(all.size());
-        DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleDtos(rez, all, null, null);
-        return rez;
+        return voAssemblySupport.assembleVos(VoShop.class, ShopDTO.class, all);
     }
 
     /**
@@ -93,9 +98,7 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShop getById(long id) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(id);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            final VoShop voShop = new VoShop();
-            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleDto(voShop, shopDTO, null, null);
-            return voShop;
+            return voAssemblySupport.assembleVo(VoShop.class, ShopDTO.class, new VoShop(), shopDTO);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -107,8 +110,9 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShop update(VoShop vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleEntity(vo, shopDTO, null, null);
-            dtoShopService.update(shopDTO);
+            dtoShopService.update(
+                    voAssemblySupport.assembleDto(ShopDTO.class, VoShop.class, shopDTO, vo)
+            );
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -121,8 +125,9 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShop create(VoShop vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             ShopDTO shopDTO = dtoShopService.getNew();
-            DTOAssembler.newAssembler(VoShop.class, ShopDTO.class).assembleEntity(vo, shopDTO, null, null);
-            shopDTO = dtoShopService.create(shopDTO);
+            shopDTO = dtoShopService.create(
+                    voAssemblySupport.assembleDto(ShopDTO.class, VoShop.class, shopDTO, vo)
+            );
             return getById(shopDTO.getShopId());
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -145,13 +150,11 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopLocale getShopLocale(long shopId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        final VoShopLocale voShopLocale = new VoShopLocale();
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class).assembleDto(voShopLocale, shopDTO, Converters.BASIC, null);
+            return voAssemblySupport.assembleVo(VoShopLocale.class, ShopDTO.class, new VoShopLocale(), shopDTO);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-        return voShopLocale;
     }
 
     /**
@@ -160,8 +163,9 @@ public class VoShopServiceImpl implements VoShopService {
     public VoShopLocale update(final VoShopLocale vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            DTOAssembler.newAssembler(VoShopLocale.class, ShopDTO.class).assembleEntity(vo, shopDTO, Converters.BASIC, null);
-            dtoShopService.update(shopDTO);
+            dtoShopService.update(
+                    voAssemblySupport.assembleDto(ShopDTO.class, VoShopLocale.class, shopDTO, vo)
+            );
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -172,13 +176,10 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopUrl getShopUrls(long shopId) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final List<ShopUrlDTO> shopUrlDTO = dtoShopUrlService.getAllByShopId(shopId);
-            final List<VoShopUrlDetail> voShopUrlDetails = new ArrayList<>(shopUrlDTO.size());
             final VoShopUrl voShopUrl = new VoShopUrl();
-            DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class).assembleDtos(voShopUrlDetails, shopUrlDTO, null, null);
-            voShopUrl.setUrls(voShopUrlDetails);
+            voShopUrl.setUrls(voAssemblySupport.assembleVos(VoShopUrlDetail.class, ShopUrlDTO.class, shopUrlDTO));
             voShopUrl.setShopId(shopId);
             return voShopUrl;
         } else {
@@ -190,22 +191,24 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopUrl update(VoShopUrl vo) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             final List<ShopUrlDTO> originalShopUrlDTOs = dtoShopUrlService.getAllByShopId(vo.getShopId());
+            final Set<Long> updated = new HashSet<>();
             for (VoShopUrlDetail urlDetail : vo.getUrls()) {
-                ShopUrlDTO shopUrlDTO = new ShopUrlDTOImpl();
-                DTOAssembler.newAssembler(VoShopUrlDetail.class, ShopUrlDTO.class).assembleEntity(urlDetail, shopUrlDTO, null, null);
+                ShopUrlDTO shopUrlDTO =
+                        voAssemblySupport.assembleDto(ShopUrlDTO.class, VoShopUrlDetail.class, new ShopUrlDTOImpl(), urlDetail);
                 shopUrlDTO.setShopId(vo.getShopId());
                 if (urlDetail.getUrlId() == 0) {  //new one insert
                     dtoShopUrlService.create(shopUrlDTO);
                 } else { //update
                     dtoShopUrlService.update(shopUrlDTO);
-                    removeById(originalShopUrlDTOs, shopUrlDTO.getStoreUrlId());
+                    updated.add(shopUrlDTO.getStoreUrlId());
                 }
             }
             for (ShopUrlDTO dto : originalShopUrlDTOs) {
-                dtoShopUrlService.remove(dto.getId());
+                if (!updated.contains(dto.getId())) {
+                    dtoShopUrlService.remove(dto.getId());
+                }
             }
             return getShopUrls(vo.getShopId());
         } else {
@@ -217,11 +220,10 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
             ssc.setShopId(shopId);
-            ssc.setAll(getAvailableCurrencies());
+            ssc.setAll(currencyService.getSupportedCurrencies());
             String curr = dtoShopService.getSupportedCurrencies(shopId);
             ssc.setSupported(
                     curr == null ? Collections.<String>emptyList() : Arrays.asList(curr.split(","))
@@ -236,8 +238,7 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopSupportedCurrencies update(VoShopSupportedCurrencies vo) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             dtoShopService.updateSupportedCurrencies(
                     vo.getShopId(),
                     StringUtils.join(vo.getSupported().toArray(), ",")
@@ -252,8 +253,7 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLanguages getShopLanguages(long shopId) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final VoShopLanguages voShopLanguages = new VoShopLanguages();
             String lng = dtoShopService.getSupportedLanguages(shopId);
             voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() : Arrays.asList(lng.split(",")));
@@ -269,8 +269,7 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLanguages update(VoShopLanguages vo) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             dtoShopService.updateSupportedLanguages(vo.getShopId(),
                     StringUtils.join(vo.getSupported().toArray(), ","));
             return getShopLanguages(vo.getShopId());
@@ -283,8 +282,7 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLocations getShopLocations(long shopId) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final VoShopLocations shopLocations = new VoShopLocations();
 
             String billing = dtoShopService.getSupportedBillingCountries(shopId);
@@ -312,8 +310,7 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShopLocations update(VoShopLocations vo) throws Exception {
-        final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
             dtoShopService.updateSupportedBillingCountries(vo.getShopId(),
                     StringUtils.join(vo.getSupportedBilling().toArray(), ","));
             dtoShopService.updateSupportedShippingCountries(vo.getShopId(),
@@ -336,19 +333,63 @@ public class VoShopServiceImpl implements VoShopService {
         }
     }
 
-    private void removeById(List<ShopUrlDTO> originalShopUrlDTOs, long storeUrlId) {
-        for (ShopUrlDTO dto : originalShopUrlDTOs) {
-            if (dto.getStoreUrlId() == storeUrlId) {
-                originalShopUrlDTOs.remove(dto);
-                break;
-            }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<VoAttrValueShop> getShopAttributes(final long shopId) throws Exception {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+
+            final List<AttrValueShopDTO> attributes = (List) dtoShopService.getEntityAttributes(shopId);
+
+            return voAssemblySupport.assembleVos(VoAttrValueShop.class, AttrValueShopDTO.class, attributes);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
     }
 
-    private List<String> getAvailableCurrencies() {
 
-        return currencyService.getSupportedCurrencies();
+    /**
+     * {@inheritDoc}
+     */
+    public List<VoAttrValueShop> update(final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
+
+        long shopId = 0L;
+        final VoAssemblySupport.VoAssembler<VoAttrValueShop, AttrValueShopDTO> asm =
+                voAssemblySupport.with(VoAttrValueShop.class, AttrValueShopDTO.class);
+
+        for (final MutablePair<VoAttrValueShop, Boolean> item : vo) {
+            if (shopId == 0L) {
+                shopId = item.getFirst().getShopId();
+                if (!federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+                    throw new AccessDeniedException("Access is denied");
+                }
+            } else if (shopId != item.getFirst().getShopId()) {
+                throw new AccessDeniedException("Access is denied");
+            }
+
+            if (Boolean.valueOf(item.getSecond())) {
+                // delete mode
+                dtoShopService.deleteAttributeValue(item.getFirst().getAttrvalueId());
+            } else if (item.getFirst().getAttrvalueId() > 0L) {
+                // update mode
+                final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
+                asm.assembleDto(dto, item.getFirst());
+                dto.setAttrvalueId(item.getFirst().getAttrvalueId());
+                dtoShopService.updateEntityAttributeValue(dto);
+            } else {
+                // insert mode
+                final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
+                asm.assembleDto(dto, item.getFirst());
+                dto.setAttrvalueId(item.getFirst().getAttrvalueId());
+                dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
+                dtoShopService.createEntityAttributeValue(dto);
+            }
+
+        }
+
+        return getShopAttributes(shopId);
     }
-
-
 }

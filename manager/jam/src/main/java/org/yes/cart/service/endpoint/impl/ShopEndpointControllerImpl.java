@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.ShopEndpointController;
 import org.yes.cart.service.vo.VoShopCategoryService;
@@ -132,5 +133,15 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     public @ResponseBody
     VoShop updateDisabledFlag(@PathVariable("shopId") final long shopId, @PathVariable("state") final boolean state) throws Exception {
         return voShopService.updateDisabledFlag(shopId, state);
+    }
+
+    public  @ResponseBody
+    List<VoAttrValueShop> getShopAttributes(@PathVariable("shopId") final long shopId) throws Exception {
+        return voShopService.getShopAttributes(shopId);
+    }
+
+    public  @ResponseBody
+    List<VoAttrValueShop> update(@RequestBody final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
+        return voShopService.update(vo);
     }
 }

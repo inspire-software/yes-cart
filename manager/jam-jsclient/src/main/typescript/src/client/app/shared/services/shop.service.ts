@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, CategoryVO} from '../model/index';
+import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -216,6 +216,18 @@ export class ShopService {
       .catch(this.handleError);
   }
 
+
+  /**
+   * Get attributes for given shop id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getShopAttributes(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/attributes/' + id)
+      .map(res => <AttrValueShopVO[]> res.json())
+      .catch(this.handleError);
+  }
+
   /**
    * Get all categories assigned to given shop.
    * @param id shop id
@@ -269,6 +281,21 @@ export class ShopService {
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/locations', body, options)
       .map(res => <ShopLocationsVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Update supported attributes.
+   * @param attrs
+   * @returns {Observable<R>}
+   */
+  saveShopAttributes(attrs:Array<Pair<AttrValueShopVO, boolean>>) {
+    let body = JSON.stringify(attrs);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
+      .map(res => <ShopLocationsVO[]> res.json())
       .catch(this.handleError);
   }
 

@@ -16,13 +16,13 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.vo.VoCategory;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCategoryService;
 
 import java.util.ArrayList;
@@ -38,15 +38,20 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
     private final FederationFacade federationFacade;
 
+    private final VoAssemblySupport voAssemblySupport;
+
     /**
      * Construct service.
      * @param dtoCategoryService dto service to use.
      * @param federationFacade  access.
+     * @param voAssemblySupport vo assembly
      */
     public VoCategoryServiceImpl(final DtoCategoryService dtoCategoryService,
-                                 final FederationFacade federationFacade) {
+                                 final FederationFacade federationFacade,
+                                 final VoAssemblySupport voAssemblySupport) {
         this.dtoCategoryService = dtoCategoryService;
         this.federationFacade = federationFacade;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
     /** {@inheritDoc} */
@@ -90,8 +95,8 @@ public class VoCategoryServiceImpl implements VoCategoryService {
      */
     private void adaptCategories(List<CategoryDTO> categoryDTOs, List<VoCategory> voCategories) {
         for(CategoryDTO dto : categoryDTOs) {
-            VoCategory voCategory = new VoCategory();
-            DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class).assembleDto(voCategory, dto, null, null);
+            VoCategory voCategory =
+                    voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), dto);
             voCategories.add(voCategory);
             voCategory.setChildren(new ArrayList<VoCategory>(dto.getChildren().size()));
             adaptCategories(dto.getChildren(), voCategory.getChildren());
@@ -103,9 +108,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     public VoCategory getById(long id) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(id);
         if (categoryDTO != null && federationFacade.isManageable(id, CategoryDTO.class)){
-            final VoCategory voCategory = new VoCategory();
-            DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class).assembleDto(voCategory, categoryDTO, null, null);
-            return voCategory;
+            return voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), categoryDTO);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -116,8 +119,9 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     public VoCategory create(VoCategory voCategory)  throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getNew();
         if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)){
-            DTOAssembler.newAssembler(VoCategory.class, CategoryDTO.class).assembleEntity(voCategory, categoryDTO, null, null);
-            final CategoryDTO persistent = dtoCategoryService.create(categoryDTO);
+            final CategoryDTO persistent = dtoCategoryService.create(
+                    voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, voCategory)
+            );
             return getById(persistent.getId());
         } else {
             throw new AccessDeniedException("Access is denied");

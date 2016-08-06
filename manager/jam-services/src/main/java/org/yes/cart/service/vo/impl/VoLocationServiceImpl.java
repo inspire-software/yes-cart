@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CountryDTO;
 import org.yes.cart.domain.dto.StateDTO;
@@ -25,6 +24,7 @@ import org.yes.cart.domain.vo.VoState;
 import org.yes.cart.service.dto.DtoCountryService;
 import org.yes.cart.service.dto.DtoStateService;
 import org.yes.cart.service.federation.FederationFacade;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoLocationService;
 
 import java.util.ArrayList;
@@ -42,21 +42,23 @@ public class VoLocationServiceImpl implements VoLocationService {
 
     private final FederationFacade federationFacade;
 
+    private final VoAssemblySupport voAssemblySupport;
+
     public VoLocationServiceImpl(final DtoCountryService dtoCountryService,
                                  final DtoStateService dtoStateService,
-                                 final FederationFacade federationFacade) {
+                                 final FederationFacade federationFacade,
+                                 final VoAssemblySupport voAssemblySupport) {
         this.dtoCountryService = dtoCountryService;
         this.dtoStateService = dtoStateService;
         this.federationFacade = federationFacade;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
     /** {@inheritDoc} */
     @Override
     public List<VoCountry> getAllCountries() throws Exception {
         final List<CountryDTO> all = dtoCountryService.getAll();
-        final List<VoCountry> rez = new ArrayList<>(all.size());
-        DTOAssembler.newAssembler(VoCountry.class, CountryDTO.class).assembleDtos(rez, all, null, null);
-        return rez;
+        return voAssemblySupport.assembleVos(VoCountry.class, CountryDTO.class, all);
     }
 
     /** {@inheritDoc} */
@@ -64,9 +66,7 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoCountry getCountryById(final long id) throws Exception {
         final CountryDTO countryDTO = dtoCountryService.getById(id);
         if (countryDTO != null) {
-            final VoCountry voCountry = new VoCountry();
-            DTOAssembler.newAssembler(VoCountry.class, CountryDTO.class).assembleDto(voCountry, countryDTO, null, null);
-            return voCountry;
+            return voAssemblySupport.assembleVo(VoCountry.class, CountryDTO.class, new VoCountry(), countryDTO);
         }
         return null;
     }
@@ -76,8 +76,9 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoCountry createCountry(final VoCountry vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             CountryDTO countryDTO = dtoCountryService.getNew();
-            DTOAssembler.newAssembler(VoCountry.class, CountryDTO.class).assembleEntity(vo, countryDTO, null, null);
-            countryDTO = dtoCountryService.create(countryDTO);
+            countryDTO = dtoCountryService.create(
+                    voAssemblySupport.assembleDto(CountryDTO.class, VoCountry.class, countryDTO, vo)
+            );
             return getCountryById(countryDTO.getCountryId());
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -89,8 +90,9 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoCountry updateCountry(final VoCountry vo) throws Exception {
         CountryDTO countryDTO = dtoCountryService.getById(vo.getCountryId());
         if (countryDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
-            DTOAssembler.newAssembler(VoCountry.class, CountryDTO.class).assembleEntity(vo, countryDTO, null, null);
-            countryDTO = dtoCountryService.update(countryDTO);
+            countryDTO = dtoCountryService.update(
+                    voAssemblySupport.assembleDto(CountryDTO.class, VoCountry.class, countryDTO, vo)
+            );
             return getCountryById(countryDTO.getCountryId());
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -114,7 +116,7 @@ public class VoLocationServiceImpl implements VoLocationService {
         final List<VoState> rez = new ArrayList<>();
         if (countryDTO != null) {
             final List<StateDTO> all = dtoStateService.findByCountry(countryDTO.getCountryCode());
-            DTOAssembler.newAssembler(VoState.class, StateDTO.class).assembleDtos(rez, all, null, null);
+            return voAssemblySupport.assembleVos(VoState.class, StateDTO.class, all);
         }
         return rez;
     }
@@ -124,9 +126,7 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoState getStateById(final long id) throws Exception {
         final StateDTO stateDTO = dtoStateService.getById(id);
         if (stateDTO != null) {
-            final VoState voState = new VoState();
-            DTOAssembler.newAssembler(VoState.class, StateDTO.class).assembleDto(voState, stateDTO, null, null);
-            return voState;
+            return voAssemblySupport.assembleVo(VoState.class, StateDTO.class, new VoState(), stateDTO);
         }
         return null;
     }
@@ -136,8 +136,9 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoState createState(final VoState vo) throws Exception {
         if (federationFacade.isCurrentUserSystemAdmin()) {
             StateDTO stateDTO = dtoStateService.getNew();
-            DTOAssembler.newAssembler(VoState.class, StateDTO.class).assembleEntity(vo, stateDTO, null, null);
-            stateDTO = dtoStateService.create(stateDTO);
+            stateDTO = dtoStateService.create(
+                    voAssemblySupport.assembleDto(StateDTO.class, VoState.class, stateDTO, vo)
+            );
             return getStateById(stateDTO.getStateId());
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -149,8 +150,9 @@ public class VoLocationServiceImpl implements VoLocationService {
     public VoState updateState(final VoState vo) throws Exception {
         StateDTO stateDTO = dtoStateService.getById(vo.getStateId());
         if (stateDTO != null && federationFacade.isCurrentUserSystemAdmin()) {
-            DTOAssembler.newAssembler(VoState.class, StateDTO.class).assembleEntity(vo, stateDTO, null, null);
-            stateDTO = dtoStateService.update(stateDTO);
+            stateDTO = dtoStateService.update(
+                    voAssemblySupport.assembleDto(StateDTO.class, VoState.class, stateDTO, vo)
+            );
             return getStateById(stateDTO.getStateId());
         } else {
             throw new AccessDeniedException("Access is denied");

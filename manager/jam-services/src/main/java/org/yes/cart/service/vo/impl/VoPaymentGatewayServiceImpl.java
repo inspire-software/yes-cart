@@ -25,6 +25,7 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPaymentGatewayService;
 
 import java.util.*;
@@ -44,12 +45,16 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
     private final FederationFacade federationFacade;
 
+    private final VoAssemblySupport voAssemblySupport;
+
     public VoPaymentGatewayServiceImpl(final PaymentModulesManager paymentModulesManager,
                                        final CustomerOrderPaymentService customerOrderPaymentService,
-                                       final FederationFacade federationFacade) {
+                                       final FederationFacade federationFacade,
+                                       final VoAssemblySupport voAssemblySupport) {
         this.paymentModulesManager = paymentModulesManager;
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.federationFacade = federationFacade;
+        this.voAssemblySupport = voAssemblySupport;
     }
 
 

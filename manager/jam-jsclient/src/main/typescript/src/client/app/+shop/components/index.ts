@@ -9,4 +9,5 @@ export * from './shop-url.component';
 export * from './shop-catalog.component';
 export * from './shop-location.component';
 export * from './shop-carrier.component';
+export * from './shop-attributes.component';
 

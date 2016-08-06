@@ -42,6 +42,10 @@
 
   "TAB_MAIN": "Main",
   "TAB_I18N": "Localization",
+  "TAB_ATTRIBUTES": "Attributes",
+
+  "AV_ATTRIBUTE": "Attribute",
+  "AV_VALUE": "Value",
 
   "SHOP_TAB_I18N": "Localization",
   "SHOP_TAB_URL": "URL",

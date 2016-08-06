@@ -21,10 +21,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <import resource="jam-dto-services.xml"/>
+
     <bean id="vShopCategoryService" class="org.yes.cart.service.vo.impl.VoShopCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoCategoryService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
         <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voShopService" class="org.yes.cart.service.vo.impl.VoShopServiceImpl">
@@ -33,35 +36,42 @@
         <constructor-arg index="2" ref="countryService"/>
         <constructor-arg index="3" ref="dtoShopUrlService"/>
         <constructor-arg index="4" ref="dtoShopService"/>
-        <constructor-arg index="5" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="dtoAttributeService"/>
+        <constructor-arg index="6" ref="uiFederationFacade"/>
+        <constructor-arg index="7" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voCategoryService" class="org.yes.cart.service.vo.impl.VoCategoryServiceImpl">
         <constructor-arg index="0" ref="dtoCategoryService"/>
         <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voManagementService" class="org.yes.cart.service.vo.impl.VoManagementServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
         <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voLocationService" class="org.yes.cart.service.vo.impl.VoLocationServiceImpl">
         <constructor-arg index="0" ref="dtoCountryService"/>
         <constructor-arg index="1" ref="dtoStateService"/>
         <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voCarrierService" class="org.yes.cart.service.vo.impl.VoShippingServiceImpl">
         <constructor-arg index="0" ref="dtoCarrierService"/>
         <constructor-arg index="1" ref="dtoCarrierSlaService"/>
         <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voPaymentGatewayService" class="org.yes.cart.service.vo.impl.VoPaymentGatewayServiceImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderPaymentService"/>
         <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
     </bean>
 
 </beans>

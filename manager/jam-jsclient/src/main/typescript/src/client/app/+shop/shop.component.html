@@ -40,6 +40,10 @@
       <yc-shop-carrier [shop]="shop"></yc-shop-carrier>
     </tab>
 
+    <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">
+      <yc-shop-attributes [shop]="shop"></yc-shop-attributes>
+    </tab>
+
   </tabset>
 
 </template>
