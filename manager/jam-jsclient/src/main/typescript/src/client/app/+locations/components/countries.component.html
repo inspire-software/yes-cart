@@ -16,7 +16,7 @@
           <td title="{{ 'LOCATION_COUNRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
           <td title="{{ 'LOCATION_COUNRY_ISO' | translate }}"><a (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName == null || row.displayName == '' ? '-' : row.displayName}}</a></td>
+          <td title="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
         </template>
       </tr>
       </tbody>

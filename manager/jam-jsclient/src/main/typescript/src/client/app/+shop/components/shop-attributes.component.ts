@@ -265,6 +265,10 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
     return this.shopAttributesRemove.indexOf(row.attrvalueId) !== -1;
   }
 
+  isNewAttribute(row:AttrValueShopVO):boolean {
+    return row.attrvalueId == 0 && row.val != null;
+  }
+
   resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -284,5 +288,19 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
     }
   }
 
-
+  public getDisplayValue(row:AttrValueShopVO):string {
+    if (row.val != null) {
+      if (row.attribute.etypeName === 'Boolean') {
+        if (row.val === 'true') {
+          return '<i class="fa fa-check-circle"></i>';
+        } else {
+          return '<i class="fa fa-times-circle"></i>';
+        }
+      } else if (row.attribute.etypeName === 'HTML') {
+        return '<pre>' + row.val + '</pre>';
+      }
+      return row.val;
+    }
+    return '&nbsp;';
+  }
 }

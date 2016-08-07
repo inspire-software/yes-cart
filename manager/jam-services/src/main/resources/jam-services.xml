@@ -39,6 +39,15 @@
         <constructor-arg index="5" ref="dtoAttributeService"/>
         <constructor-arg index="6" ref="uiFederationFacade"/>
         <constructor-arg index="7" ref="voAssemblySupport"/>
+        <property name="skipAttributesInView">
+            <list>
+                <value>CURRENCY</value>
+                <value>COUNTRY_SHIP</value>
+                <value>COUNTRY_BILL</value>
+                <value>SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL</value>
+                <value>SUPPORTED_LANGUAGES</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="voCategoryService" class="org.yes.cart.service.vo.impl.VoCategoryServiceImpl">

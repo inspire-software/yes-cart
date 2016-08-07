@@ -12,7 +12,7 @@
       <tr *ngFor="let row of filteredCarriers; let i = index" class="{{row == selectedCarrier ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a (click)="onSelectRow(row)">{{row.description == null || row.description == '' ? '-' : row.description}}</a></td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
         </template>
       </tr>
       </tbody>

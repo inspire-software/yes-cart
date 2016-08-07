@@ -28,14 +28,16 @@
       <thead class="cf">
       <tr>
         <th>{{ 'AV_ATTRIBUTE' | translate }}</th>
+        <th>{{ 'AV_TYPE' | translate }}</th>
         <th>{{ 'AV_VALUE' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredShopAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-muted': ''" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" style="max-width: 400px;"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-muted text-force-break': 'text-force-break'">{{row.attrvalueId === 0 ? '' : row.val}}&nbsp;</a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger': (isNewAttribute(row) ? 'text-success':'')" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger': (isNewAttribute(row) ? 'text-success':'')" [title]="row.attribute.code">{{row.attribute.etypeName}}</a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" style="max-width: 400px;"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger text-force-break': (isNewAttribute(row) ? 'text-success text-force-break':'text-force-break')"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </template>
       </tr>
       </tbody>

@@ -35,6 +35,7 @@ import org.yes.cart.service.misc.CurrencyService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShopService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -53,6 +54,8 @@ public class VoShopServiceImpl implements VoShopService {
     private final LanguageService languageService;
     private final CurrencyService currencyService;
     private final CountryService countryService;
+
+    private Set<String> skipAttributesInView = Collections.emptySet();
 
     /**
      * Construct service.
@@ -343,7 +346,15 @@ public class VoShopServiceImpl implements VoShopService {
 
             final List<AttrValueShopDTO> attributes = (List) dtoShopService.getEntityAttributes(shopId);
 
-            return voAssemblySupport.assembleVos(VoAttrValueShop.class, AttrValueShopDTO.class, attributes);
+            final List<VoAttrValueShop> all = voAssemblySupport.assembleVos(VoAttrValueShop.class, AttrValueShopDTO.class, attributes);
+            // Filter out special attributes that are managed by specialised editors
+            final Iterator<VoAttrValueShop> allIt = all.iterator();
+            while (allIt.hasNext()) {
+                if (skipAttributesInView.contains(allIt.next().getAttribute().getCode())) {
+                    allIt.remove();
+                }
+            }
+            return all;
 
         } else {
             throw new AccessDeniedException("Access is denied");
@@ -370,6 +381,11 @@ public class VoShopServiceImpl implements VoShopService {
                 throw new AccessDeniedException("Access is denied");
             }
 
+            if (skipAttributesInView.contains(item.getFirst().getAttribute().getCode())) {
+                ShopCodeContext.getLog(this).warn("Shop attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
+                continue;
+            }
+
             if (Boolean.valueOf(item.getSecond())) {
                 // delete mode
                 dtoShopService.deleteAttributeValue(item.getFirst().getAttrvalueId());
@@ -392,4 +408,14 @@ public class VoShopServiceImpl implements VoShopService {
 
         return getShopAttributes(shopId);
     }
+
+    /**
+     * Spring IoC
+     *
+     * @param attributes attributes to skip
+     */
+    public void setSkipAttributesInView(List<String> attributes) {
+        this.skipAttributesInView = new HashSet<>(attributes);
+    }
+
 }
