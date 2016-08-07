@@ -1,57 +1,53 @@
-<div class="col-lg-9">
+<div class="panel-body">
 
-    <div class="panel-body">
+  <form role="form">
+    <fieldset>
 
-      <form role="form">
-        <fieldset>
+      <div class="row">
+        <h3>{{title}}</h3>
+      </div>
 
-          <div class="row">
-            <h3>{{title}}</h3>
-          </div>
+      <div class="row">
+        <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
+        <div class="col-xs-8 col-md-6">
+          <input class="form-control" name="dataValue" type="text" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()">
+        </div>
+      </div>
 
-          <div class="row">
-            <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
-            <div class="col-xs-8 col-md-6">
-              <input class="form-control" name="dataValue" type="text" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()">
-            </div>
-          </div>
+      <div class="row" *ngFor="let row of dataI18n">
+        <div class="col-xs-3 col-md-3">
+          {{row.first}}
+        </div>
+        <div class="col-xs-5 col-md-6">
+          {{row.second}}
+        </div>
+        <div class="col-xs-4 col-md-3">
+          <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
+            <i class="fa fa-remove"></i>
+          </button>
+        </div>
+      </div>
 
-          <div class="row" *ngFor="let row of dataI18n">
-            <div class="col-xs-3 col-md-3">
-              {{row.first}}
-            </div>
-            <div class="col-xs-5 col-md-6">
-              {{row.second}}
-            </div>
-            <div class="col-xs-4 col-md-3">
-              <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
-                <i class="fa fa-edit"></i>
-              </button>
-              <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
-                <i class="fa fa-remove"></i>
-              </button>
-            </div>
-          </div>
+      <div class="row">
 
-          <div class="row">
+        <div class="form-group col-xs-3 col-md-3">
+          <input class="form-control" placeholder="{{ 'LANGUAGE' | translate }}" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
+        </div>
+        <div class="form-group col-xs-5 col-md-6">
+          <input class="form-control" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" [(ngModel)]="selectedRow.second">
+        </div>
+        <div class="form-group col-xs-4 col-md-3">
+          <button class="btn btn-circle btn-sm" (click)="onRowAdd()">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
 
-            <div class="form-group col-xs-3 col-md-3">
-              <input class="form-control" placeholder="{{ 'LANGUAGE' | translate }}" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
-            </div>
-            <div class="form-group col-xs-5 col-md-6">
-              <input class="form-control" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" [(ngModel)]="selectedRow.second">
-            </div>
-            <div class="form-group col-xs-4 col-md-3">
-              <button class="btn btn-circle btn-sm" (click)="onRowAdd()">
-                <i class="fa fa-plus"></i>
-              </button>
-            </div>
-
-          </div>
+      </div>
 
 
-        </fieldset>
-      </form>
-    </div>
-
+    </fieldset>
+  </form>
 </div>

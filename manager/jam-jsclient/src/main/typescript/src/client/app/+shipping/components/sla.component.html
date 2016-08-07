@@ -55,19 +55,23 @@
       <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
 
         <div class="row">
-          <yc-i18n-table title="{{ 'NAME' | translate }}"
-                         [source]="sla"
-                         value="name"
-                         i18n="displayNames"
-                         (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+          <div class="col-lg-9">
+            <yc-i18n-table title="{{ 'NAME' | translate }}"
+                           [source]="sla"
+                           value="name"
+                           i18n="displayNames"
+                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+          </div>
         </div>
 
         <div class="row">
-          <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
-                         [source]="sla"
-                         value="description"
-                         i18n="displayDescriptions"
-                         (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+          <div class="col-lg-9">
+            <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+                           [source]="sla"
+                           value="description"
+                           i18n="displayDescriptions"
+                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+          </div>
         </div>
 
 

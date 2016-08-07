@@ -44,7 +44,108 @@
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
-    // TODO
+    <template [ngIf]="isBooleanEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="bg-success">{{ attributeToEdit.attribute.description }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-md-3">
+              <input name="val" class="form-control" type="checkbox" [(ngModel)]="attributeToEditBoolean" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
+    <template [ngIf]="isTextEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="bg-success">{{ attributeToEdit.attribute.description }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-md-6">
+              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)">
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
+
+    <template [ngIf]="isTextAreaEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="bg-success">{{ attributeToEdit.attribute.description }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">
+              <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)"></textarea>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
+
+    <template [ngIf]="isLocalisableEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="bg-success">{{ attributeToEdit.attribute.description }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">
+              <yc-i18n-table [source]="attributeToEdit"
+                             value="val"
+                             i18n="displayVals"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
+    <template [ngIf]="isImageEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">
+              <p class="bg-success">{{ attributeToEdit.attribute.description }}</p>
+            </div>
+          </div>
+          <div class="row">
+            <pre>TODO: finish this
+{{ attributeToEdit.val }}</pre>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
 
   </modal>
 

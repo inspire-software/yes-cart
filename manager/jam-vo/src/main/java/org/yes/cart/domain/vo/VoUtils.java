@@ -41,9 +41,11 @@ public class VoUtils {
     }
 
     public static Map<String, String> adaptPairsToMap(List<MutablePair<String, String>> pairs) {
-        Map<String, String> map = new HashMap<>(pairs.size());
-        for (MutablePair<String, String> pair : pairs) {
-            map.put(pair.getFirst(), pair.getSecond());
+        Map<String, String> map = new HashMap<>(pairs != null ? pairs.size() : 0);
+        if (pairs != null) {
+            for (MutablePair<String, String> pair : pairs) {
+                map.put(pair.getFirst(), pair.getSecond());
+            }
         }
         return map;
     }

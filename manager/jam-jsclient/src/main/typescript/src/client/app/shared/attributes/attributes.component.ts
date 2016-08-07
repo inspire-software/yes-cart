@@ -20,6 +20,7 @@ import {PaginationComponent} from './../pagination/index';
 import {AttrValueVO, AttributeVO, Pair} from './../model/index';
 import {ShopService, ShopEventBus, Util} from './../services/index';
 import {DataControlComponent} from './../sidebar/index';
+import {I18nComponent} from './../i18n/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 import {YcValidators} from './../validation/validators';
 import {FormValidationEvent} from './../event/index';
@@ -28,7 +29,7 @@ import {FormValidationEvent} from './../event/index';
   selector: 'yc-attributes',
   moduleId: module.id,
   templateUrl: 'attributes.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
+  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent]
 })
 
 export class AttributesComponent implements OnInit, OnChanges {
@@ -138,7 +139,11 @@ export class AttributesComponent implements OnInit, OnChanges {
   protected onRowEdit(row:AttrValueVO) {
     console.debug('AttributesComponent onRowEdit handler', row);
     this.validForSave = false;
-    this.attributeToEdit = Util.clone(row) ;
+    this.attributeToEdit = Util.clone(row);
+    if (this.attributeToEdit.attribute.etypeName === 'Boolean') {
+      // Fix this to string
+      this.attributeToEdit.val = '' + this.attributeToEdit.val;
+    }
     this.editModalDialog.show();
   }
 
@@ -281,7 +286,7 @@ export class AttributesComponent implements OnInit, OnChanges {
   public getDisplayValue(row:AttrValueVO):string {
     if (row.val != null) {
       if (row.attribute.etypeName === 'Boolean') {
-        if (row.val === 'true') {
+        if (('' + row.val)  === 'true') {
           return '<i class="fa fa-check-circle"></i>';
         } else {
           return '<i class="fa fa-times-circle"></i>';
@@ -293,4 +298,37 @@ export class AttributesComponent implements OnInit, OnChanges {
     }
     return '&nbsp;';
   }
+
+  isBooleanEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Boolean';
+  }
+
+  isImageEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Image';
+  }
+
+  isLocalisableEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'String';
+  }
+
+  isTextAreaEditor():boolean {
+    return this.attributeToEdit &&
+      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML');
+  }
+
+  isTextEditor():boolean {
+    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor();
+  }
+
+  get attributeToEditBoolean():boolean {
+    // Must use get/set because there is string to boolean conversion happens somewhere in binding,
+    // so: ngTrueValue="'true'" ngFalseValue="'false'" does not work
+    return this.attributeToEdit && ('' + this.attributeToEdit.val === 'true');
+  }
+
+  set attributeToEditBoolean(val:boolean) {
+    this.attributeToEdit.val = '' + val;
+  }
+
+
 }
