@@ -3,7 +3,7 @@
   <div class="text-right data-control">
 
     <form class="pull-left">
-      <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
     </form>
 
     <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
@@ -23,52 +23,11 @@
 
   </div>
 
-  <section class="no-more-tables">
-    <table class="table-bordered table-striped table-condensed cf">
-      <thead class="cf">
-      <tr>
-        <th>{{ 'AV_ATTRIBUTE' | translate }}</th>
-        <th>{{ 'AV_TYPE' | translate }}</th>
-        <th>{{ 'AV_VALUE' | translate }}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let row of filteredShopAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
-        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger': (isNewAttribute(row) ? 'text-success':'')" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger': (isNewAttribute(row) ? 'text-success':'')" [title]="row.attribute.code">{{row.attribute.etypeName}}</a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" style="max-width: 400px;"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger text-force-break': (isNewAttribute(row) ? 'text-success text-force-break':'text-force-break')"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
-        </template>
-      </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <div>
-    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
-                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
-  </div>
-
-
-
-  <modal #deleteConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (closed)="onDeleteConfirmationResult($event)">
-    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
-  </modal>
-
-  <modal #editModalDialog
-         title="{{ 'AV_ATTRIBUTE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-         [valid]="validForSave"
-         (closed)="onEditModalResult($event)">
-
-    // TODO
-
-  </modal>
+  <yc-attributes #attributesComponent
+                 [masterObject]="shop"
+                 [objectAttributes]="shopAttributes"
+                 [attributeFilter]="attributeFilter"
+                 (dataSelected)="onSelectRow($event)"
+                 (dataChanged)="onDataChange($event)"></yc-attributes>
 
 </template>
