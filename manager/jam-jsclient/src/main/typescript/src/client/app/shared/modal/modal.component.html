@@ -30,7 +30,7 @@
           {{cancelLabel}}
         </button>
         <button type="button"
-                class="btn btn-primary btn-sm"
+                [ngClass]="valid ? 'btn btn-success btn-sm':'btn btn-default btn-sm'"
                 [disabled]="!valid"
                 (click)="positiveAction()">
           {{positiveLabel}}

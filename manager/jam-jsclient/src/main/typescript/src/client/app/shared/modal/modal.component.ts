@@ -1,4 +1,5 @@
 import {Component,  Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {NgClass} from '@angular/common';
 
 /**
  *
@@ -14,8 +15,9 @@ import {Component,  Input, Output, EventEmitter, OnInit} from '@angular/core';
  */
 @Component({
   selector: 'modal',
-  templateUrl: './modal.html',
-  moduleId: module.id
+  templateUrl: './modal.component.html',
+  moduleId: module.id,
+  directives: [NgClass]
 })
 export class ModalComponent implements OnInit {
 

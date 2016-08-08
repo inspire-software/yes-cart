@@ -76,7 +76,7 @@
           <div class="row">
             <div class="col-md-6">{{ attributeToEdit.attribute.name }}</div>
             <div class="col-md-6">
-              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)">
+              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
             </div>
           </div>
         </fieldset>
@@ -97,7 +97,7 @@
           <div class="row">
             <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
             <div class="col-xs-12">
-              <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)"></textarea>
+              <textarea name="val" class="form-control" rows="6" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required></textarea>
             </div>
           </div>
         </fieldset>

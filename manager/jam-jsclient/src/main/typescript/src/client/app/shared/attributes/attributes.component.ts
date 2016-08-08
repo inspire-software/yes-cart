@@ -163,7 +163,40 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   onDataChange(event:any) {
-    this.validForSave = true;
+
+    let val = this.attributeToEdit.val;
+    let typ = this.attributeToEdit.attribute.etypeName;
+    let customRegEx = this.attributeToEdit.attribute.regexp;
+
+    if (customRegEx) {
+      let regex = new RegExp(customRegEx);
+      this.validForSave = regex.test(val);
+    } else {
+      switch (typ) {
+        case 'Integer':
+          this.validForSave = /^[\-]?[0-9]+$/.test(val);
+          break;
+        case 'Float':
+          this.validForSave = /^(([\-][0-9]+)|([0-9]*))[\.]?[0-9]+$/.test(val);
+          break;
+        case 'Phone':
+          this.validForSave = /^[\+]?[\(\)0-9\- ]+$/.test(val);
+          break;
+        case 'Email':
+          this.validForSave = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(val);
+          break;
+        case 'Date':
+          this.validForSave = /^[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?$/.test(val);
+          break;
+        case 'Any':
+          this.validForSave = true;
+          break;
+        default:
+          this.validForSave = val != null && !(/^\s*$/.test(val));
+          break;
+      }
+    }
+
     console.debug('AttributesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
