@@ -57,6 +57,8 @@
   "SHOP_TAB_CATALOG": "Catalog",
   "SHOP_TAB_LOCATIONS": "Locations",
   "SHOP_TAB_CARRIERS": "Carriers",
+  "SHOP_TAB_WAREHOUSES": "Warehouses",
+  "SHOP_TAB_PGS": "Payment Gateways",
 
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",

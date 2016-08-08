@@ -40,8 +40,16 @@
       <yc-shop-carrier [shop]="shop"></yc-shop-carrier>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}" (select)="tabSelected('Warehouse')">
+      // TODO:
+    </tab>
+
     <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">
       <yc-shop-attributes [shop]="shop"></yc-shop-attributes>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_PGS' | translate }}" (select)="tabSelected('PGs')">
+      // TODO:
     </tab>
 
   </tabset>
