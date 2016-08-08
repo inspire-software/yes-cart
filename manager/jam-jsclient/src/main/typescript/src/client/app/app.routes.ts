@@ -1,7 +1,6 @@
 import { provideRouter, RouterConfig } from '@angular/router';
 
-import { AboutRoutes } from './+about/index';
-import { HomeRoutes } from './+home/index';
+import { HomeRoutes } from './+home/home.routes';
 import { ShopRoutes } from './+shop/shop.routes';
 import { LocationRoutes } from './+locations/locations.routes';
 import { ShippingRoutes } from './+shipping/shipping.routes';
@@ -12,7 +11,6 @@ const routes: RouterConfig = [
   ...ShopRoutes,
   ...LocationRoutes,
   ...ShippingRoutes,
-  ...AboutRoutes,
   ...LicenseRoutes,
 ];
 
