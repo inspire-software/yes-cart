@@ -17,6 +17,8 @@ package org.yes.cart.service.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
@@ -37,7 +39,20 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
     }
 
     @Override
-    public VoManager getMyself() throws Exception {
+    public @ResponseBody
+    VoManager getMyself() throws Exception {
         return this.voManagementService.getMyself();
+    }
+
+    @Override
+    public @ResponseBody
+    VoLicenseAgreement getMyAgreement() throws Exception {
+        return voManagementService.getMyAgreement();
+    }
+
+    @Override
+    public @ResponseBody
+    VoLicenseAgreement acceptMyAgreement() throws Exception {
+        return voManagementService.acceptMyAgreement();
     }
 }

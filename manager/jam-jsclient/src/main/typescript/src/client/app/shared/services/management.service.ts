@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {ManagerVO} from '../model/index';
+import {ManagerVO, LicenseAgreementVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -48,6 +48,32 @@ export class ManagementService {
     return this.http.get(this._serviceBaseUrl + '/myself')
       .map(res => <ManagerVO> res.json())
       .catch(this.handleError);
+  }
+
+
+  /**
+   * Get current user info,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getMyAgreement() {
+    return this.http.get(this._serviceBaseUrl + '/license')
+      .map(res => <LicenseAgreementVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get current user info,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  acceptMyAgreement() {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/license', null, options)
+        .map(res => <LicenseAgreementVO> res.json())
+        .catch(this.handleError);
   }
 
   private handleError (error:any) {

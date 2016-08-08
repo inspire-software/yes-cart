@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
 
 /**
@@ -33,5 +34,23 @@ public interface VoManagementService {
      * @throws Exception
      */
     VoManager getMyself() throws Exception;
+
+    /**
+     * Get license for current user
+     *
+     * @return license vo
+     *
+     * @throws Exception
+     */
+    VoLicenseAgreement getMyAgreement() throws Exception;
+
+    /**
+     * Accept license for current user.
+     *
+     * @return license vo
+     *
+     * @throws Exception
+     */
+    VoLicenseAgreement acceptMyAgreement() throws Exception;
 
 }

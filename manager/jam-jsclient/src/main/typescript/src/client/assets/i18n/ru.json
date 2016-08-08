@@ -2,6 +2,10 @@
   "VALIDATION_REQUIRED": "Correct value is required",
   "VALIDATION_URL": "Valid URL, IP or 'localhost' is required",
 
+  "LICENSE_TITLE": "YOU HAVE AGREED TO THE FOLLOWING:",
+  "MODAL_LICENSE_TITLE": "LICENSE AGREEMENT",
+  "MODAL_BUTTON_AGREE": "I, AGREE",
+  "MODAL_BUTTON_CLOSE": "Close",
   "MODAL_ERROR_TITLE": "ERROR",
   "MODAL_ERROR_MESSAGE": "The following error had occured",
   "MODAL_ERROR_LOGGED_OUT": "There was an error on server call, it could be that your session expired and you need to log in",
@@ -37,6 +41,9 @@
   "PANEL_PIM": "PIM & Master Catalog",
   "PANEL_PIM_PRODUCTS": "Products",
   "PANEL_SHOPS": "Shops",
+  "PANEL_HELP": "Help",
+  "PANEL_HELP_LICENSE": "License",
+  "PANEL_HELP_DOCS": "User Manual",
 
   "SEO_TITLE": "Window title",
   "SEO_KEYWORDS": "Meta keywords",

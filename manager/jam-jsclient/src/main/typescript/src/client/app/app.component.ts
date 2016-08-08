@@ -4,6 +4,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 
 import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus } from './shared/index';
 import { ErrorModalComponent } from './shared/error/index';
+import { LicenseModalComponent } from './shared/license/index';
 
 import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -17,7 +18,7 @@ import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
   selector: 'yc-app',
   viewProviders: [HTTP_PROVIDERS],
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, SidebarComponent, ErrorModalComponent],
+  directives: [ROUTER_DIRECTIVES, SidebarComponent, ErrorModalComponent, LicenseModalComponent],
   pipes: [TranslatePipe]
 })
 export class AppComponent implements OnDestroy {

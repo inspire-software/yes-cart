@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
 
 /**
@@ -32,9 +33,20 @@ import org.yes.cart.domain.vo.VoManager;
 @RequestMapping("/management")
 public interface ManagementEndpointController {
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/myself", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoManager getMyself() throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
+    @RequestMapping(value = "/license", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoLicenseAgreement getMyAgreement() throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
+    @RequestMapping(value = "/license", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoLicenseAgreement acceptMyAgreement() throws Exception;
 
 }

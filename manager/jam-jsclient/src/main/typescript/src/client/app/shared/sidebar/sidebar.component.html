@@ -57,6 +57,21 @@
     <yc-shop-list (shopEditTask)="selectCurrentShop($event)"></yc-shop-list>
   </accordion-group>
 
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_HELP' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/license']">{{ 'PANEL_HELP_LICENSE' | translate }}</a>
+      </li>
+      <li>
+        <a href="http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }}</a>
+      </li>
+      <li>
+        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a>
+      </li>
+    </ul>
+  </accordion-group>
+
 
 <!--
   <accordion-group heading="Dynamic Body Content">

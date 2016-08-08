@@ -27,3 +27,11 @@ export interface ManagerVO {
   enabled  : boolean;
 
 }
+
+export interface LicenseAgreementVO {
+
+  agreed : boolean;
+
+  text : string;
+
+}
