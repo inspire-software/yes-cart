@@ -18,6 +18,8 @@ package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
@@ -34,6 +36,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.misc.CurrencyService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.service.vo.VoAssemblySupport;
+import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -50,6 +53,7 @@ public class VoShopServiceImpl implements VoShopService {
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
+    private final VoIOSupport voIOSupport;
 
     private final LanguageService languageService;
     private final CurrencyService currencyService;
@@ -67,6 +71,7 @@ public class VoShopServiceImpl implements VoShopService {
      * @param dtoAttributeService attribute service
      * @param federationFacade  access.
      * @param voAssemblySupport vo support
+     * @param voIOSupport vo support
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
@@ -75,7 +80,8 @@ public class VoShopServiceImpl implements VoShopService {
                              final DtoShopService dtoShopService,
                              final DtoAttributeService dtoAttributeService,
                              final FederationFacade federationFacade,
-                             final VoAssemblySupport voAssemblySupport) {
+                             final VoAssemblySupport voAssemblySupport,
+                             final VoIOSupport voIOSupport) {
         this.currencyService = currencyService;
         this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
@@ -84,6 +90,7 @@ public class VoShopServiceImpl implements VoShopService {
         this.federationFacade = federationFacade;
         this.languageService = languageService;
         this.voAssemblySupport = voAssemblySupport;
+        this.voIOSupport = voIOSupport;
     }
 
     /**
@@ -344,14 +351,23 @@ public class VoShopServiceImpl implements VoShopService {
     public List<VoAttrValueShop> getShopAttributes(final long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
 
+            final ShopDTO shop = dtoShopService.getById(shopId);
             final List<AttrValueShopDTO> attributes = (List) dtoShopService.getEntityAttributes(shopId);
 
             final List<VoAttrValueShop> all = voAssemblySupport.assembleVos(VoAttrValueShop.class, AttrValueShopDTO.class, attributes);
             // Filter out special attributes that are managed by specialised editors
             final Iterator<VoAttrValueShop> allIt = all.iterator();
             while (allIt.hasNext()) {
-                if (skipAttributesInView.contains(allIt.next().getAttribute().getCode())) {
+                final VoAttrValueShop next = allIt.next();
+                if (skipAttributesInView.contains(next.getAttribute().getCode())) {
                     allIt.remove();
+                } else if (next.getAttrvalueId() > 0L && "Image".equals(next.getAttribute().getEtypeName())) {
+                    if (StringUtils.isNotBlank(next.getVal())) {
+                        next.setValBase64Data(
+                                voIOSupport.getImageAsBase64(next.getVal(), shop.getCode(), Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN)
+                        );
+                        // TODO: SEO data for image
+                    }
                 }
             }
             return all;
@@ -368,15 +384,19 @@ public class VoShopServiceImpl implements VoShopService {
     public List<VoAttrValueShop> update(final List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception {
 
         long shopId = 0L;
+        ShopDTO shop = null;
         final VoAssemblySupport.VoAssembler<VoAttrValueShop, AttrValueShopDTO> asm =
                 voAssemblySupport.with(VoAttrValueShop.class, AttrValueShopDTO.class);
 
+        Map<Long, AttrValueShopDTO> existing = Collections.emptyMap();
         for (final MutablePair<VoAttrValueShop, Boolean> item : vo) {
             if (shopId == 0L) {
                 shopId = item.getFirst().getShopId();
+                shop = dtoShopService.getById(shopId);
                 if (!federationFacade.isShopAccessibleByCurrentManager(shopId)) {
                     throw new AccessDeniedException("Access is denied");
                 }
+                existing = mapAvById((List) dtoShopService.getEntityAttributes(shopId));
             } else if (shopId != item.getFirst().getShopId()) {
                 throw new AccessDeniedException("Access is denied");
             }
@@ -391,22 +411,63 @@ public class VoShopServiceImpl implements VoShopService {
                 dtoShopService.deleteAttributeValue(item.getFirst().getAttrvalueId());
             } else if (item.getFirst().getAttrvalueId() > 0L) {
                 // update mode
-                final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
-                asm.assembleDto(dto, item.getFirst());
-                dto.setAttrvalueId(item.getFirst().getAttrvalueId());
-                dtoShopService.updateEntityAttributeValue(dto);
+                final AttrValueShopDTO dto = existing.get(item.getFirst().getAttrvalueId());
+                if (dto != null) {
+                    if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
+                        final String existingImage = voIOSupport.
+                                getImageAsBase64(dto.getVal(), shop.getCode(), Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN);
+                        if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
+                            String formattedFilename = item.getFirst().getVal();
+                            formattedFilename = voIOSupport.
+                                    addImageToRepository(
+                                            formattedFilename,
+                                            shop.getCode(),
+                                            dto.getAttributeDTO().getCode(),
+                                            item.getFirst().getValBase64Data(),
+                                            Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN
+                                    );
+                            item.getFirst().setVal(formattedFilename);
+                            // TODO Image SEO
+                        }
+                    }
+                    asm.assembleDto(dto, item.getFirst());
+                    dtoShopService.updateEntityAttributeValue(dto);
+                } else {
+                    ShopCodeContext.getLog(this).warn("Update skipped for inexistent ID {}", item.getFirst().getAttrvalueId());
+                }
             } else {
                 // insert mode
                 final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
-                asm.assembleDto(dto, item.getFirst());
-                dto.setAttrvalueId(item.getFirst().getAttrvalueId());
+                dto.setShopId(shopId);
                 dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
+                if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
+                    String formattedFilename = item.getFirst().getVal();
+                    formattedFilename = voIOSupport.
+                            addImageToRepository(
+                                    formattedFilename,
+                                    shop.getCode(),
+                                    dto.getAttributeDTO().getCode(),
+                                    item.getFirst().getValBase64Data(),
+                                    Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN
+                            );
+                    item.getFirst().setVal(formattedFilename);
+                    // TODO Image SEO
+                }
+                asm.assembleDto(dto, item.getFirst());
                 dtoShopService.createEntityAttributeValue(dto);
             }
 
         }
 
         return getShopAttributes(shopId);
+    }
+
+    private Map<Long, AttrValueShopDTO> mapAvById(final List<AttrValueShopDTO> entityAttributes) {
+        Map<Long, AttrValueShopDTO> map = new HashMap<Long, AttrValueShopDTO>();
+        for (final AttrValueShopDTO dto : entityAttributes) {
+            map.put(dto.getAttrvalueId(), dto);
+        }
+        return map;
     }
 
     /**

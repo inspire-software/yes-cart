@@ -14,6 +14,8 @@
   "MODAL_BUTTON_DELETE": "Delete",
   "MODAL_BUTTON_SAVE": "Save",
   "MODAL_BUTTON_CREATE": "Create",
+  "MODAL_BUTTON_UPLOAD": "Upload",
+  "MODAL_UPLOAD_DISABLED": "Your device does not support file upload",
 
   "NAME": "Name",
   "DESCRIPTION": "Description",

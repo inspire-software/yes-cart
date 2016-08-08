@@ -64,9 +64,10 @@ export interface AttrValueVO {
   attrvalueId : number;
 
   val : string;
-
   displayVals :  any;
+  valBase64Data : string;
 
   attribute :  AttributeVO;
+
 
 }

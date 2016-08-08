@@ -63,6 +63,8 @@ export class AttributesComponent implements OnInit, OnChanges {
   selectedRow:AttrValueVO;
 
   attributeToEdit:AttrValueVO;
+  attributeToEditImagePreviewAvailable:boolean = true;
+  attributeToEditImagePreview:string = '';
 
   @Output() dataSelected: EventEmitter<AttrValueVO> = new EventEmitter<AttrValueVO>();
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>>();
@@ -140,10 +142,7 @@ export class AttributesComponent implements OnInit, OnChanges {
     console.debug('AttributesComponent onRowEdit handler', row);
     this.validForSave = false;
     this.attributeToEdit = Util.clone(row);
-    if (this.attributeToEdit.attribute.etypeName === 'Boolean') {
-      // Fix this to string
-      this.attributeToEdit.val = '' + this.attributeToEdit.val;
-    }
+    this.processImageView(this.attributeToEdit);
     this.editModalDialog.show();
   }
 
@@ -293,6 +292,8 @@ export class AttributesComponent implements OnInit, OnChanges {
         }
       } else if (row.attribute.etypeName === 'HTML') {
         return '<pre>' + row.val + '</pre>';
+      } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
+        return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
       }
       return row.val;
     }
@@ -328,6 +329,52 @@ export class AttributesComponent implements OnInit, OnChanges {
 
   set attributeToEditBoolean(val:boolean) {
     this.attributeToEdit.val = '' + val;
+  }
+
+  processImageView(av:AttrValueVO) {
+    if (av.attribute.etypeName === 'Image') {
+      if (av.val != null) {
+        this.attributeToEditImagePreviewAvailable = av.valBase64Data != null;
+        if (this.attributeToEditImagePreviewAvailable) {
+          this.attributeToEditImagePreview = '<img src="' + av.valBase64Data + '"/>';
+        } else {
+          this.attributeToEditImagePreview = '&nbsp;';
+        }
+      } else {
+        this.attributeToEditImagePreviewAvailable = true;
+        this.attributeToEditImagePreview = '&nbsp;';
+      }
+    }
+  }
+
+  isFileUploadDisabled():boolean {
+    var input:any = document.getElementById('avmodaluploadimage');
+    return input == null || input.disabled;
+  }
+
+  onFileClickRelay() {
+    console.log("AttributesComponent file upload relay button click");
+    document.getElementById('avmodaluploadimage').click();
+  }
+
+  onImageFileSelected(event:any) {
+    var srcElement:any = event.srcElement;
+    var image:any = srcElement.files[0];
+    console.log("AttributesComponent image file selected", image.name);
+    var reader:FileReader = new FileReader();
+
+    let that = this;
+
+    reader.onloadend = function(e:any) {
+      console.debug("AttributesComponent image file loaded", e.target.result);
+      that.attributeToEdit.val = image.name;
+      that.attributeToEdit.valBase64Data = e.target.result;
+      that.processImageView(that.attributeToEdit);
+      that.changed = true;
+      that.validForSave = true;
+      srcElement.value = '';
+    };
+    reader.readAsDataURL(image);
   }
 
 

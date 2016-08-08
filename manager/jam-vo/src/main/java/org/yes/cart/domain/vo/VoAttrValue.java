@@ -45,6 +45,8 @@ public class VoAttrValue {
               entityBeanKeys = { "org.yes.cart.domain.dto.AttributeDTO" }, readOnly = true)
     private VoAttribute attribute = new VoAttribute();
 
+    private String valBase64Data;
+
     public long getAttrvalueId() {
         return attrvalueId;
     }
@@ -77,4 +79,11 @@ public class VoAttrValue {
         this.attribute = attribute;
     }
 
+    public String getValBase64Data() {
+        return valBase64Data;
+    }
+
+    public void setValBase64Data(final String valBase64Data) {
+        this.valBase64Data = valBase64Data;
+    }
 }
