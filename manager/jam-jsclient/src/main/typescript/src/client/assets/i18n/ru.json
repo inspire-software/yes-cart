@@ -2,6 +2,9 @@
   "VALIDATION_REQUIRED": "Correct value is required",
   "VALIDATION_URL": "Valid URL, IP or 'localhost' is required",
 
+  "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
+  "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
+
   "LICENSE_TITLE": "YOU HAVE AGREED TO THE FOLLOWING:",
   "MODAL_LICENSE_TITLE": "LICENSE AGREEMENT",
   "MODAL_BUTTON_AGREE": "I, AGREE",
@@ -18,6 +21,7 @@
   "MODAL_BUTTON_DELETE": "Delete",
   "MODAL_BUTTON_SAVE": "Save",
   "MODAL_BUTTON_CREATE": "Create",
+  "MODAL_BUTTON_SELECT": "Select",
   "MODAL_BUTTON_UPLOAD": "Upload",
   "MODAL_UPLOAD_DISABLED": "Your device does not support file upload",
 
@@ -40,11 +44,13 @@
   "PANEL_SHIPPING_LOCATIONS": "Locations",
   "PANEL_PIM": "PIM & Master Catalog",
   "PANEL_PIM_PRODUCTS": "Products",
+  "PANEL_PIM_CATEGORIES": "Catalog",
   "PANEL_SHOPS": "Shops",
   "PANEL_HELP": "Help",
   "PANEL_HELP_LICENSE": "License",
   "PANEL_HELP_DOCS": "User Manual",
 
+  "SEO_URI": "URI",
   "SEO_TITLE": "Window title",
   "SEO_KEYWORDS": "Meta keywords",
   "SEO_DESCRIPTION": "Meta description",
@@ -93,6 +99,12 @@
   "CARRIERSLA_NO_BILL": "Billing address optional",
   "CARRIERSLA_SHIP": "Delivery",
   "CARRIERSLA_NO_SHIP": "Delivery address optional",
-  "CARRIERSLA_PG": "Payment methods"
+  "CARRIERSLA_PG": "Payment methods",
+
+  "CATEGORY_NAV_ATTR": "Attribute navigation",
+  "CATEGORY_NAV_BRAND": "Brand navigation",
+  "CATEGORY_NAV_PRICE": "Price navigation",
+  "CATEGORY_FROM": "Available from",
+  "CATEGORY_TO": "Available to"
 
 }

@@ -50,6 +50,22 @@ export class CategoryService {
       .catch(this.handleError);
   }
 
+
+  /**
+   * Get list of all filtered categories, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredCategories(filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/filtered/' + max, body, options)
+      .map(res => <CategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
+
   /**
    * Create category on the fly.
    * @param newCat name of category

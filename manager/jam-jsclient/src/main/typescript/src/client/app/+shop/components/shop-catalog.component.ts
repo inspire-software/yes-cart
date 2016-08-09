@@ -97,7 +97,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopCatalogComponent ngOnChanges', changes);
+    console.debug('ShopCatalogComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 
@@ -105,19 +105,19 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
    * Load data and adapt time.
    */
   loadData() {
-    console.log('ShopCatalogComponent loading categories', this.shop);
+    console.debug('ShopCatalogComponent loading categories', this.shop);
     this.existingShop = this.shop.shopId > 0;
     if (this.existingShop) {
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
-            console.log('ShopCatalogComponent assigned categories', cats);
+            console.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
             var _assignedIds:Array<number> = this.adaptToIds(cats);
 
             var _subc:any = this._categoryService.getAllCategories().subscribe(
                 cats => {
-                  console.log('ShopCatalogComponent all categories', cats);
+                  console.debug('ShopCatalogComponent all categories', cats);
                   this.categories = cats;
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
@@ -281,7 +281,7 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
     if (this.shop.shopId > 0) {
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
-            console.log('ShopCatalogComponent assigned categories', cats);
+            console.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
             var _assignedIds:Array<number> = this.adaptToIds(cats);

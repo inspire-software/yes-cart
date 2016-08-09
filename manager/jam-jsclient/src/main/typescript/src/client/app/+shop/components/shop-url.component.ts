@@ -22,6 +22,8 @@ import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 import {YcValidators} from './../../shared/validation/validators';
+import {Futures, Future} from './../../shared/event/index';
+import {Config} from './../../shared/config/env.config';
 
 @Component({
   selector: 'yc-shop-url',
@@ -48,6 +50,8 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   shopUrl:ShopUrlVO;
   private urlFilter:string;
   filteredShopUrl:Array<UrlVO>;
+  delayedFiltering:Future;
+  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   changed:boolean = false;
   validForSave:boolean = false;
@@ -79,7 +83,6 @@ export class ShopUrlComponent implements OnInit, OnChanges {
       'theme': [''],
       'primary': [''],
     });
-
   }
 
   newUrlInstance():UrlVO {
@@ -98,10 +101,14 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   public ngOnInit() {
     console.debug('ShopUrlComponent ngOnInit shop', this.shop);
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterUrls();
+    }, this.delayedFilteringMs);
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopUrlComponent ngOnChanges', changes);
+    console.debug('ShopUrlComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 
@@ -171,7 +178,9 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   }
 
   onFilterChange(event:any) {
-    this.filterUrls();
+
+    this.delayedFiltering.delay();
+
   }
 
   onDataChange(event:any) {

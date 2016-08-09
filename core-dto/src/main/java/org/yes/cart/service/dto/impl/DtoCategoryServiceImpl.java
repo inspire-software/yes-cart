@@ -36,6 +36,7 @@ import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -107,6 +108,23 @@ public class DtoCategoryServiceImpl
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CategoryDTO> findBy(final String code,
+                                    final String name,
+                                    final String uri,
+                                    final int page,
+                                    final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        CategoryService categoryService = (CategoryService) service;
+
+        final List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>(pageSize);
+        fillDTOs(categoryService.findBy(code, name, uri, page, pageSize), categoriesDTO);
+
+        return categoriesDTO;
+    }
 
     /**
      * {@inheritDoc}

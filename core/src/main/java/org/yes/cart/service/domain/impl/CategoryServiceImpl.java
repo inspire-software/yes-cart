@@ -549,6 +549,19 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
+
+        final String codeP = code != null ? "%" + code + "%" : null;
+        final String nameP = name != null ? "%" + name + "%" : null;
+        final String uriP = uri != null ? "%" + uri + "%" : null;
+
+        return getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+    }
+
     private CategoryService proxy;
 
     private CategoryService proxy() {

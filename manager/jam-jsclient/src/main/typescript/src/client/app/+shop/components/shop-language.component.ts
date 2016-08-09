@@ -45,7 +45,7 @@ export class ShopLanguageComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopLanguageComponent ngOnChanges', changes);
+    console.debug('ShopLanguageComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 

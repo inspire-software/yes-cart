@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {AttrValueVO} from './attribute.model';
+
 export interface BasicCategoryVO {
 
   name : string;
@@ -73,3 +75,11 @@ export interface CategoryVO {
   children : Array<CategoryVO>;
 
 }
+
+
+export interface AttrValueCategoryVO extends AttrValueVO {
+
+  categoryId : number;
+
+}
+

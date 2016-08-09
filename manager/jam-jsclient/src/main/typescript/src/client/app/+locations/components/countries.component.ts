@@ -18,6 +18,8 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {CountryVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
+import {Futures, Future} from './../../shared/event/index';
+import {Config} from './../../shared/config/env.config';
 
 
 @Component({
@@ -31,6 +33,8 @@ export class CountriesComponent implements OnInit, OnDestroy {
 
   _countries:Array<CountryVO> = [];
   _filter:string;
+  delayedFiltering:Future;
+  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   filteredCountries:Array<CountryVO>;
 
@@ -50,6 +54,10 @@ export class CountriesComponent implements OnInit, OnDestroy {
 
   constructor() {
     console.debug('CountriesComponent constructed');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterCountries();
+    }, this.delayedFilteringMs);
   }
 
   ngOnInit() {
@@ -65,7 +73,7 @@ export class CountriesComponent implements OnInit, OnDestroy {
   @Input()
   set filter(filter:string) {
     this._filter = filter ? filter.toLowerCase() : null;
-    this.filterCountries();
+    this.delayedFiltering.delay();
   }
 
   private filterCountries() {

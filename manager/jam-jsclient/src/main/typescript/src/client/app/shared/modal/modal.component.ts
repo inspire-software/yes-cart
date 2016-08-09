@@ -40,12 +40,12 @@ export class ModalComponent implements OnInit {
   showModal: boolean = false;
 
   constructor() {
-    console.log('ModalComponent = ' + this.showModal);
+    console.debug('ModalComponent = ' + this.showModal);
   }
 
   ngOnInit() {
     this.loaded.next(this);
-    console.log('ModalComponent inited');
+    console.debug('ModalComponent inited');
   }
 
 
@@ -67,7 +67,7 @@ export class ModalComponent implements OnInit {
   }
 
   cancelAction() {
-    console.log('ModalComponent sending close event');
+    console.debug('ModalComponent sending close event');
     this.showModal = false;
     this.closed.next({
       action: ModalAction.CANCEL

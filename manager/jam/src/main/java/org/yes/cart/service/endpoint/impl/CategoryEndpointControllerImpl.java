@@ -17,6 +17,7 @@ package org.yes.cart.service.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoCategory;
@@ -41,10 +42,14 @@ public class CategoryEndpointControllerImpl implements CategoryEndpointControlle
 
     public @ResponseBody
     List<VoCategory> getAll() throws Exception {
-        //todo filter
         return categoryService.getAll();
     }
 
+    public @ResponseBody
+    List<VoCategory> getFiltered(@RequestBody final String filter,
+                                 @PathVariable("max") final int max) throws Exception {
+        return categoryService.getFiltered(filter, max);
+    }
 
     public @ResponseBody
     VoCategory create(@RequestBody VoCategory voCategory) throws Exception {

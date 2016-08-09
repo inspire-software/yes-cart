@@ -52,7 +52,7 @@ export class I18nComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('I18nComponent ngOnChanges', changes);
+    console.debug('I18nComponent ngOnChanges', changes);
     this.reloadModel();
   }
 

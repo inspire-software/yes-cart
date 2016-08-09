@@ -23,7 +23,9 @@ import {DataControlComponent} from './../sidebar/index';
 import {I18nComponent} from './../i18n/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 import {YcValidators} from './../validation/validators';
-import {FormValidationEvent} from './../event/index';
+import {FormValidationEvent, Futures, Future} from './../event/index';
+import {Config} from './../config/env.config';
+
 
 @Component({
   selector: 'yc-attributes',
@@ -51,6 +53,8 @@ export class AttributesComponent implements OnInit, OnChanges {
   objectAttributesRemove:Array<number>;
   _attributeFilter:string;
   filteredObjectAttributes:Array<AttrValueVO>;
+  delayedFiltering:Future;
+  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   changed:boolean = false;
   validForSave:boolean = false;
@@ -76,6 +80,10 @@ export class AttributesComponent implements OnInit, OnChanges {
     console.debug('AttributesComponent constructed');
 
     this.attributeToEdit = null;
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterAttributes();
+    }, this.delayedFilteringMs);
 
   }
 
@@ -92,7 +100,7 @@ export class AttributesComponent implements OnInit, OnChanges {
   @Input()
   set attributeFilter(attributeFilter:string) {
     this._attributeFilter = attributeFilter;
-    this.filterAttributes();
+    this.delayedFiltering.delay();
   }
 
   /** {@inheritDoc} */
@@ -101,8 +109,8 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('AttributesComponent ngOnChanges', changes);
-    this.filterAttributes();
+    console.debug('AttributesComponent ngOnChanges', changes);
+    this.delayedFiltering.delay();
   }
 
   private loadData() {
@@ -269,17 +277,15 @@ export class AttributesComponent implements OnInit, OnChanges {
         val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
         val.val && val.val.toLowerCase().indexOf(_filter) !== -1
       );
-      console.debug('AttributesComponent filterAttributes', _filter);
+      console.debug('AttributesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
     } else {
       this.filteredObjectAttributes = this._objectAttributes;
-      console.debug('AttributesComponent filterAttributes no filter');
+      console.debug('AttributesComponent filterAttributes no filter', this.filteredObjectAttributes);
     }
 
     if (this.filteredObjectAttributes === null) {
       this.filteredObjectAttributes = [];
     }
-
-    console.debug('AttributesComponent filterAttributes', this.filteredObjectAttributes);
 
     let _total = this.filteredObjectAttributes.length;
     this.totalItems = _total;
@@ -386,14 +392,14 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   onFileClickRelay() {
-    console.log("AttributesComponent file upload relay button click");
+    console.debug("AttributesComponent file upload relay button click");
     document.getElementById('avmodaluploadimage').click();
   }
 
   onImageFileSelected(event:any) {
     var srcElement:any = event.srcElement;
     var image:any = srcElement.files[0];
-    console.log("AttributesComponent image file selected", image.name);
+    console.debug("AttributesComponent image file selected", image.name);
     var reader:FileReader = new FileReader();
 
     let that = this;

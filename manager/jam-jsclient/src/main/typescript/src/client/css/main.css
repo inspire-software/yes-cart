@@ -406,6 +406,10 @@ table.dataTable thead .sorting:after {
   word-wrap: break-word;
 }
 
+.text-padding {
+  padding: 15px;
+}
+
 .av-td-value {
   max-width: 400px;
 }

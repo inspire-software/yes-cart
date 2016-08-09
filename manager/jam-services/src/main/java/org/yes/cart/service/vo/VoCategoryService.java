@@ -33,6 +33,13 @@ public interface VoCategoryService {
     List<VoCategory> getAll() throws Exception;
 
     /**
+     * Get all categories in the system, filtered by criteria and according to rights, up to max
+     * @return
+     * @throws Exception
+     */
+    List<VoCategory> getFiltered(String filter, int max) throws Exception;
+
+    /**
      * Get category by id.
      *
      * @param id

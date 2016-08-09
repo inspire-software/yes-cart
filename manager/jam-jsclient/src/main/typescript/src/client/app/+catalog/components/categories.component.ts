@@ -16,31 +16,26 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {CarrierVO} from './../../shared/model/index';
+import {CategoryVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
 
 
 @Component({
-  selector: 'yc-carriers',
+  selector: 'yc-categories',
   moduleId: module.id,
-  templateUrl: 'carriers.component.html',
+  templateUrl: 'categories.component.html',
   directives: [NgIf, PaginationComponent],
 })
 
-export class CarriersComponent implements OnInit, OnDestroy {
+export class CategoriesComponent implements OnInit, OnDestroy {
 
-  _carriers:Array<CarrierVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  _categories:Array<CategoryVO> = [];
 
-  filteredCarriers:Array<CarrierVO>;
+  filteredCategories:Array<CategoryVO>;
 
-  @Input() selectedCarrier:CarrierVO;
+  @Input() selectedCategory:CategoryVO;
 
-  @Output() dataSelected: EventEmitter<CarrierVO> = new EventEmitter<CarrierVO>();
+  @Output() dataSelected: EventEmitter<CategoryVO> = new EventEmitter<CategoryVO>();
 
   //paging
   maxSize:number = 5;
@@ -53,47 +48,29 @@ export class CarriersComponent implements OnInit, OnDestroy {
   pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CarriersComponent constructed');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCarriers();
-    }, this.delayedFilteringMs);
-
+    console.debug('CategoriesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('CarriersComponent ngOnInit');
+    console.debug('CategoriesComponent ngOnInit');
   }
 
   @Input()
-  set carriers(carriers:Array<CarrierVO>) {
-    this._carriers = carriers;
-    this.filterCarriers();
+  set categories(categories:Array<CategoryVO>) {
+    this._categories = categories;
+    this.filterCategories();
   }
 
-  @Input()
-  set filter(filter:string) {
-    this._filter = filter ? filter.toLowerCase() : null;
-    this.delayedFiltering.delay();
-  }
+  private filterCategories() {
 
-  private filterCarriers() {
-    if (this._filter) {
-      this.filteredCarriers = this._carriers.filter(carrier =>
-          carrier.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          carrier.description && carrier.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('CarriersComponent filterCarriers', this._filter);
-    } else {
-      this.filteredCarriers = this._carriers;
-      console.debug('CarriersComponent filterCarriers no filter');
+    this.filteredCategories = this._categories;
+    console.debug('CategoriesComponent filterCategories', this.filteredCategories);
+
+    if (this.filteredCategories === null) {
+      this.filteredCategories = [];
     }
 
-    if (this.filteredCarriers === null) {
-      this.filteredCarriers = [];
-    }
-
-    let _total = this.filteredCarriers.length;
+    let _total = this.filteredCategories.length;
     this.totalItems = _total;
     if (_total > 0) {
       this.resetLastPageEnd();
@@ -101,8 +78,8 @@ export class CarriersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('CarriersComponent ngOnDestroy');
-    this.selectedCarrier = null;
+    console.debug('CategoriesComponent ngOnDestroy');
+    this.selectedCategory = null;
     this.dataSelected.emit(null);
   }
 
@@ -125,14 +102,14 @@ export class CarriersComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSelectRow(row:CarrierVO) {
-    console.debug('CarriersComponent onSelectRow handler', row);
-    if (row == this.selectedCarrier) {
-      this.selectedCarrier = null;
+  protected onSelectRow(row:CategoryVO) {
+    console.debug('CategoriesComponent onSelectRow handler', row);
+    if (row == this.selectedCategory) {
+      this.selectedCategory = null;
     } else {
-      this.selectedCarrier = row;
+      this.selectedCategory = row;
     }
-    this.dataSelected.emit(this.selectedCarrier);
+    this.dataSelected.emit(this.selectedCategory);
   }
 
 }

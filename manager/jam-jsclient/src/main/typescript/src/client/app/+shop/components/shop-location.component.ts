@@ -49,7 +49,7 @@ export class ShopLocationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopLocationComponent ngOnChanges', changes);
+    console.debug('ShopLocationComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 

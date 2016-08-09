@@ -45,7 +45,7 @@ export class ShopCurrencyComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopCurrencyComponent ngOnChanges', changes);
+    console.debug('ShopCurrencyComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 

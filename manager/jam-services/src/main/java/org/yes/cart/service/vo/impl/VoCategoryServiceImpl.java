@@ -26,6 +26,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCategoryService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -103,6 +104,24 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         }
     }
 
+    /** {@inheritDoc} */
+    public List<VoCategory> getFiltered(final String filter, final int max) throws Exception {
+
+        final List<VoCategory> results = new ArrayList<>();
+
+        int start = 0;
+        do {
+            final List<CategoryDTO> batch = dtoCategoryService.findBy(filter, filter, filter, start, max);
+            if (batch.isEmpty()) {
+                break;
+            }
+            federationFacade.applyFederationFilter(batch, CategoryDTO.class);
+            results.addAll(voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, batch));
+            start += max;
+        } while (results.size() < max);
+        return results.size() > max ? results.subList(0, max) : results;
+
+    }
 
     /** {@inheritDoc} */
     public VoCategory getById(long id) throws Exception {

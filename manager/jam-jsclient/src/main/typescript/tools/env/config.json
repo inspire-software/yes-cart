@@ -1,11 +1,14 @@
 {
   "dev": {
-    "API": "../"
+    "API": "../",
+    "UI_INPUT_DELAY": 300
   },
   "prod": {
-    "API": "../"
+    "API": "../",
+    "UI_INPUT_DELAY": 300
   },
   "staging": {
-    "API": "../"
+    "API": "../",
+    "UI_INPUT_DELAY": 300
   }
 }

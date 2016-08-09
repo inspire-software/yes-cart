@@ -45,7 +45,7 @@ export class ShopI18nComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopI18nComponent ngOnChanges', changes);
+    console.debug('ShopI18nComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 

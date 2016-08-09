@@ -31,6 +31,23 @@ import java.util.List;
 public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, GenericAttrValueService {
 
     /**
+     * Get categories by criteria.
+     *
+     * @param code code (GUID)
+     * @param name base name
+     * @param uri URI
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of matching categories
+     *
+     * @throws UnmappedInterfaceException
+     * @throws UnableToCreateInstanceException
+     */
+    List<CategoryDTO> findBy(String code, String name, String uri, int page, int pageSize)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
      * Get all assigned to shop categories.
      *
      * @param shopId shop id

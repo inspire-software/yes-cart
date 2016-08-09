@@ -67,7 +67,7 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopAttributeComponent ngOnChanges', changes);
+    console.debug('ShopAttributeComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 

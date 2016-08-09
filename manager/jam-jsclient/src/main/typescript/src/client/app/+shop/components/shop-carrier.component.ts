@@ -62,7 +62,7 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any) {
-    console.log('ShopCarrierComponent ngOnChanges', changes);
+    console.debug('ShopCarrierComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 
