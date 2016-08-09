@@ -27,14 +27,14 @@ public interface VoCategoryService {
 
     /**
      * Get all categories in the system, filtered according to rights
-     * @return
+     * @return list of categories
      * @throws Exception
      */
     List<VoCategory> getAll() throws Exception;
 
     /**
      * Get all categories in the system, filtered by criteria and according to rights, up to max
-     * @return
+     * @return list of categories
      * @throws Exception
      */
     List<VoCategory> getFiltered(String filter, int max) throws Exception;
@@ -42,9 +42,9 @@ public interface VoCategoryService {
     /**
      * Get category by id.
      *
-     * @param id
+     * @param id pk
      * @return category vo
-     * @throwsException
+     * @throws Exception
      */
     VoCategory getById(long id) throws Exception;
 

@@ -23,11 +23,11 @@
 
   </div>
 
-  <yc-attributes #attributesComponent
-                 [masterObject]="shop"
-                 [objectAttributes]="shopAttributes"
-                 [attributeFilter]="attributeFilter"
-                 (dataSelected)="onSelectRow($event)"
-                 (dataChanged)="onDataChange($event)"></yc-attributes>
+  <yc-attribute-values #attributeValuesComponent
+                       [masterObject]="shop"
+                       [objectAttributes]="shopAttributes"
+                       [attributeFilter]="attributeFilter"
+                       (dataSelected)="onSelectRow($event)"
+                       (dataChanged)="onDataChange($event)"></yc-attribute-values>
 
 </template>

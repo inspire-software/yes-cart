@@ -11,7 +11,8 @@ import {
   ShopService, CategoryService,
   ShippingService, LocationService,
   ManagementService,
-  PaymentService
+  PaymentService,
+  AttributeService
 } from './shared/services/index';
 
 import { APP_ROUTER_PROVIDERS } from './app.routes';
@@ -63,7 +64,8 @@ bootstrap(AppComponent, [
   ShippingService,
   LocationService,
   ManagementService,
-  PaymentService
+  PaymentService,
+  AttributeService
 ]);
 
 // In order to start the Service Worker located at "./worker.js"

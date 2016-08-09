@@ -86,6 +86,22 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
+    @Override
+    public List<Attribute> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) {
+
+        final String codeP = code != null ? "%" + code + "%" : null;
+        final String nameP = name != null ? "%" + name + "%" : null;
+        final String descP = description != null ? "%" + description + "%" : null;
+
+        return attributeDao.findRangeByNamedQuery(
+                "ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION",
+                page * pageSize, pageSize,
+                attributeGroupCode, codeP, nameP, descP);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Attribute> findAvailableAttributes(
             final String attributeGroupCode,
             final List<String> exclude) {

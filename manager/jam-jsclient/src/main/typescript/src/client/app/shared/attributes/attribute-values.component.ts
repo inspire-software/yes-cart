@@ -28,13 +28,13 @@ import {Config} from './../config/env.config';
 
 
 @Component({
-  selector: 'yc-attributes',
+  selector: 'yc-attribute-values',
   moduleId: module.id,
-  templateUrl: 'attributes.component.html',
+  templateUrl: 'attribute-values.component.html',
   directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent]
 })
 
-export class AttributesComponent implements OnInit, OnChanges {
+export class AttributeValuesComponent implements OnInit, OnChanges {
 
   @Input() masterObject:any;
 
@@ -77,7 +77,7 @@ export class AttributesComponent implements OnInit, OnChanges {
    * Construct attribute panel
    */
   constructor() {
-    console.debug('AttributesComponent constructed');
+    console.debug('AttributeValuesComponent constructed');
 
     this.attributeToEdit = null;
     let that = this;
@@ -105,18 +105,18 @@ export class AttributesComponent implements OnInit, OnChanges {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('AttributesComponent ngOnInit shop', this.masterObject);
+    console.debug('AttributeValuesComponent ngOnInit shop', this.masterObject);
   }
 
   ngOnChanges(changes:any) {
-    console.debug('AttributesComponent ngOnChanges', changes);
+    console.debug('AttributeValuesComponent ngOnChanges', changes);
     this.delayedFiltering.delay();
   }
 
   private loadData() {
     if (this.masterObject && this._objectAttributes) {
 
-      console.debug('AttributesComponent attributes', this._objectAttributes);
+      console.debug('AttributeValuesComponent attributes', this._objectAttributes);
       this.objectAttributesRemove = [];
       this.filterAttributes();
 
@@ -136,7 +136,7 @@ export class AttributesComponent implements OnInit, OnChanges {
    * @param row attribute to delete.
    */
   protected onRowDelete(row:AttrValueVO) {
-    console.debug('AttributesComponent onRowDelete handler', row);
+    console.debug('AttributeValuesComponent onRowDelete handler', row);
     this.deleteConfirmationModalDialog.show();
   }
 
@@ -147,7 +147,7 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   protected onRowEdit(row:AttrValueVO) {
-    console.debug('AttributesComponent onRowEdit handler', row);
+    console.debug('AttributeValuesComponent onRowEdit handler', row);
     this.validForSave = false;
     this.attributeToEdit = Util.clone(row);
     this.processImageView(this.attributeToEdit);
@@ -161,7 +161,7 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   protected onSelectRow(row:AttrValueVO) {
-    console.debug('AttributesComponent onSelectRow handler', row);
+    console.debug('AttributeValuesComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -205,12 +205,12 @@ export class AttributesComponent implements OnInit, OnChanges {
       }
     }
 
-    console.debug('AttributesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    console.debug('AttributeValuesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   private processDataChangesEvent() {
 
-    console.debug('AttributesComponent data changes', this.masterObject);
+    console.debug('AttributeValuesComponent data changes', this.masterObject);
     if (this.masterObject && this._objectAttributes) {
 
       let _update = <Array<Pair<AttrValueVO, boolean>>>[];
@@ -220,7 +220,7 @@ export class AttributesComponent implements OnInit, OnChanges {
         }
       });
 
-      console.debug('AttributesComponent data changes update', _update);
+      console.debug('AttributeValuesComponent data changes update', _update);
 
       this.dataChanged.emit({ source: _update, valid: this.validForSave });
 
@@ -229,7 +229,7 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('AttributesComponent onDeleteConfirmationResult modal result is ', modalresult);
+    console.debug('AttributeValuesComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let attrToDelete = this.selectedRow.attrvalueId;
       if (attrToDelete === 0) {
@@ -237,9 +237,9 @@ export class AttributesComponent implements OnInit, OnChanges {
           return attrVo.attribute.code === this.selectedRow.attribute.code;
         });
         this._objectAttributes[idx].val = null;
-        console.debug('AttributesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
+        console.debug('AttributeValuesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
       } else {
-        console.debug('AttributesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
+        console.debug('AttributeValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
         this.objectAttributesRemove.push(attrToDelete);
       }
       this.filterAttributes();
@@ -250,14 +250,14 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('AttributesComponent onEditModalResult modal result is ', modalresult);
+    console.debug('AttributeValuesComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.attributeToEdit.attrvalueId === 0) { // add new
-        console.debug('AttributesComponent onEditModalResult add new attribute', this._objectAttributes);
+        console.debug('AttributeValuesComponent onEditModalResult add new attribute', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.attributeToEdit.attribute.code;} );
         this._objectAttributes[idx] = this.attributeToEdit;
       } else { // edit existing
-        console.debug('AttributesComponent onEditModalResult update existing', this._objectAttributes);
+        console.debug('AttributeValuesComponent onEditModalResult update existing', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attrvalueId === this.attributeToEdit.attrvalueId;} );
         this._objectAttributes[idx] = this.attributeToEdit;
       }
@@ -277,10 +277,10 @@ export class AttributesComponent implements OnInit, OnChanges {
         val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
         val.val && val.val.toLowerCase().indexOf(_filter) !== -1
       );
-      console.debug('AttributesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      console.debug('AttributeValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
     } else {
       this.filteredObjectAttributes = this._objectAttributes;
-      console.debug('AttributesComponent filterAttributes no filter', this.filteredObjectAttributes);
+      console.debug('AttributeValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
     }
 
     if (this.filteredObjectAttributes === null) {
@@ -392,20 +392,20 @@ export class AttributesComponent implements OnInit, OnChanges {
   }
 
   onFileClickRelay() {
-    console.debug("AttributesComponent file upload relay button click");
+    console.debug("AttributeValuesComponent file upload relay button click");
     document.getElementById('avmodaluploadimage').click();
   }
 
   onImageFileSelected(event:any) {
     var srcElement:any = event.srcElement;
     var image:any = srcElement.files[0];
-    console.debug("AttributesComponent image file selected", image.name);
+    console.debug("AttributeValuesComponent image file selected", image.name);
     var reader:FileReader = new FileReader();
 
     let that = this;
 
     reader.onloadend = function(e:any) {
-      console.debug("AttributesComponent image file loaded", e.target.result);
+      console.debug("AttributeValuesComponent image file loaded", e.target.result);
       that.attributeToEdit.val = image.name;
       that.attributeToEdit.valBase64Data = e.target.result;
       that.processImageView(that.attributeToEdit);

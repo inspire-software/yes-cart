@@ -60,6 +60,45 @@
     <yc-shop-list (shopEditTask)="selectCurrentShop($event)"></yc-shop-list>
   </accordion-group>
 
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/system/attributes']">{{ 'PANEL_SYSTEM_ATTR' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_IMPORT' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_EXPORT' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_INDEX' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_PG' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_PREFS' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_QUERY' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_CACHE' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_CLUSTER' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_HELP' | translate }}</div>
     <ul class="nav nav-second-level">
@@ -74,7 +113,6 @@
       </li>
     </ul>
   </accordion-group>
-
 
 <!--
   <accordion-group heading="Dynamic Body Content">

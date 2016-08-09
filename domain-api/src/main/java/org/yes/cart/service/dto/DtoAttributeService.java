@@ -100,4 +100,26 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
     List<AttributeDTO> findAttributesWithMultipleValues(
             String attributeGroupCode) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Get attributes by criteria.
+     *
+     * @param attributeGroupCode group code
+     * @param code code (GUID)
+     * @param name base name
+     * @param description description
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return one page of results
+     *
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<AttributeDTO> findAttributesBy(
+            String attributeGroupCode, String code, String name, String description, int page, int pageSize)
+                throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

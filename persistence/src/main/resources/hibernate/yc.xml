@@ -2975,6 +2975,14 @@
        ]]>
     </query>
 
+    <query name="ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION">
+        <![CDATA[
+       select a from AttributeEntity a
+       where a.attributeGroup.code = ?1 and
+        (a.code like ?2 or ?2 is null) OR (a.name like ?3 or ?3 is null) OR (a.description like ?4 or ?4 is null)
+       ]]>
+    </query>
+
     <query name="ATTRIBUTES.WITH.MULTIPLE.VALUES.BY.GROUPCODE">
         <![CDATA[
        select a from AttributeEntity a where a.allowduplicate = ?2 and a.attributeGroup.code = ?1

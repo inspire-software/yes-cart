@@ -33,7 +33,7 @@ export class LocationService {
   private _serviceBaseUrl = Config.API + 'service/location';  // URL to web api
 
   /**
-   * Construct category service, which has methods to work with information related to shop(s).
+   * Construct service, which has methods to work with information related to shop(s).
    * @param http http client.
    */
   constructor (private http: Http) {

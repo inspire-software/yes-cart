@@ -20,7 +20,7 @@ import {PaginationComponent} from './../../shared/pagination/index';
 import {ShopVO, AttrValueShopVO, AttributeVO, Pair} from './../../shared/model/index';
 import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
-import {AttributesComponent} from './../../shared/attributes/index';
+import {AttributeValuesComponent} from './../../shared/attributes/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 import {YcValidators} from './../../shared/validation/validators';
 
@@ -28,7 +28,7 @@ import {YcValidators} from './../../shared/validation/validators';
   selector: 'yc-shop-attributes',
   moduleId: module.id,
   templateUrl: 'shop-attributes.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, AttributesComponent]
+  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, AttributeValuesComponent]
 })
 
 export class ShopAttributesComponent implements OnInit, OnChanges {
@@ -41,8 +41,8 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
   changed:boolean = false;
   validForSave:boolean = false;
 
-  @ViewChild('attributesComponent')
-  attributesComponent:AttributesComponent;
+  @ViewChild('attributeValuesComponent')
+  attributeValuesComponent:AttributeValuesComponent;
 
   selectedRow:AttrValueShopVO;
 
@@ -73,13 +73,13 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
 
   protected onRowDeleteSelected() {
     if (this.selectedRow != null) {
-      this.attributesComponent.onRowDeleteSelected();
+      this.attributeValuesComponent.onRowDeleteSelected();
     }
   }
 
   protected onRowEditSelected() {
     if (this.selectedRow != null) {
-      this.attributesComponent.onRowEditSelected();
+      this.attributeValuesComponent.onRowEditSelected();
     }
   }
 

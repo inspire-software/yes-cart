@@ -1,4 +1,4 @@
 /**
  * This barrel file provides the export for the shared NavbarComponent.
  */
-export * from './attribute-values.component';
+export * from './attribute-definitions.component';
