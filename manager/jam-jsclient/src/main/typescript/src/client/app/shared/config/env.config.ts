@@ -3,6 +3,8 @@
 export interface IConfig {
   API: string;
   UI_INPUT_DELAY: number;
+  UI_FILTER_CAP: number;
+  UI_FILTER_NO_CAP: number;
 }
 
 export const Config: IConfig = JSON.parse('<%= ENV_CONFIG %>');

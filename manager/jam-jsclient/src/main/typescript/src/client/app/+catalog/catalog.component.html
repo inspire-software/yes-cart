@@ -14,6 +14,10 @@
       <input class="filter-input" type="text" name="categoryFilter" [(ngModel)]="categoryFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
     </form>
 
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'categories'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+      <i class="fa fa-filter"></i>
+    </button>
+
     <button type="button" (click)="onViewTree()" class="btn btn-circle btn-xl">
       <i class="fa fa-sitemap"></i>
     </button>
@@ -38,15 +42,16 @@
 
   </div>
 
-  <div *ngIf="categoryFilterRequired">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </div>
-
-  <div *ngIf="categoryFilterCapped">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </div>
-
   <div [hidden]="viewMode !== 'categories'">
+
+    <div *ngIf="categoryFilterRequired">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
+
+    <div *ngIf="categoryFilterCapped">
+      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+    </div>
+
     <yc-categories [categories]="categories" (dataSelected)="onCategorySelected($event)"></yc-categories>
   </div>
 

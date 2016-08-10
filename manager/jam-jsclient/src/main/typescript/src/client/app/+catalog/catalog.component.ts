@@ -38,6 +38,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   private static CATEGORIES:string = 'categories';
   private static CATEGORY:string = 'category';
 
+  private forceShowAll:boolean = false;
   private viewMode:string = CatalogComponent.CATEGORIES;
 
   private categories:Array<CategoryVO> = [];
@@ -47,6 +48,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
   delayedFiltering:Future;
   delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  filterCap:number = Config.UI_FILTER_CAP;
+  filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedCategory:CategoryVO;
 
@@ -94,9 +97,12 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   getFilteredCategories() {
-    this.categoryFilterRequired = this.categoryFilter == null || this.categoryFilter.length < 2;
+    this.categoryFilterRequired = !this.forceShowAll && (this.categoryFilter == null || this.categoryFilter.length < 2);
+
+    console.debug('CatalogComponent getFilteredCategories' + (this.forceShowAll ? ' forcefully': ''));
+
     if (!this.categoryFilterRequired) {
-      let max = 50;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
         console.debug('CatalogComponent getAllCountries', allcategories);
         this.categories = allcategories;
@@ -108,6 +114,14 @@ export class CatalogComponent implements OnInit, OnDestroy {
         this.categoryFilterCapped = this.categories.length >= max;
         _sub.unsubscribe();
       });
+    } else {
+      this.categories = [];
+      this.selectedCategory = null;
+      this.categoryEdit = null;
+      this.viewMode = CatalogComponent.CATEGORIES;
+      this.changed = false;
+      this.validForSave = false;
+      this.categoryFilterCapped = false;
     }
   }
 
@@ -126,6 +140,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
     this.changed = true;
     this.validForSave = event.valid;
     this.categoryEdit = event.source;
+  }
+
+  protected onForceShowAll() {
+    this.forceShowAll = !this.forceShowAll;
+    this.getFilteredCategories();
   }
 
   protected onBackToList() {

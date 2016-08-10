@@ -16,26 +16,28 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {CategoryVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
+import {AttributeGroupVO, AttributeVO} from './../../../shared/model/index';
+import {PaginationComponent} from './../../../shared/pagination/index';
 
 
 @Component({
-  selector: 'yc-categories',
+  selector: 'yc-attributes',
   moduleId: module.id,
-  templateUrl: 'categories.component.html',
+  templateUrl: 'attributes.component.html',
   directives: [NgIf, PaginationComponent],
 })
 
-export class CategoriesComponent implements OnInit, OnDestroy {
+export class AttributesComponent implements OnInit, OnDestroy {
 
-  _categories:Array<CategoryVO> = [];
+  @Input() group:AttributeGroupVO;
 
-  filteredCategories:Array<CategoryVO>;
+  _attributes:Array<AttributeVO> = [];
 
-  @Input() selectedCategory:CategoryVO;
+  filteredAttributes:Array<AttributeVO>;
 
-  @Output() dataSelected: EventEmitter<CategoryVO> = new EventEmitter<CategoryVO>();
+  @Input() selectedAttribute:AttributeVO;
+
+  @Output() dataSelected: EventEmitter<AttributeVO> = new EventEmitter<AttributeVO>();
 
   //paging
   maxSize:number = 5;
@@ -48,29 +50,29 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CategoriesComponent constructed');
+    console.debug('AttributesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('CategoriesComponent ngOnInit');
+    console.debug('AttributesComponent ngOnInit');
   }
 
   @Input()
-  set categories(categories:Array<CategoryVO>) {
-    this._categories = categories;
-    this.filterCategories();
+  set attributes(attributes:Array<AttributeVO>) {
+    this._attributes = attributes;
+    this.filterAttributes();
   }
 
-  private filterCategories() {
+  private filterAttributes() {
 
-    this.filteredCategories = this._categories;
-    console.debug('CategoriesComponent filterCategories', this.filteredCategories);
+    this.filteredAttributes = this._attributes;
+    console.debug('AttributesComponent filterAttributes', this.filteredAttributes);
 
-    if (this.filteredCategories === null) {
-      this.filteredCategories = [];
+    if (this.filteredAttributes === null) {
+      this.filteredAttributes = [];
     }
 
-    let _total = this.filteredCategories.length;
+    let _total = this.filteredAttributes.length;
     this.totalItems = _total;
     if (_total > 0) {
       this.resetLastPageEnd();
@@ -78,8 +80,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('CategoriesComponent ngOnDestroy');
-    this.selectedCategory = null;
+    console.debug('AttributesComponent ngOnDestroy');
+    this.selectedAttribute = null;
     this.dataSelected.emit(null);
   }
 
@@ -102,37 +104,35 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onSelectRow(row:CategoryVO) {
-    console.debug('CategoriesComponent onSelectRow handler', row);
-    if (row == this.selectedCategory) {
-      this.selectedCategory = null;
+  protected onSelectRow(row:AttributeVO) {
+    console.debug('AttributesComponent onSelectRow handler', row);
+    if (row == this.selectedAttribute) {
+      this.selectedAttribute = null;
     } else {
-      this.selectedCategory = row;
+      this.selectedAttribute = row;
     }
-    this.dataSelected.emit(this.selectedCategory);
+    this.dataSelected.emit(this.selectedAttribute);
   }
 
-  protected getUri(row:CategoryVO) {
-    if (row.uri) {
-      return '<i  title="' + row.uri + '" class="fa fa-link"></i>';
+  protected getSearchFlags(row:AttributeVO) {
+    if (this.group && this.group.code === 'PRODUCT') {
+      let flags = '';
+      if (row.store) {
+        flags += '<i class="fa fa-save"></i>&nbsp;';
+      }
+      if (row.search) {
+        if (row.primary) {
+          flags += '<i class="fa fa-search-plus"></i>&nbsp;';
+        } else {
+          flags += '<i class="fa fa-search"></i>&nbsp;';
+        }
+      }
+      if (row.navigation) {
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;';
+      }
+      return flags;
     }
-    return '';
+    return '&nbsp;';
   }
-
-  protected getNavFlags(row:CategoryVO) {
-
-    let flags = '';
-    if (row.navigationByAttributes) {
-      flags += '<i title="' + (row.productTypeName ? row.productTypeName : '') + '" class="fa fa-list-alt"></i>&nbsp;';
-    }
-    if (row.navigationByBrand) {
-      flags += '<i class="fa fa-trademark"></i>&nbsp;';
-    }
-    if (row.navigationByPrice) {
-      flags += '<i class="fa fa-dollar"></i>&nbsp;';
-    }
-    return flags;
-  }
-
 
 }

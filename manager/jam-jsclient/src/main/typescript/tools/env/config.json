@@ -1,14 +1,20 @@
 {
   "dev": {
     "API": "../",
-    "UI_INPUT_DELAY": 300
+    "UI_INPUT_DELAY": 300,
+    "UI_FILTER_CAP": 50,
+    "UI_FILTER_NO_CAP": 1000
   },
   "prod": {
     "API": "../",
-    "UI_INPUT_DELAY": 300
+    "UI_INPUT_DELAY": 300,
+    "UI_FILTER_CAP": 50,
+    "UI_FILTER_NO_CAP": 1000
   },
   "staging": {
     "API": "../",
-    "UI_INPUT_DELAY": 300
+    "UI_INPUT_DELAY": 300,
+    "UI_FILTER_CAP": 50,
+    "UI_FILTER_NO_CAP": 1000
   }
 }

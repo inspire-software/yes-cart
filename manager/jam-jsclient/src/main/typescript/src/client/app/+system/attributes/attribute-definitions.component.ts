@@ -18,17 +18,18 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {AttributeService, Util} from './../../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {AttributeGroupsComponent /*, StatesComponent, StateComponent */} from './components/index';
+import {AttributeGroupsComponent, AttributesComponent /* StateComponent */} from './components/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 import {AttributeGroupVO, AttributeVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
+import {Config} from './../../shared/config/env.config';
 
 @Component({
   selector: 'yc-attribute-definitions',
   moduleId: module.id,
   templateUrl: 'attribute-definitions.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, AttributeGroupsComponent, /* StatesComponent, StateComponent,*/ ModalComponent, DataControlComponent ],
+  directives: [TAB_DIRECTIVES, NgIf, AttributeGroupsComponent, AttributesComponent, /* StateComponent,*/ ModalComponent, DataControlComponent ],
 })
 
 export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
@@ -37,6 +38,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   private static ATTRIBUTES:string = 'attributes';
   private static ATTRIBUTE:string = 'attribute';
 
+  private forceShowAll:boolean = false;
   private viewMode:string = AttributeDefinitionsComponent.GROUPS;
 
   private groups:Array<AttributeGroupVO> = [];
@@ -49,6 +51,13 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private attributes:Array<AttributeVO> = [];
   private attributeFilter:string;
+  private attributeFilterRequired:boolean = true;
+  private attributeFilterCapped:boolean = false;
+
+  delayedFiltering:Future;
+  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  filterCap:number = Config.UI_FILTER_CAP;
+  filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedAttribute:AttributeVO;
 
@@ -80,6 +89,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.debug('AttributeDefinitionsComponent ngOnInit');
     this.onRefreshHandler();
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.getAllAttributes();
+    }, this.delayedFilteringMs);
+
   }
 
   ngOnDestroy() {
@@ -99,9 +113,20 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     });
   }
 
+  onAttributeFilterChange(event:any) {
+
+    this.delayedFiltering.delay();
+
+  }
+
   getAllAttributes() {
-    if (this.selectedGroup != null) {
-      let max = 50;
+
+    this.attributeFilterRequired = !this.forceShowAll && (this.attributeFilter == null || this.attributeFilter.length < 2);
+
+    console.debug('AttributeDefinitionsComponent getAllAttributes' + (this.forceShowAll ? ' forcefully': ''), this.selectedGroup);
+
+    if (this.selectedGroup != null && !this.attributeFilterRequired) {
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
         console.debug('AttributeDefinitionsComponent getAllAttributes', allattributes);
         this.attributes = allattributes;
@@ -110,8 +135,17 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
         this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
         this.changed = false;
         this.validForSave = false;
+        this.attributeFilterCapped = this.attributes.length >= max;
         _sub.unsubscribe();
       });
+    } else {
+      this.attributes = [];
+      this.selectedAttribute = null;
+      this.attributeEdit = null;
+      this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+      this.changed = false;
+      this.validForSave = false;
+      this.attributeFilterCapped = false;
     }
   }
 
@@ -143,6 +177,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     this.attributeEdit = event.source;
   }
 
+  protected onForceShowAll() {
+    this.forceShowAll = !this.forceShowAll;
+    this.getAllAttributes();
+  }
+
   protected onBackToList() {
     console.debug('AttributeDefinitionsComponent onBackToList handler');
     if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTE) {
@@ -151,6 +190,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     } else if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTES) {
       this.attributeEdit = null;
       this.selectedAttribute = null;
+      this.forceShowAll = false;
       this.viewMode = AttributeDefinitionsComponent.GROUPS;
     }
   }

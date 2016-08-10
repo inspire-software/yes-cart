@@ -2617,7 +2617,7 @@
     <query name="CATEGORIES.BY.CODE.NAME.URI">
         <![CDATA[
        select c from CategoryEntity c
-        where (c.guid like ?1 or ?1 is null) OR (c.name like ?2 or ?2 is null) OR (c.seoInternal.uri like ?3 or ?3 is null)
+        where (lower(c.guid) like ?1 or ?1 is null) OR (lower(c.name) like ?2 or ?2 is null) OR (lower(c.seoInternal.uri) like ?3 or ?3 is null)
        ]]>
     </query>
 
@@ -2979,7 +2979,7 @@
         <![CDATA[
        select a from AttributeEntity a
        where a.attributeGroup.code = ?1 and
-        (a.code like ?2 or ?2 is null) OR (a.name like ?3 or ?3 is null) OR (a.description like ?4 or ?4 is null)
+        ((lower(a.code) like ?2 or ?2 is null) OR (lower(a.name) like ?3 or ?3 is null) OR (lower(a.description) like ?4 or ?4 is null))
        ]]>
     </query>
 

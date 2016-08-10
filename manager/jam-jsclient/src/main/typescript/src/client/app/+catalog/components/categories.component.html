@@ -5,26 +5,20 @@
       <thead class="cf">
       <tr>
         <th>{{ 'CODE' | translate }}</th>
-        <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'SEO_URI' | translate }}</th>
+        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
         <th>{{ 'CATEGORY_FROM' | translate }}</th>
         <th>{{ 'CATEGORY_TO' | translate }}</th>
-        <th>{{ 'CATEGORY_NAV_ATTR' | translate }}</th>
-        <th>{{ 'CATEGORY_NAV_BRAND' | translate }}</th>
-        <th>{{ 'CATEGORY_NAV_PRICE' | translate }}</th>
+        <th>{{ 'CATEGORY_NAV' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCategories; let i = index" class="{{row == selectedCategory ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.guid}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'SEO_URI' | translate }}"><a (click)="onSelectRow(row)">{{row.uri}}</a></td>
-          <td title="{{ 'CATEGORY_FROM' | translate }}"><a (click)="onSelectRow(row)">{{row.availablefrom}}</a></td>
-          <td title="{{ 'CATEGORY_TO' | translate }}"><a (click)="onSelectRow(row)">{{row.availableto}}</a></td>
-          <td title="{{ 'CATEGORY_NAV_ATTR' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.navigationByAttributes ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.productTypeName}}</a></td>
-          <td title="{{ 'CATEGORY_NAV_BRAND' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.navigationByBrand ? 'fa-check-circle' : 'fa-times-circle' }}"></i></a></td>
-          <td title="{{ 'CATEGORY_NAV_BRAND' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.navigationByPrice ? 'fa-check-circle' : 'fa-times-circle' }}"></i></a></td>
+          <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
+          <td title="{{ 'CATEGORY_FROM' | translate }}"><a (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_TO' | translate }}"><a (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_NAV' | translate }}"><a (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a></td>
         </template>
       </tr>
       </tbody>

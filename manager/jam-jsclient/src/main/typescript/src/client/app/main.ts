@@ -15,6 +15,10 @@ import {
   AttributeService
 } from './shared/services/index';
 
+import {
+  YcDatePipe, YcDateTimePipe
+} from './shared/pipes/index'
+
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';
 
@@ -49,6 +53,15 @@ bootstrap(AppComponent, [
   {
     provide: PLATFORM_PIPES,
     useValue: TranslatePipe,
+    multi: true
+  },
+
+  /*
+   * Customer formatter pipes.
+   */
+  {
+    provide: PLATFORM_PIPES,
+    useValue: [ YcDatePipe, YcDateTimePipe ],
     multi: true
   },
 

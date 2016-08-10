@@ -72,6 +72,10 @@
   "AV_ATTRIBUTE": "Attribute",
   "AV_TYPE": "Type",
   "AV_VALUE": "Value",
+  "AV_MANDATORY": "Mandatory",
+  "AV_REGEX": "Validation",
+  "AV_RANK": "Rank",
+  "AV_SEARCH": "Search Index",
 
   "SHOP_TAB_I18N": "Localization",
   "SHOP_TAB_URL": "URL",
@@ -111,6 +115,7 @@
   "CARRIERSLA_NO_SHIP": "Delivery address optional",
   "CARRIERSLA_PG": "Payment methods",
 
+  "CATEGORY_NAV": "Navigation",
   "CATEGORY_NAV_ATTR": "Attribute navigation",
   "CATEGORY_NAV_BRAND": "Brand navigation",
   "CATEGORY_NAV_PRICE": "Price navigation",

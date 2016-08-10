@@ -227,8 +227,11 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public void remove(final long id) {
-        ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.findById(id));
-        super.remove(id);
+        final Category cat = service.findById(id);
+        if (cat != null && !cat.isRoot()) {
+            ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.findById(id));
+            super.remove(id);
+        }
     }
 
     /**

@@ -15,22 +15,26 @@
     </form>
 
     <form class="pull-left" [hidden]="viewMode !== 'attributes'">
-      <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+      <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onAttributeFilterChange($event)" autocomplete="off"/>
     </form>
+
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'attributes'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+      <i class="fa fa-filter"></i>
+    </button>
 
     <button type="button" (click)="onRowListSelected()" [disabled]="selectedGroup == null" [hidden]="viewMode === 'attributes' || viewMode === 'attribute'" class="btn btn-circle btn-xl">
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="viewMode === 'groups' || attributeEdit != null || (selectedGroup == null && selectedAttribute == null)" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="attributeEdit != null || (selectedGroup == null && selectedAttribute == null)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="viewMode === 'groups' || attributeEdit != null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="attributeEdit != null" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="viewMode === 'groups' || selectedAttribute == null || (attributeEdit != null && attributeEdit.groupId === 0)" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.groupId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-danger btn-circle btn-xl" >
       <i class="fa fa-remove"></i>
     </button>
 
@@ -48,7 +52,16 @@
   </div>
 
   <div [hidden]="viewMode !== 'attributes'">
-    <!--<yc-attributes [attributes]="attributes" [filter]="attributeFilter" (dataSelected)="onAttributeSelected($event)"></yc-attributes>-->
+
+    <div *ngIf="attributeFilterRequired">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
+
+    <div *ngIf="attributeFilterCapped">
+      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+    </div>
+
+    <yc-attributes [group]="selectedGroup" [attributes]="attributes" (dataSelected)="onAttributeSelected($event)"></yc-attributes>
   </div>
 
   <div [hidden]="viewMode !== 'attribute'">
