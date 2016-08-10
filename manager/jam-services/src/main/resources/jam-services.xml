@@ -53,11 +53,12 @@
     </bean>
 
     <bean id="voAttributeService" class="org.yes.cart.service.vo.impl.VoAttributeServiceImpl">
-        <constructor-arg index="0" ref="dtoAttributeGroupService"/>
-        <constructor-arg index="1" ref="dtoAttributeService"/>
-        <constructor-arg index="2" ref="dtoProductTypeService"/>
-        <constructor-arg index="3" ref="uiFederationFacade"/>
-        <constructor-arg index="4" ref="voAssemblySupport"/>
+        <constructor-arg index="0" ref="dtoEtypeService"/>
+        <constructor-arg index="1" ref="dtoAttributeGroupService"/>
+        <constructor-arg index="2" ref="dtoAttributeService"/>
+        <constructor-arg index="3" ref="dtoProductTypeService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voCategoryService" class="org.yes.cart.service.vo.impl.VoCategoryServiceImpl">

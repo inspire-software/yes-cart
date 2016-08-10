@@ -1,0 +1,98 @@
+<template [ngIf]="attribute">
+
+  <form role="form" [formGroup]="attributeForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="attribute.code" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="attributeForm.controls['code'].valid || attributeForm.controls['code'].pristine" class="alert alert-danger">
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_TYPE' | translate }}</label>
+                  <select class="form-control" formControlName="etypeId" name="etypeId" type="text"  [(ngModel)]="attribute.etypeId" (ngModelChange)="onDataChange($event)">
+                    <option *ngFor="let et of etypes" value="{{et.etypeId}}">{{ et.businesstype }}</option>
+                  </select>
+                  <div [hidden]="attributeForm.controls['etypeId'].valid || attributeForm.controls['etypeId'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control"  rows="6" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="attribute.description" (ngModelChange)="onDataChange($event)"></textarea>
+                  <div [hidden]="attributeForm.controls['description'].valid || attributeForm.controls['description'].pristine" class="alert alert-danger">
+                    {{ 'VALID_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="row">
+          <div class="col-lg-9">
+            <yc-i18n-table title="{{ 'NAME' | translate }}"
+                           [source]="attribute"
+                           value="name"
+                           i18n="displayNames"
+                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_VALIDATION' | translate }}"  (select)="tabSelected('Valid')">
+
+        <div class="row">
+          <div class="col-lg-9">
+            // TODO: Validation
+            regexp : string;
+            validationFailedMessage : any;
+            mandatory : boolean;
+            allowduplicate : boolean;
+            allowfailover : boolean;
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_OPTIONS' | translate }}"  (select)="tabSelected('options')">
+
+        <div class="row">
+          <div class="col-lg-9">
+            // TODO: Options
+            val : string;
+            choiceData : any;
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="row">
+          <div class="col-lg-9">
+            // TODO: Search
+            store : boolean;
+            search : boolean;
+            primary : boolean;
+            navigation : boolean;
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+</template>

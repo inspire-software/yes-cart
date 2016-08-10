@@ -51,7 +51,7 @@ export class SlaComponent implements OnInit, OnDestroy {
       'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-]+')])],
       'maxDays': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]+')])],
       'slaType': ['', Validators.required],
-      'script': [''],
+      'script': ['', Validators.pattern('\\S+.*\\S+')],
       'billingAddressNotRequired': [''],
       'deliveryAddressNotRequired': [''],
     });

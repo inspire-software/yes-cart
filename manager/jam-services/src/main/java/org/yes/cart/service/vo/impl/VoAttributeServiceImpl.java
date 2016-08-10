@@ -18,12 +18,15 @@ package org.yes.cart.service.vo.impl;
 
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.AttributeGroupDTO;
+import org.yes.cart.domain.dto.EtypeDTO;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
+import org.yes.cart.domain.vo.VoEtype;
 import org.yes.cart.service.dto.DtoAttributeGroupService;
 import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.service.dto.DtoEtypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
@@ -39,6 +42,7 @@ import java.util.List;
  */
 public class VoAttributeServiceImpl implements VoAttributeService {
 
+    private final DtoEtypeService dtoEtypeService;
     private final DtoAttributeGroupService dtoAttributeGroupService;
     private final DtoAttributeService dtoAttributeService;
     private final DtoProductTypeService dtoProductTypeService;
@@ -47,16 +51,24 @@ public class VoAttributeServiceImpl implements VoAttributeService {
 
     private final VoAssemblySupport voAssemblySupport;
 
-    public VoAttributeServiceImpl(final DtoAttributeGroupService dtoAttributeGroupService,
+    public VoAttributeServiceImpl(final DtoEtypeService dtoEtypeService,
+                                  final DtoAttributeGroupService dtoAttributeGroupService,
                                   final DtoAttributeService dtoAttributeService,
                                   final DtoProductTypeService dtoProductTypeService,
                                   final FederationFacade federationFacade,
                                   final VoAssemblySupport voAssemblySupport) {
+        this.dtoEtypeService = dtoEtypeService;
         this.dtoAttributeGroupService = dtoAttributeGroupService;
         this.dtoAttributeService = dtoAttributeService;
         this.dtoProductTypeService = dtoProductTypeService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
+    }
+
+    /** {@inheritDoc} */
+    public List<VoEtype> getAllEtypes() throws Exception {
+        final List<EtypeDTO> etypeDTOs = dtoEtypeService.getAll();
+        return voAssemblySupport.assembleVos(VoEtype.class, EtypeDTO.class, etypeDTOs);
     }
 
     /** {@inheritDoc} */

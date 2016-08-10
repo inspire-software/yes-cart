@@ -14,6 +14,14 @@
  *    limitations under the License.
  */
 
+export interface EtypeVO {
+
+  etypeId : number;
+  javatype : string;
+  businesstype : string;
+
+}
+
 export interface AttributeGroupVO {
 
   attributegroupId : number;

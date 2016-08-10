@@ -1,5 +1,10 @@
 {
-  "VALIDATION_REQUIRED": "Correct value is required",
+  "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9 or -)",
+  "NUM_REQUIRED": "Correct numeric value is required",
+  "VALID_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
+  "SIMPLE_REQUIRED": "Value is required",
+  "COUNTRY_CODE_REQUIRED": "Two letter country code is required (ISO 3166-1 alpha-2)",
+  "COUNTRY_ISO_REQUIRED": "Three number country code is required (ISO 3166-1 numeric)",
   "VALIDATION_URL": "Valid URL, IP or 'localhost' is required",
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
@@ -69,6 +74,12 @@
   "TAB_I18N": "Localization",
   "TAB_ATTRIBUTES": "Attributes",
 
+  "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
+  "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",
+  "ATTRIBUTE_TAB_VALIDATION": "Validation",
+  "ATTRIBUTE_TAB_OPTIONS": "Options",
+  "ATTRIBUTE_TAB_SEARCH": "Search",
+
   "AV_ATTRIBUTE": "Attribute",
   "AV_TYPE": "Type",
   "AV_VALUE": "Value",
@@ -94,9 +105,9 @@
   "BILLING": "Billing",
   "SHIPPING": "Shipping",
 
-  "LOCATION_COUNRY_CODE": "ISO 3166-1-A2",
-  "LOCATION_COUNRY_ISO": "ISO 3166-1-N",
-  "LOCATION_COUNRY_NAME_LOCAL": "Name (Local)",
+  "LOCATION_COUNTRY_CODE": "ISO 3166-1-A2",
+  "LOCATION_COUNTRY_ISO": "ISO 3166-1-N",
+  "LOCATION_COUNTRY_NAME_LOCAL": "Name (Local)",
 
   "CARRIER_TAB_SHOPS": "Shops",
   "SLA_TAB_PG": "Payment Methods",

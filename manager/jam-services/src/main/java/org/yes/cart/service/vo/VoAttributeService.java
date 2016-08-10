@@ -19,6 +19,7 @@ package org.yes.cart.service.vo;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
+import org.yes.cart.domain.vo.VoEtype;
 
 import java.util.List;
 
@@ -28,6 +29,13 @@ import java.util.List;
  * Time: 17:59
  */
 public interface VoAttributeService {
+
+    /**
+     * Get all attribute etypes.
+     * @return etypes
+     * @throws Exception
+     */
+    List<VoEtype> getAllEtypes() throws Exception;
 
     /**
      * Get all attribute groups.

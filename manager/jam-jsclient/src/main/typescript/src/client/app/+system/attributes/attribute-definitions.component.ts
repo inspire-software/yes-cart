@@ -18,10 +18,11 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {AttributeService, Util} from './../../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {AttributeGroupsComponent, AttributesComponent /* StateComponent */} from './components/index';
+import {AttributeGroupsComponent, AttributesComponent, AttributeComponent} from './components/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
+import {ProductAttributeUsageComponent} from './../../shared/attributes/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {AttributeGroupVO, AttributeVO, Pair} from './../../shared/model/index';
+import {EtypeVO, AttributeGroupVO, AttributeVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {Config} from './../../shared/config/env.config';
 
@@ -29,7 +30,7 @@ import {Config} from './../../shared/config/env.config';
   selector: 'yc-attribute-definitions',
   moduleId: module.id,
   templateUrl: 'attribute-definitions.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, AttributeGroupsComponent, AttributesComponent, /* StateComponent,*/ ModalComponent, DataControlComponent ],
+  directives: [TAB_DIRECTIVES, NgIf, AttributeGroupsComponent, AttributesComponent, AttributeComponent, ProductAttributeUsageComponent, ModalComponent, DataControlComponent ],
 })
 
 export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
@@ -40,6 +41,8 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private forceShowAll:boolean = false;
   private viewMode:string = AttributeDefinitionsComponent.GROUPS;
+
+  private etypes:Array<EtypeVO> = [];
 
   private groups:Array<AttributeGroupVO> = [];
   private groupFilter:string;
@@ -65,6 +68,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private deleteValue:String;
 
+  @ViewChild('productAttributeUsages')
+  productAttributeUsages:ProductAttributeUsageComponent;
+
+  productAttributeCode:string;
+
   constructor(private _attributeService:AttributeService) {
     console.debug('AttributeDefinitionsComponent constructed');
   }
@@ -88,6 +96,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     console.debug('AttributeDefinitionsComponent ngOnInit');
+    this.getAllEtypes();
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -98,6 +107,14 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.debug('AttributeDefinitionsComponent ngOnDestroy');
+  }
+
+  getAllEtypes() {
+    var _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
+      console.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
+      this.etypes = alletypes;
+      _sub.unsubscribe();
+    });
   }
 
 
@@ -243,6 +260,17 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   protected onRowListSelected() {
     if (this.selectedGroup != null) {
       this.onRowList(this.selectedGroup);
+    }
+  }
+
+  protected onRowInfo(row:AttributeVO) {
+    this.productAttributeCode = row.code;
+    this.productAttributeUsages.showDialog();
+  }
+
+  protected onRowInfoSelected() {
+    if (this.selectedAttribute != null) {
+      this.onRowInfo(this.selectedAttribute);
     }
   }
 

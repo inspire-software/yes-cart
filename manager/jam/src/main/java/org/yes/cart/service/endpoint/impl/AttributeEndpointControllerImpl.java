@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
+import org.yes.cart.domain.vo.VoEtype;
 import org.yes.cart.service.vo.AttributeEndpointController;
 import org.yes.cart.service.vo.VoAttributeService;
 
@@ -41,6 +42,11 @@ public class AttributeEndpointControllerImpl implements AttributeEndpointControl
     @Autowired
     public AttributeEndpointControllerImpl(final VoAttributeService voAttributeService) {
         this.voAttributeService = voAttributeService;
+    }
+
+    public @ResponseBody
+    List<VoEtype> getAllEtypes() throws Exception {
+        return voAttributeService.getAllEtypes();
     }
 
     public @ResponseBody

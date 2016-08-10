@@ -3,4 +3,5 @@
  */
 export * from './attribute-groups.component';
 export * from './attributes.component';
+export * from './attribute.component';
 

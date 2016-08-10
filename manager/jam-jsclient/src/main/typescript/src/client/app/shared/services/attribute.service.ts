@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {AttributeGroupVO, AttributeVO, Pair} from '../model/index';
+import {EtypeVO, AttributeGroupVO, AttributeVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -38,6 +38,16 @@ export class AttributeService {
    */
   constructor (private http: Http) {
     console.debug('AttributeService constructed');
+  }
+
+  /**
+   * Get list of all etypes,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAllEtypes() {
+    return this.http.get(this._serviceBaseUrl + '/etype/all')
+      .map(res => <EtypeVO[]> res.json())
+      .catch(this.handleError);
   }
 
   /**

@@ -41,7 +41,7 @@
           <div class="col-lg-9">
             <input class="form-control" formControlName="name" name="newCarrierName" type="text" [(ngModel)]="newCarrier.name" (ngModelChange)="onFormDataChange($event)">
             <div [hidden]="newCarrierForm.controls['name'].valid || newCarrierForm.controls['name'].pristine" class="alert alert-danger">
-              {{ 'VALIDATION_REQUIRED' | translate }}
+              {{ 'VALID_REQUIRED' | translate }}
             </div>
           </div>
         </div>

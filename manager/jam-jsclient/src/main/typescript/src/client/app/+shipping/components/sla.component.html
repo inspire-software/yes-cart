@@ -9,12 +9,14 @@
             <div class="panel-body">
               <fieldset>
                 <div class="form-group">
+                  <label>{{ 'CARRIERSLA_CODE' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'CARRIERSLA_CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="sla.code" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="slaForm.controls['code'].valid || slaForm.controls['code'].pristine" class="alert alert-danger">
-                    {{ 'VALIDATION_REQUIRED' | translate }}
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
+                  <label>{{ 'CARRIERSLA_SLATYPE' | translate }}</label>
                   <select class="form-control" formControlName="slaType" name="slaType" type="text"  [(ngModel)]="sla.slaType" (ngModelChange)="onDataChange($event)">
                     <option value="F">{{ 'CARRIERSLA_SLATYPE_F' | translate }}</option>
                     <option value="R">{{ 'CARRIERSLA_SLATYPE_R' | translate }}</option>
@@ -22,19 +24,21 @@
                     <option value="E">{{ 'CARRIERSLA_SLATYPE_E' | translate }}</option>
                   </select>
                   <div [hidden]="slaForm.controls['slaType'].valid || slaForm.controls['slaType'].pristine" class="alert alert-danger">
-                    {{ 'VALIDATION_REQUIRED' | translate }}
+                    {{ 'SIMPLE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group" [hidden]="sla.slaType != 'E'">
+                  <label>{{ 'CARRIERSLA_SCRIPT' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CARRIERSLA_SCRIPT' | translate }}" formControlName="script" name="script" type="text"    [(ngModel)]="sla.script" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="slaForm.controls['script'].valid || slaForm.controls['script'].pristine" class="alert alert-danger">
-                    {{ 'VALIDATION_REQUIRED' | translate }}
+                    {{ 'VALID_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
+                  <label>{{ 'CARRIERSLA_MAXDAYS' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CARRIERSLA_MAXDAYS' | translate }}" formControlName="maxDays" name="maxDays" type="text" [(ngModel)]="sla.maxDays" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="slaForm.controls['maxDays'].valid || slaForm.controls['maxDays'].pristine" class="alert alert-danger">
-                    {{ 'VALIDATION_REQUIRED' | translate }}
+                    {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">

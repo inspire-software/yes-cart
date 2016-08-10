@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoAttribute;
 import org.yes.cart.domain.vo.VoAttributeGroup;
+import org.yes.cart.domain.vo.VoEtype;
 
 import java.util.List;
 
@@ -35,6 +36,10 @@ import java.util.List;
 @RequestMapping("/attributes")
 public interface AttributeEndpointController {
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/etype/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoEtype> getAllEtypes() throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/group/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

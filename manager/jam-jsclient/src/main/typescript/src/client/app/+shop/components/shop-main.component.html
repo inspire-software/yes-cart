@@ -19,21 +19,25 @@
         <form role="form" [formGroup]="shopMainForm">
           <fieldset>
             <div class="form-group">
+              <label>{{ 'CODE' | translate }}</label>
               <input autofocus  class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="shop.code" (ngModelChange)="onDataChange($event)" [disabled]="shop.shopId > 0">
               <div [hidden]="shopMainForm.controls['code'].valid || shopMainForm.controls['code'].pristine" class="alert alert-danger">
-                {{ 'VALIDATION_REQUIRED' | translate }}
+                {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
+              <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="shop.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="shopMainForm.controls['name'].valid || shopMainForm.controls['name'].pristine" class="alert alert-danger">
-                {{ 'VALIDATION_REQUIRED' | translate }}
+                {{ 'VALID_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
+              <label>{{ 'DESCRIPTION' | translate }}</label>
               <textarea class="form-control"  placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" [(ngModel)]="shop.description" (ngModelChange)="onDataChange($event)"></textarea>
             </div>
             <div class="form-group">
+              <label>{{ 'SHOP_THEME_CHAIN' | translate }}</label>
               <input class="form-control"  placeholder="{{ 'SHOP_THEME_CHAIN' | translate }}" formControlName="fspointer" name="fspointer" type="text" [(ngModel)]="shop.fspointer" (ngModelChange)="onDataChange($event)">
             </div>
           </fieldset>

@@ -26,7 +26,11 @@
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="attributeEdit != null || (selectedGroup == null && selectedAttribute == null)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedAttribute == null" [hidden]="viewMode === 'groups' || (selectedGroup != null && selectedGroup.code !== 'PRODUCT')" class="btn btn-circle btn-xl">
+      <i class="fa fa-info"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -34,7 +38,7 @@
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.groupId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-danger btn-circle btn-xl" >
       <i class="fa fa-remove"></i>
     </button>
 
@@ -65,7 +69,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'attribute'">
-    <!--<yc-attribute [attribute]="attributeEdit" (dataChanged)="onAttributeChanged($event)"></yc-attribute>-->
+    <yc-attribute [attribute]="attributeEdit" [etypes]="etypes" (dataChanged)="onAttributeChanged($event)"></yc-attribute>
   </div>
 
 
@@ -78,5 +82,7 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </modal>
 
+  <yc-product-attribute-usage #productAttributeUsages
+                              [attributeCode]="productAttributeCode"></yc-product-attribute-usage>
 
 </div>

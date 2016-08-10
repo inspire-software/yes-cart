@@ -4,19 +4,19 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'LOCATION_COUNRY_CODE' | translate }}</th>
-        <th>{{ 'LOCATION_COUNRY_ISO' | translate }}</th>
+        <th>{{ 'LOCATION_COUNTRY_CODE' | translate }}</th>
+        <th>{{ 'LOCATION_COUNTRY_ISO' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
-        <th>{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}</th>
+        <th>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let row of filteredCountries; let i = index" class="{{row == selectedCountry ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'LOCATION_COUNRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
-          <td title="{{ 'LOCATION_COUNRY_ISO' | translate }}"><a (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
+          <td title="{{ 'LOCATION_COUNTRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
+          <td title="{{ 'LOCATION_COUNTRY_ISO' | translate }}"><a (click)="onSelectRow(row)">{{row.isoCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'LOCATION_COUNRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
+          <td title="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
         </template>
       </tr>
       </tbody>
