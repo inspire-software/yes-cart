@@ -1,41 +1,47 @@
 <template [ngIf]="shopLocalization">
 
+
   <div class="text-right data-control">
     <yc-data-control [changed]="changed"
-                     [valid]="true"
+                     [valid]="validForSave"
                      (saveEvent)="onSaveHandler()"
                      (discardEvent)="onDiscardEvent()"
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
-  <div class="row">
-    <div class="col-lg-9">
-      <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
-                     [source]="shopLocalization"
-                     value="title"
-                     i18n="displayTitles"
-                     (dataChanged)="onDataChanged()"></yc-i18n-table>
-    </div>
-  </div>
+  <form role="form" [formGroup]="shopI18nForm">
 
-  <div class="row">
-    <div class="col-lg-9">
-      <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
-                     [source]="shopLocalization"
-                     value="metakeywords"
-                     i18n="displayMetakeywords"
-                     (dataChanged)="onDataChanged()"></yc-i18n-table>
+    <div class="row">
+      <div class="col-lg-9">
+        <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                       [source]="shopLocalization"
+                       value="title"
+                       i18n="displayTitles"
+                       [formGroup]="shopI18nForm"
+                       (dataChanged)="onDataChanged()"></yc-i18n-table>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-lg-9">
-      <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
-                     [source]="shopLocalization"
-                     value="metadescription"
-                     i18n="displayMetadescriptions"
-                     (dataChanged)="onDataChanged()"></yc-i18n-table>
+    <div class="row">
+      <div class="col-lg-9">
+        <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                       [source]="shopLocalization"
+                       value="metakeywords"
+                       i18n="displayMetakeywords"
+                       [formGroup]="shopI18nForm"
+                       (dataChanged)="onDataChanged()"></yc-i18n-table>
+      </div>
     </div>
-  </div>
 
+    <div class="row">
+      <div class="col-lg-9">
+        <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                       [source]="shopLocalization"
+                       value="metadescription"
+                       i18n="displayMetadescriptions"
+                       [formGroup]="shopI18nForm"
+                       (dataChanged)="onDataChanged()"></yc-i18n-table>
+      </div>
+    </div>
+  </form>
 </template>

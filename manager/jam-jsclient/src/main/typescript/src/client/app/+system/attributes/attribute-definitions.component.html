@@ -30,6 +30,10 @@
       <i class="fa fa-info"></i>
     </button>
 
+    <button type="button" (click)="onRowCopySelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
+      <i class="fa fa-copy"></i>
+    </button>
+
     <button type="button" (click)="onRowEditSelected()" [disabled]="selectedAttribute == null || (attributeEdit != null && attributeEdit.attributeId === 0)" [hidden]="viewMode === 'groups'" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>

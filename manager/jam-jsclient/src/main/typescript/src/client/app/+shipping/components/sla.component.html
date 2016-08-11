@@ -64,7 +64,9 @@
                            [source]="sla"
                            value="name"
                            i18n="displayNames"
-                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+                           [formGroup]="slaForm"
+                           defaultRequired="true"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
         </div>
 
@@ -74,7 +76,8 @@
                            [source]="sla"
                            value="description"
                            i18n="displayDescriptions"
-                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+                           [formGroup]="slaForm"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
         </div>
 

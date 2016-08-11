@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CountryVO} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 
 
 @Component({
@@ -33,9 +33,12 @@ export class CountryComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CountryVO>> = new EventEmitter<FormValidationEvent<CountryVO>>();
 
+  changed:boolean = false;
   validForSave:boolean = false;
+  delayedChange:Future;
 
   countryForm:any;
+  countryFormSub:any;
 
   constructor(fb: FormBuilder) {
     console.debug('CountryComponent constructed');
@@ -47,6 +50,10 @@ export class CountryComponent implements OnInit, OnDestroy {
       'displayName': ['', Validators.pattern('\\S+.*\\S+')],
     });
 
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
   }
 
   formReset():void {
@@ -57,9 +64,31 @@ export class CountryComponent implements OnInit, OnDestroy {
     }
   }
 
+  formBind():void {
+    this.countryFormSub = this.countryForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.countryForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+  formUnbind():void {
+    if (this.countryFormSub) {
+      console.debug('CountryComponent unbining form');
+      this.countryFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    console.debug('CountryComponent validating formGroup is valid: ' + this.validForSave, this._country);
+    this.dataChanged.emit({ source: this._country, valid: this.validForSave });
+  }
+
   @Input()
   set country(country:CountryVO) {
     this._country = country;
+    this.changed = false;
     this.formReset();
   }
 
@@ -68,21 +97,18 @@ export class CountryComponent implements OnInit, OnDestroy {
   }
 
   onDataChange(event:any) {
-    var _sub:any = this.countryForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.countryForm.valid;
-      console.debug('CountryComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-      this.dataChanged.emit({ source: this._country, valid: this.validForSave });
-    });
-    console.debug('CountryComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    console.debug('CountryComponent onDataChange', event);
+    this.changed = true;
   }
 
   ngOnInit() {
     console.debug('CountryComponent ngOnInit');
+    this.formBind();
   }
 
   ngOnDestroy() {
     console.debug('CountryComponent ngOnDestroy');
+    this.formUnbind();
   }
 
 }

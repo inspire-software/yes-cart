@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {EtypeVO, AttributeVO} from './../../../shared/model/index';
-import {FormValidationEvent} from './../../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
 import {I18nComponent} from './../../../shared/i18n/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -38,19 +38,22 @@ export class AttributeComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<AttributeVO>> = new EventEmitter<FormValidationEvent<AttributeVO>>();
 
+  changed:boolean = false;
   validForSave:boolean = false;
+  delayedChange:Future;
 
   attributeForm:any;
+  attributeFormSub:any;
 
   constructor(fb: FormBuilder) {
     console.debug('AttributeComponent constructed');
 
     this.attributeForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-]+')])],
+      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-_]+')])],
       'etypeId': ['', Validators.required],
       'rank': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]+')])],
-      'description': ['', Validators.pattern('\S+.*\S+')],
-      'val': ['', Validators.pattern('\S+.*\S+')],
+      'description': [''],
+      'val': [''],
       'mandatory': [''],
       'allowduplicate': [''],
       'allowfailover': [''],
@@ -61,6 +64,10 @@ export class AttributeComponent implements OnInit, OnDestroy {
       'navigation': [''],
     });
 
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
   }
 
   formReset():void {
@@ -71,9 +78,32 @@ export class AttributeComponent implements OnInit, OnDestroy {
     }
   }
 
+  formBind():void {
+    this.attributeFormSub = this.attributeForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.attributeForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+
+  formUnbind():void {
+    if (this.attributeFormSub) {
+      console.debug('AttributeComponent unbining form');
+      this.attributeFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    console.debug('AttributeComponent validating formGroup is valid: ' + this.validForSave, this._attribute);
+    this.dataChanged.emit({ source: this._attribute, valid: this.validForSave });
+  }
+
   @Input()
   set attribute(attribute:AttributeVO) {
     this._attribute = attribute;
+    this.changed = false;
     this.formReset();
   }
 
@@ -82,27 +112,18 @@ export class AttributeComponent implements OnInit, OnDestroy {
   }
 
   onDataChange(event:any) {
-    var _sub:any = this.attributeForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.attributeForm.valid && (this._attribute.name != null) && (/\S+.*\S+/.test(this._attribute.name));
-      console.debug('AttributeComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-      this.dataChanged.emit({ source: this._attribute, valid: this.validForSave });
-    });
-    console.debug('AttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-  onI18nDataChange() {
-    this.validForSave = this.attributeForm.valid && (this._attribute.name != null) && (/\S+.*\S+/.test(this._attribute.name));
-    console.debug('SlaComponent form changed i18n and ' + (this.validForSave ? 'is valid' : 'is NOT valid'));
-    this.dataChanged.emit({ source: this._attribute, valid: this.validForSave });
+    console.debug('AttributeComponent data changed', this._attribute);
+    this.changed = true;
   }
 
   ngOnInit() {
     console.debug('AttributeComponent ngOnInit');
+    this.formBind();
   }
 
   ngOnDestroy() {
     console.debug('AttributeComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   tabSelected(tab:any) {

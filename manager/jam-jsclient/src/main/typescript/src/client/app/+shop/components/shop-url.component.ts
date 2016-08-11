@@ -32,7 +32,7 @@ import {Config} from './../../shared/config/env.config';
   directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
 })
 
-export class ShopUrlComponent implements OnInit, OnChanges {
+export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() shop:ShopVO;
 
@@ -54,6 +54,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   changed:boolean = false;
+  changedSingle:boolean = false;
   validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
@@ -66,6 +67,7 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   urlToEdit:UrlVO;
 
   shopUrlForm:any;
+  shopUrlFormSub:any;
 
   /**
    * Construct shop url panel
@@ -97,6 +99,21 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     }
   }
 
+  formBind():void {
+    this.shopUrlFormSub = this.shopUrlForm.valueChanges.subscribe((data:any) => {
+      if (this.changedSingle) {
+        this.validForSave = this.shopUrlForm.valid;
+      }
+    });
+  }
+
+  formUnbind():void {
+    if (this.shopUrlFormSub) {
+      console.debug('ShopUrlComponent unbining form');
+      this.shopUrlFormSub.unsubscribe();
+    }
+  }
+
   /** {@inheritDoc} */
   public ngOnInit() {
     console.debug('ShopUrlComponent ngOnInit shop', this.shop);
@@ -105,6 +122,12 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterUrls();
     }, this.delayedFilteringMs);
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    console.debug('ShopUrlComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   ngOnChanges(changes:any) {
@@ -131,7 +154,8 @@ export class ShopUrlComponent implements OnInit, OnChanges {
     console.debug('ShopUrlComponent onRowEdit handler', row);
     this.formReset();
     this.validForSave = false;
-    this.urlToEdit = Util.clone(row) ;
+    this.urlToEdit = Util.clone(row);
+    this.changedSingle = false;
     this.editModalDialog.show();
   }
 
@@ -184,12 +208,8 @@ export class ShopUrlComponent implements OnInit, OnChanges {
   }
 
   onDataChange(event:any) {
-    var _sub:any = this.shopUrlForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.shopUrlForm.valid;
-      console.debug('ShopUrlComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-    });
-    console.debug('ShopUrlComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    console.debug('ShopUrlComponent data changed', event);
+    this.changedSingle = true;
   }
 
   protected onSaveHandler() {

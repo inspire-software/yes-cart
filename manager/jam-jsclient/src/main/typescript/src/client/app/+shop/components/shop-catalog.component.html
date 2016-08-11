@@ -28,7 +28,7 @@
         <div class="row">
           <div class="col-lg-3">{{ 'NAME' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" formControlName="name" name="newCategoryName" type="text" [(ngModel)]="newCategory.name" (ngModelChange)="onDataChange($event)">
+            <input class="form-control" formControlName="name" name="newCategoryName" type="text" [(ngModel)]="newCategory.name" (ngModelChange)="onFormDataChange($event)">
             <div [hidden]="newCategoryForm.controls['name'].valid || newCategoryForm.controls['name'].pristine" class="alert alert-danger">
               {{ 'VALID_REQUIRED' | translate }}
             </div>
@@ -37,7 +37,7 @@
         <div class="row">
           <div class="col-lg-3">{{ 'CODE' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid" (ngModelChange)="onDataChange($event)">
+            <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid" (ngModelChange)="onFormDataChange($event)">
             <div [hidden]="newCategoryForm.controls['guid'].valid || newCategoryForm.controls['guid'].pristine" class="alert alert-danger">
               {{ 'ALPHANUM_REQUIRED' | translate }}
             </div>

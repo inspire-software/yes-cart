@@ -174,7 +174,7 @@ export class ShippingService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/carrier/' + sla.carrierslaId, options)
+    return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, options)
       .catch(this.handleError);
   }
 

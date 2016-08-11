@@ -28,7 +28,7 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
   directives: [ NgIf, NgFor, DataControlComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
-export class ShopCarrierComponent implements OnInit, OnChanges {
+export class ShopCarrierComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() shop:ShopVO;
 
@@ -42,7 +42,8 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
   @ViewChild('editNewCarrierName')
   editNewCarrierName:ModalComponent;
   newCarrierForm:any;
-
+  newCarrierFormSub:any;
+  changedSingle:boolean = true;
   validForSave:boolean = false;
 
   constructor(private _shippingService:ShippingService,
@@ -58,7 +59,13 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     console.debug('ShopCarrierComponent ngOnInit shop', this.shop);
+    this.formBind();
     this.onRefreshHandler();
+  }
+
+  ngOnDestroy() {
+    console.debug('ShopCarrierComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   ngOnChanges(changes:any) {
@@ -78,13 +85,25 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
     }
   }
 
-  onFormDataChange(event:any) {
-    var _sub:any = this.newCarrierForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.newCarrierForm.valid;
-      console.debug('ShopCarrierComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
+  formBind():void {
+    this.newCarrierFormSub = this.newCarrierForm.valueChanges.subscribe((data:any) => {
+      if (this.changedSingle) {
+        this.validForSave = this.newCarrierForm.valid;
+      }
     });
-    console.debug('ShopCarrierComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+  }
+
+  formUnbind():void {
+    if (this.newCarrierFormSub) {
+      console.debug('ShopCarrierComponent unbining form');
+      this.newCarrierFormSub.unsubscribe();
+    }
+  }
+
+
+  onFormDataChange(event:any) {
+    console.debug('ShopCarrierComponent data changed', event);
+    this.changedSingle = true;
   }
 
   onDataChange() {
@@ -126,7 +145,10 @@ export class ShopCarrierComponent implements OnInit, OnChanges {
    */
   createNew() {
     console.debug('ShopCarrierComponent createNew');
+    this.changedSingle = false;
+    this.validForSave = false;
     this.newCarrier = this.newCarrierInstance();
+    this.formReset();
     this.editNewCarrierName.show();
   }
 

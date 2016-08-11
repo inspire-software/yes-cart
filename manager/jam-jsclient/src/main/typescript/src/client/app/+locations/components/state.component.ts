@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {StateVO} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 
 
 @Component({
@@ -33,9 +33,12 @@ export class StateComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<StateVO>> = new EventEmitter<FormValidationEvent<StateVO>>();
 
+  changed:boolean = false;
   validForSave:boolean = false;
+  delayedChange:Future;
 
   stateForm:any;
+  stateFormSub:any;
 
   constructor(fb: FormBuilder) {
     console.debug('StateComponent constructed');
@@ -47,6 +50,10 @@ export class StateComponent implements OnInit, OnDestroy {
       'displayName': ['', Validators.pattern('\\S+.*\\S+')],
     });
 
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
   }
 
   formReset():void {
@@ -57,9 +64,31 @@ export class StateComponent implements OnInit, OnDestroy {
     }
   }
 
+  formBind():void {
+    this.stateFormSub = this.stateForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.stateForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+  formUnbind():void {
+    if (this.stateFormSub) {
+      console.debug('StateComponent unbining form');
+      this.stateFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    console.debug('StateComponent validating formGroup is valid: ' + this.validForSave, this._state);
+    this.dataChanged.emit({ source: this._state, valid: this.validForSave });
+  }
+
   @Input()
   set state(state:StateVO) {
     this._state = state;
+    this.changed = false;
     this.formReset();
   }
 
@@ -68,21 +97,18 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   onDataChange(event:any) {
-    var _sub:any = this.stateForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.stateForm.valid;
-      console.debug('StateComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-      this.dataChanged.emit({ source: this._state, valid: this.validForSave });
-    });
-    console.debug('StateComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    console.debug('StateComponent onDataChange', event);
+    this.changed = true;
   }
 
   ngOnInit() {
     console.debug('StateComponent ngOnInit');
+    this.formBind();
   }
 
   ngOnDestroy() {
     console.debug('StateComponent ngOnDestroy');
+    this.formUnbind();
   }
 
 }

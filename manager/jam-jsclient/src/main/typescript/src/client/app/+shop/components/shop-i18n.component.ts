@@ -15,33 +15,88 @@
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
+import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ShopVO, ShopLocaleVO} from './../../shared/model/index';
 import {ShopService, ShopEventBus} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
+import {Futures, Future} from './../../shared/event/index';
 
 @Component({
   selector: 'yc-shop-i18n',
   moduleId: module.id,
   templateUrl: 'shop-i18n.component.html',
-  directives: [ I18nComponent, NgIf, DataControlComponent],
+  directives: [ I18nComponent, NgIf, REACTIVE_FORM_DIRECTIVES, DataControlComponent],
 })
 
-export class ShopI18nComponent implements OnInit, OnChanges {
+export class ShopI18nComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() shop:ShopVO;
 
   shopLocalization:ShopLocaleVO;
 
   changed:boolean = false;
+  validForSave:boolean = false;
+  validForm:boolean = false;
+  delayedChange:Future;
 
-  constructor(private _shopService:ShopService) {
+  shopI18nForm:any;
+  shopI18nFormSub:any;
+
+  constructor(private _shopService:ShopService,
+              fb: FormBuilder) {
     console.debug('ShopI18nComponent constructed');
+
+    this.shopI18nForm = fb.group({});
+
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
   }
+
+
+  formReset():void {
+    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
+    for(let key in this.shopI18nForm.controls) {
+      this.shopI18nForm.controls[key]['_pristine'] = true;
+      this.shopI18nForm.controls[key]['_touched'] = false;
+    }
+  }
+
+
+  formBind():void {
+    this.shopI18nFormSub = this.shopI18nForm.valueChanges.subscribe((data:any) => {
+      this.validForm = this.shopI18nForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+
+  formUnbind():void {
+    if (this.shopI18nFormSub) {
+      console.debug('ShopI18nComponent unbining form');
+      this.shopI18nFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    this.validForSave = this.validForm;
+    console.debug('ShopI18nComponent validating formGroup is valid: ' + this.validForSave, this.shopLocalization);
+  }
+
 
   ngOnInit() {
     console.debug('ShopI18nComponent ngOnInit shop', this.shop);
+    this.formBind();
     this.onRefreshHandler();
+  }
+
+  ngOnDestroy() {
+    console.debug('ShopI18nComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   ngOnChanges(changes:any) {
@@ -61,6 +116,7 @@ export class ShopI18nComponent implements OnInit, OnChanges {
         console.debug('ShopI18nComponent Saved i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
+        this.validForSave = false;
         _sub.unsubscribe();
       });
     }
@@ -73,10 +129,13 @@ export class ShopI18nComponent implements OnInit, OnChanges {
         console.debug('ShopI18nComponent Refreshed i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
+        this.validForSave = false;
         _sub.unsubscribe();
       });
     } else {
       this.shopLocalization = null;
+      this.changed = false;
+      this.validForSave = false;
     }
   }
 

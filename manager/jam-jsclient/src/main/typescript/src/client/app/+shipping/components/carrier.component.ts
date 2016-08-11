@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CarrierVO, CarrierShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -40,12 +40,55 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierVO>> = new EventEmitter<FormValidationEvent<CarrierVO>>();
 
+  changed:boolean = false;
   validForSave:boolean = false;
+  delayedChange:Future;
+
+  carrierForm:any;
+  carrierFormSub:any;
 
   constructor(fb: FormBuilder) {
     console.debug('CarrierComponent constructed');
+
+    this.carrierForm = fb.group({});
+
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
+
   }
 
+  formReset():void {
+    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
+    for(let key in this.carrierForm.controls) {
+      this.carrierForm.controls[key]['_pristine'] = true;
+      this.carrierForm.controls[key]['_touched'] = false;
+    }
+  }
+
+
+  formBind():void {
+    this.carrierFormSub = this.carrierForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.carrierForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+
+  formUnbind():void {
+    if (this.carrierFormSub) {
+      console.debug('CarrierComponent unbining form');
+      this.carrierFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    console.debug('CarrierComponent validating formGroup is valid: ' + this.validForSave, this._carrier);
+    this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
+  }
 
   @Input()
   set shops(shops:Array<ShopVO>) {
@@ -58,6 +101,8 @@ export class CarrierComponent implements OnInit, OnDestroy {
   @Input()
   set carrier(carrier:CarrierVO) {
     this._carrier = carrier;
+    this.changed = false;
+    this.formReset();
     this.recalculateShops();
   }
 
@@ -69,6 +114,9 @@ export class CarrierComponent implements OnInit, OnDestroy {
     if (this._carrier && this._carrier.carrierId > 0) {
       this.availableShops = this.getAvailableShopNames();
       this.supportedShops = this.getSupportedShopNames();
+    } else {
+      this.availableShops = [];
+      this.supportedShops = [];
     }
   }
 
@@ -130,7 +178,8 @@ export class CarrierComponent implements OnInit, OnDestroy {
     if (idx != -1) {
       this._carrier.carrierShops.splice(idx, 1);
       this.recalculateShops();
-      this.onDataChanged(supported);
+      this.changed = true;
+      this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
     }
   }
 
@@ -138,22 +187,24 @@ export class CarrierComponent implements OnInit, OnDestroy {
     console.debug('SlaComponent add supported', available);
     this._carrier.carrierShops.push(available.second);
     this.recalculateShops();
-    this.onDataChanged(available);
+    this.changed = true;
+    this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
   }
 
 
   onDataChanged(event:any) {
-    this.validForSave = (this._carrier.name != null) && (/\S+.*\S+/.test(this._carrier.name));
-    console.debug('CarrierComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), this._carrier);
-    this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
+    console.debug('CarrierComponent data changed', this._carrier);
+    this.changed = true;
   }
 
   ngOnInit() {
     console.debug('CarrierComponent ngOnInit');
+    this.formBind();
   }
 
   ngOnDestroy() {
     console.debug('CarrierComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   tabSelected(tab:any) {

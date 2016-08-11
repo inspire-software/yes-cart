@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CarrierSlaVO, PaymentGatewayInfoVO} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
+import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -40,9 +40,12 @@ export class SlaComponent implements OnInit, OnDestroy {
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierSlaVO>> = new EventEmitter<FormValidationEvent<CarrierSlaVO>>();
 
+  changed:boolean = false;
   validForSave:boolean = false;
+  delayedChange:Future;
 
   slaForm:any;
+  slaFormSub:any;
 
   constructor(fb: FormBuilder) {
     console.debug('SlaComponent constructed');
@@ -56,6 +59,11 @@ export class SlaComponent implements OnInit, OnDestroy {
       'deliveryAddressNotRequired': [''],
     });
 
+    let that = this;
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
+
   }
 
   formReset():void {
@@ -64,6 +72,27 @@ export class SlaComponent implements OnInit, OnDestroy {
       this.slaForm.controls[key]['_pristine'] = true;
       this.slaForm.controls[key]['_touched'] = false;
     }
+  }
+
+  formBind():void {
+    this.slaFormSub = this.slaForm.valueChanges.subscribe((data:any) => {
+      this.validForSave = this.slaForm.valid;
+      if (this.changed) {
+        this.delayedChange.delay();
+      }
+    });
+  }
+
+  formUnbind():void {
+    if (this.slaFormSub) {
+      console.debug('SlaComponent unbining form');
+      this.slaFormSub.unsubscribe();
+    }
+  }
+
+  formChange():void {
+    console.debug('SlaComponent validating formGroup is valid: ' + this.validForSave, this._sla);
+    this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
   }
 
   @Input()
@@ -76,6 +105,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   @Input()
   set sla(sla:CarrierSlaVO) {
     this._sla = sla;
+    this.changed = false;
     this.formReset();
     this.recalculatePgs();
   }
@@ -128,8 +158,9 @@ export class SlaComponent implements OnInit, OnDestroy {
     if (idx != -1) {
       this._sla.supportedPaymentGateways.splice(idx, 1);
       this.recalculatePgs();
+      this.changed = true;
       this.validForSave = this.slaForm.valid;
-      console.debug('SlaComponent form changed PGs and ' + (this.validForSave ? 'is valid' : 'is NOT valid'));
+      console.debug('SlaComponent form changed PGs and valid: ' + this.validForSave);
       this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
     }
   }
@@ -143,36 +174,28 @@ export class SlaComponent implements OnInit, OnDestroy {
     if (idx == -1) {
       this._sla.supportedPaymentGateways.push(available.label);
       this.recalculatePgs();
+      this.changed = true;
       this.validForSave = this.slaForm.valid;
-      console.debug('SlaComponent form changed PGs and ' + (this.validForSave ? 'is valid' : 'is NOT valid'));
+      console.debug('SlaComponent form changed PGs and valid: ' + this.validForSave);
       this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
     }
   }
 
 
   onDataChange(event:any) {
-    var _sub:any = this.slaForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.slaForm.valid;
-      console.debug('SlaComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-      this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
-    });
-    console.debug('SlaComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-  onI18nDataChange() {
-    this.validForSave = this.slaForm.valid;
-    console.debug('SlaComponent form changed i18n and ' + (this.validForSave ? 'is valid' : 'is NOT valid'));
-    this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
+    console.debug('SlaComponent onDataChange', event);
+    this.changed = true;
   }
 
 
   ngOnInit() {
     console.debug('SlaComponent ngOnInit');
+    this.formBind();
   }
 
   ngOnDestroy() {
     console.debug('SlaComponent ngOnDestroy');
+    this.formUnbind();
   }
 
   tabSelected(tab:any) {

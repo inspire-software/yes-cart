@@ -1,5 +1,6 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from '@angular/core';
 import {NgClass, NgIf, NgFor} from '@angular/common';
+import {FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 
 import {Pair} from '../model/index';
 import {Util} from '../services/index';
@@ -9,7 +10,7 @@ import {Util} from '../services/index';
   selector: 'yc-i18n-table',
   moduleId: module.id,
   templateUrl: 'i18n.component.html',
-  directives: [NgClass, NgIf, NgFor]
+  directives: [NgClass, NgIf, NgFor, REACTIVE_FORM_DIRECTIVES]
 })
 
 export class I18nComponent implements OnInit, OnChanges {
@@ -27,14 +28,52 @@ export class I18nComponent implements OnInit, OnChanges {
   dataI18n:Array<Pair<string, string>> = [];
   dataValue:string = '';
 
+  expandDefault:boolean = true;
+
   selectedRow:Pair<string,string> = new Pair('','');
 
-  constructor() {
+  _defaultRequired : boolean = false;
+  i18nForm:any;
+
+  constructor(fb: FormBuilder) {
     console.debug('I18nComponent ' + this.title + ' constructed');
+    this.i18nForm = fb.group({
+       'addLang':  ['', Validators.pattern('[a-z]{2}')],
+       'addVal':  ['', Validators.pattern('\\S+.*\\S+')],
+       'dataValue':  ['', Validators.pattern('\\S+.*\\S+')],
+       'dataValueXL':  ['', Validators.pattern('\\S+.*\\S+')]
+    });
   }
 
   ngOnInit() {
+
     this.reloadModel();
+  }
+
+  @Input()
+  set formGroup(formGroup:FormGroup) {
+    // This is a bit of the hack to make sure we have correct binding, we do not have parent formGroup until
+    // this setter is called but then this is the only place to set it as other lifecycle methods are executed
+    // multiple times for every render, so this place just as good as any
+    if (formGroup.contains(this.value)) {
+      formGroup.removeControl(this.value);
+    }
+    formGroup.addControl(this.value, this.i18nForm);
+    console.debug('I18nComponent attaching self to parent control form', [ this.value, formGroup ]);
+  }
+
+  @Input()
+  set defaultRequired(required:string) {
+    this._defaultRequired = required === 'true';
+    if (this._defaultRequired) {
+      console.debug('I18nComponent resetting validator to required non-blank', this.value);
+      this.i18nForm.controls['dataValue'].validator = Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')]);
+      this.i18nForm.controls['dataValueXL'].validator = Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')]);
+    } else {
+      console.debug('I18nComponent resetting validator to non-blank', this.value);
+      this.i18nForm.controls['dataValue'].validator = Validators.pattern('\\S+.*\\S+');
+      this.i18nForm.controls['dataValueXL'].validator = Validators.pattern('\\S+.*\\S+');
+    }
   }
 
   reloadModel():void {
@@ -45,7 +84,7 @@ export class I18nComponent implements OnInit, OnChanges {
       this.dataI18n = [];
     }
     if (this.source[this.value] !== null) {
-      this.dataValue = this.source[this.value];
+      this.dataValue = '' + this.source[this.value];
     } else {
       this.dataValue = '';
     }
@@ -54,6 +93,10 @@ export class I18nComponent implements OnInit, OnChanges {
   ngOnChanges(changes:any) {
     console.debug('I18nComponent ngOnChanges', changes);
     this.reloadModel();
+  }
+
+  onExpandDefault() {
+    this.expandDefault = !this.expandDefault;
   }
 
   onRowSelect(selectedRow:Pair<string,string>) {
@@ -76,6 +119,9 @@ export class I18nComponent implements OnInit, OnChanges {
   }
 
   onRowAdd():void {
+    if (this.isBlank(this.selectedRow.first)) {
+      return;
+    }
     if (this.isBlank(this.selectedRow.second)) {
       this.onRowDelete(this.selectedRow);
       return;

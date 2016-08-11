@@ -36,6 +36,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   validForSave:boolean = false;
 
   shopMainForm:any;
+  shopMainFormSub:any;
 
   private shopSub:any;
 
@@ -69,9 +70,27 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  formBind():void {
+    this.shopMainFormSub = this.shopMainForm.valueChanges.subscribe((data:any) => {
+      if (this.changed) {
+        this.validForSave = this.shopMainForm.valid;
+      }
+    });
+  }
+
+  formUnbind():void {
+    if (this.shopMainFormSub) {
+      console.debug('ShopMainComponent unbining form');
+      this.shopMainFormSub.unsubscribe();
+    }
+  }
+
+
   ngOnInit() {
 
     this.onDiscardEvent();
+    this.formBind();
     console.debug('ShopMainComponent ngOnInit', this.shop);
 
   }
@@ -81,16 +100,12 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     if (this.shopSub) {
       this.shopSub.unsubscribe();
     }
+    this.formUnbind();
   }
 
   onDataChange(event:any) {
+    console.debug('ShopMainComponent data changed', event);
     this.changed = true;
-    var _sub:any = this.shopMainForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.shopMainForm.valid;
-      console.debug('ShopMainComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
-    });
-    console.debug('ShopMainComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   onSaveHandler() {

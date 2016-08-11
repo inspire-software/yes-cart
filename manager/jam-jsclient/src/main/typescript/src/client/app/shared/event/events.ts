@@ -108,19 +108,19 @@ class ResettableTimedFunction implements Future {
 
   public delay(ms?:number) {
     if (!this.isDone()) {
-      console.debug('ResettableTimedFunction clear', this.ref);
+      // console.debug('ResettableTimedFunction clear', this.ref);
       clearTimeout(this.ref);
     }
     this.done = false;
     let delay = ( (typeof ms === 'undefined') ? this.delayMs : ms);
     this.ref = setTimeout(this.future, delay);
-    console.debug('ResettableTimedFunction delay ' + delay, this.ref);
+    // console.debug('ResettableTimedFunction delay ' + delay, this.ref);
   }
 
   public cancel() {
     if (!this.isDone()) {
       clearTimeout(this.ref);
-      console.debug('ResettableTimedFunction cancel', this.ref);
+      // console.debug('ResettableTimedFunction cancel', this.ref);
     }
   }
 

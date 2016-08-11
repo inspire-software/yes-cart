@@ -250,6 +250,21 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onRowCopyAttribute(row:AttributeVO) {
+    console.debug('AttributeDefinitionsComponent onRowCopyAttribute handler', row);
+    this.attributeEdit = Util.clone(row);
+    this.attributeEdit.attributeId = 0;
+    this.changed = false;
+    this.validForSave = false;
+    this.viewMode = AttributeDefinitionsComponent.ATTRIBUTE;
+  }
+
+  protected onRowCopySelected() {
+    if (this.selectedAttribute != null) {
+      this.onRowCopyAttribute(this.selectedAttribute);
+    }
+  }
+
 
   protected onRowList(row:AttributeGroupVO) {
     console.debug('AttributeDefinitionsComponent onRowList handler', row);

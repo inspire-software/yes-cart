@@ -31,7 +31,7 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
 /**
  * Manage categories assigned to shop.
  */
-export class ShopCatalogComponent implements OnInit, OnChanges {
+export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() shop:ShopVO;
 
@@ -42,7 +42,8 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
   @ViewChild('editNewCategoryName')
   editNewCategoryName:ModalComponent;
   newCategoryForm:any;
-
+  newCategoryFormSub:any;
+  changedSingle:boolean = true;
   validForSave:boolean = false;
 
   nodes:Array<ITreeNode>;
@@ -70,6 +71,22 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
     });
   }
 
+  ngOnInit() {
+    console.debug('ShopCatalogComponent ngOnInit shop', this.shop);
+    this.formBind();
+    this.onRefreshHandler();
+  }
+
+  ngOnDestroy() {
+    console.debug('ShopCatalogComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  ngOnChanges(changes:any) {
+    console.debug('ShopCatalogComponent ngOnChanges', changes);
+    this.onRefreshHandler();
+  }
+
   newCategoryInstance():BasicCategoryVO {
     return { 'name': '', 'guid': '' };
   }
@@ -82,24 +99,27 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
     }
   }
 
-  onDataChange(event:any) {
-    var _sub:any = this.newCategoryForm.valueChanges.subscribe((data:any) => {
-      this.validForSave = this.newCategoryForm.valid;
-      console.debug('ShopCatalogComponent form changed  and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), data);
-      _sub.unsubscribe();
+  formBind():void {
+    this.newCategoryFormSub = this.newCategoryForm.valueChanges.subscribe((data:any) => {
+      if (this.changedSingle) {
+        this.validForSave = this.newCategoryForm.valid;
+      }
     });
-    console.debug('ShopCatalogComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
-  ngOnInit() {
-    console.debug('ShopCatalogComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
+  formUnbind():void {
+    if (this.newCategoryFormSub) {
+      console.debug('ShopCatalogComponent unbining form');
+      this.newCategoryFormSub.unsubscribe();
+    }
   }
 
-  ngOnChanges(changes:any) {
-    console.debug('ShopCatalogComponent ngOnChanges', changes);
-    this.onRefreshHandler();
+
+  onFormDataChange(event:any) {
+    console.debug('ShopCatalogComponent data changed', event);
+    this.changedSingle = true;
   }
+
 
   /**
    * Load data and adapt time.
@@ -238,6 +258,10 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
    */
   createNew(parent:ITreeNode) {
     console.debug('ShopCatalogComponent createNew for parent', parent);
+    this.changedSingle = false;
+    this.validForSave = false;
+    this.newCategory = this.newCategoryInstance();
+    this.formReset();
     this.editNewCategoryName.show();
   }
 
@@ -250,6 +274,8 @@ export class ShopCatalogComponent implements OnInit, OnChanges {
     if (ModalAction.POSITIVE === modalresult.action) {
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
+          this.changedSingle = false;
+          this.validForSave = false;
           this.onRefreshHandler();
         }
       );

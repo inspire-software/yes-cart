@@ -31,6 +31,13 @@
                     {{ 'VALID_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="attribute.rank" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="attributeForm.controls['rank'].valid || attributeForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
               </fieldset>
             </div>
 
@@ -46,7 +53,9 @@
                            [source]="attribute"
                            value="name"
                            i18n="displayNames"
-                           (dataChanged)="onI18nDataChange()"></yc-i18n-table>
+                           [formGroup]="attributeForm"
+                           defaultRequired="true"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
         </div>
 
@@ -55,13 +64,35 @@
       <tab heading="{{ 'ATTRIBUTE_TAB_VALIDATION' | translate }}"  (select)="tabSelected('Valid')">
 
         <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'ATTRIBUTE_MANDATORY' | translate }}</label>
+                  <input formControlName="mandatory" name="mandatory" type="checkbox" [(ngModel)]="attribute.mandatory" (ngModelChange)="onDataChange($event)">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'ATTRIBUTE_DUPLICATE' | translate }}</label>
+                  <input formControlName="allowduplicate" name="allowduplicate" type="checkbox" [(ngModel)]="attribute.allowduplicate" (ngModelChange)="onDataChange($event)">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'ATTRIBUTE_FAILOVER' | translate }}</label>
+                  <input formControlName="allowfailover" name="allowfailover" type="checkbox" [(ngModel)]="attribute.allowfailover" (ngModelChange)="onDataChange($event)">
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
           <div class="col-lg-9">
-            // TODO: Validation
-            regexp : string;
-            validationFailedMessage : any;
-            mandatory : boolean;
-            allowduplicate : boolean;
-            allowfailover : boolean;
+            <yc-i18n-table title="{{ 'ATTRIBUTE_REGEX' | translate }}"
+                           [source]="attribute"
+                           value="regexp"
+                           i18n="validationFailedMessage"
+                           [formGroup]="attributeForm"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
         </div>
 

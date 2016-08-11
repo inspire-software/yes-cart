@@ -32,7 +32,7 @@
 
   "NAME": "Name",
   "DESCRIPTION": "Description",
-  "DEFAULT_VALUE": "Default value",
+  "DEFAULT_VALUE": "default value",
   "CODE": "Code",
   "ASSIGNED": "Assigned",
   "AVAILABLE": "Available",
@@ -79,6 +79,12 @@
   "ATTRIBUTE_TAB_VALIDATION": "Validation",
   "ATTRIBUTE_TAB_OPTIONS": "Options",
   "ATTRIBUTE_TAB_SEARCH": "Search",
+
+  "ATTRIBUTE_REGEX": "Validation rule (RegEx) and messages",
+  "ATTRIBUTE_VALUES": "Values",
+  "ATTRIBUTE_MANDATORY": "Mandatory",
+  "ATTRIBUTE_DUPLICATE": "Duplicates",
+  "ATTRIBUTE_FAILOVER": "Failover",
 
   "AV_ATTRIBUTE": "Attribute",
   "AV_TYPE": "Type",
