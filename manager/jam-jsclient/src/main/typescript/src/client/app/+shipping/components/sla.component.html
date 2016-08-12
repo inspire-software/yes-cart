@@ -42,12 +42,12 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
                   <input formControlName="billingAddressNotRequired" name="billingAddressNotRequired" type="checkbox" [(ngModel)]="sla.billingAddressNotRequired" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
                   <input formControlName="deliveryAddressNotRequired" name="deliveryAddressNotRequired" type="checkbox" [(ngModel)]="sla.deliveryAddressNotRequired" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
                 </div>
               </fieldset>
             </div>

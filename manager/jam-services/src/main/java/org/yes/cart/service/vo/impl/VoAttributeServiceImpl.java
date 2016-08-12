@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.AttributeGroupDTO;
 import org.yes.cart.domain.dto.EtypeDTO;
@@ -98,5 +99,52 @@ public class VoAttributeServiceImpl implements VoAttributeService {
             names.add(MutablePair.of(type.getProducttypeId(), type.getName()));
         }
         return names;
+    }
+
+    @Override
+    public VoAttribute getAttributeById(final long id) throws Exception {
+        final AttributeDTO attr = dtoAttributeService.getById(id);
+        if (attr != null) {
+            return voAssemblySupport.assembleVo(VoAttribute.class, AttributeDTO.class, new VoAttribute(), attr);
+        }
+        return null;
+
+    }
+
+    @Override
+    public VoAttribute createAttribute(final VoAttribute vo) throws Exception {
+        if (vo != null && federationFacade.isCurrentUserSystemAdmin()) {
+            AttributeDTO attr = dtoAttributeService.getNew();
+            attr.setAttributegroupId(vo.getAttributegroupId());
+            attr.setEtypeId(vo.getEtypeId());
+            attr = dtoAttributeService.create(
+                    voAssemblySupport.assembleDto(AttributeDTO.class, VoAttribute.class, attr, vo)
+            );
+            return getAttributeById(attr.getAttributeId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    @Override
+    public VoAttribute updateAttribute(final VoAttribute vo) throws Exception {
+        final AttributeDTO attr = dtoAttributeService.getById(vo.getAttributeId());
+        if (attr != null && federationFacade.isCurrentUserSystemAdmin()) {
+            dtoAttributeService.update(
+                    voAssemblySupport.assembleDto(AttributeDTO.class, VoAttribute.class, attr, vo)
+            );
+            return getAttributeById(attr.getAttributeId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    @Override
+    public void removeAttribute(final long id) throws Exception {
+        if (federationFacade.isCurrentUserSystemAdmin()) {
+            dtoAttributeService.remove(id);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 }

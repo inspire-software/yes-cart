@@ -18,7 +18,7 @@
           <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.code}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)">{{row.etypeName}}</a></td>
-          <td title="{{ 'AV_REGEX' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-times-circle' : 'fa-check-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
+          <td title="{{ 'AV_REGEX' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
           <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)">{{row.rank}}</a></td>
           <td title="{{ 'AV_SEARCH' | translate }}"><a (click)="onSelectRow(row)"><span [innerHTML]="getSearchFlags(row)"></span></a></td>
         </template>

@@ -14,6 +14,13 @@
  *    limitations under the License.
  */
 
+export interface ErrorMessage {
+
+  code : number;
+  message : string;
+
+}
+
 export class Util {
 
   public static clone<T> (object:T):T {
@@ -35,40 +42,37 @@ export class Util {
     return arr;
   }
 
-  public static determineErrorMessage(error:any):any {
+  public static determineErrorMessage(error:any):ErrorMessage {
     if (error) {
+      let code = (error.status && !isNaN(error.status)) ? error.status : 500;
       let message = error.message;
       if (message) {
-        return message;
+        return { code: code, message: message };
       }
       if (typeof(error.json) === 'function') {
         try {
           let json = error.json();
           if (json && json.error) {
-            return json.error;
+            return { code: code, message: json.error };
           }
         } catch (err) {
           console.debug('Unable to parse error.json()');
         }
       }
-      if (error.status && error.status == 403) {
-        console.debug('Received 403 status');
-        return "AUTH403";
-      }
       if (typeof(error.text) === 'function') {
         try {
-          return error.text();
+          return { code: code, message: error.text() };
         } catch (err) {
           console.debug('Unable to get error.text()');
         }
       }
       try {
-        return JSON.stringify(error);
+        return { code: code, message: JSON.stringify(error) };
       } catch (err) {
         console.debug('Unable to JSON.stringify(error)');
       }
     }
-    return null;
+    return { code: 500, message: 'Server Error' };
   }
 
 }

@@ -82,10 +82,11 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   newAttributeInstance():AttributeVO {
     let groupId = this.selectedGroup != null ? this.selectedGroup.attributegroupId : 0;
+    let etype = this.etypes.length > 0 ? this.etypes[0] : { etypeId: 0, javatype: '', businesstype: ''};
     return {
       attributeId: 0, attributegroupId: groupId,
       code: '', name: '', description:null, displayNames: [],
-      etypeId: 0, etypeName:null,
+      etypeId: etype.etypeId, etypeName:etype.businesstype,
       val:null, mandatory:false, allowduplicate:false, allowfailover:false,
       regexp:null, validationFailedMessage:[],
       rank:500,
@@ -297,27 +298,27 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
         console.debug('AttributeDefinitionsComponent Save handler attribute', this.attributeEdit);
 
-        //var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
-        //    rez => {
-        //    if (this.attributeEdit.attributeId > 0) {
-        //      let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
-        //      if (idx !== -1) {
-        //        this.attributes[idx] = rez;
-        //        this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
-        //        console.debug('AttributeDefinitionsComponent attribute changed', rez);
-        //      }
-        //    } else {
-        //      this.attributes.push(rez);
-        //      this.attributeFilter = rez.name;
-        //      console.debug('AttributeDefinitionsComponent attribute added', rez);
-        //    }
-        //    this.changed = false;
-        //    this.selectedAttribute = rez;
-        //    this.attributeEdit = null;
-        //    this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-        //    _sub.unsubscribe();
-        //  }
-        //);
+        var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
+            rez => {
+            if (this.attributeEdit.attributeId > 0) {
+              let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
+              if (idx !== -1) {
+                this.attributes[idx] = rez;
+                this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
+                console.debug('AttributeDefinitionsComponent attribute changed', rez);
+              }
+            } else {
+              this.attributes.push(rez);
+              this.attributeFilter = rez.name;
+              console.debug('AttributeDefinitionsComponent attribute added', rez);
+            }
+            this.changed = false;
+            this.selectedAttribute = rez;
+            this.attributeEdit = null;
+            this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+            _sub.unsubscribe();
+          }
+        );
       }
     }
 
@@ -341,15 +342,15 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
       if (this.selectedAttribute != null) {
         console.debug('AttributeDefinitionsComponent onDeleteConfirmationResult', this.selectedAttribute);
 
-        //var _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
-        //  console.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
-        //  let idx = this.attributes.indexOf(this.selectedAttribute);
-        //  this.attributes.splice(idx, 1);
-        //  this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
-        //  this.selectedAttribute = null;
-        //  this.attributeEdit = null;
-        //  _sub.unsubscribe();
-        //});
+        var _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
+          console.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
+          let idx = this.attributes.indexOf(this.selectedAttribute);
+          this.attributes.splice(idx, 1);
+          this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
+          this.selectedAttribute = null;
+          this.attributeEdit = null;
+          _sub.unsubscribe();
+        });
 
       }
     }

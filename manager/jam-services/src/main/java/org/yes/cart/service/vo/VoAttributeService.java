@@ -70,4 +70,44 @@ public interface VoAttributeService {
      */
     List<MutablePair<Long, String>> getProductTypesByAttributeCode(String code) throws Exception;
 
+
+
+    /**
+     * Get vo by id.
+     *
+     * @param id id
+     * @return vo
+     * @throws Exception
+     */
+    VoAttribute getAttributeById(long id) throws Exception;
+
+
+
+    /**
+     * Create new vo
+     * @param vo vo
+     * @return persistent version
+     * @throws Exception
+     */
+    VoAttribute createAttribute(VoAttribute vo)  throws Exception;
+
+
+    /**
+     * Create new vo
+     * @param vo carrier
+     * @return persistent version
+     * @throws Exception
+     */
+    VoAttribute updateAttribute(VoAttribute vo)  throws Exception;
+
+
+    /**
+     * Remove vo.
+     *
+     * @param id id
+     * @throws Exception
+     */
+    void removeAttribute(long id) throws Exception;
+
+
 }

@@ -68,16 +68,16 @@
             <div class="panel-body">
               <fieldset>
                 <div class="form-group">
-                  <label>{{ 'ATTRIBUTE_MANDATORY' | translate }}</label>
                   <input formControlName="mandatory" name="mandatory" type="checkbox" [(ngModel)]="attribute.mandatory" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_MANDATORY' | translate }}</label>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'ATTRIBUTE_DUPLICATE' | translate }}</label>
                   <input formControlName="allowduplicate" name="allowduplicate" type="checkbox" [(ngModel)]="attribute.allowduplicate" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_DUPLICATE' | translate }}</label>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'ATTRIBUTE_FAILOVER' | translate }}</label>
                   <input formControlName="allowfailover" name="allowfailover" type="checkbox" [(ngModel)]="attribute.allowfailover" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_FAILOVER' | translate }}</label>
                 </div>
               </fieldset>
             </div>
@@ -102,9 +102,12 @@
 
         <div class="row">
           <div class="col-lg-9">
-            // TODO: Options
-            val : string;
-            choiceData : any;
+            <yc-i18n-table title="{{ 'ATTRIBUTE_VALUES' | translate }}"
+                           [source]="attribute"
+                           value="val"
+                           i18n="choiceData"
+                           [formGroup]="attributeForm"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
         </div>
 
@@ -113,12 +116,28 @@
       <tab heading="{{ 'ATTRIBUTE_TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
 
         <div class="row">
-          <div class="col-lg-9">
-            // TODO: Search
-            store : boolean;
-            search : boolean;
-            primary : boolean;
-            navigation : boolean;
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <input formControlName="store" name="store" type="checkbox" [(ngModel)]="attribute.store" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_SI_STORE' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <input formControlName="search" name="search" type="checkbox" [(ngModel)]="attribute.search" (ngModelChange)="onDataChangeSearch($event)">
+                  <label>{{ 'ATTRIBUTE_SI_SEARCH' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <input formControlName="primary" name="primary" type="checkbox" [(ngModel)]="attribute.primary" (ngModelChange)="onDataChangePrimary($event)">
+                  <label>{{ 'ATTRIBUTE_SI_PRIMARY' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <input formControlName="navigation" name="navigation" type="checkbox" [(ngModel)]="attribute.navigation" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_SI_NAV' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+
           </div>
         </div>
 

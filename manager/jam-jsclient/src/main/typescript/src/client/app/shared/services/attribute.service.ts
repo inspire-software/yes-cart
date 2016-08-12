@@ -102,12 +102,60 @@ export class AttributeService {
 
 
 
+  /**
+   * Get attribute,
+   * @param id attribute id
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAttributeById(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/attribute/' + id)
+      .map(res => <AttributeVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Create attribute.
+   * @param attribute attribute
+   * @returns {Observable<R>}
+   */
+  saveAttribute(attribute:AttributeVO) {
+    let body = JSON.stringify(attribute);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (attribute.attributeId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/attribute', body, options)
+        .map(res => <AttributeVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/attribute', body, options)
+        .map(res => <AttributeVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove attribute.
+   * @param attribute attribute
+   * @returns {Observable<R>}
+   */
+  removeAttribute(attribute:AttributeVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/attribute/' + attribute.attributeId, options)
+      .catch(this.handleError);
+  }
+
+
   private handleError (error:any) {
 
     console.error('CategoryService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
-    return Observable.throw(message || 'Server error');
+    return Observable.throw(message.message || 'Server error');
   }
 
 }

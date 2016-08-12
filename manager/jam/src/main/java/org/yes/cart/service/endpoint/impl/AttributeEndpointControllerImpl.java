@@ -68,4 +68,24 @@ public class AttributeEndpointControllerImpl implements AttributeEndpointControl
     List<MutablePair<Long, String>> getProductTypesByAttributeCode(@PathVariable("code") final String code) throws Exception {
         return voAttributeService.getProductTypesByAttributeCode(code);
     }
+
+    public @ResponseBody
+    VoAttribute getAttributeById(@PathVariable("id") final long id) throws Exception {
+        return voAttributeService.getAttributeById(id);
+    }
+
+    public @ResponseBody
+    VoAttribute createAttribute(@RequestBody final VoAttribute vo) throws Exception {
+        return voAttributeService.createAttribute(vo);
+    }
+
+    public @ResponseBody
+    VoAttribute updateAttribute(@RequestBody final VoAttribute vo) throws Exception {
+        return voAttributeService.updateAttribute(vo);
+    }
+
+    public @ResponseBody
+    void removeAttribute(@PathVariable("id") final long id) throws Exception {
+        voAttributeService.removeAttribute(id);
+    }
 }

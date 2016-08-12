@@ -61,4 +61,30 @@ public interface AttributeEndpointController {
     @ResponseBody
     List<MutablePair<Long, String>> getProductTypesByAttributeCode(@PathVariable("code") String code) throws Exception;
 
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/attribute/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAttribute getAttributeById(@PathVariable("id") long id) throws Exception;
+
+
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/attribute", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAttribute createAttribute(@RequestBody VoAttribute vo)  throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/attribute", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAttribute updateAttribute(@RequestBody VoAttribute vo)  throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/attribute/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeAttribute(@PathVariable("id") long id) throws Exception;
+
+
 }

@@ -50,7 +50,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
 
     this.attributeForm = fb.group({
       'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-_]+')])],
-      'etypeId': ['', Validators.required],
+      'etypeId': ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
       'rank': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]+')])],
       'description': [''],
       'val': [''],
@@ -113,6 +113,22 @@ export class AttributeComponent implements OnInit, OnDestroy {
 
   onDataChange(event:any) {
     console.debug('AttributeComponent data changed', this._attribute);
+    this.changed = true;
+  }
+
+  onDataChangePrimary(event:any) {
+    console.debug('AttributeComponent data changed', this._attribute);
+    if (this._attribute.primary && !this._attribute.search) {
+      this._attribute.search = true;
+    }
+    this.changed = true;
+  }
+
+  onDataChangeSearch(event:any) {
+    console.debug('AttributeComponent data changed', this._attribute);
+    if (this._attribute.primary && !this._attribute.search) {
+      this._attribute.primary = false;
+    }
     this.changed = true;
   }
 

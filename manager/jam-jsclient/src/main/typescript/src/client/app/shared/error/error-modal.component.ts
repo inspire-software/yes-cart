@@ -29,6 +29,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('errorModalDialog')
   errorModalDialog:ModalComponent;
 
+  private errorTitleKey:string = '';
   private errorString:string = '';
 
   private errorSub:any;
@@ -41,15 +42,25 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     let message = Util.determineErrorMessage(event);
     console.debug('ErrorModalComponent setErrorString', message);
-    if (message) {
-      if (message.indexOf('JSON Parse error') != -1) {
-        this.errorString = 'AUTH';
-      } else {
-        this.errorString = message;
+
+    let key = 'MODAL_ERROR_MESSAGE';
+
+    if (message.message) {
+      if (message.message.indexOf('JSON Parse error') != -1) {
+        key = 'MODAL_ERROR_MESSAGE_AUTH200';
+      } else if (message.message.indexOf('unique or primary key constraint') != -1) {
+        key = 'MODAL_ERROR_MESSAGE_UNIQUE';
       }
+      this.errorString = message.message;
     } else {
       this.errorString = 'Server error';
     }
+
+    if (message.code == 403) {
+      key = 'MODAL_ERROR_MESSAGE_AUTH403';
+    }
+
+    this.errorTitleKey = key;
 
   }
 

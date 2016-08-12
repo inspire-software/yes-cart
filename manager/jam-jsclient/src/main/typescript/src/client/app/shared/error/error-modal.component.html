@@ -1,15 +1,15 @@
 
   <modal #errorModalDialog
          title="{{ 'MODAL_ERROR_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_IGNORE' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_RESTARTAPP' | translate }}"
          [valid]="true"
          (closed)="onErrorResult($event)">
     <div>
-      {{ 'MODAL_ERROR_MESSAGE' | translate }}
+      {{ errorTitleKey | translate }}
     </div>
     <div>
-      <pre style="max-height: 100px; overflow-y: auto">{{ errorString == 'AUTH' ? ( 'MODAL_ERROR_LOGGED_OUT' | translate ) : (errorString == 'AUTH403' ? ( 'MODAL_ERROR_FORBIDDEN' | translate ) : errorString) }}</pre>
+      <pre style="max-height: 100px; overflow-y: auto">{{ errorString }}</pre>
     </div>
   </modal>
 

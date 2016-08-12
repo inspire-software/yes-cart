@@ -304,7 +304,7 @@ export class ShopService {
     console.error('CategoryService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
-    return Observable.throw(message || 'Server error');
+    return Observable.throw(message.message || 'Server error');
   }
 
 }
