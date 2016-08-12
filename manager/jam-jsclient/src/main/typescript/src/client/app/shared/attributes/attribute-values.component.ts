@@ -39,8 +39,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   @Input() masterObject:any;
 
   //paging
-  maxSize:number = 5;
-  itemsPerPage:number = 10;
+  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
+  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   totalItems:number = 0;
   currentPage:number = 1;
   // Must use separate variables (not currentPage) for table since that causes
@@ -353,11 +353,17 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   isTextAreaEditor():boolean {
     return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML');
+      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML' || this.attributeToEdit.attribute.etypeName === 'Any');
+  }
+
+  isMiniTextEditor():boolean {
+    return this.attributeToEdit &&
+      (this.attributeToEdit.attribute.etypeName === 'Float' || this.attributeToEdit.attribute.etypeName === 'Integer'
+      || this.attributeToEdit.attribute.etypeName === 'Date');
   }
 
   isTextEditor():boolean {
-    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor();
+    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor() && !this.isMiniTextEditor();
   }
 
   get attributeToEditBoolean():boolean {

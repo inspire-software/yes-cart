@@ -64,7 +64,7 @@
 
     </template>
 
-    <template [ngIf]="isTextEditor()">
+    <template [ngIf]="isMiniTextEditor()">
 
       <form role="form">
         <fieldset>
@@ -76,6 +76,27 @@
           <div class="row">
             <div class="col-md-6">{{ attributeToEdit.attribute.name }}</div>
             <div class="col-md-6">
+              <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+    </template>
+
+
+    <template [ngIf]="isTextEditor()">
+
+      <form role="form">
+        <fieldset>
+          <div class="row" [hidden]="!attributeToEdit.attribute.description">
+            <div class="col-xs-12">
+              <pre class="bg-success">{{ attributeToEdit.attribute.description }}</pre>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ attributeToEdit.attribute.name }}</div>
+            <div class="col-xs-12">
               <input name="val" class="form-control" type="text" [(ngModel)]="attributeToEdit.val" (ngModelChange)="onDataChange($event)" required>
             </div>
           </div>

@@ -60,6 +60,10 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
       key = 'MODAL_ERROR_MESSAGE_AUTH403';
     }
 
+    if (message.code == 404) {
+      key = 'MODAL_ERROR_MESSAGE_AUTH404';
+    }
+
     this.errorTitleKey = key;
 
   }

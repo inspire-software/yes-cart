@@ -79,3 +79,10 @@ export interface AttrValueVO {
 
 
 }
+
+export interface AttrValueSystemVO extends AttrValueVO {
+
+  systemId : number;
+
+}
+

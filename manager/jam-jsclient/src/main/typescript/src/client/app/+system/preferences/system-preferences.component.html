@@ -1,0 +1,38 @@
+<template [ngIf]="systemAttributes">
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{ 'PANEL_SYSTEM_PREFS' | translate }}</h1>
+    </div>
+
+    <div class="text-right data-control">
+
+      <form class="pull-left">
+        <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+      </form>
+
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+        <i class="fa fa-edit"></i>
+      </button>
+
+      <!--<button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >-->
+        <!--<i class="fa fa-remove"></i>-->
+      <!--</button>-->
+
+      <yc-data-control [changed]="changed"
+                       [valid]="true"
+                       (saveEvent)="onSaveHandler()"
+                       (discardEvent)="onDiscardEventHandler()"
+                       (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+
+    </div>
+
+    <yc-attribute-values #attributeValuesComponent
+                         [masterObject]="system"
+                         [objectAttributes]="systemAttributes"
+                         [attributeFilter]="attributeFilter"
+                         (dataSelected)="onSelectRow($event)"
+                         (dataChanged)="onDataChange($event)"></yc-attribute-values>
+
+  </div>
+</template>

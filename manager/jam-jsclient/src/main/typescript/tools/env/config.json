@@ -3,18 +3,24 @@
     "API": "../",
     "UI_INPUT_DELAY": 300,
     "UI_FILTER_CAP": 50,
-    "UI_FILTER_NO_CAP": 1000
+    "UI_FILTER_NO_CAP": 1000,
+    "UI_TABLE_PAGE_SIZE": 10,
+    "UI_TABLE_PAGE_NUMS": 5
   },
   "prod": {
     "API": "../",
     "UI_INPUT_DELAY": 300,
     "UI_FILTER_CAP": 50,
-    "UI_FILTER_NO_CAP": 1000
+    "UI_FILTER_NO_CAP": 1000,
+    "UI_TABLE_PAGE_SIZE": 10,
+    "UI_TABLE_PAGE_NUMS": 5
   },
   "staging": {
     "API": "../",
     "UI_INPUT_DELAY": 300,
     "UI_FILTER_CAP": 50,
-    "UI_FILTER_NO_CAP": 1000
+    "UI_FILTER_NO_CAP": 1000,
+    "UI_TABLE_PAGE_SIZE": 10,
+    "UI_TABLE_PAGE_NUMS": 5
   }
 }

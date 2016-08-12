@@ -43,8 +43,8 @@ export class StatesComponent implements OnInit, OnDestroy {
   @Output() dataSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
 
   //paging
-  maxSize:number = 5;
-  itemsPerPage:number = 10;
+  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
+  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   totalItems:number = 0;
   currentPage:number = 1;
   // Must use separate variables (not currentPage) for table since that causes

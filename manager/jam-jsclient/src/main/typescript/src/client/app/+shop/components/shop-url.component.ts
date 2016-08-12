@@ -37,8 +37,8 @@ export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
   @Input() shop:ShopVO;
 
   //paging
-  maxSize:number = 5;
-  itemsPerPage:number = 10;
+  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
+  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   totalItems:number = 0;
   currentPage:number = 1;
   // Must use separate variables (not currentPage) for table since that causes

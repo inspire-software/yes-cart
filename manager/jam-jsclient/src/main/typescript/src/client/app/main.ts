@@ -12,7 +12,8 @@ import {
   ShippingService, LocationService,
   ManagementService,
   PaymentService,
-  AttributeService
+  AttributeService,
+  SystemService
 } from './shared/services/index';
 
 import {
@@ -78,7 +79,8 @@ bootstrap(AppComponent, [
   LocationService,
   ManagementService,
   PaymentService,
-  AttributeService
+  AttributeService,
+  SystemService
 ]);
 
 // In order to start the Service Worker located at "./worker.js"

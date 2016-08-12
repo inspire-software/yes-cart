@@ -6,6 +6,7 @@ import { LocationRoutes } from './+locations/locations.routes';
 import { ShippingRoutes } from './+shipping/shipping.routes';
 import { CatalogRoutes } from './+catalog/catalog.routes';
 import { AttributeDefinitionRoutes } from './+system/attributes/attribute-definitions.routes';
+import { SystemPreferencesRoutes } from './+system/preferences/system-preferences.routes';
 import { LicenseRoutes } from './shared/license/license.routes';
 
 const routes: RouterConfig = [
@@ -15,7 +16,8 @@ const routes: RouterConfig = [
   ...ShippingRoutes,
   ...LicenseRoutes,
   ...CatalogRoutes,
-  ...AttributeDefinitionRoutes
+  ...AttributeDefinitionRoutes,
+  ...SystemPreferencesRoutes
 ];
 
 export const APP_ROUTER_PROVIDERS = [

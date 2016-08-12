@@ -101,3 +101,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 alter table TCARRIERSHOP add column DISABLED bit default 0;
 -- alter table TCARRIERSHOP add column DISABLED smallint default 0;
+
+
+--
+-- Tidy up attribute types
+--
+
+update TATTRIBUTE set ETYPE_ID = 1001 where CODE = 'SYSTEM_IMAGE_VAULT';

@@ -19,7 +19,6 @@ package org.yes.cart.service.vo.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;

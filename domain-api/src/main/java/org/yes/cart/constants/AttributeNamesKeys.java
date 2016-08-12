@@ -46,21 +46,6 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
-         * Default backdoor uri prefix.
-         * Real example of attribute would be: SYSTEM_BACKDOOR_URI_YES0
-         */
-        String SYSTEM_BACKDOOR_URI_PREFIX = "SYSTEM_BACKDOOR_URI";
-        /**
-         * Default cache director uri.
-         * Real example of attribute would be: SYSTEM_CACHEDIRECTOR_URI_YES0
-         */
-        String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
-        /**
-         * Default lucene index disabled setting.
-         * Real example of attribute would be: SYSTEM_LUCENE_DISABLED_PREFIX_YES0
-         */
-        String SYSTEM_LUCENE_INDEX_DISABLED_PREFIX = "SYSTEM_LUCENE_DISABLED_PREFIX";
-        /**
          * Size of the log tail in characters to show in YUM.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";
@@ -100,18 +85,6 @@ public interface AttributeNamesKeys {
          * Image repository.
          */
         String SYSTEM_IMAGE_VAULT = "SYSTEM_IMAGE_VAULT";
-        /**
-         * The absolute path to import descriptors.
-         */
-        String SYSTEM_IMPORT_DESCRIPTORS = "SYSTEM_IMPORT_DESCRIPTORS";
-        /**
-         * The absolute path to archive folder where import files will be moved after import.
-         */
-        String SYSTEM_IMPORT_ARCHIVE = "SYSTEM_IMPORT_ARCHIVE";
-        /**
-         * The absolute path to import folder.
-         */
-        String SYSTEM_IMPORT = "SYSTEM_IMPORT";
         /**
          * Default (failover) directory for resources.
          */

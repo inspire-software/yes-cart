@@ -11,4 +11,5 @@ export * from './management.service';
 export * from './location.service';
 export * from './shipping.service';
 export * from './payment.service';
+export * from './system.service';
 export * from './util';

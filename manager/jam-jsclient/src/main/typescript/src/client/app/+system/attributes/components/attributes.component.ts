@@ -18,7 +18,7 @@ import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {AttributeGroupVO, AttributeVO} from './../../../shared/model/index';
 import {PaginationComponent} from './../../../shared/pagination/index';
-
+import {Config} from './../../../shared/config/env.config';
 
 @Component({
   selector: 'yc-attributes',
@@ -40,8 +40,8 @@ export class AttributesComponent implements OnInit, OnDestroy {
   @Output() dataSelected: EventEmitter<AttributeVO> = new EventEmitter<AttributeVO>();
 
   //paging
-  maxSize:number = 5;
-  itemsPerPage:number = 10;
+  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
+  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
   totalItems:number = 0;
   currentPage:number = 1;
   // Must use separate variables (not currentPage) for table since that causes
