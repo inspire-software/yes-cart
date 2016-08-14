@@ -124,21 +124,22 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   protected onRefreshHandler() {
     console.debug('ShopAttributeComponent refresh handler');
-    this.getShopAttributes();
+    this.getSystemPreferences();
   }
 
   /**
-   * Read attributes, that belong to shop.
+   * Read attributes.
    */
-  private getShopAttributes() {
+  private getSystemPreferences() {
     console.debug('ShopAttributeComponent get attributes');
 
-    this._systemService.getSystemPreferences().subscribe(systemAttributes => {
+    var _sub:any = this._systemService.getSystemPreferences().subscribe(systemAttributes => {
 
       console.debug('ShopAttributeComponent attributes', systemAttributes);
       this.systemAttributes = systemAttributes;
       this.changed = false;
       this.selectedRow = null;
+      _sub.unsubscribe();
 
     });
 

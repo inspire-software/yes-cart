@@ -23,9 +23,16 @@ export interface ErrorMessage {
 
 export class Util {
 
+  /**
+   * Clone Object using JSON serialization.
+   *
+   * @param object object
+   * @returns {any}
+   */
   public static clone<T> (object:T):T {
     return JSON.parse(JSON.stringify(object));
   }
+
   /**
    * Remove from <code>arr</code> all items from itemsToRemove list.
    * @param arr
@@ -42,6 +49,13 @@ export class Util {
     return arr;
   }
 
+  /**
+   * Utility to deduce the correct error message from various error object that
+   * may arise during services invocation.
+   *
+   * @param error error object
+   * @returns {any}
+   */
   public static determineErrorMessage(error:any):ErrorMessage {
     if (error) {
       let code = (error.status && !isNaN(error.status)) ? error.status : 500;
@@ -73,6 +87,33 @@ export class Util {
       }
     }
     return { code: 500, message: 'Server Error' };
+  }
+
+  public static toCsv(object:any, header:boolean):string {
+
+    var _arr:Array<any> = [];
+    if (Object.prototype.toString.call(object) === '[object Array]') {
+      _arr = <Array<any>> object;
+    } else if (object != null) {
+      _arr.push(object);
+    }
+
+    var _csv:string = '';
+    if (header && _arr.length > 0) {
+      for (let prop in _arr[0]) {
+        _csv += prop + ',';
+      }
+      _csv += '\n';
+    }
+
+    _arr.forEach(val => {
+      for (let prop in val) {
+        _csv += val[prop] + ',';
+      }
+      _csv += '\n';
+    });
+
+    return _csv;
   }
 
 }

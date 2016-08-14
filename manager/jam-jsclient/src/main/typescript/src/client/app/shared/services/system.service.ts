@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {AttrValueSystemVO, Pair} from '../model/index';
+import {AttrValueSystemVO, Pair, CacheInfoVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -42,7 +42,6 @@ export class SystemService {
 
   /**
    * Get attributes for given system.
-   * @param id
    * @returns {Observable<R>}
    */
   getSystemPreferences() {
@@ -62,6 +61,65 @@ export class SystemService {
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/preferences', body, options)
       .map(res => <AttrValueSystemVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+
+  /**
+   * Get cache info.
+   * @returns {Observable<R>}
+   */
+  getCacheInfo() {
+    return this.http.get(this._serviceBaseUrl + '/cache')
+      .map(res => <CacheInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Evict all cache.
+   * @returns {Observable<R>}
+   */
+  evictAllCache() {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/cache', options)
+      .map(res => <CacheInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Evict single cache.
+   * @param name cache name
+   * @returns {Observable<R>}
+   */
+  evictSingleCache(name:string) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/cache/' + name, options)
+      .map(res => <CacheInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Save cache stats flag.
+   * @param name cache name
+   * @param stats flag whether to turn it on or off
+   * @returns {Observable<R>}
+   */
+  saveCacheStatsFlag(name:string, stats:boolean) {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    let path = stats ? 'statson/' : 'statsoff/';
+
+    return this.http.post(this._serviceBaseUrl + '/cache/' + path + name, null, options)
+      .map(res => <CacheInfoVO[]> res.json())
       .catch(this.handleError);
   }
 

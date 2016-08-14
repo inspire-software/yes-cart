@@ -17,6 +17,7 @@
 package org.yes.cart.cluster.node.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.cluster.node.ContextRspMessage;
 import org.yes.cart.cluster.node.Message;
@@ -149,10 +150,13 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final String userName = context.getAttribute(AsyncContext.USERNAME);
         final String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        final String passwordHash = context.getAttribute(AsyncContext.CREDENTIALS_HASH);
+        final boolean hashed = StringUtils.isNotBlank(passwordHash);
+        final String pwd = hashed ? passwordHash : password;
 
         final int timeout = NumberUtils.toInt(getConfiguration().get(timeoutKey), 1000);
 
-        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, password, backdoorUrl, timeout);
+        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, pwd, hashed, backdoorUrl, timeout);
 
     }
 

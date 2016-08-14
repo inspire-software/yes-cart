@@ -104,6 +104,8 @@
   <import resource="classpath:core-payments.xml"/>
   <import resource="classpath:core-module-payment-base.xml"/>
 
+  <import resource="classpath:manager-cluster.xml"/>
+
   <bean id="messageSource"
         class="org.springframework.context.support.ResourceBundleMessageSource">
     <property name="defaultEncoding" value="UTF-8"/>

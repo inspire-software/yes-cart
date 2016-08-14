@@ -145,6 +145,13 @@
   "CATEGORY_NAV_BRAND": "Brand navigation",
   "CATEGORY_NAV_PRICE": "Price navigation",
   "CATEGORY_FROM": "Available from",
-  "CATEGORY_TO": "Available to"
+  "CATEGORY_TO": "Available to",
+
+  "CACHE_NODE": "Node",
+  "CACHE_NAME": "Cache",
+  "CACHE_SIZE": "Size",
+  "CACHE_HITS": "Hit / Miss",
+  "CACHE_SIZE_MEM": "Mem size",
+  "CACHE_SIZE_DISK": "Disk size"
 
 }

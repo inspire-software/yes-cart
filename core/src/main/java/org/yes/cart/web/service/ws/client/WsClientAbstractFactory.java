@@ -29,6 +29,7 @@ public interface WsClientAbstractFactory {
      * @param service  service interface
      * @param userName username
      * @param password password of the user
+     * @param hashed   flag to denote if password is in hashed form
      * @param url      web service url
      * @param timeout  timeout for ws calls
      *
@@ -37,6 +38,7 @@ public interface WsClientAbstractFactory {
      <S> WsClientFactory<S> getFactory(Class<S> service,
                                        String userName,
                                        String password,
+                                       boolean hashed,
                                        String url,
                                        long timeout);
 

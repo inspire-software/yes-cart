@@ -31,6 +31,7 @@ public interface AsyncContext {
     String SECURITY_CTX = "SECURITY_CTX";
     String USERNAME = "USERNAME";
     String CREDENTIALS = "CREDENTIALS";
+    String CREDENTIALS_HASH = "CREDENTIALS_HASH";
     String NO_BROADCAST = "NO_BROADCAST";
     String FLEX_SESSION_CREDENTIALS = "pwd";
     String TIMEOUT_KEY = "TIMEOUT_KEY";

@@ -134,12 +134,13 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
     console.debug('ShopAttributeComponent get attributes', this.shop);
     if (this.shop.shopId > 0) {
 
-      this._shopService.getShopAttributes(this.shop.shopId).subscribe(shopAttributes => {
+      var _sub:any = this._shopService.getShopAttributes(this.shop.shopId).subscribe(shopAttributes => {
 
         console.debug('ShopAttributeComponent attributes', shopAttributes);
         this.shopAttributes = shopAttributes;
         this.changed = false;
         this.selectedRow = null;
+        _sub.unsubscribe();
 
       });
     } else {
