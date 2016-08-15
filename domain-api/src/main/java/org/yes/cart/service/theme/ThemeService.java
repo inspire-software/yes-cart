@@ -61,7 +61,7 @@ public interface ThemeService {
      * Get current shop reports templates chain.
      *
      * Note that report templates do not use current domain as in most cases reports are generated in
-     * YUM or on demand and have no current domain.
+     * Admin or on demand and have no current domain.
      *
      * @param shopId shop PK
      *

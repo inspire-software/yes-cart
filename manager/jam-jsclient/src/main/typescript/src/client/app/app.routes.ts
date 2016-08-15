@@ -8,6 +8,7 @@ import { CatalogRoutes } from './+catalog/catalog.routes';
 import { AttributeDefinitionRoutes } from './+system/attributes/attribute-definitions.routes';
 import { SystemPreferencesRoutes } from './+system/preferences/system-preferences.routes';
 import { CacheMonitoringRoutes } from './+system/cache/cache-monitoring.routes';
+import { ClusterRoutes } from './+system/cluster/cluster.routes';
 import { LicenseRoutes } from './shared/license/license.routes';
 
 const routes: RouterConfig = [
@@ -20,6 +21,7 @@ const routes: RouterConfig = [
   ...AttributeDefinitionRoutes,
   ...SystemPreferencesRoutes,
   ...CacheMonitoringRoutes,
+  ...ClusterRoutes,
 ];
 
 export const APP_ROUTER_PROVIDERS = [

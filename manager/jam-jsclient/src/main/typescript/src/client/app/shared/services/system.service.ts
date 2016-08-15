@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {AttrValueSystemVO, Pair, CacheInfoVO} from '../model/index';
+import {AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -120,6 +120,17 @@ export class SystemService {
 
     return this.http.post(this._serviceBaseUrl + '/cache/' + path + name, null, options)
       .map(res => <CacheInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get cluster info.
+   * @returns {Observable<R>}
+   */
+  getClusterInfo() {
+    return this.http.get(this._serviceBaseUrl + '/cluster')
+      .map(res => <ClusterNodeVO[]> res.json())
       .catch(this.handleError);
   }
 

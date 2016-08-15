@@ -72,7 +72,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
     /** {@inheritDoc} */
     public String getCurrentNodeId() {
-        return node.getNodeId();
+        return node.getId();
     }
 
     /** {@inheritDoc} */
@@ -127,11 +127,11 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
-    public Node getYumNode() {
+    public Node getAdminNode() {
 
         final List<Node> cluster = getCluster();
         for (final Node node : cluster) {
-            if (node.isYum()) {
+            if (node.isAdmin()) {
                 return node;
             }
         }
@@ -139,12 +139,12 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
-    public List<Node> getYesNodes() {
+    public List<Node> getSfNodes() {
 
         final List<Node> cluster = getCluster();
         final List<Node> yes = new ArrayList<Node>();
         for (final Node node : cluster) {
-            if (!node.isYum()) {
+            if (!node.isAdmin()) {
                 yes.add(node);
             }
         }
@@ -152,12 +152,12 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     }
 
     /** {@inheritDoc} */
-    public List<Node> getOtherYesNodes() {
+    public List<Node> getOtherSfNodes() {
 
         final List<Node> cluster = getCluster();
         final List<Node> yes = new ArrayList<Node>();
         for (final Node node : cluster) {
-            if (!node.isYum() && !node.isCurrent()) {
+            if (!node.isAdmin() && !node.isCurrent()) {
                 yes.add(node);
             }
         }
@@ -249,11 +249,11 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                         cluster.clear();
                         clusterAddresses.clear();
                         cluster.add(node);
-                        clusterAddresses.put(jChannel.getAddress(), node.getNodeId());
+                        clusterAddresses.put(jChannel.getAddress(), node.getId());
                         ((NodeImpl) node).setChannel(jChannel.getAddress().toString());
 
                         // Send HELLO
-                        final Message intro = new BasicMessageImpl(node.getNodeId(), "HELLO", node);
+                        final Message intro = new BasicMessageImpl(node.getId(), "HELLO", node);
 
                         RspList<Message> result =jChannelMessageDispatcher.castMessage(null,
                                 new org.jgroups.Message(null, null, intro),
@@ -276,7 +276,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                         }
 
                     } catch (Exception e) {
-                        LOG.error("Sending HELLO to all members from: {}", node.getNodeId());
+                        LOG.error("Sending HELLO to all members from: {}", node.getId());
                         LOG.error(e.getMessage(), e);
                     }
                 }
@@ -374,8 +374,8 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
             final Message notification = (Message) msg.getObject();
 
             if ((notification.getTargets() == null ||
-                    notification.getTargets().contains(node.getNodeId()))
-                    && (!notification.getSource().equals(node.getNodeId()))) {
+                    notification.getTargets().contains(node.getId()))
+                    && (!notification.getSource().equals(node.getId()))) {
 
                 LOG.debug("Message received: {}", msg.getObject());
 
@@ -451,7 +451,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
                 LOG.debug("Received HELLO from: {}", message.getSource());
 
-                return new BasicMessageImpl(node.getNodeId(), Arrays.asList(message.getSource()), "HELLO", node);
+                return new BasicMessageImpl(node.getId(), Arrays.asList(message.getSource()), "HELLO", node);
 
             }
         });
@@ -466,19 +466,22 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
                 synchronized (cluster) {
                     final Node node = new NodeImpl(false, (Node) message.getPayload());
-                    final Iterator<Node> clusterIt = cluster.iterator();
-                    while (clusterIt.hasNext()) {
-                        if (clusterIt.next().getNodeId().equals(node.getNodeId())) {
-                            clusterIt.remove();
+                    final List<Node> remove = new ArrayList<Node>();
+                    for (final Node clusterNode : cluster) {
+                        if (clusterNode.getId().equals(node.getId())) {
+                            remove.add(clusterNode);
                             final Iterator<Map.Entry<Address, String>> addressesIt = clusterAddresses.entrySet().iterator();
                             while (addressesIt.hasNext()) {
-                                if (addressesIt.next().getValue().equals(node.getNodeId())) {
+                                if (addressesIt.next().getValue().equals(node.getId())) {
                                     addressesIt.remove();
                                     break;
                                 }
                             }
                             break;
                         }
+                    }
+                    if (!remove.isEmpty()) {
+                        cluster.removeAll(remove);
                     }
                 }
                 return null;
@@ -503,7 +506,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
 
         LOG.info("Closing JGroups channel for node {}", node.getId());
         try {
-            jChannel.send(null, new BasicMessageImpl(node.getNodeId(), "BYE", node));
+            jChannel.send(null, new BasicMessageImpl(node.getId(), "BYE", node));
             Thread.sleep(100L); // give some time for message to be sent
         } catch (Exception exp) {
             LOG.error("Could not send BYE message from node: {}", node.getId());

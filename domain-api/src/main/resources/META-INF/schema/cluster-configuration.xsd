@@ -50,9 +50,10 @@
 
     <xs:simpleType name="NodeTypeType">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="YES"/>
+            <xs:enumeration value="SFW"/>
+            <xs:enumeration value="SFG"/>
             <xs:enumeration value="API"/>
-            <xs:enumeration value="YUM"/>
+            <xs:enumeration value="ADM"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -119,9 +119,9 @@
 
 <!--
   <security-constraint>
-    <display-name>YUM Security</display-name>  should only be accessible via https
+    <display-name>JAM Security</display-name>  should only be accessible via https
     <web-resource-collection>
-      <web-resource-name>YUM</web-resource-name>
+      <web-resource-name>JAM</web-resource-name>
       <url-pattern>/*</url-pattern>
     </web-resource-collection>
     <user-data-constraint>

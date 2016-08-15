@@ -508,7 +508,7 @@
             </resource>
         </resources>
 
-        <finalName>${webapp.yum.war.name}</finalName>
+        <finalName>${webapp.admin.war.name}</finalName>
 
         <pluginManagement>
             <plugins>

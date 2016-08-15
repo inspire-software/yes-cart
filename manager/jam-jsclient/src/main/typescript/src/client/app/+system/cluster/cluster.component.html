@@ -1,0 +1,56 @@
+<template [ngIf]="filteredCluster">
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</h1>
+    </div>
+
+    <div class="text-right data-control">
+
+      <form class="pull-left">
+        <input class="filter-input" type="text" name="clusterFilter" [(ngModel)]="clusterFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+      </form>
+
+      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+        <i class="fa fa-refresh"></i>
+      </button>
+
+      <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm">
+        <i class="fa fa-download"></i>
+      </button>
+
+    </div>
+
+    <div>
+
+      <section class="no-more-tables">
+        <table class="table-bordered table-striped table-condensed cf">
+          <thead class="cf">
+          <tr>
+            <th>{{ 'CLUSTER_ID' | translate }}</th>
+            <th>{{ 'CLUSTER_TYPE' | translate }}</th>
+            <th>{{ 'CLUSTER_CONFIG' | translate }}</th>
+            <th>{{ 'CLUSTER_FT_DISABLED' | translate }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of filteredCluster; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+            <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+              <td title="{{ 'CLUSTER_ID' | translate }}"><a (click)="onSelectRow(row)" title="{{row.channel ? row.channel : row.id}}">{{row.id}} <i class="fa fa-info"></i></a></td>
+              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a (click)="onSelectRow(row)">{{row.nodeType}}</a></td>
+              <td title="{{ 'CLUSTER_CONFIG' | translate }}"><a (click)="onSelectRow(row)">{{row.nodeConfig}}</a></td>
+              <td title="{{ 'CLUSTER_FT_DISABLED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.ftIndexDisabled ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
+            </template>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div>
+        <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+      </div>
+
+    </div>
+
+  </div>
+</template>

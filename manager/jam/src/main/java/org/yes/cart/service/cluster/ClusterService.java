@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.cluster;
 
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -28,6 +29,18 @@ import java.util.Map;
  * User: denispavlov
  */
 public interface ClusterService {
+
+    /**
+     * All registered nodes in this cluster.
+     *
+     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
+     * this methods should return four nodes.
+     *
+     * @param context web service context
+     *
+     * @return node objects
+     */
+    List<Node> getClusterInfo(AsyncContext context);
 
     /**
      * Warm up all storefront servers.

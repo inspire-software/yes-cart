@@ -172,7 +172,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
 
     private boolean isParameterActivated(final String parameter) {
         // Need to go over all DB and static since we want to use this PG for manual testing too
-        // and storefront and YUM could be in different VMs
+        // and storefront and Admin could be in different VMs
         for (final PaymentGatewayParameter param : getPaymentGatewayParameters()) {
             if (parameter.equals(param.getLabel())) {
                 return StringUtils.isNotBlank(param.getValue()) && !"DEACTIVATED".equals(param.getValue());
@@ -184,7 +184,7 @@ public class TestPaymentGatewayImpl extends AbstractPaymentGatewayImpl implement
 
     private String getParameterActivated(final String parameter) {
         // Need to go over all DB and static since we want to use this PG for manual testing too
-        // and storefront and YUM could be in different VMs
+        // and storefront and Admin could be in different VMs
         for (final PaymentGatewayParameter param : getPaymentGatewayParameters()) {
             if (parameter.equals(param.getLabel())) {
                 return param.getValue();

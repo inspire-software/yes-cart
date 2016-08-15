@@ -56,7 +56,7 @@ public class WsCacheDirectorImpl extends CacheDirectorImpl implements CacheDirec
                 final Node node = nodeService.getCurrentNode();
                 final ArrayList<CacheInfoDTOImpl> caches = new ArrayList<CacheInfoDTOImpl>();
                 for (final CacheInfoDTOImpl cache : WsCacheDirectorImpl.this.getCacheInfo()) {
-                    cache.setNodeId(node.getNodeId());
+                    cache.setNodeId(node.getId());
                     cache.setNodeUri(node.getChannel());
                     caches.add(cache);
                 }

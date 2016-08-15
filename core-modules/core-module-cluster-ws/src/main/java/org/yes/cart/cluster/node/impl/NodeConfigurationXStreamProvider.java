@@ -59,7 +59,7 @@ public class NodeConfigurationXStreamProvider implements XStreamProvider<List<No
             xStream.aliasField("node-type", NodeImpl.class, "nodeType");
             xStream.aliasField("node-config", NodeImpl.class, "nodeConfig");
             xStream.aliasField("cluster-id", NodeImpl.class, "clusterId");
-            xStream.aliasField("lucene-index-disabled", NodeImpl.class, "luceneIndexDisabled");
+            xStream.aliasField("lucene-index-disabled", NodeImpl.class, "ftIndexDisabled");
             xStream.aliasField("channel", NodeImpl.class, "channel");
             xStream.addDefaultImplementation(NodeImpl.class, Node.class);
             xStream.addDefaultImplementation(ArrayList.class, List.class);

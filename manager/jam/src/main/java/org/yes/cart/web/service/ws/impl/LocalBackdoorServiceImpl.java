@@ -50,63 +50,63 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public void warmUp() {
-        throw new UnsupportedOperationException("YUM does nto support product warm up");
+        throw new UnsupportedOperationException("ADMIN does nto support product warm up");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexAllProducts() {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexAllProductsSku() {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexShopProducts(final long shopPk) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexShopProductsSku(final long shopPk) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexProduct(final long productPk) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexProductSku(final long productPk) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexProductSkuCode(final String productCode) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
     public int reindexProducts(final long[] productPks) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
@@ -171,7 +171,7 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
      * {@inheritDoc}
      */
     public List<Object[]> luceneQuery(final String luceneQuery) {
-        throw new UnsupportedOperationException("YUM does nto support product index");
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**

@@ -48,3 +48,19 @@ export interface CacheInfoVO {
   nodeUri : string;
 
 }
+
+export interface ClusterNodeVO {
+
+  current : boolean;
+  admin : boolean;
+
+  id : string;
+  nodeId : string;
+  nodeType : string;
+  nodeConfig : string;
+  clusterId : string;
+  ftIndexDisabled : boolean;
+
+  channel : string;
+
+}

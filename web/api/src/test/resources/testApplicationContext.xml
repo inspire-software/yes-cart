@@ -59,7 +59,7 @@
             <map>
                 <entry key="webapp.yes.context.path" value="/yes-shop"/>
                 <entry key="webapp.api.context.path" value="/ys-api"/>
-                <entry key="webapp.yum.context.path" value="/yes-manager"/>
+                <entry key="webapp.admin.context.path" value="/yes-manager"/>
             </map>
         </constructor-arg>
     </bean>

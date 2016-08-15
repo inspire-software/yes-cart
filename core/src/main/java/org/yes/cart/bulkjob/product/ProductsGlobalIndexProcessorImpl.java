@@ -89,7 +89,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
     }
 
     protected Boolean isLuceneIndexDisabled() {
-        return nodeService.getCurrentNode().isLuceneIndexDisabled();
+        return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
 }

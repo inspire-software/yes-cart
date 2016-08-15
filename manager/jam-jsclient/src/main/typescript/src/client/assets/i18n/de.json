@@ -85,10 +85,14 @@
   "ATTRIBUTE_TAB_SEARCH": "Search",
 
   "ATTRIBUTE_REGEX": "Validation rule (RegEx) and messages",
-  "ATTRIBUTE_VALUES": "Values",
+  "ATTRIBUTE_VALUES": "Default value / Choice options",
   "ATTRIBUTE_MANDATORY": "Mandatory",
   "ATTRIBUTE_DUPLICATE": "Duplicates",
   "ATTRIBUTE_FAILOVER": "Failover",
+  "ATTRIBUTE_SI_STORE": "Store value in index",
+  "ATTRIBUTE_SI_SEARCH": "Value is searcheable",
+  "ATTRIBUTE_SI_PRIMARY": "Value is primary key (exact matches)",
+  "ATTRIBUTE_SI_NAV": "Value is navigatable",
 
   "AV_ATTRIBUTE": "Attribute",
   "AV_TYPE": "Type",
@@ -148,6 +152,11 @@
   "CACHE_SIZE": "Size",
   "CACHE_HITS": "Hit / Miss",
   "CACHE_SIZE_MEM": "Mem size",
-  "CACHE_SIZE_DISK": "Disk size"
+  "CACHE_SIZE_DISK": "Disk size",
+
+  "CLUSTER_ID": "ID",
+  "CLUSTER_TYPE": "Type",
+  "CLUSTER_CONFIG": "Config",
+  "CLUSTER_FT_DISABLED": "FT Updates"
 
 }

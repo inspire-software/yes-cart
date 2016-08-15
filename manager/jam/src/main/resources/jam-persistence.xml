@@ -73,7 +73,7 @@
                 <prop key="hibernate.dialect">${db.config.yes.hibernate.dialect}</prop>
                 <prop key="show_sql">false</prop>
 
-                <!-- Disable hibernate search automatic support - since we do not have FT index in YUM -->
+                <!-- Disable hibernate search automatic support - since we do not have FT index in ADMIN -->
                 <prop key="hibernate.search.autoregister_listeners">false</prop>
                 <prop key="hibernate.search.indexing_strategy">manual</prop>
             </props>

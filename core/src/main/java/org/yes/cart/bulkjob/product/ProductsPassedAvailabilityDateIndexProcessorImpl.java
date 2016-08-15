@@ -138,7 +138,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
     }
 
     protected Boolean isLuceneIndexDisabled() {
-        return nodeService.getCurrentNode().isLuceneIndexDisabled();
+        return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
     protected Date now(int minusDays) {

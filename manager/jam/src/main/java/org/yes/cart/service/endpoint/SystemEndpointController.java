@@ -19,8 +19,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoCacheInfo;
+import org.yes.cart.domain.vo.VoClusterNode;
+import org.yes.cart.service.async.model.AsyncContext;
 
 import java.util.List;
 
@@ -33,6 +36,18 @@ import java.util.List;
 @RequestMapping("/system")
 public interface SystemEndpointController {
 
+    /**
+     * All registered nodes in this cluster.
+     *
+     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
+     * this methods should return four nodes.
+     *
+     * @return node objects
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/cluster", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoClusterNode> getClusterInfo() throws Exception;
 
     /**
      * Execute sql and return result.

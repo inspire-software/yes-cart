@@ -499,7 +499,7 @@
             </resource>
             <resource>
                 <filtering>true</filtering>
-                <directory>${basedir}/../../env/maven/${env}/YUM</directory>
+                <directory>${basedir}/../../env/maven/${env}/JAM</directory>
                 <includes>
                     <include>logback.xml</include>
                     <include>logging.properties</include>
@@ -507,7 +507,7 @@
             </resource>
         </resources>
 
-        <finalName>${webapp.yum.war.name}</finalName>
+        <finalName>${webapp.admin.war.name}</finalName>
 
         <pluginManagement>
             <plugins>

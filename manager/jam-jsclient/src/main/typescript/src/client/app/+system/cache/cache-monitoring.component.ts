@@ -140,7 +140,7 @@ export class CacheMonitoringComponent implements OnInit {
     let myWindow = window.open("", "ExportCacheInfo", "width=800,height=600");
 
     var _csv:string = Util.toCsv(this.caches, true);
-    myWindow.document.write(_csv);
+    myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');
 
   }
 

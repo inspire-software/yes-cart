@@ -91,7 +91,7 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     Boolean isLuceneIndexDisabled() {
-        return nodeService.getCurrentNode().isLuceneIndexDisabled();
+        return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
     /**

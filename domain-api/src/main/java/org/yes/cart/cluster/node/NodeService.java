@@ -30,7 +30,7 @@ public interface NodeService {
 
     /** Node ID context parameter */
     String NODE_ID = "NODE_ID";
-    /** Node Type context parameter (YES, API or YUM) */
+    /** Node Type context parameter (SF[X], API or ADM; where [X] is storefront classifier) */
     String NODE_TYPE = "NODE_TYPE";
     /** Node config context parameter (DEFAULT, STAGING or PRODUCTION) */
     String NODE_CONFIG = "NODE_CONFIG";
@@ -44,8 +44,8 @@ public interface NodeService {
 
     /**
      * Current node identification. This should be set in the
-     * Context.xml for YUM:
-     *   <Parameter name="NODE_ID" value="YUM" override="false"/>
+     * Context.xml for Admin:
+     *   <Parameter name="NODE_ID" value="JAM" override="false"/>
      * For storefront context per instance YES[d], where d is node index from 0..n:
      *   <Parameter name="NODE_ID" value="YES0" override="false"/>
      *   <Parameter name="NODE_ID" value="YES1" override="false"/>
@@ -66,7 +66,7 @@ public interface NodeService {
     /**
      * All registered nodes in this cluster.
      *
-     * E.g. if we have YUM0, YES0, YES1 and YES2 nodes
+     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
      * this methods should return four nodes.
      *
      * @return node objects
@@ -81,31 +81,31 @@ public interface NodeService {
     Node getCurrentNode();
 
     /**
-     * YUM node in this cluster.
+     * Admin node in this cluster.
      *
-     * @return YUM node
+     * @return Admin node
      */
-    Node getYumNode();
+    Node getAdminNode();
 
     /**
      * YesCart storefront nodes.
      *
-     * @return YeS nodes
+     * @return nodes
      */
-    List<Node> getYesNodes();
+    List<Node> getSfNodes();
 
     /**
      * YesCart storefront nodes excluding this one if this node is YeS.
      *
-     * E.g. if we have YUM0, YES0, YES1 and YES2 nodes
-     * and current node is YUM0 then nodes returned are YES0, YES1 and YES2 nodes.
+     * E.g. if we have JAM, YES0, YES1 and YES2 nodes
+     * and current node is JAM then nodes returned are YES0, YES1 and YES2 nodes.
      * and current node is YES0 then nodes returned are YES1 and YES2 nodes.
      * and current node is YES1 then nodes returned are YES0 and YES2 nodes.
      * and current node is YES2 then nodes returned are YES0 and YES1 nodes.
      *
      * @return YeS nodes
      */
-    List<Node> getOtherYesNodes();
+    List<Node> getOtherSfNodes();
 
     /**
      * Send message to specified nodes in the cluster.

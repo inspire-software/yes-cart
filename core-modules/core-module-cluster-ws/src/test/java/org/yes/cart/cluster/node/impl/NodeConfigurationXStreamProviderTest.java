@@ -46,30 +46,30 @@ public class NodeConfigurationXStreamProviderTest {
         assertEquals(3, cluster.size());
 
         final Node yes0 = cluster.get(0);
-        assertNull(yes0.getId());
+        assertEquals("TESTCLUSTER.YES0", yes0.getId());
         assertEquals("TESTCLUSTER", yes0.getClusterId());
         assertEquals("YES0", yes0.getNodeId());
-        assertEquals("YES", yes0.getNodeType());
+        assertEquals("SFW", yes0.getNodeType());
         assertEquals("DEFAULT", yes0.getNodeConfig());
-        assertFalse(yes0.isLuceneIndexDisabled());
+        assertFalse(yes0.isFtIndexDisabled());
         assertEquals("http://localhost:8080/yes-shop/services/backdoor", yes0.getChannel());
 
         final Node yes1 = cluster.get(1);
-        assertNull(yes1.getId());
+        assertEquals("TESTCLUSTER.YES1", yes1.getId());
         assertEquals("TESTCLUSTER", yes1.getClusterId());
         assertEquals("YES1", yes1.getNodeId());
         assertEquals("API", yes1.getNodeType());
         assertEquals("DEFAULT", yes1.getNodeConfig());
-        assertTrue(yes1.isLuceneIndexDisabled());
+        assertTrue(yes1.isFtIndexDisabled());
         assertEquals("http://localhost:8081/yes-api/services/backdoor", yes1.getChannel());
 
         final Node yum = cluster.get(2);
-        assertNull(yum.getId());
+        assertEquals("TESTCLUSTER.JAM", yum.getId());
         assertEquals("TESTCLUSTER", yum.getClusterId());
-        assertEquals("YUM", yum.getNodeId());
-        assertEquals("YUM", yum.getNodeType());
+        assertEquals("JAM", yum.getNodeId());
+        assertEquals("ADM", yum.getNodeType());
         assertEquals("DEFAULT", yum.getNodeConfig());
-        assertTrue(yum.isLuceneIndexDisabled());
+        assertTrue(yum.isFtIndexDisabled());
         assertNull(yum.getChannel());
 
     }

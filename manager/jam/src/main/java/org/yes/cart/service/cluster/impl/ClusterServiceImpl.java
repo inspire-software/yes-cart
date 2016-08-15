@@ -53,6 +53,25 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
+    public List<Node> getClusterInfo(final AsyncContext context) {
+
+        final Message message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                "BackdoorService.ping",
+                null,
+                context
+        );
+
+        // Broadcasting ping message should result in refreshing of the cluster view
+        nodeService.broadcast(message);
+
+        return nodeService.getCluster();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public void warmUp(final AsyncContext context) {
 
         final Message message = new ContextRspMessageImpl(
@@ -77,12 +96,12 @@ public class ClusterServiceImpl implements ClusterService {
             throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            final Boolean finished = indexFinished.get(node.getNodeId()) != null && indexFinished.get(node.getNodeId());
+            final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
             if (!finished) {
-                targets.add(node.getNodeId());
+                targets.add(node.getId());
             }
         }
 
@@ -118,12 +137,12 @@ public class ClusterServiceImpl implements ClusterService {
             throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
         }
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            final Boolean finished = indexFinished.get(node.getNodeId()) != null && indexFinished.get(node.getNodeId());
+            final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
             if (!finished) {
-                targets.add(node.getNodeId());
+                targets.add(node.getId());
             }
         }
 
@@ -153,10 +172,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Integer> reindexProduct(final AsyncContext context, final long productPk) {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -184,10 +203,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Integer> reindexProductSku(final AsyncContext context, final long productPk) {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -215,10 +234,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Integer> reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -246,10 +265,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Integer> reindexProducts(final AsyncContext context, final long[] productPks) {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -361,10 +380,10 @@ public class ClusterServiceImpl implements ClusterService {
     public Map<String, List<CacheInfoDTOImpl>> getCacheInfo(final AsyncContext context)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -406,10 +425,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Boolean> evictAllCache(final AsyncContext context) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -445,10 +464,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Boolean> evictCache(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -484,10 +503,10 @@ public class ClusterServiceImpl implements ClusterService {
      */
     public Map<String, Boolean> enableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(
@@ -525,10 +544,10 @@ public class ClusterServiceImpl implements ClusterService {
     public Map<String, Boolean> disableStats(final AsyncContext context, final String name) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
 
-        final List<Node> cluster = nodeService.getYesNodes();
+        final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
         for (final Node node : cluster) {
-            targets.add(node.getNodeId());
+            targets.add(node.getId());
         }
 
         final RspMessage message = new ContextRspMessageImpl(

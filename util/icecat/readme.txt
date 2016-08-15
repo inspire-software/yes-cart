@@ -52,4 +52,4 @@ Mac OSX: make copy of all downloaded images and navigate to directory with copie
 Source: http://lifehacker.com/5962420/batch-resize-images-quickly-in-the-os-x-terminal
 (see that link there are also some suggestions for linux and win)
 
-6. Zip up the contents of pictcache and csvresult and use import section in YUM (Yes cart Update Manager) to import the data.
+6. Zip up the contents of pictcache and csvresult and use import section in Admin to import the data.

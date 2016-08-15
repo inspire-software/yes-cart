@@ -37,7 +37,7 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 
 /**
- * This handler cover case when the order is cancelled from YUM.
+ * This handler cover case when the order is cancelled from Admin.
  * <p/>
  * At this point we can cancel the order. The handler works out the amount to be refunded
  * and actions refund. In case if refund failed the order enters Cancelled/Returned waiting refund

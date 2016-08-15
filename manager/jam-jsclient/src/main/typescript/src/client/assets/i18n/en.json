@@ -152,6 +152,11 @@
   "CACHE_SIZE": "Size",
   "CACHE_HITS": "Hit / Miss",
   "CACHE_SIZE_MEM": "Mem size",
-  "CACHE_SIZE_DISK": "Disk size"
+  "CACHE_SIZE_DISK": "Disk size",
+
+  "CLUSTER_ID": "ID",
+  "CLUSTER_TYPE": "Type",
+  "CLUSTER_CONFIG": "Config",
+  "CLUSTER_FT_DISABLED": "FT Updates"
 
 }

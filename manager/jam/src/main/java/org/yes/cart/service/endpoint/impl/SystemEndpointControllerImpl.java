@@ -18,9 +18,11 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.yes.cart.bulkjob.impl.BulkJobAutoContextImpl;
+import org.yes.cart.cluster.node.Node;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
 import org.yes.cart.domain.vo.VoCacheInfo;
+import org.yes.cart.domain.vo.VoClusterNode;
 import org.yes.cart.service.async.model.AsyncContext;
 import org.yes.cart.service.cluster.ClusterService;
 import org.yes.cart.service.endpoint.SystemEndpointController;
@@ -53,6 +55,13 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
         this.voAssemblySupport = voAssemblySupport;
     }
 
+    /** {@inheritDoc} */
+    public List<VoClusterNode> getClusterInfo() throws Exception {
+        final Map<String, Object> param = new HashMap<String, Object>();
+        param.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
+        final List<Node> cluster = clusterService.getClusterInfo(createCtx(param));
+        return voAssemblySupport.assembleVos(VoClusterNode.class, Node.class, cluster);
+    }
 
     /** {@inheritDoc} */
     public List<Object[]> sqlQuery(final String query, final String node) throws Exception{
@@ -128,7 +137,7 @@ public class SystemEndpointControllerImpl implements SystemEndpointController {
 
     private AsyncContext createCtx(final Map<String, Object> param) {
         try {
-            // This is manual access via YUM
+            // This is manual access via Admin
             return asyncContextFactory.getInstance(param);
         } catch (IllegalStateException exp) {
             // This is auto access with thread local

@@ -74,9 +74,9 @@ public class JGroupsNodeServiceImplTest {
         final ServletContext ctx2 = context.mock(ServletContext.class, "ctx2");
         final ServletContext ctx3 = context.mock(ServletContext.class, "ctx3");
 
-        setExpectations(ctx1, new NodeImpl(false, "YES0", "YES", "DEFAULT", "YCTEST", false));
+        setExpectations(ctx1, new NodeImpl(false, "YES0", "SFW", "DEFAULT", "YCTEST", false));
         setExpectations(ctx2, new NodeImpl(false, "YES1", "API", "DEFAULT", "YCTEST", true));
-        setExpectations(ctx3, new NodeImpl(false, "YUM", "YUM", "DEFAULT", "YCTEST", true));
+        setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "YCTEST", true));
 
         ns1.setServletContext(ctx1);
         Thread.sleep(200L);
@@ -106,13 +106,13 @@ public class JGroupsNodeServiceImplTest {
         assertEquals(3, ns3cluster.size());
 
 
-        ns1.broadcast(new BasicMessageImpl("YES0", Arrays.asList("YUM"), "subj", "message1"));
+        ns1.broadcast(new BasicMessageImpl("YES0", Arrays.asList("JAM"), "subj", "message1"));
         Thread.sleep(200L);
 
-        ns2.broadcast(new BasicMessageImpl("YES1", Arrays.asList("YUM"), "subj", "message2"));
+        ns2.broadcast(new BasicMessageImpl("YES1", Arrays.asList("JAM"), "subj", "message2"));
         Thread.sleep(200L);
 
-        ns3.broadcast(new BasicMessageImpl("YUM", Arrays.asList("YES0", "YES1"), "subj", "message2"));
+        ns3.broadcast(new BasicMessageImpl("JAM", Arrays.asList("YES0", "YES1"), "subj", "message2"));
         Thread.sleep(200L);
 
         context.assertIsSatisfied();
@@ -163,7 +163,7 @@ public class JGroupsNodeServiceImplTest {
             one(ctx).getInitParameter(NodeService.CLUSTER_ID); will(returnValue(node.getClusterId()));
             one(ctxe).hasMoreElements(); will(returnValue(true));
             one(ctxe).nextElement(); will(returnValue(NodeService.LUCENE_INDEX_DISABLED));
-            one(ctx).getInitParameter(NodeService.LUCENE_INDEX_DISABLED); will(returnValue(String.valueOf(node.isLuceneIndexDisabled())));
+            one(ctx).getInitParameter(NodeService.LUCENE_INDEX_DISABLED); will(returnValue(String.valueOf(node.isFtIndexDisabled())));
             one(ctxe).hasMoreElements(); will(returnValue(false));
         }});
     }

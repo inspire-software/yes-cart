@@ -128,7 +128,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.yes</groupId>
-                                    <artifactId>yes-manager</artifactId>
+                                    <artifactId>jam</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                 </artifactItem>

@@ -73,8 +73,8 @@
                 SEARCH="0" SEARCHPRIMARY="0" STORE="0" NAV="0"
             />
     <TATTRIBUTE VERSION="0" ATTRIBUTE_ID="1055" GUID="IMPORT_JOB_LOG_SIZE" CODE="IMPORT_JOB_LOG_SIZE" MANDATORY="1" VAL="10000"
-                NAME="System. Import log file size in YUM"
-                DESCRIPTION="Size in characters of tail of actual log file to display in YUM during import"
+                NAME="System. Import log file size in Admin"
+                DESCRIPTION="Size in characters of tail of actual log file to display in Admin during import"
                 ETYPE_ID="1006"
                 ATTRIBUTEGROUP_ID="1000"
                 ALLOWDUPLICATE="0"

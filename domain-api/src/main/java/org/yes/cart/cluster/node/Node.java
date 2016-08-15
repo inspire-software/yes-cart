@@ -33,7 +33,7 @@ public interface Node extends Serializable {
     /**
      * @return true if current node is yum
      */
-    boolean isYum();
+    boolean isAdmin();
 
     /**
      * @return node id in the cluster
@@ -46,7 +46,7 @@ public interface Node extends Serializable {
     String getNodeId();
 
     /**
-     * @return type of node (YES, API or YUM)
+     * @return type of node (SF[X], API or ADM; where [X] is storefront classifier)
      */
     String getNodeType();
 
@@ -63,7 +63,7 @@ public interface Node extends Serializable {
     /**
      * @return flag if lucene index is disabled
      */
-    boolean isLuceneIndexDisabled();
+    boolean isFtIndexDisabled();
 
     /**
      * @return node backdoor URI

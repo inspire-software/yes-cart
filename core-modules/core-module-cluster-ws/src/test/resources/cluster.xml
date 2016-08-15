@@ -19,7 +19,7 @@
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>
         <node-id>YES0</node-id>
-        <node-type>YES</node-type>
+        <node-type>SFW</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>false</lucene-index-disabled>
         <channel>http://localhost:8080/yes-shop/services/backdoor</channel>
@@ -34,8 +34,8 @@
     </node>
     <node>
         <cluster-id>TESTCLUSTER</cluster-id>
-        <node-id>YUM</node-id>
-        <node-type>YUM</node-type>
+        <node-id>JAM</node-id>
+        <node-type>ADM</node-type>
         <node-config>DEFAULT</node-config>
         <lucene-index-disabled>true</lucene-index-disabled>
     </node>

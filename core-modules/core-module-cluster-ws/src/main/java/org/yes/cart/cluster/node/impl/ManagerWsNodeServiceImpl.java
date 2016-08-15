@@ -70,11 +70,11 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final List<String> targets = message.getTargets();
 
-        final List<Node> cluster = new ArrayList<Node>(getYesNodes());
+        final List<Node> cluster = new ArrayList<Node>(getSfNodes());
         if (CollectionUtils.isNotEmpty(targets)) {
             final Iterator<Node> clusterIt = cluster.iterator();
             while (clusterIt.hasNext()) {
-                if (!targets.contains(clusterIt.next().getNodeId())) {
+                if (!targets.contains(clusterIt.next().getId())) {
                     clusterIt.remove();
                 }
             }
@@ -108,11 +108,11 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                 if (wse.getCause() instanceof ConnectException) {
 
-                    blacklist(yesNode.getNodeId());
+                    blacklist(yesNode.getId());
 
                     if (LOG.isErrorEnabled()) {
                         LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                                + yesNode.getId() + ":" + yesNode.getChannel()
                                 + "] . Blacklisting this node",
                                 wse);
                     }
@@ -121,7 +121,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                     if (LOG.isErrorEnabled()) {
                         LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                                + yesNode.getId() + ":" + yesNode.getChannel()
                                 + "] . Exception occurred during ws call",
                                 wse);
                     }
@@ -132,7 +132,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Cannot send message [" + message + "] to  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                            + yesNode.getId() + ":" + yesNode.getChannel()
                             + "] . Exception occurred during ws call",
                             e);
                 }

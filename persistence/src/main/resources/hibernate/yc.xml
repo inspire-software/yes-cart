@@ -21,7 +21,7 @@
 <hibernate-mapping>
 
     <class name="org.yes.cart.domain.entity.impl.ManagerEntity" table="TMANAGER">
-        <comment>YUM managers</comment>
+        <comment>Admin managers</comment>
         <id name="managerId" type="long">
             <column name="MANAGER_ID" not-null="true"/>
             <generator class="native">
@@ -59,7 +59,7 @@
     </class>
 
     <class name="org.yes.cart.domain.entity.impl.RoleEntity" table="TROLE">
-        <comment>YUM roles list</comment>
+        <comment>Admin roles list</comment>
         <id name="roleId" type="long">
             <column name="ROLE_ID" not-null="true"/>
             <generator class="native">
@@ -80,7 +80,7 @@
     </class>
 
     <class name="org.yes.cart.domain.entity.impl.ManagerRoleEntity" table="TMANAGERROLE">
-        <comment>YUM manager roles list</comment>
+        <comment>Admin manager roles list</comment>
         <id name="managerRoleId" type="long">
             <column name="MANAGERROLE_ID" not-null="true"/>
             <generator class="native">

@@ -631,7 +631,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         if (asyncRunningState.compareAndSet(LASTUPDATE, IDLE)) {
             // thread had finished, so need to set this to idle
             // if this is not set then this may turn into endless recursion
-            // from pinging YUM
+            // from pinging Admin
             currentIndexingCount.set(0);
             return -1; // must be negative as the signal to job to stop
         }

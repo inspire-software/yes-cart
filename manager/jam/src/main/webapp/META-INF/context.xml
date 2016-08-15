@@ -14,7 +14,7 @@
   ~    limitations under the License.
   -->
 
-<Context path="${webapp.yum.context.path}" crossContext="true">
+<Context path="${webapp.admin.context.path}" crossContext="true">
 
 <!--    <Resource auth="Container" name="mail/Session" type="javax.mail.Session"/>-->
 
@@ -62,9 +62,9 @@
            <!--userRoleTable="TMANAGERROLE"-->
            <!--roleNameCol="code"/>-->
 
-    <Parameter name="NODE_ID" value="YUM" override="false"/>
-    <Parameter name="NODE_TYPE" value="YUM" override="false"/>
-    <Parameter name="NODE_CONFIG" value="${cluster.config.yum.node_config}" override="false"/>
+    <Parameter name="NODE_ID" value="${cluster.config.admin.node_id}" override="false"/>
+    <Parameter name="NODE_TYPE" value="ADM" override="false"/>
+    <Parameter name="NODE_CONFIG" value="${cluster.config.admin.node_config}" override="false"/>
     <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
     <Parameter name="LUCENE_INDEX_DISABLED" value="true" override="false"/>
     <Parameter name="CHANNEL_URI" value="" override="false"/>

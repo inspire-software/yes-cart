@@ -46,11 +46,11 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
-         * Size of the log tail in characters to show in YUM.
+         * Size of the log tail in characters to show in Admin.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";
         /**
-         * Import job timeout (if ping takes more than this value then the job is considered haulted).
+         * Import job timeout (if ping takes more than this value then the job is considered halted).
          */
         String IMPORT_JOB_TIMEOUT_MS = "IMPORT_JOB_TIMEOUT_MS";
         /**
@@ -418,12 +418,12 @@ public interface AttributeNamesKeys {
         String SHOP_COOKIE_POLICY_ENABLE = "SHOP_COOKIE_POLICY_ENABLE";
 
         /**
-         * Special token for customer password reset from YUM
+         * Special token for customer password reset from Admin
          */
         String SHOP_CUSTOMER_PASSWORD_RESET_CC = "SHOP_CUSTOMER_PASSWORD_RESET_CC";
 
         /**
-         * Special token for customer password reset from YUM
+         * Special token for customer password reset from Admin
          */
         String SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS = "SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS";
 
