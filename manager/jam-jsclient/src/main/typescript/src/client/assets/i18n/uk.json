@@ -161,6 +161,9 @@
 
   "REINDEX_MESSAGE": "Re-indexing job will be run on the storefront in background to update product indices. This may take couple of minutes. Once the token is received status update will be checked every 15 seconds.",
   "REINDEX_COMPLETED_OK": "Indexing completed",
-  "REINDEX_COMPLETED_ERROR": "Indexing completed with errors"
+  "REINDEX_COMPLETED_ERROR": "Indexing completed with errors",
+
+  "QUERY_NO_RESULTS": "Query {{query}} did not return any results",
+  "QUERY_RESULTS": "Results for query {{query}}:"
 
 }

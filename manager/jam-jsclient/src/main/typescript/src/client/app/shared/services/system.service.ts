@@ -179,6 +179,27 @@ export class SystemService {
   }
 
 
+
+  /**
+   * Reindex all products.
+   * @param node node
+   * @param typ query type
+   * @param query query
+   * @returns {Observable<R>}
+   */
+  runQuery(node:string, typ:string, query:string) {
+
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    let path = (typ == 'HQL') ? '/hquery/' : ((typ == 'FT') ? '/ftquery/' : '/dbquery/');
+
+    return this.http.post(this._serviceBaseUrl + path + node + '/', query, options)
+      .map(res => <Array<Array<string>>> res.json())
+      .catch(this.handleError);
+  }
+
+
   private handleError (error:any) {
 
     console.error('SystemService Server error: ', error);

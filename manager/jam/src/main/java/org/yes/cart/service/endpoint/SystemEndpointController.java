@@ -57,7 +57,7 @@ public interface SystemEndpointController {
      * @return list of rows
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/dbquery/{node}", method = RequestMethod.GET, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/dbquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<Object[]> sqlQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
 
@@ -70,7 +70,7 @@ public interface SystemEndpointController {
      * @return list of rows
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/hquery/{node}", method = RequestMethod.GET, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/hquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<Object[]> hsqlQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
 
@@ -83,7 +83,7 @@ public interface SystemEndpointController {
      * @return list of rows
      */
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/ftquery/{node}", method = RequestMethod.GET, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/ftquery/{node}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<Object[]> luceneQuery(@RequestBody String query, @PathVariable("node") String node) throws Exception;
 

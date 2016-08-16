@@ -10,6 +10,7 @@ import { SystemPreferencesRoutes } from './+system/preferences/system-preference
 import { CacheMonitoringRoutes } from './+system/cache/cache-monitoring.routes';
 import { ClusterRoutes } from './+system/cluster/cluster.routes';
 import { ReindexRoutes } from './+system/reindex/reindex.routes';
+import { QueryRoutes } from './+system/query/query.routes';
 import { LicenseRoutes } from './shared/license/license.routes';
 
 const routes: RouterConfig = [
@@ -24,6 +25,7 @@ const routes: RouterConfig = [
   ...CacheMonitoringRoutes,
   ...ClusterRoutes,
   ...ReindexRoutes,
+  ...QueryRoutes,
 ];
 
 export const APP_ROUTER_PROVIDERS = [

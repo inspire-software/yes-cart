@@ -485,6 +485,10 @@ table.dataTable thead .sorting:after {
   line-height: 1.33;
 }
 
+.data-control select.filter-input {
+  width: auto;
+}
+
 .shop-list-control .filter-input {
   width: 100%;
   height: 36px;
@@ -511,6 +515,16 @@ a.js-click {
 .job-log {
   width: 100%;
   min-height: 600px;
+}
+
+.js-query {
+  width: 100%;
+  min-height: 150px;
+}
+
+.js-query-result {
+  width: 100%;
+  min-height: 450px;
 }
 
 /* **************** EOF CONTROL BUTTONS ********************************************* */
