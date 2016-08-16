@@ -19,13 +19,13 @@
     <div accordion-heading>{{ 'PANEL_CUSTOMER_SERVICE' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
@@ -35,10 +35,10 @@
     <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/catalog']">{{ 'PANEL_PIM_CATEGORIES' | translate }}</a>
+        <a [routerLink]="['/catalog']" routerLinkActive="bg-info">{{ 'PANEL_PIM_CATEGORIES' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_PIM_PRODUCTS' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_PIM_PRODUCTS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
@@ -47,17 +47,17 @@
     <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/shipping']">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
+        <a [routerLink]="['/shipping']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/locations']">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
+        <a [routerLink]="['/locations']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
 
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
-    <yc-shop-list (shopEditTask)="selectCurrentShop($event)"></yc-shop-list>
+    <yc-shop-list [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-list>
   </accordion-group>
 
 
@@ -65,36 +65,36 @@
     <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/system/attributes']">{{ 'PANEL_SYSTEM_ATTR' | translate }}</a>
+        <a [routerLink]="['/system/attributes']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_ATTR' | translate }}</a>
       </li>
       <li><hr/></li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_IMPORT' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_SYSTEM_IMPORT' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_EXPORT' | translate }}</a>
-      </li>
-      <li><hr/></li>
-      <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_INDEX' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_SYSTEM_EXPORT' | translate }}</a>
       </li>
       <li><hr/></li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_PG' | translate }}</a>
+        <a [routerLink]="['/system/reindex']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_INDEX' | translate }}</a>
       </li>
       <li><hr/></li>
       <li>
-        <a [routerLink]="['/system/preferences']">{{ 'PANEL_SYSTEM_PREFS' | translate }}</a>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_SYSTEM_PG' | translate }}</a>
       </li>
       <li><hr/></li>
       <li>
-        <a [routerLink]="['/Home']">TODO: {{ 'PANEL_SYSTEM_QUERY' | translate }}</a>
+        <a [routerLink]="['/system/preferences']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PREFS' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_SYSTEM_QUERY' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/system/cache']">{{ 'PANEL_SYSTEM_CACHE' | translate }}</a>
+        <a [routerLink]="['/system/cache']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CACHE' | translate }}</a>
       </li>
       <li>
-        <a [routerLink]="['/system/cluster']">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</a>
+        <a [routerLink]="['/system/cluster']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
@@ -103,7 +103,7 @@
     <div accordion-heading>{{ 'PANEL_HELP' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/license']">{{ 'PANEL_HELP_LICENSE' | translate }}</a>
+        <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }}</a>
       </li>
       <li>
         <a href="http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }}</a>

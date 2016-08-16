@@ -50,7 +50,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
     this.shopIdSub = this._route.params.subscribe(params => {
       let shopId = params['shopId'];
       console.debug('ShopComponent shopId from params is ' + shopId);
-      if (shopId === 'new') {
+      if (shopId.indexOf('new_') != -1) {
         this._shopService.createShop().then(shop => {
           console.debug('ShopComponent Creating new shop', shop);
           ShopEventBus.getShopEventBus().emit(shop);

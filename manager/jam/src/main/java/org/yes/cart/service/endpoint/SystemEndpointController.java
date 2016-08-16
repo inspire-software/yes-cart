@@ -19,11 +19,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.cluster.node.Node;
-import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoCacheInfo;
 import org.yes.cart.domain.vo.VoClusterNode;
-import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.domain.vo.VoJobStatus;
 
 import java.util.List;
 
@@ -148,6 +146,41 @@ public interface SystemEndpointController {
     @RequestMapping(value = "/cache/warmup", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     void warmUp() throws Exception;
+
+
+    /**
+     * Get index job status by token.
+     *
+     * @param token job token
+     *
+     * @return status of indexing
+     */
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/index/status/{token}", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoJobStatus getIndexJobStatus(@PathVariable("token") String token);
+
+    /**
+     * Reindex all products.
+     *
+     * @return status of indexing.
+     */
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/index/all", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoJobStatus reindexAllProducts();
+
+    /**
+     * Reindex all products.
+     *
+     * @param shopPk shop pk.
+     *
+     * @return status of indexing.
+     */
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/index/shop/{id}", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoJobStatus reindexShopProducts(@PathVariable("id") long shopPk);
 
 
 }

@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO} from '../model/index';
+import {AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO, JobStatusVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -133,6 +133,51 @@ export class SystemService {
       .map(res => <ClusterNodeVO[]> res.json())
       .catch(this.handleError);
   }
+
+
+
+  /**
+   * Get index job info.
+   * @param token job token
+   * @returns {Observable<R>}
+   */
+  getIndexJobStatus(token:string) {
+    return this.http.get(this._serviceBaseUrl + '/index/status/' + token)
+      .map(res => <JobStatusVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Reindex all products.
+   * @returns {Observable<R>}
+   */
+  reindexAllProducts() {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/index/all', null, options)
+      .map(res => <JobStatusVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Reindex all products.
+   * @param id shop id
+   * @returns {Observable<R>}
+   */
+  reindexShopProducts(id:number) {
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/index/shop/' + id, null, options)
+      .map(res => <JobStatusVO> res.json())
+      .catch(this.handleError);
+  }
+
 
   private handleError (error:any) {
 

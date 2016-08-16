@@ -62,7 +62,7 @@
   "PANEL_SYSTEM_ATTR": "Attributes",
   "PANEL_SYSTEM_IMPORT": "Import",
   "PANEL_SYSTEM_EXPORT": "Export",
-  "PANEL_SYSTEM_INDEX": "Search",
+  "PANEL_SYSTEM_INDEX": "Search Indexes",
   "PANEL_SYSTEM_PG": "Payment Gateways",
   "PANEL_SYSTEM_PREFS": "Preferences",
   "PANEL_SYSTEM_QUERY": "Query API",
@@ -157,6 +157,10 @@
   "CLUSTER_ID": "ID",
   "CLUSTER_TYPE": "Type",
   "CLUSTER_CONFIG": "Config",
-  "CLUSTER_FT_DISABLED": "FT Updates"
+  "CLUSTER_FT_DISABLED": "FT Updates",
+
+  "REINDEX_MESSAGE": "Re-indexing job will be run on the storefront in background to update product indices. This may take couple of minutes. Once the token is received status update will be checked every 15 seconds.",
+  "REINDEX_COMPLETED_OK": "Indexing completed",
+  "REINDEX_COMPLETED_ERROR": "Indexing completed with errors"
 
 }

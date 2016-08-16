@@ -32,13 +32,17 @@ export class ShopEventBus {
   }
 
   shopUpdated$ : Observable<ShopVO>;
+  shopsUpdated$ : Observable<ShopVO[]>;
 
   private _shopSource : BehaviorSubject<ShopVO>;
+  private _shopsSource : BehaviorSubject<ShopVO[]>;
 
   constructor() {
     console.debug('ShopEventBus constructed');
     this._shopSource = new BehaviorSubject<ShopVO>(null);
     this.shopUpdated$ = this._shopSource.asObservable();
+    this._shopsSource = new BehaviorSubject<ShopVO[]>(null);
+    this.shopsUpdated$ = this._shopsSource.asObservable();
   }
 
   public emit(value: ShopVO): void {
@@ -46,8 +50,17 @@ export class ShopEventBus {
     console.debug('emit shop event', value);
   }
 
+  public emitAll(value: ShopVO[]): void {
+    this._shopsSource.next(value);
+    console.debug('emit shops event', value);
+  }
+
   public current():ShopVO {
     return this._shopSource.getValue();
+  }
+
+  public currentAll():ShopVO[] {
+    return this._shopsSource.getValue();
   }
 
 }

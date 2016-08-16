@@ -64,3 +64,12 @@ export interface ClusterNodeVO {
   channel : string;
 
 }
+
+export interface JobStatusVO {
+
+  token : string;
+  state : string;
+  completion : string;
+  report : string;
+
+}

@@ -187,6 +187,11 @@ body {
   font-size: 90%;
 }
 
+.sidebar ul.shop-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .btn-outline {
   color: inherit;
   background-color: transparent;
@@ -480,8 +485,32 @@ table.dataTable thead .sorting:after {
   line-height: 1.33;
 }
 
-.data-control .filter-input:focus {
+.shop-list-control .filter-input {
+  width: 100%;
+  height: 36px;
+  padding: 5px 8px;
+  border-radius: 18px;
+  font-size: 12px;
+  line-height: 1.33;
+}
+
+.data-control .filter-input:focus,
+.shop-list-control .filter-input:focus {
   outline: none;
+}
+
+a.js-click {
+  cursor: pointer;
+}
+
+.running-job-log {
+  padding-top: 70px;
+  background: transparent url(../assets/img/ajax-loader.gif) no-repeat top left;
+}
+
+.job-log {
+  width: 100%;
+  min-height: 600px;
 }
 
 /* **************** EOF CONTROL BUTTONS ********************************************* */
@@ -602,6 +631,11 @@ table {
   .table-condensed>tbody>tr>td {
     padding: 5px 5px 5px 35%;
   }
+
+  .job-log {
+    min-height: 200px;
+  }
+
 }
 
 .table-striped>tbody>tr.active {

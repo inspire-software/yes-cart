@@ -68,5 +68,18 @@
         <constructor-arg index="2" ref="localCacheDirector"/>
     </bean>
 
+    <bean id="productIndexExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1,max int) for product indexing since they may be slow.
+        </description>
+    </bean>
+
+    <bean id="reindexService" class="org.yes.cart.service.cluster.impl.ReindexServiceImpl">
+        <constructor-arg index="0" ref="productIndexExecutor"/>
+        <constructor-arg index="1" ref="clusterService"/>
+        <constructor-arg index="2" ref="nodeService"/>
+    </bean>
+
+
 </beans>
         
