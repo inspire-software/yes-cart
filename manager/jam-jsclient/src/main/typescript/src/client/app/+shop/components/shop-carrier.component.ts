@@ -28,9 +28,10 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
   directives: [ NgIf, NgFor, DataControlComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
-export class ShopCarrierComponent implements OnInit, OnDestroy, OnChanges {
+export class ShopCarrierComponent implements OnInit, OnDestroy {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   shopCarriersVO:Array<ShopCarrierVO>;
   availableCarriers:Array<ShopCarrierVO>;
@@ -57,20 +58,34 @@ export class ShopCarrierComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
+  }
+
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopCarriersVO != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
   ngOnInit() {
     console.debug('ShopCarrierComponent ngOnInit shop', this.shop);
     this.formBind();
-    this.onRefreshHandler();
   }
 
   ngOnDestroy() {
     console.debug('ShopCarrierComponent ngOnDestroy');
     this.formUnbind();
-  }
-
-  ngOnChanges(changes:any) {
-    console.debug('ShopCarrierComponent ngOnChanges', changes);
-    this.onRefreshHandler();
   }
 
   newCarrierInstance():CarrierLocaleVO {
@@ -176,6 +191,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy, OnChanges {
         this.shopCarriersVO = Util.clone(shopLanguagesVo);
         this.remapCarriers();
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     }
@@ -194,6 +210,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy, OnChanges {
         this.shopCarriersVO  = Util.clone(shopCarriersVo);
         this.remapCarriers();
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     } else {

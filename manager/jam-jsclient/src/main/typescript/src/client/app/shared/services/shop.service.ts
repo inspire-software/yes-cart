@@ -105,7 +105,7 @@ export class ShopService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this._serviceBaseUrl + '/online/' + shop.shopId + '/' + state, null, options)
+    return this.http.post(this._serviceBaseUrl + '/offline/' + shop.shopId + '/' + state, null, options)
       .map(res => <ShopVO> res.json())
       .catch(this.handleError);
   }

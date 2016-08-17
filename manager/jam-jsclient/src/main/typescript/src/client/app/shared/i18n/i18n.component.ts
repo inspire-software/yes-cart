@@ -13,11 +13,11 @@ import {Util} from '../services/index';
   directives: [NgClass, NgIf, NgFor, REACTIVE_FORM_DIRECTIVES]
 })
 
-export class I18nComponent implements OnInit, OnChanges {
+export class I18nComponent {
 
   @Input()  title : string;
 
-  @Input()  source:any;
+  private   _source:any;
 
   @Input()  i18n : string ;
 
@@ -36,18 +36,13 @@ export class I18nComponent implements OnInit, OnChanges {
   i18nForm:any;
 
   constructor(fb: FormBuilder) {
-    console.debug('I18nComponent ' + this.title + ' constructed');
+    console.debug('I18nComponent constructed', this.title);
     this.i18nForm = fb.group({
        'addLang':  ['', Validators.pattern('[a-z]{2}')],
        'addVal':  ['', Validators.pattern('\\S+.*\\S+')],
        'dataValue':  ['', Validators.pattern('\\S+.*\\S+')],
        'dataValueXL':  ['', Validators.pattern('\\S+.*\\S+')]
     });
-  }
-
-  ngOnInit() {
-
-    this.reloadModel();
   }
 
   @Input()
@@ -76,6 +71,16 @@ export class I18nComponent implements OnInit, OnChanges {
     }
   }
 
+  @Input()
+  set source(source:any) {
+    this._source = source;
+    this.reloadModel();
+  }
+
+  get source():any {
+    return this._source;
+  }
+
   reloadModel():void {
     console.debug('I18nComponent source', this.source);
     if (this.source[this.i18n] !== null) {
@@ -88,11 +93,6 @@ export class I18nComponent implements OnInit, OnChanges {
     } else {
       this.dataValue = '';
     }
-  }
-
-  ngOnChanges(changes:any) {
-    console.debug('I18nComponent ngOnChanges', changes);
-    this.reloadModel();
   }
 
   onExpandDefault() {

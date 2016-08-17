@@ -32,9 +32,10 @@ import {Config} from './../../shared/config/env.config';
   directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
 })
 
-export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
+export class ShopUrlComponent implements OnInit, OnDestroy {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   //paging
   maxSize:number = Config.UI_TABLE_PAGE_NUMS;
@@ -114,10 +115,30 @@ export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
+  }
+
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopUrl != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
   /** {@inheritDoc} */
   public ngOnInit() {
     console.debug('ShopUrlComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
+
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterUrls();
@@ -130,10 +151,6 @@ export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
     this.formUnbind();
   }
 
-  ngOnChanges(changes:any) {
-    console.debug('ShopUrlComponent ngOnChanges', changes);
-    this.onRefreshHandler();
-  }
 
   /**
    * Row delete handler.
@@ -219,6 +236,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
           rez => {
             this.shopUrl = rez;
             this.changed = false;
+            this._reload = false;
             this.selectedRow = null;
             this.filterUrls();
             console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
@@ -281,6 +299,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy, OnChanges {
         console.debug('ShopUrlComponent urls', this.shopUrl);
         this.shopUrl = shopUrl;
         this.changed = false;
+        this._reload = false;
         this.selectedRow = null;
 
         this.filterUrls();

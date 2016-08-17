@@ -37,6 +37,15 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   private shopIdSub:any;
   private shopSub:any;
 
+  private reloadCatalogue:boolean = false;
+  private reloadAttributes:boolean = false;
+  private reloadI18n:boolean = false;
+  private reloadUrls:boolean = false;
+  private reloadCarriers:boolean = false;
+  private reloadCurrency:boolean = false;
+  private reloadLanguage:boolean = false;
+  private reloadLocations:boolean = false;
+
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
               private _router: Router) {
@@ -80,6 +89,16 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
 
   tabSelected(tab:any) {
     console.debug('ShopComponent tabSelected', tab);
+
+    this.reloadCatalogue = tab === 'Catalogue';
+    this.reloadAttributes = tab === 'Attributes';
+    this.reloadI18n = tab === 'I18n';
+    this.reloadUrls = tab === 'Urls';
+    this.reloadCarriers = tab === 'Carriers';
+    this.reloadCurrency = tab === 'Currency';
+    this.reloadLanguage = tab === 'Language';
+    this.reloadLocations = tab === 'Locations';
+
   }
 
 }

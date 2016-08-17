@@ -29,9 +29,10 @@ import {Futures, Future} from './../../shared/event/index';
   directives: [ I18nComponent, NgIf, REACTIVE_FORM_DIRECTIVES, DataControlComponent],
 })
 
-export class ShopI18nComponent implements OnInit, OnDestroy, OnChanges {
+export class ShopI18nComponent implements OnInit, OnDestroy {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   shopLocalization:ShopLocaleVO;
 
@@ -87,21 +88,34 @@ export class ShopI18nComponent implements OnInit, OnDestroy, OnChanges {
     console.debug('ShopI18nComponent validating formGroup is valid: ' + this.validForSave, this.shopLocalization);
   }
 
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
+  }
+
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopLocalization != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
 
   ngOnInit() {
     console.debug('ShopI18nComponent ngOnInit shop', this.shop);
     this.formBind();
-    this.onRefreshHandler();
   }
 
   ngOnDestroy() {
     console.debug('ShopI18nComponent ngOnDestroy');
     this.formUnbind();
-  }
-
-  ngOnChanges(changes:any) {
-    console.debug('ShopI18nComponent ngOnChanges', changes);
-    this.onRefreshHandler();
   }
 
   onDataChanged() {
@@ -116,6 +130,7 @@ export class ShopI18nComponent implements OnInit, OnDestroy, OnChanges {
         console.debug('ShopI18nComponent Saved i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
+        this._reload = false;
         this.validForSave = false;
         _sub.unsubscribe();
       });
@@ -129,6 +144,7 @@ export class ShopI18nComponent implements OnInit, OnDestroy, OnChanges {
         console.debug('ShopI18nComponent Refreshed i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
+        this._reload = false;
         this.validForSave = false;
         _sub.unsubscribe();
       });

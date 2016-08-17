@@ -13,31 +13,31 @@
     </tab>
 
     <tab heading="{{ 'TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
-      <yc-shop-i18n [shop]="shop"></yc-shop-i18n>
+      <yc-shop-i18n [shop]="shop" [reload]="reloadI18n"></yc-shop-i18n>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_URL' | translate }}" (select)="tabSelected('Urls')">
-      <yc-shop-url [shop]="shop"></yc-shop-url>
+      <yc-shop-url [shop]="shop" [reload]="reloadUrls"></yc-shop-url>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CURRENCY' | translate }}" (select)="tabSelected('Currency')">
-      <yc-shop-currency [shop]="shop"></yc-shop-currency>
+      <yc-shop-currency [shop]="shop" [reload]="reloadCurrency"></yc-shop-currency>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_LANGUAGE' | translate }}" (select)="tabSelected('Language')">
-      <yc-shop-language [shop]="shop"></yc-shop-language>
+      <yc-shop-language [shop]="shop"[reload]="reloadLanguage"></yc-shop-language>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
-      <yc-shop-catalog [shop]="shop"></yc-shop-catalog>
+      <yc-shop-catalog [shop]="shop" [reload]="reloadCatalogue"></yc-shop-catalog>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_LOCATIONS' | translate }}" (select)="tabSelected('Locations')">
-      <yc-shop-location [shop]="shop"></yc-shop-location>
+      <yc-shop-location [shop]="shop" [reload]="reloadLocations"></yc-shop-location>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_CARRIERS' | translate }}" (select)="tabSelected('Carriers')">
-      <yc-shop-carrier [shop]="shop"></yc-shop-carrier>
+      <yc-shop-carrier [shop]="shop" [reload]="reloadCarriers"></yc-shop-carrier>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}" (select)="tabSelected('Warehouse')">
@@ -45,7 +45,7 @@
     </tab>
 
     <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">
-      <yc-shop-attributes [shop]="shop"></yc-shop-attributes>
+      <yc-shop-attributes [shop]="shop" [reload]="reloadAttributes"></yc-shop-attributes>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_PGS' | translate }}" (select)="tabSelected('PGs')">

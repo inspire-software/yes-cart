@@ -31,11 +31,12 @@ import {YcValidators} from './../../shared/validation/validators';
   directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, AttributeValuesComponent]
 })
 
-export class ShopAttributesComponent implements OnInit, OnChanges {
+export class ShopAttributesComponent implements OnInit {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
-  shopAttributes:Array<AttrValueShopVO>;
+  shopAttributes:Array<AttrValueShopVO> = null;
   attributeFilter:string;
 
   changed:boolean = false;
@@ -60,15 +61,28 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
 
   }
 
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
+  }
+
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopAttributes != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
   /** {@inheritDoc} */
   public ngOnInit() {
     console.debug('ShopAttributeComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
-  }
-
-  ngOnChanges(changes:any) {
-    console.debug('ShopAttributeComponent ngOnChanges', changes);
-    this.onRefreshHandler();
   }
 
   protected onRowDeleteSelected() {
@@ -110,6 +124,7 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
             console.debug('ShopAttributeComponent attributes', rez);
             this.shopAttributes = rez;
             this.changed = false;
+            this._reload = false;
             this.selectedRow = null;
             _sub.unsubscribe();
         }
@@ -139,6 +154,7 @@ export class ShopAttributesComponent implements OnInit, OnChanges {
         console.debug('ShopAttributeComponent attributes', shopAttributes);
         this.shopAttributes = shopAttributes;
         this.changed = false;
+        this._reload = false;
         this.selectedRow = null;
         _sub.unsubscribe();
 

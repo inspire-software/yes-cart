@@ -31,9 +31,10 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
 /**
  * Manage categories assigned to shop.
  */
-export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
+export class ShopCatalogComponent implements OnInit, OnDestroy {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   changed:boolean = false;
   existingShop:boolean = false;
@@ -49,8 +50,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
   nodes:Array<ITreeNode>;
   selectedNode:ITreeNode;
 
-  categories:Array<CategoryVO>;
-  assigned:Array<CategoryVO>;
+  static _categories:Array<CategoryVO> = null;
+  assigned:Array<CategoryVO> = null;
 
   /**
    * Construct shop catalogues panel.
@@ -71,20 +72,42 @@ export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
     });
   }
 
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.reloadData();
+    }
+  }
+
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.assigned != null) {
+      this.reloadData();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
+  get categories():Array<CategoryVO> {
+    return ShopCatalogComponent._categories;
+  }
+
+  set categories(categories:Array<CategoryVO>) {
+    ShopCatalogComponent._categories = categories;
+  }
+
   ngOnInit() {
     console.debug('ShopCatalogComponent ngOnInit shop', this.shop);
     this.formBind();
-    this.onRefreshHandler();
   }
 
   ngOnDestroy() {
     console.debug('ShopCatalogComponent ngOnDestroy');
     this.formUnbind();
-  }
-
-  ngOnChanges(changes:any) {
-    console.debug('ShopCatalogComponent ngOnChanges', changes);
-    this.onRefreshHandler();
   }
 
   newCategoryInstance():BasicCategoryVO {
@@ -143,6 +166,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
                   this.selectedNode = null;
                   this.newCategory = { 'name': '', 'guid': '' };
                   this.changed = false;
+                  this._reload = false;
                   _subc.unsubscribe();
               }
             );
@@ -316,6 +340,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
             this.selectedNode = null;
             this.newCategory = this.newCategoryInstance();
             this.changed = false;
+            this._reload = false;
         }
       );
     }
@@ -328,6 +353,14 @@ export class ShopCatalogComponent implements OnInit, OnDestroy, OnChanges {
   onRefreshHandler() {
     console.debug('ShopCatalogComponent Refresh handler ', this.shop);
     this.loadData();
+  }
+
+  private reloadData() {
+    if (this.categories == null) {
+      this.onRefreshHandler();
+    } else {
+      this.onDiscardEventHandler();
+    }
   }
 
 }

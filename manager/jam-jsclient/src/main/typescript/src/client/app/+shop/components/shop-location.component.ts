@@ -26,9 +26,10 @@ import {DataControlComponent} from './../../shared/sidebar/index';
   directives: [ NgIf, NgFor, DataControlComponent],
 })
 
-export class ShopLocationComponent implements OnInit, OnChanges {
+export class ShopLocationComponent implements OnInit {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   shopLocationsVO:ShopLocationsVO;
   locs:ShopLocationsVO;
@@ -43,14 +44,28 @@ export class ShopLocationComponent implements OnInit, OnChanges {
     console.debug('ShopLocationComponent constructor');
   }
 
-  ngOnInit() {
-    console.debug('ShopLocationComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
   }
 
-  ngOnChanges(changes:any) {
-    console.debug('ShopLocationComponent ngOnChanges', changes);
-    this.onRefreshHandler();
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopLocationsVO != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
+  ngOnInit() {
+    console.debug('ShopLocationComponent ngOnInit shop', this.shop);
   }
 
 
@@ -105,6 +120,7 @@ export class ShopLocationComponent implements OnInit, OnChanges {
         this.locs = Util.clone(shopLocationsVo);
         this.remapSelections();
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     }
@@ -127,6 +143,7 @@ export class ShopLocationComponent implements OnInit, OnChanges {
         this.locs  = Util.clone(shopLocationsVo);
         this.remapSelections();
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     } else {

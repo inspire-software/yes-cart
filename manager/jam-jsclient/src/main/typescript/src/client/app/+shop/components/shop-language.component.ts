@@ -26,9 +26,10 @@ import {DataControlComponent} from './../../shared/sidebar/index';
   directives: [ NgIf, NgFor, DataControlComponent],
 })
 
-export class ShopLanguageComponent implements OnInit, OnChanges {
+export class ShopLanguageComponent implements OnInit {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   shopLanguagesVO:ShopLanguagesVO;
   lang:ShopLanguagesVO;
@@ -39,14 +40,28 @@ export class ShopLanguageComponent implements OnInit, OnChanges {
     console.debug('ShopLanguageComponent constructor');
   }
 
-  ngOnInit() {
-    console.debug('ShopLanguageComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
   }
 
-  ngOnChanges(changes:any) {
-    console.debug('ShopLanguageComponent ngOnChanges', changes);
-    this.onRefreshHandler();
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopLanguagesVO != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
+  ngOnInit() {
+    console.debug('ShopLanguageComponent ngOnInit shop', this.shop);
   }
 
 
@@ -65,6 +80,7 @@ export class ShopLanguageComponent implements OnInit, OnChanges {
           return this.lang.supported.indexOf(obj.first) === -1;
         });
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     }
@@ -91,6 +107,7 @@ export class ShopLanguageComponent implements OnInit, OnChanges {
           return this.lang.supported.indexOf(obj.first) === -1;
         });
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     } else {

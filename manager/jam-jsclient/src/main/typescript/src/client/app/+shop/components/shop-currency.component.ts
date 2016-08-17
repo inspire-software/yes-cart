@@ -26,9 +26,10 @@ import {DataControlComponent} from './../../shared/sidebar/index';
   directives: [ NgIf, NgFor, DataControlComponent],
 })
 
-export class ShopCurrencyComponent implements OnInit, OnChanges {
+export class ShopCurrencyComponent implements OnInit {
 
-  @Input() shop:ShopVO;
+  private _shop:ShopVO;
+  private _reload:boolean = false;
 
   shopSupportedCurrenciesVO:ShopSupportedCurrenciesVO;
   curr:ShopSupportedCurrenciesVO;
@@ -39,14 +40,28 @@ export class ShopCurrencyComponent implements OnInit, OnChanges {
     console.debug('ShopCurrencyComponent constructed');
   }
 
-  ngOnInit() {
-    console.debug('ShopCurrencyComponent ngOnInit shop', this.shop);
-    this.onRefreshHandler();
+  @Input()
+  set reload(reload:boolean) {
+    if (reload && !this._reload) {
+      this._reload = true;
+      this.onRefreshHandler();
+    }
   }
 
-  ngOnChanges(changes:any) {
-    console.debug('ShopCurrencyComponent ngOnChanges', changes);
-    this.onRefreshHandler();
+  @Input()
+  set shop(shop:ShopVO) {
+    this._shop = shop;
+    if (this._reload || this.shopSupportedCurrenciesVO != null) {
+      this.onRefreshHandler();
+    }
+  }
+
+  get shop():ShopVO  {
+    return this._shop;
+  }
+
+  ngOnInit() {
+    console.debug('ShopCurrencyComponent ngOnInit shop', this.shop);
   }
 
 
@@ -64,6 +79,7 @@ export class ShopCurrencyComponent implements OnInit, OnChanges {
         this.curr = Util.clone(shopSupportedCurrenciesVO);
         Util.remove(this.curr.all, this.curr.supported);
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     }
@@ -86,6 +102,7 @@ export class ShopCurrencyComponent implements OnInit, OnChanges {
         this.curr = Util.clone(shopSupportedCurrenciesVO);
         Util.remove(this.curr.all, this.curr.supported);
         this.changed = false;
+        this._reload = false;
         _sub.unsubscribe();
       });
     } else {
