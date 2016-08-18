@@ -53,4 +53,10 @@ export class SidebarComponent implements OnInit {
 
   }
 
+  protected selectCurrentShopContent(shop:ShopVO) {
+
+    this._router.navigate(['/']);
+
+  }
+
 }

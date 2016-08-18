@@ -35,10 +35,60 @@
     <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/catalog']" routerLinkActive="bg-info">{{ 'PANEL_PIM_CATEGORIES' | translate }}</a>
+        <a [routerLink]="['/catalog']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_PIM_CATEGORIES' | translate }}</a>
       </li>
       <li>
         <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_PIM_PRODUCTS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_PIM_BRANDS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_PIM_PRODUCT_TYPES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_CMS' | translate }}</div>
+    <yc-shop-list [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-list>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_MARKETING' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_MARKETING_PROMO' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_MARKETING_PRICE' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_MARKETING_TAX' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_INVENTORY_STOCK' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_INVENTORY_WAREHOUSES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_REPORTS' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_DASHBOARD' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_REPORTS' | translate }}</a>
       </li>
     </ul>
   </accordion-group>
@@ -60,6 +110,17 @@
     <yc-shop-list [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-list>
   </accordion-group>
 
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_EMPLOYEES' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_EMPLOYEES_USERS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_EMPLOYEES_ROLES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
 
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
