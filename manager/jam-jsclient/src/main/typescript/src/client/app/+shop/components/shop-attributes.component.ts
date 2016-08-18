@@ -124,6 +124,7 @@ export class ShopAttributesComponent implements OnInit {
             console.debug('ShopAttributeComponent attributes', rez);
             this.shopAttributes = rez;
             this.changed = false;
+            this.validForSave = false;
             this._reload = false;
             this.selectedRow = null;
             _sub.unsubscribe();

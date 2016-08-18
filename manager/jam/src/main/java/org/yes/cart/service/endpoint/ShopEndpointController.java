@@ -123,7 +123,7 @@ public interface ShopEndpointController {
     List<VoCategory> update(@PathVariable("shopId") long shopId, @RequestBody List<VoCategory> voCategories) throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
-    @RequestMapping(value = "/online/{shopId}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/offline/{shopId}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop updateDisabledFlag(@PathVariable("shopId") long shopId, @PathVariable("state") boolean state) throws Exception;
 

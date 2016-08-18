@@ -18,9 +18,12 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.VoPaymentGateway;
 import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
+import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
 import org.yes.cart.service.endpoint.PaymentGatewaysEndpointController;
 import org.yes.cart.service.vo.VoPaymentGatewayService;
 
@@ -56,4 +59,33 @@ public class PaymentGatewaysEndpointControllerImpl implements PaymentGatewaysEnd
         return voPaymentGatewayService.getAllowedPaymentGatewaysForShops(lang);
     }
 
+    @Override
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") final String lang) throws Exception {
+        return voPaymentGatewayService.getPaymentGatewaysWithParameters(lang);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") final String lang, @PathVariable("code") final String shopCode) throws Exception {
+        return voPaymentGatewayService.getPaymentGatewaysWithParametersForShop(lang, shopCode);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.update(pgLabel, vo);
+    }
+
+    @Override
+    public @ResponseBody List<VoPaymentGatewayParameter> update(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @RequestBody final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return voPaymentGatewayService.update(shopCode, pgLabel, vo);
+    }
+
+    @Override
+    public @ResponseBody void updateDisabledFlag(@PathVariable("label") final String pgLabel, @PathVariable("state") final boolean disabled) throws Exception {
+        voPaymentGatewayService.updateDisabledFlag(pgLabel, disabled);
+    }
+
+    @Override
+    public @ResponseBody void updateDisabledFlag(@PathVariable("code") final String shopCode, @PathVariable("label") final String pgLabel, @PathVariable("state") final boolean disabled) throws Exception {
+        voPaymentGatewayService.updateDisabledFlag(shopCode, pgLabel, disabled);
+    }
 }

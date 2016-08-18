@@ -117,6 +117,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
 
     public void deleteParameter(final String parameterLabel) {
         paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
+        allParameters = null;
     }
 
     /**
@@ -125,6 +126,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
 
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.create(paymentGatewayParameter);
+        allParameters = null;
     }
 
     /**
@@ -133,6 +135,7 @@ public abstract class AbstractAuthorizeNetBasePaymentGatewayImpl implements Conf
 
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.update(paymentGatewayParameter);
+        allParameters = null;
     }
 
     /**

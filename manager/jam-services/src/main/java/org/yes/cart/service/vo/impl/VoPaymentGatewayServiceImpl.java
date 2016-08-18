@@ -16,17 +16,25 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.VoPaymentGateway;
+import org.yes.cart.domain.vo.VoPaymentGatewayFeature;
 import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
+import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
+import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayParameterEntity;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPaymentGatewayService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -126,7 +134,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         );
     }
 
-    /** {@inheritDoc}*/
+    /** {@inheritDoc} */
     public List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(final String lang) throws Exception {
 
         List<VoPaymentGatewayInfo> rez = new ArrayList<VoPaymentGatewayInfo> ();
@@ -142,13 +150,13 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         return rez;
     }
 
-    /** {@inheritDoc}*/
+    /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAllowedPaymentGateways(final String lang) throws Exception {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, DEFAULT_SHOP_CODE);
         return fillPaymentDescriptors(descriptors, lang);
     }
 
-    /** {@inheritDoc}*/
+    /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAllowedPaymentGatewaysForShop(final String lang,
                                                                        final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
@@ -160,7 +168,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
     }
 
-    /** {@inheritDoc}*/
+    /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAvailablePaymentGateways(final String lang) throws Exception {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true, DEFAULT_SHOP_CODE);
         final List<MutablePair<String, String>> rez = fillPaymentDescriptors(descriptors, lang);
@@ -168,7 +176,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         return rez;
     }
 
-    /** {@inheritDoc}*/
+    /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAvailablePaymentGatewaysForShop(final String lang,
                                                                          final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
@@ -196,5 +204,282 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         return rez;
     }
 
+    /** {@inheritDoc} */
+    public List<VoPaymentGateway> getPaymentGatewaysWithParameters(final String lang) throws Exception {
+
+        if (federationFacade.isCurrentUserSystemAdmin()) {
+
+            final List<VoPaymentGatewayInfo> info = this.getPaymentGateways(lang);
+            final List<VoPaymentGateway> vos = new ArrayList<>(info.size());
+            for (final VoPaymentGatewayInfo pgInfo : info) {
+
+                vos.add(getPaymentGatewayWithParameters(pgInfo, DEFAULT_SHOP_CODE));
+
+            }
+
+            return vos;
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+
+    /** {@inheritDoc} */
+    public List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(final String lang, final String shopCode) throws Exception {
+
+        if (federationFacade.isShopAccessibleByCurrentManager(shopCode)) {
+
+            final List<VoPaymentGatewayInfo> info = this.getPaymentGatewaysForShop(lang, shopCode);
+            final List<VoPaymentGateway> vos = new ArrayList<>(info.size());
+            for (final VoPaymentGatewayInfo pgInfo : info) {
+
+                vos.add(getPaymentGatewayWithParameters(pgInfo, shopCode));
+
+            }
+
+            return vos;
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+
+    private VoPaymentGateway getPaymentGatewayWithParameters(final VoPaymentGatewayInfo pgInfo, final String shopCode) {
+        final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(pgInfo.getLabel(), shopCode);
+
+        final VoPaymentGatewayFeature feature = voAssemblySupport.assembleVo(
+                VoPaymentGatewayFeature.class, PaymentGatewayFeature.class,
+                new VoPaymentGatewayFeature(), paymentGateway.getPaymentGatewayFeatures()
+        );
+
+        final List<VoPaymentGatewayParameter> parameters = voAssemblySupport.assembleVos(
+                VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
+                new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(paymentGateway, shopCode))
+        );
+
+        return new VoPaymentGateway(
+                pgInfo.getLabel(), pgInfo.getName(), pgInfo.isActive(), DEFAULT_SHOP_CODE,
+                feature, parameters
+        );
+    }
+
+    private Collection<PaymentGatewayParameter> getPaymentGatewayParameters(final PaymentGateway paymentGateway, final String shopCode) {
+
+        if (DEFAULT_SHOP_CODE.equals(shopCode)) {
+
+            return new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
+
+        } else {
+
+            final List<PaymentGatewayParameter> shopOnly = new ArrayList<PaymentGatewayParameter>(paymentGateway.getPaymentGatewayParameters());
+            final Iterator<PaymentGatewayParameter> shopOnlyIt = shopOnly.iterator();
+            final String prefix = labelToShopLabel(shopCode, "");
+            while (shopOnlyIt.hasNext()) {
+                final PaymentGatewayParameter param = shopOnlyIt.next();
+                if (!param.getLabel().startsWith(prefix)) {
+                    shopOnlyIt.remove();
+                }
+            }
+            return shopOnly;
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    public List<VoPaymentGatewayParameter> update(final String pgLabel, final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+        return update(DEFAULT_SHOP_CODE, pgLabel, vo);
+    }
+
+    /** {@inheritDoc} */
+    public List<VoPaymentGatewayParameter> update(final String shopCode, final String pgLabel, final List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception {
+
+        final boolean systemSettings = DEFAULT_SHOP_CODE.equals(shopCode);
+
+        if ((systemSettings && !federationFacade.isCurrentUserSystemAdmin()) ||
+                (!systemSettings && !federationFacade.isShopAccessibleByCurrentManager(shopCode))) {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+        PaymentGateway pg = paymentModulesManager.getPaymentGateway(pgLabel, shopCode);
+        final VoAssemblySupport.VoAssembler<VoPaymentGatewayParameter, PaymentGatewayParameter> asm =
+                voAssemblySupport.with(VoPaymentGatewayParameter.class, PaymentGatewayParameter.class);
+
+        Map<Long, PaymentGatewayParameter> existing = mapAvById((List) getPaymentGatewayParameters(pg, shopCode));
+        final Logger logger = ShopCodeContext.getLog(this);
+
+        for (final MutablePair<VoPaymentGatewayParameter, Boolean> item : vo) {
+            if (item.getFirst().getPaymentGatewayParameterId() > 0L && !pg.getLabel().equals(item.getFirst().getPgLabel())) {
+                throw new AccessDeniedException("Access is denied");
+            }
+
+            if (Boolean.valueOf(item.getSecond())) {
+                // delete mode
+                final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
+                if (param != null) {
+                    logger.info("Removing PG({}/{}) for {}, value was {}",
+                            new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue()});
+                    param.setValue("");
+                    pg.updateParameter(param);
+                } else {
+                    logger.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
+                }
+            } else if (item.getFirst().getPaymentGatewayParameterId() > 0L) {
+                // update mode
+                final PaymentGatewayParameter param = existing.get(item.getFirst().getPaymentGatewayParameterId());
+                if (param != null) {
+                    logger.info("Updating PG({}/{}) for {}, value was {}, now {}",
+                            new Object[]{shopCode, param.getPgLabel(), param.getLabel(), param.getValue(), item.getFirst().getValue()});
+                    param.setValue(item.getFirst().getValue());
+                    pg.updateParameter(param);
+                } else {
+                    logger.warn("Update skipped for inexistent ID {}", item.getFirst().getPaymentGatewayParameterId());
+                }
+            } else {
+                // insert mode
+
+                if (systemSettings) {
+
+                    final Collection<PaymentGatewayParameter> all = existing.values();
+                    final String name = item.getFirst().getName();
+                    final String label = item.getFirst().getLabel();
+                    final String value = item.getFirst().getValue();
+
+                    final boolean duplicate = createPaymentGatewayParameter(pg, all, name, label, name, value);
+                    if (duplicate) {
+                        logger.warn("Update skipped because create mode detected duplicate label {}", label);
+                    } else {
+                        logger.info("Creating PG({}/{}) for {}, value {}",
+                                new Object[]{shopCode, pg.getLabel(), label, value});
+                    }
+
+                } else {
+
+                    logger.warn("Update skipped because create mode is not allowed for shops");
+
+                }
+
+            }
+
+        }
+
+        if (pg != null) {
+            return voAssemblySupport.assembleVos(
+                    VoPaymentGatewayParameter.class, PaymentGatewayParameter.class,
+                    new ArrayList<PaymentGatewayParameter>(getPaymentGatewayParameters(pg, shopCode))
+            );
+        }
+
+        return Collections.emptyList();
+
+    }
+
+    private boolean createPaymentGatewayParameter(final PaymentGateway pg,
+                                                  final Collection<PaymentGatewayParameter> all,
+                                                  final String name,
+                                                  final String label,
+                                                  final String description,
+                                                  final String value) {
+
+        for (PaymentGatewayParameter param : all) {
+            if (param.getLabel().equals(label)) {
+                return true;
+            }
+        }
+
+        final PaymentGatewayParameter parameter = new PaymentGatewayParameterEntity();
+        parameter.setPgLabel(pg.getLabel());
+        parameter.setName(name);
+        parameter.setLabel(label);
+        parameter.setDescription(description);
+        parameter.setValue(value);
+        parameter.setGuid(UUID.randomUUID().toString());
+        pg.addParameter(parameter);
+
+        return false;
+    }
+
+
+    private Map<Long, PaymentGatewayParameter> mapAvById(final List<PaymentGatewayParameter> entityAttributes) {
+        Map<Long, PaymentGatewayParameter> map = new HashMap<Long, PaymentGatewayParameter>();
+        for (final PaymentGatewayParameter dto : entityAttributes) {
+            map.put(dto.getPaymentGatewayParameterId(), dto);
+        }
+        return map;
+    }
+
+    /** {@inheritDoc} */
+    public void updateDisabledFlag(final String pgLabel, final boolean disabled) throws Exception {
+        updateDisabledFlag(DEFAULT_SHOP_CODE, pgLabel, disabled);
+    }
+
+    /** {@inheritDoc} */
+    public void updateDisabledFlag(final String shopCode, final String pgLabel, final boolean disabled) throws Exception {
+
+        final boolean systemSettings = DEFAULT_SHOP_CODE.equals(shopCode);
+
+        if ((systemSettings && !federationFacade.isCurrentUserSystemAdmin()) ||
+                (!systemSettings && !federationFacade.isShopAccessibleByCurrentManager(shopCode))) {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+        final Logger logger = ShopCodeContext.getLog(this);
+        if (systemSettings) {
+
+            if (disabled) {
+
+                paymentModulesManager.disallowPaymentGateway(pgLabel);
+
+            } else {
+
+                paymentModulesManager.allowPaymentGateway(pgLabel);
+
+            }
+
+        } else {
+
+            if (disabled) {
+
+                paymentModulesManager.disallowPaymentGatewayForShop(pgLabel, shopCode);
+
+            } else {
+
+                paymentModulesManager.allowPaymentGatewayForShop(pgLabel, shopCode);
+                final PaymentGateway pgDefault = paymentModulesManager.getPaymentGateway(pgLabel, DEFAULT_SHOP_CODE);
+                final PaymentGateway pgShop = paymentModulesManager.getPaymentGateway(pgLabel, shopCode);
+                getPaymentGatewayParameters(pgShop, shopCode);
+
+                final Collection<PaymentGatewayParameter> defParams = getPaymentGatewayParameters(pgDefault, DEFAULT_SHOP_CODE);
+                final Collection<PaymentGatewayParameter> shopParams = getPaymentGatewayParameters(pgShop, shopCode);
+
+                for (final PaymentGatewayParameter defParam : defParams) {
+
+                    final String shopLabel = labelToShopLabel(shopCode, defParam.getLabel());
+                    final boolean duplicate = createPaymentGatewayParameter(pgShop, shopParams, defParam.getName(), shopLabel, defParam.getDescription(), defParam.getValue());
+
+                    if (duplicate) {
+
+                        logger.debug("Copy default skipped for label {}/{} because detected duplicate", shopCode, shopLabel);
+
+                    } else {
+
+                        logger.info("Copy default label {}/{} with value {}", new Object[] { shopCode, shopLabel, defParam.getValue() });
+
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        logger.warn("PG{} on {} is {}", new Object[] { pgLabel, shopCode, disabled ? "DISABLED" : "ENABLED" });
+
+    }
+
+    private String labelToShopLabel(String shopCode, String label) {
+        return "#" + shopCode + "_"  + label;
+    }
 
 }

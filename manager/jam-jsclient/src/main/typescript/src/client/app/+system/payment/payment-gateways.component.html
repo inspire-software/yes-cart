@@ -1,0 +1,93 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_SYSTEM_PG' | translate }} {{ shopCode ? (' / ' + shopCode) : '' }} {{ selectedGateway ? (' / ' + selectedGateway.name) : '' }}</h1>
+  </div>
+
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'pgs'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+
+    <form class="pull-left" [hidden]="viewMode !== 'pgs'">
+      <input class="filter-input" type="text" name="gatewayFilter" [(ngModel)]="gatewayFilter" autocomplete="off"/>
+    </form>
+
+    <form class="pull-left" [hidden]="viewMode !== 'params'">
+      <input class="filter-input" type="text" name="paramFilter" [(ngModel)]="paramFilter" autocomplete="off"/>
+    </form>
+
+    <button type="button" (click)="onRowListSelected()" [disabled]="selectedGateway == null" [hidden]="viewMode === 'params'" class="btn btn-circle btn-xl">
+      <i class="fa fa-list"></i>
+    </button>
+
+    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedGateway == null"  [hidden]="viewMode !== 'pgs'" class="btn btn-circle btn-xl">
+      <i class="fa {{selectedGateway != null && selectedGateway.active ? 'fa-toggle-off' : 'fa-toggle-on'}}"></i>
+    </button>
+
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedGateway == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-info"></i>
+    </button>
+
+    <button type="button" (click)="onRowNew()" [hidden]="system === false || viewMode !== 'params'" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedParam == null" [hidden]="viewMode !== 'params'" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedParam == null" [hidden]="viewMode !== 'params'" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="validForSave"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+  </div>
+
+
+  <div [hidden]="viewMode !== 'pgs'">
+    <yc-gateways [gateways]="gateways" [filter]="gatewayFilter" (dataSelected)="onGatewaySelected($event)"></yc-gateways>
+  </div>
+
+  <div [hidden]="viewMode !== 'params'">
+    <yc-parameter-values #parameterValuesComponent
+                         [paymentGateway]="selectedGateway"
+                         [attributeFilter]="paramFilter"
+                         (dataSelected)="onParamSelected($event)"
+                         (dataChanged)="onParamChange($event)"></yc-parameter-values>
+  </div>
+
+  <modal #featuresModalDialog
+         title="{{ selectedGateway != null ? selectedGateway.name : '' }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true">
+
+    <template [ngIf]="selectedGateway">
+      <ul class="no-bullet">
+        <li><i class="fa {{ selectedGateway.feature.onlineGateway ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_ONLINE' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.externalFormProcessing ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_FORM' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportAuthorize ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_AUTH' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportCapture ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_CAPTURE' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportAuthorizeCapture ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_AUTH_CAPTURE' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportCaptureMore ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_CAPTURE_MORE' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportCaptureLess ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_CAPTURE_LESS' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportAuthorizePerShipment ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_AUTH_SHIP' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportVoid ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_VOID' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportReverseAuthorization ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_REVERSE_AUTH' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.supportRefund ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_REFUND' | translate }}</li>
+        <li><i class="fa {{ selectedGateway.feature.requireDetails ? 'fa-check' : 'fa-times' }}"></i> {{ 'PG_FEATURE_DETAILS' | translate }}</li>
+        <li>{{ selectedGateway.feature.additionalFeatures }}&nbsp;</li>
+      </ul>
+    </template>
+
+  </modal>
+
+
+</div>

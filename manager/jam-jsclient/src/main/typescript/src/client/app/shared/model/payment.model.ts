@@ -23,3 +23,40 @@ export interface PaymentGatewayInfoVO {
   active : boolean;
 
 }
+
+export interface PaymentGatewayFeatureVO {
+
+  supportAuthorize : boolean;
+  supportCapture : boolean;
+  supportAuthorizeCapture : boolean;
+  supportVoid : boolean;
+  supportReverseAuthorization : boolean;
+  supportRefund : boolean;
+  externalFormProcessing : boolean;
+  onlineGateway : boolean;
+  requireDetails : boolean;
+  supportCaptureMore : boolean;
+  supportCaptureLess : boolean;
+  supportAuthorizePerShipment : boolean;
+  additionalFeatures : string;
+
+}
+
+export interface PaymentGatewayParameterVO {
+
+  paymentGatewayParameterId : number;
+  description : string;
+  label : string;
+  name : string;
+  value : string;
+  pgLabel : string;
+
+}
+
+export interface PaymentGatewayVO extends PaymentGatewayInfoVO {
+
+  shopCode : string;
+  feature : PaymentGatewayFeatureVO;
+  parameters : Array<PaymentGatewayParameterVO>;
+
+}

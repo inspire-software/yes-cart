@@ -19,6 +19,10 @@ ul {
   box-sizing: border-box;
 }
 
+ul.no-bullet {
+  list-style: none;
+}
+
 /* Make sure hidden is really hidden */
 [hidden] {
   display: none !important;

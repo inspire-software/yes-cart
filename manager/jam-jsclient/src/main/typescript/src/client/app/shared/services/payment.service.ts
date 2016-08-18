@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {PaymentGatewayInfoVO} from '../model/index';
+import {PaymentGatewayInfoVO, PaymentGatewayVO, PaymentGatewayFeatureVO, PaymentGatewayParameterVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -71,6 +71,59 @@ export class PaymentService {
   getAllowedPaymentGatewaysForShops(lang:string) {
     return this.http.get(this._serviceBaseUrl + '/gateways/shop/allowed/' + lang)
       .map(res => <PaymentGatewayInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get list of all payment gateways, which are accessible to manage or view,
+   * @param lang language
+   * @param shopCode shop code
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getPaymentGatewaysWithParameters(lang:string, shopCode:string) {
+
+    let _path = shopCode != null ? '/gateways/configure/shop/' + shopCode + '/' : '/gateways/configure/all/';
+
+    return this.http.get(this._serviceBaseUrl + _path + lang)
+      .map(res => <PaymentGatewayVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Update PG on/off flag.
+   * @param shopCode
+   * @param pgLabel
+   * @param state
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  updateDisabledFlag(shopCode: string, pgLabel:string, state:boolean) {
+    console.debug('PaymentService change state PG ' + pgLabel + ' for ' + shopCode + ' to ' + state ? 'online' : 'offline');
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    let _path = shopCode != null ? '/gateways/offline/' + shopCode : '/gateways/offline';
+
+    return this.http.post(this._serviceBaseUrl + _path + '/' + pgLabel + '/' + state, null, options)
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Update supported attributes.
+   * @param attrs
+   * @returns {Observable<R>}
+   */
+  savePaymentGatewayParameters(shopCode: string, pgLabel:string, attrs:Array<Pair<PaymentGatewayParameterVO, boolean>>) {
+    let body = JSON.stringify(attrs);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode) : ('/gateways/configure/'  + pgLabel);
+
+    return this.http.post(this._serviceBaseUrl + _path , body, options)
+      .map(res => <PaymentGatewayParameterVO[]> res.json())
       .catch(this.handleError);
   }
 

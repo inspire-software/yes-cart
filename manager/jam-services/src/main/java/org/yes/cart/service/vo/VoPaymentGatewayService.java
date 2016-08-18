@@ -17,8 +17,9 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
+import org.yes.cart.domain.vo.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -94,5 +95,67 @@ public interface VoPaymentGatewayService {
      * @return list of label-name pairs .
      */
     List<MutablePair<String, String>> getAvailablePaymentGatewaysForShop(String lang, String shopCode) throws Exception;
+
+
+    /**
+     * Get allowed payment gateways in all modules.
+     *
+     * @param lang ui lang
+     *
+     * @return list of label-name pairs .
+     */
+    List<VoPaymentGateway> getPaymentGatewaysWithParameters(String lang) throws Exception;
+
+    /**
+     * Get allowed payment gateways in all modules.
+     *
+     * @param lang ui lang
+     * @param shopCode shop code
+     *
+     * @return list of label-name pairs .
+     */
+    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(String lang, String shopCode) throws Exception;
+
+    /**
+     * Update the PG attributes.
+     *
+     * @param pgLabel PG label
+     * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @return PG attributes.
+     * @throws Exception
+     */
+    List<VoPaymentGatewayParameter> update(String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+
+    /**
+     * Update the PG attributes.
+     *
+     * @param shopCode shop code for which to update the PG parameters
+     * @param pgLabel PG label
+     * @param vo PG attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @return PG attributes.
+     * @throws Exception
+     */
+    List<VoPaymentGatewayParameter> update(String shopCode, String pgLabel, List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+
+
+    /**
+     * Update the PG disabled flag.
+     *
+     * @param pgLabel PG label
+     * @param disabled true if shop is disabled
+     * @throws Exception
+     */
+    void updateDisabledFlag(String pgLabel, boolean disabled) throws Exception;
+
+    /**
+     * Update the PG disabled flag.
+     *
+     * @param shopCode shop code for which to set flag
+     * @param pgLabel PG label
+     * @param disabled true if shop is disabled
+     * @throws Exception
+     */
+    void updateDisabledFlag(String shopCode, String pgLabel, boolean disabled) throws Exception;
+
 
 }

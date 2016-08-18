@@ -164,6 +164,20 @@
   "REINDEX_COMPLETED_ERROR": "Indexing completed with errors",
 
   "QUERY_NO_RESULTS": "Query {{query}} did not return any results",
-  "QUERY_RESULTS": "Results for query {{query}}:"
+  "QUERY_RESULTS": "Results for query {{query}}:",
+
+  "PG_ENABLED": "Enabled",
+  "PG_FEATURE_AUTH": "AUTH mode",
+  "PG_FEATURE_CAPTURE": "CAPTURE mode",
+  "PG_FEATURE_AUTH_CAPTURE": "AUTH_CAPTURE mode",
+  "PG_FEATURE_VOID": "VOID mode",
+  "PG_FEATURE_REVERSE_AUTH": "Reverse AUTH",
+  "PG_FEATURE_REFUND": "Refunds",
+  "PG_FEATURE_FORM": "Payment processing via external form",
+  "PG_FEATURE_ONLINE": "Payment processing via online service",
+  "PG_FEATURE_DETAILS": "Details are stored with payment",
+  "PG_FEATURE_CAPTURE_MORE": "Capture more supported",
+  "PG_FEATURE_CAPTURE_LESS": "Capture less supported",
+  "PG_FEATURE_AUTH_SHIP": "Authorisation is per delivery (default per order)"
 
 }

@@ -18,11 +18,11 @@ package org.yes.cart.service.endpoint;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.VoPaymentGateway;
 import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
+import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
 
 import java.util.List;
 
@@ -50,5 +50,38 @@ public interface PaymentGatewaysEndpointController {
     @RequestMapping(value = "/gateways/shop/allowed/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoPaymentGatewayInfo> getAllowedPaymentGatewaysForShops(@PathVariable("lang") String lang) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/gateways/configure/all/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPaymentGateway> getPaymentGatewaysWithParameters(@PathVariable("lang") String lang) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/gateways/configure/shop/{code}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPaymentGateway> getPaymentGatewaysWithParametersForShop(@PathVariable("lang") String lang, @PathVariable("code") String shopCode) throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/gateways/configure/{label}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPaymentGatewayParameter> update(@PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/gateways/configure/{label}/{code}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPaymentGatewayParameter> update(@PathVariable("code") String shopCode, @PathVariable("label") String pgLabel, @RequestBody List<MutablePair<VoPaymentGatewayParameter, Boolean>> vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/gateways/offline/{label}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    void updateDisabledFlag(@PathVariable("label") String pgLabel, @PathVariable("state") boolean disabled) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/gateways/offline/{code}/{label}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    void updateDisabledFlag(@PathVariable("code") String shopCode,@PathVariable("label") String pgLabel, @PathVariable("state") boolean disabled) throws Exception;
+
 
 }
