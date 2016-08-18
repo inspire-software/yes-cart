@@ -49,7 +49,7 @@
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_PGS' | translate }}" (select)="tabSelected('PGs')">
-      // TODO:
+      <yc-shop-payment-gateways [shop]="shop" [reload]="reloadPGs"></yc-shop-payment-gateways>
     </tab>
 
   </tabset>

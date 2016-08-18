@@ -98,11 +98,7 @@ export class ShopListComponent implements OnInit, OnDestroy {
 
   onSelectClick(shop: ShopVO) {
     console.debug('ShopListComponent onSelectClick', shop);
-    if (this.selectedShop != null && this.selectedShop.shopId == shop.shopId) {
-      this.selectedShop = null;
-    } else {
-      this.selectedShop = shop;
-    }
+    this.selectedShop = shop;
     this.dataSelected.emit(this.selectedShop);
   }
 

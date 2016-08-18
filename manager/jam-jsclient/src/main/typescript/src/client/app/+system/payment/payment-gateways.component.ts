@@ -37,7 +37,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   private static PARAMS:string = 'params';
 
   @Input() system:boolean = true;
-  @Input() shopCode:string;
+  private  _shopCode:string;
 
   private viewMode:string = PaymentGatewaysComponent.PGS;
 
@@ -67,6 +67,16 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
   changed:boolean = false;
   validForSave:boolean = false;
+
+  @Input()
+  set shopCode(shopCode:string) {
+    this._shopCode = shopCode;
+    this.onRefreshHandler();
+  }
+
+  get shopCode():string {
+    return this._shopCode;
+  }
 
   ngOnInit() {
     console.debug('PaymentGatewaysComponent ngOnInit');
@@ -167,9 +177,13 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
     if (this.selectedGateway != null) {
       var _sub:any = this._paymentService.updateDisabledFlag(this.shopCode, this.selectedGateway.label, this.selectedGateway.active).subscribe( done => {
         console.debug('PaymentGatewaysComponent updateDisabledFlag', done);
-        this.selectedGateway.active = !this.selectedGateway.active;
-        this.changed = false;
-        this.validForSave = false;
+        if (this.system || this.selectedGateway.active) {
+          this.selectedGateway.active = !this.selectedGateway.active;
+          this.changed = false;
+          this.validForSave = false;
+        } else { // If we are enabling for shop we copy missing attributes, so need full refresh
+          this.onRefreshHandler();
+        }
         _sub.unsubscribe();
       });
     }

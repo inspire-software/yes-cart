@@ -21,13 +21,36 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {ShopEventBus, ShopService} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
-import { ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent, ShopLocationComponent, ShopCarrierComponent, ShopAttributesComponent } from './components/index';
+import {
+  ShopMainComponent,
+  ShopI18nComponent,
+  ShopCurrencyComponent,
+  ShopLanguageComponent,
+  ShopUrlComponent,
+  ShopCatalogComponent,
+  ShopLocationComponent,
+  ShopCarrierComponent,
+  ShopAttributesComponent,
+  ShopPaymentGatewaysComponent
+} from './components/index';
 
 @Component({
   selector: 'yc-shop',
   moduleId: module.id,
   templateUrl: 'shop.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, ShopMainComponent, ShopI18nComponent, ShopCurrencyComponent, ShopLanguageComponent, ShopUrlComponent, ShopCatalogComponent, ShopLocationComponent, ShopCarrierComponent, ShopAttributesComponent],
+  directives: [
+    TAB_DIRECTIVES, NgIf,
+    ShopMainComponent,
+    ShopI18nComponent,
+    ShopCurrencyComponent,
+    ShopLanguageComponent,
+    ShopUrlComponent,
+    ShopCatalogComponent,
+    ShopLocationComponent,
+    ShopCarrierComponent,
+    ShopAttributesComponent,
+    ShopPaymentGatewaysComponent
+  ],
 })
 
 export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
@@ -45,6 +68,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   private reloadCurrency:boolean = false;
   private reloadLanguage:boolean = false;
   private reloadLocations:boolean = false;
+  private reloadPGs:boolean = false;
 
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
@@ -98,6 +122,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
     this.reloadCurrency = tab === 'Currency';
     this.reloadLanguage = tab === 'Language';
     this.reloadLocations = tab === 'Locations';
+    this.reloadPGs = tab === 'PGs';
 
   }
 

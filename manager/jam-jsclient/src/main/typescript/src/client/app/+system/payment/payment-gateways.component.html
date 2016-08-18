@@ -1,6 +1,6 @@
 <div class="row">
-  <div>
-    <h1 class="page-header">{{ 'PANEL_SYSTEM_PG' | translate }} {{ shopCode ? (' / ' + shopCode) : '' }} {{ selectedGateway ? (' / ' + selectedGateway.name) : '' }}</h1>
+  <div *ngIf="system">
+    <h1 class="page-header">{{ 'PANEL_SYSTEM_PG' | translate }} {{ selectedGateway ? (' / ' + selectedGateway.name) : '' }}</h1>
   </div>
 
 
@@ -22,8 +22,8 @@
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedGateway == null"  [hidden]="viewMode !== 'pgs'" class="btn btn-circle btn-xl">
-      <i class="fa {{selectedGateway != null && selectedGateway.active ? 'fa-toggle-off' : 'fa-toggle-on'}}"></i>
+    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedGateway == null"  [hidden]="viewMode !== 'pgs'" class="btn {{selectedGateway != null && selectedGateway.active ? 'btn-success' : 'btn-danger'}} btn-circle btn-xl">
+      <i class="fa fa fa-power-off"></i>
     </button>
 
     <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedGateway == null" class="btn btn-circle btn-xl">
@@ -50,6 +50,9 @@
 
   </div>
 
+  <div *ngIf="!system">
+    <h3 class="page-header">{{ 'PANEL_SYSTEM_PG' | translate }} {{ shopCode ? (' / ' + shopCode) : '' }} {{ selectedGateway ? (' / ' + selectedGateway.name) : '' }}</h3>
+  </div>
 
   <div [hidden]="viewMode !== 'pgs'">
     <yc-gateways [gateways]="gateways" [filter]="gatewayFilter" (dataSelected)="onGatewaySelected($event)"></yc-gateways>
