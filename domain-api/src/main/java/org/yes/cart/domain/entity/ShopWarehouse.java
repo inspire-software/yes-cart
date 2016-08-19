@@ -73,5 +73,19 @@ public interface ShopWarehouse extends Auditable {
      */
     void setRank(Integer rank);
 
+    /**
+     * Disable this warehouse in shop.
+     *
+     * @return true if this is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Disable this warehouse in shop.
+     *
+     * @param disabled true if this is disabled
+     */
+    void setDisabled(boolean disabled);
+
 
 }

@@ -83,7 +83,7 @@ export class ShippingService {
   }
 
   /**
-   * Create category on the fly.
+   * Create carrier on the fly.
    * @param carrier name of carrier
    * @param shopId shop id
    * @returns {Observable<R>}
@@ -100,7 +100,7 @@ export class ShippingService {
 
 
   /**
-   * Create carrier.
+   * Update carrier.
    * @param carriers carriers
    * @returns {Observable<R>}
    */

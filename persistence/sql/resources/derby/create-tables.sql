@@ -854,6 +854,7 @@
         SHOP_ID bigint not null,
         WAREHOUSE_ID bigint not null,
         RANK integer,
+        DISABLED smallint default 0,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

@@ -131,7 +131,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(
-                orderDelivery.getCustomerOrder().getShop().getShopId());
+                orderDelivery.getCustomerOrder().getShop().getShopId(), false);
 
         if (CollectionUtils.isEmpty(warehouses)) {
 

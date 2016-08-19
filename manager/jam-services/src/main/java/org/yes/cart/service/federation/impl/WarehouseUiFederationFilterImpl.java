@@ -64,7 +64,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
         final Set<Long> manageableWhIds = new HashSet<Long>();
         for (final Long shopId : manageableShopIds) {
             try {
-                final List<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId);
+                final Set<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId, true).keySet();
                 for (final WarehouseDTO wh : whList) {
                     manageableWhIds.add(wh.getWarehouseId());
                 }
@@ -80,7 +80,7 @@ public class WarehouseUiFederationFilterImpl implements FederationFilter {
         final Set<String> manageableWhCodes = new HashSet<String>();
         for (final Long shopId : manageableShopIds) {
             try {
-                final List<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId);
+                final Set<WarehouseDTO> whList = dtoWarehouseService.findByShopId(shopId, true).keySet();
                 for (final WarehouseDTO wh : whList) {
                     manageableWhCodes.add(wh.getCode());
                 }

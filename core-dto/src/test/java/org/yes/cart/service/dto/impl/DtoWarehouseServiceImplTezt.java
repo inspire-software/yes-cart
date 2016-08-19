@@ -30,6 +30,7 @@ import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -69,17 +70,33 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
 
     @Test
     public void testFindByShopId() throws Exception {
-        List<WarehouseDTO> dtos = dtoService.findByShopId(10L);
+        Map<WarehouseDTO, Boolean> dtos = dtoService.findByShopId(10L, false);
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+        dtos = dtoService.findByShopId(10L, true);
         assertNotNull(dtos);
         assertEquals(2, dtos.size());
         //shop has not assigned warehouses
-        dtos = dtoService.findByShopId(30L);
+        dtos = dtoService.findByShopId(30L, false);
+        assertNotNull(dtos);
+        assertTrue(dtos.isEmpty());
+        dtos = dtoService.findByShopId(30L, true);
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
         //not existing shop
-        dtos = dtoService.findByShopId(21L);
+        dtos = dtoService.findByShopId(21L, false);
         assertNotNull(dtos);
         assertTrue(dtos.isEmpty());
+        dtos = dtoService.findByShopId(21L, true);
+        assertNotNull(dtos);
+        assertTrue(dtos.isEmpty());
+        // shop with disabled warehouse 2
+        dtos = dtoService.findByShopId(70L, false);
+        assertNotNull(dtos);
+        assertEquals(1, dtos.size());
+        dtos = dtoService.findByShopId(70L, true);
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
     }
 
     @Test
@@ -87,10 +104,21 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         WarehouseDTO dto = getDto(2);
         dto = dtoService.create(dto);
         assertTrue(dto.getWarehouseId() > 0);
-        dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
-        List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
+        dtoService.assignWarehouse(dto.getWarehouseId(), 30L, true);
+        Map<WarehouseDTO, Boolean> dtos = dtoService.findByShopId(30L, true);
         assertEquals(1, dtos.size());
-        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
+        dtos = dtoService.findByShopId(30L, false);
+        assertEquals(0, dtos.size());
+        dtoService.assignWarehouse(dto.getWarehouseId(), 30L, false);
+        dtos = dtoService.findByShopId(30L, true);
+        assertEquals(1, dtos.size());
+        dtos = dtoService.findByShopId(30L, false);
+        assertEquals(1, dtos.size());
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L, false);
+        dtos = dtoService.findByShopId(30L, true);
+        assertEquals(0, dtos.size());
+        dtos = dtoService.findByShopId(30L, false);
+        assertEquals(0, dtos.size());
     }
 
     @Test
@@ -98,12 +126,19 @@ public class DtoWarehouseServiceImplTezt extends BaseCoreDBTestCase {
         WarehouseDTO dto = getDto(3);
         dto = dtoService.create(dto);
         assertTrue(dto.getWarehouseId() > 0);
-        dtoService.assignWarehouse(dto.getWarehouseId(), 30L);
-        List<WarehouseDTO> dtos = dtoService.findByShopId(30L);
+        dtoService.assignWarehouse(dto.getWarehouseId(), 30L, false);
+        Map<WarehouseDTO, Boolean> dtos = dtoService.findByShopId(30L, false);
         assertEquals(1, dtos.size());
-        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L);
-        dtos = dtoService.findByShopId(30L);
-        assertTrue(dtos.isEmpty());
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L, true);
+        dtos = dtoService.findByShopId(30L, true);
+        assertEquals(1, dtos.size());
+        dtos = dtoService.findByShopId(30L, false);
+        assertEquals(0, dtos.size());
+        dtoService.unassignWarehouse(dto.getWarehouseId(), 30L, false);
+        dtos = dtoService.findByShopId(30L, true);
+        assertEquals(0, dtos.size());
+        dtos = dtoService.findByShopId(30L, false);
+        assertEquals(0, dtos.size());
     }
 
     @Test

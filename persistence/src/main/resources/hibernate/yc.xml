@@ -1446,10 +1446,8 @@
         <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
         <property name="guid" column="GUID" type="string" length="36" unique-key="WAREHOUSE_GUID" not-null="true"/>
 
-        <bag name="warehouseShop" inverse="false" lazy="true" cascade="all">
-            <key>
-                <column name="WAREHOUSE_ID" not-null="false"/>
-            </key>
+        <bag name="warehouseShop" inverse="true" lazy="true" cascade="all,delete-orphan">
+            <key column="WAREHOUSE_ID" on-delete="cascade"/>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopWarehouseEntity"/>
         </bag>
 
@@ -1563,13 +1561,13 @@
                 <param name="column">value</param>
             </generator>
         </id>
-       <version name="version" column="VERSION" type="long"/>
+        <version name="version" column="VERSION" type="long"/>
 
-       <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity">
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SWE_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-        <many-to-one name="warehouse" class="org.yes.cart.domain.entity.impl.WarehouseEntity">
+        <many-to-one name="warehouse" class="org.yes.cart.domain.entity.impl.WarehouseEntity" foreign-key="FK_SWE_WAREHOUSE">
             <column name="WAREHOUSE_ID" not-null="true"/>
         </many-to-one>
         <property name="rank" type="int" not-null="false">
@@ -1579,6 +1577,8 @@
                 </comment>
             </column>
         </property>
+
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3248,18 +3248,19 @@
         ]]>
     </query>
 
+    <query name="ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED">
+        <![CDATA[
+            select w from WarehouseEntity w, ShopWarehouseEntity sw
+             where w.warehouseId = sw.warehouse.warehouseId
+             and sw.shop.id = ?1 and sw.disabled = ?2
+             order by sw.rank
+        ]]>
+    </query>
+
     <query name="WAREHOUSE.UPDATE.RANK">
         <![CDATA[
                 update  ShopWarehouseEntity w set w.rank = ?2 where w.shopWarehouseId = ?1
          ]]>
-    </query>
-
-    <query name="ASSIGNED.SHOPWAREHOUSE">
-        <![CDATA[
-            select sw from ShopWarehouseEntity sw
-             where sw.warehouse.warehouseId = ?1
-             and sw.shop.id = ?2
-        ]]>
     </query>
 
     <query name="SHOP.CATEGORY">

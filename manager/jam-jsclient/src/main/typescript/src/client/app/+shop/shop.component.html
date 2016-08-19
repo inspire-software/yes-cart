@@ -41,7 +41,7 @@
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}" (select)="tabSelected('Warehouse')">
-      // TODO:
+      <yc-shop-fulfilment-centre [shop]="shop" [reload]="reloadWarehouse"></yc-shop-fulfilment-centre>
     </tab>
 
     <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">

@@ -108,3 +108,10 @@ alter table TCARRIERSHOP add column DISABLED bit default 0;
 --
 
 update TATTRIBUTE set ETYPE_ID = 1001 where CODE = 'SYSTEM_IMAGE_VAULT';
+
+--
+-- YC-739 Improve access to warehouse for shop owners
+--
+
+alter table TSHOPWAREHOUSE add column DISABLED bit default 0;
+-- alter table TSHOPWAREHOUSE add column DISABLED smallint default 0;

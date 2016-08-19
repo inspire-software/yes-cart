@@ -30,6 +30,7 @@ import {
   ShopCatalogComponent,
   ShopLocationComponent,
   ShopCarrierComponent,
+  ShopFulfilmentCentreComponent,
   ShopAttributesComponent,
   ShopPaymentGatewaysComponent
 } from './components/index';
@@ -48,6 +49,7 @@ import {
     ShopCatalogComponent,
     ShopLocationComponent,
     ShopCarrierComponent,
+    ShopFulfilmentCentreComponent,
     ShopAttributesComponent,
     ShopPaymentGatewaysComponent
   ],
@@ -65,6 +67,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   private reloadI18n:boolean = false;
   private reloadUrls:boolean = false;
   private reloadCarriers:boolean = false;
+  private reloadWarehouse:boolean = false;
   private reloadCurrency:boolean = false;
   private reloadLanguage:boolean = false;
   private reloadLocations:boolean = false;
@@ -119,6 +122,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
     this.reloadI18n = tab === 'I18n';
     this.reloadUrls = tab === 'Urls';
     this.reloadCarriers = tab === 'Carriers';
+    this.reloadWarehouse = tab === 'Warehouse';
     this.reloadCurrency = tab === 'Currency';
     this.reloadLanguage = tab === 'Language';
     this.reloadLocations = tab === 'Locations';

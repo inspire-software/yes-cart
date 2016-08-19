@@ -353,7 +353,7 @@ public class ProductAvailabilityStrategyImplTest {
         product = context.mock(Product.class, "product");
 
         context.checking(new Expectations() {{
-            allowing(warehouseService).getByShopId(shopId); will(returnValue(warehouses));
+            allowing(warehouseService).getByShopId(shopId, false); will(returnValue(warehouses));
             allowing(sku).getProduct(); will(returnValue(product));
             allowing(sku).getCode(); will(returnValue("ABC"));
             allowing(product).getProductId(); will(returnValue(123L));

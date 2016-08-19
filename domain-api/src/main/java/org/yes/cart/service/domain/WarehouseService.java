@@ -30,12 +30,13 @@ public interface WarehouseService extends GenericService<Warehouse> {
 
 
     /**
-     * Find wharehouses, that assigned to given shop id.
+     * Find warehouses, that assigned to given shop id.
      *
      * @param shopId given shop id
+     * @param includeDisabled true to include disabled links
      * @return list of assigned warehouses
      */
-    List<Warehouse> getByShopId(long shopId);
+    List<Warehouse> getByShopId(long shopId, boolean includeDisabled);
 
     /**
      * Set usage rank to ShopWarehouseDTO.
@@ -49,9 +50,9 @@ public interface WarehouseService extends GenericService<Warehouse> {
      *
      * @param warehouseId warehouse id
      * @param shopId      shop id
-     * @return {@link ShopWarehouse}
+     * @param soft true disables the link, false enabled the link right away
      */
-    ShopWarehouse assignWarehouse(long warehouseId, long shopId);
+    void assignWarehouse(long warehouseId, long shopId, boolean soft);
 
 
     /**
@@ -66,8 +67,9 @@ public interface WarehouseService extends GenericService<Warehouse> {
      *
      * @param warehouseId warehouse id
      * @param shopId      shop id
+     * @param soft true disables the link but does not remove it, false removed the ShopWarehouse link completely
      */
-    void unassignWarehouse(long warehouseId, long shopId);
+    void unassignWarehouse(long warehouseId, long shopId, boolean soft);
 
 
 }

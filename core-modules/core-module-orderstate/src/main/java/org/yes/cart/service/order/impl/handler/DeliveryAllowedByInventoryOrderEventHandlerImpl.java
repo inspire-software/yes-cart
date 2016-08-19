@@ -62,7 +62,7 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
      */
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final List<Warehouse> warehouses = getWarehouseService().getByShopId(orderEvent.getCustomerOrder().getShop().getShopId());
+            final List<Warehouse> warehouses = getWarehouseService().getByShopId(orderEvent.getCustomerOrder().getShop().getShopId(), false);
             final CustomerOrderDelivery orderDelivery = orderEvent.getCustomerOrderDelivery();
             for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
 

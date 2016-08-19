@@ -19,12 +19,14 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
-import org.yes.cart.domain.dto.ShopWarehouseDTO;
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopWarehouseDTOImpl;
 import org.yes.cart.domain.dto.impl.WarehouseDTOImpl;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
@@ -36,8 +38,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -54,6 +55,7 @@ public class DtoWarehouseServiceImpl
 
     private final Assembler shopWarehouseAssembler;
 
+    private final Assembler shopAssembler;
 
 
     /**
@@ -76,6 +78,9 @@ public class DtoWarehouseServiceImpl
 
         shopWarehouseAssembler = DTOAssembler.newAssembler(
                 ShopWarehouseDTOImpl.class, ShopWarehouse.class);
+
+        shopAssembler = DTOAssembler.newAssembler(ShopDTOImpl.class, Shop.class);
+
     }
 
     /**
@@ -99,15 +104,74 @@ public class DtoWarehouseServiceImpl
         return Warehouse.class;
     }
 
+
+    @Override
+    public Map<WarehouseDTO, Map<ShopDTO, Boolean>> getAllWithShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Warehouse> all = getService().findAll();
+        final Map<WarehouseDTO, Map<ShopDTO, Boolean>> dtos = new LinkedHashMap<>(all.size() * 2);
+        for (final Warehouse warehouse : all) {
+            final WarehouseDTO dto = getNew();
+            assembler.assembleDto(dto, warehouse, getAdaptersRepository(), entityFactory);
+            createPostProcess(dto, warehouse);
+            final Map<ShopDTO, Boolean> assignments = getShopAssignmentsForWarehouse(warehouse);
+            dtos.put(dto, assignments);
+        }
+        return dtos;
+    }
+
     /**
      * {@inheritDoc}
      */
-    public List<WarehouseDTO> findByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<Warehouse> warehouses = ((WarehouseService) service).getByShopId(shopId);
+    public Map<WarehouseDTO, Boolean> findAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        return findByShopId(shopId, true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<WarehouseDTO, Boolean> findByShopId(final long shopId, boolean includeDisabled) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        List<Warehouse> warehouses = ((WarehouseService) service).getByShopId(shopId, includeDisabled);
+        Set<Long> warehouseEnabledIds = new HashSet<Long>();
+        if (includeDisabled) {
+            for (final Warehouse warehouse : ((WarehouseService) service).getByShopId(shopId, false)) {
+                warehouseEnabledIds.add(warehouse.getWarehouseId());
+            }
+        }
         List<WarehouseDTO> dtos = new ArrayList<WarehouseDTO>();
         fillDTOs(warehouses, dtos);
-        return dtos;
+        Map<WarehouseDTO, Boolean> dtosAndFlag = new HashMap<WarehouseDTO, Boolean>();
+        for (final WarehouseDTO dto : dtos) {
+            dtosAndFlag.put(dto, includeDisabled && !warehouseEnabledIds.contains(dto.getWarehouseId()));
+        }
+        return dtosAndFlag;
     }
+
+    @Override
+    public Map<ShopDTO, Boolean> getAssignedWarehouseShops(final long warehouseId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Warehouse warehouse = getService().findById(warehouseId);
+        return getShopAssignmentsForWarehouse(warehouse);
+    }
+
+
+    private Map<ShopDTO, Boolean> getShopAssignmentsForWarehouse(final Warehouse warehouse) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        if (warehouse == null) {
+            return Collections.emptyMap();
+        }
+        final Collection<ShopWarehouse> assigned = warehouse.getWarehouseShop();
+        final Map<Long, Boolean> enabledMap = new HashMap<>(assigned.size() * 2);
+        for (final ShopWarehouse shop : assigned) {
+            enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
+        }
+        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
+        fillCarrierShopsDTOs(shopDTOs, assigned);
+        final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
+        for (final ShopDTO dto : shopDTOs) {
+            dtoPairs.put(dto, enabledMap.get(dto.getShopId()));
+        }
+        return dtoPairs;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -119,21 +183,16 @@ public class DtoWarehouseServiceImpl
     /**
      * {@inheritDoc}
      */
-    public ShopWarehouseDTO assignWarehouse(
-            final long warehouseId,
-            final long shopId)
+    public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        ShopWarehouse shopWarehouse = ((WarehouseService) service).assignWarehouse(warehouseId, shopId);
-        ShopWarehouseDTO dto = dtoFactory.getByIface(ShopWarehouseDTO.class);
-        shopWarehouseAssembler.assembleDto(dto, shopWarehouse, getAdaptersRepository(), dtoFactory);
-        return dto;
+        ((WarehouseService) service).assignWarehouse(warehouseId, shopId, soft);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void unassignWarehouse(final long warehouseId, final long shopId) {
-        ((WarehouseService) service).unassignWarehouse(warehouseId, shopId);
+    public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
+        ((WarehouseService) service).unassignWarehouse(warehouseId, shopId, soft);
     }
 
 
@@ -210,6 +269,17 @@ public class DtoWarehouseServiceImpl
         // skuWarehouse.setReserved(BigDecimal.ZERO); Must not remove reservation!
         skuWarehouseService.update(skuWarehouse);
     }
+
+
+    private void fillCarrierShopsDTOs(final List<ShopDTO> result, final Collection<ShopWarehouse> shops)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        for (ShopWarehouse shop : shops) {
+            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
+            shopAssembler.assembleDto(shopDTO, shop.getShop(), getAdaptersRepository(), dtoFactory);
+            result.add(shopDTO);
+        }
+    }
+
 
     /**
      * Get the {@link SkuWarehouseService}. Test usage only.

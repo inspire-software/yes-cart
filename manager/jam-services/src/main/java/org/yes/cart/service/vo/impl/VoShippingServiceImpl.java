@@ -155,7 +155,7 @@ public class VoShippingServiceImpl implements VoShippingService {
 
     @Override
     public VoCarrier updateCarrier(final VoCarrier vo) throws Exception {
-        if (vo != null && federationFacade.isManageable(vo.getCarrierId(), ShopDTO.class)) {
+        if (vo != null && federationFacade.isManageable(vo.getCarrierId(), CarrierDTO.class)) {
 
             final VoCarrier existing = getCarrierById(vo.getCarrierId());
 
@@ -215,7 +215,6 @@ public class VoShippingServiceImpl implements VoShippingService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
-
     }
 
 

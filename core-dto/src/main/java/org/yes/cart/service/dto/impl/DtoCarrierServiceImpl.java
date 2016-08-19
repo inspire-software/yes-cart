@@ -220,6 +220,7 @@ public class DtoCarrierServiceImpl
                     assigned.remove();
                 }
                 getService().update(carrier);
+                break;
             }
         }
     }

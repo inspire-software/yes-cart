@@ -16,8 +16,11 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.EntityFactory;
@@ -27,6 +30,7 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.WarehouseService;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -58,21 +62,18 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testAssignWarehouse() {
         createShopAndWareHouse("TESTSHOP", "TESTWAREHOUSE");
-        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId());
+        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId(), false);
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
-        ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        assertNotNull(shopWarehouse);
-        assertEquals(warehouse.getWarehouseId(), shopWarehouse.getWarehouse().getWarehouseId());
-        assertEquals(shop.getShopId(), shopWarehouse.getShop().getShopId());
-        shopWarehouses = warehouseService.getByShopId(shop.getShopId());
+        warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId(), false);
+        shopWarehouses = warehouseService.getByShopId(shop.getShopId(), false);
         assertNotNull(shopWarehouses);
         assertFalse(shopWarehouses.isEmpty());
         assertEquals(warehouse.getWarehouseId(), shopWarehouses.get(0).getWarehouseId());
 
         // unassign
-        warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        List<Warehouse> shopWarehousesAfter = warehouseService.getByShopId(shop.getShopId());
+        warehouseService.unassignWarehouse(warehouse.getWarehouseId(), shop.getShopId(), false);
+        List<Warehouse> shopWarehousesAfter = warehouseService.getByShopId(shop.getShopId(), false);
         assertNotNull(shopWarehousesAfter);
         assertTrue(shopWarehousesAfter.isEmpty());
 
@@ -81,15 +82,32 @@ public class TestWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testSetShopWarehouseRank() {
         createShopAndWareHouse("TESTSHOP123", "TESTWAREHOUSE123");
-        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId());
+        List<Warehouse> shopWarehouses = warehouseService.getByShopId(shop.getShopId(), false);
         assertNotNull(shopWarehouses);
         assertTrue(shopWarehouses.isEmpty());
 
-        ShopWarehouse shopWarehouse = warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId());
-        assertEquals("Test default rank", new Integer(100), shopWarehouse.getRank());
+        warehouseService.assignWarehouse(warehouse.getWarehouseId(), shop.getShopId(), false);
+        final long[] pk = new long[1];
+        getTx().execute(new TransactionCallbackWithoutResult() {
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                final Iterator<ShopWarehouse> it = warehouseService.findById(warehouse.getWarehouseId()).getWarehouseShop().iterator();
+                ShopWarehouse shopWarehouse = null;
+                while (it.hasNext()) {
+                    shopWarehouse = it.next();
+                    if (shopWarehouse.getShop().getShopId() == shop.getShopId()) {
+                        break;
+                    } else {
+                        shopWarehouse = null;
+                    }
+                }
+                assertNotNull(shopWarehouse);
+                assertEquals("Test default rank", new Integer(100), shopWarehouse.getRank());
+                pk[0] = shopWarehouse.getShopWarehouseId();
+            }
+        });
 
-        warehouseService.updateShopWarehouseRank(shopWarehouse.getShopWarehouseId(), 200);
-        shopWarehouse = warehouseService.findShopWarehouseById(shopWarehouse.getShopWarehouseId());
+        warehouseService.updateShopWarehouseRank(pk[0], 200);
+        ShopWarehouse shopWarehouse = warehouseService.findShopWarehouseById(pk[0]);
         assertEquals("Test default rank", new Integer(200), shopWarehouse.getRank());
     }
 

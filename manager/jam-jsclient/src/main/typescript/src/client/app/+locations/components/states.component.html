@@ -5,7 +5,7 @@
       <thead class="cf">
       <tr>
         <th>{{ 'LOCATION_COUNTRY_CODE' | translate }}</th>
-        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'LOCATION_STATE_CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</th>
       </tr>
@@ -14,7 +14,7 @@
       <tr *ngFor="let row of filteredStates; let i = index" class="{{row == selectedState ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'LOCATION_COUNTRY_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
-          <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.stateCode}}</a></td>
+          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.stateCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}"><a (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
         </template>

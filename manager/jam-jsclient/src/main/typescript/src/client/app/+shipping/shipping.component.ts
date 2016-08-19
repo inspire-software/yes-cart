@@ -16,7 +16,7 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {I18nEventBus, ShopService, ShippingService, PaymentService, Util} from './../shared/services/index';
+import {I18nEventBus, ShopEventBus, ShippingService, PaymentService, Util} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {CarriersComponent, CarrierComponent, SlasComponent, SlaComponent } from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
@@ -61,10 +61,14 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   private deleteValue:String;
 
+  private shopAllSub:any;
+
   constructor(private _shippingService:ShippingService,
-              private _paymentService:PaymentService,
-              private _shopService:ShopService) {
+              private _paymentService:PaymentService) {
     console.debug('ShippingComponent constructed');
+    this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
+      this.shops = shopsevt;
+    });
   }
 
   changed:boolean = false;
@@ -92,6 +96,9 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     console.debug('ShippingComponent ngOnDestroy');
+    if (this.shopAllSub) {
+      this.shopAllSub.unsubscribe();
+    }
   }
 
 
@@ -105,13 +112,6 @@ export class ShippingComponent implements OnInit, OnDestroy {
       this.changed = false;
       this.validForSave = false;
       _sub.unsubscribe();
-
-      var _sub2:any = this._shopService.getAllShops().subscribe(allshops => {
-        console.debug('ShippingComponent getAllShops', allshops);
-        this.shops = allshops;
-        _sub2.unsubscribe();
-      });
-
     });
   }
 

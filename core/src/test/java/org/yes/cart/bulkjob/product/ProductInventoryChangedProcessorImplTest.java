@@ -58,7 +58,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
         final SkuWarehouseService skuWarehouseService = ctx().getBean("skuWarehouseService", SkuWarehouseService.class);
         final LuceneQueryFactory luceneQueryFactory = ctx().getBean("luceneQueryFactory", LuceneQueryFactory.class);
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(10L);
+        final List<Warehouse> warehouses = warehouseService.getByShopId(10L, false);
 
         Product product = productService.findById(9998L);
         assertEquals(Product.AVAILABILITY_STANDARD, product.getAvailability());
@@ -94,7 +94,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
         product = productService.findById(9998L);
 
-        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
+        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L, false), product.getDefaultSku().getCode());
         assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) == 0);
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) <= 0);
 
@@ -150,7 +150,7 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
 
         product = productService.findById(9998L);
 
-        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L), product.getDefaultSku().getCode());
+        quantity = skuWarehouseService.findQuantity(warehouseService.getByShopId(10L, false), product.getDefaultSku().getCode());
         assertTrue(quantity.getFirst().compareTo(BigDecimal.ZERO) > 0);
         assertTrue(quantity.getFirst().compareTo(quantity.getSecond()) > 0);
 

@@ -63,7 +63,7 @@
   "PANEL_MARKETING_TAX": "Tax",
   "PANEL_INVENTORY": "Inventory",
   "PANEL_INVENTORY_STOCK": "Stock",
-  "PANEL_INVENTORY_WAREHOUSES": "Fulfilment",
+  "PANEL_INVENTORY_WAREHOUSES": "Fulfilment centres",
   "PANEL_DASHBOARD": "Dashboard",
   "PANEL_REPORTS": "Reports",
   "PANEL_EMPLOYEES": "Organisation",
@@ -92,6 +92,8 @@
   "TAB_MAIN": "Main",
   "TAB_I18N": "Localization",
   "TAB_ATTRIBUTES": "Attributes",
+  "TAB_SHOPS": "Shops",
+  "TAB_PG": "Payment Methods",
 
   "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",
@@ -124,7 +126,7 @@
   "SHOP_TAB_CATALOG": "Catalog",
   "SHOP_TAB_LOCATIONS": "Locations",
   "SHOP_TAB_CARRIERS": "Carriers",
-  "SHOP_TAB_WAREHOUSES": "Warehouses",
+  "SHOP_TAB_WAREHOUSES": "Fulfilment centres",
   "SHOP_TAB_PGS": "Payment Gateways",
 
   "SHOP_URL": "URL",
@@ -137,9 +139,9 @@
   "LOCATION_COUNTRY_CODE": "ISO 3166-1-A2",
   "LOCATION_COUNTRY_ISO": "ISO 3166-1-N",
   "LOCATION_COUNTRY_NAME_LOCAL": "Name (Local)",
-
-  "CARRIER_TAB_SHOPS": "Shops",
-  "SLA_TAB_PG": "Payment Methods",
+  "LOCATION_STATE_CODE": "State code",
+  "LOCATION_CITY": "City",
+  "LOCATION_POST_CODE": "Post code",
 
   "CARRIERSLA_CODE": "SLA SKU",
   "CARRIERSLA_MAXDAYS": "Max days",

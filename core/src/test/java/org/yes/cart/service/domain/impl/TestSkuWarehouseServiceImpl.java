@@ -331,7 +331,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantitySobotSHOP10() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(10000L, shop10wh);
         assertEquals(4, skusWarehouse.size());
         assertEquals(0, new BigDecimal(1).compareTo(skusWarehouse.get("SOBOT-BEER")));
@@ -343,7 +343,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantitySobotSHOP10() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductSkuAvailableToSellQuantity("SOBOT-PINK", shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(2).compareTo(skusWarehouse.get("SOBOT-PINK")));
@@ -352,7 +352,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantityProduct5AccSHOP10() {
         //14004 product id - PRODUCT5-ACC only has associations
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(14004L, shop10wh);
         assertEquals(0, skusWarehouse.size());
     }
@@ -360,7 +360,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8SHOP10() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(15007L, shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
@@ -369,7 +369,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP10() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(10L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductSkuAvailableToSellQuantity("PRODUCT8", shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
@@ -379,7 +379,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantitySobotSHOP50() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(10000L, shop10wh);
         assertEquals(4, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-BEER")));
@@ -391,7 +391,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantitySobotSHOP50() {
         //10000 product id - sobot has 4 skus on 1 warehouse
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductSkuAvailableToSellQuantity("SOBOT-PINK", shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("SOBOT-PINK")));
@@ -400,7 +400,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductAvailableToSellQuantityProduct5AccSHOP50() {
         //14004 product id - PRODUCT5-ACC only has associations
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(14004L, shop10wh);
         assertEquals(0, skusWarehouse.size());
     }
@@ -408,7 +408,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8SHOP50() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductAvailableToSellQuantity(15007L, shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));
@@ -417,7 +417,7 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
     @Test
     public void testFindProductSkuAvailableToSellQuantityProduct8bySkuSHOP50() {
         //15007 product id - PRODUCT8 only has SKU
-        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L);
+        final List<Warehouse> shop10wh = warehouseService.getByShopId(50L, false);
         Map<String, BigDecimal> skusWarehouse = skuWarehouseService.getProductSkuAvailableToSellQuantity("PRODUCT8", shop10wh);
         assertEquals(1, skusWarehouse.size());
         assertEquals(0, new BigDecimal(0).compareTo(skusWarehouse.get("PRODUCT8")));

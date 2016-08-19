@@ -100,7 +100,7 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
         if (voidCredit || voidReservation) {
             final List<Warehouse> warehouses = warehouseService.getByShopId(
-                    delivery.getCustomerOrder().getShop().getShopId());
+                    delivery.getCustomerOrder().getShop().getShopId(), false);
 
             for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
                 final String skuCode = det.getProductSkuCode();

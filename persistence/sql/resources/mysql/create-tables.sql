@@ -824,6 +824,7 @@
         SHOP_ID bigint not null,
         WAREHOUSE_ID bigint not null,
         RANK integer comment 'Warehouse priority usage',
+        DISABLED bit default 0,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

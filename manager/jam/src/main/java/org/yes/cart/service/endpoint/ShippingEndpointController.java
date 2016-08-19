@@ -60,18 +60,15 @@ public interface ShippingEndpointController {
     @ResponseBody
     VoCarrier createShopCarrier(@RequestBody VoCarrierLocale vo, @PathVariable("id") long shopId)  throws Exception;
 
-
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCarrier updateCarrier(@RequestBody VoCarrier vo)  throws Exception;
 
-
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carrier/shop", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     List<VoShopCarrier> updateShopCarriers(@RequestBody List<VoShopCarrier> vo)  throws Exception;
-
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/carrier/{id}", method = RequestMethod.DELETE)
@@ -94,12 +91,10 @@ public interface ShippingEndpointController {
     @ResponseBody
     VoCarrierSla createCarrierSla(@RequestBody VoCarrierSla vo)  throws Exception;
 
-
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carriersla", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCarrierSla updateCarrierSla(@RequestBody VoCarrierSla vo)  throws Exception;
-
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/carriersla/{id}", method = RequestMethod.DELETE)

@@ -62,7 +62,7 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
 
                 for (final Shop shop : shops) {
 
-                    final Set<Warehouse> warehouses = shopSupport.getShopWarehouses(shop);
+                    final List<Warehouse> warehouses = shopSupport.getShopWarehouses(shop.getShopId(), false);
 
                     final List<SkuWarehouse> inventory = skuSupport.getQuantityOnWarehouses(sku.getCode(), warehouses);
                     BigDecimal qtyForShop = BigDecimal.ZERO;

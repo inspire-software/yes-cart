@@ -1,0 +1,102 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
+package org.yes.cart.service.vo;
+
+import org.yes.cart.domain.vo.VoFulfilmentCentre;
+import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
+import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+
+import java.util.List;
+
+/**
+ * User: denispavlov
+ * Date: 19/08/2016
+ * Time: 10:37
+ */
+public interface VoFulfilmentService {
+
+
+
+    /**
+     * Get all vo in the system, filtered according to rights
+     * @return all fulfilment centers
+     * @throws Exception
+     */
+    List<VoFulfilmentCentre> getAllFulfilmentCentres() throws Exception;
+
+    /**
+     * Get all vo in the system, filtered according to rights
+     * @param shopId pk
+     * @return all fulfilment centers for shop
+     * @throws Exception
+     */
+    List<VoShopFulfilmentCentre> getShopFulfilmentCentres(long shopId) throws Exception;
+
+    /**
+     * Get vo by id.
+     *
+     * @param id id
+     * @return vo
+     * @throws Exception
+     */
+    VoFulfilmentCentre getFulfilmentCentreById(long id) throws Exception;
+
+    /**
+     * Create new vo
+     * @param vo vo
+     * @return persistent version
+     * @throws Exception
+     */
+    VoFulfilmentCentre createFulfilmentCentre(VoFulfilmentCentreInfo vo)  throws Exception;
+
+    /**
+     * Create new vo
+     * @param vo vo
+     * @return persistent version
+     * @throws Exception
+     */
+    VoFulfilmentCentre createShopFulfilmentCentre(VoFulfilmentCentreInfo vo, long shopId)  throws Exception;
+
+
+    /**
+     * Create new vo
+     * @param vo fulfilment center
+     * @return persistent version
+     * @throws Exception
+     */
+    VoFulfilmentCentre updateFulfilmentCentre(VoFulfilmentCentre vo)  throws Exception;
+
+
+    /**
+     * Create new vo
+     * @param vo fulfilment center
+     * @return persistent version
+     * @throws Exception
+     */
+    List<VoShopFulfilmentCentre> updateShopFulfilmentCentres(List<VoShopFulfilmentCentre> vo)  throws Exception;
+
+
+    /**
+     * Remove vo.
+     *
+     * @param id fulfilment center id
+     * @throws Exception
+     */
+    void removeFulfilmentCentre(long id) throws Exception;
+
+
+}
