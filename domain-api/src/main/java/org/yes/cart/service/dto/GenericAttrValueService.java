@@ -87,7 +87,17 @@ public interface GenericAttrValueService {
      */
     long deleteAttributeValue(long attributeValuePk) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
-
+    /**
+     * Create new empty DTO.
+     *
+     * @param entityPk entity pk value
+     * @return new instance
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    AttrValueDTO getNewAttribute(long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException;
 
 
 }

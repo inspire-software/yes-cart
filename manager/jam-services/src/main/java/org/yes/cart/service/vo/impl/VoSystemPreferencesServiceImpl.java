@@ -16,12 +16,10 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueSystemDTO;
-import org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl;
 import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.VoAttrValueSystem;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoSystemService;
@@ -29,9 +27,11 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoSystemPreferencesService;
-import org.yes.cart.util.ShopCodeContext;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -51,6 +51,7 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
 
     private Set<String> skipAttributesInView = Collections.emptySet();
 
+    private final VoAttributesCRUDTemplate<VoAttrValueSystem, AttrValueSystemDTO> voAttributesCRUDTemplate;
 
     public VoSystemPreferencesServiceImpl(final DtoSystemService dtoSystemService,
                                           final DtoAttributeService dtoAttributeService,
@@ -62,6 +63,37 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
         this.voIOSupport = voIOSupport;
+
+        this.voAttributesCRUDTemplate =
+                new VoAttributesCRUDTemplate<VoAttrValueSystem, AttrValueSystemDTO>(
+                        VoAttrValueSystem.class,
+                        AttrValueSystemDTO.class,
+                        Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN,
+                        this.dtoSystemService,
+                        this.dtoAttributeService,
+                        this.voAssemblySupport,
+                        this.voIOSupport
+                )
+        {
+            @Override
+            protected Set<String> getSkipAttributesInView() {
+                return skipAttributesInView;
+            }
+
+            @Override
+            protected long determineObjectId(final VoAttrValueSystem vo) {
+                return vo.getSystemId();
+            }
+
+            @Override
+            protected Pair<Boolean, String> verifyAccessAndDetermineObjectCode(final long objectId) throws Exception {
+                boolean accessible = federationFacade.isCurrentUserSystemAdmin();
+                if (!accessible) {
+                    return new Pair<>(false, null);
+                }
+                return new Pair<>(true, SYSTEM_CODE);
+            }
+        };
     }
 
 
@@ -70,31 +102,9 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
      * {@inheritDoc}
      */
     public List<VoAttrValueSystem> getSystemPreferences() throws Exception {
-        if (federationFacade.isCurrentUserSystemAdmin()) {
 
-            final List<AttrValueSystemDTO> attributes = (List) dtoSystemService.getEntityAttributes(100L);
+        return this.voAttributesCRUDTemplate.verifyAccessAndGetAttributes(100L);
 
-            final List<VoAttrValueSystem> all = voAssemblySupport.assembleVos(VoAttrValueSystem.class, AttrValueSystemDTO.class, attributes);
-            // Filter out special attributes that are managed by specialised editors
-            final Iterator<VoAttrValueSystem> allIt = all.iterator();
-            while (allIt.hasNext()) {
-                final VoAttrValueSystem next = allIt.next();
-                if (skipAttributesInView.contains(next.getAttribute().getCode())) {
-                    allIt.remove();
-                } else if (next.getAttrvalueId() > 0L && "Image".equals(next.getAttribute().getEtypeName())) {
-                    if (StringUtils.isNotBlank(next.getVal())) {
-                        next.setValBase64Data(
-                                voIOSupport.getImageAsBase64(next.getVal(), SYSTEM_CODE, Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN)
-                        );
-                        // TODO: SEO data for image
-                    }
-                }
-            }
-            return all;
-
-        } else {
-            throw new AccessDeniedException("Access is denied");
-        }
     }
 
 
@@ -103,83 +113,10 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
      */
     public List<VoAttrValueSystem> update(final List<MutablePair<VoAttrValueSystem, Boolean>> vo) throws Exception {
 
-        if (!federationFacade.isCurrentUserSystemAdmin()) {
-            throw new AccessDeniedException("Access is denied");
-        }
-
-        final VoAssemblySupport.VoAssembler<VoAttrValueSystem, AttrValueSystemDTO> asm =
-                voAssemblySupport.with(VoAttrValueSystem.class, AttrValueSystemDTO.class);
-
-        Map<Long, AttrValueSystemDTO> existing = mapAvById((List) dtoSystemService.getEntityAttributes(100L));
-        for (final MutablePair<VoAttrValueSystem, Boolean> item : vo) {
-
-            if (skipAttributesInView.contains(item.getFirst().getAttribute().getCode())) {
-                ShopCodeContext.getLog(this).warn("Shop attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
-                continue;
-            }
-
-            if (Boolean.valueOf(item.getSecond())) {
-                // delete mode
-                dtoSystemService.deleteAttributeValue(item.getFirst().getAttrvalueId());
-            } else if (item.getFirst().getAttrvalueId() > 0L) {
-                // update mode
-                final AttrValueSystemDTO dto = existing.get(item.getFirst().getAttrvalueId());
-                if (dto != null) {
-                    if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
-                        final String existingImage = voIOSupport.
-                                getImageAsBase64(dto.getVal(), SYSTEM_CODE, Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN);
-                        if (existingImage == null || !existingImage.equals(item.getFirst().getValBase64Data())) {
-                            String formattedFilename = item.getFirst().getVal();
-                            formattedFilename = voIOSupport.
-                                    addImageToRepository(
-                                            formattedFilename,
-                                            SYSTEM_CODE,
-                                            dto.getAttributeDTO().getCode(),
-                                            item.getFirst().getValBase64Data(),
-                                            Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN
-                                    );
-                            item.getFirst().setVal(formattedFilename);
-                            // TODO Image SEO
-                        }
-                    }
-                    asm.assembleDto(dto, item.getFirst());
-                    dtoSystemService.updateEntityAttributeValue(dto);
-                } else {
-                    ShopCodeContext.getLog(this).warn("Update skipped for inexistent ID {}", item.getFirst().getAttrvalueId());
-                }
-            } else {
-                // insert mode
-                final AttrValueSystemDTO dto = new AttrValueSystemDTOImpl();
-                dto.setSystemId(100L);
-                dto.setAttributeDTO(dtoAttributeService.getById(item.getFirst().getAttribute().getAttributeId()));
-                if ("Image".equals(dto.getAttributeDTO().getEtypeName())) {
-                    String formattedFilename = item.getFirst().getVal();
-                    formattedFilename = voIOSupport.
-                            addImageToRepository(
-                                    formattedFilename,
-                                    SYSTEM_CODE,
-                                    dto.getAttributeDTO().getCode(),
-                                    item.getFirst().getValBase64Data(),
-                                    Constants.SHOP_IMAGE_REPOSITORY_URL_PATTERN
-                            );
-                    item.getFirst().setVal(formattedFilename);
-                    // TODO Image SEO
-                }
-                asm.assembleDto(dto, item.getFirst());
-                dtoSystemService.createEntityAttributeValue(dto);
-            }
-
-        }
+        this.voAttributesCRUDTemplate.verifyAccessAndUpdateAttributes(vo);
 
         return getSystemPreferences();
-    }
 
-    private Map<Long, AttrValueSystemDTO> mapAvById(final List<AttrValueSystemDTO> entityAttributes) {
-        Map<Long, AttrValueSystemDTO> map = new HashMap<Long, AttrValueSystemDTO>();
-        for (final AttrValueSystemDTO dto : entityAttributes) {
-            map.put(dto.getAttrvalueId(), dto);
-        }
-        return map;
     }
 
     /**

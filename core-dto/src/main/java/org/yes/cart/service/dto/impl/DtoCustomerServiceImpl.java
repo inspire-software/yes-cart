@@ -25,6 +25,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.*;
@@ -391,6 +392,16 @@ public class DtoCustomerServiceImpl
             }
         }
 
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueCustomerDTO dto = new AttrValueCustomerDTOImpl();
+        dto.setCustomerId(entityPk);
+        return dto;
     }
 
 }

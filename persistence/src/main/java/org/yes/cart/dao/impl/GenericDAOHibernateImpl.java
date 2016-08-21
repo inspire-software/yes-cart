@@ -490,6 +490,20 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public T findSingleByCriteria(final Criterion... criterion) {
         return findSingleByCriteria(null, criterion);
     }

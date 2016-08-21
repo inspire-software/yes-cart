@@ -297,6 +297,17 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find entities by criteria.
      *
+     * @param criterion given criteria
+     *
+     * @return list of found entities.
+     */
+    List<T> findByCriteria(int firstResult,
+                           int maxResults,
+                           Criterion... criterion);
+
+    /**
+     * Find entities by criteria.
+     *
      * @param criteriaTuner optional criteria tuner.
      * @param criterion     given criteria
      *

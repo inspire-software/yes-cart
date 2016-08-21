@@ -3,4 +3,6 @@
  */
 export * from './categories.component';
 // export * from './category.component';
+export * from './brands.component';
+export * from './brand.component';
 

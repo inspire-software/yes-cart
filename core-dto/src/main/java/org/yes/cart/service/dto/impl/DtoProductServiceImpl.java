@@ -32,6 +32,7 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.exception.ObjectNotFoundException;
@@ -579,5 +580,16 @@ public class DtoProductServiceImpl
         return skuId == null || skuId.equals(productSkuId);
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueProductDTO dto = new AttrValueProductDTOImpl();
+        dto.setProductId(entityPk);
+        return dto;
+    }
+
 
 }

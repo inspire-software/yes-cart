@@ -38,4 +38,17 @@ public interface DtoBrandService extends GenericDTOService<BrandDTO>, GenericAtt
      */
     List<BrandDTO> findBrands(String name) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Find brands by name.
+     *
+     * @param name brand name for partial match.
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of brands
+     */
+    List<BrandDTO> findBy(String name, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
 }
