@@ -1,0 +1,56 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_EMPLOYEES_ROLES' | translate }} {{ selectedRole && (!roleEdit || roleEdit.roleId > 0) ? (' / ' + selectedRole.code) : '' }}</h1>
+  </div>
+
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'roles'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+
+    <form class="pull-left" [hidden]="viewMode !== 'roles'">
+      <input class="filter-input" type="text" name="roleFilter" [(ngModel)]="roleFilter" autocomplete="off"/>
+    </form>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="roleEdit != null || selectedRole == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
+    <button type="button" (click)="onRowNew()" [disabled]="roleEdit != null" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRole == null || (roleEdit != null && roleEdit.roleId === 0)" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="validForSave"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+  </div>
+
+
+  <div [hidden]="viewMode !== 'roles'">
+    <yc-roles [roles]="roles" [filter]="roleFilter" (dataSelected)="onRoleSelected($event)"></yc-roles>
+  </div>
+
+  <div [hidden]="viewMode !== 'role'">
+    <yc-role [role]="roleEdit" (dataChanged)="onRoleChanged($event)"></yc-role>
+  </div>
+
+  <modal #deleteConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+         [valid]="true"
+         (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
+  </modal>
+
+
+</div>

@@ -41,7 +41,7 @@ public interface VoLocationService {
      *
      * @param id country id
      * @return vo
-     * @throwsException
+     * @throws Exception
      */
     VoCountry getCountryById(long id) throws Exception;
 
@@ -67,7 +67,6 @@ public interface VoLocationService {
      * Remove vo.
      *
      * @param id country id
-     * @return shop vo
      * @throws Exception
      */
     void removeCountry(long id) throws Exception;
@@ -112,7 +111,6 @@ public interface VoLocationService {
      * Remove vo.
      *
      * @param id state id
-     * @return shop vo
      * @throws Exception
      */
     void removeState(long id) throws Exception;

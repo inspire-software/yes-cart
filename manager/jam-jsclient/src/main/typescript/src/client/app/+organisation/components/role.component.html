@@ -1,0 +1,29 @@
+<template [ngIf]="role">
+
+  <div>
+    <div class="col-md-9 col-lg-6">
+      <div class="panel-body">
+        <form role="form" [formGroup]="roleForm">
+          <fieldset>
+            <div class="form-group">
+              <label>{{ 'CODE' | translate }}</label>
+              <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="role.code" (ngModelChange)="onDataChange($event)" [disabled]="role.roleId > 0">
+              <div [hidden]="roleForm.controls['code'].valid || roleForm.controls['code'].pristine" class="alert alert-danger">
+                {{ 'VALID_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{ 'DESCRIPTION' | translate }}</label>
+              <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="role.description" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="roleForm.controls['description'].valid || roleForm.controls['description'].pristine" class="alert alert-danger">
+                {{ 'VALID_REQUIRED' | translate }}
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</template>

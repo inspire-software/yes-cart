@@ -14,6 +14,7 @@ import { ReindexRoutes } from './+system/reindex/reindex.routes';
 import { QueryRoutes } from './+system/query/query.routes';
 import { PaymentGatewaysRoutes } from './+system/payment/payment-gateways.routes';
 import { LicenseRoutes } from './shared/license/license.routes';
+import { OrganisationRoutes } from './+organisation/organisation.routes';
 
 const routes: RouterConfig = [
   ...HomeRoutes,
@@ -30,6 +31,7 @@ const routes: RouterConfig = [
   ...ReindexRoutes,
   ...QueryRoutes,
   ...PaymentGatewaysRoutes,
+  ...OrganisationRoutes,
 ];
 
 export const APP_ROUTER_PROVIDERS = [
