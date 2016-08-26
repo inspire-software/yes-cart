@@ -25,10 +25,10 @@
              <div class="col-md-6">
                <h4>{{ 'ASSIGNED' | translate }}</h4>
                <ul class="treenodes lvl-1">
-                 <li class="treenode" *ngFor="let attr of selectedRowAssigned">{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <a (click)=onAssignedAttrClick(attr)> <i class="fa fa-remove"></i></a></li>
+                 <li class="treenode" *ngFor="let attr of selectedRowAssigned"><a class="js-click" (click)=onAssignedAttrClick(attr)>{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <i class="fa fa-remove"></i></a></li>
                </ul>
                <ul class="treenodes lvl-1">
-                 <li class="treenode bg-danger" *ngFor="let attrCode of selectedRowAssignedExtra">{{ attrCode }} <a (click)=onAssignedAttrCodeClick(attrCode)> <i class="fa fa-remove"></i></a></li>
+                 <li class="treenode bg-danger" *ngFor="let attrCode of selectedRowAssignedExtra"><a class="js-click" (click)=onAssignedAttrCodeClick(attrCode)>{{ attrCode }} <i class="fa fa-remove"></i></a></li>
                </ul>
              </div>
              <div class="col-md-6">
@@ -42,7 +42,7 @@
 
                </ul>
                <ul class="treenodes lvl-1">
-                 <li class="treenode" *ngFor="let attr of selectedRowAvailableFiltered">{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <a (click)=onAvailableAttrClick(attr)> <i class="fa fa-plus"></i></a></li>
+                 <li class="treenode" *ngFor="let attr of selectedRowAvailableFiltered"><a class="js-click" (click)=onAvailableAttrClick(attr)>{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <i class="fa fa-plus"></i></a></li>
                </ul>
              </div>
            </div>
