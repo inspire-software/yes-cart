@@ -3,3 +3,4 @@
  */
 export * from './attribute-values.component';
 export * from './product-attribute-usage.component';
+export * from './product-attribute-list.component';

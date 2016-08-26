@@ -27,19 +27,19 @@ import {FormValidationEvent, Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
 @Component({
-  selector: 'yc-catalog',
+  selector: 'yc-catalog-category',
   moduleId: module.id,
-  templateUrl: 'catalog.component.html',
+  templateUrl: 'catalog-category.component.html',
   directives: [TAB_DIRECTIVES, NgIf, CategoriesComponent, CategorySelectComponent, /* CategoryComponent, */ ModalComponent, DataControlComponent ],
 })
 
-export class CatalogComponent implements OnInit, OnDestroy {
+export class CatalogCategoryComponent implements OnInit, OnDestroy {
 
   private static CATEGORIES:string = 'categories';
   private static CATEGORY:string = 'category';
 
   private forceShowAll:boolean = false;
-  private viewMode:string = CatalogComponent.CATEGORIES;
+  private viewMode:string = CatalogCategoryComponent.CATEGORIES;
 
   private categories:Array<CategoryVO> = [];
   private categoryFilter:string;
@@ -65,7 +65,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   categorySelectComponent:CategorySelectComponent;
 
   constructor(private _categoryService:CategoryService) {
-    console.debug('CatalogComponent constructed');
+    console.debug('CatalogCategoryComponent constructed');
   }
 
   changed:boolean = false;
@@ -76,7 +76,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('CatalogComponent ngOnInit');
+    console.debug('CatalogCategoryComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -86,7 +86,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('CatalogComponent ngOnDestroy');
+    console.debug('CatalogCategoryComponent ngOnDestroy');
   }
 
 
@@ -99,16 +99,16 @@ export class CatalogComponent implements OnInit, OnDestroy {
   getFilteredCategories() {
     this.categoryFilterRequired = !this.forceShowAll && (this.categoryFilter == null || this.categoryFilter.length < 2);
 
-    console.debug('CatalogComponent getFilteredCategories' + (this.forceShowAll ? ' forcefully': ''));
+    console.debug('CatalogCategoryComponent getFilteredCategories' + (this.forceShowAll ? ' forcefully': ''));
 
     if (!this.categoryFilterRequired) {
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
-        console.debug('CatalogComponent getAllCountries', allcategories);
+        console.debug('CatalogCategoryComponent getAllCountries', allcategories);
         this.categories = allcategories;
         this.selectedCategory = null;
         this.categoryEdit = null;
-        this.viewMode = CatalogComponent.CATEGORIES;
+        this.viewMode = CatalogCategoryComponent.CATEGORIES;
         this.changed = false;
         this.validForSave = false;
         this.categoryFilterCapped = this.categories.length >= max;
@@ -118,7 +118,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
       this.categories = [];
       this.selectedCategory = null;
       this.categoryEdit = null;
-      this.viewMode = CatalogComponent.CATEGORIES;
+      this.viewMode = CatalogCategoryComponent.CATEGORIES;
       this.changed = false;
       this.validForSave = false;
       this.categoryFilterCapped = false;
@@ -126,17 +126,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onRefreshHandler() {
-    console.debug('CatalogComponent refresh handler');
+    console.debug('CatalogCategoryComponent refresh handler');
     this.getFilteredCategories();
   }
 
   onCategorySelected(data:CategoryVO) {
-    console.debug('CatalogComponent onCategorySelected', data);
+    console.debug('CatalogCategoryComponent onCategorySelected', data);
     this.selectedCategory = data;
   }
 
   onCategoryChanged(event:FormValidationEvent<CategoryVO>) {
-    console.debug('CatalogComponent onCategoryChanged', event);
+    console.debug('CatalogCategoryComponent onCategoryChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.categoryEdit = event.source;
@@ -148,20 +148,20 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onBackToList() {
-    console.debug('CatalogComponent onBackToList handler');
-    if (this.viewMode === CatalogComponent.CATEGORY) {
+    console.debug('CatalogCategoryComponent onBackToList handler');
+    if (this.viewMode === CatalogCategoryComponent.CATEGORY) {
       this.categoryEdit = null;
-      this.viewMode = CatalogComponent.CATEGORIES;
+      this.viewMode = CatalogCategoryComponent.CATEGORIES;
     }
   }
 
   protected onViewTree() {
-    console.debug('CatalogComponent onViewTree handler');
+    console.debug('CatalogCategoryComponent onViewTree handler');
     this.categorySelectComponent.showDialog();
   }
 
   protected onCatalogTreeDataSelected(event:FormValidationEvent<CategoryVO>) {
-    console.debug('CatalogComponent onCatalogTreeDataSelected handler', event);
+    console.debug('CatalogCategoryComponent onCatalogTreeDataSelected handler', event);
     if (event.valid) {
       this.categoryFilter = event.source.guid;
       this.getFilteredCategories();
@@ -169,17 +169,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('CatalogComponent onRowNew handler');
+    console.debug('CatalogCategoryComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
-    if (this.viewMode === CatalogComponent.CATEGORIES) {
+    if (this.viewMode === CatalogCategoryComponent.CATEGORIES) {
       this.categoryAdd = this.newCategoryInstance();
-      this.viewMode = CatalogComponent.CATEGORY;
+      this.viewMode = CatalogCategoryComponent.CATEGORY;
     }
   }
 
   protected onRowDelete(row:any) {
-    console.debug('CatalogComponent onRowDelete handler', row);
+    console.debug('CatalogCategoryComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -192,11 +192,11 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditCategory(row:CategoryVO) {
-    console.debug('CatalogComponent onRowEditCategory handler', row);
+    console.debug('CatalogCategoryComponent onRowEditCategory handler', row);
     this.categoryEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
-    this.viewMode = CatalogComponent.CATEGORY;
+    this.viewMode = CatalogCategoryComponent.CATEGORY;
   }
 
   protected onRowEditSelected() {
@@ -211,7 +211,7 @@ export class CatalogComponent implements OnInit, OnDestroy {
 
       if (this.categoryEdit != null) {
 
-        console.debug('CatalogComponent Save handler category', this.categoryEdit);
+        console.debug('CatalogCategoryComponent Save handler category', this.categoryEdit);
 
         //var _sub:any = this._categoryService.save(this.categoryEdit).subscribe(
         //    rez => {
@@ -220,17 +220,17 @@ export class CatalogComponent implements OnInit, OnDestroy {
         //      if (idx !== -1) {
         //        this.categories[idx] = rez;
         //        this.categories = this.categories.slice(0, this.categories.length); // reset to propagate changes
-        //        console.debug('CatalogComponent category changed', rez);
+        //        console.debug('CatalogCategoryComponent category changed', rez);
         //      }
         //    } else {
         //      this.categories.push(rez);
         //      this.categoryFilter = rez.categoryCode;
-        //      console.debug('CatalogComponent category added', rez);
+        //      console.debug('CatalogCategoryComponent category added', rez);
         //    }
         //    this.changed = false;
         //    this.selectedCategory = rez;
         //    this.categoryEdit = null;
-        //    this.viewMode = CatalogComponent.CATEGORIES;
+        //    this.viewMode = CatalogCategoryComponent.CATEGORIES;
         //    _sub.unsubscribe();
         //  }
         //);
@@ -241,8 +241,8 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('CatalogComponent discard handler');
-    if (this.viewMode === CatalogComponent.CATEGORY) {
+    console.debug('CatalogCategoryComponent discard handler');
+    if (this.viewMode === CatalogCategoryComponent.CATEGORY) {
       if (this.selectedCategory != null) {
         this.onRowEditSelected();
       } else {
@@ -252,14 +252,14 @@ export class CatalogComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('CatalogComponent onDeleteConfirmationResult modal result is ', modalresult);
+    console.debug('CatalogCategoryComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedCategory != null) {
-        console.debug('CatalogComponent onDeleteConfirmationResult', this.selectedCategory);
+        console.debug('CatalogCategoryComponent onDeleteConfirmationResult', this.selectedCategory);
 
         //var _sub:any = this._categoryService.removeCategory(this.selectedCategory).subscribe(res => {
-        //  console.debug('CatalogComponent removeCategory', this.selectedCategory);
+        //  console.debug('CatalogCategoryComponent removeCategory', this.selectedCategory);
         //  let idx = this.categories.indexOf(this.selectedCategory);
         //  this.categories.splice(idx, 1);
         //  this.categories = this.categories.slice(0, this.categories.length); // reset to propagate changes

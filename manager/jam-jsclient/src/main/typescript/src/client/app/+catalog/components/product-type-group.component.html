@@ -1,0 +1,98 @@
+<template [ngIf]="masterObject">
+
+  <div class="panel-body">
+    <div class="row">
+
+      <div class="col-xs-12 col-md-4">
+        <ul class="nav nav-second-level shop-list">
+          <li *ngFor="let row of filteredObjectGroups">
+            <a (click)="onSelectRow(row)" class="{{ (selectedRow != null && selectedRow.name == row.name) ? 'bg-info js-click' : 'js-click' }}"><span>{{row.rank}} {{row.name}}</span><span class="label label-default pull-right">{{row.attrCodeList.length}}</span></a>
+          </li>
+          <li *ngFor="let row of removedObjectGroups">
+            <a class="js-click bg-danger text-strikethrough"><span>{{row.name}}</span><span class="label label-default pull-right">{{row.attrCodeList.length}}</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-xs-12 col-md-8">
+         <template [ngIf]="selectedRow">
+           <div class="row">
+             <div class="col-xs-12">
+                <h3>{{selectedRow.name}}</h3>
+             </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+               <h4>{{ 'ASSIGNED' | translate }}</h4>
+               <ul class="treenodes lvl-1">
+                 <li class="treenode" *ngFor="let attr of selectedRowAssigned">{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <a (click)=onAssignedAttrClick(attr)> <i class="fa fa-remove"></i></a></li>
+               </ul>
+               <ul class="treenodes lvl-1">
+                 <li class="treenode bg-danger" *ngFor="let attrCode of selectedRowAssignedExtra">{{ attrCode }} <a (click)=onAssignedAttrCodeClick(attrCode)> <i class="fa fa-remove"></i></a></li>
+               </ul>
+             </div>
+             <div class="col-md-6">
+               <h4>{{ 'AVAILABLE' | translate }}</h4>
+               <ul class="nav nav-second-level item-list-control">
+                 <li>
+                   <form>
+                     <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onAttributeFilterChange()" autocomplete="off"/>
+                   </form>
+                 </li>
+
+               </ul>
+               <ul class="treenodes lvl-1">
+                 <li class="treenode" *ngFor="let attr of selectedRowAvailableFiltered">{{attr.attribute.name}} <span [innerHTML]="getAttrFlags(attr)"></span> <a (click)=onAvailableAttrClick(attr)> <i class="fa fa-plus"></i></a></li>
+               </ul>
+             </div>
+           </div>
+         </template>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<modal #deleteConfirmationModalDialog
+       title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+       [valid]="true"
+       (closed)="onDeleteConfirmationResult($event)">
+  {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.name : '') } }}
+</modal>
+
+
+<modal #editModalDialog
+       title="{{ groupToEdit ? groupToEdit.name : '' }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+       [valid]="validForSave"
+       (closed)="onEditModalResult($event)">
+
+  <template [ngIf]="groupToEdit">
+
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-md-3">{{ 'AV_RANK' | translate }}</div>
+          <div class="col-xs-8 col-md-6">
+            <input name="rank" class="form-control" type="text" [(ngModel)]="groupToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <yc-i18n-table title="{{ 'NAME' | translate }}"
+                           [source]="groupToEdit"
+                           value="name"
+                           i18n="displayNames"
+                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+  </template>
+
+</modal>
+

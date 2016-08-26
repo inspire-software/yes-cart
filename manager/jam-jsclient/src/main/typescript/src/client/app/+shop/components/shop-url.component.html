@@ -95,7 +95,7 @@
         <div class="row">
           <div class="col-lg-3">{{ 'SHOP_URL_PRIMARY' | translate }}</div>
           <div class="col-lg-9">
-            <input class="form-control" formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
+            <input formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
           </div>
         </div>
       </fieldset>

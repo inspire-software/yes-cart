@@ -191,7 +191,8 @@ body {
   font-size: 90%;
 }
 
-.sidebar ul.shop-list {
+.sidebar ul.item-list,
+.item-list-overflow ul.item-list {
   max-height: 300px;
   overflow-y: auto;
 }
@@ -431,6 +432,15 @@ table.dataTable thead .sorting:after {
   width: 50%;
 }
 
+.product-type-nav-ranges {
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.product-type-nav-range {
+  border-bottom: 1px solid #ccc;
+}
+
 @media (max-width:768px) {
 
   .av-td-value {
@@ -493,7 +503,7 @@ table.dataTable thead .sorting:after {
   width: auto;
 }
 
-.shop-list-control .filter-input {
+.item-list-control .filter-input {
   width: 100%;
   height: 36px;
   padding: 5px 8px;
@@ -503,7 +513,7 @@ table.dataTable thead .sorting:after {
 }
 
 .data-control .filter-input:focus,
-.shop-list-control .filter-input:focus {
+.item-list-control .filter-input:focus {
   outline: none;
 }
 

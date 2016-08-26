@@ -41,11 +41,11 @@
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
-                <div class="form-group">
+                <div>
                   <input formControlName="billingAddressNotRequired" name="billingAddressNotRequired" type="checkbox" [(ngModel)]="sla.billingAddressNotRequired" (ngModelChange)="onDataChange($event)">
                   <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
                 </div>
-                <div class="form-group">
+                <div>
                   <input formControlName="deliveryAddressNotRequired" name="deliveryAddressNotRequired" type="checkbox" [(ngModel)]="sla.deliveryAddressNotRequired" (ngModelChange)="onDataChange($event)">
                   <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
                 </div>
@@ -58,30 +58,31 @@
 
       <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
 
-        <div class="row">
-          <div class="col-lg-9">
-            <yc-i18n-table title="{{ 'NAME' | translate }}"
-                           [source]="sla"
-                           value="name"
-                           i18n="displayNames"
-                           [formGroup]="slaForm"
-                           defaultRequired="true"
-                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="sla"
+                             value="name"
+                             i18n="displayNames"
+                             [formGroup]="slaForm"
+                             defaultRequired="true"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
           </div>
-        </div>
 
-        <div class="row">
-          <div class="col-lg-9">
-            <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
-                           [source]="sla"
-                           value="description"
-                           i18n="displayDescriptions"
-                           [formGroup]="slaForm"
-                           (dataChanged)="onDataChange($event)"></yc-i18n-table>
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+                             [source]="sla"
+                             value="description"
+                             i18n="displayDescriptions"
+                             [formGroup]="slaForm"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
           </div>
+
         </div>
-
-
       </tab>
 
       <tab heading="{{ 'TAB_PG' | translate }}"  (select)="tabSelected('PG')">

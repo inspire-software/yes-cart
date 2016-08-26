@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {BrandVO, AttrValueBrandVO, Pair} from '../model/index';
+import {BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -127,6 +127,100 @@ export class CatalogService {
       .map(res => <AttrValueBrandVO[]> res.json())
       .catch(this.handleError);
   }
+
+
+
+
+  /**
+   * Get list of all product types, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredProductTypes(filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/producttypes/filtered/' + max, body, options)
+      .map(res => <ProductTypeInfoVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get product type, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getProductTypeById(productTypeId:number) {
+    return this.http.get(this._serviceBaseUrl + '/producttype/' + productTypeId)
+      .map(res => <ProductTypeVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create/update product type.
+   * @param productType product type
+   * @returns {Observable<R>}
+   */
+  saveProductType(productType:ProductTypeVO) {
+
+    let body = JSON.stringify(productType);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (productType.producttypeId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/producttype', body, options)
+        .map(res => <ProductTypeVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/producttype', body, options)
+        .map(res => <ProductTypeVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove product type.
+   * @param productType product type
+   * @returns {Observable<R>}
+   */
+  removeProductType(productType:ProductTypeInfoVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/producttype/' + productType.producttypeId, options)
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get attributes for given product type id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getProductTypeAttributes(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/producttype/attributes/' + id)
+      .map(res => <ProductTypeAttrVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Update supported attributes.
+   * @param attrs
+   * @returns {Observable<R>}
+   */
+  saveProductTypeAttributes(attrs:Array<Pair<ProductTypeAttrVO, boolean>>) {
+    let body = JSON.stringify(attrs);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._serviceBaseUrl + '/producttype/attributes', body, options)
+      .map(res => <ProductTypeAttrVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+
 
   private handleError (error:any) {
 

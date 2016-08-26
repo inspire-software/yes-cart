@@ -195,6 +195,22 @@
   "PG_FEATURE_DETAILS": "Details are stored with payment",
   "PG_FEATURE_CAPTURE_MORE": "Capture more supported",
   "PG_FEATURE_CAPTURE_LESS": "Capture less supported",
-  "PG_FEATURE_AUTH_SHIP": "Authorisation is per delivery (default per order)"
+  "PG_FEATURE_AUTH_SHIP": "Authorisation is per delivery (default per order)",
+
+  "PRODUCT_TYPE_UITEMPLATE": "Product template",
+  "PRODUCT_TYPE_UISEARCHTEMPLATE": "Category template",
+  "PRODUCT_TYPE_FLAGS": "Configurations",
+  "PRODUCT_TYPE_FLAG_ENSEMBLE": "Ensenble",
+  "PRODUCT_TYPE_FLAG_SHIPPABLE": "Shippable",
+  "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Downloadable",
+  "PRODUCT_TYPE_FLAG_DIGITAL": "Digital",
+  "PRODUCT_TYPE_ATTR_CONFIG": "Configuration",
+  "PRODUCT_TYPE_ATTR_CONFIG_VISIBLE": "Visible",
+  "PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY": "Similarity",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S": "Single",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Range",
+  "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Selected attribute is already assigned to this type",
+
+  "PRODUCT_TYPE_TAB_GROUPS": "Attribute Groups"
 
 }

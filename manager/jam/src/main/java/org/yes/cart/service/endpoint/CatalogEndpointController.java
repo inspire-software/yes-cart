@@ -20,8 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueBrand;
-import org.yes.cart.domain.vo.VoBrand;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -32,13 +31,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/catalog")
-public interface BrandEndpointController {
+public interface CatalogEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/brand/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoBrand> getFiltered(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoBrand> getFilteredBrands(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/brand/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -69,7 +68,48 @@ public interface BrandEndpointController {
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/brand/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoAttrValueBrand> update(@RequestBody List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception;
+    List<VoAttrValueBrand> updateBrand(@RequestBody List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception;
+
+
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/producttypes/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/producttype/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductType getProductTypeById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/producttype", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductType createProductType(@RequestBody VoProductType vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/producttype", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoProductType updateProductType(@RequestBody VoProductType vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/producttype/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeProductType(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/producttype/attributes/{typeId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoProductTypeAttr> getProductTypeAttributes(@PathVariable("typeId") long typeId) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/producttype/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoProductTypeAttr> updateProductType(@RequestBody List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception;
+
 
 
 }

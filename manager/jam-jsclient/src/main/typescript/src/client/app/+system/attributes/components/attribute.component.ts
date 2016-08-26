@@ -51,7 +51,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
     this.attributeForm = fb.group({
       'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-_]+')])],
       'etypeId': ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
-      'rank': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]+')])],
+      'rank': ['', Validators.compose([Validators.required, Validators.pattern('\-?[0-9]+')])],
       'description': [''],
       'val': [''],
       'mandatory': [''],

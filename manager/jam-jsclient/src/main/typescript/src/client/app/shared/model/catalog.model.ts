@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-import {AttrValueVO} from './attribute.model';
+import {AttrValueVO, AttributeVO} from './attribute.model';
 
 export interface BrandVO {
 
@@ -27,5 +27,76 @@ export interface BrandVO {
 export interface AttrValueBrandVO extends AttrValueVO {
 
   brandId : number;
+
+}
+
+export interface ProductTypeInfoVO {
+
+  producttypeId : number;
+
+  name : string;
+  description : string;
+
+  uitemplate : string;
+  uisearchtemplate : string;
+
+  ensemble : boolean;
+  shippable : boolean;
+  downloadable : boolean;
+  digital : boolean;
+
+}
+
+export interface ProductTypeViewGroupVO {
+
+  prodTypeAttributeViewGroupId : number;
+  producttypeId : number;
+
+  attrCodeList : string[];
+
+  rank : number;
+
+  name : string;
+  displayNames : any;
+
+}
+
+export interface ProductTypeAttrNavigationRangeVO {
+
+  range : string;
+  displayVals : any;
+
+}
+
+export interface ProductTypeAttrNavigationRangesVO {
+
+  ranges : ProductTypeAttrNavigationRangeVO[];
+
+}
+
+export interface ProductTypeAttrVO {
+
+  productTypeAttrId : number;
+  producttypeId : number;
+
+  attribute : AttributeVO;
+
+  rank : number;
+
+  visible : boolean;
+  similarity : boolean;
+  store : boolean;
+  search : boolean;
+  primary : boolean;
+  navigation : boolean;
+  navigationType : string;
+
+  rangeNavigation : ProductTypeAttrNavigationRangesVO;
+
+}
+
+export interface ProductTypeVO extends ProductTypeInfoVO {
+
+  viewGroups : ProductTypeViewGroupVO[];
 
 }

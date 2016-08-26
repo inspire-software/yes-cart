@@ -33,14 +33,16 @@
           class="com.inspiresoftware.lib.dto.geda.adapter.repository.impl.AdaptersRepositoryImpl">
         <constructor-arg>
             <map>
-                <entry key="DisplayValues"          value-ref="voDisplayValues"/>
-                <entry key="CSVToList"              value-ref="voCSVToList"/>
+                <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
+                <entry key="CSVToList"                          value-ref="voCSVToList"/>
+                <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
             </map>
         </constructor-arg>
     </bean>
 
     <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
     <bean id="voCSVToList" class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
+    <bean id="voProductTypeAttrNavigationRanges" class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
 
     <bean id="voAssemblySupport" class="org.yes.cart.service.vo.impl.VoAssemblySupportImpl">
         <constructor-arg index="0" ref="voKeyToClassFactory"/>

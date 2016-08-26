@@ -1,0 +1,157 @@
+<template [ngIf]="productType">
+
+  <form role="form" [formGroup]="productTypeForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'NAME' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="productType.name" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productTypeForm.controls['name'].valid || productTypeForm.controls['name'].pristine" class="alert alert-danger">
+                    {{ 'VALID_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="productType.description" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productTypeForm.controls['description'].valid || productTypeForm.controls['description'].pristine" class="alert alert-danger">
+                    {{ 'VALID_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productTypeForm.controls['uitemplate'].valid || productTypeForm.controls['uitemplate'].pristine" class="alert alert-danger">
+                    {{ 'VALID_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [(ngModel)]="productType.uisearchtemplate" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productTypeForm.controls['uisearchtemplate'].valid || productTypeForm.controls['uisearchtemplate'].pristine" class="alert alert-danger">
+                    {{ 'VALID_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div>
+                  <input formControlName="ensemble" name="ensemble" type="checkbox" [(ngModel)]="productType.ensemble" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PRODUCT_TYPE_FLAG_ENSEMBLE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="shippable" name="shippable" type="checkbox" [(ngModel)]="productType.shippable" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PRODUCT_TYPE_FLAG_SHIPPABLE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="downloadable" name="downloadable" type="checkbox" [(ngModel)]="productType.downloadable" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PRODUCT_TYPE_FLAG_DOWNLOADABLE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="digital" name="digital" type="checkbox" [(ngModel)]="productType.digital" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PRODUCT_TYPE_FLAG_DIGITAL' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"  (select)="tabSelected('Groups')">
+
+        <template [ngIf]="productType.producttypeId > 0">
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" autocomplete="off"/>
+                </form>
+
+                <button type="button" (click)="onGroupRowAdd()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <yc-product-type-group #groupsComponent
+                                   [masterObject]="productType"
+                                   [objectAttributes]="attributes"
+                                   [groupFilter]="groupFilter"
+                                   (dataSelected)="onGroupSelectRow($event)"
+                                   (dataChanged)="onGroupDataChanged($event)"></yc-product-type-group>
+          </div>
+
+        </template>
+      </tab>
+
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+
+        <template [ngIf]="productType.producttypeId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                </form>
+
+                <button type="button" (click)="onAttributeSearchIndexFilter()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-search"></i>
+                </button>
+
+                <button type="button" (click)="onAttributeVisibleFilter()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-eye"></i>
+                </button>
+
+                <button type="button" (click)="onAttributeInvisibleFilter()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-eye-slash"></i>
+                </button>
+
+                <button type="button" (click)="onAttributeRowAdd()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <yc-product-type-attribute #attributesComponent
+                                         [masterObject]="productType"
+                                         [objectAttributes]="attributes"
+                                         [attributeFilter]="attributeFilter"
+                                         (dataSelected)="onAttributeSelectRow($event)"
+                                         (dataChanged)="onAttributeDataChanged($event)"></yc-product-type-attribute>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>

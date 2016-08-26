@@ -56,7 +56,7 @@
           <div class="row">
             <div class="col-md-9">{{ attributeToEdit.attribute.name }}</div>
             <div class="col-md-3">
-              <input name="val" class="form-control" type="checkbox" [(ngModel)]="attributeToEditBoolean" (ngModelChange)="onDataChange($event)">
+              <input name="val" type="checkbox" [(ngModel)]="attributeToEditBoolean" (ngModelChange)="onDataChange($event)">
             </div>
           </div>
         </fieldset>

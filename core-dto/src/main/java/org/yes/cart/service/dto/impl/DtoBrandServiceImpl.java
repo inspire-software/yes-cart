@@ -234,7 +234,7 @@ public class DtoBrandServiceImpl
                     )
             );
         } else {
-            entities = service.findAll();
+            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
         }
         final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
         fillDTOs(entities, dtos);

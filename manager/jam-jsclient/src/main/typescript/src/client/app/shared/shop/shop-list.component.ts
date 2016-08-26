@@ -49,7 +49,7 @@ export class ShopListComponent implements OnInit, OnDestroy {
   @Output() dataSelected: EventEmitter<ShopVO> = new EventEmitter<ShopVO>();
 
   constructor (private _shopService : ShopService) {
-    console.debug('ShopListComponent constructed selectedShop ' + this.selectedShop);
+    console.debug('ShopListComponent constructed selectedShop ', this.selectedShop);
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.reloadShopList(shopevt);
     });

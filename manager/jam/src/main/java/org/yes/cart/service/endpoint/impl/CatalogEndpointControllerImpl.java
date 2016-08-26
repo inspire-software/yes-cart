@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueBrand;
-import org.yes.cart.domain.vo.VoBrand;
-import org.yes.cart.service.endpoint.BrandEndpointController;
+import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.endpoint.CatalogEndpointController;
 import org.yes.cart.service.vo.VoBrandService;
+import org.yes.cart.service.vo.VoProductTypeService;
 
 import java.util.List;
 
@@ -34,17 +34,20 @@ import java.util.List;
  * Time: 16:43
  */
 @Component
-public class BrandEndpointControllerImpl implements BrandEndpointController {
+public class CatalogEndpointControllerImpl implements CatalogEndpointController {
 
     private final VoBrandService voBrandService;
+    private final VoProductTypeService voProductTypeService;
 
     @Autowired
-    public BrandEndpointControllerImpl(final VoBrandService voBrandService) {
+    public CatalogEndpointControllerImpl(final VoBrandService voBrandService,
+                                         final VoProductTypeService voProductTypeService) {
         this.voBrandService = voBrandService;
+        this.voProductTypeService = voProductTypeService;
     }
 
     public @ResponseBody
-    List<VoBrand> getFiltered(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+    List<VoBrand> getFilteredBrands(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
         return voBrandService.getFiltered(filter, max);
     }
 
@@ -74,7 +77,42 @@ public class BrandEndpointControllerImpl implements BrandEndpointController {
     }
 
     public @ResponseBody
-    List<VoAttrValueBrand> update(@RequestBody final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
+    List<VoAttrValueBrand> updateBrand(@RequestBody final List<MutablePair<VoAttrValueBrand, Boolean>> vo) throws Exception {
         return voBrandService.update(vo);
+    }
+
+    public @ResponseBody
+    List<VoProductTypeInfo> getFilteredProductTypes(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voProductTypeService.getFiltered(filter, max);
+    }
+
+    public @ResponseBody
+    VoProductType getProductTypeById(@PathVariable("id") final long id) throws Exception {
+        return voProductTypeService.getById(id);
+    }
+
+    public @ResponseBody
+    VoProductType createProductType(@RequestBody final VoProductType vo) throws Exception {
+        return voProductTypeService.create(vo);
+    }
+
+    public @ResponseBody
+    VoProductType updateProductType(@RequestBody final VoProductType vo) throws Exception {
+        return voProductTypeService.update(vo);
+    }
+
+    public @ResponseBody
+    void removeProductType(@PathVariable("id") final long id) throws Exception {
+        voProductTypeService.remove(id);
+    }
+
+    public @ResponseBody
+    List<VoProductTypeAttr> getProductTypeAttributes(@PathVariable("typeId") final long typeId) throws Exception {
+        return voProductTypeService.getTypeAttributes(typeId);
+    }
+
+    public @ResponseBody
+    List<VoProductTypeAttr> updateProductType(@RequestBody final List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception {
+        return voProductTypeService.update(vo);
     }
 }

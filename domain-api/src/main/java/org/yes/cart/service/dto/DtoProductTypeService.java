@@ -39,6 +39,17 @@ public interface DtoProductTypeService extends GenericDTOService<ProductTypeDTO>
      */
     List<ProductTypeDTO> findProductTypes(String name)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Find product types by name.
+     *
+     * @param name product type name for partial match.
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of types
+     */
+    List<ProductTypeDTO> findBy(String name, int page, int pageSize)  throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Find all product types that use attribute code.

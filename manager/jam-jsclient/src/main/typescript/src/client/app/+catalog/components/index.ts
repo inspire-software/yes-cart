@@ -5,4 +5,6 @@ export * from './categories.component';
 // export * from './category.component';
 export * from './brands.component';
 export * from './brand.component';
+export * from './product-types.component';
+export * from './product-type.component';
 
