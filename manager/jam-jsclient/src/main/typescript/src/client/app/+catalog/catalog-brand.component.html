@@ -18,12 +18,12 @@
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="brandEdit != null || selectedBrand == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="brandEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="brandEdit != null || selectedBrand == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedBrand == null || (brandEdit != null && brandEdit.brandId === 0)" class="btn btn-danger btn-circle btn-xl" >

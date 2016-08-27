@@ -22,12 +22,12 @@
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="carrierEdit != null || slaEdit != null || (selectedCarrier == null && selectedSla == null)" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="carrierEdit != null || slaEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="carrierEdit != null || slaEdit != null || (selectedCarrier == null && selectedSla == null)" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCarrier == null || (carrierEdit != null && carrierEdit.carrierId === 0)" class="btn btn-danger btn-circle btn-xl" >

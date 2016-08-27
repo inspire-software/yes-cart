@@ -18,16 +18,20 @@
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onViewTree()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onViewTree()" [hidden]="viewMode !== 'categories'" class="btn btn-circle btn-xl">
       <i class="fa fa-sitemap"></i>
-    </button>
-
-    <button type="button" (click)="onRowEditSelected()" [disabled]="categoryEdit != null || selectedCategory == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowNew()" [disabled]="categoryEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowLinkSelected()" [disabled]="categoryEdit != null || selectedCategory == null || selectedCategory.linkToId > 0" class="btn btn-circle btn-xl">
+      <i class="fa fa-link"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="categoryEdit != null || selectedCategory == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCategory == null || (categoryEdit != null && categoryEdit.categoryId === 0)" class="btn btn-danger btn-circle btn-xl" >
@@ -56,7 +60,8 @@
   </div>
 
   <div [hidden]="viewMode !== 'category'">
-    <yc-category [category]="categoryEdit" (dataChanged)="onCategoryChanged($event)"></yc-category>
+    <yc-category [category]="categoryEdit" [attributes]="categoryEditAttributes"
+                 (dataChanged)="onCategoryChanged($event)"></yc-category>
   </div>
 
   <modal #deleteConfirmationModalDialog

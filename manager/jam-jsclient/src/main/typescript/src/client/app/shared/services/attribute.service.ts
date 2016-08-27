@@ -152,7 +152,7 @@ export class AttributeService {
 
   private handleError (error:any) {
 
-    console.error('CategoryService Server error: ', error);
+    console.error('AttributeService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

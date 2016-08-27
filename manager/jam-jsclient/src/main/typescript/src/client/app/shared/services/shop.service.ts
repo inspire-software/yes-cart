@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
-import {ShopVO, ShopUrlVO, ShopLocaleVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair} from '../model/index';
+import {ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Observable}     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -114,28 +114,28 @@ export class ShopService {
   /**
    * Get localization information for given shop id.
    * @param id given shop id
-   * @return {Promise<ShopLocaleVO>}
+   * @return {Promise<ShopSeoVO>}
    */
   getShopLocalization(shopId:number) {
     console.debug('ShopService get shop localization info ' + shopId);
     return this.http.get(this._serviceBaseUrl + '/localization/' + shopId)
-      .map(res => <ShopLocaleVO> res.json())
+      .map(res => <ShopSeoVO> res.json())
       .catch(this.handleError);
   }
 
   /**
    * Save changes in localisation information
-   * @param shopLocaleVO
-   * @returns {Promise<ShopLocaleVO>}
+   * @param shopSeoVO
+   * @returns {Promise<ShopSeoVO>}
      */
-  saveShopLocalization(shopLocaleVO:ShopLocaleVO) {
-    console.debug('ShopService save localization info', shopLocaleVO);
+  saveShopLocalization(shopSeoVO:ShopSeoVO) {
+    console.debug('ShopService save localization info', shopSeoVO);
 
-    let body = JSON.stringify(shopLocaleVO);
+    let body = JSON.stringify(shopSeoVO);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/localization', body, options)
-      .map(res => <ShopLocaleVO> res.json())
+      .map(res => <ShopSeoVO> res.json())
       .catch(this.handleError);
   }
 

@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {Validators} from '@angular/forms';
+
 export class YcValidators {
 
   static validDomainName(control:any):any {
@@ -57,5 +59,44 @@ export class YcValidators {
     var regex:RegExp = /^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
     return regex.test(url);
   }
+
+  static requiredValidDomainName = Validators.compose([Validators.required, YcValidators.validDomainName]);
+
+  static validCode = Validators.pattern('[A-Za-z0-9\-_]+');
+
+  static requiredValidCode = Validators.compose([Validators.required, YcValidators.validCode]);
+
+  static nonBlankTrimmed = Validators.pattern('\\S+.*\\S+');
+
+  static requiredNonBlankTrimmed = Validators.compose([Validators.required, YcValidators.nonBlankTrimmed]);
+
+  static noWhitespace = Validators.pattern('\\S+');
+
+  static validLanguageCode = Validators.pattern('[a-z]{2}');
+
+  static validCountryCode = Validators.pattern('[A-Z]{2}');
+
+  static requiredValidCountryCode = Validators.compose([Validators.required, YcValidators.validCountryCode]);
+
+  static validCountryIsoCode = Validators.pattern('[0-9]{3}');
+
+  static requiredValidCountryIsoCode = Validators.compose([Validators.required, YcValidators.validCountryIsoCode]);
+
+  static validRole = Validators.pattern('ROLE_[A-Z_]+');
+
+  static requiredValidRole = Validators.compose([Validators.required, YcValidators.validRole]);
+
+  static positiveWholeNumber = Validators.pattern('[0-9]+');
+
+  static requiredPositiveWholeNumber = Validators.compose([Validators.required, YcValidators.positiveWholeNumber]);
+
+  static rank = Validators.pattern('\-?[0-9]+');
+
+  static requiredRank = Validators.compose([Validators.required, YcValidators.rank]);
+
+  static pk = Validators.pattern('[1-9][0-9]*');
+
+  static requiredPk = Validators.compose([Validators.required, YcValidators.pk]);
+
 
 }

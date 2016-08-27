@@ -35,9 +35,9 @@ export interface ShopVO {
 }
 
 /**
- * Represent localization information for shop.
+ * Represent SEO information for shop.
  */
-export interface ShopLocaleVO  {
+export interface ShopSeoVO  {
 
   shopId : number;
 
@@ -46,9 +46,9 @@ export interface ShopLocaleVO  {
   metakeywords : string;
   metadescription : string;
 
-  displayTitles : any;
-  displayMetakeywords : any;
-  displayMetadescriptions : any;
+  displayTitles : Pair<string, string>[];
+  displayMetakeywords : Pair<string, string>[];
+  displayMetadescriptions : Pair<string, string>[];
 
 }
 

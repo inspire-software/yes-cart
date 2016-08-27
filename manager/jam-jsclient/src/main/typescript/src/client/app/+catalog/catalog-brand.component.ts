@@ -258,7 +258,6 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
         var _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
           _sub.unsubscribe();
           console.debug('CatalogBrandComponent removeBrand', this.selectedBrand);
-          let idx = this.brands.indexOf(this.selectedBrand);
           this.selectedBrand = null;
           this.brandEdit = null;
           this.getFilteredBrands();

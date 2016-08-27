@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {Pair} from './common.model';
+
 export interface CarrierShopLinkVO {
 
   carrierId : number;
@@ -30,8 +32,8 @@ export interface CarrierLocaleVO {
   name  : string;
   description : string;
 
-  displayNames : any;
-  displayDescriptions : any;
+  displayNames : Pair<string, string>[];
+  displayDescriptions : Pair<string, string>[];
 
 }
 
@@ -56,8 +58,8 @@ export interface CarrierSlaVO {
   name  : string;
   description : string;
 
-  displayNames : any;
-  displayDescriptions : any;
+  displayNames : Pair<string, string>[];
+  displayDescriptions : Pair<string, string>[];
 
   maxDays : number;
   slaType : string;

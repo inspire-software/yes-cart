@@ -61,10 +61,9 @@ public interface VoBrandService {
     VoBrand create(VoBrand vo) throws Exception;
 
     /**
-     * Get brand by id.
+     * Remove brand by id.
      *
-     * @param id
-     * @return brand vo
+     * @param id brand id
      * @throws Exception
      */
     void remove(long id) throws Exception;

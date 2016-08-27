@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {NgIf, NgFor} from '@angular/common';
+import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO, ShopCarrierVO, CarrierLocaleVO} from './../../shared/model/index';
 import {ShippingService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
@@ -54,7 +55,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.newCarrier = this.newCarrierInstance();
 
     this.newCarrierForm = fb.group({
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
   }
 

@@ -14,8 +14,9 @@
  *    limitations under the License.
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {NgIf, NgFor} from '@angular/common';
+import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO} from './../../shared/model/index';
 import {FulfilmentService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
@@ -54,8 +55,8 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     this.newCentre = this.newCentreInstance();
 
     this.newCentreForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9]+')])],
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'code': ['', YcValidators.requiredValidCode],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
   }
 

@@ -4,7 +4,6 @@
 export * from './common.model';
 export * from './attribute.model';
 export * from './system.model';
-export * from './category.model';
 export * from './catalog.model';
 export * from './shop.model';
 export * from './manager.model';

@@ -12,8 +12,8 @@
       <yc-shop-main></yc-shop-main>
     </tab>
 
-    <tab heading="{{ 'TAB_I18N' | translate }}" (select)="tabSelected('I18n')">
-      <yc-shop-i18n [shop]="shop" [reload]="reloadI18n"></yc-shop-i18n>
+    <tab heading="{{ 'TAB_SEO' | translate }}" (select)="tabSelected('SEO')">
+      <yc-shop-seo [shop]="shop" [reload]="reloadSEO"></yc-shop-seo>
     </tab>
 
     <tab heading="{{ 'SHOP_TAB_URL' | translate }}" (select)="tabSelected('Urls')">

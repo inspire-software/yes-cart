@@ -22,9 +22,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.vo.VoShopService;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
@@ -50,28 +48,28 @@ public class VoShopServiceDerivedImplTest extends BaseCoreDBTestCase {
         VoShop voShop = getTestVoShop("0001");
         voShop = voShopService.create(voShop);
 
-        VoShopLocale voShopLocale = voShopService.getShopLocale(voShop.getShopId());
-        assertThat(voShopLocale.getDisplayMetadescriptions().size(), equalTo(0));
-        assertThat(voShopLocale.getDisplayMetakeywords().size(), equalTo(0));
-        assertThat(voShopLocale.getDisplayTitles().size(), equalTo(0));
+        VoShopSeo voShopSeo = voShopService.getShopLocale(voShop.getShopId());
+        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(0));
+        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(0));
+        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(0));
 
-        voShopLocale.getDisplayMetadescriptions().add(MutablePair.of("en", "Meta description"));
-        voShopLocale.getDisplayMetakeywords().add(MutablePair.of("en", "Meta, key, word"));
-        voShopLocale.getDisplayTitles().add(MutablePair.of("en", "Title"));
+        voShopSeo.getDisplayMetadescriptions().add(MutablePair.of("en", "Meta description"));
+        voShopSeo.getDisplayMetakeywords().add(MutablePair.of("en", "Meta, key, word"));
+        voShopSeo.getDisplayTitles().add(MutablePair.of("en", "Title"));
 
-        voShopLocale = voShopService.update(voShopLocale);
-        assertThat(voShopLocale.getDisplayMetadescriptions().size(), equalTo(1));
-        assertThat(voShopLocale.getDisplayMetakeywords().size(), equalTo(1));
-        assertThat(voShopLocale.getDisplayTitles().size(), equalTo(1));
+        voShopSeo = voShopService.update(voShopSeo);
+        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(1));
+        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(1));
+        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(1));
 
-        voShopLocale.getDisplayMetadescriptions().clear();
-        voShopLocale.getDisplayMetakeywords().clear();
-        voShopLocale.getDisplayTitles().clear();
+        voShopSeo.getDisplayMetadescriptions().clear();
+        voShopSeo.getDisplayMetakeywords().clear();
+        voShopSeo.getDisplayTitles().clear();
 
-        voShopLocale = voShopService.update(voShopLocale);
-        assertThat(voShopLocale.getDisplayMetadescriptions().size(), equalTo(0));
-        assertThat(voShopLocale.getDisplayMetakeywords().size(), equalTo(0));
-        assertThat(voShopLocale.getDisplayTitles().size(), equalTo(0));
+        voShopSeo = voShopService.update(voShopSeo);
+        assertThat(voShopSeo.getDisplayMetadescriptions().size(), equalTo(0));
+        assertThat(voShopSeo.getDisplayMetakeywords().size(), equalTo(0));
+        assertThat(voShopSeo.getDisplayTitles().size(), equalTo(0));
     }
 
 

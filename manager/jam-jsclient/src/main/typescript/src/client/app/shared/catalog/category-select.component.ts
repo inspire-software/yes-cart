@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {ShopService, CategoryService, ShopEventBus, Util} from './../services/index';
+import {ShopService, CatalogService, ShopEventBus, Util} from './../services/index';
 import {CategoryVO, BasicCategoryVO} from './../model/index';
 import {TreeViewComponent, ITreeNode} from './../tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
@@ -48,7 +48,7 @@ export class CategorySelectComponent implements OnInit {
    * Construct shop catalogues panel.
    * @param _categoryService
    */
-  constructor(private _categoryService:CategoryService) {
+  constructor(private _categoryService:CatalogService) {
     console.debug('CategorySelectComponent constructed');
   }
 
@@ -105,7 +105,7 @@ export class CategorySelectComponent implements OnInit {
    */
   onSelectNode(node:ITreeNode) {
     console.debug('CategorySelectComponent selected node', node);
-    if (node.id !== '100' && node.disabled === false) {
+    if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
       this.validForSelect = true;

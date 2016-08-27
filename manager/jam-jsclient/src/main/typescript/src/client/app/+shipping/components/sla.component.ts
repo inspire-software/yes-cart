@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {CarrierSlaVO, PaymentGatewayInfoVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';
@@ -51,10 +52,10 @@ export class SlaComponent implements OnInit, OnDestroy {
     console.debug('SlaComponent constructed');
 
     this.slaForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-]+')])],
-      'maxDays': ['', Validators.compose([Validators.required, Validators.pattern('[0-9]+')])],
+      'code': ['', YcValidators.requiredValidCode],
+      'maxDays': ['', YcValidators.requiredPositiveWholeNumber],
       'slaType': ['', Validators.required],
-      'script': ['', Validators.pattern('\\S+.*\\S+')],
+      'script': ['', YcValidators.nonBlankTrimmed],
       'billingAddressNotRequired': [''],
       'deliveryAddressNotRequired': [''],
     });

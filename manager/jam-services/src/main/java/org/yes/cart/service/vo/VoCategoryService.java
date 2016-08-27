@@ -16,6 +16,8 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.misc.MutablePair;
+import org.yes.cart.domain.vo.VoAttrValueCategory;
 import org.yes.cart.domain.vo.VoCategory;
 
 import java.util.List;
@@ -49,11 +51,46 @@ public interface VoCategoryService {
     VoCategory getById(long id) throws Exception;
 
     /**
-     * Create new category..
+     * Update category.
+     * @param voCategory category
+     * @return persistent version
+     * @throws Exception
+     */
+    VoCategory update(VoCategory voCategory)  throws Exception;
+
+    /**
+     * Create new category.
      * @param voCategory category
      * @return persistent version
      * @throws Exception
      */
     VoCategory create(VoCategory voCategory)  throws Exception;
+
+    /**
+     * Remove category by id.
+     *
+     * @param id category
+     * @throws Exception
+     */
+    void remove(long id) throws Exception;
+
+
+    /**
+     * Get supported attributes by given category
+     * @param categoryId given category id
+     * @return attributes
+     * @throws Exception
+     */
+    List<VoAttrValueCategory> getCategoryAttributes(long categoryId) throws Exception;
+
+
+    /**
+     * Update the category attributes.
+     *
+     * @param vo category attributes to update, boolean indicates if this attribute is to be removed (true) or not (false)
+     * @return category attributes.
+     * @throws Exception
+     */
+    List<VoAttrValueCategory> update(List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception;
 
 }

@@ -29,7 +29,7 @@
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="shop.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="shopMainForm.controls['name'].valid || shopMainForm.controls['name'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">

@@ -71,13 +71,13 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     }
 
     public @ResponseBody
-    VoShopLocale getLocalization(@PathVariable("shopId") final long shopId) throws Exception {
+    VoShopSeo getLocalization(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopLocale(shopId);
     }
 
     public @ResponseBody
-    VoShopLocale update(@RequestBody final VoShopLocale voShopLocale) throws Exception {
-        return voShopService.update(voShopLocale);
+    VoShopSeo update(@RequestBody final VoShopSeo voShopSeo) throws Exception {
+        return voShopService.update(voShopSeo);
     }
 
     public @ResponseBody

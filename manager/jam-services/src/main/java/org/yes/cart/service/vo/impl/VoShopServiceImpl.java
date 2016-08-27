@@ -104,8 +104,8 @@ public class VoShopServiceImpl implements VoShopService {
                 )
         {
             @Override
-            protected Set<String> getSkipAttributesInView() {
-                return skipAttributesInView;
+            protected boolean skipAttributesInView(final String code) {
+                return skipAttributesInView.contains(code);
             }
 
             @Override
@@ -190,10 +190,10 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public VoShopLocale getShopLocale(long shopId) throws Exception {
+    public VoShopSeo getShopLocale(long shopId) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
-            return voAssemblySupport.assembleVo(VoShopLocale.class, ShopDTO.class, new VoShopLocale(), shopDTO);
+            return voAssemblySupport.assembleVo(VoShopSeo.class, ShopDTO.class, new VoShopSeo(), shopDTO);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -202,11 +202,11 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public VoShopLocale update(final VoShopLocale vo) throws Exception {
+    public VoShopSeo update(final VoShopSeo vo) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(vo.getShopId());
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             dtoShopService.update(
-                    voAssemblySupport.assembleDto(ShopDTO.class, VoShopLocale.class, shopDTO, vo)
+                    voAssemblySupport.assembleDto(ShopDTO.class, VoShopSeo.class, shopDTO, vo)
             );
         } else {
             throw new AccessDeniedException("Access is denied");

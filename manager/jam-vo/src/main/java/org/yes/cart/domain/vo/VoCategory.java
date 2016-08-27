@@ -17,6 +17,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
 
 import java.util.Date;
 import java.util.List;
@@ -38,10 +39,19 @@ public class VoCategory {
     @DtoField(value = "parentId")
     private long parentId;
 
+    @DtoField(value = "parentName", readOnly = true)
+    private String parentName;
+
+    @DtoField(value = "linkToId")
+    private Long linkToId;
+
+    @DtoField(value = "linkToName", readOnly = true)
+    private String linkToName;
+
     @DtoField(value = "rank")
     private int rank;
 
-    @DtoField(value = "productTypeId", readOnly = true)
+    @DtoField(value = "productTypeId")
     private Long productTypeId;
 
     @DtoField(value = "productTypeName", readOnly = true)
@@ -53,8 +63,8 @@ public class VoCategory {
     @DtoField(value = "guid")
     private String guid;
 
-    @DtoField(value = "displayNames")
-    private Map<String, String> displayNames;
+    @DtoField(value = "displayNames", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayNames;
 
     @DtoField(value = "description")
     private String description;
@@ -80,14 +90,14 @@ public class VoCategory {
     @DtoField(value = "metadescription")
     private String metadescription;
 
-    @DtoField(value = "displayTitles")
-    private Map<String, String> displayTitles;
+    @DtoField(value = "displayTitles", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayTitles;
 
-    @DtoField(value = "displayMetakeywords")
-    private Map<String, String> displayMetakeywords;
+    @DtoField(value = "displayMetakeywords", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayMetakeywords;
 
-    @DtoField(value = "displayMetadescriptions")
-    private Map<String, String> displayMetadescriptions;
+    @DtoField(value = "displayMetadescriptions", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayMetadescriptions;
 
     @DtoField(value = "navigationByAttributes")
     private Boolean navigationByAttributes;
@@ -135,6 +145,30 @@ public class VoCategory {
         this.parentId = parentId;
     }
 
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(final String parentName) {
+        this.parentName = parentName;
+    }
+
+    public Long getLinkToId() {
+        return linkToId;
+    }
+
+    public void setLinkToId(final Long linkToId) {
+        this.linkToId = linkToId;
+    }
+
+    public String getLinkToName() {
+        return linkToName;
+    }
+
+    public void setLinkToName(final String linkToName) {
+        this.linkToName = linkToName;
+    }
+
     public int getRank() {
         return rank;
     }
@@ -175,11 +209,11 @@ public class VoCategory {
         this.guid = guid;
     }
 
-    public Map<String, String> getDisplayNames() {
+    public List<MutablePair<String, String>> getDisplayNames() {
         return displayNames;
     }
 
-    public void setDisplayNames(Map<String, String> displayNames) {
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
         this.displayNames = displayNames;
     }
 
@@ -247,27 +281,27 @@ public class VoCategory {
         this.metadescription = metadescription;
     }
 
-    public Map<String, String> getDisplayTitles() {
+    public List<MutablePair<String, String>> getDisplayTitles() {
         return displayTitles;
     }
 
-    public void setDisplayTitles(Map<String, String> displayTitles) {
+    public void setDisplayTitles(final List<MutablePair<String, String>> displayTitles) {
         this.displayTitles = displayTitles;
     }
 
-    public Map<String, String> getDisplayMetakeywords() {
+    public List<MutablePair<String, String>> getDisplayMetakeywords() {
         return displayMetakeywords;
     }
 
-    public void setDisplayMetakeywords(Map<String, String> displayMetakeywords) {
+    public void setDisplayMetakeywords(final List<MutablePair<String, String>> displayMetakeywords) {
         this.displayMetakeywords = displayMetakeywords;
     }
 
-    public Map<String, String> getDisplayMetadescriptions() {
+    public List<MutablePair<String, String>> getDisplayMetadescriptions() {
         return displayMetadescriptions;
     }
 
-    public void setDisplayMetadescriptions(Map<String, String> displayMetadescriptions) {
+    public void setDisplayMetadescriptions(final List<MutablePair<String, String>> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
     }
 

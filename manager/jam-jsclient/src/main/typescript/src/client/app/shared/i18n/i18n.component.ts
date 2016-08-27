@@ -1,6 +1,7 @@
 import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from '@angular/core';
 import {NgClass, NgIf, NgFor} from '@angular/common';
 import {FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from '../validation/validators';
 
 import {Pair} from '../model/index';
 import {Util} from '../services/index';
@@ -38,10 +39,10 @@ export class I18nComponent {
   constructor(fb: FormBuilder) {
     console.debug('I18nComponent constructed', this.title);
     this.i18nForm = fb.group({
-       'addLang':  ['', Validators.pattern('[a-z]{2}')],
-       'addVal':  ['', Validators.pattern('\\S+.*\\S+')],
-       'dataValue':  ['', Validators.pattern('\\S+.*\\S+')],
-       'dataValueXL':  ['', Validators.pattern('\\S+.*\\S+')]
+       'addLang':  ['', YcValidators.validLanguageCode],
+       'addVal':  ['', YcValidators.nonBlankTrimmed],
+       'dataValue':  ['', YcValidators.nonBlankTrimmed],
+       'dataValueXL':  ['', YcValidators.nonBlankTrimmed]
     });
   }
 

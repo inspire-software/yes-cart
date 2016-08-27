@@ -41,6 +41,7 @@ public class CategoryDTOImpl implements CategoryDTO {
 
     @DtoField(value = "parentId")
     private long parentId;
+    private String parentName;
 
     @DtoField(value = "linkToId")
     private Long linkToId;
@@ -186,6 +187,20 @@ public class CategoryDTOImpl implements CategoryDTO {
      */
     public void setParentId(final long parentId) {
         this.parentId = parentId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getParentName() {
+        return parentName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setParentName(final String parentName) {
+        this.parentName = parentName;
     }
 
     /**

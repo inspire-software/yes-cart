@@ -31,7 +31,7 @@
                   <label>{{ 'CARRIERSLA_SCRIPT' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CARRIERSLA_SCRIPT' | translate }}" formControlName="script" name="script" type="text"    [(ngModel)]="sla.script" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="slaForm.controls['script'].valid || slaForm.controls['script'].pristine" class="alert alert-danger">
-                    {{ 'VALID_REQUIRED' | translate }}
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">

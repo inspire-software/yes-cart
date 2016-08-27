@@ -22,12 +22,12 @@
       <i class="fa fa-list"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || stateEdit != null || (selectedCountry == null && selectedState == null)" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="countryEdit != null || stateEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="countryEdit != null || stateEdit != null || (selectedCountry == null && selectedState == null)" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCountry == null || (countryEdit != null && countryEdit.countryId === 0)" class="btn btn-danger btn-circle btn-xl" >

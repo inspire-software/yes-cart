@@ -173,6 +173,12 @@ public class DtoCategoryServiceImpl
                 dto.setLinkToName(link.getName());
             }
         }
+        if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
+            final Category parent = ((CategoryService)getService()).getById(entity.getParentId());
+            if (parent != null) {
+                dto.setParentName(parent.getName());
+            }
+        }
         super.assemblyPostProcess(dto, entity);
     }
 

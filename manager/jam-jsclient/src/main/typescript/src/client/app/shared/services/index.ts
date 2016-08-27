@@ -6,7 +6,6 @@ export * from './shop-event-bus.service';
 export * from './i18n-event-bus.service';
 export * from './attribute.service';
 export * from './shop.service';
-export * from './category.service';
 export * from './catalog.service';
 export * from './management.service';
 export * from './location.service';

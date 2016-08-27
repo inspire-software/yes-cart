@@ -23,7 +23,7 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {
   ShopMainComponent,
-  ShopI18nComponent,
+  ShopSEOComponent,
   ShopCurrencyComponent,
   ShopLanguageComponent,
   ShopUrlComponent,
@@ -42,7 +42,7 @@ import {
   directives: [
     TAB_DIRECTIVES, NgIf,
     ShopMainComponent,
-    ShopI18nComponent,
+    ShopSEOComponent,
     ShopCurrencyComponent,
     ShopLanguageComponent,
     ShopUrlComponent,
@@ -64,7 +64,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
 
   private reloadCatalogue:boolean = false;
   private reloadAttributes:boolean = false;
-  private reloadI18n:boolean = false;
+  private reloadSEO:boolean = false;
   private reloadUrls:boolean = false;
   private reloadCarriers:boolean = false;
   private reloadWarehouse:boolean = false;
@@ -119,7 +119,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
 
     this.reloadCatalogue = tab === 'Catalogue';
     this.reloadAttributes = tab === 'Attributes';
-    this.reloadI18n = tab === 'I18n';
+    this.reloadSEO = tab === 'SEO';
     this.reloadUrls = tab === 'Urls';
     this.reloadCarriers = tab === 'Carriers';
     this.reloadWarehouse = tab === 'Warehouse';

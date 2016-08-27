@@ -24,6 +24,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.CatalogEndpointController;
 import org.yes.cart.service.vo.VoBrandService;
+import org.yes.cart.service.vo.VoCategoryService;
 import org.yes.cart.service.vo.VoProductTypeService;
 
 import java.util.List;
@@ -38,12 +39,15 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
 
     private final VoBrandService voBrandService;
     private final VoProductTypeService voProductTypeService;
+    private final VoCategoryService voCategoryService;
 
     @Autowired
     public CatalogEndpointControllerImpl(final VoBrandService voBrandService,
-                                         final VoProductTypeService voProductTypeService) {
+                                         final VoProductTypeService voProductTypeService,
+                                         final VoCategoryService voCategoryService) {
         this.voBrandService = voBrandService;
         this.voProductTypeService = voProductTypeService;
+        this.voCategoryService = voCategoryService;
     }
 
     public @ResponseBody
@@ -114,5 +118,47 @@ public class CatalogEndpointControllerImpl implements CatalogEndpointController 
     public @ResponseBody
     List<VoProductTypeAttr> updateProductType(@RequestBody final List<MutablePair<VoProductTypeAttr, Boolean>> vo) throws Exception {
         return voProductTypeService.update(vo);
+    }
+
+
+    public @ResponseBody
+    List<VoCategory> getAllCategories() throws Exception {
+        return voCategoryService.getAll();
+    }
+
+    public @ResponseBody
+    List<VoCategory> getFilteredCategories(@RequestBody final String filter,
+                                           @PathVariable("max") final int max) throws Exception {
+        return voCategoryService.getFiltered(filter, max);
+    }
+
+    public @ResponseBody
+    VoCategory createCategory(@RequestBody VoCategory voCategory) throws Exception {
+        return voCategoryService.create(voCategory);
+    }
+
+    public @ResponseBody
+    VoCategory getCategoryById(@PathVariable("id") final long id) throws Exception {
+        return voCategoryService.getById(id);
+    }
+
+    public @ResponseBody
+    VoCategory updateCategory(@RequestBody final VoCategory voCategory) throws Exception {
+        return voCategoryService.update(voCategory);
+    }
+
+    public @ResponseBody
+    void removeCategory(@PathVariable("id") final long id) throws Exception {
+        voCategoryService.remove(id);
+    }
+
+    public @ResponseBody
+    List<VoAttrValueCategory> getCategoryAttributes(@PathVariable("categoryId") final long categoryId) throws Exception {
+        return voCategoryService.getCategoryAttributes(categoryId);
+    }
+
+    public @ResponseBody
+    List<VoAttrValueCategory> updateCategory(@RequestBody final List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception {
+        return voCategoryService.update(vo);
     }
 }

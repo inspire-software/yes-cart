@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../../shared/validation/validators';
 import {EtypeVO, AttributeVO} from './../../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
 import {I18nComponent} from './../../../shared/i18n/index';
@@ -49,9 +50,9 @@ export class AttributeComponent implements OnInit, OnDestroy {
     console.debug('AttributeComponent constructed');
 
     this.attributeForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9\-_]+')])],
-      'etypeId': ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
-      'rank': ['', Validators.compose([Validators.required, Validators.pattern('\-?[0-9]+')])],
+      'code': ['', YcValidators.requiredValidCode],
+      'etypeId': ['', YcValidators.requiredPk],
+      'rank': ['', YcValidators.requiredRank],
       'description': [''],
       'val': [''],
       'mandatory': [''],

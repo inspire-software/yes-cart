@@ -68,7 +68,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         final Iterator<V> allIt = all.iterator();
         while (allIt.hasNext()) {
             final V next = allIt.next();
-            if (getSkipAttributesInView().contains(next.getAttribute().getCode())) {
+            if (skipAttributesInView(next.getAttribute().getCode())) {
                 allIt.remove();
             } else if (next.getAttrvalueId() > 0L && "Image".equals(next.getAttribute().getEtypeName())) {
                 if (StringUtils.isNotBlank(next.getVal())) {
@@ -88,7 +88,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
      *
      * @return set of attributes to skip
      */
-    protected abstract Set<String> getSkipAttributesInView();
+    protected abstract boolean skipAttributesInView(String code);
 
     /**
      * Update attribute values for a single master object.
@@ -119,7 +119,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
                 throw new AccessDeniedException("Access is denied");
             }
 
-            if (getSkipAttributesInView().contains(item.getFirst().getAttribute().getCode())) {
+            if (skipAttributesInView(item.getFirst().getAttribute().getCode())) {
                 ShopCodeContext.getLog(this).warn("Attribute {} value cannot be updated using general AV update ... skipped", item.getFirst().getAttribute().getCode());
                 continue;
             }

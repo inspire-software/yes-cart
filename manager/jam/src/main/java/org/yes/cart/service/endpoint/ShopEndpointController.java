@@ -65,12 +65,12 @@ public interface ShopEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/localization/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLocale getLocalization(@PathVariable("id") long id) throws Exception;
+    VoShopSeo getLocalization(@PathVariable("id") long id) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/localization", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoShopLocale update(@RequestBody VoShopLocale voShopLocale)  throws Exception;
+    VoShopSeo update(@RequestBody VoShopSeo voShopSeo)  throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/urls/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

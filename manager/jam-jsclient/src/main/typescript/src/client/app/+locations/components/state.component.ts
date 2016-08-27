@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {StateVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 
@@ -44,10 +45,10 @@ export class StateComponent implements OnInit, OnDestroy {
     console.debug('StateComponent constructed');
 
     this.stateForm = fb.group({
-      'countryCode': ['', Validators.compose([Validators.required, Validators.pattern('[A-Z]{2}')])],
-      'stateCode': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
-      'displayName': ['', Validators.pattern('\\S+.*\\S+')],
+      'countryCode': ['', YcValidators.requiredValidCountryCode],
+      'stateCode': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'displayName': ['', YcValidators.nonBlankTrimmed],
     });
 
     let that = this;

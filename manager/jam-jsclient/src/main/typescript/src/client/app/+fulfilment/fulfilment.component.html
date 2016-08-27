@@ -14,12 +14,12 @@
       <input class="filter-input" type="text" name="centreFilter" [(ngModel)]="centreFilter" autocomplete="off"/>
     </form>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="centreEdit != null || selectedCentre == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="centreEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="centreEdit != null || selectedCentre == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCentre == null || (centreEdit != null && centreEdit.warehouseId === 0)" class="btn btn-danger btn-circle btn-xl" >

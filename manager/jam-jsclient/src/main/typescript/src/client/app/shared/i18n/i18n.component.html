@@ -10,7 +10,7 @@
       <input class="form-control" formControlName="dataValue" name="dataValue" type="text" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()" [hidden]="!expandDefault">
       <textarea class="form-control" formControlName="dataValueXL" name="dataValue" rows="6" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()" [hidden]="expandDefault"></textarea>
       <div [hidden]="i18nForm.controls['dataValue'].valid || i18nForm.controls['dataValueXL'].valid || (i18nForm.controls['dataValue'].pristine && i18nForm.controls['dataValueXL'].pristine)" class="alert alert-danger">
-        {{ 'VALID_REQUIRED' | translate }}
+        {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
       </div>
     </div>
     <div class="col-xs-4 col-md-3">

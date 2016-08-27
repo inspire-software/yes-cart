@@ -1,7 +1,10 @@
 {
-  "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9 or -)",
+  "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _ or -)",
+  "ROLE_REQUIRED": "Correct role code is required (ROLE_ followed by A-Z or _)",
   "NUM_REQUIRED": "Correct numeric value is required",
-  "VALID_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
+  "DATE_REQUIRED": "Correct date value is required. E.g. 3rd Jan 2017 should be entered as 2017-01-03",
+  "NON_BLANK_TRIMMED_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
+  "NO_WHITESPACE_REQUIRED": "Correct value is required (no spaces)",
   "SIMPLE_REQUIRED": "Value is required",
   "COUNTRY_CODE_REQUIRED": "Two letter country code is required (ISO 3166-1 alpha-2)",
   "COUNTRY_ISO_REQUIRED": "Three number country code is required (ISO 3166-1 numeric)",
@@ -90,6 +93,7 @@
   "SEO_DESCRIPTION": "Meta description",
 
   "TAB_MAIN": "Main",
+  "TAB_SEO": "SEO",
   "TAB_I18N": "Localization",
   "TAB_ATTRIBUTES": "Attributes",
   "TAB_SHOPS": "Shops",
@@ -163,6 +167,7 @@
   "CATEGORY_NAV_PRICE": "Price navigation",
   "CATEGORY_FROM": "Available from",
   "CATEGORY_TO": "Available to",
+  "CATEGORY_PARENT": "Parent",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",

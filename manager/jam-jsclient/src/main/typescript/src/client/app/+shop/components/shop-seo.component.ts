@@ -16,39 +16,39 @@
 import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {ShopVO, ShopLocaleVO} from './../../shared/model/index';
+import {ShopVO, ShopSeoVO} from './../../shared/model/index';
 import {ShopService, ShopEventBus} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {Futures, Future} from './../../shared/event/index';
 
 @Component({
-  selector: 'yc-shop-i18n',
+  selector: 'yc-shop-seo',
   moduleId: module.id,
-  templateUrl: 'shop-i18n.component.html',
+  templateUrl: 'shop-seo.component.html',
   directives: [ I18nComponent, NgIf, REACTIVE_FORM_DIRECTIVES, DataControlComponent],
 })
 
-export class ShopI18nComponent implements OnInit, OnDestroy {
+export class ShopSEOComponent implements OnInit, OnDestroy {
 
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopLocalization:ShopLocaleVO;
+  shopLocalization:ShopSeoVO;
 
   changed:boolean = false;
   validForSave:boolean = false;
   validForm:boolean = false;
   delayedChange:Future;
 
-  shopI18nForm:any;
-  shopI18nFormSub:any;
+  shopSEOForm:any;
+  shopSEOFormSub:any;
 
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
-    console.debug('ShopI18nComponent constructed');
+    console.debug('ShopSEOComponent constructed');
 
-    this.shopI18nForm = fb.group({});
+    this.shopSEOForm = fb.group({});
 
     let that = this;
     this.delayedChange = Futures.perpetual(function() {
@@ -59,16 +59,16 @@ export class ShopI18nComponent implements OnInit, OnDestroy {
 
   formReset():void {
     // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.shopI18nForm.controls) {
-      this.shopI18nForm.controls[key]['_pristine'] = true;
-      this.shopI18nForm.controls[key]['_touched'] = false;
+    for(let key in this.shopSEOForm.controls) {
+      this.shopSEOForm.controls[key]['_pristine'] = true;
+      this.shopSEOForm.controls[key]['_touched'] = false;
     }
   }
 
 
   formBind():void {
-    this.shopI18nFormSub = this.shopI18nForm.valueChanges.subscribe((data:any) => {
-      this.validForm = this.shopI18nForm.valid;
+    this.shopSEOFormSub = this.shopSEOForm.valueChanges.subscribe((data:any) => {
+      this.validForm = this.shopSEOForm.valid;
       if (this.changed) {
         this.delayedChange.delay();
       }
@@ -77,15 +77,15 @@ export class ShopI18nComponent implements OnInit, OnDestroy {
 
 
   formUnbind():void {
-    if (this.shopI18nFormSub) {
-      console.debug('ShopI18nComponent unbining form');
-      this.shopI18nFormSub.unsubscribe();
+    if (this.shopSEOFormSub) {
+      console.debug('ShopSEOComponent unbining form');
+      this.shopSEOFormSub.unsubscribe();
     }
   }
 
   formChange():void {
     this.validForSave = this.validForm;
-    console.debug('ShopI18nComponent validating formGroup is valid: ' + this.validForSave, this.shopLocalization);
+    console.debug('ShopSEOComponent validating formGroup is valid: ' + this.validForSave, this.shopLocalization);
   }
 
   @Input()
@@ -109,25 +109,25 @@ export class ShopI18nComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopI18nComponent ngOnInit shop', this.shop);
+    console.debug('ShopSEOComponent ngOnInit shop', this.shop);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ShopI18nComponent ngOnDestroy');
+    console.debug('ShopSEOComponent ngOnDestroy');
     this.formUnbind();
   }
 
   onDataChanged() {
-    console.debug('ShopI18nComponent data change');
+    console.debug('ShopSEOComponent data change');
     this.changed = true;
   }
 
   onSaveHandler() {
-    console.debug('ShopI18nComponent Save handler', this.shop);
+    console.debug('ShopSEOComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLocalization) {
       var _sub:any = this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
-        console.debug('ShopI18nComponent Saved i18n', shopLocalization);
+        console.debug('ShopSEOComponent Saved i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
         this._reload = false;
@@ -138,10 +138,10 @@ export class ShopI18nComponent implements OnInit, OnDestroy {
   }
 
   onDiscardEvent() {
-    console.debug('ShopI18nComponent Discard handler for shop', this.shop);
+    console.debug('ShopSEOComponent Discard handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShopLocalization(this.shop.shopId).subscribe(shopLocalization => {
-        console.debug('ShopI18nComponent Refreshed i18n', shopLocalization);
+        console.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
         this.shopLocalization = shopLocalization;
         this.changed = false;
         this._reload = false;
@@ -156,7 +156,7 @@ export class ShopI18nComponent implements OnInit, OnDestroy {
   }
 
   onRefreshHandler() {
-    console.debug('ShopI18nComponent Refresh handler');
+    console.debug('ShopSEOComponent Refresh handler');
     this.onDiscardEvent();
   }
 

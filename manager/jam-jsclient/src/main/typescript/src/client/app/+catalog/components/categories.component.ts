@@ -114,7 +114,14 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected getUri(row:CategoryVO) {
     if (row.uri) {
-      return '<i  title="' + row.uri + '" class="fa fa-link"></i>';
+      return '<i  title="' + row.uri + '" class="fa fa-globe"></i>';
+    }
+    return '';
+  }
+
+  protected getLink(row:CategoryVO) {
+    if (row.linkToId > 0) {
+      return '<i  title="' + row.linkToName + '" class="fa fa-link"></i>';
     }
     return '';
   }

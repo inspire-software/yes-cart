@@ -112,4 +112,46 @@ public interface CatalogEndpointController {
 
 
 
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCategory> getAllCategories() throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCategory> getFilteredCategories(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCategory getCategoryById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCategory createCategory(@RequestBody VoCategory voCategory) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCategory updateCategory(@RequestBody VoCategory voCategory) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeCategory(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/attributes/{categoryId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueCategory> getCategoryAttributes(@PathVariable("categoryId") long categoryId) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/category/attributes", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoAttrValueCategory> updateCategory(@RequestBody List<MutablePair<VoAttrValueCategory, Boolean>> vo) throws Exception;
+
 }

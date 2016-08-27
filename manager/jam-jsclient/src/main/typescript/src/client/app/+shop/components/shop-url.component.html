@@ -10,12 +10,12 @@
       <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >

@@ -14,12 +14,12 @@
       <input class="filter-input" type="text" name="roleFilter" [(ngModel)]="roleFilter" autocomplete="off"/>
     </form>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="roleEdit != null || selectedRole == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="roleEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="roleEdit != null || selectedRole == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRole == null || (roleEdit != null && roleEdit.roleId === 0)" class="btn btn-danger btn-circle btn-xl" >

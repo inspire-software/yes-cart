@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair} from '../model/index';
+import {BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -219,6 +219,124 @@ export class CatalogService {
       .catch(this.handleError);
   }
 
+
+  /**
+   * Get list of all categories, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAllCategories() {
+    return this.http.get(this._serviceBaseUrl + '/category/all')
+      .map(res => <CategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get list of all filtered categories, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredCategories(filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/category/filtered/' + max, body, options)
+      .map(res => <CategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get category, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getCategoryById(categoryId:number) {
+    return this.http.get(this._serviceBaseUrl + '/category/' + categoryId)
+      .map(res => <BrandVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Create category on the fly.
+   * @param newCat name of category
+   * @param parentId parent id
+   * @returns {Observable<R>}
+   */
+  createCategory(newCat:BasicCategoryVO, parentId : number) {
+    var cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
+    let body = JSON.stringify(cat);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this._serviceBaseUrl + '/category', body, options)
+      .map(res => <CategoryVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Create/update category.
+   * @param category category
+   * @returns {Observable<R>}
+   */
+  saveCategory(category:CategoryVO) {
+
+    let body = JSON.stringify(category);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (category.categoryId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/category', body, options)
+        .map(res => <CategoryVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/category', body, options)
+        .map(res => <CategoryVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+
+  /**
+   * Remove category.
+   * @param category category
+   * @returns {Observable<R>}
+   */
+  removeCategory(category:CategoryVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/category/' + category.categoryId, options)
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get attributes for given category id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getCategoryAttributes(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/category/attributes/' + id)
+      .map(res => <AttrValueCategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Update supported attributes.
+   * @param attrs
+   * @returns {Observable<R>}
+   */
+  saveCategoryAttributes(attrs:Array<Pair<AttrValueCategoryVO, boolean>>) {
+    let body = JSON.stringify(attrs);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this._serviceBaseUrl + '/category/attributes', body, options)
+      .map(res => <AttrValueCategoryVO[]> res.json())
+      .catch(this.handleError);
+  }
 
 
 

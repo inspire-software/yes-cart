@@ -1,0 +1,113 @@
+<template [ngIf]="category">
+
+  <form role="form" [formGroup]="categoryForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_PARENT' | translate }}</label>
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'CATEGORY_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="category.parentName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onEditParent()" class="btn btn-circle">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="categoryForm.controls['parentName'].valid || categoryForm.controls['parentName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="category.guid" (ngModelChange)="onMainDataChange($event)"/>
+                  <div [hidden]="categoryForm.controls['guid'].valid || categoryForm.controls['guid'].pristine" class="alert alert-danger">
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="category"
+                             value="name"
+                             defaultRequired="true"
+                             i18n="displayNames"
+                             [formGroup]="categoryForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="category.description" (ngModelChange)="onMainDataChange($event)"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="category.rank" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="categoryForm.controls['rank'].valid || categoryForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+
+        <template [ngIf]="category.categoryId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                </form>
+
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <yc-attribute-values #attributeValuesComponent
+                                   [masterObject]="category"
+                                   [objectAttributes]="attributes"
+                                   [attributeFilter]="attributeFilter"
+                                   (dataSelected)="onSelectRow($event)"
+                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>
+
+<yc-category-select #categoryParentSelectComponent
+                    (dataSelected)="onCategoryParentSelected($event)"></yc-category-select>
+

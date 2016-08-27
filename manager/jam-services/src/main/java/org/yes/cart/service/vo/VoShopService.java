@@ -77,7 +77,7 @@ public interface VoShopService {
      * @return localization information
      * @throws Exception
      */
-    VoShopLocale getShopLocale(long shopId) throws Exception;
+    VoShopSeo getShopLocale(long shopId) throws Exception;
 
     /**
      * Update localization information.
@@ -86,7 +86,7 @@ public interface VoShopService {
      * @return localization information
      * @throws Exception
      */
-    VoShopLocale update(final VoShopLocale vo) throws Exception;
+    VoShopSeo update(final VoShopSeo vo) throws Exception;
 
     /**
      * Get urls for shop.

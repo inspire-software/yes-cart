@@ -8,7 +8,7 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 
 import {
   ErrorEventBus, ShopEventBus, I18nEventBus,
-  ShopService, CategoryService,
+  ShopService,
   ShippingService, LocationService,
   OrganisationService,
   CatalogService,
@@ -77,7 +77,6 @@ bootstrap(AppComponent, [
   ShopEventBus,
   I18nEventBus,
   ShopService,
-  CategoryService,
   ShippingService,
   LocationService,
   OrganisationService,

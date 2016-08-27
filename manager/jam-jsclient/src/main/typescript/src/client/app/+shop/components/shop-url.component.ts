@@ -16,12 +16,12 @@
 import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
 import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {ShopVO, ShopUrlVO, UrlVO} from './../../shared/model/index';
 import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {YcValidators} from './../../shared/validation/validators';
 import {Futures, Future} from './../../shared/event/index';
 import {Config} from './../../shared/config/env.config';
 
@@ -82,7 +82,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     this.urlToEdit = this.newUrlInstance();
 
     this.shopUrlForm = fb.group({
-      'url': ['', Validators.compose([Validators.required, YcValidators.validDomainName])],
+      'url': ['', YcValidators.requiredValidDomainName],
       'theme': [''],
       'primary': [''],
     });

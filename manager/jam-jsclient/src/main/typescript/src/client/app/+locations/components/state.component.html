@@ -16,21 +16,21 @@
               <label>{{ 'LOCATION_STATE_CODE' | translate }}</label>
               <input autofocus class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="state.stateCode" (ngModelChange)="onDataChange($event)">
               <div [hidden]="stateForm.controls['stateCode'].valid || stateForm.controls['stateCode'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="state.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="stateForm.controls['name'].valid || stateForm.controls['name'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
               <label>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</label>
               <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text" [(ngModel)]="state.displayName" (ngModelChange)="onDataChange($event)">
               <div [hidden]="stateForm.controls['displayName'].valid || stateForm.controls['displayName'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
           </fieldset>

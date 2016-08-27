@@ -15,7 +15,8 @@
  */
 import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {ShopService, CategoryService, ShopEventBus, Util} from './../../shared/services/index';
+import {YcValidators} from './../../shared/validation/validators';
+import {ShopService, CatalogService, ShopEventBus, Util} from './../../shared/services/index';
 import {ShopVO, CategoryVO, BasicCategoryVO} from './../../shared/model/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
@@ -59,7 +60,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param _shopService
    * @param _routeParams
    */
-  constructor(private _categoryService:CategoryService,
+  constructor(private _categoryService:CatalogService,
               private _shopService:ShopService,
               fb: FormBuilder) {
     console.debug('ShopCatalogComponent constructed');
@@ -67,8 +68,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     this.newCategory = this.newCategoryInstance();
 
     this.newCategoryForm = fb.group({
-      'guid': ['', Validators.pattern('[A-Za-z0-9\-]+')],
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'guid': ['', YcValidators.validCode],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
   }
 
@@ -265,7 +266,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    */
   onSelectNode(node:ITreeNode) {
     console.debug('ShopCatalogComponent selected node', node);
-    if (node.id !== '100' && node.disabled === false) {
+    if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
     }

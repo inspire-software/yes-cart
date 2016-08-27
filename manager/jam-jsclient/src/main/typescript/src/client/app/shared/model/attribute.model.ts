@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {Pair} from './common.model';
+
 export interface EtypeVO {
 
   etypeId : number;
@@ -42,7 +44,7 @@ export interface AttributeVO {
   name : string;
   description : string;
 
-  displayNames :  any;
+  displayNames :  Pair<string, string>[];
 
   etypeId : number;
   etypeName : string;
@@ -72,7 +74,7 @@ export interface AttrValueVO {
   attrvalueId : number;
 
   val : string;
-  displayVals :  any;
+  displayVals :  Pair<string, string>[];
   valBase64Data : string;
 
   attribute :  AttributeVO;

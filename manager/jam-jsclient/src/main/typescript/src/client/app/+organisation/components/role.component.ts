@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {RoleVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 
@@ -44,7 +45,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     console.debug('RoleComponent constructed');
 
     this.roleForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'code': ['', YcValidators.requiredValidRole],
       'description': [''],
     });
 

@@ -9,7 +9,7 @@
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
   </div>
 
-  <form role="form" [formGroup]="shopI18nForm">
+  <form role="form" [formGroup]="shopSEOForm">
 
     <div class="panel-body">
       <div class="row">
@@ -18,7 +18,7 @@
                          [source]="shopLocalization"
                          value="title"
                          i18n="displayTitles"
-                         [formGroup]="shopI18nForm"
+                         [formGroup]="shopSEOForm"
                          (dataChanged)="onDataChanged()"></yc-i18n-table>
         </div>
       </div>
@@ -29,7 +29,7 @@
                          [source]="shopLocalization"
                          value="metakeywords"
                          i18n="displayMetakeywords"
-                         [formGroup]="shopI18nForm"
+                         [formGroup]="shopSEOForm"
                          (dataChanged)="onDataChanged()"></yc-i18n-table>
         </div>
       </div>
@@ -40,7 +40,7 @@
                          [source]="shopLocalization"
                          value="metadescription"
                          i18n="displayMetadescriptions"
-                         [formGroup]="shopI18nForm"
+                         [formGroup]="shopSEOForm"
                          (dataChanged)="onDataChanged()"></yc-i18n-table>
         </div>
       </div>

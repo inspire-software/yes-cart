@@ -23,14 +23,14 @@
               <label>{{ 'NAME' | translate }}</label>
               <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="country.name" (ngModelChange)="onDataChange($event)">
               <div [hidden]="countryForm.controls['name'].valid || countryForm.controls['name'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
               <label>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</label>
               <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text" [(ngModel)]="country.displayName" (ngModelChange)="onDataChange($event)">
               <div [hidden]="countryForm.controls['displayName'].valid || countryForm.controls['displayName'].pristine" class="alert alert-danger">
-                {{ 'VALID_REQUIRED' | translate }}
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
           </fieldset>

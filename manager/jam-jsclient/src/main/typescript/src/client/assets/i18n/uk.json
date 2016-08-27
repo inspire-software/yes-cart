@@ -1,7 +1,10 @@
 {
-  "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9 or -)",
+  "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _ or -)",
+  "ROLE_REQUIRED": "Correct role code is required (ROLE_ followed by A-Z or _)",
   "NUM_REQUIRED": "Correct numeric value is required",
-  "VALID_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
+  "DATE_REQUIRED": "Correct date value is required. E.g. 3rd Jan 2017 should be entered as 2017-01-03",
+  "NON_BLANK_TRIMMED_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
+  "NO_WHITESPACE_REQUIRED": "Correct value is required (no spaces)",
   "SIMPLE_REQUIRED": "Value is required",
   "COUNTRY_CODE_REQUIRED": "Two letter country code is required (ISO 3166-1 alpha-2)",
   "COUNTRY_ISO_REQUIRED": "Three number country code is required (ISO 3166-1 numeric)",
@@ -163,6 +166,7 @@
   "CATEGORY_NAV_PRICE": "Price navigation",
   "CATEGORY_FROM": "Available from",
   "CATEGORY_TO": "Available to",
+  "CATEGORY_PARENT": "Parent",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",
@@ -195,6 +199,22 @@
   "PG_FEATURE_DETAILS": "Details are stored with payment",
   "PG_FEATURE_CAPTURE_MORE": "Capture more supported",
   "PG_FEATURE_CAPTURE_LESS": "Capture less supported",
-  "PG_FEATURE_AUTH_SHIP": "Authorisation is per delivery (default per order)"
+  "PG_FEATURE_AUTH_SHIP": "Authorisation is per delivery (default per order)",
+
+  "PRODUCT_TYPE_UITEMPLATE": "Product template",
+  "PRODUCT_TYPE_UISEARCHTEMPLATE": "Category template",
+  "PRODUCT_TYPE_FLAGS": "Configurations",
+  "PRODUCT_TYPE_FLAG_ENSEMBLE": "Ensenble",
+  "PRODUCT_TYPE_FLAG_SHIPPABLE": "Shippable",
+  "PRODUCT_TYPE_FLAG_DOWNLOADABLE": "Downloadable",
+  "PRODUCT_TYPE_FLAG_DIGITAL": "Digital",
+  "PRODUCT_TYPE_ATTR_CONFIG": "Configuration",
+  "PRODUCT_TYPE_ATTR_CONFIG_VISIBLE": "Visible",
+  "PRODUCT_TYPE_ATTR_CONFIG_SIMILARITY": "Similarity",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S": "Single",
+  "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Range",
+  "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Selected attribute is already assigned to this type",
+
+  "PRODUCT_TYPE_TAB_GROUPS": "Attribute Groups"
 
 }

@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
@@ -50,13 +51,13 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
     console.debug('FulfilmentCentreComponent constructed');
 
     this.centreForm = fb.group({
-      'code': ['', Validators.compose([Validators.required, Validators.pattern('[A-Za-z0-9]+')])],
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'code': ['', YcValidators.requiredValidCode],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
-      'countryCode': ['', Validators.pattern('[A-Z]{2}')],
-      'stateCode': ['', Validators.pattern('\\S+.*\\S+')],
-      'city': ['', Validators.pattern('\\S+.*\\S+')],
-      'postcode': ['', Validators.pattern('\\S+.*\\S+')],
+      'countryCode': ['', YcValidators.validCountryCode],
+      'stateCode': ['', YcValidators.nonBlankTrimmed],
+      'city': ['', YcValidators.nonBlankTrimmed],
+      'postcode': ['', YcValidators.nonBlankTrimmed],
     });
 
     let that = this;

@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 
+import {Pair} from './common.model';
 import {AttrValueVO, AttributeVO} from './attribute.model';
 
 export interface BrandVO {
@@ -57,14 +58,14 @@ export interface ProductTypeViewGroupVO {
   rank : number;
 
   name : string;
-  displayNames : any;
+  displayNames : Pair<string, string>[];
 
 }
 
 export interface ProductTypeAttrNavigationRangeVO {
 
   range : string;
-  displayVals : any;
+  displayVals : Pair<string, string>[];
 
 }
 
@@ -98,5 +99,75 @@ export interface ProductTypeAttrVO {
 export interface ProductTypeVO extends ProductTypeInfoVO {
 
   viewGroups : ProductTypeViewGroupVO[];
+
+}
+
+export interface BasicCategoryVO {
+
+  name : string;
+
+  guid  : string;
+
+}
+
+export interface CategoryVO {
+
+  categoryId : number;
+
+  parentId : number;
+  parentName : string;
+
+  linkToId : number;
+  linkToName : string;
+
+  rank : number;
+
+  productTypeId : number;
+  productTypeName : string;
+
+  name : string;
+
+  guid  : string;
+
+  displayNames :  Pair<string, string>[];
+
+  description : string;
+
+  uitemplate  : string;
+
+  availablefrom : Date;
+
+  availableto : Date;
+
+  uri  : string;
+
+  title  : string;
+
+  metakeywords  : string;
+
+  metadescription  : string;
+
+  displayTitles : Pair<string, string>[];
+
+  displayMetakeywords : Pair<string, string>[];
+
+  displayMetadescriptions : Pair<string, string>[];
+
+  navigationByAttributes : boolean;
+
+  navigationByBrand : boolean;
+
+  navigationByPrice : boolean;
+
+  navigationByPriceTiers  : string;
+
+  children : Array<CategoryVO>;
+
+}
+
+
+export interface AttrValueCategoryVO extends AttrValueVO {
+
+  categoryId : number;
 
 }

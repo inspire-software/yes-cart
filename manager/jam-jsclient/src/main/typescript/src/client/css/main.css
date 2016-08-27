@@ -424,6 +424,11 @@ table.dataTable thead .sorting:after {
   max-width: 400px;
 }
 
+.av-image-preview {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
 .av-image-preview img {
   width: 100%;
 }

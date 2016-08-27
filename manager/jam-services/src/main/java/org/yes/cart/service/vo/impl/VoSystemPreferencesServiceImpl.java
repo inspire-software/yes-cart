@@ -76,8 +76,8 @@ public class VoSystemPreferencesServiceImpl implements VoSystemPreferencesServic
                 )
         {
             @Override
-            protected Set<String> getSkipAttributesInView() {
-                return skipAttributesInView;
+            protected boolean skipAttributesInView(final String code) {
+                return skipAttributesInView.contains(code);
             }
 
             @Override

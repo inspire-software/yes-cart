@@ -16,6 +16,7 @@
 import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {YcValidators} from './../../shared/validation/validators';
 import {ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {ProductTypeGroupComponent} from './product-type-group.component';
@@ -59,10 +60,10 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
     console.debug('ProductTypeComponent constructed');
 
     this.productTypeForm = fb.group({
-      'name': ['', Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')])],
+      'name': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
-      'uitemplate': ['', Validators.pattern('\\S+')],
-      'uisearchtemplate': ['', Validators.pattern('\\S+')],
+      'uitemplate': ['', YcValidators.noWhitespace],
+      'uisearchtemplate': ['', YcValidators.noWhitespace],
       'ensemble': [''],
       'shippable': [''],
       'downloadable': [''],
