@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
+import {FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -50,8 +50,34 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
   constructor(fb: FormBuilder) {
     console.debug('FulfilmentCentreComponent constructed');
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let basic = Validators.required(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (!that.changed || that._centre == null) {
+          return null;
+        }
+
+        basic = YcValidators.validCode(control);
+        if (basic == null) {
+          var req:ValidationRequestVO = {
+            subject: 'warehouse',
+            subjectId: that._centre.warehouseId,
+            field: 'code',
+            value: code
+          };
+          return YcValidators.validRemoteCheck(control, req);
+        }
+      }
+      return basic;
+    };
+
     this.centreForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
       'countryCode': ['', YcValidators.validCountryCode],
@@ -60,7 +86,6 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       'postcode': ['', YcValidators.nonBlankTrimmed],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);

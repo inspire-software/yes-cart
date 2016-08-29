@@ -12,6 +12,12 @@
                   <label>{{ 'CARRIERSLA_CODE' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'CARRIERSLA_CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="sla.code" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="slaForm.controls['code'].valid || slaForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!slaForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!slaForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>

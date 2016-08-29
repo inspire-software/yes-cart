@@ -50,6 +50,12 @@
           <div class="col-lg-9">
             <input class="form-control" formControlName="code" name="newCentreCode" type="text" [(ngModel)]="newCentre.code" (ngModelChange)="onFormDataChange($event)">
             <div [hidden]="newCentreForm.controls['code'].valid || newCentreForm.controls['code'].pristine" class="alert alert-danger">
+              <div [hidden]="!newCentreForm.controls['code'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!newCentreForm.controls['code'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
               {{ 'ALPHANUM_REQUIRED' | translate }}
             </div>
           </div>

@@ -16,25 +16,31 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
+import org.hibernate.criterion.Restrictions;
+import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.vo.VoValidationService;
+
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceWarehouseCodeImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final CategoryService categoryService;
+    private final WarehouseService warehouseService;
 
-    public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceWarehouseCodeImpl(final WarehouseService warehouseService) {
+        this.warehouseService = warehouseService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findCategoryIdBySeoUri(valueToCheck);
-        return catId != null && !catId.equals(currentId) ? catId : null;
+        final List<Warehouse> wh = this.warehouseService.findByCriteria(Restrictions.eq("code", valueToCheck));
+        return wh != null && wh.size() > 0 && wh.get(0).getWarehouseId() != currentId ? wh.get(0).getWarehouseId() : null;
     }
 }

@@ -39,6 +39,12 @@
           <div class="col-lg-9">
             <input class="form-control" formControlName="guid" name="newCategoryCode" type="text" [(ngModel)]="newCategory.guid" (ngModelChange)="onFormDataChange($event)">
             <div [hidden]="newCategoryForm.controls['guid'].valid || newCategoryForm.controls['guid'].pristine" class="alert alert-danger">
+              <div [hidden]="!newCategoryForm.controls['guid'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!newCategoryForm.controls['guid'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
               {{ 'ALPHANUM_REQUIRED' | translate }}
             </div>
           </div>

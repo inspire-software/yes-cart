@@ -16,7 +16,8 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoValidationService;
 
 /**
@@ -24,17 +25,17 @@ import org.yes.cart.service.vo.VoValidationService;
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceAttributeCodeImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final CategoryService categoryService;
+    private final AttributeService categoryService;
 
-    public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
+    public VoValidationServiceAttributeCodeImpl(final AttributeService categoryService) {
         this.categoryService = categoryService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findCategoryIdBySeoUri(valueToCheck);
-        return catId != null && !catId.equals(currentId) ? catId : null;
+        final Attribute attr = this.categoryService.findByAttributeCode(valueToCheck);
+        return attr != null && attr.getAttributeId() != currentId ? attr.getAttributeId() : null;
     }
 }

@@ -16,25 +16,31 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
+import org.hibernate.criterion.Restrictions;
+import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.vo.VoValidationService;
+
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceProductTypeGUIDImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final CategoryService categoryService;
+    private final ProductTypeService productTypeService;
 
-    public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceProductTypeGUIDImpl(final ProductTypeService productTypeService) {
+        this.productTypeService = productTypeService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findCategoryIdBySeoUri(valueToCheck);
-        return catId != null && !catId.equals(currentId) ? catId : null;
+        final List<ProductType> type = this.productTypeService.findByCriteria(Restrictions.eq("guid", valueToCheck));
+        return type != null && type.size() > 0 && type.get(0).getProducttypeId() != currentId ? type.get(0).getProducttypeId() : null;
     }
 }

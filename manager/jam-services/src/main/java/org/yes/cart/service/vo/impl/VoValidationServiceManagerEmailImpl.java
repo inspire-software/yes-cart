@@ -16,25 +16,28 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
+import org.yes.cart.domain.entity.Manager;
+import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.vo.VoValidationService;
+
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceManagerEmailImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final CategoryService categoryService;
+    private final ManagerService managerService;
 
-    public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceManagerEmailImpl(final ManagerService managerService) {
+        this.managerService = managerService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findCategoryIdBySeoUri(valueToCheck);
-        return catId != null && !catId.equals(currentId) ? catId : null;
+        final List<Manager> managers = this.managerService.findByEmail(valueToCheck);
+        return managers != null && managers.size() > 0 && managers.get(0).getManagerId() != currentId ? managers.get(0).getManagerId() : null;
     }
 }

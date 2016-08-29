@@ -157,6 +157,51 @@
                         </entry>
                     </map>
                 </entry>
+                <entry key="attribute">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceAttributeCodeImpl">
+                                <constructor-arg index="0" ref="attributeService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="carriersla">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierSlaGUIDImpl">
+                                <constructor-arg index="0" ref="carrierSlaService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="manager">
+                    <map>
+                        <entry key="email">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceManagerEmailImpl">
+                                <constructor-arg index="0" ref="managerService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="producttype">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductTypeGUIDImpl">
+                                <constructor-arg index="0" ref="productTypeService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="warehouse">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceWarehouseCodeImpl">
+                                <constructor-arg index="0" ref="warehouseService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

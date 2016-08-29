@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../../shared/validation/validators';
-import {EtypeVO, AttributeVO} from './../../../shared/model/index';
+import {EtypeVO, AttributeVO, ValidationRequestVO} from './../../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
 import {I18nComponent} from './../../../shared/i18n/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
@@ -49,8 +49,34 @@ export class AttributeComponent implements OnInit, OnDestroy {
   constructor(fb: FormBuilder) {
     console.debug('AttributeComponent constructed');
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let basic = Validators.required(control);
+      if (basic == null) {
+        let code = control.value;
+        if (!that.changed || that._attribute == null) {
+          return null;
+        }
+
+        basic = YcValidators.validCode(control);
+        if (basic == null) {
+          var req:ValidationRequestVO = {
+            subject: 'attribute',
+            subjectId: that._attribute.attributeId,
+            field: 'code',
+            value: code
+          };
+          return YcValidators.validRemoteCheck(control, req);
+        }
+      }
+      return basic;
+    };
+
+
     this.attributeForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'etypeId': ['', YcValidators.requiredPk],
       'rank': ['', YcValidators.requiredRank],
       'description': [''],
@@ -65,7 +91,6 @@ export class AttributeComponent implements OnInit, OnDestroy {
       'navigation': [''],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);

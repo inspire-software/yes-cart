@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angula
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {CarrierSlaVO, PaymentGatewayInfoVO} from './../../shared/model/index';
+import {CarrierSlaVO, PaymentGatewayInfoVO, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
@@ -51,8 +51,34 @@ export class SlaComponent implements OnInit, OnDestroy {
   constructor(fb: FormBuilder) {
     console.debug('SlaComponent constructed');
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let basic = Validators.required(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (!that.changed || that._sla == null) {
+          return null;
+        }
+
+        basic = YcValidators.validCode(control);
+        if (basic == null) {
+          var req:ValidationRequestVO = {
+            subject: 'carriersla',
+            subjectId: that._sla.carrierslaId,
+            field: 'guid',
+            value: code
+          };
+          return YcValidators.validRemoteCheck(control, req);
+        }
+      }
+      return basic;
+    };
+
     this.slaForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'maxDays': ['', YcValidators.requiredPositiveWholeNumber],
       'slaType': ['', Validators.required],
       'script': ['', YcValidators.nonBlankTrimmed],
@@ -60,7 +86,6 @@ export class SlaComponent implements OnInit, OnDestroy {
       'deliveryAddressNotRequired': [''],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);

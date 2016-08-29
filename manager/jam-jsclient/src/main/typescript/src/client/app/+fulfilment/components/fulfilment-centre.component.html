@@ -13,6 +13,12 @@
                   <label>{{ 'CODE' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="centre.code" (ngModelChange)="onDataChange($event)">
                   <div [hidden]="centreForm.controls['code'].valid || centreForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!centreForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!centreForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>

@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angula
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopService, CatalogService, ShopEventBus, Util} from './../../shared/services/index';
-import {ShopVO, CategoryVO, BasicCategoryVO} from './../../shared/model/index';
+import {ShopVO, CategoryVO, BasicCategoryVO, ValidationRequestVO} from './../../shared/model/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
@@ -67,8 +67,26 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
     this.newCategory = this.newCategoryInstance();
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let code = control.value;
+      if (!that.changedSingle || code == null || code == '' || that.newCategory == null) {
+        return null;
+      }
+
+      let basic = YcValidators.validCode(control);
+      if (basic == null) {
+        var req:ValidationRequestVO = { subject: 'category', subjectId: 0, field: 'guid', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+
     this.newCategoryForm = fb.group({
-      'guid': ['', YcValidators.validCode],
+      'guid': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
   }

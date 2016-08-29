@@ -16,25 +16,31 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
+import org.hibernate.criterion.Restrictions;
+import org.yes.cart.domain.entity.CarrierSla;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.vo.VoValidationService;
+
+import java.util.List;
 
 /**
  * User: denispavlov
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceCarrierSlaGUIDImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final CategoryService categoryService;
+    private final CarrierSlaService carrierSlaService;
 
-    public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceCarrierSlaGUIDImpl(final CarrierSlaService carrierSlaService) {
+        this.carrierSlaService = carrierSlaService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findCategoryIdBySeoUri(valueToCheck);
-        return catId != null && !catId.equals(currentId) ? catId : null;
+        final List<CarrierSla> sla = this.carrierSlaService.findByCriteria(Restrictions.eq("guid", valueToCheck));
+        return sla != null && sla.size() > 0 && sla.get(0).getCarrierslaId() != currentId ? sla.get(0).getCarrierslaId() : null;
     }
 }

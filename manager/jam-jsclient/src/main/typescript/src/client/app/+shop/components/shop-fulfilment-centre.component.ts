@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angula
 import {NgIf, NgFor} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO} from './../../shared/model/index';
+import {ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO, ValidationRequestVO} from './../../shared/model/index';
 import {FulfilmentService, ShopEventBus, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
@@ -54,8 +54,34 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
     this.newCentre = this.newCentreInstance();
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let basic = Validators.required(control);
+
+      if (basic == null) {
+        let code = control.value;
+        if (!that.changedSingle || that.newCentre == null) {
+          return null;
+        }
+
+        basic = YcValidators.validCode(control);
+        if (basic == null) {
+          var req:ValidationRequestVO = {
+            subject: 'warehouse',
+            subjectId: 0,
+            field: 'code',
+            value: code
+          };
+          return YcValidators.validRemoteCheck(control, req);
+        }
+      }
+      return basic;
+    };
+
     this.newCentreForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
     });
   }
