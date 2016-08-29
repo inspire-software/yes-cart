@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} fr
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair} from './../../shared/model/index';
+import {ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {ProductTypeGroupComponent} from './product-type-group.component';
 import {ProductTypeAttributeComponent} from './product-type-attribute.component';
@@ -59,7 +59,26 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   constructor(fb: FormBuilder) {
     console.debug('ProductTypeComponent constructed');
 
+    let that = this;
+
+    let validCode = function(control:any):any {
+
+      let code = control.value;
+      if (!that.changed || code == null || code == '' || that._productType == null) {
+        return null;
+      }
+
+      let basic = YcValidators.validCode(control);
+      if (basic == null) {
+        var req:ValidationRequestVO = { subject: 'producttype', subjectId: that._productType.producttypeId, field: 'guid', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+
     this.productTypeForm = fb.group({
+      'guid': ['', validCode],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
       'description': [''],
       'uitemplate': ['', YcValidators.noWhitespace],
@@ -70,7 +89,6 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
       'digital': [''],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);

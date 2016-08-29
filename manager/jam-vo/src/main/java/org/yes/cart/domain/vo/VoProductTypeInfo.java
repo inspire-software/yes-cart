@@ -32,6 +32,9 @@ public class VoProductTypeInfo {
     @DtoField(value = "name")
     private String name;
 
+    @DtoField(value = "guid")
+    private String guid;
+
     @DtoField(value = "description")
     private String description;
 
@@ -70,6 +73,14 @@ public class VoProductTypeInfo {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(final String guid) {
+        this.guid = guid;
     }
 
     public String getDescription() {

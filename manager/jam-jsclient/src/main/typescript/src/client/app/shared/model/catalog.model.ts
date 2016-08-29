@@ -35,6 +35,8 @@ export interface ProductTypeInfoVO {
 
   producttypeId : number;
 
+  guid  : string;
+
   name : string;
   description : string;
 

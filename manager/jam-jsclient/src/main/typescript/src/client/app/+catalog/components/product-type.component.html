@@ -10,6 +10,19 @@
             <div class="panel-body">
               <fieldset>
                 <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="productType.guid" (ngModelChange)="onMainDataChange($event)"/>
+                  <div [hidden]="productTypeForm.controls['guid'].valid || productTypeForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!productTypeForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
                   <label>{{ 'NAME' | translate }}</label>
                   <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="productType.name" (ngModelChange)="onMainDataChange($event)">
                   <div [hidden]="productTypeForm.controls['name'].valid || productTypeForm.controls['name'].pristine" class="alert alert-danger">
