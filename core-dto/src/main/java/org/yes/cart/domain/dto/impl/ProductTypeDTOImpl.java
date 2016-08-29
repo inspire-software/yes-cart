@@ -36,6 +36,9 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     @DtoField(value = "name")
     private String name;
 
+    @DtoField(value = "guid")
+    private String guid;
+
     @DtoField(value = "description")
     private String description;
 
@@ -105,6 +108,16 @@ public class ProductTypeDTOImpl implements ProductTypeDTO {
     /** {@inheritDoc} */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /** {@inheritDoc} */
+    public String getGuid() {
+        return guid;
+    }
+
+    /** {@inheritDoc} */
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     /** {@inheritDoc} */

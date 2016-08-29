@@ -16,6 +16,7 @@
 
 package org.yes.cart.domain.dto;
 
+import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 /**
@@ -25,7 +26,7 @@ import org.yes.cart.domain.entity.Identifiable;
  * Date: 07-May-2011
  * Time: 11:12:54
  */
-public interface ProductTypeDTO extends Identifiable {
+public interface ProductTypeDTO extends Identifiable, Guidable {
 
     /**
      * Primary key.
