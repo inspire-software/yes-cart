@@ -69,7 +69,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.carrierFormSub = this.carrierForm.valueChanges.subscribe((data:any) => {
+    this.carrierFormSub = this.carrierForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.carrierForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

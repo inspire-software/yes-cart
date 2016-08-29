@@ -101,7 +101,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.shopUrlFormSub = this.shopUrlForm.valueChanges.subscribe((data:any) => {
+    this.shopUrlFormSub = this.shopUrlForm.statusChanges.subscribe((data:any) => {
       if (this.changedSingle) {
         this.validForSave = this.shopUrlForm.valid;
       }

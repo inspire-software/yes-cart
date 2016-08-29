@@ -103,7 +103,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.newCentreFormSub = this.newCentreForm.valueChanges.subscribe((data:any) => {
+    this.newCentreFormSub = this.newCentreForm.statusChanges.subscribe((data:any) => {
       if (this.changedSingle) {
         this.validForSave = this.newCentreForm.valid;
       }

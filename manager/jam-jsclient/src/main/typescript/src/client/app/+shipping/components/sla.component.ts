@@ -76,7 +76,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.slaFormSub = this.slaForm.valueChanges.subscribe((data:any) => {
+    this.slaFormSub = this.slaForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.slaForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

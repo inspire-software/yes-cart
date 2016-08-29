@@ -15,8 +15,18 @@
  */
 
 import {Validators} from '@angular/forms';
+import {Observable} from 'rxjs/Rx';
+import 'rxjs/Rx';
+import {ValidationRequestVO} from './../model/validation.model';
+import {ValidationService} from './../services/validation.service';
 
 export class YcValidators {
+
+  private static validationService:ValidationService;
+
+  public static init(validationService:ValidationService) {
+    YcValidators.validationService = validationService;
+  }
 
   static validDomainName(control:any):any {
 
@@ -98,5 +108,28 @@ export class YcValidators {
 
   static requiredPk = Validators.compose([Validators.required, YcValidators.pk]);
 
+  static validPhone = Validators.pattern('[\+]?[\(\)0-9\- ]');
+
+  static validEmail = Validators.pattern('[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})');
+
+  static validDate = Validators.pattern('[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
+
+  static validRemoteCheck(control:any, request:ValidationRequestVO):any {
+
+    console.debug('validRemoteCheck', control, request);
+    let service = YcValidators.validationService;
+
+    var _sub:any = service.validate(request).subscribe(
+      data => {
+        console.debug('validRemoteCheck result', data);
+        control.setErrors(null);
+        if (data.errorCode) {
+          control.setErrors({ [data.errorCode]: true }, { emitEvent: true });
+        }
+        _sub.unsubscribe();
+    });
+
+    return { checking: true };
+  }
 
 }

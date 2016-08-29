@@ -140,4 +140,26 @@
         <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="category">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCategoryGUIDImpl">
+                                <constructor-arg index="0" ref="categoryService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCategoryURIImpl">
+                                <constructor-arg index="0" ref="categoryService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+
 </beans>

@@ -12,3 +12,4 @@ export * from './shipping.model';
 export * from './fulfilment.model';
 export * from './payment.model';
 export * from './organisation.model';
+export * from './validation.model';

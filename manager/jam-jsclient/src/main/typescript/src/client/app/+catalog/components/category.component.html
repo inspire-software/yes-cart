@@ -15,7 +15,7 @@
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'CATEGORY_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="category.parentName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
                     <span class="input-group-btn">
-                      <button type="button" (click)="onEditParent()" class="btn btn-circle">
+                      <button type="button" (click)="onEditParent()" class="btn">
                         <i class="fa fa-edit"></i>
                       </button>
                     </span>
@@ -24,10 +24,20 @@
                     {{ 'SIMPLE_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div class="form-group" [hidden]="!(category.linkToId > 0)">
+                  <label>{{ 'CATEGORY_LINK' | translate }}</label>
+                  <input class="form-control" formControlName="linkToName" name="linkToName" type="text" [ngModel]="category.linkToName" [disabled]="true"/>
+                </div>
                 <div class="form-group">
                   <label>{{ 'CODE' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="category.guid" (ngModelChange)="onMainDataChange($event)"/>
                   <div [hidden]="categoryForm.controls['guid'].valid || categoryForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!categoryForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!categoryForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
                     {{ 'ALPHANUM_REQUIRED' | translate }}
                   </div>
                 </div>
@@ -51,20 +61,158 @@
             <div class="col-md-9 col-lg-6">
               <fieldset>
                 <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="category.rank" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="categoryForm.controls['rank'].valid || categoryForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_FROM' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="categoryForm.controls['availablefrom'].valid || categoryForm.controls['availablefrom'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_TO' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="categoryForm.controls['availableto'].valid || categoryForm.controls['availableto'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
                   <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="category.description" (ngModelChange)="onMainDataChange($event)"></textarea>
                 </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_TEMPLATES' | translate }}"  (select)="tabSelected('Templates')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
                 <div class="form-group">
-                  <label>{{ 'AV_RANK' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="category.rank" (ngModelChange)="onMainDataChange($event)">
-                  <div [hidden]="categoryForm.controls['rank'].valid || categoryForm.controls['rank'].pristine" class="alert alert-danger">
-                    {{ 'NUM_REQUIRED' | translate }}
+                  <label>{{ 'CATEGORY_TEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="category.uitemplate" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="categoryForm.controls['uitemplate'].valid || categoryForm.controls['uitemplate'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
               </fieldset>
             </div>
           </div>
         </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SEO' | translate }}"  (select)="tabSelected('SEO')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/category/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="category.uri" (ngModelChange)="onMainDataChange($event)"/>
+                  </div>
+                  <div [hidden]="categoryForm.controls['uri'].valid || categoryForm.controls['uri'].pristine" class="alert alert-danger">
+                    <div [hidden]="!categoryForm.controls['uri'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!categoryForm.controls['uri'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                             [source]="category"
+                             value="title"
+                             i18n="displayTitles"
+                             [formGroup]="categoryForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                             [source]="category"
+                             value="metakeywords"
+                             i18n="displayMetakeywords"
+                             [formGroup]="categoryForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                             [source]="category"
+                             value="metadescription"
+                             i18n="displayMetadescriptions"
+                             [formGroup]="categoryForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_NAV_ATTR' | translate }}</label>
+                  <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes" (ngModelChange)="onMainDataAttrNavChange($event)">
+                </div>
+                <div class="form-group" [hidden]="!category.navigationByAttributes">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="parentName" type="text" [(ngModel)]="category.productTypeName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onEditProductType()" class="btn">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="categoryForm.controls['productTypeName'].valid || categoryForm.controls['productTypeName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_NAV_BRAND' | translate }}</label>
+                  <input formControlName="navigationByBrand" name="navigationByBrand" type="checkbox" [(ngModel)]="category.navigationByBrand" (ngModelChange)="onMainDataChange($event)">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CATEGORY_NAV_PRICE' | translate }}</label>
+                  <input formControlName="navigationByPrice" name="navigationByPrice" type="checkbox" [(ngModel)]="category.navigationByPrice" (ngModelChange)="onMainDataChange($event)">
+                </div>
+                <div class="form-group" [hidden]="!category.navigationByPrice">
+                    // TODO price tiers
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
       </tab>
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
@@ -111,3 +259,5 @@
 <yc-category-select #categoryParentSelectComponent
                     (dataSelected)="onCategoryParentSelected($event)"></yc-category-select>
 
+<yc-product-type-select #categoryProductTypeSelectComponent
+                        (dataSelected)="onCategoryProductTypeSelected($event)"></yc-product-type-select>

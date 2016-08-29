@@ -102,7 +102,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.newCarrierFormSub = this.newCarrierForm.valueChanges.subscribe((data:any) => {
+    this.newCarrierFormSub = this.newCarrierForm.statusChanges.subscribe((data:any) => {
       if (this.changedSingle) {
         this.validForSave = this.newCarrierForm.valid;
       }

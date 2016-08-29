@@ -73,7 +73,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.shopMainFormSub = this.shopMainForm.valueChanges.subscribe((data:any) => {
+    this.shopMainFormSub = this.shopMainForm.statusChanges.subscribe((data:any) => {
       if (this.changed) {
         this.validForSave = this.shopMainForm.valid;
       }

@@ -67,7 +67,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.shopSEOFormSub = this.shopSEOForm.valueChanges.subscribe((data:any) => {
+    this.shopSEOFormSub = this.shopSEOForm.statusChanges.subscribe((data:any) => {
       this.validForm = this.shopSEOForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

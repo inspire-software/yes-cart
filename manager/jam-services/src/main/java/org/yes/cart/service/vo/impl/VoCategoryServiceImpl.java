@@ -17,6 +17,7 @@
 package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueCategoryDTO;
@@ -181,9 +182,9 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(vo.getCategoryId());
         final long categoryId = categoryDTO != null && categoryDTO.getParentId() == vo.getParentId() ? vo.getCategoryId() : vo.getParentId();
         if (categoryDTO != null && federationFacade.isManageable(categoryId, CategoryDTO.class)) {
-            dtoCategoryService.update(
-                    voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, vo)
-            );
+            CategoryDTO persistent = voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, vo);
+            ensureValidNullValues(persistent);
+            dtoCategoryService.update(persistent);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -194,12 +195,21 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     public VoCategory create(VoCategory voCategory)  throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getNew();
         if (voCategory != null && federationFacade.isManageable(voCategory.getParentId(), CategoryDTO.class)){
-            final CategoryDTO persistent = dtoCategoryService.create(
-                    voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, voCategory)
-            );
+            CategoryDTO persistent = voAssemblySupport.assembleDto(CategoryDTO.class, VoCategory.class, categoryDTO, voCategory);
+            ensureValidNullValues(persistent);
+            persistent = dtoCategoryService.create(persistent);
             return getById(persistent.getId());
         } else {
             throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    private void ensureValidNullValues(final CategoryDTO persistent) {
+        if (StringUtils.isBlank(persistent.getUri())) {
+            persistent.setUri(null);
+        }
+        if (!persistent.getNavigationByAttributes() || persistent.getProductTypeId() == 0) {
+            persistent.setProductTypeId(null);
         }
     }
 

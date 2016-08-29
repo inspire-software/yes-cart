@@ -300,23 +300,23 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
         var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
             rez => {
-            if (this.attributeEdit.attributeId > 0) {
-              let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
-              if (idx !== -1) {
-                this.attributes[idx] = rez;
-                this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
-                console.debug('AttributeDefinitionsComponent attribute changed', rez);
+              _sub.unsubscribe();
+              if (this.attributeEdit.attributeId > 0) {
+                let idx = this.attributes.findIndex(rez => rez.attributeId == this.attributeEdit.attributeId);
+                if (idx !== -1) {
+                  this.attributes[idx] = rez;
+                  this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
+                  console.debug('AttributeDefinitionsComponent attribute changed', rez);
+                }
+                this.changed = false;
+                this.selectedAttribute = rez;
+                this.attributeEdit = null;
+                this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+              } else {
+                this.attributeFilter = rez.name;
+                console.debug('AttributeDefinitionsComponent attribute added', rez);
+                this.getAllAttributes();
               }
-            } else {
-              this.attributes.push(rez);
-              this.attributeFilter = rez.name;
-              console.debug('AttributeDefinitionsComponent attribute added', rez);
-            }
-            this.changed = false;
-            this.selectedAttribute = rez;
-            this.attributeEdit = null;
-            this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-            _sub.unsubscribe();
           }
         );
       }

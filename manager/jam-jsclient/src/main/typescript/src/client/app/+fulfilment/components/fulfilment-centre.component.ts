@@ -77,7 +77,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.centreFormSub = this.centreForm.valueChanges.subscribe((data:any) => {
+    this.centreFormSub = this.centreForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.centreForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

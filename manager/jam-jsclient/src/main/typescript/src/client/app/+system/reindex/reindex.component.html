@@ -29,7 +29,7 @@
 
 
   <div [hidden]="jobStatus != null">
-    <yc-shop-list [showNewLink]="false" (dataSelected)="selectShop($event)"></yc-shop-list>
+    <yc-shop-select [showNewLink]="false" (dataSelected)="selectShop($event)"></yc-shop-select>
   </div>
 
   <div [hidden]="jobStatus == null" class="{{ jobRunning ? 'running-job-log' : 'finished-job-log' }}">

@@ -6,6 +6,7 @@
       <tr>
         <th>{{ 'CODE' | translate }}</th>
         <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
+        <th>{{ 'CATEGORY_TEMPLATE' | translate }}</th>
         <th>{{ 'CATEGORY_FROM' | translate }}</th>
         <th>{{ 'CATEGORY_TO' | translate }}</th>
         <th>{{ 'CATEGORY_NAV' | translate }}</th>
@@ -16,6 +17,7 @@
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.guid}}</a></td>
           <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span> <span [innerHTML]="getLink(row)"></span></td>
+          <td title="{{ 'CATEGORY_TEMPLATE' | translate }}"><a (click)="onSelectRow(row)">{{row.uitemplate}}</a></td>
           <td title="{{ 'CATEGORY_FROM' | translate }}"><a (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'CATEGORY_TO' | translate }}"><a (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'CATEGORY_NAV' | translate }}"><a (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a></td>

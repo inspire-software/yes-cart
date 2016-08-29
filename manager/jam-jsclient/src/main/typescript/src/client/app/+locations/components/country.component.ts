@@ -66,7 +66,7 @@ export class CountryComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.countryFormSub = this.countryForm.valueChanges.subscribe((data:any) => {
+    this.countryFormSub = this.countryForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.countryForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

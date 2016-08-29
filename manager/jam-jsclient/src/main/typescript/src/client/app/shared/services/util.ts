@@ -116,4 +116,64 @@ export class Util {
     return _csv;
   }
 
+  private static toTwoChars(num:number):string {
+    if (num > 9) {
+      return ''+num;
+    }
+    return '0'+num;
+  }
+
+  /**
+   * Get string representation of date.
+   *
+   * @param value date
+   * @param showtime if true then adds time as well
+   */
+  public static toDateString(value:any, showtime:boolean):string {
+    if (value == null) {
+      return '';
+    }
+
+    var date:Date;
+    if (value instanceof Date) {
+      date = value;
+    } else {
+      date = new Date(value);
+    }
+
+    if (showtime) {
+      return date.getFullYear() + '-' + Util.toTwoChars(date.getMonth() + 1) + '-' + Util.toTwoChars(date.getDate()) +
+        ' ' +
+        Util.toTwoChars(date.getHours()) + ':' + Util.toTwoChars(date.getMinutes()) + ':' + Util.toTwoChars(date.getSeconds());
+
+    }
+    return date.getFullYear() + '-' + Util.toTwoChars(date.getMonth()) + '-' + Util.toTwoChars(date.getDate());
+  }
+
+  /**
+   * Convert string to date.
+   *
+   * @param date date in YYYY-MM-DD format or datetime in YYYY-MM-DD HH:mm:SS format
+   * @returns {any}
+   */
+  public static toDate(date:string):Date {
+    if (date == null || date == '' || (date.length != 10 && date.length != 19)) {
+      return null;
+    }
+
+    if (date.length > 10) {
+      // date time
+      let dateAndTime = date.split(' ');
+      let dateParts = dateAndTime[0].split('-');
+      let timeParts = dateAndTime[1].split(':');
+      console.debug('Util toDate datetime', dateParts, timeParts);
+      return new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2], +timeParts[0], +timeParts[1], +timeParts[2], 0);
+    }
+    // date only
+    let dateParts = date.split('-');
+    console.debug('Util toDate date', dateParts);
+    return new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2], 0, 0, 0, 0);
+
+  }
+
 }

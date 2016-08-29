@@ -77,7 +77,7 @@ export class BrandComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.brandFormSub = this.brandForm.valueChanges.subscribe((data:any) => {
+    this.brandFormSub = this.brandForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.brandForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

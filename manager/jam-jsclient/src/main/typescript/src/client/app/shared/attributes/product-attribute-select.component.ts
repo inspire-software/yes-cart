@@ -23,13 +23,13 @@ import {Futures, Future} from './../event/index';
 import {Config} from './../config/env.config';
 
 @Component({
-  selector: 'yc-product-attribute-list',
+  selector: 'yc-product-attribute-select',
   moduleId: module.id,
-  templateUrl: 'product-attribute-list.component.html',
+  templateUrl: 'product-attribute-select.component.html',
   directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
-export class ProductAttributeListComponent implements OnInit, OnDestroy {
+export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
 
   private filteredAttributes : AttributeVO[] = [];
   private attributeFilter : string;

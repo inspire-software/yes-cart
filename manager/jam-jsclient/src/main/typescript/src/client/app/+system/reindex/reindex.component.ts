@@ -18,7 +18,7 @@ import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ShopVO, JobStatusVO} from './../../shared/model/index';
 import {SystemService, ShopEventBus, Util} from './../../shared/services/index';
-import {ShopListComponent} from './../../shared/shop/index';
+import {ShopSelectComponent} from './../../shared/shop/index';
 import {Futures, Future} from './../../shared/event/index';
 import {Config} from './../../shared/config/env.config';
 
@@ -26,7 +26,7 @@ import {Config} from './../../shared/config/env.config';
   selector: 'yc-reindex',
   moduleId: module.id,
   templateUrl: 'reindex.component.html',
-  directives: [REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ShopListComponent]
+  directives: [REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ShopSelectComponent]
 })
 
 export class ReindexComponent implements OnInit, OnDestroy {

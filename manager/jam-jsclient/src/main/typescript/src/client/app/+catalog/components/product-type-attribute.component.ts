@@ -17,7 +17,7 @@ import {Component, OnInit, OnDestroy, OnChanges, Input, Output, ViewChild, Event
 import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../../shared/pagination/index';
-import {ProductAttributeListComponent} from './../../shared/attributes/index';
+import {ProductAttributeSelectComponent} from './../../shared/attributes/index';
 import {ProductTypeVO, ProductTypeAttrVO, AttributeVO, ProductTypeAttrNavigationRangeVO, Pair} from './../../shared/model/index';
 import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
@@ -31,7 +31,7 @@ import {Config} from './../../shared/config/env.config';
   selector: 'yc-product-type-attribute',
   moduleId: module.id,
   templateUrl: 'product-type-attribute.component.html',
-  directives: [PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent, ProductAttributeListComponent]
+  directives: [PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent, ProductAttributeSelectComponent]
 })
 
 export class ProductTypeAttributeComponent implements OnInit, OnChanges {

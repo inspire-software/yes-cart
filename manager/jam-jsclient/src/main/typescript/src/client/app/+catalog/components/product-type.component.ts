@@ -87,7 +87,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.productTypeFormSub = this.productTypeForm.valueChanges.subscribe((data:any) => {
+    this.productTypeFormSub = this.productTypeForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.productTypeForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

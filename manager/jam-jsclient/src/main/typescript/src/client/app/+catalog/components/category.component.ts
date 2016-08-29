@@ -17,10 +17,12 @@ import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} fr
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {CategoryVO, AttrValueCategoryVO, Pair} from './../../shared/model/index';
+import {CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
+import {Util} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {CategorySelectComponent} from './../../shared/catalog/index';
+import {ProductTypeSelectComponent} from './../../shared/product/index';
 import {AttributeValuesComponent} from './../../shared/attributes/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -29,7 +31,7 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
   selector: 'yc-category',
   moduleId: module.id,
   templateUrl: 'category.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, CategorySelectComponent, I18nComponent],
+  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, CategorySelectComponent, ProductTypeSelectComponent, I18nComponent],
 })
 
 export class CategoryComponent implements OnInit, OnDestroy {
@@ -57,17 +59,60 @@ export class CategoryComponent implements OnInit, OnDestroy {
   @ViewChild('categoryParentSelectComponent')
   categoryParentSelectComponent:CategorySelectComponent;
 
+  @ViewChild('categoryProductTypeSelectComponent')
+  categoryProductTypeSelectComponent:ProductTypeSelectComponent;
+
   constructor(fb: FormBuilder) {
     console.debug('CategoryComponent constructed');
 
+    let that = this;
+
+    let validUri = function(control:any):any {
+
+      let uri = control.value;
+      if (!that.changed || uri == null || uri == '' || that._category == null) {
+        return null;
+      }
+
+      let basic = YcValidators.validCode(control);
+      if (basic == null) {
+        var req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'uri', value: uri };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
+    let validCode = function(control:any):any {
+
+      let code = control.value;
+      if (!that.changed || code == null || code == '' || that._category == null) {
+        return null;
+      }
+
+      let basic = YcValidators.validCode(control);
+      if (basic == null) {
+        var req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'guid', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
     this.categoryForm = fb.group({
-      'guid': ['', YcValidators.validCode],
+      'guid': ['', validCode],
       'parentName': ['', Validators.required],
+      'linkToName': [''],
       'description': [''],
       'rank': ['', YcValidators.requiredRank],
+      'uitemplate': ['', YcValidators.nonBlankTrimmed],
+      'availablefrom': ['', YcValidators.validDate],
+      'availableto': ['', YcValidators.validDate],
+      'uri': ['', validUri],
+      'navigationByAttributes': [''],
+      'navigationByBrand': [''],
+      'navigationByPrice': [''],
+      'productTypeName': [''],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
@@ -84,7 +129,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
 
   formBind():void {
-    this.categoryFormSub = this.categoryForm.valueChanges.subscribe((data:any) => {
+    this.categoryFormSub = this.categoryForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.categoryForm.valid;
       if (this.changed) {
         this.delayedChange.delay();
@@ -116,6 +161,40 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this._category;
   }
 
+  get availableto():string {
+    if (this._category != null && this._category.availableto != null) {
+      let date = Util.toDateString(this._category.availableto, true);
+      console.debug('CategoryComponent get availableto', this._category.availablefrom, date);
+      return date;
+    }
+    return null;
+  }
+
+  set availableto(availableto:string) {
+    if (this._category != null && availableto != null && (availableto.length == 10 || availableto.length == 19)) {
+      let date = Util.toDate(availableto);
+      console.debug('CategoryComponent set availableto', availableto, date);
+      this._category.availableto = date;
+    }
+  }
+
+  get availablefrom():string {
+    if (this._category != null && this._category.availablefrom != null) {
+      let date = Util.toDateString(this._category.availablefrom, true);
+      console.debug('CategoryComponent get availablefrom', this._category.availablefrom, date);
+      return date;
+    }
+    return null;
+  }
+
+  set availablefrom(availablefrom:string) {
+    if (this._category != null && availablefrom != null && (availablefrom.length == 10 || availablefrom.length == 19)) {
+      let date = Util.toDate(availablefrom);
+      console.debug('CategoryComponent set availablefrom', availablefrom, date);
+      this._category.availablefrom = date;
+    }
+  }
+
   @Input()
   set attributes(attributes:AttrValueCategoryVO[]) {
     this._attributes = attributes;
@@ -127,6 +206,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   onMainDataChange(event:any) {
     console.debug('CategoryComponent main data changed', this._category);
+    this.changed = true;
+  }
+
+  onMainDataAttrNavChange(event:any) {
+    console.debug('CategoryComponent main data attr-nav changed', this._category);
+    if (!this._category.navigationByAttributes) {
+      this._category.productTypeId = 0;
+      this._category.productTypeName = null;
+    } // note that we can have productTypeId blank because it is inherited in SF
     this.changed = true;
   }
 
@@ -183,6 +271,21 @@ export class CategoryComponent implements OnInit, OnDestroy {
     if (event.valid) {
       this.category.parentId = event.source.categoryId;
       this.category.parentName = event.source.name;
+      this.changed = true;
+    }
+  }
+
+  protected onEditProductType() {
+    console.debug('CategoryComponent onEditProductType handler');
+    this.categoryProductTypeSelectComponent.showDialog();
+  }
+
+
+  protected onCategoryProductTypeSelected(event:FormValidationEvent<ProductTypeInfoVO>) {
+    console.debug('CategoryComponent onCategoryProductTypeSelected handler', event);
+    if (event.valid) {
+      this.category.productTypeId = event.source.producttypeId;
+      this.category.productTypeName = event.source.name;
       this.changed = true;
     }
   }

@@ -5,13 +5,13 @@ import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {ManagerVO} from '../model/index';
 import {ManagementService} from '../services/index';
 import {ShopVO} from '../model/index';
-import {ShopListComponent} from '../shop/index';
+import {ShopSelectComponent} from '../shop/index';
 
 @Component({
   selector: 'sidebar',
   moduleId: module.id,
   templateUrl: 'sidebar.component.html',
-  directives: [ROUTER_DIRECTIVES, ShopListComponent, ACCORDION_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, ShopSelectComponent, ACCORDION_DIRECTIVES],
 })
 
 export class SidebarComponent implements OnInit {

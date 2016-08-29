@@ -20,6 +20,19 @@
                   <label>{{ 'DESCRIPTION' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="productType.description" (ngModelChange)="onMainDataChange($event)">
                 </div>
+              </fieldset>
+
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_TEMPLATES' | translate }}"  (select)="tabSelected('Templates')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate" (ngModelChange)="onMainDataChange($event)">
@@ -34,6 +47,18 @@
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
                 </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_CONFIGURATIONS' | translate }}"  (select)="tabSelected('Templates')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
                 <div>
                   <input formControlName="ensemble" name="ensemble" type="checkbox" [(ngModel)]="productType.ensemble" (ngModelChange)="onMainDataChange($event)">
                   <label>{{ 'PRODUCT_TYPE_FLAG_ENSEMBLE' | translate }}</label>

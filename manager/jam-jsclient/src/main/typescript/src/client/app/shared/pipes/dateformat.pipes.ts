@@ -14,19 +14,13 @@
  *    limitations under the License.
  */
 import { Pipe, PipeTransform } from '@angular/core';
+import { Util } from './../services/util';
 
 /**
  * NG2 DatePipes use Intl package which is NOT available in some browsers, so
  * need to improvise.
  * see https://github.com/angular/angular/issues/3333
  */
-
-function toTwoChars(num:number):string {
-  if (num > 9) {
-    return ''+num;
-  }
-  return '0'+num;
-}
 
 @Pipe({name: 'ycdate'})
 export class YcDatePipe implements PipeTransform {
@@ -35,16 +29,8 @@ export class YcDatePipe implements PipeTransform {
       return '';
     }
 
-
-    var date:Date;
-    if (value instanceof Date) {
-      date = value;
-    } else {
-      date = new Date(value);
-    }
-
-    console.debug('ycdatetime formatting', date);
-    return date.getFullYear() + '-' + toTwoChars(date.getMonth()) + '-' + toTwoChars(date.getDate());
+    console.debug('ycdatetime formatting', value);
+    return Util.toDateString(value, false);
 
   }
 }
@@ -57,17 +43,8 @@ export class YcDateTimePipe implements PipeTransform {
       return '';
     }
 
-    var date:Date;
-    if (value instanceof Date) {
-      date = value;
-    } else {
-      date = new Date(value);
-    }
-
-    console.debug('ycdatetime formatting', date);
-    return date.getFullYear() + '-' + toTwoChars(date.getMonth()) + '-' + toTwoChars(date.getDate()) +
-           ' ' +
-           toTwoChars(date.getHours()) + ':' + toTwoChars(date.getMinutes()) + ':' + toTwoChars(date.getSeconds());
+    console.debug('ycdatetime formatting', value);
+    return Util.toDateString(value, true);
   }
 }
 

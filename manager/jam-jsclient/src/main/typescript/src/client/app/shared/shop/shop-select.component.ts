@@ -23,13 +23,13 @@ import {Futures, Future} from './../event/index';
 import {Config} from './../config/env.config';
 
 @Component({
-  selector: 'yc-shop-list',
+  selector: 'yc-shop-select',
   moduleId: module.id,
-  templateUrl: 'shop-list.component.html',
+  templateUrl: 'shop-select.component.html',
   directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
-export class ShopListComponent implements OnInit, OnDestroy {
+export class ShopSelectComponent implements OnInit, OnDestroy {
 
   private shops : ShopVO[] = null;
   private filteredShops : ShopVO[] = [];

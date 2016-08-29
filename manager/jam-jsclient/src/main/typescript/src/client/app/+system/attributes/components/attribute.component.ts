@@ -80,7 +80,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.attributeFormSub = this.attributeForm.valueChanges.subscribe((data:any) => {
+    this.attributeFormSub = this.attributeForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.attributeForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

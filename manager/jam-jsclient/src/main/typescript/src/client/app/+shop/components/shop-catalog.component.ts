@@ -124,7 +124,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.newCategoryFormSub = this.newCategoryForm.valueChanges.subscribe((data:any) => {
+    this.newCategoryFormSub = this.newCategoryForm.statusChanges.subscribe((data:any) => {
       if (this.changedSingle) {
         this.validForSave = this.newCategoryForm.valid;
       }

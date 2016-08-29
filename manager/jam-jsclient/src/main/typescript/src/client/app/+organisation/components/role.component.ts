@@ -64,7 +64,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.roleFormSub = this.roleForm.valueChanges.subscribe((data:any) => {
+    this.roleFormSub = this.roleForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.roleForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

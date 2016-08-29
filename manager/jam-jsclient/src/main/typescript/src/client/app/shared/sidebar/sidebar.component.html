@@ -51,7 +51,7 @@
 
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_CMS' | translate }}</div>
-    <yc-shop-list [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-list>
+    <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
   </accordion-group>
 
   <accordion-group>
@@ -107,7 +107,7 @@
 
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
-    <yc-shop-list [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-list>
+    <yc-shop-select [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
   </accordion-group>
 
   <accordion-group>

@@ -66,7 +66,7 @@ export class StateComponent implements OnInit, OnDestroy {
   }
 
   formBind():void {
-    this.stateFormSub = this.stateForm.valueChanges.subscribe((data:any) => {
+    this.stateFormSub = this.stateForm.statusChanges.subscribe((data:any) => {
       this.validForSave = this.stateForm.valid;
       if (this.changed) {
         this.delayedChange.delay();

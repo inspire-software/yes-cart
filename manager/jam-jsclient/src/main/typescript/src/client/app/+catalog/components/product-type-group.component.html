@@ -4,7 +4,7 @@
     <div class="row">
 
       <div class="col-xs-12 col-md-4">
-        <ul class="nav nav-second-level shop-list">
+        <ul class="nav nav-second-level item-list">
           <li *ngFor="let row of filteredObjectGroups">
             <a (click)="onSelectRow(row)" class="{{ (selectedRow != null && selectedRow.name == row.name) ? 'bg-info js-click' : 'js-click' }}"><span>{{row.rank}} {{row.name}}</span><span class="label label-default pull-right">{{row.attrCodeList.length}}</span></a>
           </li>
