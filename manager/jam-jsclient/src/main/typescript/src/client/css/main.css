@@ -446,6 +446,12 @@ table.dataTable thead .sorting:after {
   border-bottom: 1px solid #ccc;
 }
 
+.category-nav-price-tiers {
+  padding-top: 10px;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
 @media (max-width:768px) {
 
   .av-td-value {
@@ -518,7 +524,8 @@ table.dataTable thead .sorting:after {
 }
 
 .data-control .filter-input:focus,
-.item-list-control .filter-input:focus {
+.item-list-control .filter-input:focus,
+button.btn:focus {
   outline: none;
 }
 

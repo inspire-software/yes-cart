@@ -141,5 +141,13 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     return flags;
   }
 
+  protected isAvailableFromNow(row:CategoryVO) {
+    return row.availablefrom === null || (row.availablefrom < new Date());
+  }
+
+  protected isAvailableToNow(row:CategoryVO) {
+    return row.availableto === null || (row.availableto > new Date());
+  }
+
 
 }

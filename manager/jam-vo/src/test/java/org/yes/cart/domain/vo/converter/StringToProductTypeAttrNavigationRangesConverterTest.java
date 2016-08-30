@@ -5,18 +5,15 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.yes.cart.domain.dto.ProductTypeAttrDTO;
-import org.yes.cart.domain.entity.xml.ProductTypeRangeListXStreamProvider;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.misc.navigation.range.DisplayValue;
-import org.yes.cart.domain.misc.navigation.range.RangeList;
 import org.yes.cart.domain.vo.VoProductTypeAttrNavigationRanges;
-import org.yes.cart.stream.xml.XStreamProvider;
 
 import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * User: denispavlov
@@ -33,13 +30,12 @@ public class StringToProductTypeAttrNavigationRangesConverterTest {
         final ProductTypeAttrDTO dto = this.context.mock(ProductTypeAttrDTO.class, "dto");
         final ProductTypeAttrDTO dto2 = this.context.mock(ProductTypeAttrDTO.class, "dto2");
 
-        final XStreamProvider<RangeList> provider = new ProductTypeRangeListXStreamProvider();
-
         final String xml = new Scanner(new File("src/test/resources/weight_filtering_example.xml")).useDelimiter("\\Z").next();
 
         this.context.checking(new Expectations() {{
             allowing(dto).getRangeNavigation();
             will(returnValue(xml));
+            allowing(dto).setRangeNavigation(with(any(String.class)));
         }});
 
         final StringToProductTypeAttrNavigationRangesConverter converter = new StringToProductTypeAttrNavigationRangesConverter();
@@ -59,7 +55,7 @@ public class StringToProductTypeAttrNavigationRangesConverterTest {
         assertEquals("ru", i18n.get(1).getFirst());
         assertEquals("100 g - 1 kg ru", i18n.get(1).getSecond());
 
-        final String xmlStr = (String) converter.convertToEntity(rl, null, null);
+        final String xmlStr = (String) converter.convertToEntity(rl, dto, null);
 
         assertNotNull(xmlStr);
 

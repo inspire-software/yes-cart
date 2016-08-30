@@ -17,6 +17,7 @@
 package org.yes.cart.domain.misc.navigation.price;
 
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -25,6 +26,13 @@ import java.util.List;
  * Time: 11:12:54
  */
 public interface PriceTierTree {
+
+    /**
+     * Get configured currencies.
+     *
+     * @return set of configured currencies
+     */
+    Set<String> getSupportedCurrencies();
 
     /**
      * Get price tiers node for given currency.

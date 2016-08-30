@@ -22,6 +22,7 @@ import org.yes.cart.domain.misc.navigation.price.PriceTierTree;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,6 +32,16 @@ import java.util.Map;
 public class PriceTierTreeImpl implements PriceTierTree {
 
     private Map<String, List<PriceTierNode>> priceMap;
+
+    /**
+     * {@inheritDoc}
+     */
+    public Set<String> getSupportedCurrencies() {
+        if (priceMap == null) {
+            priceMap = new HashMap<String, List<PriceTierNode>>();
+        }
+        return priceMap.keySet();
+    }
 
     /**
      * {@inheritDoc}

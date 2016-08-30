@@ -104,9 +104,14 @@ public class StringToProductTypeAttrNavigationRangesConverter implements ValueCo
                 rangeList.setRanges(rangeNodes);
             }
         }
+        final String nav;
         if (rangeList.getRanges() != null) {
-            return xStreamProvider.toXML(rangeList);
+            nav = xStreamProvider.toXML(rangeList);
+        } else {
+            nav = null;
         }
-        return null;
+        final ProductTypeAttrDTO dto = (ProductTypeAttrDTO) oldEntity;
+        dto.setRangeNavigation(nav);
+        return nav;
     }
 }

@@ -172,6 +172,7 @@
   "CATEGORY_NAV_PRODUCT_TYPE": "Product type",
   "CATEGORY_NAV_BRAND": "Brand navigation",
   "CATEGORY_NAV_PRICE": "Price navigation",
+  "CATEGORY_NAV_PRICE_CURRENCY": "Currency",
   "CATEGORY_FROM": "Available from",
   "CATEGORY_TO": "Available to",
   "CATEGORY_PARENT": "Parent",

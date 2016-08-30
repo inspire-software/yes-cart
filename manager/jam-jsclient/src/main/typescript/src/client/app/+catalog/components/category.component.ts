@@ -17,13 +17,14 @@ import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} fr
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, ValidationRequestVO} from './../../shared/model/index';
+import {CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavigationPriceTiersVO, CategoryNavigationPriceTierVO, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {Util} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {CategorySelectComponent} from './../../shared/catalog/index';
 import {ProductTypeSelectComponent} from './../../shared/product/index';
 import {AttributeValuesComponent} from './../../shared/attributes/index';
+import {ModalComponent, ModalAction, ModalResult} from './../../shared/modal/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
 
@@ -31,7 +32,7 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
   selector: 'yc-category',
   moduleId: module.id,
   templateUrl: 'category.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, CategorySelectComponent, ProductTypeSelectComponent, I18nComponent],
+  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, CategorySelectComponent, ProductTypeSelectComponent, I18nComponent, ModalComponent],
 })
 
 export class CategoryComponent implements OnInit, OnDestroy {
@@ -39,6 +40,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
   _category:CategoryVO;
   _attributes:AttrValueCategoryVO[] = [];
   attributeFilter:string;
+
+  navigationByPriceTiers:CategoryNavigationPriceTiersVO;
+  navigationByPriceTiersAddCurrency:string;
 
   _changes:Array<Pair<AttrValueCategoryVO, boolean>>;
 
@@ -61,6 +65,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   @ViewChild('categoryProductTypeSelectComponent')
   categoryProductTypeSelectComponent:ProductTypeSelectComponent;
+
+  @ViewChild('categoryPriceTiersModalDialog')
+  categoryPriceTiersModalDialog:ModalComponent;
 
   constructor(fb: FormBuilder) {
     console.debug('CategoryComponent constructed');
@@ -171,10 +178,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   set availableto(availableto:string) {
-    if (this._category != null && availableto != null && (availableto.length == 10 || availableto.length == 19)) {
-      let date = Util.toDate(availableto);
-      console.debug('CategoryComponent set availableto', availableto, date);
-      this._category.availableto = date;
+    if (this._category != null) {
+      if (availableto == null || availableto.length == 0) {
+        console.debug('CategoryComponent set availableto', availableto);
+        this._category.availableto = null;
+      } else if (availableto.length == 10 || availableto.length == 19) {
+        let date = Util.toDate(availableto);
+        console.debug('CategoryComponent set availableto', availableto, date);
+        this._category.availableto = date;
+      }
     }
   }
 
@@ -188,10 +200,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   set availablefrom(availablefrom:string) {
-    if (this._category != null && availablefrom != null && (availablefrom.length == 10 || availablefrom.length == 19)) {
-      let date = Util.toDate(availablefrom);
-      console.debug('CategoryComponent set availablefrom', availablefrom, date);
-      this._category.availablefrom = date;
+    if (this._category != null) {
+      if (availablefrom == null || availablefrom.length == 0) {
+        console.debug('CategoryComponent set availableto', availablefrom);
+        this._category.availablefrom = null;
+      } else if (availablefrom.length == 10 || availablefrom.length == 19) {
+        let date = Util.toDate(availablefrom);
+        console.debug('CategoryComponent set availableto', availablefrom, date);
+        this._category.availablefrom = date;
+      }
     }
   }
 
@@ -206,15 +223,6 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   onMainDataChange(event:any) {
     console.debug('CategoryComponent main data changed', this._category);
-    this.changed = true;
-  }
-
-  onMainDataAttrNavChange(event:any) {
-    console.debug('CategoryComponent main data attr-nav changed', this._category);
-    if (!this._category.navigationByAttributes) {
-      this._category.productTypeId = 0;
-      this._category.productTypeName = null;
-    } // note that we can have productTypeId blank because it is inherited in SF
     this.changed = true;
   }
 
@@ -275,6 +283,15 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onClearProductType() {
+    console.debug('CategoryComponent onClearProductType handler');
+    if (this._category) {
+      this._category.productTypeId = 0;
+      this._category.productTypeName = null;
+    }
+  }
+
+
   protected onEditProductType() {
     console.debug('CategoryComponent onEditProductType handler');
     this.categoryProductTypeSelectComponent.showDialog();
@@ -287,6 +304,49 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this.category.productTypeId = event.source.producttypeId;
       this.category.productTypeName = event.source.name;
       this.changed = true;
+    }
+  }
+
+  protected onEditPriceTiers() {
+    console.debug('CategoryComponent onCategoryProductTypeSelected handler');
+    if (this._category.navigationByPriceTiers != null) {
+      this.navigationByPriceTiers = Util.clone(this._category.navigationByPriceTiers)
+    } else {
+      this.navigationByPriceTiers = { tiers: [] }
+    }
+    this.categoryPriceTiersModalDialog.show();
+  }
+
+  protected onEditPriceTiersModalResult(modalresult: ModalResult) {
+    console.debug('CategoryComponent onEditPriceTiersModalResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      this._category.navigationByPriceTiers = this.navigationByPriceTiers;
+      this.navigationByPriceTiers = null;
+      this.changed = true;
+      this.categoryForm.updateValueAndValidity();
+    }
+  }
+
+
+  protected onNavPriceTierDelete(tier:Pair<string, Array<CategoryNavigationPriceTierVO>>, item:CategoryNavigationPriceTierVO) {
+    console.debug('CategoryComponent onNavPriceTierDelete handler', tier, item);
+    let idx = tier.second.indexOf(item);
+    if (idx != -1) {
+      tier.second.splice(idx, 1);
+      tier.second = tier.second.slice(0, tier.second.length);
+    }
+  }
+
+  protected onNavPriceTierAdd(tier:Pair<string, Array<CategoryNavigationPriceTierVO>>) {
+    console.debug('CategoryComponent onNavPriceTierAdd handler', tier);
+    tier.second.push({ from: 0, to: 99 });
+  }
+
+  protected onEditPriceTiersAddCurrency() {
+    console.debug('CategoryComponent onEditPriceTiersAddCurrency handler');
+    if (this.navigationByPriceTiersAddCurrency != null && this.navigationByPriceTiersAddCurrency.length == 3) {
+      this.navigationByPriceTiers.tiers.push({ first: this.navigationByPriceTiersAddCurrency, second: [] });
     }
   }
 

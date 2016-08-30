@@ -208,8 +208,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
         if (StringUtils.isBlank(persistent.getUri())) {
             persistent.setUri(null);
         }
-        if ((persistent.getNavigationByAttributes() != null && !persistent.getNavigationByAttributes()) ||
-                (persistent.getProductTypeId() != null && persistent.getProductTypeId() == 0)) {
+        if (persistent.getProductTypeId() != null && persistent.getProductTypeId() == 0) {
             persistent.setProductTypeId(null);
         }
     }

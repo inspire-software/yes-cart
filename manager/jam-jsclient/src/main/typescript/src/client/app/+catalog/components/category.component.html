@@ -182,12 +182,15 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CATEGORY_NAV_ATTR' | translate }}</label>
-                  <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes" (ngModelChange)="onMainDataAttrNavChange($event)">
+                  <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes" (ngModelChange)="onMainDataChange($event)">
                 </div>
                 <div class="form-group" [hidden]="!category.navigationByAttributes">
                   <div class="input-group">
                     <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="parentName" type="text" [(ngModel)]="category.productTypeName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
                     <span class="input-group-btn">
+                      <button type="button" (click)="onClearProductType()" class="btn">
+                        <i class="fa fa-remove"></i>
+                      </button>
                       <button type="button" (click)="onEditProductType()" class="btn">
                         <i class="fa fa-edit"></i>
                       </button>
@@ -204,9 +207,17 @@
                 <div class="form-group">
                   <label>{{ 'CATEGORY_NAV_PRICE' | translate }}</label>
                   <input formControlName="navigationByPrice" name="navigationByPrice" type="checkbox" [(ngModel)]="category.navigationByPrice" (ngModelChange)="onMainDataChange($event)">
+                  <button class="btn btn-info btn-circle btn-sm" (click)="onEditPriceTiers()" [hidden]="!category.navigationByPrice" >
+                    <i class="fa fa-edit"></i>
+                  </button>
                 </div>
                 <div class="form-group" [hidden]="!category.navigationByPrice">
-                    // TODO price tiers
+                  <div *ngFor="let currencyTier of category.navigationByPriceTiers.tiers">
+                    <label>{{ currencyTier.first }}</label>
+                    <ul>
+                      <li *ngFor="let priceTier of currencyTier.second">{{priceTier.from}}-{{priceTier.to}}</li>
+                    </ul>
+                  </div>
                 </div>
               </fieldset>
             </div>
@@ -261,3 +272,74 @@
 
 <yc-product-type-select #categoryProductTypeSelectComponent
                         (dataSelected)="onCategoryProductTypeSelected($event)"></yc-product-type-select>
+
+<modal #categoryPriceTiersModalDialog
+       title="{{ 'CATEGORY_NAV_PRICE' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+       [valid]="true"
+       (closed)="onEditPriceTiersModalResult($event)">
+
+  <template [ngIf]="navigationByPriceTiers">
+
+    <div class="row">
+
+      <div class="col-xs-12">
+
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRICE_CURRENCY' | translate }}" name="currency" type="text" [(ngModel)]="navigationByPriceTiersAddCurrency"/>
+            <span class="input-group-btn">
+              <button type="button" (click)="onEditPriceTiersAddCurrency()" class="btn">
+                <i class="fa fa-plus"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-xs-12">
+
+        <tabset>
+
+          <tab *ngFor="let currencyTier of navigationByPriceTiers.tiers" heading="{{ currencyTier.first }}">
+
+            <div class="row">
+              <div class="col-xs-12 category-nav-price-tiers">
+                <div class="row" *ngFor="let priceTier of currencyTier.second">
+                  <div class="col-xs-3">
+                    <button class="pull-left btn btn-danger btn-circle btn-sm" (click)="onNavPriceTierDelete(currencyTier,priceTier)">
+                      <i class="fa fa-remove"></i>
+                    </button>
+                  </div>
+                  <div class="col-xs-4">
+                    <input class="form-control" name="priceTierFrom" type="text" [(ngModel)]="priceTier.from" (ngModelChange)="onMainDataChange($event)">
+                  </div>
+                  <div class="col-xs-4">
+                    <input class="form-control" name="priceTierTo" type="text" [(ngModel)]="priceTier.to" (ngModelChange)="onMainDataChange($event)">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs-12">
+                <button class="pull-right btn btn-circle btn-sm" (click)="onNavPriceTierAdd(currencyTier)">
+                  <i class="fa fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+          </tab>
+
+        </tabset>
+      </div>
+    </div>
+  </template>
+
+</modal>

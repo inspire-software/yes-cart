@@ -17,21 +17,18 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoVirtualField;
 import org.yes.cart.domain.misc.MutablePair;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-//import org.yes.cart.domain.dto.AttrValueCategoryDTO;
-
 /**
  * Created by Igor_Azarny on 4/13/2016.
  */
 @Dto
 public class VoCategory {
-
-    private static final long serialVersionUID = 20160413L;
 
     @DtoField(value = "categoryId", readOnly = true)
     private long categoryId;
@@ -108,14 +105,11 @@ public class VoCategory {
     @DtoField(value = "navigationByPrice")
     private Boolean navigationByPrice;
 
-    @DtoField(value = "navigationByPriceTiers")
-    private String navigationByPriceTiers;
+    @DtoVirtualField(converter = "CategoryNavigationPriceTiers")
+    private VoCategoryNavigationPriceTiers navigationByPriceTiers;
 
     @DtoField(value = "children")
     private List<VoCategory> children;
-
-    //TODO VO @DtoField(value = "attributes",readOnly = true )
-    //private Set<AttrValueCategoryDTO> attributes;
 
     public List<VoCategory> getChildren() {
         return children;
@@ -123,10 +117,6 @@ public class VoCategory {
 
     public void setChildren(List<VoCategory> children) {
         this.children = children;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public long getCategoryId() {
@@ -329,11 +319,11 @@ public class VoCategory {
         this.navigationByPrice = navigationByPrice;
     }
 
-    public String getNavigationByPriceTiers() {
+    public VoCategoryNavigationPriceTiers getNavigationByPriceTiers() {
         return navigationByPriceTiers;
     }
 
-    public void setNavigationByPriceTiers(String navigationByPriceTiers) {
+    public void setNavigationByPriceTiers(final VoCategoryNavigationPriceTiers navigationByPriceTiers) {
         this.navigationByPriceTiers = navigationByPriceTiers;
     }
 }

@@ -18,8 +18,8 @@
           <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.guid}}</a></td>
           <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span> <span [innerHTML]="getLink(row)"></span></td>
           <td title="{{ 'CATEGORY_TEMPLATE' | translate }}"><a (click)="onSelectRow(row)">{{row.uitemplate}}</a></td>
-          <td title="{{ 'CATEGORY_FROM' | translate }}"><a (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'CATEGORY_TO' | translate }}"><a (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'CATEGORY_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
           <td title="{{ 'CATEGORY_NAV' | translate }}"><a (click)="onSelectRow(row)"> <span [innerHTML]="getNavFlags(row)"></span></a></td>
         </template>
       </tr>

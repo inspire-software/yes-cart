@@ -69,7 +69,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   validForSave:boolean = false;
 
   newTypeInstance():ProductTypeVO {
-    return { producttypeId: 0, name: '', description: null, uitemplate: null, uisearchtemplate: null, ensemble: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
+    return { producttypeId: 0, guid: null, name: '', description: null, uitemplate: null, uisearchtemplate: null, ensemble: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
   }
 
   ngOnInit() {

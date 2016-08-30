@@ -112,6 +112,19 @@ export interface BasicCategoryVO {
 
 }
 
+export interface CategoryNavigationPriceTierVO {
+
+  from : number;
+  to : number;
+
+}
+
+export interface CategoryNavigationPriceTiersVO {
+
+  tiers : Array<Pair<string, Array<CategoryNavigationPriceTierVO>>>;
+
+}
+
 export interface CategoryVO {
 
   categoryId : number;
@@ -158,7 +171,7 @@ export interface CategoryVO {
   navigationByAttributes : boolean;
   navigationByBrand : boolean;
   navigationByPrice : boolean;
-  navigationByPriceTiers  : string;
+  navigationByPriceTiers  : CategoryNavigationPriceTiersVO;
 
   children : Array<CategoryVO>;
 
