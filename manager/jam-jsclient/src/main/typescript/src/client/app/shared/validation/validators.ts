@@ -100,6 +100,10 @@ export class YcValidators {
 
   static requiredPositiveWholeNumber = Validators.compose([Validators.required, YcValidators.positiveWholeNumber]);
 
+  static positiveNumber = Validators.pattern('[0-9]+(\.[0-9]+)?');
+
+  static requiredPositiveNumber = Validators.compose([Validators.required, YcValidators.positiveNumber]);
+
   static rank = Validators.pattern('\-?[0-9]+');
 
   static requiredRank = Validators.compose([Validators.required, YcValidators.rank]);

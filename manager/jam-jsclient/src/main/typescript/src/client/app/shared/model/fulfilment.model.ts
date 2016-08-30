@@ -47,3 +47,18 @@ export interface ShopFulfilmentCentreVO extends FulfilmentCentreInfoVO {
 
 }
 
+export interface InventoryVO {
+
+  skuWarehouseId : number;
+
+  skuCode : string;
+  skuName : string;
+
+  warehouseCode : string;
+  warehouseName : string;
+
+  quantity : number;
+  reserved : number;
+
+}
+

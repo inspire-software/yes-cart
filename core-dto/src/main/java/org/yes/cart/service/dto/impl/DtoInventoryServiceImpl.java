@@ -172,6 +172,66 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
     }
 
     /** {@inheritDoc} */
+    public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<InventoryDTO> inventory = new ArrayList<InventoryDTO>();
+
+        if (warehouseId > 0L) {
+            // only allow lists for warehouse inventory lists
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("warehouse.warehouseId", warehouseId));
+            if (StringUtils.hasLength(filter)) {
+
+                final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                    public void tune(final Criteria crit) {
+                        crit.createAlias("product", "prod");
+                        crit.setFetchMode("prod", FetchMode.JOIN);
+                    }
+                }, Restrictions.or(
+                        Restrictions.or(
+                                Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
+                                Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
+                        ),
+                        Restrictions.or(
+                                Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
+                                Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                        )
+                ));
+
+                final List<String> skuCodes = new ArrayList<String>();
+                for (final ProductSku sku : skus) {
+                    skuCodes.add(sku.getCode()); // sku codes from product match
+                }
+
+                if (skuCodes.isEmpty()) {
+                    criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
+                } else {
+                    criteria.add(
+                            Restrictions.or(
+                                    Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
+                                    Restrictions.in("skuCode", skuCodes)
+                            )
+                    );
+                }
+            }
+
+            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+            final Map<String, Object> adapters = adaptersRepository.getAll();
+            for (final SkuWarehouse entity : entities) {
+                final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
+                skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
+                inventory.add(dto);
+            }
+
+        }
+
+        return inventory;
+
+    }
+
+    /** {@inheritDoc} */
     public List<WarehouseDTO> getWarehouses() throws UnmappedInterfaceException, UnableToCreateInstanceException {
         return dtoWarehouseService.getAll();
     }

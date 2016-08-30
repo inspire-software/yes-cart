@@ -15,6 +15,8 @@
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
   "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
+  "SHOP_SELECTION_REQUIRED": "This view requires shop selection. Please click the button to choose.",
+  "FULFILMENT_CENTRE_SELECTION_REQUIRED": "This view requires fulfilment centre selection. Please click the button to choose.",
 
   "LICENSE_TITLE": "YOU HAVE AGREED TO THE FOLLOWING:",
   "MODAL_LICENSE_TITLE": "LICENSE AGREEMENT",
@@ -226,6 +228,11 @@
   "PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R": "Range",
   "PRODUCT_TYPE_ATTR_NEW_DUPLICATE": "Selected attribute is already assigned to this type",
 
-  "PRODUCT_TYPE_TAB_GROUPS": "Attribute Groups"
+  "PRODUCT_TYPE_TAB_GROUPS": "Attribute Groups",
+
+  "INVENTORY_STOCK": "Stock",
+  "INVENTORY_RESERVED": "Reserved",
+  "INVENTORY_CENTRE": "Fulfilment centre",
+  "INVENTORY_CENTRE_CODE": "Centre code"
 
 }

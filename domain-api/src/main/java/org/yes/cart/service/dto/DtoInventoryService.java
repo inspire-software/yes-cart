@@ -49,6 +49,18 @@ public interface DtoInventoryService {
     List<InventoryDTO> getInventoryList(InventoryFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
+     * Inventory by filter.
+     *
+     * @param warehouseId warehouse id
+     * @param filter criteria
+     * @param page start page
+     * @param pageSize page size
+     *
+     * @return inventory
+     */
+    List<InventoryDTO> findBy(long warehouseId, String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
      * Create or update inventory object.
      *
      * @param inventory inventory

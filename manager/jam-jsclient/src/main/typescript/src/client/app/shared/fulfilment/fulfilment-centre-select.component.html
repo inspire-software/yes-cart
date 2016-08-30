@@ -1,0 +1,16 @@
+<ul class="nav nav-second-level item-list-control">
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="centreFilter" [(ngModel)]="centreFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let centre of filteredCentres">
+    <a (click)="onSelectClick(centre)" class="{{ (selectedCentre != null && centre != null && selectedCentre.warehouseId == centre.warehouseId) ? 'bg-info js-click' : 'js-click' }}"  [title]="centre.code">{{centre.name}}</a>
+  </li>
+
+</ul>
+

@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {FulfilmentCentreShopLinkVO, FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO} from '../model/index';
+import {FulfilmentCentreShopLinkVO, FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, InventoryVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -128,6 +128,72 @@ export class FulfilmentService {
     return this.http.delete(this._serviceBaseUrl + '/centre/' + centre.warehouseId, options)
       .catch(this.handleError);
   }
+
+
+  /**
+   * Get list of all inventory, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredInventory(centre:FulfilmentCentreInfoVO, filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered/' + max, body, options)
+      .map(res => <InventoryVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get inventory, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getInventoryById(inventoryId:number) {
+    return this.http.get(this._serviceBaseUrl + '/inventory/' + inventoryId)
+      .map(res => <InventoryVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Create/update inventory.
+   * @param inventory inventory
+   * @returns {Observable<R>}
+   */
+  saveInventory(inventory:InventoryVO) {
+
+    let body = JSON.stringify(inventory);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (inventory.skuWarehouseId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/inventory', body, options)
+        .map(res => <InventoryVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/inventory', body, options)
+        .map(res => <InventoryVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove inventory.
+   * @param inventory inventory
+   * @returns {Observable<R>}
+   */
+  removeInventory(inventory:InventoryVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/inventory/' + inventory.skuWarehouseId, options)
+      .catch(this.handleError);
+  }
+
+
 
   private handleError (error:any) {
 

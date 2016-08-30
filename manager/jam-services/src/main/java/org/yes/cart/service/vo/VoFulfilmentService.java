@@ -18,6 +18,7 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
+import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
 
 import java.util.List;
@@ -97,6 +98,53 @@ public interface VoFulfilmentService {
      * @throws Exception
      */
     void removeFulfilmentCentre(long id) throws Exception;
+
+    /**
+     * Get inventory for given fulfilment centre.
+     *
+     * @param centreId centre pk
+     * @param filter filter
+     * @param max max results
+     * @return results
+     *
+     * @throws Exception
+     */
+    List<VoInventory> getFilteredInventory(long centreId, String filter, int max) throws Exception;
+
+    /**
+     * Get inventory by id.
+     *
+     * @param id inventory id
+     * @return inventory vo
+     * @throws Exception
+     */
+    VoInventory getInventoryById(long id) throws Exception;
+
+    /**
+     * Update given inventory.
+     *
+     * @param vo inventory to update
+     * @return updated instance
+     * @throws Exception
+     */
+    VoInventory updateInventory(VoInventory vo) throws Exception;
+
+    /**
+     * Create new inventory
+     *
+     * @param vo given instance to persist
+     * @return persisted instance
+     * @throws Exception
+     */
+    VoInventory createInventory(VoInventory vo) throws Exception;
+
+    /**
+     * Remove inventory by id.
+     *
+     * @param id inventory id
+     * @throws Exception
+     */
+    void removeInventory(long id) throws Exception;
 
 
 }

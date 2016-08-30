@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
+import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
 
 import java.util.List;
@@ -74,6 +75,31 @@ public interface FulfilmentEndpointController {
     @ResponseBody
     void removeFulfilmentCentre(@PathVariable("id") long id) throws Exception;
 
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN"})
+    @RequestMapping(value = "/inventory/centre/{id}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoInventory> getFilteredInventory(@PathVariable("id") long centreId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN"})
+    @RequestMapping(value = "/inventory/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoInventory getInventoryById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN"})
+    @RequestMapping(value = "/inventory", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoInventory createInventory(@RequestBody VoInventory vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN"})
+    @RequestMapping(value = "/inventory", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoInventory updateInventory(@RequestBody VoInventory vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN"})
+    @RequestMapping(value = "/inventory/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeInventory(@PathVariable("id") long id) throws Exception;
 
 
 }

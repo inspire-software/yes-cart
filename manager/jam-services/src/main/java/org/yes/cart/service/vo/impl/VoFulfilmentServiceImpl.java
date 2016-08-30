@@ -17,12 +17,12 @@
 package org.yes.cart.service.vo.impl;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
-import org.yes.cart.domain.vo.VoFulfilmentCentreShopLink;
-import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.domain.dto.impl.InventoryDTOImpl;
+import org.yes.cart.domain.vo.*;
+import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
@@ -40,14 +40,17 @@ import java.util.Map;
 public class VoFulfilmentServiceImpl implements VoFulfilmentService {
 
     private final DtoWarehouseService dtoWarehouseService;
+    private final DtoInventoryService dtoInventoryService;
 
     private final FederationFacade federationFacade;
     private final VoAssemblySupport voAssemblySupport;
 
     public VoFulfilmentServiceImpl(final DtoWarehouseService dtoWarehouseService,
+                                   final DtoInventoryService dtoInventoryService,
                                    final FederationFacade federationFacade,
                                    final VoAssemblySupport voAssemblySupport) {
         this.dtoWarehouseService = dtoWarehouseService;
+        this.dtoInventoryService = dtoInventoryService;
         this.federationFacade = federationFacade;
         this.voAssemblySupport = voAssemblySupport;
     }
@@ -159,8 +162,6 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     public VoFulfilmentCentre updateFulfilmentCentre(final VoFulfilmentCentre vo) throws Exception {
         if (vo != null && federationFacade.isManageable(vo.getWarehouseId(), WarehouseDTO.class)) {
 
-            final VoFulfilmentCentre existing = getFulfilmentCentreById(vo.getWarehouseId());
-
             WarehouseDTO dto = dtoWarehouseService.getById(vo.getWarehouseId());
             dto = dtoWarehouseService.update(
                     voAssemblySupport.assembleDto(WarehouseDTO.class, VoFulfilmentCentreInfo.class, dto, vo)
@@ -219,5 +220,80 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    @Override
+    public List<VoInventory> getFilteredInventory(final long centreId, final String filter, final int max) throws Exception {
+
+        if (federationFacade.isManageable(centreId, WarehouseDTO.class)) {
+
+            final List<InventoryDTO> dtos = dtoInventoryService.findBy(centreId, filter, 0, max);
+
+            return voAssemblySupport.assembleVos(VoInventory.class, InventoryDTO.class, dtos);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoInventory getInventoryById(final long id) throws Exception {
+
+        final InventoryDTO dto = dtoInventoryService.getInventory(id);
+
+        if (dto != null && federationFacade.isManageable(dto.getWarehouseCode(), WarehouseDTO.class)) {
+
+            return voAssemblySupport.assembleVo(VoInventory.class, InventoryDTO.class, new VoInventory(), dto);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoInventory updateInventory(final VoInventory vo) throws Exception {
+
+        final InventoryDTO dto = dtoInventoryService.getInventory(vo.getSkuWarehouseId());
+
+        if (dto != null && federationFacade.isManageable(vo.getWarehouseCode(), WarehouseDTO.class)) {
+
+            final InventoryDTO updated = voAssemblySupport.assembleDto(InventoryDTO.class, VoInventory.class, dto, vo);
+
+            dtoInventoryService.updateInventory(updated);
+
+            return getInventoryById(updated.getSkuWarehouseId());
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoInventory createInventory(final VoInventory vo) throws Exception {
+
+        if (federationFacade.isManageable(vo.getWarehouseCode(), WarehouseDTO.class)) {
+
+            InventoryDTO created = voAssemblySupport.assembleDto(InventoryDTO.class, VoInventory.class, new InventoryDTOImpl(), vo);
+
+            created = dtoInventoryService.createInventory(created);
+
+            return getInventoryById(created.getSkuWarehouseId());
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public void removeInventory(final long id) throws Exception {
+
+        // check access
+        getInventoryById(id);
+        dtoInventoryService.removeInventory(id);
+
     }
 }

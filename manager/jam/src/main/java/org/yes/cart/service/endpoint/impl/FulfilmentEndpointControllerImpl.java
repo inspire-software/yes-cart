@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoFulfilmentCentre;
 import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
+import org.yes.cart.domain.vo.VoInventory;
 import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
 import org.yes.cart.service.endpoint.FulfilmentEndpointController;
 import org.yes.cart.service.vo.VoFulfilmentService;
@@ -81,5 +82,31 @@ public class FulfilmentEndpointControllerImpl implements FulfilmentEndpointContr
     @Override
     public @ResponseBody void removeFulfilmentCentre(@PathVariable("id") final long id) throws Exception {
         voFulfilmentService.removeFulfilmentCentre(id);
+    }
+
+
+    @Override
+    public @ResponseBody List<VoInventory> getFilteredInventory(@PathVariable("id") final long centreId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voFulfilmentService.getFilteredInventory(centreId, filter, max);
+    }
+
+    @Override
+    public @ResponseBody VoInventory getInventoryById(@PathVariable("id") final long id) throws Exception {
+        return voFulfilmentService.getInventoryById(id);
+    }
+
+    @Override
+    public @ResponseBody VoInventory createInventory(@RequestBody final VoInventory vo) throws Exception {
+        return voFulfilmentService.createInventory(vo);
+    }
+
+    @Override
+    public @ResponseBody VoInventory updateInventory(@RequestBody final VoInventory vo) throws Exception {
+        return voFulfilmentService.updateInventory(vo);
+    }
+
+    @Override
+    public @ResponseBody void removeInventory(@PathVariable("id") final long id) throws Exception {
+        voFulfilmentService.removeInventory(id);
     }
 }
