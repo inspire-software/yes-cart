@@ -215,6 +215,8 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
           _sub.unsubscribe();
         });
       }
+    } else {
+      this.centreEdit = null;
     }
   }
 

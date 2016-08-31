@@ -340,6 +340,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
           _sub.unsubscribe();
         });
       }
+    } else {
+      if (this.selectedState != null) {
+        this.stateEdit = null;
+      } else {
+        this.countryEdit = null;
+      }
     }
   }
 

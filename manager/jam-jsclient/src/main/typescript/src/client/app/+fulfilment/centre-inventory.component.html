@@ -18,7 +18,7 @@
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="inventoryEdit != null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null || inventoryEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
     </button>
 
@@ -109,7 +109,7 @@
             <div class="col-lg-9">
               <input class="form-control" formControlName="quantity" name="quantity" type="text" [(ngModel)]="inventoryEdit.quantity" (ngModelChange)="onFormDataChange($event)">
               <div [hidden]="inventoryEditForm.controls['quantity'].valid || inventoryEditForm.controls['quantity'].pristine" class="alert alert-danger">
-                {{ 'NUM_REQUIRED' | translate }}
+                {{ 'POS_DECIMAL_REQUIRED' | translate }}
               </div>
             </div>
           </div>

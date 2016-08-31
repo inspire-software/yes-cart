@@ -347,6 +347,8 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       this.onSelectRow(this.selectedRow); // deselect
       this.changed = true;
       this.processDataChangesEvent();
+    } else {
+      this.groupToEdit = null;
     }
   }
 
@@ -363,6 +365,8 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
       this.changed = true;
       this.filterGroups();
       this.processDataChangesEvent();
+    } else {
+      this.groupToEdit = null;
     }
   }
 

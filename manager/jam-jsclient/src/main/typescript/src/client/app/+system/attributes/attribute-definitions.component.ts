@@ -353,6 +353,8 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
         });
 
       }
+    } else {
+      this.attributeEdit = null;
     }
   }
 

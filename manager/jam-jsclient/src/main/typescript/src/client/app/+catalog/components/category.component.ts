@@ -309,7 +309,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   protected onEditPriceTiers() {
     console.debug('CategoryComponent onCategoryProductTypeSelected handler');
-    if (this._category.navigationByPriceTiers != null) {
+    if (this._category.navigationByPriceTiers != null && this._category.navigationByPriceTiers.tiers != null) {
       this.navigationByPriceTiers = Util.clone(this._category.navigationByPriceTiers)
     } else {
       this.navigationByPriceTiers = { tiers: [] }
@@ -325,6 +325,8 @@ export class CategoryComponent implements OnInit, OnDestroy {
       this.navigationByPriceTiers = null;
       this.changed = true;
       this.categoryForm.updateValueAndValidity();
+    } else {
+      this.navigationByPriceTiers = null;
     }
   }
 

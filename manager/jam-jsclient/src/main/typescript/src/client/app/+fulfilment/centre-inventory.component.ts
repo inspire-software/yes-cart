@@ -74,7 +74,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     console.debug('CentreInventoryComponent constructed');
 
     this.inventoryEditForm = fb.group({
-      'skuCode': ['', YcValidators.validCode],
+      'skuCode': ['', YcValidators.requiredValidCode],
       'skuName': [''],
       'warehouseCode': ['', Validators.required],
       'warehouseName': [''],
@@ -205,8 +205,8 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
     console.debug('CentreInventoryComponent onRowNew handler');
     this.changedSingle = false;
     this.validForSave = false;
-    this.inventoryEdit = this.newInventoryInstance();
     this.formReset();
+    this.inventoryEdit = this.newInventoryInstance();
     this.editInventoryModalDialog.show();
   }
 
@@ -225,10 +225,10 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onRowEditInventory(row:InventoryVO) {
     console.debug('CentreInventoryComponent onRowEditInventory handler', row);
+    this.formReset();
     this.inventoryEdit = Util.clone(row);
     this.changedSingle = false;
     this.validForSave = false;
-    this.formReset();
     this.editInventoryModalDialog.show();
   }
 
@@ -279,6 +279,10 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
       this.onSaveHandler();
 
+    } else {
+
+      this.inventoryEdit = null;
+
     }
   }
 
@@ -297,6 +301,8 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
           this.getFilteredInventory();
         });
       }
+    } else {
+      this.inventoryEdit = null;
     }
   }
 

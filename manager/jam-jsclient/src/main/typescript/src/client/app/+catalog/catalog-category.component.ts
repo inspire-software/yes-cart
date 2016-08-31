@@ -83,7 +83,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
       uitemplate: null,
       availablefrom: null, availableto: null,
       uri: null, title: null, metakeywords: null, metadescription: null, displayTitles: [], displayMetakeywords: [], displayMetadescriptions: [],
-      navigationByAttributes: false, navigationByBrand: false, navigationByPrice: false, navigationByPriceTiers: null, children: []
+      navigationByAttributes: false, navigationByBrand: false, navigationByPrice: false, navigationByPriceTiers: { tiers: [] }, children: []
     };
   }
 
@@ -305,6 +305,8 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
           this.getFilteredCategories();
         });
       }
+    } else {
+      this.categoryEdit = null;
     }
   }
 

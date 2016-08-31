@@ -246,6 +246,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       this.onSelectRow(null);
       this.changed = true;
       this.processDataChangesEvent();
+    } else {
+      this.attributeToEdit = null;
     }
   }
 
@@ -265,6 +267,8 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       this.changed = true;
       this.filterAttributes();
       this.processDataChangesEvent();
+    } else {
+      this.attributeToEdit = null;
     }
   }
 
