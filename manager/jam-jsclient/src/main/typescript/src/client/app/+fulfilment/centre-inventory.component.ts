@@ -129,21 +129,21 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   formUnbind():void {
     if (this.inventoryEditFormSub) {
-      console.debug('ShopCatalogComponent unbining form');
+      console.debug('CentreInventoryComponent unbining form');
       this.inventoryEditFormSub.unsubscribe();
     }
   }
 
 
   onFormDataChange(event:any) {
-    console.debug('ShopCatalogComponent data changed', event);
+    console.debug('CentreInventoryComponent data changed', event);
     this.changedSingle = true;
   }
 
 
 
   protected onFulfilmentCentreSelect() {
-    console.debug('CentreInventoryComponent ngAfterViewInit');
+    console.debug('CentreInventoryComponent onFulfilmentCentreSelect');
     this.selectCentreModalDialog.show();
   }
 
@@ -153,7 +153,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectCentreResult(modalresult: ModalResult) {
-    console.debug('CentreInventoryComponent onDeleteConfirmationResult modal result is ', modalresult);
+    console.debug('CentreInventoryComponent onSelectCentreResult modal result is ', modalresult);
     if (this.selectedCentre == null) {
       this.selectCentreModalDialog.show();
     } else {
@@ -202,6 +202,16 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   onInventorySelected(data:InventoryVO) {
     console.debug('CentreInventoryComponent onInventorySelected', data);
     this.selectedInventory = data;
+  }
+
+  protected onSearchLow() {
+    this.inventoryFilter = '-5';
+    this.getFilteredInventory();
+  }
+
+  protected onSearchReserved() {
+    this.inventoryFilter = '+0.001';
+    this.getFilteredInventory();
   }
 
   protected onForceShowAll() {

@@ -10,6 +10,14 @@
       <input class="filter-input" type="text" name="inventoryFilter" [(ngModel)]="inventoryFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
     </form>
 
+    <button type="button" (click)="onSearchLow()" class="btn btn-circle btn-xl">
+      <i class="fa fa-exclamation"></i>
+    </button>
+
+    <button type="button" (click)="onSearchReserved()" class="btn btn-circle btn-xl">
+      <i class="fa fa-truck"></i>
+    </button>
+
     <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
       <i class="fa fa-filter"></i>
     </button>
@@ -131,7 +139,9 @@
          [valid]="selectedCentre != null"
          (closed)="onSelectCentreResult($event)">
 
+    <div class="item-list-overflow">
       <yc-fulfilment-centre-select (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
+    </div>
 
   </modal>
 

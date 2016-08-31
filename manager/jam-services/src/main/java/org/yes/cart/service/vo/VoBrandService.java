@@ -28,7 +28,7 @@ public interface VoBrandService {
 
     /**
      * Get all brands in the system, filtered by criteria and according to rights, up to max
-     * @return list of categories
+     * @return list of brands
      * @throws Exception
      */
     List<VoBrand> getFiltered(String filter, int max) throws Exception;
