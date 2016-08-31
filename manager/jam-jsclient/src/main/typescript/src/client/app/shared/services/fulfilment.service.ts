@@ -141,7 +141,7 @@ export class FulfilmentService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered/' + max, body, options)
-      .map(res => <InventoryVO> res.json())
+      .map(res => <InventoryVO[]> res.json())
       .catch(this.handleError);
   }
 

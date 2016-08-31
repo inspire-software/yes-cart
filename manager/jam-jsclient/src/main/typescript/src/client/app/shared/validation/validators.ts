@@ -104,6 +104,10 @@ export class YcValidators {
 
   static requiredPositiveNumber = Validators.compose([Validators.required, YcValidators.positiveNumber]);
 
+  static nonZeroPositiveNumber = Validators.pattern('[1-9][0-9]*(\.[0-9]+)?');
+
+  static requiredNonZeroPositiveNumber = Validators.compose([Validators.required, YcValidators.nonZeroPositiveNumber]);
+
   static rank = Validators.pattern('\-?[0-9]+');
 
   static requiredRank = Validators.compose([Validators.required, YcValidators.rank]);

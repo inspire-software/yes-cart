@@ -13,11 +13,14 @@
   "URI_REQUIRED": "Valid URI is required (A-Z, a-z, 0-9, _ or -)",
   "REMOTE_CHECK": "Performing duplicate data check...",
   "UNIQUE_REQUIRED": "This value has already been used. Please choose another.",
+  "TAGS_REQUIRED": "Tags must be separated by space and should be one word. E.g. 'onetag another third123'",
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
   "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
   "SHOP_SELECTION_REQUIRED": "This view requires shop selection. Please click the button to choose.",
   "FULFILMENT_CENTRE_SELECTION_REQUIRED": "This view requires fulfilment centre selection. Please click the button to choose.",
+  "SHOP_SELECTION_REQUIRED": "This view requires shop selection. Please click the button to choose.",
+  "CURRENCY_SELECTION_REQUIRED": "This view requires currency selection. Please click the button to choose.",
 
   "LICENSE_TITLE": "YOU HAVE AGREED TO THE FOLLOWING:",
   "MODAL_LICENSE_TITLE": "LICENSE AGREEMENT",
@@ -235,6 +238,17 @@
   "INVENTORY_STOCK": "Stock",
   "INVENTORY_RESERVED": "Reserved",
   "INVENTORY_CENTRE": "Fulfilment centre",
-  "INVENTORY_CENTRE_CODE": "Centre code"
+  "INVENTORY_CENTRE_CODE": "Centre code",
+
+  "PRICELIST_CURRENCY": "Currency",
+  "PRICELIST_QUANTITY": "Tier",
+  "PRICELIST_REGULAR": "List",
+  "PRICELIST_SALE": "Sale",
+  "PRICELIST_MIN": "Min",
+  "PRICELIST_FROM": "From",
+  "PRICELIST_TO": "To",
+  "PRICELIST_POLICY": "Policy",
+  "PRICELIST_TAG": "Tags",
+  "PRICELIST_SHOP_CODE": "Shop code"
 
 }

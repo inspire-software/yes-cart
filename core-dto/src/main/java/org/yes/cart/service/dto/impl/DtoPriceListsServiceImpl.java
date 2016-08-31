@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
+import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
@@ -43,10 +44,7 @@ import org.yes.cart.service.dto.support.PriceListFilter;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -226,6 +224,147 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
         }
 
         return priceList;
+    }
+
+    /** {@inheritDoc} */
+    public List<PriceListDTO> findBy(final long shopId, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<PriceListDTO> priceList = new ArrayList<PriceListDTO>();
+
+        if (shopId > 0 && StringUtils.hasLength(currency)) {
+            // only allow lists for shop+currency selection
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("shop.shopId", shopId));
+            criteria.add(Restrictions.eq("currency", currency));
+            if (StringUtils.hasLength(filter)) {
+
+                if (filter.startsWith("#")) {
+
+                    // tag & policy search
+                    final String tagOrPolicy = filter.substring(1);
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("tag", tagOrPolicy, MatchMode.ANYWHERE),
+                            Restrictions.eq("pricingPolicy", tagOrPolicy)
+                    ));
+
+                } else if (filter.contains("<")) {
+
+                    final String[] fromAndTo = org.apache.commons.lang.StringUtils.splitPreserveAllTokens(filter, '<');
+                    final Date from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0]) : null;
+                    final Date to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1]) : null;
+
+                    // time search
+                    if (from != null) {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ge("salefrom", from),
+                                        Restrictions.isNull("salefrom")
+                                )
+                        );
+                    }
+                    if (to != null) {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.le("saleto", to),
+                                        Restrictions.isNull("saleto")
+                                )
+                        );
+                    }
+
+                } else {
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
+                            ),
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                            )
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    if (skuCodes.isEmpty()) {
+                        criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
+                    } else {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
+                                        Restrictions.in("skuCode", skuCodes)
+                                )
+                        );
+                    }
+                }
+            }
+
+            final List<SkuPrice> entities = skuPriceDAO.findByCriteria(new CriteriaTuner() {
+                public void tune(final Criteria crit) {
+                    crit.createAlias("shop", "shop");
+                    crit.setFetchMode("shop", FetchMode.JOIN);
+                }
+            }, page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+            final Map<String, Object> adapters = adaptersRepository.getAll();
+            for (final SkuPrice entity : entities) {
+                final PriceListDTO dto = dtoFactory.getByIface(PriceListDTO.class);
+                skuPriceAsm.assembleDto(dto, entity, adapters, dtoFactory);
+                priceList.add(dto);
+            }
+
+        }
+
+        return priceList;
+    }
+
+    private Date stringToDate(String string) {
+        if (StringUtils.hasLength(string)) {
+            final String[] dateParts = org.apache.commons.lang.StringUtils.split(string, '-');
+            final Calendar cal = Calendar.getInstance();
+            if (dateParts.length > 0) {
+                cal.set(Calendar.YEAR, NumberUtils.toInt(dateParts[0]));
+            }
+            if (dateParts.length > 1) {
+                cal.set(Calendar.MONTH, NumberUtils.toInt(dateParts[1]) - 1);
+            } else {
+                cal.set(Calendar.MONTH, 0);
+            }
+            if (dateParts.length > 2) {
+                cal.set(Calendar.DATE, NumberUtils.toInt(dateParts[2]));
+            } else {
+                cal.set(Calendar.DATE, 1);
+            }
+            cal.set(Calendar.HOUR, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            return cal.getTime();
+        }
+        return null;
+    }
+
+    /** {@inheritDoc} */
+    public PriceListDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final SkuPrice entity = skuPriceDAO.findById(id);
+
+        final Map<String, Object> adapters = adaptersRepository.getAll();
+
+        final PriceListDTO price = dtoFactory.getByIface(PriceListDTO.class);
+
+        skuPriceAsm.assembleDto(price, entity, adapters, dtoFactory);
+
+        return price;
+
     }
 
     /** {@inheritDoc} */

@@ -12,6 +12,7 @@ export * from './management.service';
 export * from './location.service';
 export * from './shipping.service';
 export * from './fulfilment.service';
+export * from './pricing.service';
 export * from './payment.service';
 export * from './system.service';
 export * from './organisation.service';

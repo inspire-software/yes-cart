@@ -171,7 +171,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   get availableto():string {
     if (this._category != null && this._category.availableto != null) {
       let date = Util.toDateString(this._category.availableto, true);
-      console.debug('CategoryComponent get availableto', this._category.availablefrom, date);
+      console.debug('CategoryComponent get availableto', this._category.availableto, date);
       return date;
     }
     return null;
@@ -202,11 +202,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
   set availablefrom(availablefrom:string) {
     if (this._category != null) {
       if (availablefrom == null || availablefrom.length == 0) {
-        console.debug('CategoryComponent set availableto', availablefrom);
+        console.debug('CategoryComponent set availablefrom', availablefrom);
         this._category.availablefrom = null;
       } else if (availablefrom.length == 10 || availablefrom.length == 19) {
         let date = Util.toDate(availablefrom);
-        console.debug('CategoryComponent set availableto', availablefrom, date);
+        console.debug('CategoryComponent set availablefrom', availablefrom, date);
         this._category.availablefrom = date;
       }
     }

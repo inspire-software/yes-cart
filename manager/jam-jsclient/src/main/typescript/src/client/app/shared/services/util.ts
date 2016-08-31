@@ -166,12 +166,12 @@ export class Util {
       let dateAndTime = date.split(' ');
       let dateParts = dateAndTime[0].split('-');
       let timeParts = dateAndTime[1].split(':');
-      console.debug('Util toDate datetime', dateParts, timeParts);
+      // console.debug('Util toDate datetime', dateParts, timeParts);
       return new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2], +timeParts[0], +timeParts[1], +timeParts[2], 0);
     }
     // date only
     let dateParts = date.split('-');
-    console.debug('Util toDate date', dateParts);
+    // console.debug('Util toDate date', dateParts);
     return new Date(+dateParts[0], +dateParts[1] - 1, +dateParts[2], 0, 0, 0, 0);
 
   }

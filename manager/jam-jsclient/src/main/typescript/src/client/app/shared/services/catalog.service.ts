@@ -51,7 +51,7 @@ export class CatalogService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/brand/filtered/' + max, body, options)
-        .map(res => <BrandVO> res.json())
+        .map(res => <BrandVO[]> res.json())
         .catch(this.handleError);
   }
 
@@ -142,7 +142,7 @@ export class CatalogService {
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/producttypes/filtered/' + max, body, options)
-      .map(res => <ProductTypeInfoVO> res.json())
+      .map(res => <ProductTypeInfoVO[]> res.json())
       .catch(this.handleError);
   }
 
@@ -251,7 +251,7 @@ export class CatalogService {
    */
   getCategoryById(categoryId:number) {
     return this.http.get(this._serviceBaseUrl + '/category/' + categoryId)
-      .map(res => <BrandVO> res.json())
+      .map(res => <CategoryVO> res.json())
       .catch(this.handleError);
   }
 

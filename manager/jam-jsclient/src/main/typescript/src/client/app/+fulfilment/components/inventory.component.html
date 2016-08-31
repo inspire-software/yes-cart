@@ -15,8 +15,8 @@
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
-          <td title="{{ 'INVENTORY_STOCK' | translate }}"><a (click)="onSelectRow(row)">{{row.quantity}}</a></td>
-          <td title="{{ 'INVENTORY_RESERVED' | translate }}"><a (click)="onSelectRow(row)">{{row.reserved}}</a></td>
+          <td title="{{ 'INVENTORY_STOCK' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.quantity | ycquantity}}</a></td>
+          <td title="{{ 'INVENTORY_RESERVED' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.reserved | ycquantity}}</a></td>
         </template>
       </tr>
       </tbody>

@@ -14,6 +14,7 @@ import {
   OrganisationService,
   CatalogService,
   FulfilmentService,
+  PricingService,
   ManagementService,
   PaymentService,
   AttributeService,
@@ -21,7 +22,9 @@ import {
 } from './shared/services/index';
 
 import {
-  YcDatePipe, YcDateTimePipe
+  YcDatePipe, YcDateTimePipe,
+  YcQuantityPipe,
+  YcPricePipe
 } from './shared/pipes/index'
 
 import { APP_ROUTER_PROVIDERS } from './app.routes';
@@ -66,7 +69,7 @@ bootstrap(AppComponent, [
    */
   {
     provide: PLATFORM_PIPES,
-    useValue: [ YcDatePipe, YcDateTimePipe ],
+    useValue: [ YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe ],
     multi: true
   },
 
@@ -84,6 +87,7 @@ bootstrap(AppComponent, [
   OrganisationService,
   CatalogService,
   FulfilmentService,
+  PricingService,
   ManagementService,
   PaymentService,
   AttributeService,

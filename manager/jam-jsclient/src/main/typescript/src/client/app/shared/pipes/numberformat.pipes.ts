@@ -14,37 +14,32 @@
  *    limitations under the License.
  */
 import { Pipe, PipeTransform } from '@angular/core';
-import { Util } from './../services/util';
 
 /**
- * NG2 DatePipes use Intl package which is NOT available in some browsers, so
- * need to improvise.
- * see https://github.com/angular/angular/issues/3333
+ * Simple formatting of quantity (3 d.p.) and price (2 d.p.)
  */
 
-@Pipe({name: 'ycdate'})
-export class YcDatePipe implements PipeTransform {
+@Pipe({name: 'ycquantity'})
+export class YcQuantityPipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';
     }
 
-    //console.debug('ycdatetime formatting', value);
-    return Util.toDateString(value, false);
+    return parseFloat(value).toFixed(3);
 
   }
 }
 
 
-@Pipe({name: 'ycdatetime'})
-export class YcDateTimePipe implements PipeTransform {
+@Pipe({name: 'ycprice'})
+export class YcPricePipe implements PipeTransform {
   transform(value: any, args: string[]): string {
     if (value == null) {
       return '';
     }
 
-    //console.debug('ycdatetime formatting', value);
-    return Util.toDateString(value, true);
+    return parseFloat(value).toFixed(2);
   }
 }
 

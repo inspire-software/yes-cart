@@ -509,13 +509,10 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
     /**
-     * Find entities by criteria.
-     * @param criteriaTuner optional criteria tuner.
-     * @param criterion given criteria
-     * @return list of found entities.
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion) {
+    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
@@ -525,6 +522,22 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         }
         return crit.list();
 
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
     }
 
     /**
