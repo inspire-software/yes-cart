@@ -49,7 +49,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   filterCap:number = Config.UI_FILTER_CAP;
   filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
-  private selectedCentre:FulfilmentCentreInfoVO;
+  static _selectedCentre:FulfilmentCentreInfoVO;
   private selectedInventory:InventoryVO;
 
   private inventoryEdit:InventoryVO;
@@ -81,6 +81,14 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       'quantity': ['', YcValidators.requiredPositiveNumber],
       'reserved': [''],
     });
+  }
+
+  get selectedCentre():FulfilmentCentreInfoVO {
+     return CentreInventoryComponent._selectedCentre;
+  }
+
+  set selectedCentre(selectedCentre:FulfilmentCentreInfoVO) {
+    CentreInventoryComponent._selectedCentre = selectedCentre;
   }
 
   newInventoryInstance():InventoryVO {
