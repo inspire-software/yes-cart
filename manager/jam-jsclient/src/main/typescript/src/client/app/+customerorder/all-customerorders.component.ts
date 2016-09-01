@@ -16,13 +16,14 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {HTTP_PROVIDERS}    from '@angular/http';
-import {CustomerOrderService, I18nEventBus, Util} from './../shared/services/index';
+import {CustomerOrderService, I18nEventBus, ErrorEventBus, Util} from './../shared/services/index';
+import {YcValidators} from './../shared/validation/validators';
 import {UiUtil} from './../shared/ui/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {CustomerOrdersComponent, CustomerOrderComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CustomerOrderInfoVO} from './../shared/model/index';
+import {CustomerOrderInfoVO, CustomerOrderTransitionResultVO} from './../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
@@ -54,7 +55,22 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   private selectedCustomerorder:CustomerOrderInfoVO;
 
+  private selectedCustomerorderApprovable:boolean = false;
+  private selectedCustomerorderCancellable:boolean = false;
+  private selectedCustomerorderReturnable:boolean = false;
+  private selectedCustomerorderRefundable:boolean = false;
+  private selectedCustomerorderRefundableManual:boolean = false;
+
   private customerorderEdit:CustomerOrderInfoVO;
+
+  @ViewChild('orderTransitionConfirmationModalDialog')
+  orderTransitionConfirmationModalDialog:ModalComponent;
+  orderTransitionName:string = '';
+  orderTransitionNameOfflineNote:boolean;
+  orderTransitionNumber:string = '';
+  orderTransitionRequiresMessage:boolean;
+  orderTransitionMessage:string;
+  orderTransitionValid:boolean = false;
 
   constructor(private _customerorderService:CustomerOrderService) {
     console.debug('AllCustomerOrdersComponent constructed');
@@ -122,6 +138,28 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   onCustomerorderSelected(data:CustomerOrderInfoVO) {
     console.debug('AllCustomerOrdersComponent onCustomerorderSelected', data);
     this.selectedCustomerorder = data;
+
+    this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' ' + this.selectedCustomerorder.lastname;
+    this.orderTransitionMessage = null;
+    this.orderTransitionRequiresMessage = false;
+    this.orderTransitionName = '';
+    this.orderTransitionNameOfflineNote = false;
+    this.orderTransitionValid = false;
+
+    let options = data.orderStatusNextOptions;
+    if (options != null && options.length > 0) {
+      this.selectedCustomerorderApprovable = options.indexOf('approve.order') != -1;
+      this.selectedCustomerorderCancellable = options.indexOf('cancel.order') != -1;
+      this.selectedCustomerorderReturnable = options.indexOf('return.order') != -1;
+      this.selectedCustomerorderRefundable = options.indexOf('cancel.order.refund') != -1;
+      this.selectedCustomerorderRefundableManual = options.indexOf('cancel.order.manual.refund') != -1;
+    } else {
+      this.selectedCustomerorderApprovable = false;
+      this.selectedCustomerorderCancellable = false;
+      this.selectedCustomerorderReturnable = false;
+      this.selectedCustomerorderRefundable = false;
+      this.selectedCustomerorderRefundableManual = false;
+    }
   }
 
   protected onSearchNumber() {
@@ -200,6 +238,113 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.onRowEditCustomerorder(this.selectedCustomerorder);
     }
   }
+
+  protected onApproveSelected() {
+    if (this.selectedCustomerorder != null) {
+      console.debug('AllCustomerOrdersComponent onApproveSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'approve.order';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onCancelSelected() {
+    if (this.selectedCustomerorder != null) {
+      console.debug('AllCustomerOrdersComponent onCancelSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'cancel.order';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onReturnSelected() {
+    if (this.selectedCustomerorder != null) {
+      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'return.order';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onRefundSelected() {
+    if (this.selectedCustomerorder != null) {
+      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'cancel.order.refund';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onRefundManualSelected() {
+    if (this.selectedCustomerorder != null) {
+      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = true;
+      this.orderTransitionName = 'cancel.order.manual.refund';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = false;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onTransitionMessageChange(event:any) {
+
+    this.orderTransitionValid = this.orderTransitionMessage != null && /\S+.*\S+/.test(this.orderTransitionMessage);
+
+  }
+
+  protected onOrderTransitionConfirmationResult(modalresult: ModalResult) {
+    console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      if (this.selectedCustomerorder != null) {
+        console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
+
+        var _sub:any = this._customerorderService.transitionOrder(
+          this.selectedCustomerorder, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
+            console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
+            if (res.errorCode === '0') {
+              console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result success');
+              // TODO: OK done, now refresh order
+            } else {
+              ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
+            }
+            _sub.unsubscribe();
+        });
+
+        //var _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
+        //  _sub.unsubscribe();
+        //  console.debug('CatalogBrandComponent removeBrand', this.selectedBrand);
+        //  this.selectedBrand = null;
+        //  this.brandEdit = null;
+        //  this.getFilteredBrands();
+        //});
+      }
+    }
+  }
+
 
   protected onSaveHandler() {
 

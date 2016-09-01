@@ -14,34 +14,20 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.service.order;
+package org.yes.cart.service.order.impl;
 
-import java.util.List;
+import org.yes.cart.domain.misc.Result;
+import org.yes.cart.service.order.OrderFlowAction;
 
 /**
  * User: denispavlov
- * Date: 31/08/2016
- * Time: 20:02
+ * Date: 01/09/2016
+ * Time: 17:50
  */
-public interface OrderFlow {
+public class NoopOrderAction implements OrderFlowAction {
 
-    /**
-     * Determine options for next transition of the order
-     *
-     * @param pgLabel payment gateway
-     * @param currentStatus current order status
-     *
-     * @return transition options
-     */
-    List<String> getNext(String pgLabel, String currentStatus);
-
-    /**
-     * Determine action object for given action key.
-     *
-     * @param action action key
-     *
-     * @return action object (or null)
-     */
-    OrderFlowAction getAction(String action);
-
+    @Override
+    public Result doTransition(final String orderNum, final Object params) {
+        return new Result(orderNum, null);
+    }
 }

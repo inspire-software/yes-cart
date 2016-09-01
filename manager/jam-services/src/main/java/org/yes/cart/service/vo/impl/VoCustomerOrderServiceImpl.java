@@ -16,8 +16,11 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.misc.Result;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
+import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.order.OrderFlow;
@@ -91,4 +94,31 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         return orderFlow.getNext(vo.getPgLabel(), vo.getOrderStatus());
     }
 
+    @Override
+    public VoCustomerOrderInfo getById(final long orderId) throws Exception {
+
+        if (federationFacade.isManageable(orderId, CustomerOrderDTO.class)) {
+
+            final CustomerOrderDTO dto = dtoCustomerOrderService.getById(orderId);
+            return voAssemblySupport.assembleVo(VoCustomerOrderInfo.class, CustomerOrderDTO.class, new VoCustomerOrderInfo(), dto);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoCustomerOrderTransitionResult transitionOrder(final String transition, final String ordernum, final String message) throws Exception {
+
+        if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
+
+            final Result result = this.orderFlow.getAction(transition).doTransition(ordernum, message);
+            return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
 }

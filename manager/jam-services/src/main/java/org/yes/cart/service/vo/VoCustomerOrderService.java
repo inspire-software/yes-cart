@@ -17,6 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
+import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 
 import java.util.List;
 
@@ -29,9 +30,39 @@ public interface VoCustomerOrderService {
 
     /**
      * Get all orders for given filter
+     *
+     * @param lang language used for PG localizations
+     * @param filter filter
+     * @param max max results
+     *
      * @return orders
+     *
      * @throws Exception
      */
     List<VoCustomerOrderInfo> getFiltered(String lang, String filter, int max) throws Exception;
+
+    /**
+     * Get order by id
+     *
+     * @param orderId order pk
+     *
+     * @return order
+     *
+     * @throws Exception
+     */
+    VoCustomerOrderInfo getById(long orderId) throws Exception;
+
+    /**
+     * Perform order transition.
+     *
+     * @param transition transition key
+     * @param ordernum order number
+     * @param message optional message
+     *
+     * @return transition result
+     *
+     * @throws Exception
+     */
+    VoCustomerOrderTransitionResult transitionOrder(String transition, String ordernum, String message) throws Exception;
 
 }

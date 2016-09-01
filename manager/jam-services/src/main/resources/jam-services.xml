@@ -148,6 +148,18 @@
         <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="defaultUiOrderFlowCancelAction" class="org.yes.cart.service.order.impl.CancelOrderAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlowCancelManualAction" class="org.yes.cart.service.order.impl.CancelOrderWithManualRefundAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlowApproveAction" class="org.yes.cart.service.order.impl.ApproveOrderAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
     <bean id="defaultUiOrderFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
         <constructor-arg index="0">
             <map>
@@ -191,6 +203,15 @@
                 </entry>
             </map>
         </constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="approve.order" value-ref="defaultUiOrderFlowApproveAction"/>
+                <entry key="cancel.order" value-ref="defaultUiOrderFlowCancelAction"/>
+                <entry key="cancel.order.refund" value-ref="defaultUiOrderFlowCancelAction"/>
+                <entry key="cancel.order.manual.refund" value-ref="defaultUiOrderFlowCancelManualAction"/>
+                <entry key="return.order" value-ref="defaultUiOrderFlowCancelAction"/>
+            </map>
+        </constructor-arg>
     </bean>
 
     <bean id="defaultUiOrderDeliveryFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
@@ -227,6 +248,9 @@
                     </list>
                 </entry>
             </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map/>
         </constructor-arg>
     </bean>
 

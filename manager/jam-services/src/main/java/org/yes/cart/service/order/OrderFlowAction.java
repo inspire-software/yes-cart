@@ -16,32 +16,23 @@
 
 package org.yes.cart.service.order;
 
-import java.util.List;
+import org.yes.cart.domain.misc.Result;
 
 /**
  * User: denispavlov
- * Date: 31/08/2016
- * Time: 20:02
+ * Date: 01/09/2016
+ * Time: 17:40
  */
-public interface OrderFlow {
+public interface OrderFlowAction {
 
     /**
-     * Determine options for next transition of the order
+     * Transition action.
      *
-     * @param pgLabel payment gateway
-     * @param currentStatus current order status
+     * @param orderNum order number
+     * @param params action parameters
      *
-     * @return transition options
+     * @return transition result
      */
-    List<String> getNext(String pgLabel, String currentStatus);
-
-    /**
-     * Determine action object for given action key.
-     *
-     * @param action action key
-     *
-     * @return action object (or null)
-     */
-    OrderFlowAction getAction(String action);
+    Result doTransition(String orderNum, Object params);
 
 }

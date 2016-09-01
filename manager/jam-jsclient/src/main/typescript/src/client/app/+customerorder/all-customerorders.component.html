@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }} {{ selectedCustomerorder && (!customerorderEdit || customerorderEdit.customerorderId > 0) ? (' / ' + selectedCustomerorder.ordernum + ' ' + selectedCustomerorder.lastname) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }} {{ orderTransitionNumber ? (' / ' + orderTransitionNumber) : '' }}</h1>
   </div>
 
 
@@ -17,6 +17,26 @@
 
     <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
       <i class="fa fa-filter"></i>
+    </button>
+
+    <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-ban"></i>
+    </button>
+
+    <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-reply"></i>
+    </button>
+
+    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-circle btn-xl">
+      <i class="fa fa-dollar"></i>
+    </button>
+
+    <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-dollar"></i>
     </button>
 
     <button type="button" (click)="onRowEditSelected()" [disabled]="customerorderEdit != null || selectedCustomerorder == null" class="btn btn-circle btn-xl">
@@ -62,5 +82,30 @@
     <yc-customerorder [customerorder]="customerorderEdit" [attributes]="customerorderEditAttributes"
                       (dataChanged)="onCustomerorderChanged($event)"></yc-customerorder>
   </div>
+
+  <modal #orderTransitionConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="orderTransitionValid"
+         (closed)="onOrderTransitionConfirmationResult($event)">
+
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-12" [hidden]="!orderTransitionNameOfflineNote">
+            <p class="bg-danger text-padding">{{ orderTransitionName + '.offlinenote' | translate }}</p>
+          </div>
+          <div class="col-xs-12">{{ orderTransitionName | translate:{order: orderTransitionNumber } }}</div>
+        </div>
+        <div class="row" [hidden]="!orderTransitionRequiresMessage">
+          <div class="col-lg-3">{{ 'CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" name="orderTransitionMessage" type="text" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </modal>
 
 </div>

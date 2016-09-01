@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl;
 
 import org.yes.cart.service.order.OrderFlow;
+import org.yes.cart.service.order.OrderFlowAction;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,10 +31,15 @@ import java.util.Map;
  */
 public class SimpleStaticOrderFlow implements OrderFlow {
 
-    private final Map<String, List<String>> flow;
+    private static final OrderFlowAction NOOP = new NoopOrderAction();
 
-    public SimpleStaticOrderFlow(final Map<String, List<String>> flow) {
+    private final Map<String, List<String>> flow;
+    private final Map<String, OrderFlowAction> actions;
+
+    public SimpleStaticOrderFlow(final Map<String, List<String>> flow,
+                                 final Map<String, OrderFlowAction> actions) {
         this.flow = flow;
+        this.actions = actions;
     }
 
     @Override
@@ -43,5 +49,14 @@ public class SimpleStaticOrderFlow implements OrderFlow {
             return Collections.emptyList();
         }
         return Collections.unmodifiableList(next);
+    }
+
+    @Override
+    public OrderFlowAction getAction(final String action) {
+        final OrderFlowAction flowAction = actions.get(action);
+        if (flowAction == null) {
+            return NOOP;
+        }
+        return flowAction;
     }
 }

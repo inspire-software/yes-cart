@@ -18,6 +18,8 @@ export interface ErrorMessage {
 
   code : number;
   message : string;
+  key? : string;
+  params? : any[];
 
 }
 
@@ -61,6 +63,10 @@ export class Util {
       let code = (error.status && !isNaN(error.status)) ? error.status : 500;
       let message = error.message;
       if (message) {
+        let key = error.key;
+        if (key) {
+          return { code: code, message: message, key: key, params: error.param };
+        }
         return { code: code, message: message };
       }
       if (typeof(error.json) === 'function') {

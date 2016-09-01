@@ -56,3 +56,14 @@ export interface CustomerOrderInfoVO {
   orderIp : string;
 
 }
+
+export interface CustomerOrderTransitionResultVO {
+
+  errorCode : string;
+  orderNum : string;
+  shippingNum : string;
+  localizationKey : string;
+  localizedMessageParameters : any[];
+  errorMessage : string;
+
+}

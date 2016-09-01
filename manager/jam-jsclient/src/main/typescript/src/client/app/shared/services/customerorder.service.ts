@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CustomerOrderInfoVO} from '../model/index';
+import {CustomerOrderInfoVO, CustomerOrderTransitionResultVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -52,6 +52,36 @@ export class CustomerOrderService {
 
     return this.http.post(this._serviceBaseUrl + '/filtered/' + max + '/' + lang, body, options)
         .map(res => <CustomerOrderInfoVO[]> res.json())
+        .catch(this.handleError);
+  }
+
+
+  /**
+   * Get order, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getOrderById(orderId:number) {
+    return this.http.get(this._serviceBaseUrl + '/order/' + orderId)
+      .map(res => <CustomerOrderInfoVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Transition order to next state.
+   * @param order order
+   * @param action action key from order next transitions
+   * @param manualMsg message provided by manual PG actions
+   * @returns {Observable<R>}
+   */
+  transitionOrder(order:CustomerOrderInfoVO, action:string, manualMsg:string) {
+
+    let body = JSON.stringify(manualMsg);
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/transition/' + action + '/' + order.ordernum + '/', body, options)
+        .map(res => <CustomerOrderTransitionResultVO> res.json())
         .catch(this.handleError);
   }
 

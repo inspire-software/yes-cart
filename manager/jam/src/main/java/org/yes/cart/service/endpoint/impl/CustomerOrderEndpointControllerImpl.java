@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
+import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 import org.yes.cart.service.endpoint.CustomerOrderEndpointController;
 import org.yes.cart.service.vo.VoCustomerOrderService;
 
@@ -45,5 +46,17 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
     public @ResponseBody
     List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
         return voCustomerOrderService.getFiltered(lang, filter, max);
+    }
+
+    @Override
+    public @ResponseBody
+    VoCustomerOrderInfo getOrderById(@PathVariable("id") final long id) throws Exception {
+        return voCustomerOrderService.getById(id);
+    }
+
+    @Override
+    public @ResponseBody
+    VoCustomerOrderTransitionResult transitionOrder(@PathVariable("transition") final String transition, @PathVariable("ordernum") final String ordernum, @RequestBody final String message) throws Exception {
+        return voCustomerOrderService.transitionOrder(transition, ordernum, message);
     }
 }
