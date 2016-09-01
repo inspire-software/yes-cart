@@ -8,6 +8,7 @@ import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoRoleService;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -32,6 +33,16 @@ public class VoRoleServiceImpl implements VoRoleService {
     @Override
     public List<VoRole> getAllRoles() throws Exception {
         final List<RoleDTO> all = managementService.getRolesList();
+        if (!federationFacade.isCurrentUserSystemAdmin()) {
+            final Iterator<RoleDTO> allIt = all.iterator();
+            while (allIt.hasNext()) {
+                // do not show system admin role to regular managers
+                if ("ROLE_SMADMIN".equals(allIt.next().getCode())) {
+                    allIt.remove();
+                    break;
+                }
+            }
+        }
         return voAssemblySupport.assembleVos(VoRole.class, RoleDTO.class, all);
     }
 

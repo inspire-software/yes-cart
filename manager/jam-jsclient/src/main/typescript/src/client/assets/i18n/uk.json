@@ -14,6 +14,7 @@
   "REMOTE_CHECK": "Performing duplicate data check...",
   "UNIQUE_REQUIRED": "This value has already been used. Please choose another.",
   "TAGS_REQUIRED": "Tags must be separated by space and should be one word. E.g. 'onetag another third123'",
+  "EMAIL_REQUIRED": "Valid email address is required",
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
   "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
@@ -116,6 +117,7 @@
   "TAB_TEMPLATES": "Templates",
   "TAB_SEARCH": "Search Index",
   "TAB_CONFIGURATIONS": "Configurations",
+  "TAB_ROLES": "Roles",
 
   "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",
@@ -301,6 +303,8 @@
   "CUSTOMER_FIRSTNAME": "First name",
   "CUSTOMER_MIDDLENAME": "Middle name",
   "CUSTOMER_LASTNAME": "Last name",
+
+  "MANAGER_ENABLED": "Active",
 
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders. Format: '~keyword' or '~~' for all open orders",

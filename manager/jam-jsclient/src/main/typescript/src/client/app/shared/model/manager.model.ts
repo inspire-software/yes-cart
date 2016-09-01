@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-export interface ManagerVO {
+export interface ManagerInfoVO {
 
   managerId : number;
 
@@ -25,6 +25,30 @@ export interface ManagerVO {
   lastName  : string;
 
   enabled  : boolean;
+
+}
+
+export interface ManagerShopLinkVO {
+
+  managerId : number;
+
+  shopId : number;
+
+}
+
+export interface ManagerRoleLinkVO {
+
+  managerId : number;
+
+  roleId : number;
+
+}
+
+export interface ManagerVO extends ManagerInfoVO {
+
+  managerShops : Array<ManagerShopLinkVO>;
+
+  managerRoles : Array<ManagerRoleLinkVO>;
 
 }
 

@@ -525,7 +525,8 @@ table.dataTable thead .sorting:after {
 
 .data-control .filter-input:focus,
 .item-list-control .filter-input:focus,
-button.btn:focus {
+button.btn:focus,
+a:focus {
   outline: none;
 }
 

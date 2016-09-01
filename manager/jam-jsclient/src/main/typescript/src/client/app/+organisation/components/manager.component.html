@@ -1,0 +1,94 @@
+<template [ngIf]="manager">
+
+  <form role="form" [formGroup]="managerForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+        <div class="col-md-9 col-lg-6">
+          <div class="panel-body">
+            <form role="form" [formGroup]="managerForm">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="manager.email" (ngModelChange)="onMainDataChanged($event)" [disabled]="manager.managerId > 0" autocomplete="off">
+                  <div [hidden]="managerForm.controls['email'].valid || managerForm.controls['email'].pristine" class="alert alert-danger">
+                    <div [hidden]="!managerForm.controls['email'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!managerForm.controls['email'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'EMAIL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName" (ngModelChange)="onMainDataChanged($event)">
+                  <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName" (ngModelChange)="onMainDataChanged($event)">
+                  <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
+
+        <template [ngIf]="manager != null">
+
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'ASSIGNED' | translate }}</h3>
+                <span *ngFor="let supported of supportedShops">
+                  <a class="btn js-click" (click)=onSupportedShopClick(supported)><span [ngClass]="supported.second.disabled ? 'text-strikethrough text-muted' : '' ">{{supported.first.name}} ( {{supported.first.code}} ) </span> <i class="fa fa-remove"></i></a>
+                </span>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'AVAILABLE' | translate }}</h3>
+                <span *ngFor="let available of availableShops">
+                  <a class="btn js-click" (click)=onAvailableShopClick(available)>{{available.first.name}} ( {{available.first.code}} ) <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+          </div>
+
+        </template>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_ROLES' | translate }}"  (select)="tabSelected('Roles')">
+
+        <template [ngIf]="manager != null">
+
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'ASSIGNED' | translate }}</h3>
+                <span *ngFor="let supported of supportedRoles">
+                  <a class="btn js-click" (click)=onSupportedRoleClick(supported)>{{supported.first.code}}<i class="fa fa-remove"></i></a>
+                </span>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'AVAILABLE' | translate }}</h3>
+                <span *ngFor="let available of availableRoles">
+                  <a class="btn js-click" (click)=onAvailableRoleClick(available)>{{available.first.code}}<i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+          </div>
+
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>

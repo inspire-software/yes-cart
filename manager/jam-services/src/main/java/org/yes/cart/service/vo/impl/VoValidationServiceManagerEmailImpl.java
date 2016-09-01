@@ -21,6 +21,7 @@ import org.yes.cart.service.domain.ManagerService;
 import org.yes.cart.service.vo.VoValidationService;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * User: denispavlov
@@ -32,6 +33,7 @@ public class VoValidationServiceManagerEmailImpl extends AbstractVoValidationSer
     private final ManagerService managerService;
 
     public VoValidationServiceManagerEmailImpl(final ManagerService managerService) {
+        super(Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$"));
         this.managerService = managerService;
     }
 

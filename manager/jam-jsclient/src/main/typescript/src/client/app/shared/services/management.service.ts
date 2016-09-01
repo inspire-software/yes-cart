@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {ManagerVO, LicenseAgreementVO} from '../model/index';
+import {ManagerInfoVO, LicenseAgreementVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -46,7 +46,7 @@ export class ManagementService {
    */
   getMyself() {
     return this.http.get(this._serviceBaseUrl + '/myself')
-      .map(res => <ManagerVO> res.json())
+      .map(res => <ManagerInfoVO> res.json())
       .catch(this.handleError);
   }
 
@@ -60,7 +60,6 @@ export class ManagementService {
       .map(res => <LicenseAgreementVO> res.json())
       .catch(this.handleError);
   }
-
 
   /**
    * Get current user info,

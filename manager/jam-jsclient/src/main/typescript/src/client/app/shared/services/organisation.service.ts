@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {RoleVO} from '../model/index';
+import {RoleVO, ManagerInfoVO, ManagerVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -38,6 +38,77 @@ export class OrganisationService {
    */
   constructor (private http: Http) {
     console.debug('OrganisationService constructed');
+  }
+
+  /**
+   * Get list of all managers,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAllManagers() {
+    return this.http.get(this._serviceBaseUrl + '/managers/all')
+      .map(res => <ManagerInfoVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get manager by email
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getManagerByEmail(email:string) {
+    return this.http.get(this._serviceBaseUrl + '/manager/' + email + '/')
+      .map(res => <ManagerVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create manager.
+   * @param manager manager
+   * @returns {Observable<R>}
+   */
+  saveManager(manager:ManagerVO) {
+
+    let body = JSON.stringify(manager);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (manager.managerId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/manager', body, options)
+        .map(res => <ManagerVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/manager', body, options)
+        .map(res => <ManagerVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+  /**
+   * Remove manager.
+   * @param manager manager
+   * @returns {Observable<R>}
+   */
+  removeManager(email:string) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/manager/' + email, options)
+      .catch(this.handleError);
+  }
+
+  /**
+   * Update manager on/off flag.
+   * @param manager manager email
+   * @param state manager state
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  updateDisabledFlag(manager:string, state:boolean) {
+    console.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
+
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + manager + '/' + state, null, options)
+      .catch(this.handleError);
   }
 
   /**

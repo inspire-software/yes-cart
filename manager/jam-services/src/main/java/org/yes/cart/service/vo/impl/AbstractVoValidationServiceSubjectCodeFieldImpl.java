@@ -29,7 +29,15 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final Pattern VALID_URI = Pattern.compile("^[A-Za-z0-9\\-_]+$");
+    private final Pattern validPattern;
+
+    public AbstractVoValidationServiceSubjectCodeFieldImpl() {
+        this(Pattern.compile("^[A-Za-z0-9\\-_]+$"));
+    }
+
+    protected AbstractVoValidationServiceSubjectCodeFieldImpl(Pattern validPattern) {
+        this.validPattern = validPattern;
+    }
 
     /**
      * {@inheritDoc}
@@ -41,7 +49,7 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
             return new VoValidationResult(request, 0L, null);
         }
 
-        if (VALID_URI.matcher(valueToCheck).matches()) {
+        if (validPattern.matcher(valueToCheck).matches()) {
 
             final Long duplicate = getDuplicateId(request.getSubjectId(), valueToCheck);
             if (duplicate == null) {
@@ -51,7 +59,7 @@ public abstract class AbstractVoValidationServiceSubjectCodeFieldImpl implements
             return new VoValidationResult(request, duplicate, "DUPLICATE");
 
         }
-        return new VoValidationResult(request, 0L, "INVALID_URI");
+        return new VoValidationResult(request, 0L, "INVALID_DATA");
     }
 
     /**

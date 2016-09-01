@@ -120,6 +120,8 @@ export class YcValidators {
 
   static validEmail = Validators.pattern('[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})');
 
+  static requiredValidEmail = Validators.compose([Validators.required, YcValidators.validEmail]);
+
   static validDate = Validators.pattern('[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
 
   static validRemoteCheck(control:any, request:ValidationRequestVO):any {

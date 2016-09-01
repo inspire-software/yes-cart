@@ -18,6 +18,10 @@ package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoLicenseAgreement;
 import org.yes.cart.domain.vo.VoManager;
+import org.yes.cart.domain.vo.VoManagerInfo;
+import org.yes.cart.domain.vo.VoRole;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -28,29 +32,78 @@ public interface VoManagementService {
 
     /**
      * Get information about current user
-     *
      * @return manager vo
-     *
      * @throws Exception
      */
-    VoManager getMyself() throws Exception;
+    VoManagerInfo getMyself() throws Exception;
 
     /**
      * Get license for current user
-     *
      * @return license vo
-     *
      * @throws Exception
      */
     VoLicenseAgreement getMyAgreement() throws Exception;
 
     /**
      * Accept license for current user.
-     *
      * @return license vo
-     *
      * @throws Exception
      */
     VoLicenseAgreement acceptMyAgreement() throws Exception;
+
+    /**
+     * Get all vo in the system, filtered according to rights
+     * @return all managers
+     * @throws Exception
+     */
+    List<VoManagerInfo> getManagers() throws Exception;
+
+    /**
+     * Get vo by email.
+     *
+     * @param email email
+     * @return vo
+     * @throws Exception
+     */
+    VoManager getByEmail(String email) throws Exception;
+
+    /**
+     * Create new vo
+     * @param voManager vo
+     * @return persistent version
+     * @throws Exception
+     */
+    VoManager createManager(VoManager voManager) throws Exception;
+
+    /**
+     * Update vo
+     * @param voManager vo
+     * @return persistent version
+     * @throws Exception
+     */
+    VoManager updateManager(VoManager voManager) throws Exception;
+
+    /**
+     * Remove vo.
+     * @param managerEmail manager email
+     * @throws Exception
+     */
+    void deleteManager(String managerEmail) throws Exception;
+
+    /**
+     * Reset password to given vo.
+     * @param managerId manager id
+     * @throws Exception
+     */
+    void resetPassword(String managerId) throws Exception;
+
+    /**
+     * Update the manager disabled flag.
+     *
+     * @param manager manager user name
+     * @param disabled true if manager account is disabled
+     * @throws Exception
+     */
+    void updateDisabledFlag(String manager, boolean disabled) throws Exception;
 
 }

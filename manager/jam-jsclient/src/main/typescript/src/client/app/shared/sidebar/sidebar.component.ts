@@ -2,7 +2,7 @@ import {Component,  OnInit} from '@angular/core';
 import {ACCORDION_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {HTTP_PROVIDERS}    from '@angular/http';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
-import {ManagerVO} from '../model/index';
+import {ManagerInfoVO} from '../model/index';
 import {ManagementService} from '../services/index';
 import {ShopVO} from '../model/index';
 import {ShopSelectComponent} from '../shop/index';
@@ -16,7 +16,7 @@ import {ShopSelectComponent} from '../shop/index';
 
 export class SidebarComponent implements OnInit {
 
-  private currentUser : ManagerVO;
+  private currentUser : ManagerInfoVO;
   private currentUserName : string;
 
   constructor (private _managementService : ManagementService,

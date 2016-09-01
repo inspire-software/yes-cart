@@ -4,4 +4,6 @@
 
 export * from './roles.component';
 export * from './role.component';
+export * from './manager.component';
+export * from './managers.component';
 

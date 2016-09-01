@@ -18,10 +18,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:aop="http://www.springframework.org/schema/aop"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/security
-                           http://www.springframework.org/schema/security/spring-security.xsd">
+                           http://www.springframework.org/schema/security/spring-security.xsd
+                           http://www.springframework.org/schema/aop
+			               http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+  <aop:aspectj-autoproxy/>
+
+  <import resource="classpath:manager-aspects.xml"/>
 
   <bean id="viewResolver"
     class="org.springframework.web.servlet.view.UrlBasedViewResolver">
