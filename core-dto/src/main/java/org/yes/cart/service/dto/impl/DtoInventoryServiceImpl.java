@@ -34,6 +34,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -43,6 +44,7 @@ import org.yes.cart.service.dto.support.InventoryFilter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +175,11 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         return inventory;
     }
 
+    private final static char[] LOW_OR_RESERVED = new char[] { '-', '+' };
+    static {
+        Arrays.sort(LOW_OR_RESERVED);
+    }
+
     /** {@inheritDoc} */
     public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -185,30 +192,16 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
             criteria.add(Restrictions.eq("warehouse.warehouseId", warehouseId));
             if (StringUtils.hasLength(filter)) {
 
-                boolean low = filter.startsWith("-");
-                boolean reserved = filter.startsWith("+");
-                BigDecimal qty = BigDecimal.ZERO;
+                final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(filter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
 
-                if (low || reserved) {
+                if (lowOrReserved != null) {
 
-                    try {
-                        qty = new BigDecimal(filter.substring(1)).setScale(Constants.INVENTORY_SCALE, BigDecimal.ROUND_CEILING);
-                        if (qty.signum() == -1) {
-                            low = false;
-                            reserved = false;
-                        }
-                    } catch (Exception exp) {
-                        // do nothing
-                        low = false;
-                        reserved = false;
+                    if ("-".equals(lowOrReserved.getFirst())) {
+                        criteria.add(Restrictions.le("quantity", lowOrReserved.getSecond()));
+                    } else if ("+".equals(lowOrReserved.getFirst())) {
+                        criteria.add(Restrictions.ge("reserved", lowOrReserved.getSecond()));
                     }
 
-                }
-
-                if (low) {
-                    criteria.add(Restrictions.le("quantity", qty));
-                } else if (reserved) {
-                    criteria.add(Restrictions.ge("reserved", qty));
                 } else {
 
                     final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {

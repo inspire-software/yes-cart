@@ -8,15 +8,8 @@
 
     <form class="pull-left">
       <input class="filter-input" type="text" name="inventoryFilter" [(ngModel)]="inventoryFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
     </form>
-
-    <button type="button" (click)="onSearchLow()" class="btn btn-circle btn-xl">
-      <i class="fa fa-exclamation"></i>
-    </button>
-
-    <button type="button" (click)="onSearchReserved()" class="btn btn-circle btn-xl">
-      <i class="fa fa-truck"></i>
-    </button>
 
     <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
       <i class="fa fa-filter"></i>
@@ -44,6 +37,14 @@
                      (discardEvent)="onDiscardEventHandler()"
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
 
+  </div>
+
+
+  <div *ngIf="searchHelpShow">
+    <div class="bg-info text-padding">
+      <p>{{ 'SEARCH_HELP_INVENTORY_LOW' | translate }} <span><button type="button" (click)="onSearchLow()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_INVENTORY_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-circle"><i class="fa fa-truck"></i></button></span></p>
+    </div>
   </div>
 
   <div *ngIf="selectedCentre == null">

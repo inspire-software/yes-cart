@@ -19,7 +19,6 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
-import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
@@ -34,6 +33,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.PriceService;
@@ -226,6 +226,8 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
         return priceList;
     }
 
+    private final static char[] TAG_OR_POLICY = new char[] { '#' };
+
     /** {@inheritDoc} */
     public List<PriceListDTO> findBy(final long shopId, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -239,37 +241,29 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
             criteria.add(Restrictions.eq("currency", currency));
             if (StringUtils.hasLength(filter)) {
 
-                if (filter.startsWith("#")) {
+                final Pair<String, String> tagSearch = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_POLICY);
+                final Pair<Date, Date> dateSearch = tagSearch == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+                if (tagSearch != null) {
 
                     // tag & policy search
-                    final String tagOrPolicy = filter.substring(1);
+                    final String tagOrPolicy = tagSearch.getSecond();
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("tag", tagOrPolicy, MatchMode.ANYWHERE),
                             Restrictions.eq("pricingPolicy", tagOrPolicy)
                     ));
 
-                } else if (filter.contains("<")) {
+                } else if (dateSearch != null) {
 
-                    final String[] fromAndTo = org.apache.commons.lang.StringUtils.splitPreserveAllTokens(filter, '<');
-                    final Date from = fromAndTo.length > 0 ? stringToDate(fromAndTo[0]) : null;
-                    final Date to = fromAndTo.length > 1 ? stringToDate(fromAndTo[1]) : null;
+                    final Date from = dateSearch.getFirst();
+                    final Date to = dateSearch.getSecond();
 
                     // time search
                     if (from != null) {
-                        criteria.add(
-                                Restrictions.or(
-                                        Restrictions.ge("salefrom", from),
-                                        Restrictions.isNull("salefrom")
-                                )
-                        );
+                        criteria.add(Restrictions.ge("salefrom", from));
                     }
                     if (to != null) {
-                        criteria.add(
-                                Restrictions.or(
-                                        Restrictions.le("saleto", to),
-                                        Restrictions.isNull("saleto")
-                                )
-                        );
+                        criteria.add(Restrictions.le("saleto", to));
                     }
 
                 } else {
@@ -325,32 +319,6 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
         }
 
         return priceList;
-    }
-
-    private Date stringToDate(String string) {
-        if (StringUtils.hasLength(string)) {
-            final String[] dateParts = org.apache.commons.lang.StringUtils.split(string, '-');
-            final Calendar cal = Calendar.getInstance();
-            if (dateParts.length > 0) {
-                cal.set(Calendar.YEAR, NumberUtils.toInt(dateParts[0]));
-            }
-            if (dateParts.length > 1) {
-                cal.set(Calendar.MONTH, NumberUtils.toInt(dateParts[1]) - 1);
-            } else {
-                cal.set(Calendar.MONTH, 0);
-            }
-            if (dateParts.length > 2) {
-                cal.set(Calendar.DATE, NumberUtils.toInt(dateParts[2]));
-            } else {
-                cal.set(Calendar.DATE, 1);
-            }
-            cal.set(Calendar.HOUR, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            return cal.getTime();
-        }
-        return null;
     }
 
     /** {@inheritDoc} */

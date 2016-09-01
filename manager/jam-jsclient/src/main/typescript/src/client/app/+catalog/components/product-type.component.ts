@@ -56,6 +56,8 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   @ViewChild('groupsComponent')
   groupsComponent:ProductTypeGroupComponent;
 
+  private searchHelpShow:boolean = false;
+
   constructor(fb: FormBuilder) {
     console.debug('ProductTypeComponent constructed');
 
@@ -203,16 +205,23 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
   protected onAttributeSearchIndexFilter() {
     this.attributeFilter = '#SI';
+    this.searchHelpShow = false;
   }
 
   protected onAttributeVisibleFilter() {
     this.attributeFilter = '+V';
+    this.searchHelpShow = false;
   }
 
   protected onAttributeInvisibleFilter() {
     this.attributeFilter = '-V';
+    this.searchHelpShow = false;
   }
 
   protected onGroupRowAdd() {

@@ -144,19 +144,8 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
                 </form>
-
-                <button type="button" (click)="onAttributeSearchIndexFilter()" class="btn btn-circle btn-xl">
-                  <i class="fa fa-search"></i>
-                </button>
-
-                <button type="button" (click)="onAttributeVisibleFilter()" class="btn btn-circle btn-xl">
-                  <i class="fa fa-eye"></i>
-                </button>
-
-                <button type="button" (click)="onAttributeInvisibleFilter()" class="btn btn-circle btn-xl">
-                  <i class="fa fa-eye-slash"></i>
-                </button>
 
                 <button type="button" (click)="onAttributeRowAdd()" class="btn btn-circle btn-xl">
                   <i class="fa fa-plus"></i>
@@ -170,6 +159,14 @@
                   <i class="fa fa-remove"></i>
                 </button>
 
+              </div>
+            </div>
+
+            <div class="row" *ngIf="searchHelpShow">
+              <div class="bg-info text-padding">
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_SI' | translate }} <span><button type="button" (click)="onAttributeSearchIndexFilter()" class="btn btn-circle"><i class="fa fa-search"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE' | translate }} <span><button type="button" (click)="onAttributeVisibleFilter()" class="btn btn-circle"><i class="fa fa-eye"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_INVISIBLE' | translate }} <span><button type="button" (click)="onAttributeInvisibleFilter()" class="btn btn-circle"><i class="fa fa-eye-slash"></i></button></span></p>
               </div>
             </div>
 

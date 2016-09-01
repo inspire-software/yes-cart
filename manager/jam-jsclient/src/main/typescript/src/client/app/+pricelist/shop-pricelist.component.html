@@ -8,15 +8,8 @@
 
     <form class="pull-left">
       <input class="filter-input" type="text" name="pricelistFilter" [(ngModel)]="pricelistFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
     </form>
-
-    <button type="button" (click)="onSearchTag()" class="btn btn-circle btn-xl ">
-      <i class="fa fa-tag"></i>
-    </button>
-
-    <button type="button" (click)="onSearchDate()" class="btn btn-circle btn-xl ">
-      <i class="fa fa-calendar"></i>
-    </button>
 
     <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
       <i class="fa fa-filter"></i>
@@ -52,6 +45,13 @@
                      (discardEvent)="onDiscardEventHandler()"
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
 
+  </div>
+
+  <div *ngIf="searchHelpShow">
+    <div class="bg-info text-padding">
+      <p>{{ 'SEARCH_HELP_PRICELIST_TAG' | translate }} <span><button type="button" (click)="onSearchTag()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+    </div>
   </div>
 
   <div *ngIf="selectedShop == null">
@@ -124,7 +124,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-3">{{ 'PRICELIST_CURRENCY' | translate }}</div>
+            <div class="col-lg-3">{{ 'CURRENCY' | translate }}</div>
             <div class="col-lg-9">
               <input class="form-control" formControlName="currency" name="currency" type="text" [(ngModel)]="pricelistEdit.currency" [disabled]="true">
             </div>
@@ -219,7 +219,7 @@
   </modal>
 
   <modal #selectCurrencyModalDialog
-         title="{{ 'PRICELIST_CURRENCY' | translate }}"
+         title="{{ 'CURRENCY' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
          [valid]="selectedCurrency != null"

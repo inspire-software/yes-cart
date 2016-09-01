@@ -16,4 +16,5 @@ export * from './pricing.service';
 export * from './payment.service';
 export * from './system.service';
 export * from './organisation.service';
+export * from './customerorder.service';
 export * from './validation.service';

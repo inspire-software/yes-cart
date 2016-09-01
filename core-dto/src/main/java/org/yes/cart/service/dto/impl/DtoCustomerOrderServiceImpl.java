@@ -20,7 +20,11 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
@@ -35,6 +39,7 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -569,6 +574,131 @@ public class DtoCustomerOrderServiceImpl
         }
     };
 
+
+    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS = new char[] { '#', '?', '@' };
+    private final static List<String> OPEN_ORDERS = Arrays.asList(
+            CustomerOrder.ORDER_STATUS_PENDING,
+            CustomerOrder.ORDER_STATUS_WAITING,
+            CustomerOrder.ORDER_STATUS_WAITING_PAYMENT,
+            CustomerOrder.ORDER_STATUS_IN_PROGRESS,
+            CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED
+    );
+    private final static List<String> CANCELLED_ORDERS = Arrays.asList(
+            CustomerOrder.ORDER_STATUS_CANCELLED,
+            CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT,
+            CustomerOrder.ORDER_STATUS_RETURNED,
+            CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT
+    );
+    private final static List<String> PAYMENT_ORDERS = Arrays.asList(
+            CustomerOrder.ORDER_STATUS_WAITING_PAYMENT,
+            CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT,
+            CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT
+    );
+    private final static List<String> COMPLETED_ORDERS = Arrays.asList(
+            CustomerOrder.ORDER_STATUS_COMPLETED
+    );
+    private final static Map<String, List<String>> STATUS_IN = new HashMap<String, List<String>>() {{
+        put("~", OPEN_ORDERS);
+        put("-", CANCELLED_ORDERS);
+        put("$", PAYMENT_ORDERS);
+        put("+", COMPLETED_ORDERS);
+        put("*", ListUtils.union(OPEN_ORDERS, ListUtils.union(CANCELLED_ORDERS, ListUtils.union(PAYMENT_ORDERS, COMPLETED_ORDERS))));
+    }};
+    private final static char[] ORDER_STATUS = new char[] { '~', '-', '$', '+', '*' };
+    static {
+        Arrays.sort(ORDER_OR_CUSTOMER_OR_ADDRESS);
+        Arrays.sort(ORDER_STATUS);
+    }
+
+    @Override
+    public List<CustomerOrderDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<CustomerOrderDTO> orders = new ArrayList<>();
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+
+        if (StringUtils.isNotBlank(filter)) {
+
+            final Pair<String, String> orderNumberOrCustomerOrAddressOrStatus = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS);
+            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrAddressOrStatus == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+            if (orderNumberOrCustomerOrAddressOrStatus != null) {
+
+                if ("#".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                    // order number search
+                    final String orderNumber = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("ordernum", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("cartGuid", orderNumber, MatchMode.ANYWHERE)
+                    ));
+                } else if ("?".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                    // customer search
+                    final String customer = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("email", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
+                    ));
+                } else if ("@".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                    // address search
+                    final String address = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("billingAddress", address, MatchMode.ANYWHERE),
+                            Restrictions.ilike("shippingAddress", address, MatchMode.ANYWHERE)
+                    ));
+                }
+
+            } else if (dateSearch != null) {
+
+                final Date from = dateSearch.getFirst();
+                final Date to = dateSearch.getSecond();
+
+                // time search
+                if (from != null) {
+                    criteria.add(Restrictions.ge("orderTimestamp", from));
+                }
+                if (to != null) {
+                    criteria.add(Restrictions.le("orderTimestamp", to));
+                }
+
+            } else {
+
+                final Pair<String, String> orderStatus = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_STATUS);
+
+                final String search;
+                final List<String> in;
+                if (orderStatus != null) {
+                    search = orderStatus.getFirst().equals(orderStatus.getSecond()) ? null : orderStatus.getSecond();
+                    in = STATUS_IN.get(orderStatus.getFirst());
+                } else {
+                    search = filter;
+                    in = OPEN_ORDERS; // default is open orders only
+                }
+
+                if (StringUtils.isNotBlank(search)) {
+                    // basic search
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("ordernum", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("email", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("lastname", search, MatchMode.ANYWHERE)
+                    ));
+                }
+                criteria.add(Restrictions.in("orderStatus", in));
+
+            }
+
+        } else {
+
+            criteria.add(Restrictions.in("orderStatus", OPEN_ORDERS));  // default is open orders only
+
+        }
+
+        final List<CustomerOrder> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+        fillDTOs(entities, orders);
+
+        return orders;
+    }
 
     @Override
     public Map<String, String> getOrderPgLabels(final String locale) {

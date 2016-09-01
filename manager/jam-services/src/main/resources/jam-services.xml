@@ -147,6 +147,96 @@
         <constructor-arg index="2" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="defaultUiOrderFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
+        <constructor-arg index="0">
+            <map>
+                <entry key="os.waiting">
+                    <list>
+                        <value>cancel.order</value>
+                        <value>approve.order</value>
+                    </list>
+                </entry>
+                <entry key="os.waiting.payment">
+                    <list>
+                        <value>cancel.order</value>
+                    </list>
+                </entry>
+                <entry key="os.in.progress">
+                    <list>
+                        <value>cancel.order</value>
+                    </list>
+                </entry>
+                <entry key="os.partially.shipped">
+                    <list>
+                        <value>return.order</value>
+                    </list>
+                </entry>
+                <entry key="os.completed">
+                    <list>
+                        <value>return.order</value>
+                    </list>
+                </entry>
+                <entry key="os.cancelled.waiting.payment">
+                    <list>
+                        <value>cancel.order.refund</value>
+                        <value>cancel.order.manual.refund</value>
+                    </list>
+                </entry>
+                <entry key="os.returned.waiting.payment">
+                    <list>
+                        <value>cancel.order.refund</value>
+                        <value>cancel.order.manual.refund</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ds.inventory.allocated">
+                    <list>
+                        <value>pack.delivery</value>
+                    </list>
+                </entry>
+                <entry key="ds.packing">
+                    <list>
+                        <value>mark.ready.for.shipment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.ready">
+                    <list>
+                        <value>start.shipment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.ready.waiting.payment">
+                    <list>
+                        <value>start.shipment.wait.payment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.inprogress">
+                    <list>
+                        <value>mark.shipped</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.inprogress.waiting.payment">
+                    <list>
+                        <value>mark.shipped</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" ref="defaultUiOrderFlow"/>
+        <constructor-arg index="2" ref="defaultUiOrderDeliveryFlow"/>
+        <constructor-arg index="3" ref="uiFederationFacade"/>
+        <constructor-arg index="4" ref="voAssemblySupport"/>
+    </bean>
+
     <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
         <constructor-arg index="0">
             <map>

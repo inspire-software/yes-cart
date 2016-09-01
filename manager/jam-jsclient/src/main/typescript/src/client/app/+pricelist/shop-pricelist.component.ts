@@ -19,6 +19,7 @@ import {HTTP_PROVIDERS}    from '@angular/http';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../shared/validation/validators';
 import {PricingService, Util} from './../shared/services/index';
+import {UiUtil} from './../shared/ui/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {PriceListComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
@@ -38,6 +39,7 @@ import {Config} from './../shared/config/env.config';
 
 export class ShopPriceListComponent implements OnInit, OnDestroy {
 
+  private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
 
   private pricelist:Array<PriceListVO> = [];
@@ -112,47 +114,19 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
 
   get availableto():string {
-    if (this.pricelistEdit != null && this.pricelistEdit.saleto != null) {
-      let date = Util.toDateString(this.pricelistEdit.saleto, true);
-      console.debug('ShopPriceListComponent get availableto', this.pricelistEdit.saleto, date);
-      return date;
-    }
-    return null;
+    return UiUtil.dateInputGetterProxy(this.pricelistEdit, 'saleto');
   }
 
   set availableto(availableto:string) {
-    if (this.pricelistEdit != null) {
-      if (availableto == null || availableto.length == 0) {
-        console.debug('ShopPriceListComponent set availableto', availableto);
-        this.pricelistEdit.saleto = null;
-      } else if (availableto.length == 10 || availableto.length == 19) {
-        let date = Util.toDate(availableto);
-        console.debug('ShopPriceListComponent set availableto', availableto, date);
-        this.pricelistEdit.saleto = date;
-      }
-    }
+    UiUtil.dateInputSetterProxy(this.pricelistEdit, 'saleto', availableto);
   }
 
   get availablefrom():string {
-    if (this.pricelistEdit != null && this.pricelistEdit.salefrom != null) {
-      let date = Util.toDateString(this.pricelistEdit.salefrom, true);
-      console.debug('ShopPriceListComponent get availablefrom', this.pricelistEdit.salefrom, date);
-      return date;
-    }
-    return null;
+    return UiUtil.dateInputGetterProxy(this.pricelistEdit, 'salefrom');
   }
 
   set availablefrom(availablefrom:string) {
-    if (this.pricelistEdit != null) {
-      if (availablefrom == null || availablefrom.length == 0) {
-        console.debug('ShopPriceListComponent set availableto', availablefrom);
-        this.pricelistEdit.salefrom = null;
-      } else if (availablefrom.length == 10 || availablefrom.length == 19) {
-        let date = Util.toDate(availablefrom);
-        console.debug('ShopPriceListComponent set availableto', availablefrom, date);
-        this.pricelistEdit.salefrom = date;
-      }
-    }
+    UiUtil.dateInputSetterProxy(this.pricelistEdit, 'salefrom', availablefrom);
   }
 
 
@@ -291,23 +265,18 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     this.selectedPricelist = data;
   }
 
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
   protected onSearchTag() {
     this.pricelistFilter = '#tag';
-    this.getFilteredPricelist();
+    this.searchHelpShow = false;
   }
 
   protected onSearchDate() {
-    let now = new Date();
-    let yearStart = now.getFullYear();
-    let yearEnd = yearStart;
-    let mthStart = now.getMonth() + 1;
-    let mthEnd = mthStart + 1;
-    if (mthStart == 1) {
-      yearStart--;
-      mthStart = 12;
-    }
-    this.pricelistFilter = yearStart + '-' + (mthStart < 10 ? '0'+mthStart : mthStart)  + '-01<' + yearEnd + '-' + (mthEnd < 10 ? '0'+mthEnd : mthEnd) + '-01';
-    this.getFilteredPricelist();
+    this.pricelistFilter = UiUtil.exampleDateSearch();
+    this.searchHelpShow = false;
   }
 
   protected onForceShowAll() {
@@ -373,11 +342,10 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.pricelistEdit.skuPriceId;
               console.debug('ShopPriceListComponent pricelist changed', rez);
-              this.pricelistFilter = rez.skuCode;
               this.changedSingle = false;
               this.selectedPricelist = rez;
               this.pricelistEdit = null;
-              this.getFilteredPricelist();
+              this.pricelistFilter = rez.skuCode;
           }
         );
       }

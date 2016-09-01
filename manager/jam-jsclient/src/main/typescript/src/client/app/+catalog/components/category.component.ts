@@ -20,6 +20,7 @@ import {YcValidators} from './../../shared/validation/validators';
 import {CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavigationPriceTiersVO, CategoryNavigationPriceTierVO, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {Util} from './../../shared/services/index';
+import {UiUtil} from './../../shared/ui/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {CategorySelectComponent} from './../../shared/catalog/index';
 import {ProductTypeSelectComponent} from './../../shared/product/index';
@@ -169,47 +170,19 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   get availableto():string {
-    if (this._category != null && this._category.availableto != null) {
-      let date = Util.toDateString(this._category.availableto, true);
-      console.debug('CategoryComponent get availableto', this._category.availableto, date);
-      return date;
-    }
-    return null;
+    return UiUtil.dateInputGetterProxy(this._category, 'availableto');
   }
 
   set availableto(availableto:string) {
-    if (this._category != null) {
-      if (availableto == null || availableto.length == 0) {
-        console.debug('CategoryComponent set availableto', availableto);
-        this._category.availableto = null;
-      } else if (availableto.length == 10 || availableto.length == 19) {
-        let date = Util.toDate(availableto);
-        console.debug('CategoryComponent set availableto', availableto, date);
-        this._category.availableto = date;
-      }
-    }
+    UiUtil.dateInputSetterProxy(this._category, 'availableto', availableto);
   }
 
   get availablefrom():string {
-    if (this._category != null && this._category.availablefrom != null) {
-      let date = Util.toDateString(this._category.availablefrom, true);
-      console.debug('CategoryComponent get availablefrom', this._category.availablefrom, date);
-      return date;
-    }
-    return null;
+    return UiUtil.dateInputGetterProxy(this._category, 'availablefrom');
   }
 
   set availablefrom(availablefrom:string) {
-    if (this._category != null) {
-      if (availablefrom == null || availablefrom.length == 0) {
-        console.debug('CategoryComponent set availablefrom', availablefrom);
-        this._category.availablefrom = null;
-      } else if (availablefrom.length == 10 || availablefrom.length == 19) {
-        let date = Util.toDate(availablefrom);
-        console.debug('CategoryComponent set availablefrom', availablefrom, date);
-        this._category.availablefrom = date;
-      }
-    }
+    UiUtil.dateInputSetterProxy(this._category, 'availablefrom', availablefrom);
   }
 
   @Input()

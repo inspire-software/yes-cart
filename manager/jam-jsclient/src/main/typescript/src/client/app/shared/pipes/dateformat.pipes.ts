@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Pipe, PipeTransform } from '@angular/core';
-import { Util } from './../services/util';
+import { UiUtil } from './../ui/uiutil';
 
 /**
  * NG2 DatePipes use Intl package which is NOT available in some browsers, so
@@ -30,7 +30,7 @@ export class YcDatePipe implements PipeTransform {
     }
 
     //console.debug('ycdatetime formatting', value);
-    return Util.toDateString(value, false);
+    return UiUtil.toDateString(value, false);
 
   }
 }
@@ -44,7 +44,7 @@ export class YcDateTimePipe implements PipeTransform {
     }
 
     //console.debug('ycdatetime formatting', value);
-    return Util.toDateString(value, true);
+    return UiUtil.toDateString(value, true);
   }
 }
 

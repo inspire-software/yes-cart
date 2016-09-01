@@ -37,6 +37,7 @@ import {Config} from './../shared/config/env.config';
 
 export class CentreInventoryComponent implements OnInit, OnDestroy {
 
+  private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
 
   private inventory:Array<InventoryVO> = [];
@@ -206,17 +207,23 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onSearchLow() {
     this.inventoryFilter = '-5';
+    this.searchHelpShow = false;
     this.getFilteredInventory();
   }
 
   protected onSearchReserved() {
     this.inventoryFilter = '+0.001';
+    this.searchHelpShow = false;
     this.getFilteredInventory();
   }
 
   protected onForceShowAll() {
     this.forceShowAll = !this.forceShowAll;
     this.getFilteredInventory();
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
   }
 
   protected onRowNew() {
