@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CustomerOrderInfoVO, CustomerOrderTransitionResultVO} from '../model/index';
+import {CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderTransitionResultVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -62,7 +62,7 @@ export class CustomerOrderService {
    */
   getOrderById(lang:string, orderId:number) {
     return this.http.get(this._serviceBaseUrl + '/order/' + orderId + '/' + lang)
-      .map(res => <CustomerOrderInfoVO> res.json())
+      .map(res => <CustomerOrderVO> res.json())
       .catch(this.handleError);
   }
 

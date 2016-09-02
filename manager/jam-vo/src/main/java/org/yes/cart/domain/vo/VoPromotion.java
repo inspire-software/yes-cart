@@ -79,4 +79,155 @@ public class VoPromotion {
     @DtoField(value = "enabledTo")
     private Date enabledTo;
 
+    public long getPromotionId() {
+        return promotionId;
+    }
+
+    public void setPromotionId(final long promotionId) {
+        this.promotionId = promotionId;
+    }
+
+    public String getShopCode() {
+        return shopCode;
+    }
+
+    public void setShopCode(final String shopCode) {
+        this.shopCode = shopCode;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(final String currency) {
+        this.currency = currency;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(final String code) {
+        this.code = code;
+    }
+
+    public String getPromoType() {
+        return promoType;
+    }
+
+    public void setPromoType(final String promoType) {
+        this.promoType = promoType;
+    }
+
+    public String getPromoAction() {
+        return promoAction;
+    }
+
+    public void setPromoAction(final String promoAction) {
+        this.promoAction = promoAction;
+    }
+
+    public String getEligibilityCondition() {
+        return eligibilityCondition;
+    }
+
+    public void setEligibilityCondition(final String eligibilityCondition) {
+        this.eligibilityCondition = eligibilityCondition;
+    }
+
+    public String getPromoActionContext() {
+        return promoActionContext;
+    }
+
+    public void setPromoActionContext(final String promoActionContext) {
+        this.promoActionContext = promoActionContext;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(final String tag) {
+        this.tag = tag;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(final int rank) {
+        this.rank = rank;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public List<MutablePair<String, String>> getDisplayNames() {
+        return displayNames;
+    }
+
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
+        this.displayNames = displayNames;
+    }
+
+    public List<MutablePair<String, String>> getDisplayDescriptions() {
+        return displayDescriptions;
+    }
+
+    public void setDisplayDescriptions(final List<MutablePair<String, String>> displayDescriptions) {
+        this.displayDescriptions = displayDescriptions;
+    }
+
+    public boolean isCouponTriggered() {
+        return couponTriggered;
+    }
+
+    public void setCouponTriggered(final boolean couponTriggered) {
+        this.couponTriggered = couponTriggered;
+    }
+
+    public boolean isCanBeCombined() {
+        return canBeCombined;
+    }
+
+    public void setCanBeCombined(final boolean canBeCombined) {
+        this.canBeCombined = canBeCombined;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Date getEnabledFrom() {
+        return enabledFrom;
+    }
+
+    public void setEnabledFrom(final Date enabledFrom) {
+        this.enabledFrom = enabledFrom;
+    }
+
+    public Date getEnabledTo() {
+        return enabledTo;
+    }
+
+    public void setEnabledTo(final Date enabledTo) {
+        this.enabledTo = enabledTo;
+    }
 }

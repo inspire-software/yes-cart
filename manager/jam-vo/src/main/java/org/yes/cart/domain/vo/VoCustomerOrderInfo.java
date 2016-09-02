@@ -60,7 +60,6 @@ public class VoCustomerOrderInfo {
 
     @DtoField(value = "orderStatus", readOnly = true)
     private String orderStatus;
-
     private List<String> orderStatusNextOptions = Collections.emptyList();
 
     @DtoField(value = "multipleShipmentOption", readOnly = true)

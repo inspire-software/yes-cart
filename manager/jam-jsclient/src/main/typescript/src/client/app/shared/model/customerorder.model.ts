@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {PromotionVO} from './pricelists.model';
+
 export interface CustomerOrderInfoVO {
 
   customerorderId : number;
@@ -65,5 +67,80 @@ export interface CustomerOrderTransitionResultVO {
   localizationKey : string;
   localizedMessageParameters : any[];
   errorMessage : string;
+
+}
+
+export interface CustomerOrderLineVO {
+
+  customerOrderDeliveryDetId : number;
+
+  skuCode : string;
+  skuName : string;
+
+  qty : number;
+  price : number;
+
+  listPrice : number;
+  salePrice : number;
+
+  gift : boolean;
+  promoApplied : boolean;
+  appliedPromo : string[];
+
+  netPrice : number;
+  grossPrice : number;
+  taxRate : number;
+  taxCode : string;
+  taxExclusiveOfPrice : boolean;
+
+  lineTotal : number;
+  lineTax : number;
+
+  deliveryNum : string;
+  deliveryStatusLabel : string;
+
+}
+
+export interface CustomerOrderDeliveryInfoVO {
+
+  customerOrderDeliveryId : number;
+
+  ordernum : string;
+  deliveryNum : string;
+  refNo : string;
+  deliveryGroup : string;
+  deliveryStatus : string;
+  deliveryStatusNextOptions : string[];
+
+  carrierSlaName : string;
+  carrierName : string;
+  shippingAddress : string;
+  billingAddress : string;
+
+  shopName : string;
+  pgLabel : string;
+  supportCaptureMore : boolean;
+  supportCaptureLess : boolean;
+
+  currency : string;
+  price : number;
+  listPrice : number;
+
+  promoApplied : boolean;
+  appliedPromo : string[];
+
+  netPrice : number;
+  grossPrice : number;
+  taxRate : number;
+  taxCode : string;
+  taxExclusiveOfPrice : boolean;
+
+}
+
+export interface CustomerOrderVO extends CustomerOrderInfoVO {
+
+  lines : CustomerOrderLineVO[];
+  deliveries : CustomerOrderDeliveryInfoVO[];
+  promotions : PromotionVO[];
 
 }

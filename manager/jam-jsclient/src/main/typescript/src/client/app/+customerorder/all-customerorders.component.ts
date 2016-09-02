@@ -237,10 +237,19 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onRowEditCustomerorder(row:CustomerOrderInfoVO) {
     console.debug('AllCustomerOrdersComponent onRowEditCustomerorder handler', row);
-    this.customerorderEdit = null; // TODO: get by id full
-    this.changed = false;
-    this.validForSave = false;
-    this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDER;
+
+    let lang = I18nEventBus.getI18nEventBus().current();
+    var _sub:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
+      console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+
+      this.customerorderEdit = null; // TODO: get by id full
+      this.changed = false;
+      this.validForSave = false;
+      this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDER;
+
+      _sub.unsubscribe();
+    });
+
   }
 
   protected onRowEditSelected() {
@@ -336,7 +345,6 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
           this.selectedCustomerorder, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
             console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
-              console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result success');
 
               let lang = I18nEventBus.getI18nEventBus().current();
               var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {

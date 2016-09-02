@@ -256,10 +256,11 @@
 
     <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
-        <constructor-arg index="1" ref="defaultUiOrderFlow"/>
-        <constructor-arg index="2" ref="defaultUiOrderDeliveryFlow"/>
-        <constructor-arg index="3" ref="uiFederationFacade"/>
-        <constructor-arg index="4" ref="voAssemblySupport"/>
+        <constructor-arg index="1" ref="dtoPromotionService"/>
+        <constructor-arg index="2" ref="defaultUiOrderFlow"/>
+        <constructor-arg index="3" ref="defaultUiOrderDeliveryFlow"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">

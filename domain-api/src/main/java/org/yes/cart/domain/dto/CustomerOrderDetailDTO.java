@@ -227,4 +227,32 @@ public interface CustomerOrderDetailDTO extends Identifiable {
      */
     void setAppliedPromo(String appliedPromo);
 
+    /**
+     * Total amount for this line.
+     *
+     * @return  qty * grossPrice;
+     */
+    BigDecimal getLineTotal();
+
+    /**
+     * Total amount for this line.
+     *
+     * @param lineTotal qty * grossPrice;
+     */
+    void setLineTotal(BigDecimal lineTotal);
+
+    /**
+     * Total tax amount for this line.
+     *
+     * @return qty * (grossPrice - netPrice)
+     */
+    BigDecimal getLineTax();
+
+    /**
+     * Total tax amount for this line.
+     *
+     * @param lineTax qty * (grossPrice - netPrice)
+     */
+    void setLineTax(BigDecimal lineTax);
+
 }

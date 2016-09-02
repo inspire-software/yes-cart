@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.vo.VoCustomerOrder;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
 import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 import org.yes.cart.service.endpoint.CustomerOrderEndpointController;
@@ -50,7 +51,7 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    VoCustomerOrderInfo getOrderById(@PathVariable("lang") final String lang, @PathVariable("id") final long id) throws Exception {
+    VoCustomerOrder getOrderById(@PathVariable("lang") final String lang, @PathVariable("id") final long id) throws Exception {
         return voCustomerOrderService.getById(lang, id);
     }
 

@@ -16,21 +16,22 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
+import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
+import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.misc.Result;
-import org.yes.cart.domain.vo.VoCustomerOrderInfo;
-import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
+import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.order.OrderFlow;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCustomerOrderService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -40,6 +41,7 @@ import java.util.Map;
 public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
     private final DtoCustomerOrderService dtoCustomerOrderService;
+    private final DtoPromotionService dtoPromotionService;
 
     private final OrderFlow orderFlow;
     private final OrderFlow deliveryFlow;
@@ -48,11 +50,13 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     private final VoAssemblySupport voAssemblySupport;
 
     public VoCustomerOrderServiceImpl(final DtoCustomerOrderService dtoCustomerOrderService,
+                                      final DtoPromotionService dtoPromotionService,
                                       final OrderFlow orderFlow,
                                       final OrderFlow deliveryFlow,
                                       final FederationFacade federationFacade,
                                       final VoAssemblySupport voAssemblySupport) {
         this.dtoCustomerOrderService = dtoCustomerOrderService;
+        this.dtoPromotionService = dtoPromotionService;
         this.orderFlow = orderFlow;
         this.deliveryFlow = deliveryFlow;
         this.federationFacade = federationFacade;
@@ -94,16 +98,50 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         return orderFlow.getNext(vo.getPgLabel(), vo.getOrderStatus());
     }
 
+    private List<String> determineOrderStatusNextOptions(final VoCustomerOrderDeliveryInfo vo) {
+        return deliveryFlow.getNext(vo.getPgLabel(), vo.getDeliveryStatus());
+    }
+
     @Override
-    public VoCustomerOrderInfo getById(final String lang, final long orderId) throws Exception {
+    public VoCustomerOrder getById(final String lang, final long orderId) throws Exception {
 
         if (federationFacade.isManageable(orderId, CustomerOrderDTO.class)) {
 
-            final CustomerOrderDTO dto = dtoCustomerOrderService.getById(orderId);
+            final CustomerOrderDTO order = dtoCustomerOrderService.getById(orderId);
+
             final Map<String, String> pgNames = dtoCustomerOrderService.getOrderPgLabels(lang);
-            final VoCustomerOrderInfo vo = voAssemblySupport.assembleVo(VoCustomerOrderInfo.class, CustomerOrderDTO.class, new VoCustomerOrderInfo(), dto);
+            final VoCustomerOrder vo = voAssemblySupport.assembleVo(VoCustomerOrder.class, CustomerOrderDTO.class, new VoCustomerOrder(), order);
             vo.setPgName(pgNames.get(vo.getPgLabel()));
             vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
+
+            final List<CustomerOrderDeliveryDTO> deliveries = dtoCustomerOrderService.findDeliveryByOrderNumber(order.getOrdernum());
+            vo.setDeliveries(voAssemblySupport.assembleVos(VoCustomerOrderDeliveryInfo.class, CustomerOrderDeliveryDTO.class, deliveries));
+
+            final List<CustomerOrderDeliveryDetailDTO> lines = dtoCustomerOrderService.findDeliveryDetailsByOrderNumber(order.getOrdernum());
+            vo.setLines(voAssemblySupport.assembleVos(VoCustomerOrderLine.class, CustomerOrderDeliveryDetailDTO.class, lines));
+
+            final Set<String> promoCodes = new HashSet<>();
+            if (CollectionUtils.isNotEmpty(vo.getAppliedPromo())) {
+                promoCodes.addAll(vo.getAppliedPromo());
+            }
+            for (final VoCustomerOrderDeliveryInfo vod : vo.getDeliveries()) {
+                if (CollectionUtils.isNotEmpty(vod.getAppliedPromo())) {
+                    promoCodes.addAll(vod.getAppliedPromo());
+                }
+                vod.setDeliveryStatusNextOptions(determineOrderStatusNextOptions(vod));
+            }
+            for (final VoCustomerOrderLine vol : vo.getLines()) {
+                if (CollectionUtils.isNotEmpty(vol.getAppliedPromo())) {
+                    promoCodes.addAll(vol.getAppliedPromo());
+                }
+            }
+
+            if (!promoCodes.isEmpty()) {
+                final List<PromotionDTO> promotions = dtoPromotionService.findByCodes(promoCodes);
+                vo.setPromotions(voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, promotions));
+            } else {
+                vo.setPromotions(Collections.EMPTY_LIST);
+            }
 
             return vo;
 

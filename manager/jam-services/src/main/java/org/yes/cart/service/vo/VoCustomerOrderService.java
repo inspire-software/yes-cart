@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.vo;
 
+import org.yes.cart.domain.vo.VoCustomerOrder;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
 import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 
@@ -51,7 +52,7 @@ public interface VoCustomerOrderService {
      *
      * @throws Exception
      */
-    VoCustomerOrderInfo getById(String lang, long orderId) throws Exception;
+    VoCustomerOrder getById(String lang, long orderId) throws Exception;
 
     /**
      * Perform order transition.

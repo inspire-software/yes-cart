@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {Pair} from './common.model';
+
 export interface PriceListVO {
 
   skuPriceId : number;
@@ -35,5 +37,38 @@ export interface PriceListVO {
   tag : string;
 
   pricingPolicy : string;
+
+}
+
+export interface PromotionVO {
+
+  promotionId : number;
+
+  code : string;
+  shopCode : string;
+  currency : string;
+
+  rank : number;
+
+  name : string;
+  description : string;
+
+  displayNames : Pair<string, string>[];
+  displayDescriptions : Pair<string, string>[];
+
+  promoType : string;
+  promoAction : string;
+
+  eligibilityCondition : string;
+  promoActionContext : string;
+
+  couponTriggered : boolean;
+  canBeCombined : boolean;
+  enabled : boolean;
+
+  enabledFrom : Date;
+  enabledTo : Date;
+
+  tag : string;
 
 }

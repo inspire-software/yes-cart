@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.PromotionDTOImpl;
@@ -29,6 +30,7 @@ import org.yes.cart.service.dto.DtoPromotionService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -62,6 +64,14 @@ public class DtoPromotionServiceImpl
                                                final Boolean enabled)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Promotion> promos = ((PromotionService) service).findByParameters(code, shopCode, currency, tag, type, action, enabled);
+        final List<PromotionDTO> dtos = new ArrayList<PromotionDTO>();
+        fillDTOs(promos, dtos);
+        return dtos;
+    }
+
+    @Override
+    public List<PromotionDTO> findByCodes(final Set<String> codes) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Promotion> promos = service.findByCriteria(Restrictions.in("code", codes));
         final List<PromotionDTO> dtos = new ArrayList<PromotionDTO>();
         fillDTOs(promos, dtos);
         return dtos;
