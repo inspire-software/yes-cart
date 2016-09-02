@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.PGDisabledException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 
@@ -81,6 +82,10 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
             final CustomerOrder order = orderEvent.getCustomerOrder();
 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (!paymentProcessor.isPaymentGatewayEnabled()) {
+                throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
+            }
+
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 
                 // We need to attempt to cancel first as this may throw an exception, then we should not make any payment refunds

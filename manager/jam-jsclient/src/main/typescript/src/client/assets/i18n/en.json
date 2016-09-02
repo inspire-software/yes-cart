@@ -272,6 +272,7 @@
   "CUSTOMERORDER_BALANCE": "Paid balance",
   "CUSTOMERORDER_IP": "IP",
   "CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE": "Details",
+
   "os.none": "Temporary",
   "os.pending": "Pending",
   "os.waiting.payment": "New awaiting payment",
@@ -298,6 +299,7 @@
   "ds.shipment.inprogress": "Shipping",
   "ds.shipment.inprogress.waiting.payment": "Shipping awaiting payment",
   "ds.shipped": "Delivered",
+
   "cancel.order": "Do you really want to cancel the order '{{order}}'?",
   "cancel.order.offlinenote": "Note: if this is offline payment mode please refund payments now",
   "cancel.order.manual.refund": "Do you really want to refund transaction for order '{{order}}' manually?",
@@ -307,6 +309,18 @@
   "approve.order.offlinenote": "Note: if this is offline payment mode please take payment now",
   "return.order": "Do you really want to create return the order '{{order}}'?",
   "return.order.offlinenote": "Note: if this is offline payment mode please refund payments now",
+
+  "error.order.not.found": "Order with number {{ params.value.p0 }} not found",
+  "error.delivery.not.found": "Order with number {{ params.value.p0 }} found, but it has not delivery {{ params.value.p1 }}",
+  "error.delivery.in.wrong.state": "Order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} in {{ params.value.p2 }} state, but required {{ params.value.p3 }}. Updated by {{ params.value.p4 }}",
+  "error.delivery.manual.no.notes": "Manual operation for order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} requires transaction reference.",
+  "error.illegal.transition": "Transition from {{ params.value.p0 }} to {{ params.value.p1 }} delivery state is illegal",
+  "error.delivery.transition.fatal": "Order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} in {{ params.value.p2 }} can not be transited to  {{ params.value.p3 }} status",
+  "error.order.cancel.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled",
+  "error.order.cancel.retry.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled. (Refund failed)",
+  "error.order.cancel.retry.manual.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled. (Manual refund failed)",
+  "error.order.cancel.retry.manual.fatal.no.notes": "Order with number {{ params.value.p0 }} cannot be cancelled because cancellation authorisation is missing. (Manual refund failed)",
+  "error.order.payment.confirm.fatal": "Cannot confirm payment for order {{ params.value.p0 }}",
 
   "CUSTOMER_EMAIL": "Email",
   "CUSTOMER_SALUTATION": "Salutation",

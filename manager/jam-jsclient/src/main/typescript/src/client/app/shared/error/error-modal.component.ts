@@ -30,6 +30,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   errorModalDialog:ModalComponent;
 
   private errorTitleKey:string = '';
+  private errorTitleParams:any = {};
   private errorString:string = '';
 
   private errorSub:any;
@@ -44,6 +45,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
     console.debug('ErrorModalComponent setErrorString', message);
 
     let key = 'MODAL_ERROR_MESSAGE';
+    let keyParams:any = {};
 
     if (message.message) {
       if (message.message.indexOf('JSON Parse error') != -1) {
@@ -66,9 +68,18 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (message.key) {
       key = message.key;
+      if (message.params) {
+        if (key.indexOf('fatal') != -1 && message.params.length > 0) {
+          this.errorString += ' ' + message.params[message.params.length - 1]; // Last is error from server usually
+        }
+        message.params.forEach((item:string, index:number) => {
+          keyParams['p' + index] = item;
+        });
+      }
     }
 
     this.errorTitleKey = key;
+    this.errorTitleParams = keyParams;
 
   }
 
@@ -87,7 +98,7 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   protected showErrorModal() {
-    console.debug('ErrorModalComponent showErrorModal', this.errorString);
+    console.debug('ErrorModalComponent showErrorModal', this.errorString, this.errorTitleKey, this.errorTitleParams);
     if (this.errorModalDialog) {
       this.errorModalDialog.show();
     }

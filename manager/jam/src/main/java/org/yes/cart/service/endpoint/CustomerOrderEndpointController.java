@@ -40,9 +40,9 @@ public interface CustomerOrderEndpointController {
     List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") String lang, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
-    @RequestMapping(value = "/order/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/order/{id}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoCustomerOrderInfo getOrderById(@PathVariable("id") long id) throws Exception;
+    VoCustomerOrderInfo getOrderById(@PathVariable("lang") String lang, @PathVariable("id") long id) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/transition/{transition}/{ordernum}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })

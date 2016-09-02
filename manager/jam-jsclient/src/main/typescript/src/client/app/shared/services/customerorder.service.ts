@@ -60,8 +60,8 @@ export class CustomerOrderService {
    * Get order, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getOrderById(orderId:number) {
-    return this.http.get(this._serviceBaseUrl + '/order/' + orderId)
+  getOrderById(lang:string, orderId:number) {
+    return this.http.get(this._serviceBaseUrl + '/order/' + orderId + '/' + lang)
       .map(res => <CustomerOrderInfoVO> res.json())
       .catch(this.handleError);
   }

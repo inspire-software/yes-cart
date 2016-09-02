@@ -44,13 +44,14 @@ public interface VoCustomerOrderService {
     /**
      * Get order by id
      *
+     * @param lang language used for PG localizations
      * @param orderId order pk
      *
      * @return order
      *
      * @throws Exception
      */
-    VoCustomerOrderInfo getById(long orderId) throws Exception;
+    VoCustomerOrderInfo getById(String lang, long orderId) throws Exception;
 
     /**
      * Perform order transition.

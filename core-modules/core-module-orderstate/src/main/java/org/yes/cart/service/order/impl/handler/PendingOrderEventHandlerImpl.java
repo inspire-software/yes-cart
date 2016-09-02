@@ -98,6 +98,10 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (!paymentProcessor.isPaymentGatewayEnabled()) {
+                throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
+            }
+
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {

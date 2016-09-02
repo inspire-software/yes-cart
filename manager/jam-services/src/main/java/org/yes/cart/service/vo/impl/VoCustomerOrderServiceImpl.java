@@ -95,12 +95,17 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     }
 
     @Override
-    public VoCustomerOrderInfo getById(final long orderId) throws Exception {
+    public VoCustomerOrderInfo getById(final String lang, final long orderId) throws Exception {
 
         if (federationFacade.isManageable(orderId, CustomerOrderDTO.class)) {
 
             final CustomerOrderDTO dto = dtoCustomerOrderService.getById(orderId);
-            return voAssemblySupport.assembleVo(VoCustomerOrderInfo.class, CustomerOrderDTO.class, new VoCustomerOrderInfo(), dto);
+            final Map<String, String> pgNames = dtoCustomerOrderService.getOrderPgLabels(lang);
+            final VoCustomerOrderInfo vo = voAssemblySupport.assembleVo(VoCustomerOrderInfo.class, CustomerOrderDTO.class, new VoCustomerOrderInfo(), dto);
+            vo.setPgName(pgNames.get(vo.getPgLabel()));
+            vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
+
+            return vo;
 
         } else {
             throw new AccessDeniedException("Access is denied");

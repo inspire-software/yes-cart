@@ -6,7 +6,7 @@
          [valid]="true"
          (closed)="onErrorResult($event)">
     <div>
-      {{ errorTitleKey | translate }}
+      {{ errorTitleKey | translate: { params: { value: errorTitleParams } } }}
     </div>
     <div>
       <pre style="max-height: 100px; overflow-y: auto">{{ errorString }}</pre>

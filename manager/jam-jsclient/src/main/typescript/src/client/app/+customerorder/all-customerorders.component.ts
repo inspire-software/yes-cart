@@ -139,27 +139,37 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     console.debug('AllCustomerOrdersComponent onCustomerorderSelected', data);
     this.selectedCustomerorder = data;
 
-    this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' ' + this.selectedCustomerorder.lastname;
     this.orderTransitionMessage = null;
     this.orderTransitionRequiresMessage = false;
     this.orderTransitionName = '';
     this.orderTransitionNameOfflineNote = false;
     this.orderTransitionValid = false;
 
-    let options = data.orderStatusNextOptions;
-    if (options != null && options.length > 0) {
-      this.selectedCustomerorderApprovable = options.indexOf('approve.order') != -1;
-      this.selectedCustomerorderCancellable = options.indexOf('cancel.order') != -1;
-      this.selectedCustomerorderReturnable = options.indexOf('return.order') != -1;
-      this.selectedCustomerorderRefundable = options.indexOf('cancel.order.refund') != -1;
-      this.selectedCustomerorderRefundableManual = options.indexOf('cancel.order.manual.refund') != -1;
-    } else {
-      this.selectedCustomerorderApprovable = false;
-      this.selectedCustomerorderCancellable = false;
-      this.selectedCustomerorderReturnable = false;
-      this.selectedCustomerorderRefundable = false;
-      this.selectedCustomerorderRefundableManual = false;
+    let selectedCustomerorderApprovable = false;
+    let selectedCustomerorderCancellable = false;
+    let selectedCustomerorderReturnable = false;
+    let selectedCustomerorderRefundable = false;
+    let selectedCustomerorderRefundableManual = false;
+
+    if (this.selectedCustomerorder != null) {
+
+      this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' ' + this.selectedCustomerorder.lastname;
+
+      let options = data.orderStatusNextOptions;
+      if (options != null && options.length > 0) {
+        selectedCustomerorderApprovable = options.indexOf('approve.order') != -1;
+        selectedCustomerorderCancellable = options.indexOf('cancel.order') != -1;
+        selectedCustomerorderReturnable = options.indexOf('return.order') != -1;
+        selectedCustomerorderRefundable = options.indexOf('cancel.order.refund') != -1;
+        selectedCustomerorderRefundableManual = options.indexOf('cancel.order.manual.refund') != -1;
+      }
     }
+
+    this.selectedCustomerorderApprovable = selectedCustomerorderApprovable;
+    this.selectedCustomerorderCancellable = selectedCustomerorderCancellable;
+    this.selectedCustomerorderReturnable = selectedCustomerorderReturnable;
+    this.selectedCustomerorderRefundable = selectedCustomerorderRefundable;
+    this.selectedCustomerorderRefundableManual = selectedCustomerorderRefundableManual;
   }
 
   protected onSearchNumber() {
@@ -327,20 +337,40 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
             console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
               console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result success');
-              // TODO: OK done, now refresh order
+
+              let lang = I18nEventBus.getI18nEventBus().current();
+              var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
+                console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+
+                if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
+                  // We are editing
+                  this.customerorderEdit = customerorder;
+                }
+
+                let idx = this.customerorders.findIndex(order => {
+                  return order.customerorderId === customerorder.customerorderId;
+                });
+
+                if (idx != -1) {
+                  this.customerorders[idx] = customerorder;
+                } else {
+                  this.customerorders.splice(0, 0, customerorder);
+                  idx = 0;
+                }
+                this.selectedCustomerorder = this.customerorders[idx];
+                this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+
+                this.changed = false;
+                this.validForSave = false;
+                _sub2.unsubscribe();
+              });
+
             } else {
               ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
             }
             _sub.unsubscribe();
         });
 
-        //var _sub:any = this._brandService.removeBrand(this.selectedBrand).subscribe(res => {
-        //  _sub.unsubscribe();
-        //  console.debug('CatalogBrandComponent removeBrand', this.selectedBrand);
-        //  this.selectedBrand = null;
-        //  this.brandEdit = null;
-        //  this.getFilteredBrands();
-        //});
       }
     }
   }

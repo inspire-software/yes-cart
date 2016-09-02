@@ -472,6 +472,9 @@ public class DtoCustomerOrderServiceImpl
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
             final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), customerOrder.getShop().getCode());
+            if (paymentGateway == null) {
+                ShopCodeContext.getLog(this).error("Cannot determine capture less/more because gateway {} is not resolved for shop {}, could it be disabled?", customerOrder.getPgLabel(), customerOrder.getShop().getCode());
+            }
 
             final List<CustomerOrderDeliveryDTO> rez = new ArrayList<CustomerOrderDeliveryDTO>(customerOrder.getDelivery().size());
 

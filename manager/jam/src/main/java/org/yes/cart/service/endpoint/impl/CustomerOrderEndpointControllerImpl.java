@@ -50,8 +50,8 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    VoCustomerOrderInfo getOrderById(@PathVariable("id") final long id) throws Exception {
-        return voCustomerOrderService.getById(id);
+    VoCustomerOrderInfo getOrderById(@PathVariable("lang") final String lang, @PathVariable("id") final long id) throws Exception {
+        return voCustomerOrderService.getById(lang, id);
     }
 
     @Override

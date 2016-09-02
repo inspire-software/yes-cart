@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
+import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -187,6 +188,13 @@ public class PaymentAspect extends BaseNotificationAspect {
                             final Map<String, String> shopperTemplates,
                             final Map<String, String> adminTemplates) {
 
+        final CustomerOrder order = (CustomerOrder) pjp.getArgs()[0];
+        final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(order.getPgLabel(), order.getShop().getCode());
+        if (gateway == null) {
+            ShopCodeContext.getLog(this).error("Cannot send payment email because gateway {} is not resolved for {}, could it be disabled?", order.getPgLabel(), order.getShop().getCode());
+            return;
+        }
+
         final String shopperTemplate = shopperTemplates.get(rez);
         final String adminTemplate = adminTemplates.get(rez);
 
@@ -194,10 +202,9 @@ public class PaymentAspect extends BaseNotificationAspect {
 
         fillParameters(pjp, map);
 
-        fillPaymentParameters(pjp, rez, map);
+        fillPaymentParameters(pjp, order, gateway, rez, map);
 
-        final CustomerOrder order = (CustomerOrder) pjp.getArgs()[0];
-        final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(order.getPgLabel(), order.getShop().getCode()).getPaymentGatewayFeatures();
+        final PaymentGatewayFeature feature = gateway.getPaymentGatewayFeatures();
 
         // We only report online PG result to shoppers, as offline would be made by contacting shopper directly
         if (feature.isOnlineGateway() && StringUtils.isNotBlank(shopperTemplate)) {
@@ -217,7 +224,7 @@ public class PaymentAspect extends BaseNotificationAspect {
                 adminMap.put(StandardMessageListener.PAYMENTS, payments);
                 sendNotification(adminMap);
             } else {
-                ShopCodeContext.getLog(this).warn("Shop admin e-mail is not setup for: " + order.getShop().getCode());
+                ShopCodeContext.getLog(this).warn("Shop admin e-mail is not setup for: {}", order.getShop().getCode());
             }
         }
 
@@ -231,9 +238,8 @@ public class PaymentAspect extends BaseNotificationAspect {
      * @param rez payment result {@link org.yes.cart.payment.dto.Payment}
      * @param map context map
      */
-    protected void fillPaymentParameters(final ProceedingJoinPoint pjp, final String rez, final HashMap<String, Object> map) {
+    protected void fillPaymentParameters(final ProceedingJoinPoint pjp, final CustomerOrder customerOrder, final PaymentGateway paymentGateway, final String rez, final HashMap<String, Object> map) {
 
-        final CustomerOrder customerOrder = (CustomerOrder) pjp.getArgs()[0];
         final Shop shop = shopService.getById(customerOrder.getShop().getShopId());
         map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getEmail());
@@ -247,7 +253,7 @@ public class PaymentAspect extends BaseNotificationAspect {
         map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());
         map.put(StandardMessageListener.LOCALE, customerOrder.getLocale());
 
-        final PaymentGatewayFeature feature = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), shop.getCode()).getPaymentGatewayFeatures();
+        final PaymentGatewayFeature feature = paymentGateway.getPaymentGatewayFeatures();
         map.put(StandardMessageListener.PAYMENT_GATEWAY_FEATURE, feature);
 
         final Map<String, String> carrier = new HashMap<String, String>();

@@ -31,6 +31,7 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.service.payment.PaymentModulesManager;
+import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
@@ -280,9 +281,16 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
 
     private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
-        final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
-        final String orderGuid = paymentGateway.restoreOrderGuid(privateCallBackParameters);
         final Logger log = ShopCodeContext.getLog(this);
+        final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
+        if (paymentGateway == null) {
+            if (log.isErrorEnabled()) {
+                log.error("Get order guid from http request with {} payment gateway cannot be resolved. Is payment gateway enabled?\n{}",
+                        paymentGatewayLabel, HttpParamsUtils.stringify("CALLBACK", privateCallBackParameters));
+            }
+            return null;
+        }
+        final String orderGuid = paymentGateway.restoreOrderGuid(privateCallBackParameters);
         if (log.isDebugEnabled()) {
             log.debug("Get order guid {}  from http request with {} payment gateway.",
                     orderGuid, paymentGatewayLabel);
