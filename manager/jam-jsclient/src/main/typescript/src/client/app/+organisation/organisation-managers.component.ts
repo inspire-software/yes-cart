@@ -249,4 +249,15 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onRowResetSelected() {
+    if (this.selectedManager != null) {
+      var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
+        console.debug('OrganisationManagerComponent resetPassword', done);
+        this.changed = false;
+        this.validForSave = false;
+        _sub.unsubscribe();
+      });
+    }
+  }
+
 }

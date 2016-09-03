@@ -256,8 +256,12 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public void resetPassword(String managerId) throws Exception {
-
+    public void resetPassword(String email) throws Exception {
+        if (federationFacade.isManageable(email, ManagerDTO.class)) {
+            managementService.resetPassword(email);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 
     /** {@inheritDoc} */

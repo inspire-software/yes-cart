@@ -63,6 +63,12 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
+    void resetPassword(@PathVariable("email") String email) throws Exception {
+        voManagementService.resetPassword(email);
+    }
+
+    @Override
+    public @ResponseBody
     void updateDisabledFlag(@PathVariable("manager") String manager, @PathVariable("state") boolean disabled) throws Exception {
         voManagementService.updateDisabledFlag(manager, disabled);
     }

@@ -92,10 +92,10 @@ public interface VoManagementService {
 
     /**
      * Reset password to given vo.
-     * @param managerId manager id
+     * @param email manager email
      * @throws Exception
      */
-    void resetPassword(String managerId) throws Exception;
+    void resetPassword(String email) throws Exception;
 
     /**
      * Update the manager disabled flag.

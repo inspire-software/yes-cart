@@ -43,11 +43,15 @@ public interface OrganisationEndpointController {
     @ResponseBody
     void deleteManager(@PathVariable("email") String email) throws Exception;
 
+    @Secured({"ROLE_SMADMIN"})
+    @RequestMapping(value = "/manager/reset/{email}", method = RequestMethod.POST)
+    @ResponseBody
+    void resetPassword(@PathVariable("email") String email) throws Exception;
+
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/manager/offline/{manager}/{state}", method = RequestMethod.POST,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     void updateDisabledFlag(@PathVariable("manager") String manager, @PathVariable("state") boolean disabled) throws Exception;
-
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(value = "/role/all", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

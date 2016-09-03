@@ -91,7 +91,20 @@ export class OrganisationService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
 
-    return this.http.delete(this._serviceBaseUrl + '/manager/' + email, options)
+    return this.http.delete(this._serviceBaseUrl + '/manager/' + email + '/', options)
+      .catch(this.handleError);
+  }
+
+  /**
+   * Reset manager password.
+   * @param email manager email
+   * @returns {Observable<R>}
+   */
+  resetPassword(email:string) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/manager/reset/' + email + '/', options)
       .catch(this.handleError);
   }
 

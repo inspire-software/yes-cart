@@ -14,7 +14,11 @@
     </form>
 
     <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn {{selectedManager != null && selectedManager.enabled ? 'btn-danger' : 'btn-success'}} btn-circle btn-xl">
-      <i class="fa fa fa-power-off"></i>
+      <i class="fa fa-power-off"></i>
+    </button>
+
+    <button type="button" (click)="onRowResetSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn btn-circle btn-xl">
+      <i class="fa fa-repeat"></i>
     </button>
 
     <button type="button" (click)="onRowEditSelected()" [disabled]="managerEdit != null || selectedManager == null" class="btn btn-circle btn-xl">
