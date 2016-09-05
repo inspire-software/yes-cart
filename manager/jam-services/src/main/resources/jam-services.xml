@@ -366,5 +366,20 @@
         </constructor-arg>
     </bean>
 
+    <bean id="voPaymentService" class="org.yes.cart.service.vo.impl.VoPaymentServiceImpl">
+        <constructor-arg index="0">
+            <bean parent="txPayProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.payment.service.impl.DtoCustomerOrderPaymentServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="customerOrderPaymentDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
+    </bean>
+
+
 
 </beans>

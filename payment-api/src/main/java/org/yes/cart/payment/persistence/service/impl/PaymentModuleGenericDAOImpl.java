@@ -198,6 +198,19 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
         return crit.list();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings(UNCHECKED)
+    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
 
     /**
      * {@inheritDoc}

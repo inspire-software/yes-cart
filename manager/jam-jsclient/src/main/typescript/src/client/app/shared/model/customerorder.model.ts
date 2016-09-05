@@ -151,6 +151,7 @@ export interface PaymentVO {
   customerOrderPaymentId : number;
 
   cardHolderName : string;
+  cardNumber : string;
   cardExpireYear : string;
   cardExpireMonth : string;
   cardStartDate : Date;

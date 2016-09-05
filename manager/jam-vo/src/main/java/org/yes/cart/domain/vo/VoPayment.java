@@ -35,6 +35,8 @@ public class VoPayment {
     @DtoField(readOnly = true)
     private String cardHolderName;
     @DtoField(readOnly = true)
+    private String cardNumber;
+    @DtoField(readOnly = true)
     private String cardExpireYear;
     @DtoField(readOnly = true)
     private String cardExpireMonth;
@@ -93,6 +95,14 @@ public class VoPayment {
 
     public void setCardHolderName(final String cardHolderName) {
         this.cardHolderName = cardHolderName;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(final String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
     public String getCardExpireYear() {
