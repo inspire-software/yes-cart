@@ -67,4 +67,18 @@ public interface VoCustomerOrderService {
      */
     VoCustomerOrderTransitionResult transitionOrder(String transition, String ordernum, String message) throws Exception;
 
+    /**
+     * Perform order transition.
+     *
+     * @param transition transition key
+     * @param ordernum order number
+     * @param deliverynum order deliverynumber
+     * @param message optional message
+     *
+     * @return transition result
+     *
+     * @throws Exception
+     */
+    VoCustomerOrderTransitionResult transitionDelivery(String transition, String ordernum, String deliverynum, String message) throws Exception;
+
 }

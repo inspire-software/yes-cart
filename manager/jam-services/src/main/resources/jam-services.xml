@@ -214,6 +214,35 @@
         </constructor-arg>
     </bean>
 
+    <bean id="defaultUiOrderDeliveryFlowPackAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.packing"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowMarkShipmentReadyAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.ready"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowStartShipmentAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.inprogress"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowStartShipmentManualAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionManualAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.inprogress"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowMarkShippedAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipped"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowUpdateRefAction" class="org.yes.cart.service.order.impl.UpdateDeliveryRefAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
     <bean id="defaultUiOrderDeliveryFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
         <constructor-arg index="0">
             <map>
@@ -234,7 +263,7 @@
                 </entry>
                 <entry key="ds.shipment.ready.waiting.payment">
                     <list>
-                        <value>start.shipment.wait.payment</value>
+                        <value>start.shipment.manual.payment</value>
                     </list>
                 </entry>
                 <entry key="ds.shipment.inprogress">
@@ -250,17 +279,25 @@
             </map>
         </constructor-arg>
         <constructor-arg index="1">
-            <map/>
+            <map>
+                <entry key="pack.delivery" value-ref="defaultUiOrderDeliveryFlowPackAction"/>
+                <entry key="mark.ready.for.shipment" value-ref="defaultUiOrderDeliveryFlowMarkShipmentReadyAction"/>
+                <entry key="start.shipment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
+                <entry key="start.shipment.manual.payment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
+                <entry key="mark.shipped" value-ref="defaultUiOrderDeliveryFlowMarkShippedAction"/>
+                <entry key="update.external.ref" value-ref="defaultUiOrderDeliveryFlowUpdateRefAction"/>
+            </map>
         </constructor-arg>
     </bean>
 
     <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">
         <constructor-arg index="0" ref="dtoCustomerOrderService"/>
         <constructor-arg index="1" ref="dtoPromotionService"/>
-        <constructor-arg index="2" ref="defaultUiOrderFlow"/>
-        <constructor-arg index="3" ref="defaultUiOrderDeliveryFlow"/>
-        <constructor-arg index="4" ref="uiFederationFacade"/>
-        <constructor-arg index="5" ref="voAssemblySupport"/>
+        <constructor-arg index="2" ref="customerOrderPaymentService"/>
+        <constructor-arg index="3" ref="defaultUiOrderFlow"/>
+        <constructor-arg index="4" ref="defaultUiOrderDeliveryFlow"/>
+        <constructor-arg index="5" ref="uiFederationFacade"/>
+        <constructor-arg index="6" ref="voAssemblySupport"/>
     </bean>
 
     <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">

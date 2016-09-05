@@ -50,4 +50,9 @@ public interface CustomerOrderEndpointController {
     @ResponseBody
     VoCustomerOrderTransitionResult transitionOrder(@PathVariable("transition") String transition, @PathVariable("ordernum") String ordernum, @RequestBody String message) throws Exception;
 
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/transition/{transition}/{ordernum}/{deliverynum}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("transition") String transition, @PathVariable("ordernum") String ordernum, @PathVariable("deliverynum") String deliverynum, @RequestBody String message) throws Exception;
+
 }

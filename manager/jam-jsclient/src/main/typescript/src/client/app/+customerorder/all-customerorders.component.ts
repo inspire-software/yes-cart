@@ -23,7 +23,7 @@ import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {CustomerOrdersComponent, CustomerOrderComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CustomerOrderInfoVO, CustomerOrderTransitionResultVO} from './../shared/model/index';
+import {CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO} from './../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
@@ -61,7 +61,16 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private selectedCustomerorderRefundable:boolean = false;
   private selectedCustomerorderRefundableManual:boolean = false;
 
-  private customerorderEdit:CustomerOrderInfoVO;
+  private customerorderEdit:CustomerOrderVO;
+
+  private selectedCustomerdelivery:CustomerOrderDeliveryInfoVO;
+
+  private selectedCustomerdeliveryPackable:boolean = false;
+  private selectedCustomerdeliveryPacked:boolean = false;
+  private selectedCustomerdeliveryShippable:boolean = false;
+  private selectedCustomerdeliveryShippableManual:boolean = false;
+  private selectedCustomerdeliveryDelivered:boolean = false;
+
 
   @ViewChild('orderTransitionConfirmationModalDialog')
   orderTransitionConfirmationModalDialog:ModalComponent;
@@ -163,6 +172,10 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
         selectedCustomerorderRefundable = options.indexOf('cancel.order.refund') != -1;
         selectedCustomerorderRefundableManual = options.indexOf('cancel.order.manual.refund') != -1;
       }
+    } else {
+
+      this.orderTransitionNumber = '';
+
     }
 
     this.selectedCustomerorderApprovable = selectedCustomerorderApprovable;
@@ -171,6 +184,54 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.selectedCustomerorderRefundable = selectedCustomerorderRefundable;
     this.selectedCustomerorderRefundableManual = selectedCustomerorderRefundableManual;
   }
+
+
+  onCustomerdeliverySelected(data:CustomerOrderDeliveryInfoVO) {
+    console.debug('AllCustomerOrdersComponent onCustomerdeliverySelected', data);
+    this.selectedCustomerdelivery = data;
+
+    if (this.selectedCustomerdelivery) {
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = '';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = false;
+      this.selectedCustomerorderApprovable = false;
+      this.selectedCustomerorderCancellable = false;
+      this.selectedCustomerorderReturnable = false;
+      this.selectedCustomerorderRefundable = false;
+      this.selectedCustomerorderRefundableManual = false;
+
+      this.orderTransitionNumber = this.selectedCustomerorder.ordernum + ' ' + this.selectedCustomerorder.lastname + ' / ' + this.selectedCustomerdelivery.deliveryNum;
+
+      let selectedCustomerdeliveryPackable:boolean = false;
+      let selectedCustomerdeliveryPacked:boolean = false;
+      let selectedCustomerdeliveryShippable:boolean = false;
+      let selectedCustomerdeliveryShippableManual:boolean = false;
+      let selectedCustomerdeliveryDelivered:boolean = false;
+
+      let options = data.deliveryStatusNextOptions;
+      if (options != null && options.length > 0) {
+        selectedCustomerdeliveryPackable = options.indexOf('pack.delivery') != -1;
+        selectedCustomerdeliveryPacked = options.indexOf('mark.ready.for.shipment') != -1;
+        selectedCustomerdeliveryShippable = options.indexOf('start.shipment') != -1;
+        selectedCustomerdeliveryShippableManual = options.indexOf('start.shipment.manual.payment') != -1;
+        selectedCustomerdeliveryDelivered = options.indexOf('mark.shipped') != -1;
+      }
+
+      this.selectedCustomerdeliveryPackable = selectedCustomerdeliveryPackable;
+      this.selectedCustomerdeliveryPacked = selectedCustomerdeliveryPacked;
+      this.selectedCustomerdeliveryShippable = selectedCustomerdeliveryShippable;
+      this.selectedCustomerdeliveryShippableManual = selectedCustomerdeliveryShippableManual;
+      this.selectedCustomerdeliveryDelivered = selectedCustomerdeliveryDelivered;
+
+    } else {
+      this.onCustomerorderSelected(this.selectedCustomerorder);
+    }
+
+  }
+
 
   protected onSearchNumber() {
     this.searchHelpShow = false;
@@ -230,6 +291,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     console.debug('AllCustomerOrdersComponent onBackToList handler');
     if (this.viewMode === AllCustomerOrdersComponent.CUSTOMERORDER) {
       this.customerorderEdit = null;
+      this.onCustomerdeliverySelected(null);
+      this.onCustomerorderSelected(this.selectedCustomerorder);
       this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
     }
   }
@@ -242,7 +305,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     var _sub:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
       console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
-      this.customerorderEdit = null; // TODO: get by id full
+      this.customerorderEdit = customerorder;
       this.changed = false;
       this.validForSave = false;
       this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDER;
@@ -338,7 +401,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
-      if (this.selectedCustomerorder != null) {
+      if (this.selectedCustomerorder != null && this.selectedCustomerdelivery == null) {
         console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
         var _sub:any = this._customerorderService.transitionOrder(
@@ -379,7 +442,149 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
             _sub.unsubscribe();
         });
 
+      } else if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
+        console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
+
+        var _sub:any = this._customerorderService.transitionDelivery(
+          this.selectedCustomerorder, this.selectedCustomerdelivery, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
+            console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
+            if (res.errorCode === '0') {
+
+              let lang = I18nEventBus.getI18nEventBus().current();
+              var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe((customerorder:CustomerOrderVO) => {
+                console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+
+                if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
+                  // We are editing
+                  this.customerorderEdit = customerorder;
+                }
+
+                let idx = this.customerorders.findIndex(order => {
+                  return order.customerorderId === customerorder.customerorderId;
+                });
+
+                if (idx != -1) {
+                  this.customerorders[idx] = customerorder;
+                } else {
+                  this.customerorders.splice(0, 0, customerorder);
+                  idx = 0;
+                }
+                this.selectedCustomerorder = this.customerorders[idx];
+                this.customerorders = this.customerorders.slice(0, this.customerorders.length); // hack to retrigger change
+
+                let delivery:CustomerOrderDeliveryInfoVO = null;
+                if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
+                  console.debug('AllCustomerOrdersComponent trying to re-select delivery', this.selectedCustomerdelivery);
+                  let idx2 = customerorder.deliveries.findIndex(delivery => {
+                    return delivery.deliveryNum == this.selectedCustomerdelivery.deliveryNum;
+                  });
+                  if (idx2 != -1) {
+                    delivery = customerorder.deliveries[idx2];
+                    console.debug('AllCustomerOrdersComponent re-selected delivery', delivery);
+                  }
+                }
+                this.onCustomerdeliverySelected(delivery);
+
+                this.changed = false;
+                this.validForSave = false;
+                _sub2.unsubscribe();
+              });
+
+            } else {
+              ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
+            }
+            _sub.unsubscribe();
+          });
+
+
       }
+    }
+  }
+
+
+
+  protected onUpdateDeliveryRefSelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onUpdateDeliveryRefSelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = true;
+      this.orderTransitionName = 'update.external.ref';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = false;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onPackDeliverySelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onPackDeliverySelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'pack.delivery';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onMarkReadyForShippingDeliverySelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onMarkReadyForShippingDeliverySelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'mark.ready.for.shipment';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onStartDeliverySelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onStartDeliverySelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'start.shipment';
+      this.orderTransitionNameOfflineNote = false;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+  protected onShipDeliveryManualSelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onShipDeliveryManualSelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = true;
+      this.orderTransitionName = 'start.shipment.manual.payment';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = false;
+
+      this.orderTransitionConfirmationModalDialog.show();
+    }
+  }
+
+
+  protected onMarkShippedDeliverySelected() {
+    if (this.selectedCustomerdelivery != null) {
+      console.debug('AllCustomerOrdersComponent onMarkShippedDeliverySelected handler', this.selectedCustomerdelivery);
+
+      this.orderTransitionMessage = null;
+      this.orderTransitionRequiresMessage = false;
+      this.orderTransitionName = 'mark.shipped';
+      this.orderTransitionNameOfflineNote = true;
+      this.orderTransitionValid = true;
+
+      this.orderTransitionConfirmationModalDialog.show();
     }
   }
 

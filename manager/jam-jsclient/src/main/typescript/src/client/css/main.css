@@ -534,6 +534,11 @@ a.js-click {
   cursor: pointer;
 }
 
+a.disabled {
+  text-decoration: none;
+  color: inherit;
+}
+
 .running-job-log {
   padding-top: 70px;
   background: transparent url(../assets/img/ajax-loader.gif) no-repeat top left;

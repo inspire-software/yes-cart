@@ -33,6 +33,8 @@ public class VoCustomerOrder extends VoCustomerOrderInfo {
 
     private List<VoPromotion> promotions;
 
+    private List<VoPayment> payments;
+
     public List<VoCustomerOrderLine> getLines() {
         return lines;
     }
@@ -56,4 +58,13 @@ public class VoCustomerOrder extends VoCustomerOrderInfo {
     public void setPromotions(final List<VoPromotion> promotions) {
         this.promotions = promotions;
     }
+
+    public List<VoPayment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(final List<VoPayment> payments) {
+        this.payments = payments;
+    }
+
 }

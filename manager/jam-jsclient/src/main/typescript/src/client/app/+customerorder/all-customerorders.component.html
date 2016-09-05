@@ -39,6 +39,36 @@
       <i class="fa fa-dollar"></i>
     </button>
 
+
+
+    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-circle btn-xl">
+      <i class="fa fa-archive"></i>
+    </button>
+
+    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-circle btn-xl">
+      <i class="fa fa-truck"></i>
+    </button>
+
+    <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-truck"></i>
+    </button>
+
+    <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-external-link"></i>
+    </button>
+
+
+
+
+
     <button type="button" (click)="onRowEditSelected()" [disabled]="customerorderEdit != null || selectedCustomerorder == null" class="btn btn-circle btn-xl">
       <i class="fa fa-edit"></i>
     </button>
@@ -79,8 +109,7 @@
   </div>
 
   <div [hidden]="viewMode !== 'customerorder'">
-    <yc-customerorder [customerorder]="customerorderEdit" [attributes]="customerorderEditAttributes"
-                      (dataChanged)="onCustomerorderChanged($event)"></yc-customerorder>
+    <yc-customerorder [customerorder]="customerorderEdit" (dataSelected)="onCustomerdeliverySelected($event)"></yc-customerorder>
   </div>
 
   <modal #orderTransitionConfirmationModalDialog

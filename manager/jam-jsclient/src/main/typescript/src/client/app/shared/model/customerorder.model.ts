@@ -27,6 +27,7 @@ export interface CustomerOrderInfoVO {
   cartGuid : string;
   orderStatus : string;
   orderStatusNextOptions : string[];
+  orderPaymentStatus : string;
   orderTimestamp : Date;
 
   pgLabel : string;
@@ -142,5 +143,39 @@ export interface CustomerOrderVO extends CustomerOrderInfoVO {
   lines : CustomerOrderLineVO[];
   deliveries : CustomerOrderDeliveryInfoVO[];
   promotions : PromotionVO[];
+
+}
+
+export interface PaymentVO {
+
+  customerOrderPaymentId : number;
+
+  cardHolderName : string;
+  cardExpireYear : string;
+  cardExpireMonth : string;
+  cardStartDate : Date;
+
+  paymentAmount : number;
+  taxAmount : number;
+
+  orderDate : Date;
+  orderCurrency : string;
+  orderNumber : string;
+  orderShipment : string;
+  shopCode : string;
+
+  transactionReferenceId : string;
+  transactionRequestToken : string;
+  transactionAuthorizationCode : string;
+  transactionGatewayLabel : string;
+  transactionOperation : string;
+  transactionOperationResultCode : string;
+  transactionOperationResultMessage : string;
+  paymentProcessorResult : string;
+  paymentProcessorBatchSettlement : boolean;
+
+  createdTimestamp : Date;
+  updatedTimestamp : Date;
+  shopperIpAddress : string;
 
 }

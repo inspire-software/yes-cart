@@ -22,15 +22,20 @@ import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
 import org.yes.cart.domain.dto.PromotionDTO;
+import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
 import org.yes.cart.service.dto.DtoPromotionService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.order.OrderFlow;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCustomerOrderService;
+import org.yes.cart.util.MoneyUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -43,6 +48,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
     private final DtoCustomerOrderService dtoCustomerOrderService;
     private final DtoPromotionService dtoPromotionService;
 
+    private final CustomerOrderPaymentService customerOrderPaymentService;
+
     private final OrderFlow orderFlow;
     private final OrderFlow deliveryFlow;
 
@@ -51,12 +58,14 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
     public VoCustomerOrderServiceImpl(final DtoCustomerOrderService dtoCustomerOrderService,
                                       final DtoPromotionService dtoPromotionService,
+                                      final CustomerOrderPaymentService customerOrderPaymentService,
                                       final OrderFlow orderFlow,
                                       final OrderFlow deliveryFlow,
                                       final FederationFacade federationFacade,
                                       final VoAssemblySupport voAssemblySupport) {
         this.dtoCustomerOrderService = dtoCustomerOrderService;
         this.dtoPromotionService = dtoPromotionService;
+        this.customerOrderPaymentService = customerOrderPaymentService;
         this.orderFlow = orderFlow;
         this.deliveryFlow = deliveryFlow;
         this.federationFacade = federationFacade;
@@ -86,12 +95,51 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
 
                 vo.setPgName(pgNames.get(vo.getPgLabel()));
                 vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
+                vo.setOrderPaymentStatus(determinePaymentStatus(vo));
 
                 results.add(vo);
             }
             start += max;
         } while (results.size() < max);
         return results.size() > max ? results.subList(0, max) : results;
+    }
+
+    private String determinePaymentStatus(final VoCustomerOrderInfo vo) {
+        if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderTotal(), BigDecimal.ZERO)) {
+            if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), vo.getOrderTotal())) {
+                // more payments than order total
+                return "pt.refund.pending";
+            } else if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderTotal(), vo.getOrderPaymentBalance())) {
+                if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), BigDecimal.ZERO)) {
+                    // less payments than order total
+                    return "pt.partial";
+                }
+                if (CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(vo.getOrderStatus()) ||
+                        CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.equals(vo.getOrderStatus())) {
+                    // more payments than order total
+                    return "pt.refund.pending";
+                } else if (CustomerOrder.ORDER_STATUS_CANCELLED.equals(vo.getOrderStatus()) ||
+                        CustomerOrder.ORDER_STATUS_RETURNED.equals(vo.getOrderStatus())) {
+                    // no balance, no payment
+                    return "pt.none";
+                }
+                // no payments
+                return "pt.pending";
+            }
+            if (CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.equals(vo.getOrderStatus()) ||
+                    CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.equals(vo.getOrderStatus())) {
+                // more payments than order total
+                return "pt.refund.pending";
+            }
+            // exact payment
+            return "pt.full";
+        } else if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), BigDecimal.ZERO)) {
+            // payments on zero order
+            return "pt.refund.pending";
+        }
+        // no balance, no payment
+        return "pt.none";
+
     }
 
     private List<String> determineOrderStatusNextOptions(final VoCustomerOrderInfo vo) {
@@ -113,6 +161,7 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
             final VoCustomerOrder vo = voAssemblySupport.assembleVo(VoCustomerOrder.class, CustomerOrderDTO.class, new VoCustomerOrder(), order);
             vo.setPgName(pgNames.get(vo.getPgLabel()));
             vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
+            vo.setOrderPaymentStatus(determinePaymentStatus(vo));
 
             final List<CustomerOrderDeliveryDTO> deliveries = dtoCustomerOrderService.findDeliveryByOrderNumber(order.getOrdernum());
             vo.setDeliveries(voAssemblySupport.assembleVos(VoCustomerOrderDeliveryInfo.class, CustomerOrderDeliveryDTO.class, deliveries));
@@ -143,6 +192,8 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
                 vo.setPromotions(Collections.EMPTY_LIST);
             }
 
+            vo.setPayments(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, customerOrderPaymentService.findBy(vo.getOrdernum(), null, (String) null, (String) null)));
+
             return vo;
 
         } else {
@@ -157,6 +208,24 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
 
             final Result result = this.orderFlow.getAction(transition).doTransition(ordernum, message);
+            return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public VoCustomerOrderTransitionResult transitionDelivery(final String transition, final String ordernum, final String deliverynum, final String message) throws Exception {
+
+        if (federationFacade.isManageable(ordernum, CustomerOrderDTO.class)) {
+
+            final Map<String, String> params = new HashMap<>();
+            params.put("ordernum", ordernum);
+            params.put("message", message);
+
+            final Result result = this.deliveryFlow.getAction(transition).doTransition(deliverynum, params);
             return voAssemblySupport.assembleVo(VoCustomerOrderTransitionResult.class, Result.class, new VoCustomerOrderTransitionResult(), result);
 
         } else {

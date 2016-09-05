@@ -21,7 +21,6 @@ import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -721,17 +720,9 @@ public class DtoCustomerOrderServiceImpl
         return available;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void fillDTOs(final Collection<CustomerOrder> entities, final Collection<CustomerOrderDTO> dtos)
-            throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (CustomerOrder entity : entities) {
-            CustomerOrderDTO dto = (CustomerOrderDTO) dtoFactory.getByIface(getDtoIFace());
-            assembler.assembleDto(dto, entity, getAdaptersRepository(), dtoFactory);
-            dto.setAmount(customerOrderPaymentService.getOrderAmount(entity.getOrdernum()));
-            dtos.add(dto);
-        }
+    protected void assemblyPostProcess(final CustomerOrderDTO dto, final CustomerOrder entity) {
+        dto.setAmount(customerOrderPaymentService.getOrderAmount(entity.getOrdernum()));
+        super.assemblyPostProcess(dto, entity);
     }
 }

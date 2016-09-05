@@ -61,6 +61,7 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "orderStatus", readOnly = true)
     private String orderStatus;
     private List<String> orderStatusNextOptions = Collections.emptyList();
+    private String orderPaymentStatus;
 
     @DtoField(value = "multipleShipmentOption", readOnly = true)
     private boolean multipleShipmentOption;
@@ -200,6 +201,14 @@ public class VoCustomerOrderInfo {
 
     public void setOrderStatusNextOptions(final List<String> orderStatusNextOptions) {
         this.orderStatusNextOptions = orderStatusNextOptions;
+    }
+
+    public String getOrderPaymentStatus() {
+        return orderPaymentStatus;
+    }
+
+    public void setOrderPaymentStatus(final String orderPaymentStatus) {
+        this.orderPaymentStatus = orderPaymentStatus;
     }
 
     public boolean isMultipleShipmentOption() {
