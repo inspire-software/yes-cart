@@ -92,7 +92,7 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
      * @param shopId  shop
      * @param soft true disables the link, false enabled the link right away
      */
-    void assignToShop(long carrierId, long shopId, final boolean soft);
+    void assignToShop(long carrierId, long shopId, boolean soft);
 
     /**
      * Unassign shop from carrier.
@@ -100,7 +100,7 @@ public interface DtoCarrierService extends GenericDTOService<CarrierDTO> {
      * @param shopId  shop
      * @param soft true disables the link but does not remove it, false removed the CarrierShop link completely
      */
-    void unassignFromShop(long carrierId, long shopId, final boolean soft);
+    void unassignFromShop(long carrierId, long shopId, boolean soft);
 
 
 }

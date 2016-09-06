@@ -410,6 +410,7 @@
         VERSION bigint not null DEFAULT 0,
         CUSTOMER_ID bigint not null,
         SHOP_ID bigint not null,
+        DISABLED smallint default 0,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),
@@ -1587,6 +1588,11 @@
         add constraint FK_TAXCFG_TAX
         foreign key (TAX_ID)
         references TTAX on delete cascade;
+
+
+    create index I_CRS_SHOP_DISABLED on TCARRIERSHOP (DISABLED);
+    create index I_SWE_SHOP_DISABLED on TSHOPWAREHOUSE (DISABLED);
+    create index I_CS_SHOP_DISABLED on TCUSTOMERSHOP (DISABLED);
 
 
     create table HIBERNATE_UNIQUE_KEYS (

@@ -94,17 +94,19 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * Grant given shop to user
      *
      * @param customerId user id
-     * @param shopCode  shop
+     * @param shopId  shop
+     * @param soft true disables the link, false enabled the link right away
      */
-    void grantShop(long customerId, String shopCode);
+    void grantShop(long customerId, long shopId, boolean soft);
 
     /**
      * Revoke shop from user.
      *
      * @param customerId user id
-     * @param shopCode  shop
+     * @param shopId  shop
+     * @param soft true disables the link but does not remove it, false removed the CarrierShop link completely
      */
-    void revokeShop(long customerId, String shopCode);
+    void revokeShop(long customerId, long shopId, boolean soft);
 
 
 }

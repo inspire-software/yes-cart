@@ -102,6 +102,8 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 alter table TCARRIERSHOP add column DISABLED bit default 0;
 -- alter table TCARRIERSHOP add column DISABLED smallint default 0;
 
+create index I_CRS_SHOP_DISABLED on TCARRIERSHOP (DISABLED);
+
 
 --
 -- Tidy up attribute types
@@ -115,3 +117,14 @@ update TATTRIBUTE set ETYPE_ID = 1001 where CODE = 'SYSTEM_IMAGE_VAULT';
 
 alter table TSHOPWAREHOUSE add column DISABLED bit default 0;
 -- alter table TSHOPWAREHOUSE add column DISABLED smallint default 0;
+
+create index I_SWE_SHOP_DISABLED on TSHOPWAREHOUSE (DISABLED);
+
+--
+-- YC-743 Improve access to customers for shop owners
+--
+
+alter table TCUSTOMERSHOP add column DISABLED bit default 0;
+-- alter table TCUSTOMERSHOP add column DISABLED smallint default 0;
+
+create index I_CS_SHOP_DISABLED on TCUSTOMERSHOP (DISABLED);

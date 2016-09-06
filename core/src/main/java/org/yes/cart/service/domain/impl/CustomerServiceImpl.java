@@ -87,7 +87,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code")
     public Customer getCustomerByEmail(final String email, Shop shop) {
-        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId());
+        Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId(), Boolean.FALSE);
         if (customer != null) {
             Hibernate.initialize(customer.getAttributes());
             for (AttrValueCustomer attrValueCustomer :  customer.getAttributes()) {
@@ -234,7 +234,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             criterionList.add(Restrictions.eq("email", email));
             criterionList.add(Restrictions.eq("password", hash));
 
-            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email, shop.getShopId(), hash);
+            final List<Object> counts = (List) getGenericDao().findQueryObjectByNamedQuery("PASS.CHECK", email, shop.getShopId(), hash, Boolean.FALSE);
 
             if (CollectionUtils.isNotEmpty(counts)) {
                 return ((Number) counts.get(0)).intValue() == 1;

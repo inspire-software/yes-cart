@@ -1578,7 +1578,7 @@
             </column>
         </property>
 
-        <property name="disabled" column="DISABLED" type="boolean" not-null="true"/>
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_SWE_SHOP_DISABLED"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -1832,7 +1832,7 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_CS_SHOP_DISABLED"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -2261,7 +2261,7 @@
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
-        <property name="disabled" column="DISABLED" type="boolean" not-null="true"/>
+        <property name="disabled" column="DISABLED" type="boolean" not-null="true" index="I_CRS_SHOP_DISABLED"/>
 
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
@@ -3390,7 +3390,7 @@
 
     <query name="CUSTOMER.BY.EMAIL.SHOP">
         <![CDATA[
-            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2
+            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.disabled = ?3
         ]]>
     </query>
 
@@ -3402,7 +3402,7 @@
 
     <query name="PASS.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.customer.password = ?3
+            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.customer.password = ?3 and cse.disabled = ?4
         ]]>
     </query>
 
