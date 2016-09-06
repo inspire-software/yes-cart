@@ -179,7 +179,7 @@
                     <td title="{{ 'PAYMENT_ORDER' | translate }}">{{ row.orderNumber }}</td>
                     <td title="{{ 'PAYMENT_DELIVERY' | translate }}">{{ row.orderShipment }}&nbsp;</td>
                     <td title="{{ 'PAYMENT_OPERATION' | translate }}">{{ row.transactionOperation }}</td>
-                    <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}">{{ row.transactionOperationResultCode }} <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info"></i></span>&nbsp;</td>
+                    <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }} <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
                     <td title="{{ 'PAYMENT_DETAILS' | translate }}">{{ row.transactionReferenceId }} <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
                     <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right">{{ row.orderCurrency }} {{ row.paymentAmount | ycprice }}</td>
                   </tr>

@@ -49,7 +49,7 @@
           <tbody>
           <tr *ngFor="let row of filteredCaches; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
             <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-              <td title="{{ 'CACHE_NODE' | translate }}"><a (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info"></i></a></td>
+              <td title="{{ 'CACHE_NODE' | translate }}"><a (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
               <td title="{{ 'CACHE_NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.cacheName}}</a></td>
               <td title="{{ 'CACHE_SIZE' | translate }}"><a (click)="onSelectRow(row)">{{row.cacheSize}}</a></td>
               <td title="{{ 'CACHE_HITS' | translate }}"><a (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>

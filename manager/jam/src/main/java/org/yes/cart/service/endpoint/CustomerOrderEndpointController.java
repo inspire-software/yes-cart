@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoCustomerOrder;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
 import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
+import org.yes.cart.domain.vo.VoPayment;
 
 import java.util.List;
 
@@ -54,5 +55,13 @@ public interface CustomerOrderEndpointController {
     @RequestMapping(value = "/transition/{transition}/{ordernum}/{deliverynum}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("transition") String transition, @PathVariable("ordernum") String ordernum, @PathVariable("deliverynum") String deliverynum, @RequestBody String message) throws Exception;
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/payments/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPayment> getFilteredPayments(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
 
 }

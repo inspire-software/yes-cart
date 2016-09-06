@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoCustomerOrder;
 import org.yes.cart.domain.vo.VoCustomerOrderInfo;
 import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
+import org.yes.cart.domain.vo.VoPayment;
 import org.yes.cart.service.endpoint.CustomerOrderEndpointController;
 import org.yes.cart.service.vo.VoCustomerOrderService;
+import org.yes.cart.service.vo.VoPaymentService;
 
 import java.util.List;
 
@@ -37,10 +39,13 @@ import java.util.List;
 public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpointController {
 
     private final VoCustomerOrderService voCustomerOrderService;
+    private final VoPaymentService voPaymentService;
 
     @Autowired
-    public CustomerOrderEndpointControllerImpl(final VoCustomerOrderService voCustomerOrderService) {
+    public CustomerOrderEndpointControllerImpl(final VoCustomerOrderService voCustomerOrderService,
+                                               final VoPaymentService voPaymentService) {
         this.voCustomerOrderService = voCustomerOrderService;
+        this.voPaymentService = voPaymentService;
     }
 
     @Override
@@ -65,5 +70,11 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
     public @ResponseBody
     VoCustomerOrderTransitionResult transitionDelivery(@PathVariable("transition") final String transition, @PathVariable("ordernum") final String ordernum, @PathVariable("deliverynum") final String deliverynum, @RequestBody final String message) throws Exception {
         return voCustomerOrderService.transitionDelivery(transition, ordernum, deliverynum, message);
+    }
+
+    @Override
+    public @ResponseBody
+    List<VoPayment> getFilteredPayments(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voPaymentService.getFiltered(filter, max);
     }
 }

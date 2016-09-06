@@ -31,7 +31,6 @@ public interface VoPaymentService {
     /**
      * Get all payments for given filter
      *
-     * @param lang language used for PG localizations
      * @param filter filter
      * @param max max results
      *
@@ -39,6 +38,6 @@ public interface VoPaymentService {
      *
      * @throws Exception
      */
-    List<VoPayment> getFiltered(String lang, String filter, int max) throws Exception;
+    List<VoPayment> getFiltered(String filter, int max) throws Exception;
 
 }

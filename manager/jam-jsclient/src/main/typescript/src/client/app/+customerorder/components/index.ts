@@ -3,4 +3,5 @@
  */
 export * from './customerorders.component';
 export * from './customerorder.component';
+export * from './payments.component';
 

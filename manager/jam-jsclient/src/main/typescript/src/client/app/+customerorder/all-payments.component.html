@@ -1,0 +1,128 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}</h1>
+  </div>
+
+
+  <div class="text-right data-control">
+
+    <form class="pull-left">
+      <input class="filter-input" type="text" name="paymentFilter" [(ngModel)]="paymentFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+    </form>
+
+    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+      <i class="fa fa-filter"></i>
+    </button>
+
+    <button type="button" (click)="onRowInfoPaymentSelected()" [disabled]="selectedPayment == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-info"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="validForSave"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+  </div>
+
+  <div *ngIf="searchHelpShow">
+    <div class="bg-info text-padding">
+      <p>{{ 'SEARCH_HELP_PAYMENT_DEFAULT' | translate }}</p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_INCOMING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentIncoming()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_OUTGOING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentOutgoing()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
+      <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+    </div>
+  </div>
+
+  <div *ngIf="paymentFilterRequired">
+    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+  </div>
+
+  <div *ngIf="paymentFilterCapped">
+    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+  </div>
+
+  <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)"></yc-payments>
+
+  <modal #transactionDetailsModalDialog
+         title="{{ selectedPayment != null ? (selectedPayment.orderNumber + ' ' + selectedPayment.transactionOperation) : '' }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true">
+
+    <template [ngIf]="selectedPayment">
+
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_DATE' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.createdTimestamp | ycdatetime }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'CUSTOMERORDER_SHOP_CODE' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.shopCode }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_ORDER' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.orderNumber }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_DELIVERY' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.orderShipment }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_DELIVERY' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.orderShipment }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_AMOUNT' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.orderCurrency }} {{ selectedPayment.paymentAmount }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_TAX' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.orderCurrency }} {{ selectedPayment.taxAmount }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_OPERATION' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.transactionGatewayLabel }} / {{ selectedPayment.transactionOperation }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_OPERATION_SETTLEMENT' | translate }}</strong></div>
+        <div class="col-xs-8"><i class="fa {{ selectedPayment.paymentProcessorBatchSettlement ? 'fa-check' : 'fa-remove' }}"></i></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_OPERATION_REF' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.transactionReferenceId }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_OPERATION_TOKEN' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.transactionRequestToken }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_OPERATION_AUTHCODE' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.transactionAuthorizationCode }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_RESULT_CODE' | translate }}</strong></div>
+        <div class="col-xs-8"><span class="label {{ (selectedPayment.paymentProcessorResult == 'Ok') ? 'label-success' : 'label-danger' }}">{{ ('PAYMENT_RESULT_' + selectedPayment.paymentProcessorResult) | translate }}</span> {{ selectedPayment.transactionOperationResultCode }} {{ selectedPayment.transactionOperationResultMessage }}</div>
+      </div>
+      <div class="row" *ngIf="selectedPayment.cardHolderName">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_DETAILS_CARD' | translate }}</strong></div>
+        <div class="col-xs-8"><i class="fa fa-credit-card"></i> {{ selectedPayment.cardHolderName }}, {{selectedPayment.cardNumber}} {{ selectedPayment.cardExpireMonth }}/{{ selectedPayment.cardExpireYear }}</div>
+      </div>
+      <div class="row" *ngIf="selectedPayment.shopperIpAddress">
+        <div class="col-xs-4"><strong>{{ 'PAYMENT_DETAILS_IP' | translate }}</strong></div>
+        <div class="col-xs-8">{{ selectedPayment.shopperIpAddress }}</div>
+      </div>
+
+    </template>
+
+  </modal>
+
+</div>

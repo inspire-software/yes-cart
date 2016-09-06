@@ -347,7 +347,7 @@
   "error.delivery.in.wrong.state": "Order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} in {{ params.value.p2 }} state, but required {{ params.value.p3 }}. Updated by {{ params.value.p4 }}",
   "error.delivery.manual.no.notes": "Manual operation for order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} requires transaction reference.",
   "error.illegal.transition": "Transition from {{ params.value.p0 }} to {{ params.value.p1 }} delivery state is illegal",
-  "error.delivery.transition.fatal": "Order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} in {{ params.value.p2 }} can not be transited to  {{ params.value.p3 }} status",
+  "error.delivery.transition.fatal": "Order with number {{ params.value.p0 }} delivery number {{ params.value.p1 }} in {{ params.value.p2 }} state cannot be transitioned to {{ params.value.p3 }} state",
   "error.order.cancel.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled",
   "error.order.cancel.retry.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled. (Refund failed)",
   "error.order.cancel.retry.manual.fatal": "Order with number {{ params.value.p0 }} cannot be cancelled. (Manual refund failed)",
@@ -367,9 +367,18 @@
   "PAYMENT_ORDER": "Order no.",
   "PAYMENT_DELIVERY": "Delivery no.",
   "PAYMENT_OPERATION": "Operation",
+  "PAYMENT_OPERATION_SETTLEMENT": "Is settlement",
+  "PAYMENT_OPERATION_REF": "Ref",
+  "PAYMENT_OPERATION_TOKEN": "Token",
+  "PAYMENT_OPERATION_AUTHCODE": "Authorisation",
   "PAYMENT_RESULT_CODE": "Result",
   "PAYMENT_DETAILS": "Details",
+  "PAYMENT_DETAILS_CARD": "Card details",
+  "PAYMENT_DETAILS_IP": "IP details",
   "PAYMENT_AMOUNT": "Amount",
+  "PAYMENT_TAX": "Tax",
+  "PAYMENT_RESULT_Ok": "Success",
+  "PAYMENT_RESULT_Failed": "Failure",
 
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders. Format: '~keyword' or '~~' for all open orders",
@@ -388,6 +397,16 @@
 
   "SEARCH_HELP_INVENTORY_LOW": "To search for low inventory use '-quantity'. E.g. to show inventory less than 5 units '-5'",
   "SEARCH_HELP_INVENTORY_RESERVED": "To search for reserved inventory use '+quantity'. E.g. to show reservations more than than 2 units '+2'",
+
+  "SEARCH_HELP_PAYMENT_DEFAULT": "Default order search is searching: order/delivery number, name on card and payment gateway name",
+  "SEARCH_HELP_PAYMENT_NUMBER": "To search only by reference number (order/delivery number, transaction ref/token/auth). Format: '#reference'",
+  "SEARCH_HELP_PAYMENT_CUSTOMER": "To search only by customer details (name on card, card number and IP). Format: '?keyword'",
+  "SEARCH_HELP_PAYMENT_DETAILS": "To search only by transaction operation details (operation, result code and message). Format: '@keyword'",
+  "SEARCH_HELP_PAYMENT_STATUS_PENDING": "Pending payments search does regular search in processing, failed or manual required payments. Format: '~keyword' or '~~' for all pending payments",
+  "SEARCH_HELP_PAYMENT_STATUS_FAILED": "Failed payments search does regular search in failed or manual required payments. Format: '-keyword' or '--' for all failed payments",
+  "SEARCH_HELP_PAYMENT_STATUS_COMPLETED": "Completed payments search does regular search in successful payments. Format: '+keyword' or '++' for all successful payments",
+  "SEARCH_HELP_PAYMENT_INCOMING": "Incoming payments search does combined search. Format: '$+[anothersearch]'. E.g. Incoming payments in 2009 '$+2009<2010'",
+  "SEARCH_HELP_PAYMENT_OUTGOING": "Outgoing payments search does combined search. Format: '$-[anothersearch]'. E.g. Outgoing payments with reference ABC '$+#ABC'",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates before (on left) or after (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

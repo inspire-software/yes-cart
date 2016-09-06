@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO} from '../model/index';
+import {CustomerOrderVO, CustomerOrderInfoVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, PaymentVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -104,6 +104,24 @@ export class CustomerOrderService {
         .map(res => <CustomerOrderTransitionResultVO> res.json())
         .catch(this.handleError);
   }
+
+
+
+  /**
+   * Get list of all payments, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredPayments(filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/payments/filtered/' + max + '/', body, options)
+      .map(res => <PaymentVO[]> res.json())
+      .catch(this.handleError);
+  }
+
 
 
   private handleError (error:any) {
