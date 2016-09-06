@@ -357,20 +357,25 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void grantShop(final long customerId, final String shopCode) {
+    public void grantShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
         final Collection<CustomerShop> assigned = customer.getShops();
         for (final CustomerShop shop : assigned) {
-            if (shop.getShop().getCode().equals(shopCode)) {
+            if (shop.getShop().getShopId() == shopId) {
+                if (shop.isDisabled() && !soft) {
+                    shop.setDisabled(false);
+                    getService().update(customer);
+                }
                 return;
             }
         }
-        final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
+        final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
             final CustomerShop customerShop = shopDao.getEntityFactory().getByIface(CustomerShop.class);
             customerShop.setCustomer(customer);
             customerShop.setShop(shop);
+            customerShop.setDisabled(soft);
             assigned.add(customerShop);
         }
         getService().update(customer);
@@ -380,15 +385,20 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void revokeShop(final long customerId, final String shopCode) {
+    public void revokeShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
         final Iterator<CustomerShop> assigned = customer.getShops().iterator();
         while (assigned.hasNext()) {
             final CustomerShop shop = assigned.next();
-            if (shop.getShop().getCode().equals(shopCode)) {
-                assigned.remove();
+            if (shop.getShop().getShopId() == shopId) {
+                if (soft) {
+                    shop.setDisabled(true);
+                } else {
+                    assigned.remove();
+                }
                 getService().update(customer);
+                break;
             }
         }
 
