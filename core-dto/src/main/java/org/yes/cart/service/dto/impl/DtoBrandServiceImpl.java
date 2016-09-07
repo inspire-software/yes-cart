@@ -221,16 +221,16 @@ public class DtoBrandServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<BrandDTO> findBy(final String name, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<Brand> entities;
-        if (StringUtils.isNotBlank(name)) {
+        if (StringUtils.isNotBlank(filter)) {
             entities = service.getGenericDao().findByCriteria(
                     page * pageSize, pageSize,
                     Restrictions.or(
-                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                            Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
                     )
             );
         } else {

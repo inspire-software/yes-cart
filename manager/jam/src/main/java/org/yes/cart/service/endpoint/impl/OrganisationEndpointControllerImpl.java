@@ -57,7 +57,7 @@ public class OrganisationEndpointControllerImpl implements OrganisationEndpointC
 
     @Override
     public @ResponseBody
-    void deleteManager(@PathVariable("email") String email) throws Exception {
+    void removeManager(@PathVariable("email") String email) throws Exception {
         voManagementService.deleteManager(email);
     }
 

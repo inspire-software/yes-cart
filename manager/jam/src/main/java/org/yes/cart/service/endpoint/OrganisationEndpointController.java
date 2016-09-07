@@ -41,7 +41,7 @@ public interface OrganisationEndpointController {
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/manager/{email}", method = RequestMethod.DELETE)
     @ResponseBody
-    void deleteManager(@PathVariable("email") String email) throws Exception;
+    void removeManager(@PathVariable("email") String email) throws Exception;
 
     @Secured({"ROLE_SMADMIN"})
     @RequestMapping(value = "/manager/reset/{email}", method = RequestMethod.POST)

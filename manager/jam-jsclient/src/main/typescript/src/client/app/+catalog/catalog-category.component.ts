@@ -305,8 +305,6 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
           this.getFilteredCategories();
         });
       }
-    } else {
-      this.categoryEdit = null;
     }
   }
 

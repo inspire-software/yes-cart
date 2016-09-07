@@ -133,6 +133,7 @@ public interface Constants {
 
     String CATEGORY_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/category/";
     String BRAND_IMAGE_REPOSITORY_URL_PATTERN       = "/imgvault/brand/";
+    String CUSTOMER_IMAGE_REPOSITORY_URL_PATTERN    = "/imgvault/customer/";
     String PRODUCT_IMAGE_REPOSITORY_URL_PATTERN     = "/imgvault/product/";
     String SHOP_IMAGE_REPOSITORY_URL_PATTERN        = "/imgvault/shop/";
 

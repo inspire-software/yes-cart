@@ -55,7 +55,7 @@ public class CustomerUiFederationFilterImpl implements FederationFilter {
             final CustomerDTO customer = customersIt.next();
 
             try {
-                final List<ShopDTO> shops = customerService.getAssignedShop(customer.getCustomerId());
+                final Set<ShopDTO> shops = customerService.getAssignedShop(customer.getCustomerId()).keySet();
                 boolean manageable = false;
                 for (final ShopDTO shop : shops) {
                     if (manageableShopIds.contains(shop.getShopId())) {
@@ -80,7 +80,7 @@ public class CustomerUiFederationFilterImpl implements FederationFilter {
     public boolean isManageable(final Object object, final Class objectType) {
         final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         try {
-            final List<ShopDTO> shops = customerService.getAssignedShop((Long) object);
+            final Set<ShopDTO> shops = customerService.getAssignedShop((Long) object).keySet();
             for (final ShopDTO shop : shops) {
                 if (manageableShopIds.contains(shop.getShopId())) {
                     return true;

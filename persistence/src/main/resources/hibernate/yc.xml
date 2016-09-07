@@ -3366,10 +3366,19 @@
 
     <query name="ADDRESSES.BY.CUSTOMER">
         <![CDATA[
-            select a from AddressEntity a
+            select a.customer.customerId from AddressEntity a
                 where a.customer.customerId = ?1
         ]]>
     </query>
+
+    <query name="CUSTOMER.IDS.BY.ADDRESS">
+        <![CDATA[
+            select distinct(a.customer.customerId) from AddressEntity a
+                where a.customer.customerId is not null and
+                (lower(a.addrline1) like ?1 or lower(a.addrline2) like ?1 or lower(a.city) like ?1 or lower(a.countryCode) like ?1 or lower(a.stateCode) like ?1 or lower(a.postcode) like ?1)
+        ]]>
+    </query>
+
 
     <query name="ADDRESSES.BY.CUSTOMER.TYPE">
         <![CDATA[

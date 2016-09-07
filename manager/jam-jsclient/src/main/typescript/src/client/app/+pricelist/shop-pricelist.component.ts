@@ -391,8 +391,6 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
           this.getFilteredPricelist();
         });
       }
-    } else {
-      this.pricelistEdit = null;
     }
   }
 

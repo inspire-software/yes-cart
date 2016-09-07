@@ -16,12 +16,14 @@
 
 package org.yes.cart.service.dto;
 
+import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -56,6 +58,16 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
                                    String customerType,
                                    String pricingPolicy) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Find customers by filter.
+     *
+     * @param filter filter for partial match.
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of customers
+     */
+    List<CustomerDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Reset password to given user and send generated password via email.
@@ -81,7 +93,7 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
      * @param customerId customer id
      * @return list of shops
      */
-    List<ShopDTO> getAssignedShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<ShopDTO, Boolean> getAssignedShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get shop, which is assigned to customer.

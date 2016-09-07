@@ -267,8 +267,6 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
       this.onSelectRow(null);
       this.changed = true;
       this.processDataChangesEvent();
-    } else {
-      this.attributeToEdit = null;
     }
   }
 

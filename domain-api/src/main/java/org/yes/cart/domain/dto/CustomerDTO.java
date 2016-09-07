@@ -21,7 +21,7 @@ import org.yes.cart.domain.entity.Identifiable;
 import java.util.Set;
 
 /**
- * Customet DTO.
+ * Customer DTO.
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011

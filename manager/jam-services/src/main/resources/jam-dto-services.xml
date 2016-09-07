@@ -25,6 +25,7 @@
         <constructor-arg>
             <map>
                 <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
+                <entry key="VoAttrValueCustomer" value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
             </map>
         </constructor-arg>
     </bean>

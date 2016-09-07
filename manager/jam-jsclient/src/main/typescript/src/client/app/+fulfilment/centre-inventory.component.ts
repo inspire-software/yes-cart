@@ -326,8 +326,6 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
           this.getFilteredInventory();
         });
       }
-    } else {
-      this.inventoryEdit = null;
     }
   }
 

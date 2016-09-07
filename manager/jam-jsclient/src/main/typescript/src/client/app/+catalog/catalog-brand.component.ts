@@ -263,8 +263,6 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
           this.getFilteredBrands();
         });
       }
-    } else {
-      this.brandEdit = null;
     }
   }
 

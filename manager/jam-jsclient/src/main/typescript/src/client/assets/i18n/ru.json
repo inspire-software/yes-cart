@@ -27,6 +27,7 @@
   "MODAL_LICENSE_TITLE": "LICENSE AGREEMENT",
   "MODAL_BUTTON_AGREE": "I, AGREE",
   "MODAL_BUTTON_CLOSE": "Close",
+  "MODAL_BUTTON_RESET": "Reset",
   "MODAL_ERROR_TITLE": "ERROR",
   "MODAL_ERROR_MESSAGE_AUTH200": "There was an error on server call, it could be that your session expired and you need to log in",
   "MODAL_ERROR_MESSAGE_AUTH403": "You are not authorised to view and/or update data",
@@ -360,6 +361,10 @@
   "CUSTOMER_MIDDLENAME": "Middle name",
   "CUSTOMER_LASTNAME": "Last name",
   "CUSTOMER_FULLNAME": "Customer",
+  "CUSTOMER_TYPE": "Type",
+  "CUSTOMER_POLICY": "Policy",
+  "CUSTOMER_TAG": "Tags",
+  "CUSTOMER_RESET_MSG": "Do you wish to reset customer password and send email notification on behalf of {{ shop }}?",
 
   "MANAGER_ENABLED": "Active",
 
@@ -407,6 +412,12 @@
   "SEARCH_HELP_PAYMENT_STATUS_COMPLETED": "Completed payments search does regular search in successful payments. Format: '+keyword' or '++' for all successful payments",
   "SEARCH_HELP_PAYMENT_INCOMING": "Incoming payments search does combined search. Format: '$+[anothersearch]'. E.g. Incoming payments in 2009 '$+2009<2010'",
   "SEARCH_HELP_PAYMENT_OUTGOING": "Outgoing payments search does combined search. Format: '$-[anothersearch]'. E.g. Outgoing payments with reference ABC '$+#ABC'",
+
+  "SEARCH_HELP_CUSTOMER_DEFAULT": "Default customer search is searching: email, first name, last name, type and policy",
+  "SEARCH_HELP_CUSTOMER_NUMBER": "To search only by customer reference (code, email or tag). Format: '#ref'",
+  "SEARCH_HELP_CUSTOMER_CUSTOMER": "To search only by customer details (email, first name and last name). Format: '?keyword'",
+  "SEARCH_HELP_CUSTOMER_ADDRESS": "To search only by address details. Format: '@keyword'",
+  "SEARCH_HELP_CUSTOMER_POLICY": "To search only by type or policy. Format: '$keyword'",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates before (on left) or after (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

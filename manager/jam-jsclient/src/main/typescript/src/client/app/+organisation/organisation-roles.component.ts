@@ -208,8 +208,6 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
           this.roleEdit = null;
         });
       }
-    } else {
-      this.roleEdit = null;
     }
   }
 

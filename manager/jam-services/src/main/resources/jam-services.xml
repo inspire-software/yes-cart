@@ -300,6 +300,16 @@
         <constructor-arg index="6" ref="voAssemblySupport"/>
     </bean>
 
+
+    <bean id="voCustomerService" class="org.yes.cart.service.vo.impl.VoCustomerServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+    </bean>
+
+
     <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
         <constructor-arg index="0">
             <map>

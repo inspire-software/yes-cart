@@ -7,6 +7,7 @@ import { ShippingRoutes } from './+shipping/shipping.routes';
 import { FulfilmentRoutes } from './+fulfilment/fulfilment.routes';
 import { PriceListRoutes } from './+pricelist/pricelist.routes';
 import { CustomerOrdersRoutes } from './+customerorder/customerorders.routes';
+import { CustomerRoutes } from './+customer/customer.routes';
 import { CatalogRoutes } from './+catalog/catalog.routes';
 import { AttributeDefinitionRoutes } from './+system/attributes/attribute-definitions.routes';
 import { SystemPreferencesRoutes } from './+system/preferences/system-preferences.routes';
@@ -26,6 +27,7 @@ const routes: RouterConfig = [
   ...FulfilmentRoutes,
   ...PriceListRoutes,
   ...CustomerOrdersRoutes,
+  ...CustomerRoutes,
   ...LicenseRoutes,
   ...CatalogRoutes,
   ...AttributeDefinitionRoutes,

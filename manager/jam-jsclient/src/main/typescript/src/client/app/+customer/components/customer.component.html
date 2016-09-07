@@ -1,0 +1,151 @@
+<template [ngIf]="customer">
+
+  <form role="form" [formGroup]="customerForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [ngModel]="customer.customerId" [disabled]="true">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="customer.email" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['email'].valid || customerForm.controls['email'].pristine" class="alert alert-danger">
+                    {{ 'EMAIL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_SALUTATION' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_SALUTATION' | translate }}" formControlName="salutation" name="salutation" type="text" [(ngModel)]="customer.salutation" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['salutation'].valid || customerForm.controls['salutation'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstname" name="firstname" type="text" [(ngModel)]="customer.firstname" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['firstname'].valid || customerForm.controls['firstname'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_MIDDLENAME' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_MIDDLENAME' | translate }}" formControlName="middlename" name="middlename" type="text" [(ngModel)]="customer.middlename" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['middlename'].valid || customerForm.controls['middlename'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastname" name="lastname" type="text" [(ngModel)]="customer.lastname" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['lastname'].valid || customerForm.controls['lastname'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_TYPE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_TYPE' | translate }}" formControlName="customerType" name="customerType" type="text" [(ngModel)]="customer.customerType" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['customerType'].valid || customerForm.controls['customerType'].pristine" class="alert alert-danger">
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_POLICY' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_POLICY' | translate }}" formControlName="pricingPolicy" name="pricingPolicy" type="text" [(ngModel)]="customer.pricingPolicy" (ngModelChange)="onMainDataChange($event)" [disabled]="customer.customerId > 0">
+                  <div [hidden]="customerForm.controls['pricingPolicy'].valid || customerForm.controls['pricingPolicy'].pristine" class="alert alert-danger">
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CUSTOMER_TAG' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CUSTOMER_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="customer.tag" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="customerForm.controls['tag'].valid || customerForm.controls['tag'].pristine" class="alert alert-danger">
+                    {{ 'TAGS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
+
+        <template [ngIf]="customer != null">
+
+          <div class="row">
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'ASSIGNED' | translate }}</h3>
+                <span *ngFor="let supported of supportedShops">
+                  <a class="btn js-click" (click)=onSupportedShopClick(supported)><span>{{supported.first.name}} ( {{supported.first.code}} ) </span> <i class="fa fa-remove"></i></a> <span><button type="button" (click)="onRowReset(supported.first)" class="btn btn-danger btn-circle"><i class="fa fa-repeat"></i></button></span>
+                </span>
+            </div>
+            <div class="col-md-6 col-lg-5">
+              <h3>{{ 'AVAILABLE' | translate }}</h3>
+                <span *ngFor="let available of availableShops">
+                  <a class="btn js-click" (click)=onAvailableShopClick(available)><span [ngClass]="available.second.disabled ? 'text-strikethrough text-muted' : '' ">{{available.first.name}} ( {{available.first.code}} ) </span> <i class="fa fa-plus"></i></a>
+                </span>
+            </div>
+          </div>
+
+        </template>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+
+        <template [ngIf]="customer.customerId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                </form>
+
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <yc-attribute-values #attributeValuesComponent
+                                   [masterObject]="customer"
+                                   [objectAttributes]="attributes"
+                                   [attributeFilter]="attributeFilter"
+                                   (dataSelected)="onSelectRow($event)"
+                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>
+
+
+<modal #resetConfirmationModalDialog
+       title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_RESET' | translate }}"
+       [valid]="true"
+       (closed)="onResetConfirmationResult($event)">
+  {{ 'CUSTOMER_RESET_MSG' | translate:{shop: resetShopName } }}
+</modal>
+

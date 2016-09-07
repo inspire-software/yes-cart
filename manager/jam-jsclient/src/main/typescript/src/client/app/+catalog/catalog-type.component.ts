@@ -269,8 +269,6 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
           this.getFilteredTypes();
         });
       }
-    } else {
-      this.typeEdit = null;
     }
   }
 

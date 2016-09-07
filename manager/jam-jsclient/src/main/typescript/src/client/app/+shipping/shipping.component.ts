@@ -365,12 +365,6 @@ export class ShippingComponent implements OnInit, OnDestroy {
           _sub.unsubscribe();
         });
       }
-    } else {
-      if (this.selectedSla != null) {
-        this.slaEdit = null;
-      } else {
-        this.carrierEdit = null;
-      }
     }
   }
 
