@@ -83,6 +83,15 @@
         <property name="skipContentAttributesInView" value="CONTENT_BODY_"/>
     </bean>
 
+    <bean id="voContentService" class="org.yes.cart.service.vo.impl.VoContentServiceImpl">
+        <constructor-arg index="0" ref="dtoContentService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+        <property name="skipContentAttributesInView" value="CONTENT_BODY_"/>
+    </bean>
+
     <bean id="voBrandService" class="org.yes.cart.service.vo.impl.VoBrandServiceImpl">
         <constructor-arg index="0" ref="dtoBrandService"/>
         <constructor-arg index="1" ref="dtoAttributeService"/>
@@ -323,6 +332,20 @@
                         <entry key="uri">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCategoryURIImpl">
                                 <constructor-arg index="0" ref="categoryService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="content">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceContentGUIDImpl">
+                                <constructor-arg index="0" ref="contentService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceContentURIImpl">
+                                <constructor-arg index="0" ref="contentService"/>
                             </bean>
                         </entry>
                     </map>

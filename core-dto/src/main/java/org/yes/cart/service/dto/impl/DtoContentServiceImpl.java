@@ -150,6 +150,19 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
+        if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
+            final Category parent = ((ContentService)getService()).getById(entity.getParentId());
+            if (parent != null) {
+                dto.setParentName(parent.getName());
+            }
+        }
+        super.assemblyPostProcess(dto, entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected void createPostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
@@ -193,6 +206,19 @@ public class DtoContentServiceImpl
         return getAllWithAvailabilityFilter(shopId, false);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CategoryDTO> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        ContentService contentService = (ContentService) service;
+
+        final List<CategoryDTO> contentDTO = new ArrayList<CategoryDTO>(pageSize);
+        fillDTOs(contentService.findBy(shopId, code, name, uri, page, pageSize), contentDTO);
+
+        return contentDTO;
+    }
 
     /**
      * {@inheritDoc}

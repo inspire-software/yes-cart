@@ -9,6 +9,7 @@ import { PriceListRoutes } from './+pricelist/pricelist.routes';
 import { CustomerOrdersRoutes } from './+customerorder/customerorders.routes';
 import { CustomerRoutes } from './+customer/customer.routes';
 import { CatalogRoutes } from './+catalog/catalog.routes';
+import { ContentRoutes } from './+content/content.routes';
 import { AttributeDefinitionRoutes } from './+system/attributes/attribute-definitions.routes';
 import { SystemPreferencesRoutes } from './+system/preferences/system-preferences.routes';
 import { CacheMonitoringRoutes } from './+system/cache/cache-monitoring.routes';
@@ -28,6 +29,7 @@ const routes: RouterConfig = [
   ...PriceListRoutes,
   ...CustomerOrdersRoutes,
   ...CustomerRoutes,
+  ...ContentRoutes,
   ...LicenseRoutes,
   ...CatalogRoutes,
   ...AttributeDefinitionRoutes,

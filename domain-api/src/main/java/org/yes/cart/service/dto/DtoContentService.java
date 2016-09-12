@@ -49,6 +49,26 @@ public interface DtoContentService extends GenericDTOService<CategoryDTO>, Gener
     List<CategoryDTO> getAllByShopId(final long shopId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Get categories by criteria.
+     *
+     * @param shopId shop id
+     * @param code code (GUID)
+     * @param name base name
+     * @param uri URI
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of matching categories
+     *
+     * @throws UnmappedInterfaceException
+     * @throws UnableToCreateInstanceException
+     */
+    List<CategoryDTO> findBy(long shopId, String code, String name, String uri, int page, int pageSize)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
     /**
      * Get all content with or without availability date range filtering.
      *

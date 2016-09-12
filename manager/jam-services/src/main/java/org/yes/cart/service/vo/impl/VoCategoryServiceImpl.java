@@ -165,7 +165,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
     }
 
     /** {@inheritDoc} */
-    public VoCategory getById(long id) throws Exception {
+    public VoCategory getById(final long id) throws Exception {
         final CategoryDTO categoryDTO = dtoCategoryService.getById(id);
         if (categoryDTO != null && federationFacade.isManageable(id, CategoryDTO.class)){
             return voAssemblySupport.assembleVo(VoCategory.class, CategoryDTO.class, new VoCategory(), categoryDTO);

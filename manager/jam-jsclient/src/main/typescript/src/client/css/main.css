@@ -21,6 +21,7 @@ ul {
 
 ul.no-bullet {
   list-style: none;
+  padding-left: 0;
 }
 
 /* Make sure hidden is really hidden */

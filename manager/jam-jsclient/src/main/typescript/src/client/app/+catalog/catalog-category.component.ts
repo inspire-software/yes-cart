@@ -116,7 +116,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
     if (!this.categoryFilterRequired) {
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._categoryService.getFilteredCategories(this.categoryFilter, max).subscribe( allcategories => {
-        console.debug('CatalogCategoryComponent getAllCountries', allcategories);
+        console.debug('CatalogCategoryComponent getFilteredCategories', allcategories);
         this.categories = allcategories;
         this.selectedCategory = null;
         this.categoryEdit = null;

@@ -566,13 +566,17 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         final Iterator<Category> catsIt = cats.iterator();
         while (catsIt.hasNext()) {
             Category category = catsIt.next();
-            while (category.getParentId() != root.getParentId()) {
-                if (category.isRoot()) {
-                    // if this is root and not category root matches then this is content
-                    catsIt.remove();
-                    break;
+            if (category.isRoot()) {
+                catsIt.remove();
+            } else {
+                while (category.getParentId() != root.getCategoryId()) {
+                    if (category.isRoot()) {
+                        // if this is root and not category root matches then this is content
+                        catsIt.remove();
+                        break;
+                    }
+                    category = proxy().findById(category.getParentId());
                 }
-                category = proxy().findById(category.getParentId());
             }
         }
         return cats;

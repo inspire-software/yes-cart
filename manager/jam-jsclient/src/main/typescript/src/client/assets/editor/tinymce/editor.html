@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="tinymce.min.js"></script>
+  <script>
+    function contentSubmit() {
+      window.opener.postMessage({ lang: window.contentlang, text: document.getElementById('content').value }, '*');
+      return false;
+    }
+
+    window.addEventListener('message', function(event) {
+
+      var _msg = event.data;
+      document.write('<form action="#" onsubmit="contentSubmit()"><textarea id="content" name="content">' + _msg.text + '</textarea></form>');
+
+      window.contentlang = _msg.lang;
+
+      tinymce.init({
+        selector: 'textarea',
+        language: _msg.lang,
+        height: 500,
+        theme: 'modern',
+        plugins: [
+          'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+          'searchreplace wordcount visualblocks visualchars code fullscreen',
+          'insertdatetime media nonbreaking save table contextmenu directionality',
+          'emoticons template paste textcolor colorpicker textpattern imagetools'
+        ],
+        toolbar1: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media',
+        toolbar2: 'save print preview | forecolor backcolor',
+        image_advtab: true,
+        templates: [
+          { title: 'Two columns', content: '<div class="row"><div class="col-xs-12 col-md-6">Col 1</div><div class="col-xs-12 col-md-6">Col 2</div></div>' },
+        ],
+        content_css: [
+          '../../../css/bootstrap.min.css',
+          'skins/yc-cms.css'
+        ],
+        force_p_newlines: false,
+        forced_root_block: 'template'
+      });
+
+      var _load = document.getElementById('loading');
+      _load.parent.removeChild(_load);
+
+    });
+  </script>
+</head>
+<body><img id="loading" src="../../img/ajax-loader.gif"></body>
+</html>

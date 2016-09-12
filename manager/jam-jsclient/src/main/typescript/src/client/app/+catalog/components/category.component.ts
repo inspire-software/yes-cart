@@ -138,7 +138,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   formBind():void {
     this.categoryFormSub = this.categoryForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.categoryForm.valid;
+      this.validForSave = this._category.categoryId != 100 && this.categoryForm.valid;
       if (this.changed) {
         this.delayedChange.delay();
       }

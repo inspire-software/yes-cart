@@ -82,6 +82,7 @@
   "PANEL_PIM_BRANDS": "Brands",
   "PANEL_PIM_PRODUCT_TYPES": "Product types",
   "PANEL_CMS": "CMS",
+  "PANEL_CMS_CONTENT": "Content",
   "PANEL_MARKETING": "Marketing & Pricing",
   "PANEL_MARKETING_PROMO": "Promotions",
   "PANEL_MARKETING_PRICE": "Price lists",
@@ -198,6 +199,16 @@
   "CATEGORY_PARENT": "Parent",
   "CATEGORY_LINK": "This category is a link to",
   "CATEGORY_TEMPLATE": "Category template",
+
+  "CONTENT_FROM": "Available from",
+  "CONTENT_TO": "Available to",
+  "CONTENT_PARENT": "Parent",
+  "CONTENT_TEMPLATE": "Content template",
+  "CONTENT_TEMPLATE_content": "Default content displayed as is (plain HTML)",
+  "CONTENT_TEMPLATE_dynocontent": "Dynamic content is preprocessed by template parser and can contain dynamic code elements",
+  "CONTENT_TEMPLATE_include": "Includes are hidden from public access and are only available from within page templates. Can also be used to cap the parent hierarchy for microsites.",
+
+  "CONTENT_TAB_CMS": "CMS",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",

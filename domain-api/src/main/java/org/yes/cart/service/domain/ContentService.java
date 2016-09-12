@@ -81,6 +81,21 @@ public interface ContentService extends GenericService<Category> {
      */
     Set<Category> getChildContentRecursive(long contentId);
 
+
+    /**
+     * Get contents by criteria.
+     *
+     * @param shopId shop id
+     * @param code code (GUID)
+     * @param name base name
+     * @param uri URI
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return one page of results
+     */
+    List<Category> findBy(long shopId, String code, String name, String uri, int page, int pageSize);
+
     /**
      * Get content body for a particular content.
      * See CONTENT_BODY setting.

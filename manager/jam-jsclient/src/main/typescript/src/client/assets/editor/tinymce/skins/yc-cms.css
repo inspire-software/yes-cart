@@ -1,0 +1,20 @@
+div, p, span, a, ul, li {
+  border: 1px #008800 dashed;
+}
+
+@media (max-width:768px) {
+
+  div, p, span, a, ul, li {
+    border: 1px #d34646 dashed;
+  }
+
+}
+
+@media (min-width:769px) and (max-width:1200px) {
+
+  div, p, span, a, ul, li {
+    border: 1px #0064cc dashed;
+  }
+
+}
+

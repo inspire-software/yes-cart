@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus, ValidationService } from './shared/index';
+import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, ValidationService } from './shared/index';
 import { YcValidators } from './shared/validation/validators';
 import { ErrorModalComponent } from './shared/error/index';
 import { LicenseModalComponent } from './shared/license/index';
@@ -26,16 +26,18 @@ export class AppComponent implements OnDestroy {
 
   private langSub:any;
 
-  constructor(@Inject(ShopEventBus)      _shopEventBus:ShopEventBus,
-              @Inject(ErrorEventBus)     _errorEventBus:ErrorEventBus,
-              @Inject(I18nEventBus)      _i18nEventBus:I18nEventBus,
-              @Inject(ValidationService) _validationService:ValidationService,
+  constructor(@Inject(ShopEventBus)          _shopEventBus:ShopEventBus,
+              @Inject(ErrorEventBus)         _errorEventBus:ErrorEventBus,
+              @Inject(I18nEventBus)          _i18nEventBus:I18nEventBus,
+              @Inject(WindowMessageEventBus) _windowMessageEventBus:WindowMessageEventBus,
+              @Inject(ValidationService)     _validationService:ValidationService,
               translate: TranslateService) {
 
     console.log('AppComponent environment config', Config);
     ErrorEventBus.init(_errorEventBus);
     ShopEventBus.init(_shopEventBus);
     I18nEventBus.init(_i18nEventBus);
+    WindowMessageEventBus.init(_windowMessageEventBus);
     YcValidators.init(_validationService);
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
