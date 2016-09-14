@@ -27,14 +27,14 @@
         <text-qualifier>&quot;</text-qualifier>
     </import-file-descriptor>
 
-    <select-sql>select c from CarrierSlaEntity c where c.name = {name} and c.carrier.name = {carrier}</select-sql>
+    <select-sql>select c from CarrierSlaEntity c where c.guid = {guid}</select-sql>
 
     <import-columns>
 
         <column-descriptor>
             <column-index>0</column-index>
             <field-type>FIELD</field-type>
-            <name>name</name>
+            <name>guid</name>
             <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
@@ -42,9 +42,8 @@
         <column-descriptor>
             <column-index>1</column-index>
             <field-type>FIELD</field-type>
-            <name>displayName</name>
-            <language>en</language>
-            <value-regex>(.{0,4000})(.*)</value-regex>
+            <name>name</name>
+            <value-regex>(.{0,255})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
@@ -52,7 +51,7 @@
             <column-index>2</column-index>
             <field-type>FIELD</field-type>
             <name>displayName</name>
-            <language>ru</language>
+            <language>en</language>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
@@ -61,7 +60,7 @@
             <column-index>3</column-index>
             <field-type>FIELD</field-type>
             <name>displayName</name>
-            <language>uk</language>
+            <language>ru</language>
             <value-regex>(.{0,4000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
@@ -69,13 +68,22 @@
         <column-descriptor>
             <column-index>4</column-index>
             <field-type>FIELD</field-type>
+            <name>displayName</name>
+            <language>uk</language>
+            <value-regex>(.{0,4000})(.*)</value-regex>
+            <value-regex-group>1</value-regex-group>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>5</column-index>
+            <field-type>FIELD</field-type>
             <name>description</name>
             <value-regex>(.{0,1000})(.*)</value-regex>
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>5</column-index>
+            <column-index>6</column-index>
             <field-type>FIELD</field-type>
             <name>displayDescription</name>
             <language>en</language>
@@ -84,7 +92,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>7</column-index>
             <field-type>FIELD</field-type>
             <name>displayDescription</name>
             <language>ru</language>
@@ -93,7 +101,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>7</column-index>
+            <column-index>8</column-index>
             <field-type>FIELD</field-type>
             <name>displayDescription</name>
             <language>uk</language>
@@ -102,28 +110,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>8</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>DECIMAL</data-type>
-            <name>price</name>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>-1</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>DECIMAL</data-type>
-            <name>percent</name>
-            <value-constant>0.00</value-constant>
-        </column-descriptor>
-
-        <column-descriptor>
             <column-index>9</column-index>
-            <field-type>FIELD</field-type>
-            <name>currency</name>
-        </column-descriptor>
-
-        <column-descriptor>
-            <column-index>10</column-index>
             <field-type>FK_FIELD</field-type>
             <entity-type>org.yes.cart.domain.entity.Carrier</entity-type>
             <name>carrier</name>
@@ -133,7 +120,7 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>11</column-index>
+            <column-index>10</column-index>
             <field-type>FIELD</field-type>
             <name>slaType</name>
             <value-regex>(.{1,1})(.*)</value-regex>
@@ -141,28 +128,28 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>12</column-index>
+            <column-index>11</column-index>
             <field-type>FIELD</field-type>
             <data-type>INT</data-type>
             <name>maxDays</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>13</column-index>
+            <column-index>12</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>billingAddressNotRequired</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>14</column-index>
+            <column-index>13</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>deliveryAddressNotRequired</name>
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>15</column-index>
+            <column-index>14</column-index>
             <field-type>FIELD</field-type>
             <name>supportedPaymentGateways</name>
             <value-regex>(.{0,255})(.*)</value-regex>
