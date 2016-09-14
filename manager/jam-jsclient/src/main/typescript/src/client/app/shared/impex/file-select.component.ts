@@ -57,6 +57,11 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
   }
 
+  @Input()
+  set filter(filter:string) {
+    this.fileFilter = filter;
+  }
+
   getAllFiles() {
     var _sub:any = this._fileService.getFiles(this.mode).subscribe( allfiles => {
       console.debug('FileSelectComponent getFiles', this.mode, allfiles);
@@ -132,6 +137,16 @@ export class FileSelectComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(null);
     this.getAllFiles();
     this.reloadFileList();
+  }
+
+  protected onDeleteClick(file:Pair<string,string>) {
+    var _sub:any = this._fileService.removeFile(file.first).subscribe( rez => {
+      console.debug('FileSelectComponent removeFile', file.first);
+      this.selectedFile = null;
+      _sub.unsubscribe();
+      this.getAllFiles();
+      this.reloadFileList();
+    });
   }
 
 }

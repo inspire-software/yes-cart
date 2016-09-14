@@ -398,6 +398,7 @@
 
   "IMPEX_NEW_TIP": "Press plus button to add new task",
   "IMPEX_UPDATES_TIP": "Import/Export can take some time. Status updates will be received every 15 seconds",
+  "IMPEX_DOWNLOAD_TIP": "Click download button to get the file",
   "IMPEX_START_TIP": "Press play button to start the import",
   "IMPEX_COMPLETED_OK": "Job completed successfully",
   "IMPEX_COMPLETED_ERROR": "Job completed with errors",

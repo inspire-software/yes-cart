@@ -18,7 +18,6 @@ package org.yes.cart.service.endpoint.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URLConnection;
 import java.util.List;
 
 /**
@@ -57,10 +55,17 @@ public class FileManagerEndpointControllerImpl implements FileManagerEndpointCon
     public void download(@RequestParam("fileName") final String fileName, final HttpServletResponse response) throws IOException {
 
         final byte[] content = this.fileManager.download(fileName);
-        final String mimeType = URLConnection.guessContentTypeFromName(fileName);
 
-        response.setContentType(mimeType);
-        response.addHeader("Content-Disposition", "attachment; filename=" + fileName);
+        response.setContentType("application/zip, application/octet-stream");
+
+        final String nameOnly;
+        if (fileName.contains("/")) {
+            nameOnly = fileName.substring(fileName.lastIndexOf('/') + 1).concat(".zip");
+        } else {
+            nameOnly = fileName.concat(".zip");
+        }
+
+        response.addHeader("Content-Disposition", "attachment; filename=" + nameOnly);
 
         response.setContentLength(content.length);
 

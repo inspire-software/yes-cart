@@ -250,17 +250,15 @@ public class FSFileManagerImpl implements FileManager {
         final String importRoot = importDirectorService.getImportDirectory() + File.separator + userDir;
 
         if (fileName.startsWith(importRoot)) {
-
             new File(fileName).delete();
-
+            return;
         }
 
         final String exportRoot = exportDirectorService.getExportDirectory() + File.separator + userDir;
 
         if (fileName.startsWith(exportRoot)) {
-
             new File(fileName).delete();
-
+            return;
         }
 
         throw new AccessDeniedException("Access denied");

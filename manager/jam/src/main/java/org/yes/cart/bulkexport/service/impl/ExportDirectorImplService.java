@@ -127,7 +127,7 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         final int timeout = NumberUtils.toInt(nodeService.getConfiguration().get(AttributeNamesKeys.System.IMPORT_JOB_TIMEOUT_MS), 100);
 
         final String rootPath = resolveExportDirectory();
-        final String absFile = resolveExportFile(fileName);
+        final String absFile = resolveExportFile((String) ctx.getAttribute(AsyncContext.USERNAME), fileName);
 
         return doJob(new JobContextImpl(async, new JobStatusListenerWithLoggerImpl(new JobStatusListenerImpl(logSize, timeout), ShopCodeContext.getLog(this)),
                 new HashMap<String, Object>() {{
@@ -222,15 +222,23 @@ public class ExportDirectorImplService extends SingletonJobRunner implements Exp
         return pathToExportDirectory;
     }
 
-    private String resolveExportFile(String fileName) {
+    private String resolveExportFile(final String username, final String fileName) {
         if (StringUtils.isNotBlank(fileName)) {
             if (fileName.startsWith("/") || fileName.startsWith("file://")) {
                 return fileName;
             }
+
+            final File home;
             if (pathToExportDirectory.endsWith(File.separator)) {
-                return new File(pathToExportDirectory + fileName).getAbsolutePath();
+                home = new File(pathToExportDirectory + username);
+            } else {
+                home = new File(pathToExportDirectory + File.separator + username);
             }
-            return new File(pathToExportDirectory + File.separator + fileName).getAbsolutePath();
+            if (!home.exists()) {
+                home.mkdirs();
+            }
+            return new File(home, fileName).getAbsolutePath();
+
         }
         return null;
     }

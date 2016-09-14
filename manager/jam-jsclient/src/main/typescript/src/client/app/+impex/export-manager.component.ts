@@ -25,18 +25,19 @@ import {Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
 @Component({
-  selector: 'yc-import-manager',
+  selector: 'yc-export-manager',
   moduleId: module.id,
-  templateUrl: 'import-manager.component.html',
+  templateUrl: 'export-manager.component.html',
   directives: [TAB_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, FileSelectComponent, DataGroupSelectComponent, ModalComponent]
 })
 
-export class ImportManagerComponent implements OnInit {
+export class ExportManagerComponent implements OnInit {
 
   selectedGroup:DataGroupInfoVO = null;
+  fileFilter:string = null;
   selectedFile:Pair<string,string> = null;
 
-  static tabs:Array<ImportTabData> = [ ];
+  static tabs:Array<ExportTabData> = [ ];
   selectedTab:number = -1;
   selectedTabRunning:boolean = false;
   selectedTabCompleted:boolean = false;
@@ -51,12 +52,12 @@ export class ImportManagerComponent implements OnInit {
   delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
 
   /**
-   * Construct import panel
+   * Construct export panel
    *
-   * @param _importService system service
+   * @param _exportService system service
    */
-  constructor(private _importService:ImpexService) {
-    console.debug('ImportManagerComponent constructed');
+  constructor(private _exportService:ImpexService) {
+    console.debug('ExportManagerComponent constructed');
     let that = this;
     this.delayedStatus = Futures.perpetual(function() {
       that.getStatusInfo();
@@ -64,17 +65,17 @@ export class ImportManagerComponent implements OnInit {
 
   }
 
-  get tabs():Array<ImportTabData> {
-    return ImportManagerComponent.tabs;
+  get tabs():Array<ExportTabData> {
+    return ExportManagerComponent.tabs;
   }
 
-  set tabs(tabs:Array<ImportTabData>) {
-    ImportManagerComponent.tabs = tabs;
+  set tabs(tabs:Array<ExportTabData>) {
+    ExportManagerComponent.tabs = tabs;
   }
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ImportManagerComponent ngOnInit');
+    console.debug('ExportManagerComponent ngOnInit');
   }
 
   protected tabSelected(idx:number) {
@@ -85,38 +86,23 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onNewTabHandler() {
-    console.debug('ImportManagerComponent onNewTabHandler');
+    console.debug('ExportManagerComponent onNewTabHandler');
     this.selectedGroup = null;
     this.selectGroupModalDialog.show();
   }
 
   protected onGroupSelect(group:DataGroupInfoVO) {
-    console.debug('ImportManagerComponent onGroupSelect', group);
+    console.debug('ExportManagerComponent onGroupSelect', group);
     this.selectedGroup = group;
   }
 
   protected onGroupConfirmationResult(modalresult: ModalResult) {
-    console.debug('ImportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
+    console.debug('ExportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedGroup != null) {
-        this.selectedFile = null;
-        this.selectFileModalDialog.show();
-      }
-    }
-  }
-
-  protected onFileSelect(file:Pair<string, string>) {
-    console.debug('ImportManagerComponent onFileSelect', file);
-    this.selectedFile = file;
-  }
-
-  protected onFilesConfirmationResult(modalresult: ModalResult) {
-    console.debug('ImportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      if (this.selectedFile != null) {
         this.tabs.push({
           group: this.selectedGroup,
-          file: this.selectedFile,
+          file: this.selectedGroup.name + '.csv',
           status : { token: null, state: 'UNDEFINED', completion: null, report: null },
           running : false
         });
@@ -125,6 +111,38 @@ export class ImportManagerComponent implements OnInit {
         }
       }
     }
+  }
+
+  protected onFileSelect(file:Pair<string, string>) {
+    console.debug('ExportManagerComponent onFileSelect', file);
+    this.selectedFile = file;
+  }
+
+  protected onFileDownload() {
+    console.debug('ExportManagerComponent onFileSelect');
+    if (this.selectedTab >= 0) {
+      let data = this.tabs[this.selectedTab];
+      if (data.status.completion == 'OK') {
+        this.fileFilter = data.file;
+        this.selectFileModalDialog.show();
+      }
+    } else {
+      this.fileFilter = null;
+      this.selectFileModalDialog.show();
+    }
+  }
+
+  protected onFilesConfirmationResult(modalresult: ModalResult) {
+    console.debug('ExportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      if (this.selectedFile != null) {
+
+        window.open("/yes-manager/service/filemanager/download?fileName=" + encodeURI(this.selectedFile.first), "DOWNLOAD", "width=300,height=100");
+
+
+      }
+    }
+    this.selectedFile = null;
   }
 
 
@@ -142,17 +160,17 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onRunHandler() {
-    console.debug('ImportManagerComponent Run handler');
+    console.debug('ExportManagerComponent Run handler');
 
     if (this.selectedTab >= 0) {
       let data = this.tabs[this.selectedTab];
       if (!data.running) {
 
-        console.debug('ImportManagerComponent importFromFile', data.group.label, data.file.first);
+        console.debug('ExportManagerComponent exportFromFile', data.group.label, data.file);
 
-        var _sub:any = this._importService.importFromFile(data.group.label, data.file.first).subscribe(res => {
+        var _sub:any = this._exportService.exportToFile(data.group.label, data.file).subscribe(res => {
 
-          console.debug('ImportManagerComponent importFromFile', res);
+          console.debug('ExportManagerComponent exportToFile', res);
 
           data.status.token = res;
           data.running = true;
@@ -168,7 +186,7 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onRefreshHandler() {
-    console.debug('ImportManagerComponent refresh handler');
+    console.debug('ExportManagerComponent refresh handler');
     this.getStatusInfo();
   }
 
@@ -176,15 +194,15 @@ export class ImportManagerComponent implements OnInit {
    * Read attributes.
    */
   private getStatusInfo() {
-    console.debug('ImportManagerComponent status');
+    console.debug('ExportManagerComponent status');
 
-    this.tabs.forEach((tab:ImportTabData, idx:number) => {
+    this.tabs.forEach((tab:ExportTabData, idx:number) => {
 
       if (tab.status.completion == null) {
 
-        var _sub:any = this._importService.getImportStatus(tab.status.token).subscribe(update => {
+        var _sub:any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
 
-          console.debug('ImportManagerComponent getImportStatus', update);
+          console.debug('ExportManagerComponent getExportStatus', update);
           tab.status = update;
           tab.running = tab.status.completion == null;
           _sub.unsubscribe();
@@ -211,10 +229,10 @@ export class ImportManagerComponent implements OnInit {
 
 }
 
-interface ImportTabData {
+interface ExportTabData {
 
   group : DataGroupInfoVO;
-  file : Pair<string, string>;
+  file : string;
   status : JobStatusVO;
   running : boolean;
 
