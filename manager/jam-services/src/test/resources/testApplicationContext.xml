@@ -32,7 +32,7 @@
     <import resource="io.xml"/>
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-dto-services.xml"/>
-    <import resource="jam-services.xml"/>
+    <import resource="manager-services.xml"/>
     <import resource="classpath:core-services-commands.xml"/>
     <import resource="classpath:core-orderstate.xml"/>
 
