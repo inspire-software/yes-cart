@@ -19,6 +19,7 @@ import { QueryRoutes } from './+system/query/query.routes';
 import { PaymentGatewaysRoutes } from './+system/payment/payment-gateways.routes';
 import { LicenseRoutes } from './shared/license/license.routes';
 import { OrganisationRoutes } from './+organisation/organisation.routes';
+import { ImpexRoutes } from './+impex/impex.routes';
 
 const routes: RouterConfig = [
   ...HomeRoutes,
@@ -40,6 +41,7 @@ const routes: RouterConfig = [
   ...QueryRoutes,
   ...PaymentGatewaysRoutes,
   ...OrganisationRoutes,
+  ...ImpexRoutes,
 ];
 
 export const APP_ROUTER_PROVIDERS = [

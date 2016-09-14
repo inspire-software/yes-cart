@@ -545,7 +545,7 @@ a.disabled {
   background: transparent url(../assets/img/ajax-loader.gif) no-repeat top left;
 }
 
-.job-log {
+textarea.job-log {
   width: 100%;
   min-height: 600px;
 }
@@ -555,7 +555,8 @@ a.disabled {
   min-height: 150px;
 }
 
-.js-query-result {
+textarea.js-query-result,
+textarea.js-impex-result {
   width: 100%;
   min-height: 450px;
 }

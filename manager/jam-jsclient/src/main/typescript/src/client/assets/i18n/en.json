@@ -396,6 +396,16 @@
   "PAYMENT_RESULT_Ok": "Success",
   "PAYMENT_RESULT_Failed": "Failure",
 
+  "IMPEX_NEW_TIP": "Press plus button to add new task",
+  "IMPEX_UPDATES_TIP": "Import/Export can take some time. Status updates will be received every 15 seconds",
+  "IMPEX_START_TIP": "Press play button to start the import",
+  "IMPEX_COMPLETED_OK": "Job completed successfully",
+  "IMPEX_COMPLETED_ERROR": "Job completed with errors",
+  "IMPEX_STATUS_UNDEFINED": "Current status: pending",
+  "IMPEX_STATUS_STARTED": "Current status: started",
+  "IMPEX_STATUS_INPROGRESS": "Current status: in progress",
+  "IMPEX_STATUS_FINISHED": "Current status: finished",
+
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders. Format: '~keyword' or '~~' for all open orders",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Cancelled order search does regular search in cancelled or returned orders. Format: '-keyword' or '--' for all cancelled orders",

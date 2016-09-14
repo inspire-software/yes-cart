@@ -30,6 +30,9 @@
 
   <import resource="classpath:manager-aspects.xml"/>
 
+  <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
   <bean id="viewResolver"
     class="org.springframework.web.servlet.view.UrlBasedViewResolver">
     <property name="viewClass"

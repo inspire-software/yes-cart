@@ -20,10 +20,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>YC - pure eCommerce</title>
-    <link href="<c:url value='resources/css/bootstrap.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/css/font-awesome.min.css' />" rel="stylesheet"/>
-    <link href="<c:url value='resources/css/main.css' />" rel="stylesheet"/>
-    <%--<link href="<c:url value='resources/css/login.css' />" rel="stylesheet"/>--%>
+    <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/resources/css/main.css" rel="stylesheet"/>
 </head>
 <body>
 <script type="text/javascript">
@@ -43,12 +42,12 @@
 
                 <div class="text-center clearfix">
                     <a href="http://yes-cart.org" target="_blank">
-                        <img border="0" src="<c:url value='resources/assets/img/logo-button-100x100.png'/>"/>
+                        <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/logo-button-100x100.png"/>
                     </a>
                 </div>
 
                 <div class="text-center clearfix">
-                    <img border="0" src="<c:url value='resources/assets/img/ajax-loader.gif'/>"/>
+                    <img border="0" src="${pageContext.servletContext.contextPath}/resources/assets/img/ajax-loader.gif"/>
                 </div>
 
                 <div class="input-group input-sm pull-right">
