@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.vo.VoPriceList;
+import org.yes.cart.domain.vo.VoTax;
+import org.yes.cart.domain.vo.VoTaxConfig;
 import org.yes.cart.service.endpoint.PricingEndpointController;
 import org.yes.cart.service.vo.VoPriceService;
+import org.yes.cart.service.vo.VoTaxService;
 
 import java.util.List;
 
@@ -35,10 +38,13 @@ import java.util.List;
 public class PricingEndpointControllerImpl implements PricingEndpointController {
 
     private final VoPriceService voPriceService;
+    private final VoTaxService voTaxService;
 
     @Autowired
-    public PricingEndpointControllerImpl(final VoPriceService voPriceService) {
+    public PricingEndpointControllerImpl(final VoPriceService voPriceService,
+                                         final VoTaxService voTaxService) {
         this.voPriceService = voPriceService;
+        this.voTaxService = voTaxService;
     }
 
     @Override
@@ -64,5 +70,51 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     @Override
     public @ResponseBody void removePriceList(@PathVariable("id") final long id) throws Exception {
         voPriceService.remove(id);
+    }
+
+
+    @Override
+    public @ResponseBody List<VoTax> getFilteredTax(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voTaxService.getFilteredTax(shopCode, currency, filter, max);
+    }
+
+    @Override
+    public @ResponseBody VoTax getTaxById(@PathVariable("id") final long id) throws Exception {
+        return voTaxService.getTaxById(id);
+    }
+
+    @Override
+    public @ResponseBody VoTax createTax(@RequestBody final VoTax vo) throws Exception {
+        return voTaxService.createTax(vo);
+    }
+
+    @Override
+    public @ResponseBody VoTax updateTax(@RequestBody final VoTax vo) throws Exception {
+        return voTaxService.updateTax(vo);
+    }
+
+    @Override
+    public @ResponseBody void removeTax(@PathVariable("id") final long id) throws Exception {
+        voTaxService.removeTax(id);
+    }
+
+    @Override
+    public @ResponseBody List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") final long taxId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voTaxService.getFilteredTaxConfig(taxId, filter, max);
+    }
+
+    @Override
+    public @ResponseBody VoTaxConfig getTaxConfigById(@PathVariable("id") final long id) throws Exception {
+        return voTaxService.getTaxConfigById(id);
+    }
+
+    @Override
+    public @ResponseBody VoTaxConfig createTaxConfig(@RequestBody final VoTaxConfig vo) throws Exception {
+        return voTaxService.createTaxConfig(vo);
+    }
+
+    @Override
+    public @ResponseBody void removeTaxConfig(@PathVariable("id") final long id) throws Exception {
+        voTaxService.removeTaxConfig(id);
     }
 }

@@ -22,7 +22,6 @@ import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.impl.PriceListDTOImpl;
 import org.yes.cart.domain.vo.VoPriceList;
 import org.yes.cart.service.dto.DtoPriceListsService;
-import org.yes.cart.service.dto.DtoProductSkuService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoPriceService;

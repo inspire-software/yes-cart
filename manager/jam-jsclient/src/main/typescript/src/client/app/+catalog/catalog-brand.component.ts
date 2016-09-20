@@ -212,7 +212,6 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.brandEdit.brandId;
               console.debug('CatalogBrandComponent brand changed', rez);
-              this.brandFilter = rez.name;
               this.changed = false;
               this.selectedBrand = rez;
               this.brandEdit = null;
@@ -227,6 +226,7 @@ export class CatalogBrandComponent implements OnInit, OnDestroy {
                   this.getFilteredBrands();
                 });
               } else {
+                this.brandFilter = rez.name;
                 this.getFilteredBrands();
               }
           }

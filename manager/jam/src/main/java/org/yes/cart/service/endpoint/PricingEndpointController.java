@@ -20,6 +20,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.VoPriceList;
+import org.yes.cart.domain.vo.VoTax;
+import org.yes.cart.domain.vo.VoTaxConfig;
 
 import java.util.List;
 
@@ -58,6 +60,61 @@ public interface PricingEndpointController {
     @RequestMapping(value = "/price/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removePriceList(@PathVariable("id") long id) throws Exception;
+
+
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/tax/shop/{shopCode}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoTax> getFilteredTax(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/tax/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoTax getTaxById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/tax", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoTax createTax(@RequestBody VoTax vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/tax", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoTax updateTax(@RequestBody VoTax vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/tax/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeTax(@PathVariable("id") long id) throws Exception;
+
+
+
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/taxconfig/tax/{taxId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoTaxConfig> getFilteredTaxConfig(@PathVariable("taxId") long taxId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/taxconfig/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoTaxConfig getTaxConfigById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/taxconfig", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoTaxConfig createTaxConfig(@RequestBody VoTaxConfig vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/taxconfig/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeTaxConfig(@PathVariable("id") long id) throws Exception;
+
 
 
 

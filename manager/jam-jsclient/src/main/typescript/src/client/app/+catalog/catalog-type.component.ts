@@ -217,7 +217,6 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.typeEdit.producttypeId;
               console.debug('CatalogTypeComponent type changed', rez);
-              this.typeFilter = rez.name;
               this.changed = false;
               this.selectedType = rez;
               this.typeEdit = null;
@@ -232,6 +231,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
                   this.getFilteredTypes();
                 });
               } else {
+                this.typeFilter = rez.name;
                 this.getFilteredTypes();
               }
           }

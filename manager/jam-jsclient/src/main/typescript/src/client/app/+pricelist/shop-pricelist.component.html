@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_MARKETING_PRICE' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }} {{ selectedCurrency != null ? ('(' + selectedCurrency + ')') : ''}} {{ selectedPricelist && (!pricelistEdit || pricelistEdit.skuWarehouseId > 0) ? (' / ' + selectedPricelist.skuCode) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_MARKETING_PRICE' | translate }} {{ selectedShop != null ? (' / ' + selectedShop.name) : '' }} {{ selectedCurrency != null ? ('(' + selectedCurrency + ')') : ''}} {{ selectedPricelist && (!pricelistEdit || pricelistEdit.skuPriceId > 0) ? (' / ' + selectedPricelist.skuCode) : '' }}</h1>
   </div>
 
 
@@ -35,7 +35,7 @@
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedPricelist == null || (pricelistEdit != null && pricelistEdit.skuWarehouseId === 0)" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedPricelist == null || (pricelistEdit != null && pricelistEdit.skuPriceId === 0)" class="btn btn-danger btn-circle btn-xl" >
       <i class="fa fa-remove"></i>
     </button>
 
@@ -105,7 +105,7 @@
           <div class="row">
             <div class="col-lg-3">{{ 'CODE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="pricelistEdit.skuCode" (ngModelChange)="onFormDataChange($event)" [disabled]="pricelistEdit.skuWarehouseId > 0">
+              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="pricelistEdit.skuCode" (ngModelChange)="onFormDataChange($event)" [disabled]="pricelistEdit.skuPriceId > 0">
               <div [hidden]="pricelistEditForm.controls['skuCode'].valid || pricelistEditForm.controls['skuCode'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>

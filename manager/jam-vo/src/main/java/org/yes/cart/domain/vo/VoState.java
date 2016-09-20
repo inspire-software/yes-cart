@@ -18,7 +18,6 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.StateDTO;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -27,8 +26,6 @@ import org.yes.cart.domain.dto.StateDTO;
  */
 @Dto
 public class VoState {
-
-    private static final long serialVersionUID = 20101108L;
 
     @DtoField(value = "stateId", readOnly = true)
     private long stateId;

@@ -270,7 +270,6 @@ export class ShopContentComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.contentEdit.contentId;
               console.debug('ShopContentComponent content changed', rez);
-              this.contentFilter = rez.guid;
               this.changed = false;
               this.selectedContent = rez;
               this.contentEdit = null;
@@ -285,6 +284,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
                   this.getFilteredContents();
                 });
               } else {
+                this.contentFilter = rez.guid;
                 this.getFilteredContents();
               }
           }

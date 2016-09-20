@@ -15,6 +15,7 @@
   "UNIQUE_REQUIRED": "This value has already been used. Please choose another.",
   "TAGS_REQUIRED": "Tags must be separated by space and should be one word. E.g. 'onetag another third123'",
   "EMAIL_REQUIRED": "Valid email address is required",
+  "TAX_REQUIRED": "Valid tax rate is required, a number from 0 to 100",
 
   "FILTER_REQUIRED": "This panel requires filter to display results. Please type search phrase into filter input.",
   "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
@@ -67,6 +68,7 @@
   "PROMO_APPLIED": "Promotion",
   "PROMO_APPLIED_CODES": "Promotion ref",
   "QUANTITY": "Quantity",
+  "SKU": "SKU",
 
   "LOGGED_IN": "Logged in as {{user}}",
   "PANEL_CUSTOMER_SERVICE": "Customer service",
@@ -86,7 +88,7 @@
   "PANEL_MARKETING": "Marketing & Pricing",
   "PANEL_MARKETING_PROMO": "Promotions",
   "PANEL_MARKETING_PRICE": "Price lists",
-  "PANEL_MARKETING_TAX": "Tax",
+  "PANEL_MARKETING_TAX": "Taxation",
   "PANEL_INVENTORY": "Inventory",
   "PANEL_INVENTORY_STOCK": "Stock",
   "PANEL_INVENTORY_WAREHOUSES": "Fulfilment centres",
@@ -274,6 +276,12 @@
   "PRICELIST_TAG": "Tags",
   "PRICELIST_SHOP_CODE": "Shop code",
 
+  "TAX_SHOP_CODE": "Shop code",
+  "TAX_RATE": "Rate",
+  "TAX_TYPE": "Type",
+  "TAX_TYPE_EXCLUSIVE": "Gross (added on top of price)",
+  "TAX_TYPE_INCLUSIVE": "Net (included in price)",
+
   "CUSTOMERORDER_SHOP_CODE": "Shop code",
   "CUSTOMERORDER_NUM": "No.",
   "CUSTOMERORDER_CARTGUID": "GUID",
@@ -440,6 +448,12 @@
   "SEARCH_HELP_CUSTOMER_CUSTOMER": "To search only by customer details (email, first name and last name). Format: '?keyword'",
   "SEARCH_HELP_CUSTOMER_ADDRESS": "To search only by address details. Format: '@keyword'",
   "SEARCH_HELP_CUSTOMER_POLICY": "To search only by type or policy. Format: '$keyword'",
+
+  "SEARCH_HELP_TAX_DEFAULT": "Default tax search is by code or description",
+  "SEARCH_HELP_TAX_RATE": "To search only rate. Format: '%rate' e.g. '%20'",
+  "SEARCH_HELP_TAX_TYPE": "To search only Gross/Net tax. Format: '+grosskeyword' or '-netkeyword', use '++' or '--' for all. Can be combined with rate e.g. Gross taxation of 20%: '+%20'",
+  "SEARCH_HELP_TAXCFG_LOCATION": "To search only by location (country code exact, state code partial). Format: '@keyword'",
+  "SEARCH_HELP_TAXCFG_SKU": "To search only by SKU. Format: '#SKU'. Use '#!' to select all non-SKU configurations",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates before (on left) or after (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

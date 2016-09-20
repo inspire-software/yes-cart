@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {ShopVO, PriceListVO} from '../model/index';
+import {ShopVO, PriceListVO, TaxVO, TaxConfigVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -100,6 +100,128 @@ export class PricingService {
     return this.http.delete(this._serviceBaseUrl + '/price/' + price.skuPriceId, options)
       .catch(this.handleError);
   }
+
+
+
+  /**
+   * Get list of all taxes, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredTax(shop:ShopVO, currency:string, filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
+      .map(res => <TaxVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get tax, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getTaxById(taxId:number) {
+    return this.http.get(this._serviceBaseUrl + '/tax/' + taxId)
+      .map(res => <TaxVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create/update tax.
+   * @param tax tax
+   * @returns {Observable<R>}
+   */
+  saveTax(tax:TaxVO) {
+
+    let body = JSON.stringify(tax);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (tax.taxId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/tax', body, options)
+        .map(res => <TaxVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/tax', body, options)
+        .map(res => <TaxVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove tax.
+   * @param tax tax
+   * @returns {Observable<R>}
+   */
+  removeTax(tax:TaxVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/tax/' + tax.taxId, options)
+      .catch(this.handleError);
+  }
+
+
+
+  /**
+   * Get list of all tax configs, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredTaxConfig(tax:TaxVO, filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered/' + max, body, options)
+      .map(res => <TaxConfigVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get tax config, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getTaxConfigById(taxConfigId:number) {
+    return this.http.get(this._serviceBaseUrl + '/taxconfig/' + taxConfigId)
+      .map(res => <TaxConfigVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create tax config.
+   * @param tax config
+   * @returns {Observable<R>}
+   */
+  createTaxConfig(taxConfig:TaxConfigVO) {
+
+    let body = JSON.stringify(taxConfig);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this._serviceBaseUrl + '/taxconfig', body, options)
+      .map(res => <TaxConfigVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Remove tax config.
+   * @param taxConfig tax config
+   * @returns {Observable<R>}
+   */
+  removeTaxConfig(taxConfig:TaxConfigVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/taxconfig/' + taxConfig.taxConfigId, options)
+      .catch(this.handleError);
+  }
+
+
 
 
   private handleError (error:any) {

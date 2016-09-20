@@ -254,7 +254,6 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
               _sub.unsubscribe();
               let pk = this.categoryEdit.categoryId;
               console.debug('CatalogCategoryComponent category changed', rez);
-              this.categoryFilter = rez.guid;
               this.changed = false;
               this.selectedCategory = rez;
               this.categoryEdit = null;
@@ -269,6 +268,7 @@ export class CatalogCategoryComponent implements OnInit, OnDestroy {
                   this.getFilteredCategories();
                 });
               } else {
+                this.categoryFilter = rez.guid;
                 this.getFilteredCategories();
               }
           }

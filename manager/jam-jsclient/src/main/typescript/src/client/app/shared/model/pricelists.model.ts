@@ -72,3 +72,33 @@ export interface PromotionVO {
   tag : string;
 
 }
+
+export interface TaxVO {
+
+  taxId : number;
+
+  taxRate : number;
+  exclusiveOfPrice : boolean;
+
+  shopCode : string;
+  currency : string;
+  code : string;
+
+  guid : string;
+
+  description : string;
+
+}
+
+export interface TaxConfigVO {
+
+  taxConfigId : number;
+  taxId : number;
+
+  productCode : string;
+  stateCode : string;
+  countryCode : string;
+
+  guid : string;
+
+}
