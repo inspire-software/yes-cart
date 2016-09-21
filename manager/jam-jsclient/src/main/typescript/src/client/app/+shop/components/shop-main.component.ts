@@ -13,19 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO} from './../../shared/model/index';
 import {ShopEventBus, ShopService, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
+import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 
 @Component({
   selector: 'yc-shop-main',
   moduleId: module.id,
   templateUrl: 'shop-main.component.html',
-  directives: [DataControlComponent, NgIf, REACTIVE_FORM_DIRECTIVES],
+  directives: [DataControlComponent, NgIf, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 export class ShopMainComponent implements OnInit, OnDestroy {
@@ -40,6 +41,11 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   shopMainFormSub:any;
 
   private shopSub:any;
+
+  @ViewChild('disableConfirmationModalDialog')
+  disableConfirmationModalDialog:ModalComponent;
+
+  private offValue:String;
 
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
@@ -119,13 +125,23 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   }
 
   onPowerOff() {
-    console.debug('ShopMainComponent Power off handler for shop', this.shop);
-    var _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {
-      console.debug('ShopMainComponent Shop service power off', shop);
-      ShopEventBus.getShopEventBus().emit(shop);
-      _sub.unsubscribe();
-    });
+    this.offValue = this.shop.code + (this.shop.name ? (': ' + this.shop.name) : '');
+    this.disableConfirmationModalDialog.show();
   }
+
+
+  protected onDisableConfirmationResult(modalresult: ModalResult) {
+    console.debug('OrganisationManagerComponent onDisableConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      console.debug('ShopMainComponent Power off handler for shop', this.shop);
+      var _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {
+        console.debug('ShopMainComponent Shop service power off', shop);
+        ShopEventBus.getShopEventBus().emit(shop);
+        _sub.unsubscribe();
+      });
+    }
+  }
+
 
   onDiscardEvent() {
     console.debug('ShopMainComponent Discard handler for shop', this.shop);
