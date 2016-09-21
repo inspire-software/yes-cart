@@ -58,6 +58,11 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
   update:Array<Pair<PaymentGatewayParameterVO, boolean>>;
 
+  @ViewChild('disableConfirmationModalDialog')
+  disableConfirmationModalDialog:ModalComponent;
+
+  private offValue:String;
+
   constructor(private _paymentService:PaymentService) {
     console.debug('PaymentGatewaysComponent constructed');
 
@@ -175,6 +180,18 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
 
   protected onRowEnableSelected() {
     if (this.selectedGateway != null) {
+
+      this.offValue = this.selectedGateway.name;
+      this.disableConfirmationModalDialog.show();
+
+    }
+  }
+
+
+  protected onDisableConfirmationResult(modalresult: ModalResult) {
+    console.debug('PaymentGatewaysComponent onDisableConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
       var _sub:any = this._paymentService.updateDisabledFlag(this.shopCode, this.selectedGateway.label, this.selectedGateway.active).subscribe( done => {
         console.debug('PaymentGatewaysComponent updateDisabledFlag', done);
         if (this.system || this.selectedGateway.active) {
@@ -188,6 +205,7 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
       });
     }
   }
+
 
 
   protected onRowList(row:PaymentGatewayVO) {

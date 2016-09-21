@@ -13,7 +13,7 @@
       <input class="filter-input" type="text" name="managerFilter" [(ngModel)]="managerFilter" autocomplete="off"/>
     </form>
 
-    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn {{selectedManager != null && selectedManager.enabled ? 'btn-danger' : 'btn-success'}} btn-circle btn-xl">
+    <button type="button" (click)="onRowEnableSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn {{selectedManager != null && selectedManager.enabled ? 'btn-success' : 'btn-danger' }} btn-circle btn-xl">
       <i class="fa fa-power-off"></i>
     </button>
 

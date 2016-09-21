@@ -131,7 +131,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
 
   protected onDisableConfirmationResult(modalresult: ModalResult) {
-    console.debug('OrganisationManagerComponent onDisableConfirmationResult modal result is ', modalresult);
+    console.debug('ShopMainComponent onDisableConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       console.debug('ShopMainComponent Power off handler for shop', this.shop);
       var _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {

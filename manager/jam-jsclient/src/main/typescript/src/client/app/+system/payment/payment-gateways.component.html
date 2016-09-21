@@ -93,4 +93,13 @@
   </modal>
 
 
+  <modal #disableConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true"
+         (closed)="onDisableConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_MSG_OFF' | translate:{value: offValue } }}
+  </modal>
+
 </div>
