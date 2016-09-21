@@ -17,7 +17,7 @@
       <i class="fa fa-power-off"></i>
     </button>
 
-    <button type="button" (click)="onRowResetSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowResetSelected()" [disabled]="selectedManager == null"  [hidden]="viewMode !== 'managers'" class="btn btn-danger btn-circle btn-xl">
       <i class="fa fa-repeat"></i>
     </button>
 
@@ -58,5 +58,23 @@
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
   </modal>
 
+
+  <modal #disableConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true"
+         (closed)="onDisableConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_MSG_OFF' | translate:{value: deleteValue } }}
+  </modal>
+
+  <modal #resetConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="true"
+         (closed)="onResetConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_MSG_PWD_RESET' | translate:{value: deleteValue } }}
+  </modal>
 
 </div>

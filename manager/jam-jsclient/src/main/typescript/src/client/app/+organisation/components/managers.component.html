@@ -13,10 +13,10 @@
       <tbody>
       <tr *ngFor="let row of filteredManagers; let i = index" class="{{row == selectedManager ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'EMAIL' | translate }}"><a (click)="onSelectRow(row)">{{row.email}}</a></td>
-          <td title="{{ 'FIRSTNAME' | translate }}"><a (click)="onSelectRow(row)">{{row.firstName}}</a></td>
-          <td title="{{ 'LASTNAME' | translate }}"><a (click)="onSelectRow(row)">{{row.lastName}}</a></td>
-          <td title="{{ 'ENABLED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a (click)="onSelectRow(row)">{{row.email}}</a></td>
+          <td title="{{ 'CUSTOMER_FIRSTNAME' | translate }}"><a (click)="onSelectRow(row)">{{row.firstName}}</a></td>
+          <td title="{{ 'CUSTOMER_LASTNAME' | translate }}"><a (click)="onSelectRow(row)">{{row.lastName}}</a></td>
+          <td title="{{ 'MANAGER_ENABLED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
         </template>
       </tr>
       </tbody>

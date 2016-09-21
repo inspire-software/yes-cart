@@ -51,6 +51,12 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   @ViewChild('deleteConfirmationModalDialog')
   deleteConfirmationModalDialog:ModalComponent;
 
+  @ViewChild('disableConfirmationModalDialog')
+  disableConfirmationModalDialog:ModalComponent;
+
+  @ViewChild('resetConfirmationModalDialog')
+  resetConfirmationModalDialog:ModalComponent;
+
   private deleteValue:String;
   private shopAllSub:any;
 
@@ -139,7 +145,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   protected onRowDelete(row:any) {
     console.debug('OrganisationManagerComponent onRowDelete handler', row);
-    this.deleteValue = row.managerId;;
+    this.deleteValue = row.email;
     this.deleteConfirmationModalDialog.show();
   }
 
@@ -186,7 +192,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
               }
             } else {
               this.managers.push(rez);
-              this.managerFilter = rez.managerId;
+              this.managerFilter = rez.email;
               console.debug('OrganisationManagerComponent manager added', rez);
             }
             this.changed = false;
@@ -235,29 +241,55 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
   protected onRowEnableSelected() {
     if (this.selectedManager != null) {
-      var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
-        console.debug('OrganisationManagerComponent updateDisabledFlag', done);
-        if (this.selectedManager.enabled) {
-          this.selectedManager.enabled = !this.selectedManager.enabled;
-          this.changed = false;
-          this.validForSave = false;
-        } else { // If we are enabling for shop we copy missing attributes, so need full refresh
-          this.onRefreshHandler();
-        }
-        _sub.unsubscribe();
-      });
+      this.deleteValue = this.selectedManager.email;
+      this.disableConfirmationModalDialog.show();
     }
   }
 
-  protected onRowResetSelected() {
-    if (this.selectedManager != null) {
-      var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
-        console.debug('OrganisationManagerComponent resetPassword', done);
-        this.changed = false;
-        this.validForSave = false;
-        _sub.unsubscribe();
-      });
+
+  protected onDisableConfirmationResult(modalresult: ModalResult) {
+    console.debug('OrganisationManagerComponent onDisableConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      if (this.selectedManager != null) {
+        var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
+          console.debug('OrganisationManagerComponent updateDisabledFlag', done);
+          if (this.selectedManager.enabled) {
+            this.selectedManager.enabled = !this.selectedManager.enabled;
+            this.changed = false;
+            this.validForSave = false;
+          } else { // If we are enabling for shop we copy missing attributes, so need full refresh
+            this.onRefreshHandler();
+          }
+          _sub.unsubscribe();
+        });
+      }
     }
   }
+
+
+  protected onRowResetSelected() {
+    if (this.selectedManager != null) {
+      this.deleteValue = this.selectedManager.email;
+      this.resetConfirmationModalDialog.show();
+    }
+  }
+
+
+  protected onResetConfirmationResult(modalresult: ModalResult) {
+    console.debug('OrganisationManagerComponent onResetConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      if (this.selectedManager != null) {
+        var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
+          console.debug('OrganisationManagerComponent resetPassword', done);
+          this.changed = false;
+          this.validForSave = false;
+          _sub.unsubscribe();
+        });
+      }
+    }
+  }
+
 
 }
