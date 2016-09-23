@@ -21,12 +21,12 @@
       <i class="fa fa-repeat"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="managerEdit != null || selectedManager == null" class="btn btn-circle btn-xl">
-      <i class="fa fa-edit"></i>
-    </button>
-
     <button type="button" (click)="onRowNew()" [disabled]="managerEdit != null" class="btn btn-circle btn-xl">
       <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="managerEdit != null || selectedManager == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
     </button>
 
     <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedManager == null || (managerEdit != null && managerEdit.managerId === 0)" class="btn btn-danger btn-circle btn-xl" >

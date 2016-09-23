@@ -158,6 +158,13 @@
         <constructor-arg index="3" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="voPromotionService" class="org.yes.cart.service.vo.impl.VoPromotionServiceImpl">
+        <constructor-arg index="0" ref="dtoPromotionService"/>
+        <constructor-arg index="1" ref="dtoPromotionCouponService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
     <bean id="voRoleService" class="org.yes.cart.service.vo.impl.VoRoleServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
         <constructor-arg index="1" ref="uiFederationFacade"/>

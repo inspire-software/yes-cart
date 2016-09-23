@@ -19,9 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.VoPriceList;
-import org.yes.cart.domain.vo.VoTax;
-import org.yes.cart.domain.vo.VoTaxConfig;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -116,6 +114,55 @@ public interface PricingEndpointController {
     void removeTaxConfig(@PathVariable("id") long id) throws Exception;
 
 
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion/shop/{shopCode}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoPromotion getPromotionById(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoPromotion createPromotion(@RequestBody VoPromotion vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoPromotion updatePromotion(@RequestBody VoPromotion vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removePromotion(@PathVariable("id") long id) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotion/offline/{id}/{state}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    void updatePromotionDisabledFlag(@PathVariable("id") long id, @PathVariable("state") boolean state) throws Exception;
+
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotioncoupon/{promoId}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") long promotionId, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotioncoupon", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoPromotionCoupon> createPromotionCoupons(@RequestBody VoPromotionCoupon vo) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/promotioncoupon/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removePromotionCoupon(@PathVariable("id") long id) throws Exception;
 
 
 }

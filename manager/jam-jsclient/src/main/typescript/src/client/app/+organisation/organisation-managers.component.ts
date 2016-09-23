@@ -254,13 +254,9 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
       if (this.selectedManager != null) {
         var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
           console.debug('OrganisationManagerComponent updateDisabledFlag', done);
-          if (this.selectedManager.enabled) {
-            this.selectedManager.enabled = !this.selectedManager.enabled;
-            this.changed = false;
-            this.validForSave = false;
-          } else { // If we are enabling for shop we copy missing attributes, so need full refresh
-            this.onRefreshHandler();
-          }
+          this.selectedManager.enabled = !this.selectedManager.enabled;
+          this.changed = false;
+          this.validForSave = false;
           _sub.unsubscribe();
         });
       }

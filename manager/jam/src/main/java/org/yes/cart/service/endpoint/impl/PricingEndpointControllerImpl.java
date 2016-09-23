@@ -20,11 +20,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.VoPriceList;
-import org.yes.cart.domain.vo.VoTax;
-import org.yes.cart.domain.vo.VoTaxConfig;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.PricingEndpointController;
 import org.yes.cart.service.vo.VoPriceService;
+import org.yes.cart.service.vo.VoPromotionService;
 import org.yes.cart.service.vo.VoTaxService;
 
 import java.util.List;
@@ -39,12 +38,15 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
 
     private final VoPriceService voPriceService;
     private final VoTaxService voTaxService;
+    private final VoPromotionService voPromotionService;
 
     @Autowired
     public PricingEndpointControllerImpl(final VoPriceService voPriceService,
-                                         final VoTaxService voTaxService) {
+                                         final VoTaxService voTaxService,
+                                         final VoPromotionService voPromotionService) {
         this.voPriceService = voPriceService;
         this.voTaxService = voTaxService;
+        this.voPromotionService = voPromotionService;
     }
 
     @Override
@@ -116,5 +118,50 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     @Override
     public @ResponseBody void removeTaxConfig(@PathVariable("id") final long id) throws Exception {
         voTaxService.removeTaxConfig(id);
+    }
+
+    @Override
+    public @ResponseBody List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voPromotionService.getFilteredPromotion(shopCode, currency, filter, max);
+    }
+
+    @Override
+    public @ResponseBody VoPromotion getPromotionById(@PathVariable("id") final long id) throws Exception {
+        return voPromotionService.getPromotionById(id);
+    }
+
+    @Override
+    public @ResponseBody VoPromotion createPromotion(@RequestBody final VoPromotion vo) throws Exception {
+        return voPromotionService.createPromotion(vo);
+    }
+
+    @Override
+    public @ResponseBody VoPromotion updatePromotion(@RequestBody final VoPromotion vo) throws Exception {
+        return voPromotionService.updatePromotion(vo);
+    }
+
+    @Override
+    public @ResponseBody void removePromotion(@PathVariable("id") final long id) throws Exception {
+        voPromotionService.removePromotion(id);
+    }
+
+    @Override
+    public @ResponseBody void updatePromotionDisabledFlag(@PathVariable("id") final long id, @PathVariable("state") final boolean state) throws Exception {
+        voPromotionService.updateDisabledFlag(id, state);
+    }
+
+    @Override
+    public @ResponseBody List<VoPromotionCoupon> getFilteredPromotionCoupons(@PathVariable("promoId") final long promotionId, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voPromotionService.getFilteredPromotionCoupons(promotionId, filter, max);
+    }
+
+    @Override
+    public @ResponseBody List<VoPromotionCoupon> createPromotionCoupons(@RequestBody final VoPromotionCoupon vo) throws Exception {
+        return voPromotionService.createPromotionCoupons(vo);
+    }
+
+    @Override
+    public @ResponseBody void removePromotionCoupon(@PathVariable("id") final long id) throws Exception {
+        voPromotionService.removePromotionCoupon(id);
     }
 }

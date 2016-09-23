@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {ShopVO, PriceListVO, TaxVO, TaxConfigVO} from '../model/index';
+import {ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -221,6 +221,132 @@ export class PricingService {
       .catch(this.handleError);
   }
 
+
+
+
+  /**
+   * Get list of all promotions, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredPromotions(shop:ShopVO, currency:string, filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
+      .map(res => <PromotionVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Get promotion, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getPromotionById(promotionId:number) {
+    return this.http.get(this._serviceBaseUrl + '/promotion/' + promotionId)
+      .map(res => <PromotionVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Create/update promotion.
+   * @param promotion promotion
+   * @returns {Observable<R>}
+   */
+  savePromotion(promotion:PromotionVO) {
+
+    let body = JSON.stringify(promotion);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (promotion.promotionId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/promotion', body, options)
+        .map(res => <PromotionVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/promotion', body, options)
+        .map(res => <PromotionVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove promotion.
+   * @param promotion promotion
+   * @returns {Observable<R>}
+   */
+  removePromotion(promotion:PromotionVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/promotion/' + promotion.promotionId, options)
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Save or create given shop detal - the root of shop related information.
+   * @param shop
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
+    console.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
+
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/promotion/offline/' + promotion.promotionId + '/' + state, null, options)
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get list of all promotion coupons, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredPromotionCoupons(promotion:PromotionVO, filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered/' + max, body, options)
+      .map(res => <PromotionCouponVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Create promotion coupons.
+   * @param promotion promotion
+   * @returns {Observable<R>}
+   */
+  createPromotionCoupons(coupons:PromotionCouponVO) {
+
+    let body = JSON.stringify(coupons);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, options)
+      .map(res => <PromotionCouponVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Remove promotion coupon.
+   * @param coupon coupon
+   * @returns {Observable<R>}
+   */
+  removePromotionCoupon(coupon:PromotionCouponVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/promotioncoupon/' + coupon.promotioncouponId, options)
+      .catch(this.handleError);
+  }
 
 
 

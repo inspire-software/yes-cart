@@ -181,8 +181,8 @@
             <div class="col-md-9 col-lg-6">
               <fieldset>
                 <div class="form-group">
-                  <label>{{ 'CATEGORY_NAV_ATTR' | translate }}</label>
                   <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'CATEGORY_NAV_ATTR' | translate }}</label>
                 </div>
                 <div class="form-group" [hidden]="!category.navigationByAttributes">
                   <div class="input-group">
@@ -201,12 +201,12 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'CATEGORY_NAV_BRAND' | translate }}</label>
                   <input formControlName="navigationByBrand" name="navigationByBrand" type="checkbox" [(ngModel)]="category.navigationByBrand" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'CATEGORY_NAV_BRAND' | translate }}</label>
                 </div>
                 <div class="form-group">
-                  <label>{{ 'CATEGORY_NAV_PRICE' | translate }}</label>
                   <input formControlName="navigationByPrice" name="navigationByPrice" type="checkbox" [(ngModel)]="category.navigationByPrice" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'CATEGORY_NAV_PRICE' | translate }}</label>
                   <button class="btn btn-info btn-circle btn-sm" (click)="onEditPriceTiers()" [hidden]="!category.navigationByPrice" >
                     <i class="fa fa-edit"></i>
                   </button>

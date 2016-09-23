@@ -272,7 +272,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
     console.debug('ShopTaxesComponent getFilteredTax' + (this.forceShowAll ? ' forcefully': ''));
 
-    if (this.selectedShop != null && !this.taxesFilterRequired) {
+    if (this.selectedShop != null && this.selectedCurrency != null && !this.taxesFilterRequired) {
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
         console.debug('ShopTaxesComponent getFilteredTax', alltaxes);

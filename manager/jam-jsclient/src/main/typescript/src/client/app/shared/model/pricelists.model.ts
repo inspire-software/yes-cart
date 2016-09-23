@@ -73,6 +73,18 @@ export interface PromotionVO {
 
 }
 
+export interface PromotionCouponVO {
+
+  promotioncouponId : number;
+  promotionId : number;
+
+  code : string;
+  usageLimit : number;
+  usageLimitPerCustomer : number;
+  usageCount : number;
+
+}
+
 export interface TaxVO {
 
   taxId : number;
