@@ -461,10 +461,12 @@
   "IMPEX_STATUS_FINISHED": "Current status: finished",
 
   "DASHBOARD_VIEW_DETAILS": "View Details",
+  "DASHBOARD_ORDERS_DETAILS": "Manage orders",
   "DASHBOARD_ORDERS_TODAY": "New orders",
   "DASHBOARD_ORDERS_THIS_WEEK": "This week",
   "DASHBOARD_ORDERS_THIS_MONTH": "This month",
   "DASHBOARD_ORDERS_WAITING": "Waiting approval",
+  "DASHBOARD_CUSTOMERS_DETAILS": "Manage customers",
   "DASHBOARD_CUSTOMERS_TODAY": "New customers",
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "This week",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
