@@ -460,6 +460,15 @@
   "IMPEX_STATUS_INPROGRESS": "Current status: in progress",
   "IMPEX_STATUS_FINISHED": "Current status: finished",
 
+  "DASHBOARD_VIEW_DETAILS": "View Details",
+  "DASHBOARD_ORDERS_TODAY": "New orders",
+  "DASHBOARD_ORDERS_THIS_WEEK": "This week",
+  "DASHBOARD_ORDERS_THIS_MONTH": "This month",
+  "DASHBOARD_ORDERS_WAITING": "Waiting approval",
+  "DASHBOARD_CUSTOMERS_TODAY": "New customers",
+  "DASHBOARD_CUSTOMERS_THIS_WEEK": "This week",
+  "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
+
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders. Format: '~keyword' or '~~' for all open orders",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Cancelled order search does regular search in cancelled or returned orders. Format: '-keyword' or '--' for all cancelled orders",

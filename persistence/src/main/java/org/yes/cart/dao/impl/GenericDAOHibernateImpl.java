@@ -24,6 +24,7 @@ import org.hibernate.*;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
@@ -501,6 +502,16 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return crit.list();
     }
 
+    @Override
+    public int findCountByCriteria(final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        crit.setProjection(new RowCountProjection());
+        return ((Number) crit.uniqueResult()).intValue();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -523,6 +534,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return crit.list();
 
     }
+
     /**
      * {@inheritDoc}
      */
@@ -538,6 +550,23 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         crit.setFirstResult(firstResult);
         crit.setMaxResults(maxResults);
         return crit.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
+
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        crit.setProjection(new RowCountProjection());
+        return ((Number) crit.uniqueResult()).intValue();
     }
 
     /**

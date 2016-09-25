@@ -18,6 +18,7 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
+import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.service.domain.GenericService;
 
@@ -88,6 +89,20 @@ public class BaseGenericServiceImpl<ENTITY> implements GenericService<ENTITY> {
     public List<ENTITY> findByCriteria(final Criterion... criterion) {
         return genericDao.findByCriteria(criterion);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int findCountByCriteria(final Criterion... criterion) {
+        return genericDao.findCountByCriteria(criterion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
+        return genericDao.findCountByCriteria(criteriaTuner, criterion);
     }
 
     /**

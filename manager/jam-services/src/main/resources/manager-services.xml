@@ -117,6 +117,20 @@
         <property name="licenseTextResource" value="classpath:yc-license.txt"/>
     </bean>
 
+    <bean id="voDashboardWidgetService" class="org.yes.cart.service.vo.impl.VoDashboardWidgetServiceImpl">
+        <constructor-arg index="0" ref="voManagementService"/>
+        <property name="plugins">
+            <list>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginOrdersInShops">
+                    <constructor-arg index="0" ref="customerOrderService"/>
+                </bean>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCustomersInShops">
+                    <constructor-arg index="0" ref="customerService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
     <bean id="voLocationService" class="org.yes.cart.service.vo.impl.VoLocationServiceImpl">
         <constructor-arg index="0" ref="dtoCountryService"/>
         <constructor-arg index="1" ref="dtoStateService"/>

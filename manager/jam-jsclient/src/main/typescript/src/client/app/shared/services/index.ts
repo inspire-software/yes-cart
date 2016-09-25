@@ -21,4 +21,5 @@ export * from './organisation.service';
 export * from './customerorder.service';
 export * from './customer.service';
 export * from './impex.service';
+export * from './reports.service';
 export * from './validation.service';

@@ -308,6 +308,15 @@ public interface GenericDAO<T, PK extends Serializable> {
                            Criterion... criterion);
 
     /**
+     * Find count by criteria.
+     *
+     * @param criterion given criteria
+     *
+     * @return list of found entities.
+     */
+    int findCountByCriteria(Criterion... criterion);
+
+    /**
      * Find entities by criteria.
      *
      * @param criteriaTuner optional criteria tuner.
@@ -332,6 +341,17 @@ public interface GenericDAO<T, PK extends Serializable> {
                            int firstResult,
                            int maxResults,
                            Criterion... criterion);
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param criteriaTuner optional criteria tuner.
+     * @param criterion     given criteria
+     *
+     * @return count of found entities.
+     */
+    int findCountByCriteria(CriteriaTuner criteriaTuner,
+                            Criterion... criterion);
 
     /**
      * Find single entity by criteria.
