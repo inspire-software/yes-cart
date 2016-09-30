@@ -122,4 +122,6 @@
     <property name="basename" value="jam" />
   </bean>
 
+  <import resource="classpath:manager-tools.xml"/>
+
 </beans>

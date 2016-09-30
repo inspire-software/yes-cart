@@ -38,6 +38,7 @@
     <import resource="classpath:manager-import.xml"/>
     <import resource="classpath:manager-export.xml"/>
     <import resource="classpath:manager-files.xml"/>
+    <import resource="classpath:manager-cronjob.xml"/>
 
     <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
 
