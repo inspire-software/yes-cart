@@ -20,9 +20,9 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
+ * Date: 28/07/2016
+ * Time: 17:54
  */
 @Dto
 public class VoCountry {

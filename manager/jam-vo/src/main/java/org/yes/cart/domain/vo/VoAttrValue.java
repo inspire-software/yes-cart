@@ -23,9 +23,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import java.util.List;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
  */
 @Dto
 public class VoAttrValue {

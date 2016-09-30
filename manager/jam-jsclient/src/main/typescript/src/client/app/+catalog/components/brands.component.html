@@ -12,7 +12,7 @@
       <tr *ngFor="let row of filteredBrands; let i = index" class="{{row == selectedBrand ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }} / {{ 'SEO_URI' | translate }}"><a (click)="onSelectRow(row)">{{row.description}}</a>&nbsp;</td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a (click)="onSelectRow(row)">{{row.description}}</a>&nbsp;</td>
         </template>
       </tr>
       </tbody>

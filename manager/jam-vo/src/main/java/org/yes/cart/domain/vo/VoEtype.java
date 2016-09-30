@@ -18,12 +18,9 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.EtypeDTO;
 
 /**
- * User: Igor Azarny iazarny@yahoo.com
- * Date: 09-May-2011
- * Time: 14:12:54
+ * User: denispavlov
  */
 @Dto
 public class VoEtype {

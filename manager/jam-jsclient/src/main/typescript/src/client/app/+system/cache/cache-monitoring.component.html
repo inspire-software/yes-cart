@@ -8,11 +8,8 @@
 
       <form class="pull-left">
         <input class="filter-input" type="text" name="cacheFilter" [(ngModel)]="cacheFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
       </form>
-
-      <button type="button" (click)="onTopSelected()" class="btn btn-circle btn-xl">
-        <i class="fa fa-sort-numeric-desc"></i>
-      </button>
 
       <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
         <i class="fa {{ selectedRow != null && selectedRow.stats ? 'fa-toggle-off' : 'fa-toggle-on' }}"></i>
@@ -33,6 +30,13 @@
     </div>
 
     <div>
+
+      <div *ngIf="searchHelpShow">
+        <div class="bg-info text-padding">
+          <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
+          <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-circle"><i class="fa fa-calculator"></i></button></span></p>
+        </div>
+      </div>
 
       <section class="no-more-tables">
         <table class="table-bordered table-striped table-condensed cf">

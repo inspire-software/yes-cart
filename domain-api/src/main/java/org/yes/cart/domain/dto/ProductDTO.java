@@ -21,10 +21,7 @@ import org.yes.cart.domain.entity.Guidable;
 import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Product DTO.
@@ -396,5 +393,19 @@ public interface ProductDTO extends Identifiable, Guidable {
      * @param stepOrderQuantity step quantity for order.
      */
     void setStepOrderQuantity(BigDecimal stepOrderQuantity);
+
+    /**
+     * List of SKU associated with product.
+     *
+     * @return list of SKU
+     */
+    List<ProductSkuDTO> getSku();
+
+    /**
+     * List of SKU associated with product.
+     *
+     * @param sku SKU
+     */
+    void setSku(List<ProductSkuDTO> sku);
 
 }

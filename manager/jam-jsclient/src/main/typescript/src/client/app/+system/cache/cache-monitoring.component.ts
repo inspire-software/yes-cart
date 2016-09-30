@@ -31,6 +31,8 @@ import {Config} from './../../shared/config/env.config';
 
 export class CacheMonitoringComponent implements OnInit {
 
+  private searchHelpShow:boolean = false;
+
   caches:Array<CacheInfoVO> = [];
   filteredCaches:Array<CacheInfoVO> = [];
   cacheFilter:string;
@@ -178,17 +180,20 @@ export class CacheMonitoringComponent implements OnInit {
 
       let _filter = this.cacheFilter.toLowerCase();
 
-      if (!isNaN(parseInt(_filter))) {
+      if (_filter.indexOf('#') == 0) {
 
-        let _size = parseInt(_filter);
+        let _size = parseInt(_filter.substr(1));
+        if (isNaN(_size)) {
+          _size = 100;
+        }
 
         this.filteredCaches = this.caches.filter(cache =>
           cache.cacheSize >= _size
         );
         console.debug('CacheMonitoringComponent filterCaches size', this.cacheFilter);
-      } else if (_filter.indexOf('top:') == 0) {
+      } else if (_filter.indexOf('^') == 0) {
 
-        let _top = parseInt(_filter.substr(4));
+        let _top = parseInt(_filter.substr(1));
         if (isNaN(_top)) {
           _top = 5;
         }
@@ -278,8 +283,19 @@ export class CacheMonitoringComponent implements OnInit {
     return '';
   }
 
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
   protected onTopSelected() {
-    this.cacheFilter = 'top:10';
+    this.cacheFilter = '^10';
+    this.searchHelpShow = false;
+    this.filterCaches();
+  }
+
+  protected onSizeSelected() {
+    this.cacheFilter = '#100';
+    this.searchHelpShow = false;
     this.filterCaches();
   }
 

@@ -1,0 +1,23 @@
+<ul class="nav nav-second-level item-list-control">
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="brandFilter" [(ngModel)]="brandFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+  <li *ngIf="brandFilterRequired">
+    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+  </li>
+
+  <li *ngIf="brandFilterCapped">
+    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+  </li>
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let brand of filteredBrands">
+    <a (click)="onSelectClick(brand)" class="{{ (selectedBrand != null && brand != null && selectedBrand.brandId == brand.brandId) ? 'bg-info js-click' : 'js-click' }}" [title]="brand.guid"><span>{{brand.name}}</span></a>
+  </li>
+
+</ul>
+

@@ -76,7 +76,7 @@ export class YcValidators {
 
   static requiredValidCode = Validators.compose([Validators.required, YcValidators.validCode]);
 
-  static nonBlankTrimmed = Validators.pattern('\\S+.*\\S+');
+  static nonBlankTrimmed = Validators.pattern('\\S+(.*\\S)*');
 
   static requiredNonBlankTrimmed = Validators.compose([Validators.required, YcValidators.nonBlankTrimmed]);
 

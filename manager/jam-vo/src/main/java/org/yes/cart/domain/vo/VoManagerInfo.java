@@ -18,7 +18,6 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
-import org.yes.cart.domain.dto.ManagerDTO;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com

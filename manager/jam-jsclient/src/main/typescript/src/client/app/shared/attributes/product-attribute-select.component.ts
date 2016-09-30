@@ -46,27 +46,29 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
   @Output() dataSelected: EventEmitter<AttributeVO> = new EventEmitter<AttributeVO>();
 
   constructor (private _attributeService : AttributeService) {
-    console.debug('ProductAttributeListComponent constructed');
+    console.debug('ProductAttributeSelectComponent constructed');
   }
 
   getAllAttributes() {
 
     this.attributeFilterRequired = (this.attributeFilter == null || this.attributeFilter.length < 2);
 
-    var _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe( allattributes => {
-      console.debug('ProductAttributeListComponent getAllAttributes', allattributes);
-      this.filteredAttributes = allattributes;
-      this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;
-      _sub.unsubscribe();
-    });
+    if (!this.attributeFilterRequired) {
+      var _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
+        console.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
+        this.filteredAttributes = allattributes;
+        this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;
+        _sub.unsubscribe();
+      });
+    }
   }
 
   ngOnDestroy() {
-    console.debug('ProductAttributeListComponent ngOnDestroy');
+    console.debug('ProductAttributeSelectComponent ngOnDestroy');
   }
 
   ngOnInit() {
-    console.debug('ProductAttributeListComponent ngOnInit');
+    console.debug('ProductAttributeSelectComponent ngOnInit');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.getAllAttributes();
@@ -75,7 +77,7 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
   }
 
   onSelectClick(attribute: AttributeVO) {
-    console.debug('ProductAttributeListComponent onSelectClick', attribute);
+    console.debug('ProductAttributeSelectComponent onSelectClick', attribute);
     this.selectedAttribute = attribute;
     this.dataSelected.emit(this.selectedAttribute);
   }

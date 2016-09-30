@@ -22,6 +22,7 @@ import {ShopService, ShopEventBus, Util} from './../services/index';
 import {DataControlComponent} from './../sidebar/index';
 import {I18nComponent} from './../i18n/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
+import {ProductAttributeSelectComponent} from './product-attribute-select.component';
 import {YcValidators} from './../validation/validators';
 import {FormValidationEvent, Futures, Future} from './../event/index';
 import {Config} from './../config/env.config';
@@ -31,12 +32,15 @@ import {Config} from './../config/env.config';
   selector: 'yc-attribute-values',
   moduleId: module.id,
   templateUrl: 'attribute-values.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent]
+  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent, ProductAttributeSelectComponent]
 })
 
 export class AttributeValuesComponent implements OnInit, OnChanges {
 
   @Input() masterObject:any;
+  @Input() avPrototype:AttrValueVO;
+
+  @Input() showHelp:boolean = false;
 
   //paging
   maxSize:number = Config.UI_TABLE_PAGE_NUMS;
@@ -51,6 +55,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   _objectAttributes:Array<AttrValueVO>;
   objectAttributesRemove:Array<number>;
+  objectAttributesEdit:Array<number>;
   _attributeFilter:string;
   filteredObjectAttributes:Array<AttrValueVO>;
   delayedFiltering:Future;
@@ -64,7 +69,11 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   @ViewChild('editModalDialog')
   editModalDialog:ModalComponent;
 
+  @ViewChild('addModalDialog')
+  addModalDialog:ModalComponent;
+
   selectedRow:AttrValueVO;
+  selectedAttribute:AttributeVO;
 
   attributeToEdit:AttrValueVO;
   attributeToEditImagePreviewAvailable:boolean = true;
@@ -105,7 +114,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('AttributeValuesComponent ngOnInit shop', this.masterObject);
+    console.debug('AttributeValuesComponent ngOnInit', this.masterObject);
   }
 
   ngOnChanges(changes:any) {
@@ -118,11 +127,13 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
       console.debug('AttributeValuesComponent attributes', this._objectAttributes);
       this.objectAttributesRemove = [];
+      this.objectAttributesEdit = [];
       this.filterAttributes();
 
     } else {
 
       this.objectAttributesRemove = null;
+      this.objectAttributesEdit = null;
       this.filteredObjectAttributes = [];
 
     }
@@ -157,6 +168,33 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   public onRowEditSelected() {
     if (this.selectedRow != null) {
       this.onRowEdit(this.selectedRow);
+    }
+  }
+
+  public onRowAdd() {
+    if (this.avPrototype != null) {
+      this.addModalDialog.show();
+    }
+  }
+
+  protected onAttributeSelected(row:AttributeVO) {
+    this.selectedAttribute = row;
+  }
+
+  protected onAttributeAddModalResult(modalresult: ModalResult) {
+    console.debug('AttributeValuesComponent onAttributeAddModalResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.selectedAttribute.code;} );
+      if (idx != -1) {
+        this.onRowEdit(this._objectAttributes[idx]);
+      } else {
+        let av = Util.clone(this.avPrototype);
+        av.attribute = this.selectedAttribute;
+        this.onRowEdit(av);
+      }
+    } else {
+      this.selectedAttribute = null;
     }
   }
 
@@ -200,7 +238,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           this.validForSave = true;
           break;
         default:
-          this.validForSave = val != null && !(/^\s*$/.test(val));
+          this.validForSave = val != null && /\S+(.*\S)*/.test(val);
           break;
       }
     }
@@ -215,7 +253,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
       let _update = <Array<Pair<AttrValueVO, boolean>>>[];
       this._objectAttributes.forEach(attr => {
-        if (attr.attrvalueId !== 0 || (attr.val !== null && /\S+.*\S+/.test(attr.val))) {
+        if ((attr.attrvalueId !== 0 && this.isEditedAttribute(attr)) || (attr.attrvalueId === 0 && attr.val !== null && /\S+(.*\S)*/.test(attr.val) && !(/\* .+/.test(attr.val)))) {
           _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
         }
       });
@@ -241,6 +279,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       } else {
         console.debug('AttributeValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
         this.objectAttributesRemove.push(attrToDelete);
+        this.objectAttributesEdit.push(attrToDelete);
       }
       this.filterAttributes();
       this.onSelectRow(null);
@@ -257,11 +296,16 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       if (this.attributeToEdit.attrvalueId === 0) { // add new
         console.debug('AttributeValuesComponent onEditModalResult add new attribute', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.attributeToEdit.attribute.code;} );
-        this._objectAttributes[idx] = this.attributeToEdit;
+        if (idx != -1) {
+          this._objectAttributes[idx] = this.attributeToEdit;
+        } else {
+          this._objectAttributes.push(this.attributeToEdit);
+        }
       } else { // edit existing
         console.debug('AttributeValuesComponent onEditModalResult update existing', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attrvalueId === this.attributeToEdit.attrvalueId;} );
         this._objectAttributes[idx] = this.attributeToEdit;
+        this.objectAttributesEdit.push(this.attributeToEdit.attrvalueId);
       }
       this.selectedRow = this.attributeToEdit;
       this.changed = true;
@@ -275,12 +319,30 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   private filterAttributes() {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
     if (_filter) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-        val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
-        val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
-        val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
-        val.val && val.val.toLowerCase().indexOf(_filter) !== -1
-      );
+      if (_filter === '###') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.val != null && val.val != '' && val.attrvalueId > 0
+        );
+      } else if (_filter === '##0') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.val != null && val.val != ''
+        );
+      } else if (_filter === '#00') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.val != null && val.val != '' && val.attrvalueId == 0
+        );
+      } else if (_filter === '#0#') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          this.isEditedAttribute(val) || (val.attrvalueId == 0 && val.val != null && val.val != '' && val.val.indexOf('* ') !== 0)
+        );
+      } else {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
+          val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
+          val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
+          val.val && val.val.toLowerCase().indexOf(_filter) !== -1
+        );
+      }
       console.debug('AttributeValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
     } else {
       this.filteredObjectAttributes = this._objectAttributes;
@@ -302,8 +364,37 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     return this.objectAttributesRemove.indexOf(row.attrvalueId) !== -1;
   }
 
+  isEditedAttribute(row:AttrValueVO):boolean {
+    return this.objectAttributesEdit.indexOf(row.attrvalueId) !== -1;
+  }
+
   isNewAttribute(row:AttrValueVO):boolean {
-    return row.attrvalueId == 0 && row.val != null;
+    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') !== 0;
+  }
+
+  isInheritedAttribute(row:AttrValueVO):boolean {
+    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') === 0;
+  }
+
+  getAttributeColor(row:AttrValueVO, removed:string, edited:string, added:string, inherited:string, prestine:string) {
+
+    if (this.isRemovedAttribute(row)) {
+      return removed;
+    }
+
+    if (this.isEditedAttribute(row)) {
+      return edited;
+    }
+
+    if (this.isNewAttribute(row)) {
+      return added;
+    }
+
+    if (this.isInheritedAttribute(row)) {
+      return inherited;
+    }
+
+    return prestine;
   }
 
   resetLastPageEnd() {
@@ -425,6 +516,5 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     };
     reader.readAsDataURL(image);
   }
-
 
 }

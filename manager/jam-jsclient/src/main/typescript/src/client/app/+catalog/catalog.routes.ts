@@ -1,6 +1,6 @@
 import { RouterConfig } from '@angular/router';
 
-import { CatalogCategoryComponent, CatalogBrandComponent, CatalogTypeComponent } from './index';
+import { CatalogCategoryComponent, CatalogBrandComponent, CatalogTypeComponent, CatalogProductsComponent } from './index';
 
 export const CatalogRoutes: RouterConfig = [
   {
@@ -14,5 +14,9 @@ export const CatalogRoutes: RouterConfig = [
   {
     path: 'catalog/producttypes',
     component: CatalogTypeComponent
+  },
+  {
+    path: 'catalog/products',
+    component: CatalogProductsComponent
   }
 ];

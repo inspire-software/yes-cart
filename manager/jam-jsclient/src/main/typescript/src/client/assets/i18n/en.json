@@ -55,6 +55,7 @@
   "NAME": "Name",
   "DESCRIPTION": "Description",
   "DEFAULT_VALUE": "default value",
+  "GUID": "GUID",
   "CODE": "Code",
   "ASSIGNED": "Assigned",
   "AVAILABLE": "Available",
@@ -123,7 +124,7 @@
   "TAB_MAIN": "Main",
   "TAB_SEO": "SEO",
   "TAB_I18N": "Localization",
-  "TAB_ATTRIBUTES": "Attributes",
+  "TAB_ATTRIBUTES": "Attributes/Images",
   "TAB_SHOPS": "Shops",
   "TAB_PG": "Payment Methods",
   "TAB_TEMPLATES": "Templates",
@@ -214,6 +215,32 @@
   "CONTENT_TEMPLATE_include": "Includes are hidden from public access and are only available from within page templates. Can also be used to cap the parent hierarchy for microsites.",
 
   "CONTENT_TAB_CMS": "CMS",
+
+  "PRODUCT_MANUFACTURER_CODE": "Manufacturer code",
+  "PRODUCT_PIM_CODE": "PIM reference",
+  "PRODUCT_BAR_CODE": "EAN/UPC",
+  "PRODUCT_FROM": "Available from",
+  "PRODUCT_TO": "Available to",
+  "PRODUCT_AVAILABILITY": "Availability",
+  "PRODUCT_AVAILABILITY_1": "Standard (stock required)",
+  "PRODUCT_AVAILABILITY_2": "Preorder (wait for 'Available from')",
+  "PRODUCT_AVAILABILITY_4": "Backorder (replenished on demand)",
+  "PRODUCT_AVAILABILITY_8": "Always (perpetual stock)",
+  "PRODUCT_AVAILABILITY_16": "Showroom (non-purchasable)",
+  "PRODUCT_BRAND": "Brand",
+  "PRODUCT_TYPE": "Type",
+  "PRODUCT_CATEGORIES": "Categories",
+  "PRODUCT_FEATURED": "Featured",
+  "PRODUCT_ORDER_MIN": "Min order quantity",
+  "PRODUCT_ORDER_MAX": "Max order quantity",
+  "PRODUCT_ORDER_STEP": "Step order quantity",
+  "PRODUCT_TAG": "Tags",
+  "PRODUCT_TEMPLATE": "Template",
+  "PRODUCT_SEARCH_TEMPLATE": "Search template",
+
+  "PRODUCT_TAB_AVAILABILITY": "Availability",
+  "PRODUCT_TAB_EXTERNAL": "External",
+  "PRODUCT_TAB_CATALOG": "Catalog",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",
@@ -515,6 +542,18 @@
   "SEARCH_HELP_PROMOTION_CODE": "To search only code or tag. Format: '#tag'",
   "SEARCH_HELP_PROMOTION_TYPE": "To search only promotion type or action. Format: '?id' where id can be: O - Order, S - Shipping, I - Product item, C - Customer tag, F - Fixed value off, P - Percentage off, G - Gifts and T - Customer tag",
   "SEARCH_HELP_PROMOTION_ENABLED": "To search only enabled/disabled use '+' or '-'. Format: '+#tag' or '++' for all enabled",
+
+  "SEARCH_HELP_PRODUCT_DEFAULT": "Default product search is by code, manufacturer code, PIM code, name and description",
+  "SEARCH_HELP_PRODUCT_CODE": "To search only code, manufacturer code, PIM code or tag. Format: '#tag'",
+  "SEARCH_HELP_PRODUCT_TYPE": "To search only by brand or product type. Format: '?keyword'",
+
+  "SEARCH_HELP_AV_VALUES": "To display all existing values use '###'",
+  "SEARCH_HELP_AV_VALUES_NEW": "To display all non blank values use '##0'",
+  "SEARCH_HELP_AV_VALUES_NEW_ONLY": "To display new values use '#00'",
+  "SEARCH_HELP_AV_VALUES_CHANGES": "To display changed values use '#0#'",
+
+  "SEARCH_HELP_CACHE_TOP": "To display top X used caches. Format: '^X'",
+  "SEARCH_HELP_CACHE_SIZE": "To display caches with X or more elements. Format: '#X'",
 
   "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates before (on left) or after (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 

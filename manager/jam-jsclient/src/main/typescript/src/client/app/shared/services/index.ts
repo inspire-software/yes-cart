@@ -9,6 +9,7 @@ export * from './window-message-event-bus.service';
 export * from './attribute.service';
 export * from './shop.service';
 export * from './catalog.service';
+export * from './pim.service';
 export * from './content.service';
 export * from './management.service';
 export * from './location.service';

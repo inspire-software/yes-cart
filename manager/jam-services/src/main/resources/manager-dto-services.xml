@@ -26,6 +26,10 @@
             <map>
                 <entry key="VoAttribute" value="org.yes.cart.domain.vo.VoAttribute"/>
                 <entry key="VoAttrValueCustomer" value="org.yes.cart.domain.vo.VoAttrValueCustomer"/>
+                <entry key="VoBrand" value="org.yes.cart.domain.vo.VoBrand"/>
+                <entry key="VoProductTypeInfo" value="org.yes.cart.domain.vo.VoProductTypeInfo"/>
+                <entry key="VoProductCategory" value="org.yes.cart.domain.vo.VoProductCategory"/>
+                <entry key="VoProductSku" value="org.yes.cart.domain.vo.VoProductSku"/>
             </map>
         </constructor-arg>
     </bean>

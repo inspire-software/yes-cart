@@ -4,4 +4,5 @@
 export * from './catalog-category.component';
 export * from './catalog-brand.component';
 export * from './catalog-type.component';
+export * from './catalog-products.component';
 

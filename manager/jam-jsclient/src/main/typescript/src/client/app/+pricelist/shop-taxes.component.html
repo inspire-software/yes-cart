@@ -172,7 +172,7 @@
           <div class="row">
             <div class="col-lg-3">{{ 'TAX_TYPE' | translate }}</div>
             <div class="col-lg-9">
-              <select class="form-control" formControlName="exclusiveOfPrice" name="exclusiveOfPrice" type="text" [(ngModel)]="taxEdit.exclusiveOfPrice" (ngModelChange)="onFormDataChangeTax($event)">
+              <select class="form-control" formControlName="exclusiveOfPrice" name="exclusiveOfPrice" [(ngModel)]="taxEdit.exclusiveOfPrice" (ngModelChange)="onFormDataChangeTax($event)">
                 <option value="true">{{ 'TAX_TYPE_EXCLUSIVE' | translate }}</option>
                 <option value="false">{{ 'TAX_TYPE_INCLUSIVE' | translate }}</option>
               </select>

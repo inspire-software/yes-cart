@@ -109,6 +109,20 @@
         <constructor-arg index="5" ref="voAssemblySupport"/>
     </bean>
 
+    <bean id="voProductService" class="org.yes.cart.service.vo.impl.VoProductServiceImpl">
+        <constructor-arg index="0" ref="dtoAssociationService"/>
+        <constructor-arg index="1" ref="dtoProductService"/>
+        <constructor-arg index="2" ref="dtoProductSkuService"/>
+        <constructor-arg index="3" ref="dtoProductAssociationService"/>
+        <constructor-arg index="4" ref="dtoProductCategoryService"/>
+        <constructor-arg index="5" ref="dtoBrandService"/>
+        <constructor-arg index="6" ref="dtoProductTypeService"/>
+        <constructor-arg index="7" ref="dtoAttributeService"/>
+        <constructor-arg index="8" ref="uiFederationFacade"/>
+        <constructor-arg index="9" ref="voAssemblySupport"/>
+        <constructor-arg index="10" ref="voIOSupport"/>
+    </bean>
+
     <bean id="voManagementService" class="org.yes.cart.service.vo.impl.VoManagementServiceImpl">
         <constructor-arg index="0" ref="userManagementService"/>
         <constructor-arg index="1" ref="dtoShopService"/>
@@ -410,6 +424,44 @@
                         <entry key="guid">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductTypeGUIDImpl">
                                 <constructor-arg index="0" ref="productTypeService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="product">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductGUIDImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductCodeImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductURIImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="sku">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUGUIDImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUCodeImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUURIImpl">
+                                <constructor-arg index="0" ref="productService"/>
                             </bean>
                         </entry>
                     </map>

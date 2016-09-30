@@ -80,7 +80,7 @@ public class StringToCategoryNavigationPriceTiersConverter implements ValueConve
 
         final String nav;
         final VoCategoryNavigationPriceTiers tiers = (VoCategoryNavigationPriceTiers) object;
-        if (CollectionUtils.isNotEmpty(tiers.getTiers())) {
+        if (tiers != null && CollectionUtils.isNotEmpty(tiers.getTiers())) {
 
             final PriceTierTree priceTierTree = new PriceTierTreeImpl();
             for (final MutablePair<String, List<VoCategoryNavigationPriceTier>> tier : tiers.getTiers()) {

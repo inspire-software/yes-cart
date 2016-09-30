@@ -63,12 +63,12 @@ export class I18nComponent {
     this._defaultRequired = required === 'true';
     if (this._defaultRequired) {
       console.debug('I18nComponent resetting validator to required non-blank', this.value);
-      this.i18nForm.controls['dataValue'].validator = Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')]);
-      this.i18nForm.controls['dataValueXL'].validator = Validators.compose([Validators.required, Validators.pattern('\\S+.*\\S+')]);
+      this.i18nForm.controls['dataValue'].validator = YcValidators.requiredNonBlankTrimmed;
+      this.i18nForm.controls['dataValueXL'].validator = YcValidators.requiredNonBlankTrimmed;
     } else {
       console.debug('I18nComponent resetting validator to non-blank', this.value);
-      this.i18nForm.controls['dataValue'].validator = Validators.pattern('\\S+.*\\S+');
-      this.i18nForm.controls['dataValueXL'].validator = Validators.pattern('\\S+.*\\S+');
+      this.i18nForm.controls['dataValue'].validator = YcValidators.nonBlankTrimmed;
+      this.i18nForm.controls['dataValueXL'].validator = YcValidators.nonBlankTrimmed;
     }
   }
 

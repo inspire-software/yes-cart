@@ -25,8 +25,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Dto
 public class VoShop {
 
-    private static final long serialVersionUID = 20160119L;
-
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 

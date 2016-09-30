@@ -7,4 +7,8 @@ export * from './brands.component';
 export * from './brand.component';
 export * from './product-types.component';
 export * from './product-type.component';
+export * from './products.component';
+export * from './product.component';
+export * from './skus.component';
+export * from './sku.component';
 
