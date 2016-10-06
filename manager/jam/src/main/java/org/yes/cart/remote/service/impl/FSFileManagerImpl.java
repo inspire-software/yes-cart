@@ -264,4 +264,26 @@ public class FSFileManagerImpl implements FileManager {
         throw new AccessDeniedException("Access denied");
 
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String home() throws IOException {
+
+        final SecurityContext sc = SecurityContextHolder.getContext();
+
+        if (sc == null || sc.getAuthentication() == null || sc.getAuthentication().getName() == null) {
+            throw new AccessDeniedException("Access denied");
+        }
+
+        final String userDir = sc.getAuthentication().getName();
+
+        final File exportRoot = new File(exportDirectorService.getExportDirectory() + File.separator + userDir);
+
+        if (!exportRoot.exists()) {
+            exportRoot.mkdirs();
+        }
+
+        return exportRoot.getAbsolutePath();
+    }
 }

@@ -62,7 +62,7 @@ public class VoPaymentServiceImpl implements VoPaymentService {
 
             results.addAll(voAssemblySupport.assembleVos(VoPayment.class, CustomerOrderPayment.class, batch));
             start += max;
-        } while (results.size() < max);
+        } while (results.size() < max && max != Integer.MAX_VALUE);
         return results.size() > max ? results.subList(0, max) : results;
     }
 }

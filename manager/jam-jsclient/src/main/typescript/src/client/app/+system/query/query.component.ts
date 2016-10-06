@@ -34,6 +34,7 @@ export class QueryComponent implements OnInit {
   cluster:Array<ClusterNodeVO> = [];
 
   selectedNode:string = null;
+  selectedTabType:string = 'SQL';
 
   static tabs:Array<QueryTabData> = [ { query: '', qtype: 'SQL', result: '', resultQuery: '' } ];
   selectedTab:number = 0;
@@ -66,7 +67,10 @@ export class QueryComponent implements OnInit {
     this.selectedTab = idx;
   }
 
-  protected onNewTabHandler(qtype:string) {
+  protected onNewTabHandler() {
+
+    let qtype = this.selectedTabType ? this.selectedTabType : 'SQL';
+
     this.tabs.push({ query: '', qtype: qtype, result: '', resultQuery: '' });
   }
 

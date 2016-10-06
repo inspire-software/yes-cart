@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {DashboardWidgetVO} from '../model/index';
+import {DashboardWidgetVO, ReportDescriptorVO, ReportRequestVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';
@@ -49,6 +49,51 @@ export class ReportsService {
       .map(res => <DashboardWidgetVO[]> res.json())
       .catch(this.handleError);
   }
+
+  /**
+   * Get current user reports,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getReportDescriptors() {
+    return this.http.get(this._serviceBaseUrl + '/report/all')
+      .map(res => <ReportDescriptorVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Refine report options.
+   * @param req report request with selections
+   * @returns {Observable<R>}
+   */
+  updateReportRequestValues(req:ReportRequestVO) {
+
+    let body = JSON.stringify(req);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/report/configure', body, options)
+        .map(res => <ReportRequestVO> res.json())
+        .catch(this.handleError);
+  }
+
+
+  /**
+   * Generate report and return file name on server.
+   * @param req report request with selections
+   * @returns {Observable<R>}
+   */
+  generateReport(req:ReportRequestVO) {
+
+    let body = JSON.stringify(req);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/report/generate', body, options)
+        .map(res => res.text())
+        .catch(this.handleError);
+  }
+
 
   private handleError (error:any) {
 

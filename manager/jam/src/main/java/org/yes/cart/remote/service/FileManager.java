@@ -41,4 +41,13 @@ public interface FileManager {
      */
     void delete(String fileName) throws IOException;
 
+    /**
+     * Get user home directory.
+     *
+     * @return home path
+     *
+     * @throws IOException
+     */
+    String home() throws IOException;
+
 }

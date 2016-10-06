@@ -85,11 +85,11 @@
     <div accordion-heading>{{ 'PANEL_REPORTS' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
-        <a [routerLink]="['/']" routerLinkActive="bg-info">{{ 'PANEL_DASHBOARD' | translate }}</a>
+        <a [routerLink]="['/dashboard']" routerLinkActive="bg-info">{{ 'PANEL_DASHBOARD' | translate }}</a>
       </li>
-      <!-- li>
-        <a [routerLink]="['/']" routerLinkActive="bg-danger">TODO: {{ 'PANEL_REPORTS' | translate }}</a>
-      </li -->
+      <li class="hidden-sm hidden-xs">
+        <a [routerLink]="['/reports']" routerLinkActive="bg-info">{{ 'PANEL_REPORTS' | translate }}</a>
+      </li>
     </ul>
   </accordion-group>
 

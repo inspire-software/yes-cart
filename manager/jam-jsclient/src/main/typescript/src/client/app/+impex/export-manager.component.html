@@ -5,7 +5,7 @@
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="onRunHandler()" [disabled]="selectedTab < 0 || selectedTabRunning || selectedTabCompleted" class="btn btn-info btn-circle btn-xl hidden-sm">
+    <button type="button" (click)="onRunHandler()" [disabled]="selectedTab < 0 || selectedTabRunning || selectedTabCompleted" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
       <i class="fa fa-play"></i>
     </button>
 
@@ -60,7 +60,7 @@
             <p class="bg-info text-padding">{{ 'IMPEX_UPDATES_TIP' | translate }}</p>
           </div>
           <div *ngIf="tab.status.token == null">
-            <p class="bg-info text-padding">{{ 'IMPEX_START_TIP' | translate }} <span><button type="button" (click)="onRunHandler()" class="btn btn-info btn-circle hidden-sm"><i class="fa fa-play"></i></button></span></p>
+            <p class="bg-info text-padding">{{ 'IMPEX_START_TIP' | translate }} <span><button type="button" (click)="onRunHandler()" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></span></p>
           </div>
           <div *ngIf="tab.status.token != null">
             <p class="bg-success text-padding">{{ 'IMPEX_STATUS_' + tab.status.state | translate }}</p>

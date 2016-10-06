@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import {Pair} from './common.model';
+
 export interface DashboardWidgetVO {
 
   widgetId : string;
@@ -21,3 +23,35 @@ export interface DashboardWidgetVO {
 
 }
 
+export interface ReportParameterVO {
+
+  parameterId : string;
+  businesstype : string;
+  mandatory : boolean;
+
+}
+
+export interface ReportDescriptorVO {
+
+  reportId : string;
+  parameters : ReportParameterVO[];
+
+}
+
+export interface ReportRequestParameterVO {
+
+  parameterId : string;
+  options : Pair<string, string>[];
+  value : string;
+  mandatory : boolean;
+
+}
+
+export interface ReportRequestVO {
+
+  reportId : string;
+  lang : string;
+
+  parameters : ReportRequestParameterVO[];
+
+}

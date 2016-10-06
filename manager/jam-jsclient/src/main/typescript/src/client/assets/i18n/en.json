@@ -3,7 +3,7 @@
   "ROLE_REQUIRED": "Correct role code is required (ROLE_ followed by A-Z or _)",
   "NUM_REQUIRED": "Correct numeric value is required (e.g. -1, 0, 33 ... etc)",
   "POS_DECIMAL_REQUIRED": "Correct positive numeric value is required (e.g. 1, 1.5, 5, 33.0 ... etc)",
-  "DATE_REQUIRED": "Correct date value is required. E.g. 3rd Jan 2017 should be entered as 2017-01-03. Time is optional and should be three double digits (hours, minutes, seconds) separated by semicolon. E.g. 02:43:00",
+  "DATE_REQUIRED": "Correct date value is required. E.g. 3rd Jan 2017 should be entered as 2017-01-03. Time is optional and should be three double digits (hours, minutes, seconds) separated by colon. E.g. 02:43:00",
   "NON_BLANK_TRIMMED_REQUIRED": "Correct value is required (no preceding or tailing spaces)",
   "NO_WHITESPACE_REQUIRED": "Correct value is required (no spaces)",
   "SIMPLE_REQUIRED": "Value is required",
@@ -21,7 +21,6 @@
   "FILTER_CAPPED": "Too many results for given filter. Results have been capped.",
   "SHOP_SELECTION_REQUIRED": "This view requires shop selection. Please click the button to choose.",
   "FULFILMENT_CENTRE_SELECTION_REQUIRED": "This view requires fulfilment centre selection. Please click the button to choose.",
-  "SHOP_SELECTION_REQUIRED": "This view requires shop selection. Please click the button to choose.",
   "CURRENCY_SELECTION_REQUIRED": "This view requires currency selection. Please click the button to choose.",
 
   "LICENSE_TITLE": "YOU HAVE AGREED TO THE FOLLOWING:",
@@ -34,7 +33,7 @@
   "MODAL_ERROR_MESSAGE_AUTH403": "You are not authorised to view and/or update data",
   "MODAL_ERROR_MESSAGE_AUTH404": "Server error: Service path not found",
   "MODAL_ERROR_MESSAGE_UNIQUE": "Data constrain violation occurred. (e.g. CODE, GUID, URI, data relationship)",
-  "MODAL_ERROR_MESSAGE": "The following error had occured",
+  "MODAL_ERROR_MESSAGE": "The following error had occurred",
   "MODAL_CONFIRM_TITLE": "Are you sure?",
   "MODAL_CONFIRM_MSG": "Please confirm that you wish to proceed",
   "MODAL_CONFIRM_MSG_OFF": "Please confirm that you wish to proceed with on/off action for {{value}} ",
@@ -498,6 +497,19 @@
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "This week",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
 
+  "REPORT_reportAvailableStock" : "Inventory report",
+  "REPORT_reportPayments" : "Payments report",
+  "REPORT_reportDelivery" : "Delivery report",
+  "REPORT_PARAM_warehouse" : "Fulfilment centre",
+  "REPORT_PARAM_skuCode" : "SKU",
+  "REPORT_PARAM_orderNumber" : "Order Number",
+  "REPORT_PARAM_fromDate" : "From (yyyy-MM-dd HH:mm:ss, only year is mandatory)",
+  "REPORT_PARAM_tillDate" : "To (yyyy-MM-dd HH:mm:ss, only year is mandatory)",
+  "REPORT_FILENAME" : "Report filename",
+  "REPORT_NO_RESULTS" : "No report was generated because there is no data for given report parameters",
+  "REPORT_SELECT_TIP" : "Select report and click plus button to generate the report",
+  "REPORT_RUN_TIP" : "Click play button to run generate this report",
+
   "SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT": "Default order search is searching: order number, email and last name in open orders only",
   "SEARCH_HELP_CUSTOMER_ORDERS_OPEN": "Open order search does regular search in open orders. Format: '~keyword' or '~~' for all open orders",
   "SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED": "Cancelled order search does regular search in cancelled or returned orders. Format: '-keyword' or '--' for all cancelled orders",
@@ -555,6 +567,6 @@
   "SEARCH_HELP_CACHE_TOP": "To display top X used caches. Format: '^X'",
   "SEARCH_HELP_CACHE_SIZE": "To display caches with X or more elements. Format: '#X'",
 
-  "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates before (on left) or after (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
+  "SEARCH_HELP_CALENDAR": "To search by date use the < character with dates after (on left) or before (on right). E.g: 'before 2000': <2000, 'after sep 2000 before 2017': 2000-09<2017"
 
 }

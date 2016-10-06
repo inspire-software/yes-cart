@@ -60,6 +60,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
   @Input()
   set filter(filter:string) {
     this.fileFilter = filter;
+    this.reloadFileList();
   }
 
   getAllFiles() {

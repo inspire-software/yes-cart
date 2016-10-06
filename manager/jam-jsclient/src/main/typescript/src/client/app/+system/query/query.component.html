@@ -12,20 +12,18 @@
         </select>
       </form>
 
-      <button type="button" (click)="onRunHandler()" [disabled]="selectedNode == null" class="btn btn-info btn-circle btn-xl hidden-sm">
+      <button type="button" (click)="onRunHandler()" [disabled]="selectedNode == null" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onNewTabHandler('FT')" class="btn btn-circle btn-xl">
-        <i class="fa fa-plus" title="FT"></i>
-      </button>
+      <select class="filter-input" type="text" name="selectedTabType" [(ngModel)]="selectedTabType">
+        <option value="SQL">SQL</option>
+        <option value="HQL">HQL</option>
+        <option value="FT">FT</option>
+      </select>
 
-      <button type="button" (click)="onNewTabHandler('HQL')" class="btn btn-circle btn-xl">
-        <i class="fa fa-plus" title="HQL"></i>
-      </button>
-
-      <button type="button" (click)="onNewTabHandler('SQL')" class="btn btn-circle btn-xl">
-        <i class="fa fa-plus" title="SQL"></i>
+      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+        <i class="fa fa-plus"></i>
       </button>
 
       <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
