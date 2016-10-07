@@ -49,14 +49,12 @@
                     <label class="input-group-addon" for="j_username"><i class="fa fa-user"></i></label>
                     <input type="text" class="form-control" id="j_username" name="j_username"
                            placeholder="<spring:message code="login.form.placeholder.user"/>"
-                           value="<spring:message code="login.prefill.user"/>"
                            required>
                 </div>
                 <div class="input-group input-sm">
                     <label class="input-group-addon" for="j_password"><i class="fa fa-lock"></i></label>
                     <input type="password" class="form-control" id="j_password" name="j_password"
                            placeholder="<spring:message code="login.form.placeholder.pass"/>"
-                           value="<spring:message code="login.prefill.pass"/>"
                            required>
                 </div>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
