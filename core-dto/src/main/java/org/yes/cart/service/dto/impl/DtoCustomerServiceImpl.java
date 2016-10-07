@@ -20,15 +20,21 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueCustomerDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCustomer;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeService;
@@ -56,19 +62,21 @@ public class DtoCustomerServiceImpl
 
     private final GenericDAO<Shop, Long> shopDao;
 
+    private final GenericDAO<Address, Long> addressDao;
+
     private final Assembler attrValueAssembler;
 
     private final Assembler shopAssembler;
 
     /**
      * Construct base remote service.
-     *
-     * @param dtoFactory               {@link org.yes.cart.domain.dto.factory.DtoFactory}
-     * @param customerGenericService   {@link org.yes.cart.service.domain.GenericService}
-     * @param adaptersRepository {@link com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository}
+     *  @param dtoFactory               {@link DtoFactory}
+     * @param customerGenericService   {@link GenericService}
+     * @param adaptersRepository {@link AdaptersRepository}
      * @param dtoAttributeService      {@link DtoAttributeService}
      * @param attrValueEntityCustomerDao       link to customer attribute values dao
      * @param shopDao shop dao
+     * @param addressDao address dao
      */
     public DtoCustomerServiceImpl(
             final DtoFactory dtoFactory,
@@ -76,7 +84,8 @@ public class DtoCustomerServiceImpl
             final AdaptersRepository adaptersRepository,
             final DtoAttributeService dtoAttributeService,
             final GenericDAO<AttrValueEntityCustomer, Long> attrValueEntityCustomerDao,
-            final GenericDAO<Shop, Long> shopDao) {
+            final GenericDAO<Shop, Long> shopDao,
+            final GenericDAO<Address, Long> addressDao) {
 
         super(dtoFactory, customerGenericService, adaptersRepository);
 
@@ -85,6 +94,7 @@ public class DtoCustomerServiceImpl
         this.attrValueEntityCustomerDao = attrValueEntityCustomerDao;
 
         this.shopDao = shopDao;
+        this.addressDao = addressDao;
 
         this.attrValueAssembler = DTOAssembler.newAssembler(
                 dtoFactory.getImplClass(AttrValueCustomerDTO.class),
@@ -263,6 +273,99 @@ public class DtoCustomerServiceImpl
         return dtos;
     }
 
+    private final static char[] REF_OR_CUSTOMER_OR_ADDRESS = new char[] { '#', '?', '@', '$' };
+    static {
+        Arrays.sort(REF_OR_CUSTOMER_OR_ADDRESS);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<CustomerDTO> customers = new ArrayList<>();
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+
+        if (StringUtils.isNotBlank(filter)) {
+
+            final Pair<String, String> refOrCustomerOrAddressOrPolicy = ComplexSearchUtils.checkSpecialSearch(filter, REF_OR_CUSTOMER_OR_ADDRESS);
+            final Pair<Date, Date> dateSearch = refOrCustomerOrAddressOrPolicy == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+            if (refOrCustomerOrAddressOrPolicy != null) {
+
+                if ("#".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
+                    // order number search
+                    final String refNumber = refOrCustomerOrAddressOrPolicy.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.eq("customerId", NumberUtils.toLong(refNumber)),
+                            Restrictions.ilike("email", refNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("tag", refNumber, MatchMode.ANYWHERE)
+                    ));
+                } else if ("?".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
+                    // customer search
+                    final String customer = refOrCustomerOrAddressOrPolicy.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("email", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
+                    ));
+                } else if ("@".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
+                    // address search
+                    final String address = refOrCustomerOrAddressOrPolicy.getSecond();
+                    final List<Long> ids = (List) this.addressDao.
+                            findQueryObjectsRangeByNamedQuery("CUSTOMER.IDS.BY.ADDRESS", page * pageSize, pageSize, "%" + address.toLowerCase() + "%");
+
+                    if (ids.isEmpty()) {
+                        return Collections.emptyList();
+                    }
+
+                    criteria.add(Restrictions.in("customerId", ids));
+
+                } else if ("$".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
+                    // address search
+                    final String policy = refOrCustomerOrAddressOrPolicy.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("customerType", policy, MatchMode.EXACT),
+                            Restrictions.ilike("pricingPolicy", policy, MatchMode.EXACT)
+                    ));
+                }
+
+            } else if (dateSearch != null) {
+
+                final Date from = dateSearch.getFirst();
+                final Date to = dateSearch.getSecond();
+
+                // time search
+                if (from != null) {
+                    criteria.add(Restrictions.ge("createdTimestamp", from));
+                }
+                if (to != null) {
+                    criteria.add(Restrictions.le("createdTimestamp", to));
+                }
+
+            } else {
+
+                criteria.add(Restrictions.or(
+                        Restrictions.ilike("email", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("firstname", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("lastname", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("customerType", filter, MatchMode.EXACT),
+                        Restrictions.ilike("pricingPolicy", filter, MatchMode.EXACT)
+                ));
+
+            }
+
+        }
+
+        final List<Customer> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+        fillDTOs(entities, customers);
+
+        return customers;
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -319,23 +422,37 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<ShopDTO> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        List<ShopDTO> rez = new ArrayList<ShopDTO>();
-        for (CustomerShop customerShop : getService().findById(customerId).getShops()) {
-            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
-            shopAssembler.assembleDto(shopDTO, customerShop.getShop(), getAdaptersRepository(), dtoFactory);
-            rez.add(shopDTO);
+    public Map<ShopDTO, Boolean> getAssignedShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final Collection<CustomerShop> assigned = getService().findById(customerId).getShops();
+        final Map<Long, Boolean> enabledMap = new HashMap<>(assigned.size() * 2);
+        for (final CustomerShop shop : assigned) {
+            enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
         }
-        return rez;
-
+        final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
+        fillCarrierShopsDTOs(shopDTOs, assigned);
+        final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
+        for (final ShopDTO dto : shopDTOs) {
+            dtoPairs.put(dto, enabledMap.get(dto.getShopId()));
+        }
+        return dtoPairs;
     }
+
+    private void fillCarrierShopsDTOs(final List<ShopDTO> result, final Collection<CustomerShop> shops)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        for (CustomerShop shop : shops) {
+            final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
+            shopAssembler.assembleDto(shopDTO, shop.getShop(), getAdaptersRepository(), dtoFactory);
+            result.add(shopDTO);
+        }
+    }
+
 
     /**
      * {@inheritDoc}
      */
     public List<ShopDTO> getAvailableShop(final long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final List<Shop> all = shopDao.findAll();
-        final List<ShopDTO> assigned = getAssignedShop(customerId);
+        final Set<ShopDTO> assigned = getAssignedShop(customerId).keySet();
         final List<ShopDTO> available = new ArrayList<ShopDTO>(all.size());
         for (final Shop shop : all) {
             boolean match = false;
@@ -356,20 +473,25 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void grantShop(final long customerId, final String shopCode) {
+    public void grantShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
         final Collection<CustomerShop> assigned = customer.getShops();
         for (final CustomerShop shop : assigned) {
-            if (shop.getShop().getCode().equals(shopCode)) {
+            if (shop.getShop().getShopId() == shopId) {
+                if (shop.isDisabled() && !soft) {
+                    shop.setDisabled(false);
+                    getService().update(customer);
+                }
                 return;
             }
         }
-        final Shop shop = shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
+        final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
             final CustomerShop customerShop = shopDao.getEntityFactory().getByIface(CustomerShop.class);
             customerShop.setCustomer(customer);
             customerShop.setShop(shop);
+            customerShop.setDisabled(soft);
             assigned.add(customerShop);
         }
         getService().update(customer);
@@ -379,18 +501,33 @@ public class DtoCustomerServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void revokeShop(final long customerId, final String shopCode) {
+    public void revokeShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
         final Iterator<CustomerShop> assigned = customer.getShops().iterator();
         while (assigned.hasNext()) {
             final CustomerShop shop = assigned.next();
-            if (shop.getShop().getCode().equals(shopCode)) {
-                assigned.remove();
+            if (shop.getShop().getShopId() == shopId) {
+                if (soft) {
+                    shop.setDisabled(true);
+                } else {
+                    assigned.remove();
+                }
                 getService().update(customer);
+                break;
             }
         }
 
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueCustomerDTO dto = new AttrValueCustomerDTOImpl();
+        dto.setCustomerId(entityPk);
+        return dto;
     }
 
 }

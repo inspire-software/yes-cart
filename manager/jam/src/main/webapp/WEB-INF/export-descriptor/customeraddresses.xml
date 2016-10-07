@@ -1,0 +1,168 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.Address</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>customeraddresses-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>select a from AddressEntity a where a.customer is not null</select-sql>
+
+    <export-columns>
+        
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Country Code</column-header>
+            <field-type>FIELD</field-type>
+            <name>countryCode</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>State Code</column-header>
+            <field-type>FIELD</field-type>
+            <name>stateCode</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>City</column-header>
+            <field-type>FIELD</field-type>
+            <name>city</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Address 1</column-header>
+            <field-type>FIELD</field-type>
+            <name>addrline1</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Address 2</column-header>
+            <field-type>FIELD</field-type>
+            <name>addrline2</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Post Code</column-header>
+            <field-type>FIELD</field-type>
+            <name>postcode</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Phone 1</column-header>
+            <field-type>FIELD</field-type>
+            <name>phone1</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Phone 2</column-header>
+            <field-type>FIELD</field-type>
+            <name>phone2</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Mobile 1</column-header>
+            <field-type>FIELD</field-type>
+            <name>mobile1</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Mobile 2</column-header>
+            <field-type>FIELD</field-type>
+            <name>mobile2</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>First name</column-header>
+            <field-type>FIELD</field-type>
+            <name>firstname</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Last name</column-header>
+            <field-type>FIELD</field-type>
+            <name>lastname</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Middle name</column-header>
+            <field-type>FIELD</field-type>
+            <name>middlename</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Email 1</column-header>
+            <field-type>FIELD</field-type>
+            <name>email1</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Email 2</column-header>
+            <field-type>FIELD</field-type>
+            <name>email2</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 1</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom1</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 2</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom2</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 3</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom3</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 4</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom4</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Is default</column-header>
+            <field-type>FIELD</field-type>
+            <name>defaultAddress</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Type</column-header>
+            <field-type>FIELD</field-type>
+            <name>addressType</name>
+        </column-descriptor>
+
+    </export-columns>
+
+</export-descriptor>

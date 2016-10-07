@@ -27,8 +27,12 @@ import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueShopDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopDTOImpl;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.AttrValueShop;
+import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.entity.Etype;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.impl.AttrValueEntityShop;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
@@ -37,7 +41,9 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -96,7 +102,7 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
-    public Collection<String> getAllSupportedCurrenciesByShops() {
+    public List<String> getAllSupportedCurrenciesByShops() {
         return ((ShopService)service).findAllSupportedCurrenciesByShops();
     }
 
@@ -242,5 +248,13 @@ public class DtoShopServiceImpl
         throw new UnmappedInterfaceException("Not implemented");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueShopDTO dto = new AttrValueShopDTOImpl();
+        dto.setShopId(entityPk);
+        return dto;
+    }
 
 }

@@ -61,7 +61,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
     /** {@inheritDoc} */
     public String getCurrentNodeId() {
-        return node.getNodeId();
+        return node.getId();
     }
 
     /** {@inheritDoc} */
@@ -116,11 +116,11 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
-    public Node getYumNode() {
+    public Node getAdminNode() {
 
         final List<Node> cluster = getCluster();
         for (final Node node : cluster) {
-            if (node.isYum()) {
+            if (node.isAdmin()) {
                 return node;
             }
         }
@@ -128,12 +128,12 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
-    public List<Node> getYesNodes() {
+    public List<Node> getSfNodes() {
 
         final List<Node> cluster = getCluster();
         final List<Node> yes = new ArrayList<Node>();
         for (final Node node : cluster) {
-            if (!node.isYum()) {
+            if (!node.isAdmin()) {
                 yes.add(node);
             }
         }
@@ -141,12 +141,12 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     }
 
     /** {@inheritDoc} */
-    public List<Node> getOtherYesNodes() {
+    public List<Node> getOtherSfNodes() {
 
         final List<Node> cluster = getCluster();
         final List<Node> yes = new ArrayList<Node>();
         for (final Node node : cluster) {
-            if (!node.isYum() && !node.isCurrent()) {
+            if (!node.isAdmin() && !node.isCurrent()) {
                 yes.add(node);
             }
         }
@@ -190,7 +190,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
 
                 Node toBlacklist = null;
                 for (final Node node : this.cluster) {
-                    if (nodeId.equals(node.getNodeId())) {
+                    if (nodeId.equals(node.getId())) {
                         toBlacklist = node;
                         break;
                     }
@@ -227,8 +227,8 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
             final List<Node> all = new ArrayList<Node>();
             all.add(this.node);
             for (final Node node : cluster) {
-                if (!node.getNodeId().equals(this.node.getNodeId())) {
-                    if (StringUtils.isNotBlank(node.getChannel()) || "YUM".equals(node.getNodeType())) {
+                if (!node.getId().equals(this.node.getId())) {
+                    if (StringUtils.isNotBlank(node.getChannel()) || node.isAdmin()) {
                         // only add nodes with specified channels
                         all.add(new NodeImpl(false, node));
                     }

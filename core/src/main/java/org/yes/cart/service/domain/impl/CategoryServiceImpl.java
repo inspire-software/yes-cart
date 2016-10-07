@@ -549,6 +549,39 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
+
+        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
+        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
+        final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
+
+        final Category root = proxy().getRootCategory();
+        final List<Category> cats =
+                getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+
+        final Iterator<Category> catsIt = cats.iterator();
+        while (catsIt.hasNext()) {
+            Category category = catsIt.next();
+            if (category.isRoot()) {
+                catsIt.remove();
+            } else {
+                while (category.getParentId() != root.getCategoryId()) {
+                    if (category.isRoot()) {
+                        // if this is root and not category root matches then this is content
+                        catsIt.remove();
+                        break;
+                    }
+                    category = proxy().findById(category.getParentId());
+                }
+            }
+        }
+        return cats;
+    }
+
     private CategoryService proxy;
 
     private CategoryService proxy() {

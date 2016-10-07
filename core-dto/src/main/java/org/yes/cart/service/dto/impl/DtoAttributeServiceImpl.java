@@ -147,6 +147,17 @@ public class DtoAttributeServiceImpl
         return null;
     }
 
+    /** {@inheritDoc}  */
+    public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Attribute> attrs = ((AttributeService)service).findAttributesBy(attributeGroupCode, code, name, description, page, pageSize);
+        if (attrs != null) {
+            final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
+            fillDTOs(attrs, attributesDTO);
+            return attributesDTO;
+
+        }
+        return null;
+    }
 
     /** {@inheritDoc}  */
     public Class<AttributeDTO> getDtoIFace() {

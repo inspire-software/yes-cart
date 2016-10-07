@@ -25,6 +25,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.StringUtils;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.InventoryDTO;
@@ -33,6 +34,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -40,7 +42,9 @@ import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.dto.support.InventoryFilter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -169,6 +173,84 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         }
 
         return inventory;
+    }
+
+    private final static char[] LOW_OR_RESERVED = new char[] { '-', '+' };
+    static {
+        Arrays.sort(LOW_OR_RESERVED);
+    }
+
+    /** {@inheritDoc} */
+    public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<InventoryDTO> inventory = new ArrayList<InventoryDTO>();
+
+        if (warehouseId > 0L) {
+            // only allow lists for warehouse inventory lists
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("warehouse.warehouseId", warehouseId));
+            if (StringUtils.hasLength(filter)) {
+
+                final Pair<String, BigDecimal> lowOrReserved = ComplexSearchUtils.checkNumericSearch(filter, LOW_OR_RESERVED, Constants.INVENTORY_SCALE);
+
+                if (lowOrReserved != null) {
+
+                    if ("-".equals(lowOrReserved.getFirst())) {
+                        criteria.add(Restrictions.le("quantity", lowOrReserved.getSecond()));
+                    } else if ("+".equals(lowOrReserved.getFirst())) {
+                        criteria.add(Restrictions.ge("reserved", lowOrReserved.getSecond()));
+                    }
+
+                } else {
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
+                            ),
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                            )
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    if (skuCodes.isEmpty()) {
+                        criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
+                    } else {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
+                                        Restrictions.in("skuCode", skuCodes)
+                                )
+                        );
+                    }
+                }
+            }
+
+            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+            final Map<String, Object> adapters = adaptersRepository.getAll();
+            for (final SkuWarehouse entity : entities) {
+                final InventoryDTO dto = dtoFactory.getByIface(InventoryDTO.class);
+                skuWarehouseAsm.assembleDto(dto, entity, adapters, dtoFactory);
+                inventory.add(dto);
+            }
+
+        }
+
+        return inventory;
+
     }
 
     /** {@inheritDoc} */

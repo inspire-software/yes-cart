@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttrValueSystemDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueSystemDTOImpl;
 import org.yes.cart.domain.entity.AttrValueSystem;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -145,6 +146,16 @@ public class DtoSystemServiceImpl implements DtoSystemService {
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueSystemDTO dto = new AttrValueSystemDTOImpl();
+        dto.setSystemId(entityPk);
+        return dto;
     }
 
 }

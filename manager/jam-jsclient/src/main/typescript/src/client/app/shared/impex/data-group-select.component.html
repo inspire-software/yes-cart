@@ -1,0 +1,18 @@
+<ul class="nav nav-second-level item-list-control">
+
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let group of filteredGroups">
+    <a (click)="onSelectClick(group)" class="{{ (selectedGroup != null && group != null && selectedGroup.label == group.label) ? 'bg-info js-click' : 'js-click' }}">{{group.name}}</a>
+  </li>
+
+</ul>
+

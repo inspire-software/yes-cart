@@ -1,0 +1,300 @@
+<template [ngIf]="promotion">
+
+  <div *ngIf="promotion.enabled">
+    <p class="bg-warning text-padding">{{ 'PROMOTION_ENABLED_TIP' | translate }}</p>
+  </div>
+
+  <form role="form" [formGroup]="promotionForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="promotion.code" (ngModelChange)="onMainDataChange($event)" [disabled]="promotion.promotionId > 0">
+                  <div [hidden]="promotionForm.controls['code'].valid || promotionForm.controls['code'].pristine" class="alert alert-danger">
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_SHOP_CODE' | translate }}</label>
+                  <input class="form-control" formControlName="shopCode" name="shopCode" type="text" [ngModel]="promotion.shopCode" [disabled]="true">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CURRENCY' | translate }}</label>
+                  <input class="form-control" formControlName="currency" name="currency" type="text" [ngModel]="promotion.currency" [disabled]="true">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="promotion.rank" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="promotionForm.controls['rank'].valid || promotionForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_ENABLED_FROM' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="promotionForm.controls['availablefrom'].valid || promotionForm.controls['availablefrom'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_ENABLED_TO' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="promotionForm.controls['availableto'].valid || promotionForm.controls['availableto'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_TAG' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'PROMOTION_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="promotion.tag" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="promotionForm.controls['tag'].valid || promotionForm.controls['tag'].pristine" class="alert alert-danger">
+                    {{ 'TAGS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="promotion"
+                             value="name"
+                             defaultRequired="true"
+                             i18n="displayNames"
+                             [formGroup]="promotionForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+                             [source]="promotion"
+                             value="description"
+                             i18n="displayDescriptions"
+                             [formGroup]="promotionForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'PROMOTION_CONDITION' | translate }}"  (select)="tabSelected('Condition')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <input formControlName="canBeCombined" name="canBeCombined" type="checkbox" [(ngModel)]="promotion.canBeCombined" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PROMOTION_CAN_COMBINE' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <input formControlName="couponTriggered" name="couponTriggered" type="checkbox" [(ngModel)]="promotion.couponTriggered" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PROMOTION_COUPON_TRIGGERED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_TYPE' | translate }}</label>
+                  <select class="form-control" formControlName="promoType" name="promoType" type="text" [(ngModel)]="promotion.promoType" (ngModelChange)="onMainDataChange($event)" [disabled]="promotion.promotionId > 0">
+                    <option value="O">{{ 'PROMOTION_TYPE_O' | translate }}</option>
+                    <option value="I">{{ 'PROMOTION_TYPE_I' | translate }}</option>
+                    <option value="S">{{ 'PROMOTION_TYPE_S' | translate }}</option>
+                    <option value="C">{{ 'PROMOTION_TYPE_C' | translate }}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_ACTION' | translate }}</label>
+                  <select class="form-control" formControlName="promoAction" name="promoAction" type="text" [(ngModel)]="promotion.promoAction" (ngModelChange)="onMainDataChange($event)" [disabled]="promotion.promotionId > 0">
+                    <option value="P" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_P' | translate }}</option>
+                    <option value="F" [disabled]="promotion.promoType == 'C'">{{ 'PROMOTION_ACTION_F' | translate }}</option>
+                    <option value="G" [disabled]="promotion.promoType == 'C' || promotion.promoType == 'S'">{{ 'PROMOTION_ACTION_G' | translate }}</option>
+                    <option value="T" [disabled]="promotion.promoType != 'C'">{{ 'PROMOTION_ACTION_T' | translate }}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_CONTEXT_' + promotion.promoAction  | translate: { currency: promotion.currency } }}</label>
+                  <input class="form-control" placeholder="{{ 'PROMOTION_CONTEXT_' + promotion.promoAction  | translate: { currency: promotion.currency } }}" formControlName="promoActionContext" name="promoActionContext" type="text" [(ngModel)]="promotion.promoActionContext" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="promotionForm.controls['promoActionContext'].valid || promotionForm.controls['promoActionContext'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PROMOTION_CONDITION_RULE' | translate }} <a class="js-click" (click)="onRuleHelpClick()"><i class="fa fa-question-circle"></i></a></label>
+                  <textarea class="form-control" placeholder="{{ 'PROMOTION_CONDITION_RULE' | translate }}" formControlName="eligibilityCondition" name="eligibilityCondition" rows="10" [(ngModel)]="promotion.eligibilityCondition" (ngModelChange)="onMainDataChange($event)"></textarea>
+                  <div [hidden]="promotionForm.controls['eligibilityCondition'].valid || promotionForm.controls['eligibilityCondition'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'PROMOTION_COUPONS' | translate }}"  (select)="tabSelected('Coupons')">
+
+        <template [ngIf]="promotion.promotionId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="couponFilter" [(ngModel)]="couponFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+                </form>
+
+                <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+                  <i class="fa fa-filter"></i>
+                </button>
+
+                <button type="button" (click)="onCouponGenerate()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onDownloadHandler()" [disabled]="cannotExport" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+                  <i class="fa fa-download"></i>
+                </button>
+
+                <button type="button" (click)="onCouponDeleteSelected()" [disabled]="selectedCoupon == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div *ngIf="couponFilterRequired">
+              <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+            </div>
+
+            <div *ngIf="couponFilterCapped">
+              <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+            </div>
+
+            <div class="row">
+              <yc-promotion-coupons #couponsComponent
+                                    [coupons]="coupons"
+                                    [couponFilter]="couponFilter"
+                                    (dataSelected)="onCouponSelected($event)"></yc-promotion-coupons>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+  <modal #ruleHelpModalDialog
+         title="{{ 'PROMOTION_CONDITION_RULE_TEMPLATE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+         [valid]="selectedRuleTemplate != null"
+         (closed)="onSelectRuleTemplateResult($event)">
+
+    <div class="item-list-overflow">
+      <ul *ngIf="promotion.promoType == 'I'" class="nav nav-second-level item-list">
+        <li><a (click)="onSelectRuleTemplate('shoppingCartItem.qty >= X')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_BUY_X_QTY' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('[\'X\', \'Y\', \'Z\'].contains(shoppingCartItem.productSkuCode)')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_BUY_ONE_OF' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customerTags.contains(\'X\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_HAS_TAG' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('registered')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_REGISTERED' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.firstname == \'X\'')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.email?.contains(\'X.com\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS' | translate }}</a></li>
+      </ul>
+      <ul *ngIf="promotion.promoType == 'O'" class="nav nav-second-level item-list">
+        <li><a (click)="onSelectRuleTemplate('shoppingCartItemTotal.priceSubTotal > X')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_TOTAL_MORE_THAN' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customerTags.contains(\'X\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_HAS_TAG' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('registered')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_REGISTERED' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.firstname == \'X\'')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.email?.contains(\'X.com\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS' | translate }}</a></li>
+      </ul>
+      <ul *ngIf="promotion.promoType == 'S'" class="nav nav-second-level item-list">
+        <li><a (click)="onSelectRuleTemplate('shoppingCartOrderTotal.subTotal > X')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_ORDER_TOTAL_MORE_THAN' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customerTags.contains(\'X\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_HAS_TAG' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('registered')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_REGISTERED' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.firstname == \'X\'')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.email?.contains(\'X.com\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS' | translate }}</a></li>
+      </ul>
+      <ul *ngIf="promotion.promoType == 'C'" class="nav nav-second-level item-list">
+        <li><a (click)="onSelectRuleTemplate('def address = customer.getDefaultAddress(\'S\');\naddress != null && address.countryCode == \'XX\'')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_TAG_FOR_COUNTRY_X' | translate }}</a></li>
+        <li><a (click)="onSelectRuleTemplate('customer.email?.contains(\'X.com\')')" class="js-click">{{ 'PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS' | translate }}</a></li>
+      </ul>
+    </div>
+  </modal>
+
+</template>
+
+
+<modal #deleteConfirmationModalDialog
+       title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+       [valid]="true"
+       (closed)="onDeleteConfirmationResult($event)">
+  {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
+</modal>
+
+<modal #generateCouponsModalDialog
+       title="{{ 'PROMOTION_COUPONS' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'PROMOTION_COUPONS_GENERATE' | translate }}"
+       [valid]="validForGenerate"
+       (closed)="onGenerateConfirmationResult($event)">
+
+  <div>
+    <p class="bg-success text-padding">{{ 'PROMOTION_COUPONS_GENERATE_TIP' | translate }}</p>
+  </div>
+
+  <template [ngIf]="generateCoupons">
+    <form role="form" [formGroup]="couponForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="code" name="code" type="text" [(ngModel)]="generateCoupons.code">
+            <div [hidden]="couponForm.controls['code'].valid || couponForm.controls['code'].pristine" class="alert alert-danger">
+              {{ 'ALPHANUM_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'PROMOTION_COUPON_LIMIT' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="usageLimit" name="usageLimit" type="text" [(ngModel)]="generateCoupons.usageLimit">
+            <div [hidden]="couponForm.controls['usageLimit'].valid || couponForm.controls['usageLimit'].pristine" class="alert alert-danger">
+              {{ 'POS_DECIMAL_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="usageLimitPerCustomer" name="usageLimitPerCustomer" type="text" [(ngModel)]="generateCoupons.usageLimitPerCustomer">
+            <div [hidden]="couponForm.controls['usageLimitPerCustomer'].valid || couponForm.controls['usageLimitPerCustomer'].pristine" class="alert alert-danger">
+              {{ 'POS_DECIMAL_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </template>
+
+</modal>
+
+
+
+

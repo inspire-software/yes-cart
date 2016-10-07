@@ -24,6 +24,7 @@ import org.hibernate.*;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.FullTextSession;
@@ -490,18 +491,39 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
+    @Override
+    public int findCountByCriteria(final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        crit.setProjection(new RowCountProjection());
+        return ((Number) crit.uniqueResult()).intValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public T findSingleByCriteria(final Criterion... criterion) {
         return findSingleByCriteria(null, criterion);
     }
 
     /**
-     * Find entities by criteria.
-     * @param criteriaTuner optional criteria tuner.
-     * @param criterion given criteria
-     * @return list of found entities.
+     * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion) {
+    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
@@ -511,6 +533,40 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         }
         return crit.list();
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion... criterion) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public int findCountByCriteria(final CriteriaTuner criteriaTuner, final Criterion... criterion) {
+
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        crit.setProjection(new RowCountProjection());
+        return ((Number) crit.uniqueResult()).intValue();
     }
 
     /**
@@ -631,7 +687,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         if (asyncRunningState.compareAndSet(LASTUPDATE, IDLE)) {
             // thread had finished, so need to set this to idle
             // if this is not set then this may turn into endless recursion
-            // from pinging YUM
+            // from pinging Admin
             currentIndexingCount.set(0);
             return -1; // must be negative as the signal to job to stop
         }

@@ -1,0 +1,43 @@
+<template [ngIf]="country">
+
+  <div>
+    <div class="col-md-9 col-lg-6">
+      <div class="panel-body">
+        <form role="form" [formGroup]="countryForm">
+          <fieldset>
+            <div class="form-group">
+              <label>{{ 'LOCATION_COUNTRY_CODE' | translate }}</label>
+              <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="country.countryCode" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['countryCode'].valid || countryForm.controls['countryCode'].pristine" class="alert alert-danger">
+                {{ 'COUNTRY_CODE_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{ 'LOCATION_COUNTRY_ISO' | translate }}</label>
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_ISO' | translate }}" formControlName="isoCode" name="isoCode" type="text" [(ngModel)]="country.isoCode" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['isoCode'].valid || countryForm.controls['isoCode'].pristine" class="alert alert-danger">
+                {{ 'COUNTRY_ISO_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{ 'NAME' | translate }}</label>
+              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="country.name" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['name'].valid || countryForm.controls['name'].pristine" class="alert alert-danger">
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+              </div>
+            </div>
+            <div class="form-group">
+              <label>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</label>
+              <input class="form-control" placeholder="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}" formControlName="displayName" name="displayName" type="text" [(ngModel)]="country.displayName" (ngModelChange)="onDataChange($event)">
+              <div [hidden]="countryForm.controls['displayName'].valid || countryForm.controls['displayName'].pristine" class="alert alert-danger">
+                {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</template>

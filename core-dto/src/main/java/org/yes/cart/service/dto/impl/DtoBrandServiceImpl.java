@@ -30,6 +30,7 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.BrandDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueBrandDTOImpl;
 import org.yes.cart.domain.dto.impl.BrandDTOImpl;
 import org.yes.cart.domain.entity.AttrValueBrand;
 import org.yes.cart.domain.entity.Attribute;
@@ -203,6 +204,7 @@ public class DtoBrandServiceImpl
         if (StringUtils.isNotBlank(name)) {
             entities = service.getGenericDao().findByCriteria(
                     Restrictions.or(
+                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
                             Restrictions.ilike("name", name, MatchMode.ANYWHERE),
                             Restrictions.ilike("description", name, MatchMode.ANYWHERE)
                     )
@@ -214,5 +216,38 @@ public class DtoBrandServiceImpl
         fillDTOs(entities, dtos);
         return dtos;
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<Brand> entities;
+        if (StringUtils.isNotBlank(filter)) {
+            entities = service.getGenericDao().findByCriteria(
+                    page * pageSize, pageSize,
+                    Restrictions.or(
+                            Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
+                    )
+            );
+        } else {
+            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
+        }
+        final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueBrandDTO dto = new AttrValueBrandDTOImpl();
+        dto.setBrandId(entityPk);
+        return dto;
     }
 }

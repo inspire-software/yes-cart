@@ -46,26 +46,11 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
-         * Default backdoor uri prefix.
-         * Real example of attribute would be: SYSTEM_BACKDOOR_URI_YES0
-         */
-        String SYSTEM_BACKDOOR_URI_PREFIX = "SYSTEM_BACKDOOR_URI";
-        /**
-         * Default cache director uri.
-         * Real example of attribute would be: SYSTEM_CACHEDIRECTOR_URI_YES0
-         */
-        String SYSTEM_CACHEDIRECTOR_URI_PREFIX = "SYSTEM_CACHEDIRECTOR_URI";
-        /**
-         * Default lucene index disabled setting.
-         * Real example of attribute would be: SYSTEM_LUCENE_DISABLED_PREFIX_YES0
-         */
-        String SYSTEM_LUCENE_INDEX_DISABLED_PREFIX = "SYSTEM_LUCENE_DISABLED_PREFIX";
-        /**
-         * Size of the log tail in characters to show in YUM.
+         * Size of the log tail in characters to show in Admin.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";
         /**
-         * Import job timeout (if ping takes more than this value then the job is considered haulted).
+         * Import job timeout (if ping takes more than this value then the job is considered halted).
          */
         String IMPORT_JOB_TIMEOUT_MS = "IMPORT_JOB_TIMEOUT_MS";
         /**
@@ -100,18 +85,6 @@ public interface AttributeNamesKeys {
          * Image repository.
          */
         String SYSTEM_IMAGE_VAULT = "SYSTEM_IMAGE_VAULT";
-        /**
-         * The absolute path to import descriptors.
-         */
-        String SYSTEM_IMPORT_DESCRIPTORS = "SYSTEM_IMPORT_DESCRIPTORS";
-        /**
-         * The absolute path to archive folder where import files will be moved after import.
-         */
-        String SYSTEM_IMPORT_ARCHIVE = "SYSTEM_IMPORT_ARCHIVE";
-        /**
-         * The absolute path to import folder.
-         */
-        String SYSTEM_IMPORT = "SYSTEM_IMPORT";
         /**
          * Default (failover) directory for resources.
          */
@@ -445,12 +418,12 @@ public interface AttributeNamesKeys {
         String SHOP_COOKIE_POLICY_ENABLE = "SHOP_COOKIE_POLICY_ENABLE";
 
         /**
-         * Special token for customer password reset from YUM
+         * Special token for customer password reset from Admin
          */
         String SHOP_CUSTOMER_PASSWORD_RESET_CC = "SHOP_CUSTOMER_PASSWORD_RESET_CC";
 
         /**
-         * Special token for customer password reset from YUM
+         * Special token for customer password reset from Admin
          */
         String SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS = "SHOP_CUSTOMER_TOKEN_EXPIRY_SECONDS";
 

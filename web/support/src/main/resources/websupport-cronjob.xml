@@ -142,6 +142,7 @@
 
     <bean id="productInventoryChangedProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="productInventoryChangedProcessorJob" />
+        <property name="startDelay" value="60000"/>
         <property name="cronExpression" value="${ws.cron.productInventoryChangedProcessorJob}" />
     </bean>
 
@@ -191,7 +192,7 @@
                 <prop key="org.terracotta.quartz.skipUpdateCheck">true</prop>
             </props>
         </property>
-        <property name="startupDelay" value="10"/><!-- Give context 10sec to stabilise before starting quartz -->
+        <property name="startupDelay" value="30"/><!-- Give context 30sec to stabilise before starting quartz -->
     </bean>
 
 

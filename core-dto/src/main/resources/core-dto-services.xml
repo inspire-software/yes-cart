@@ -273,6 +273,7 @@
                 <constructor-arg index="3" ref="dtoAttributeService"/>
                 <constructor-arg index="4" ref="attrValueEntityCustomerDao"/>
                 <constructor-arg index="5" ref="shopDao"/>
+                <constructor-arg index="6" ref="addressDao"/>
             </bean>
         </property>
     </bean>

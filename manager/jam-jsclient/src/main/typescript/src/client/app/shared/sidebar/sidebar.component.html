@@ -1,0 +1,212 @@
+
+<div id="sidebar-logo">
+  Powered by<br/>
+  <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a>
+</div>
+
+
+<div id="sidebar-login">
+  <span>{{ 'LOGGED_IN' | translate: { user: currentUserName } }}</span>
+  <a href="../j_spring_security_logout">
+    <i class="fa fa-power-off "></i>
+  </a>
+</div>
+
+
+<accordion [closeOthers]="true">
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_CUSTOMER_SERVICE' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/customerorder/allorders']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/customerorder/allpayments']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_PAYMENTS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/customer/allcustomers']" routerLinkActive="bg-info">{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/catalog/categories']" routerLinkActive="bg-info">{{ 'PANEL_PIM_CATEGORIES' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/products']" routerLinkActive="bg-info">{{ 'PANEL_PIM_PRODUCTS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/brands']" routerLinkActive="bg-info">{{ 'PANEL_PIM_BRANDS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/catalog/producttypes']" routerLinkActive="bg-info">{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_CMS' | translate }}</div>
+    <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_MARKETING' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/promotions/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PROMO' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/pricelist/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_PRICE' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/taxes/shop']" routerLinkActive="bg-info">{{ 'PANEL_MARKETING_TAX' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/fulfilment/inventory']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_STOCK' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/fulfilment/centres']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_WAREHOUSES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_REPORTS' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/dashboard']" routerLinkActive="bg-info">{{ 'PANEL_DASHBOARD' | translate }}</a>
+      </li>
+      <li class="hidden-sm hidden-xs">
+        <a [routerLink]="['/reports']" routerLinkActive="bg-info">{{ 'PANEL_REPORTS' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_SHIPPING' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/shipping']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/locations']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_SHOPS' | translate }}</div>
+    <yc-shop-select [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_EMPLOYEES' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/organisation/management']" routerLinkActive="bg-info">{{ 'PANEL_EMPLOYEES_USERS' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/organisation/roles']" routerLinkActive="bg-info">{{ 'PANEL_EMPLOYEES_ROLES' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/system/attributes']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_ATTR' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/impex/import']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_IMPORT' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/impex/export']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_EXPORT' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/reindex']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_INDEX' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/payment']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PG' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/preferences']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PREFS' | translate }}</a>
+      </li>
+      <li><hr/></li>
+      <li>
+        <a [routerLink]="['/system/query']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_QUERY' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/system/cache']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CACHE' | translate }}</a>
+      </li>
+      <li>
+        <a [routerLink]="['/system/cluster']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+  <accordion-group>
+    <div accordion-heading>{{ 'PANEL_HELP' | translate }}</div>
+    <ul class="nav nav-second-level">
+      <li>
+        <a [routerLink]="['/license']" routerLinkActive="bg-info">{{ 'PANEL_HELP_LICENSE' | translate }}</a>
+      </li>
+      <li>
+        <a href="http://www.inspire-software.com/confluence/display/YC3EN/YC+3.x.x+Wiki" target="_blank">{{ 'PANEL_HELP_DOCS' | translate }}</a>
+      </li>
+      <li>
+        <a href="http://www.yes-cart.org" target="_blank">YesCart.org</a>
+      </li>
+    </ul>
+  </accordion-group>
+
+<!--
+  <accordion-group heading="Dynamic Body Content">
+    <p>The body of the accordion group grows to fit the contents</p>
+    <button type="button" class="btn btn-primary btn-sm" (click)="addItem()">Add Item</button>
+    <div *ngFor="#item of items">{{item}}</div>
+  </accordion-group>
+-->
+<!--
+  <accordion-group #group [isOpen]="status.open">
+    <div accordion-heading>
+      I can have markup, too!
+      <i class="pull-right glyphicon"
+         [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+    </div>
+    This is just some content to illustrate fancy headings.
+  </accordion-group>
+-->
+</accordion>
+
+
+
+<!--
+<ul class="nav in" [closeOthers]="oneAtATime">
+
+
+  <ul class="nav in" accordion>
+    <li>
+      <a [routerLink]="['/Home']"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+    </li>
+    <li>
+      <a [routerLink]="['/About']"><i class="fa fa-dashboard fa-fw"></i> About</a>
+    </li>
+  </ul>
+</ul>
+-->

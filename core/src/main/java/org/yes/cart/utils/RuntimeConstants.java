@@ -29,8 +29,8 @@ public interface RuntimeConstants {
     String WEBAPP_SF_WAR_NAME = "webapp.yes.war.name";
     String WEBAPP_API_CONTEXT_PATH = "webapp.api.context.path";
     String WEBAPP_API_WAR_NAME = "webapp.api.war.name";
-    String WEBAPP_YUM_CONTEXT_PATH = "webapp.yum.context.path";
-    String WEBAPP_YUM_WAR_NAME = "webapp.yum.war.name";
+    String WEBAPP_ADMIN_CONTEXT_PATH = "webapp.admin.context.path";
+    String WEBAPP_ADMIN_WAR_NAME = "webapp.admin.war.name";
 
     /**
      * Check if value exists for key.

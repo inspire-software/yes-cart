@@ -47,6 +47,8 @@ public class ProductAvailabilityModelRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean perpetual;
     @DtoField(readOnly = true)
+    private int availability;
+    @DtoField(readOnly = true)
     private String defaultSkuCode;
     @DtoField(readOnly = true)
     private String firstAvailableSkuCode;
@@ -78,6 +80,14 @@ public class ProductAvailabilityModelRO implements Serializable {
 
     public void setPerpetual(final boolean perpetual) {
         this.perpetual = perpetual;
+    }
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(final int availability) {
+        this.availability = availability;
     }
 
     @XmlElement(name = "default-sku")

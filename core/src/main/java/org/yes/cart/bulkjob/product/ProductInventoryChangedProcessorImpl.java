@@ -147,7 +147,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
     }
 
     protected Boolean isLuceneIndexDisabled() {
-        return nodeService.getCurrentNode().isLuceneIndexDisabled();
+        return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
     /**

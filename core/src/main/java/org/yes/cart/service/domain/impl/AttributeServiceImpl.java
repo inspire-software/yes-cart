@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.domain.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -82,6 +83,22 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return attr;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Attribute> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) {
+
+        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
+        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
+        final String descP = StringUtils.isNotBlank(description) ? "%" + description.toLowerCase() + "%" : null;
+
+        return attributeDao.findRangeByNamedQuery(
+                "ATTRIBUTES.BY.GROUPCODE.CODE.NAME.DESCRIPTION",
+                page * pageSize, pageSize,
+                attributeGroupCode, codeP, nameP, descP);
+    }
 
     /**
      * {@inheritDoc}

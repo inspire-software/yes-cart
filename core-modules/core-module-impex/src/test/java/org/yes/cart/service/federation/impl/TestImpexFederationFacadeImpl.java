@@ -45,6 +45,13 @@ public class TestImpexFederationFacadeImpl implements FederationFacade {
     /**
      * {@inheritDoc}
      */
+    public boolean isShopAccessibleByCurrentManager(final Long shopId) {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Set<Long> getAccessibleShopIdsByCurrentManager() {
         return new HashSet<Long>(Arrays.asList(10L, 20L, 30L, 40L, 50L, 60L));
     }

@@ -63,6 +63,20 @@ public interface CarrierShop extends Guidable {
      */
     void setShop(Shop shop);
 
+    /**
+     * Disable this carrier in shop.
+     *
+     * @return true if this is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Disable this carrier in shop.
+     *
+     * @param disabled true if this is disabled
+     */
+    void setDisabled(boolean disabled);
+
 
 }
 

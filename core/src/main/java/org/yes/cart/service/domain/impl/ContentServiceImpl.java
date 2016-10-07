@@ -339,6 +339,41 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
 
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
+
+        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
+        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
+        final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
+
+        final Category root = proxy().getRootContent(shopId);
+        final List<Category> cats =
+                getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+
+        final Iterator<Category> catsIt = cats.iterator();
+        while (catsIt.hasNext()) {
+            Category category = catsIt.next();
+            if (category.isRoot() && category.getCategoryId() != root.getCategoryId()) {
+                catsIt.remove();
+            } else {
+                while (category.getParentId() != root.getCategoryId()) {
+                    if (category.isRoot()) {
+                        // if this is root and not shop root matches then this is not this shop's content
+                        catsIt.remove();
+                        break;
+                    }
+                    category = proxy().findById(category.getParentId());
+                }
+            }
+        }
+        return cats;
+    }
+
+
+
+    /**
      * {@inheritDoc} Just to cache
      */
     @Cacheable(value = "contentService-byId")

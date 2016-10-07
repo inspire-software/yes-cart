@@ -1,0 +1,47 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
+        <th>{{ 'PRODUCT_BRAND' | translate }}</th>
+        <th>{{ 'PRODUCT_TYPE' | translate }}</th>
+        <th>{{ 'PRODUCT_AVAILABILITY' | translate }}</th>
+        <th>{{ 'PRODUCT_FROM' | translate }}</th>
+        <th>{{ 'PRODUCT_TO' | translate }}</th>
+        <th>{{ 'PRODUCT_CATEGORIES' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredProducts; let i = index" class="{{row == selectedProduct ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
+          <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
+          <td title="{{ 'PRODUCT_BRAND' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.brand.name}}</a></td>
+          <td title="{{ 'PRODUCT_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productType.name}}</a></td>
+          <td title="{{ 'PRODUCT_AVAILABILITY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ 'PRODUCT_AVAILABILITY_' + row.availability | translate }}</a></td>
+          <td title="{{ 'PRODUCT_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availablefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.availableto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_CATEGORIES' | translate }}">
+            <a class="js-click" (click)="onSelectRow(row)">
+              <ul class="list-unstyled">
+                <li *ngFor="let category of row.productCategories">{{category.rank}} {{category.categoryName}}</li>
+              </ul>
+            </a>
+            &nbsp;</td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

@@ -94,3 +94,37 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11024,  'PRODUCT_WEIGHT_KG', 'PRODUCT_WEIGHT_KG',  0,  NULL,  'Product weight KG',  'Product weight KG',  1005, 1003, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11025,  'PRODUCT_VOLUME_M3', 'PRODUCT_VOLUME_M3',  0,  NULL,  'Product volume m3',  'Product volume m3',  1005, 1003, 0, 0, 0, 0);
+
+--
+-- YC-734 Improve access to carriers for shop owners
+--
+
+alter table TCARRIERSHOP add column DISABLED bit default 0;
+-- alter table TCARRIERSHOP add column DISABLED smallint default 0;
+
+create index I_CRS_SHOP_DISABLED on TCARRIERSHOP (DISABLED);
+
+
+--
+-- Tidy up attribute types
+--
+
+update TATTRIBUTE set ETYPE_ID = 1001 where CODE = 'SYSTEM_IMAGE_VAULT';
+
+--
+-- YC-739 Improve access to warehouse for shop owners
+--
+
+alter table TSHOPWAREHOUSE add column DISABLED bit default 0;
+-- alter table TSHOPWAREHOUSE add column DISABLED smallint default 0;
+
+create index I_SWE_SHOP_DISABLED on TSHOPWAREHOUSE (DISABLED);
+
+--
+-- YC-743 Improve access to customers for shop owners
+--
+
+alter table TCUSTOMERSHOP add column DISABLED bit default 0;
+-- alter table TCUSTOMERSHOP add column DISABLED smallint default 0;
+
+create index I_CS_SHOP_DISABLED on TCUSTOMERSHOP (DISABLED);

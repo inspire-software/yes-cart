@@ -140,7 +140,7 @@
 
     <!-- ################################ Auto Import  ###################################################### -->
 
-    <bean id="autoImportListener" class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
+    <!--<bean id="autoImportListener" class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
         <constructor-arg index="0" ref="shopService"/>
         <constructor-arg index="1" ref="bulkImportService"/>
         <constructor-arg index="2" ref="reindexService"/>
@@ -148,9 +148,9 @@
         <constructor-arg index="4" ref="systemService"/>
         <constructor-arg index="5" ref="runtimeAttributeService"/>
         <constructor-arg index="6" ref="authenticationManager"/>
-    </bean>
+    </bean>-->
 
-    <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <!--<bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -164,11 +164,11 @@
     <bean id="autoImportJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="autoImportJob" />
         <property name="cronExpression" value="${yum.cron.autoImportJob}" />
-    </bean>
+    </bean>-->
 
     <!-- ################################ Image scanner  ################################################### -->
 
-
+<!--
     <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.images.LocalFileShareImageVaultProcessorImpl">
         <constructor-arg index="0" ref="systemService"/>
         <constructor-arg index="1" ref="ioProviderFactory"/>
@@ -222,9 +222,9 @@
         <constructor-arg index="5" ref="remoteDevService"/>
         <constructor-arg index="6" ref="runtimeAttributeService"/>
         <constructor-arg index="7" ref="authenticationManager"/>
-    </bean>
+    </bean>-->
 
-    <bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    <!--<bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
         <property name="jobDataAsMap">
             <map>
@@ -233,12 +233,12 @@
                 <entry key="nodeService" value-ref="nodeService" />
             </map>
         </property>
-    </bean>
+    </bean>-->
 
-    <bean id="imageVaultProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    <!--<bean id="imageVaultProcessorJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="imageVaultProcessorJob" />
         <property name="cronExpression" value="${yum.cron.imageVaultProcessorJob}" />
-    </bean>
+    </bean>-->
 
     <!-- ################################ Scheduler  ####################################################### -->
 
@@ -275,8 +275,8 @@
                 <ref bean="expiredGuestsJobCronTrigger" />
                 <ref bean="customerTagJobCronTrigger" />
                 <ref bean="sendMailJobCronTrigger" />
-                <ref bean="autoImportJobCronTrigger" />
-                <ref bean="imageVaultProcessorJobCronTrigger" />
+                <!--<ref bean="autoImportJobCronTrigger" />
+                <ref bean="imageVaultProcessorJobCronTrigger" />-->
             </list>
         </property>
         <property name="quartzProperties">

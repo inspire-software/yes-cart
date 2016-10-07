@@ -19,7 +19,7 @@
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>
         <node-id>${cluster.config.yes.node_id}</node-id>
-        <node-type>YES</node-type>
+        <node-type>SFW</node-type>
         <node-config>${cluster.config.yes.node_config}</node-config>
         <lucene-index-disabled>${cluster.config.yes.lucene_index_disabled}</lucene-index-disabled>
         <channel>${cluster.config.yes.ws.channel_uri}</channel>
@@ -34,9 +34,9 @@
     </node>
     <node>
         <cluster-id>${cluster.config.cluster_id}</cluster-id>
-        <node-id>YUM</node-id>
-        <node-type>YUM</node-type>
-        <node-config>${cluster.config.yum.node_config}</node-config>
+        <node-id>JAM</node-id>
+        <node-type>ADM</node-type>
+        <node-config>${cluster.config.admin.node_config}</node-config>
         <lucene-index-disabled>true</lucene-index-disabled>
     </node>
 </nodes>

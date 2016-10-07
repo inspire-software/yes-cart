@@ -26,14 +26,14 @@ import org.yes.cart.cluster.node.Node;
 public class NodeImpl implements Node {
 
     private boolean current;
-    private boolean yum;
+    private boolean admin;
 
     private String id;
     private String nodeId;
     private String nodeType;
     private String nodeConfig;
     private String clusterId;
-    private boolean luceneIndexDisabled;
+    private boolean ftIndexDisabled;
 
     private String channel;
 
@@ -42,7 +42,7 @@ public class NodeImpl implements Node {
 
     public NodeImpl(final boolean current,
                     final Node node) {
-        this(current, node.getNodeId(), node.getNodeType(), node.getNodeConfig(), node.getClusterId(), node.isLuceneIndexDisabled());
+        this(current, node.getNodeId(), node.getNodeType(), node.getNodeConfig(), node.getClusterId(), node.isFtIndexDisabled());
         setChannel(node.getChannel());
     }
 
@@ -53,16 +53,20 @@ public class NodeImpl implements Node {
                     final String nodeType,
                     final String nodeConfig,
                     final String clusterId,
-                    final boolean luceneIndexDisabled) {
-        this.id = clusterId != null && nodeId != null ? clusterId.concat(".").concat(nodeId) : "N/A";
+                    final boolean ftIndexDisabled) {
+        this.id = fullNodeId(nodeId, clusterId);
         this.current = current;
-        this.yum = "YUM".equals(nodeType);
+        this.admin = "ADM".equals(nodeType);
         this.nodeId = nodeId;
         this.nodeType = nodeType;
         this.nodeConfig = nodeConfig;
         this.clusterId = clusterId;
-        this.luceneIndexDisabled = luceneIndexDisabled;
+        this.ftIndexDisabled = ftIndexDisabled;
         this.channel = "";
+    }
+
+    private String fullNodeId(final String nodeId, final String clusterId) {
+        return clusterId != null && nodeId != null ? clusterId.concat(".").concat(nodeId) : "N/A";
     }
 
 
@@ -83,15 +87,15 @@ public class NodeImpl implements Node {
     /**
      * @return true if current node is yum
      */
-    public boolean isYum() {
-        return yum;
+    public boolean isAdmin() {
+        return admin;
     }
 
     /**
-     * @param yum true if current node is yum
+     * @param admin true if current node is yum
      */
-    public void setYum(final boolean yum) {
-        this.yum = yum;
+    public void setAdmin(final boolean admin) {
+        this.admin = admin;
     }
 
 
@@ -99,6 +103,9 @@ public class NodeImpl implements Node {
      * @return node id in the cluster
      */
     public String getId() {
+        if (id == null) {
+            id = fullNodeId(nodeId, clusterId);
+        }
         return id;
     }
 
@@ -124,14 +131,14 @@ public class NodeImpl implements Node {
     }
 
     /**
-     * @return type of node (YES, API or YUM)
+     * @return type of node (SF[X], API or ADM; where [X] is storefront classifier)
      */
     public String getNodeType() {
         return nodeType;
     }
 
     /**
-     * @param nodeType type of node (YES, API or YUM)
+     * @param nodeType type of node (SF[X], API or ADM; where [X] is storefront classifier)
      */
     public void setNodeType(final String nodeType) {
         this.nodeType = nodeType;
@@ -168,15 +175,15 @@ public class NodeImpl implements Node {
     /**
      * @return flag if lucene index is disabled
      */
-    public boolean isLuceneIndexDisabled() {
-        return luceneIndexDisabled;
+    public boolean isFtIndexDisabled() {
+        return ftIndexDisabled;
     }
 
     /**
-     * @param luceneIndexDisabled flag if lucene index is disabled
+     * @param ftIndexDisabled flag if lucene index is disabled
      */
-    public void setLuceneIndexDisabled(final boolean luceneIndexDisabled) {
-        this.luceneIndexDisabled = luceneIndexDisabled;
+    public void setFtIndexDisabled(final boolean ftIndexDisabled) {
+        this.ftIndexDisabled = ftIndexDisabled;
     }
 
     /**
@@ -203,8 +210,8 @@ public class NodeImpl implements Node {
         final NodeImpl node = (NodeImpl) o;
 
         if (current != node.current) return false;
-        if (luceneIndexDisabled != node.luceneIndexDisabled) return false;
-        if (yum != node.yum) return false;
+        if (ftIndexDisabled != node.ftIndexDisabled) return false;
+        if (admin != node.admin) return false;
         if (clusterId != null ? !clusterId.equals(node.clusterId) : node.clusterId != null) return false;
         if (nodeConfig != null ? !nodeConfig.equals(node.nodeConfig) : node.nodeConfig != null) return false;
         if (nodeId != null ? !nodeId.equals(node.nodeId) : node.nodeId != null) return false;
@@ -217,12 +224,12 @@ public class NodeImpl implements Node {
     @Override
     public int hashCode() {
         int result = (current ? 1 : 0);
-        result = 31 * result + (yum ? 1 : 0);
+        result = 31 * result + (admin ? 1 : 0);
         result = 31 * result + (nodeId != null ? nodeId.hashCode() : 0);
         result = 31 * result + (nodeType != null ? nodeType.hashCode() : 0);
         result = 31 * result + (nodeConfig != null ? nodeConfig.hashCode() : 0);
         result = 31 * result + (clusterId != null ? clusterId.hashCode() : 0);
-        result = 31 * result + (luceneIndexDisabled ? 1 : 0);
+        result = 31 * result + (ftIndexDisabled ? 1 : 0);
         return result;
     }
 
@@ -231,12 +238,12 @@ public class NodeImpl implements Node {
     public String toString() {
         return "NodeImpl{" +
                 "current=" + current +
-                ", yum=" + yum +
+                ", yum=" + admin +
                 ", nodeId='" + nodeId + '\'' +
                 ", nodeType='" + nodeType + '\'' +
                 ", nodeConfig='" + nodeConfig + '\'' +
                 ", clusterId='" + clusterId + '\'' +
-                ", luceneIndexDisabled=" + luceneIndexDisabled +
+                ", luceneIndexDisabled=" + ftIndexDisabled +
                 '}';
     }
 }

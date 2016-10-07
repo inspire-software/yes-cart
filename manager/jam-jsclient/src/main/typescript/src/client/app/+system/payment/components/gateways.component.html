@@ -1,0 +1,29 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'PG_ENABLED' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredGateways; let i = index" class="{{row == selectedGateway ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.label}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'PG_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.active ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

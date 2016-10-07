@@ -73,6 +73,13 @@ public class PaymentProcessorImpl implements PaymentProcessor {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public boolean isPaymentGatewayEnabled() {
+        return paymentGateway != null;
+    }
+
+    /**
      * Set payment gateway to use.
      *
      * @param paymentGateway see PaymentGatewayInternalForm to use.

@@ -33,6 +33,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.PriceService;
@@ -43,10 +44,7 @@ import org.yes.cart.service.dto.support.PriceListFilter;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -226,6 +224,115 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
         }
 
         return priceList;
+    }
+
+    private final static char[] TAG_OR_POLICY = new char[] { '#' };
+
+    /** {@inheritDoc} */
+    public List<PriceListDTO> findBy(final long shopId, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<PriceListDTO> priceList = new ArrayList<PriceListDTO>();
+
+        if (shopId > 0 && StringUtils.hasLength(currency)) {
+            // only allow lists for shop+currency selection
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("shop.shopId", shopId));
+            criteria.add(Restrictions.eq("currency", currency));
+            if (StringUtils.hasLength(filter)) {
+
+                final Pair<String, String> tagSearch = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_POLICY);
+                final Pair<Date, Date> dateSearch = tagSearch == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+                if (tagSearch != null) {
+
+                    // tag & policy search
+                    final String tagOrPolicy = tagSearch.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("tag", tagOrPolicy, MatchMode.ANYWHERE),
+                            Restrictions.eq("pricingPolicy", tagOrPolicy)
+                    ));
+
+                } else if (dateSearch != null) {
+
+                    final Date from = dateSearch.getFirst();
+                    final Date to = dateSearch.getSecond();
+
+                    // time search
+                    if (from != null) {
+                        criteria.add(Restrictions.ge("salefrom", from));
+                    }
+                    if (to != null) {
+                        criteria.add(Restrictions.le("saleto", to));
+                    }
+
+                } else {
+
+                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                        public void tune(final Criteria crit) {
+                            crit.createAlias("product", "prod");
+                            crit.setFetchMode("prod", FetchMode.JOIN);
+                        }
+                    }, Restrictions.or(
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
+                            ),
+                            Restrictions.or(
+                                    Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                            )
+                    ));
+
+                    final List<String> skuCodes = new ArrayList<String>();
+                    for (final ProductSku sku : skus) {
+                        skuCodes.add(sku.getCode()); // sku codes from product match
+                    }
+
+                    if (skuCodes.isEmpty()) {
+                        criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
+                    } else {
+                        criteria.add(
+                                Restrictions.or(
+                                        Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
+                                        Restrictions.in("skuCode", skuCodes)
+                                )
+                        );
+                    }
+                }
+            }
+
+            final List<SkuPrice> entities = skuPriceDAO.findByCriteria(new CriteriaTuner() {
+                public void tune(final Criteria crit) {
+                    crit.createAlias("shop", "shop");
+                    crit.setFetchMode("shop", FetchMode.JOIN);
+                }
+            }, page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+            final Map<String, Object> adapters = adaptersRepository.getAll();
+            for (final SkuPrice entity : entities) {
+                final PriceListDTO dto = dtoFactory.getByIface(PriceListDTO.class);
+                skuPriceAsm.assembleDto(dto, entity, adapters, dtoFactory);
+                priceList.add(dto);
+            }
+
+        }
+
+        return priceList;
+    }
+
+    /** {@inheritDoc} */
+    public PriceListDTO getById(final long id) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final SkuPrice entity = skuPriceDAO.findById(id);
+
+        final Map<String, Object> adapters = adaptersRepository.getAll();
+
+        final PriceListDTO price = dtoFactory.getByIface(PriceListDTO.class);
+
+        skuPriceAsm.assembleDto(price, entity, adapters, dtoFactory);
+
+        return price;
+
     }
 
     /** {@inheritDoc} */

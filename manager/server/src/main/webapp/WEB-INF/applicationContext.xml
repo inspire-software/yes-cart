@@ -23,15 +23,36 @@
                            http://www.springframework.org/schema/security
                            http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass"
+                  value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
 
 
-
-    <security:http entry-point-ref="entryPoint">
+    <security:http auto-config="true">
         <security:anonymous enabled="false"/>
+        <security:intercept-url pattern="/app/pages/index" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/shop" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/store" access="ROLE_SMADMIN" />
+        <security:intercept-url pattern="/app/pages/warehouse" access="ROLE_SMADMIN" />
+        <!--<security:http-basic />-->
+        <security:form-login
+                 login-page="/app/pages/login"
+                 default-target-url="/app/pages/index"
+                 authentication-failure-url="/login?error"
+                 username-parameter="j_username"
+                 password-parameter="j_password" />
     </security:http>
 
-    <bean id="entryPoint"
-          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+
+
+    <!--<bean id="entryPoint"
+          class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
+
+    <security:global-method-security pre-post-annotations="enabled"/>
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider>
@@ -43,6 +64,8 @@
                     authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
         </security:authentication-provider>
     </security:authentication-manager>
+
+
 
 
     <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">

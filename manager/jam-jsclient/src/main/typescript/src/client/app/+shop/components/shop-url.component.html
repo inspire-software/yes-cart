@@ -1,0 +1,106 @@
+<template [ngIf]="shopUrl">
+
+  <div class="text-right data-control">
+
+    <form class="pull-left">
+      <input class="filter-input" type="text" name="urlFilter" [(ngModel)]="urlFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+    </form>
+
+    <button type="button" (click)="onRowPrimarySelected()" [disabled]="selectedRow == null || selectedRow.primary" class="btn btn-circle btn-xl">
+      <i class="fa {{selectedRow != null && selectedRow.primary ? 'fa-toggle-on' : 'fa-toggle-off'}}"></i>
+    </button>
+
+    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+
+  </div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'SHOP_URL' | translate }}</th>
+        <th>{{ 'SHOP_THEME_CHAIN' | translate }}</th>
+        <th>{{ 'SHOP_URL_PRIMARY' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredShopUrl; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'SHOP_URL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.url}}</a></td>
+          <td title="{{ 'SHOP_THEME_CHAIN' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.theme == null || row.theme == '' ? 'default' : row.theme}}</a></td>
+          <td title="{{ 'SHOP_URL_PRIMARY' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.primary ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+
+
+  <modal #deleteConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+         [valid]="true"
+         (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.url : '') } }}
+  </modal>
+
+  <modal #editModalDialog
+         title="{{ 'SHOP_TAB_URL' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+         [valid]="validForSave"
+         (closed)="onEditModalResult($event)">
+
+    <form role="form" [formGroup]="shopUrlForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'SHOP_URL' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="url" type="text" [(ngModel)]="urlToEdit.url" (ngModelChange)="onDataChange($event)">
+            <div [hidden]="shopUrlForm.controls['url'].valid || shopUrlForm.controls['url'].pristine" class="alert alert-danger">
+              {{ 'VALIDATION_URL' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'SHOP_THEME_CHAIN' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="theme" type="text" [(ngModel)]="urlToEdit.theme" (ngModelChange)="onDataChange($event)">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'SHOP_URL_PRIMARY' | translate }}</div>
+          <div class="col-lg-9">
+            <input formControlName="primary" type="checkbox" [(ngModel)]="urlToEdit.primary" (ngModelChange)="onDataChange($event)">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
+  </modal>
+
+</template>

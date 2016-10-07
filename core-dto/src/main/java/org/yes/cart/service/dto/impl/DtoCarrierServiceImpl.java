@@ -28,6 +28,7 @@ import org.yes.cart.domain.dto.impl.ShopDTOImpl;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.domain.entity.CarrierShop;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CarrierService;
@@ -71,25 +72,66 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<CarrierDTO> findAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Carrier> all = ((CarrierService) getService()).findCarriersByShopId(shopId);
-        final List<CarrierDTO> dtos = new ArrayList<CarrierDTO>(all.size());
-        fillDTOs(all, dtos);
+    public Map<CarrierDTO, Map<ShopDTO, Boolean>> getAllWithShops() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Carrier> all = ((CarrierService) getService()).findAll();
+        final Map<CarrierDTO, Map<ShopDTO, Boolean>> dtos = new LinkedHashMap<>(all.size() * 2);
+        for (final Carrier carrier : all) {
+            final CarrierDTO dto = getNew();
+            assembler.assembleDto(dto, carrier, getAdaptersRepository(), entityFactory);
+            createPostProcess(dto, carrier);
+            final Map<ShopDTO, Boolean> assignments = getShopAssignmentsForCarrier(carrier);
+            dtos.put(dto, assignments);
+        }
         return dtos;
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<ShopDTO> getAssignedCarrierShops(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public Map<CarrierDTO, Boolean> findAllByShopId(final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Carrier> all = ((CarrierService) getService()).findCarriersByShopId(shopId, true);
+        final List<CarrierDTO> dtos = new ArrayList<CarrierDTO>(all.size());
+        fillDTOs(all, dtos);
+        final Map<Long, Boolean> disabledMap = new HashMap<>(dtos.size() * 2);
+        for (final Carrier carrier : all) {
+            for (final CarrierShop shop : carrier.getShops()) {
+                if (shop.getShop().getShopId() == shopId) {
+                    disabledMap.put(carrier.getCarrierId(), shop.isDisabled());
+                    break;
+                }
+            }
+        }
+        final Map<CarrierDTO, Boolean> dtoPairs = new LinkedHashMap<CarrierDTO, Boolean>(all.size());
+        for (final CarrierDTO dto : dtos) {
+            dtoPairs.put(dto, disabledMap.get(dto.getCarrierId()));
+        }
+        return dtoPairs;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<ShopDTO, Boolean> getAssignedCarrierShops(final long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Carrier carrier = getService().findById(carrierId);
+        return getShopAssignmentsForCarrier(carrier);
+    }
+
+    private Map<ShopDTO, Boolean> getShopAssignmentsForCarrier(final Carrier carrier) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         if (carrier == null) {
-            return Collections.emptyList();
+            return Collections.emptyMap();
         }
         final Collection<CarrierShop> assigned = carrier.getShops();
+        final Map<Long, Boolean> enabledMap = new HashMap<>(assigned.size() * 2);
+        for (final CarrierShop shop : assigned) {
+            enabledMap.put(shop.getShop().getShopId(), shop.isDisabled());
+        }
         final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
         fillCarrierShopsDTOs(shopDTOs, assigned);
-        return shopDTOs;
+        final Map<ShopDTO, Boolean> dtoPairs = new LinkedHashMap<>(shopDTOs.size());
+        for (final ShopDTO dto : shopDTOs) {
+            dtoPairs.put(dto, enabledMap.get(dto.getShopId()));
+        }
+        return dtoPairs;
     }
 
     /**
@@ -140,20 +182,25 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void assignToShop(final long carrierId, final long shopId) {
+    public void assignToShop(final long carrierId, final long shopId, final boolean soft) {
         final Carrier carrier = getService().findById(carrierId);
         final Collection<CarrierShop> assigned = carrier.getShops();
         for (final CarrierShop shop : assigned) {
             if (shop.getShop().getShopId() == shopId) {
+                if (shop.isDisabled() && !soft) {
+                    shop.setDisabled(false);
+                    getService().update(carrier);
+                }
                 return;
             }
         }
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
-            final CarrierShop managerShop = shopDao.getEntityFactory().getByIface(CarrierShop.class);
-            managerShop.setCarrier(carrier);
-            managerShop.setShop(shop);
-            assigned.add(managerShop);
+            final CarrierShop carrierShop = shopDao.getEntityFactory().getByIface(CarrierShop.class);
+            carrierShop.setCarrier(carrier);
+            carrierShop.setShop(shop);
+            carrierShop.setDisabled(soft);
+            assigned.add(carrierShop);
         }
         getService().update(carrier);
     }
@@ -161,14 +208,19 @@ public class DtoCarrierServiceImpl
     /**
      * {@inheritDoc}
      */
-    public void unassignFromShop(final long carrierId, final long shopId) {
+    public void unassignFromShop(final long carrierId, final long shopId, final boolean soft) {
         final Carrier carrier = getService().findById(carrierId);
         final Iterator<CarrierShop> assigned = carrier.getShops().iterator();
         while (assigned.hasNext()) {
             final CarrierShop shop = assigned.next();
             if (shop.getShop().getShopId() == shopId) {
-                assigned.remove();
+                if (soft) {
+                    shop.setDisabled(true);
+                } else {
+                    assigned.remove();
+                }
                 getService().update(carrier);
+                break;
             }
         }
     }

@@ -191,29 +191,29 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   'This value will be used for redirects when shop can not be resolved by http request', 1002,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11042,  'IMPORT_JOB_LOG_SIZE', 'IMPORT_JOB_LOG_SIZE',  1,  NULL,  'YUM\\Import Import log file size',
-  'Size in characters of tail of actual log file to display in YUM during import', 1006,  1000, 0, 0, 0, 0);
+  VALUES (  11042,  'IMPORT_JOB_LOG_SIZE', 'IMPORT_JOB_LOG_SIZE',  1,  NULL,  'Admin\\Import Import log file size',
+  'Size in characters of tail of actual log file to display in Admin during import', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11043,  'IMPORT_JOB_TIMEOUT_MS', 'IMPORT_JOB_TIMEOUT_MS',  1,  NULL,  'YUM\\Import job timeout',
+  VALUES (  11043,  'IMPORT_JOB_TIMEOUT_MS', 'IMPORT_JOB_TIMEOUT_MS',  1,  NULL,  'Admin\\Import job timeout',
   'Timeout in ms during which no ping action performed by import', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
-  VALUES (  11044,  'SYSTEM_BACKDOOR_TIMEOUT_MS', 'SYSTEM_BACKDOOR_TIMEOUT_MS',  1,  NULL,  'YUM\\Communication timeout',
+  VALUES (  11044,  'SYSTEM_BACKDOOR_TIMEOUT_MS', 'SYSTEM_BACKDOOR_TIMEOUT_MS',  1,  NULL,  'Admin\\Communication timeout',
   'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11045,  'SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS', 'SYSTEM_BACKDOOR_PRODB_IDX_TIMEOUT_MS',  1,  NULL,
-  'YUM\\Indexing Bulk product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
+  'Admin\\Indexing Bulk product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11046,  'SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS', 'SYSTEM_BACKDOOR_PRODS_IDX_TIMEOUT_MS',  1,  NULL,
-  'YUM\\Indexing Single product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
+  'Admin\\Indexing Single product index timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11047,  'SYSTEM_BACKDOOR_SQL_TIMEOUT_MS', 'SYSTEM_BACKDOOR_SQL_TIMEOUT_MS',  1,  NULL,
-  'YUM\\System SQL, HSQL, FTQL timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
+  'Admin\\System SQL, HSQL, FTQL timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11048,  'SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS', 'SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS',  1,  NULL,
-  'YUM\\System Clear cache timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
+  'Admin\\System Clear cache timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11049,  'SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS', 'SYSTEM_BACKDOOR_IMAGE_TIMEOUT_MS',  1,  NULL,
-  'YUM\\Import Image operation timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
+  'Admin\\Import Image operation timeout', 'Timeout in ms for cluster calls', 1006,  1000, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10099,  'SYSTEM_ALLOWED_IMAGE_SIZES', 'SYSTEM_ALLOWED_IMAGE_SIZES',  1,  NULL,
   'SF\\Image service: allowed image sizes', 'Image resolutions allowed to be processed by shop
@@ -226,7 +226,7 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11099,  'SYSTEM_IMAGE_VAULT', 'SYSTEM_IMAGE_VAULT',  1,  NULL,  'System\\Image Root directory for image repository',
-  'Root directory for image repository', 1000,  1000, 0, 0, 0, 0);
+  'Root directory for image repository', 1001,  1000, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11100,  'SEARCH_ITEMS_PER_PAGE', 'SEARCH_ITEMS_PER_PAGE',  1,  NULL,  'SF\\Behaviour Search items per page ',

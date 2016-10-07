@@ -1,0 +1,31 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CUSTOMER_EMAIL' | translate }}</th>
+        <th>{{ 'CUSTOMER_FIRSTNAME' | translate }}</th>
+        <th>{{ 'CUSTOMER_LASTNAME' | translate }}</th>
+        <th>{{ 'MANAGER_ENABLED' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredManagers; let i = index" class="{{row == selectedManager ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CUSTOMER_EMAIL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.email}}</a></td>
+          <td title="{{ 'CUSTOMER_FIRSTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.firstName}}</a></td>
+          <td title="{{ 'CUSTOMER_LASTNAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.lastName}}</a></td>
+          <td title="{{ 'MANAGER_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

@@ -1,0 +1,52 @@
+<template [ngIf]="shopCarriersVO">
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="createNew()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
+      <span *ngFor="let supported of selectedCarriers">
+        <a class="btn js-click" (click)=onSupportedCarrierClick(supported)>{{supported.name}} <i class="fa fa-remove"></i></a>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
+      <span *ngFor="let available of availableCarriers">
+        <a class="btn js-click" (click)=onAvailableCarrierClick(available)>{{available.name}} <i class="fa fa-plus"></i></a>
+      </span>
+    </div>
+  </div>
+
+  <modal #editNewCarrierName
+         title="{{ 'MODAL_CREATE_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+         [valid]="validForSave"
+         (closed)="editNewCarrierNameModalResult($event)">
+    <form role="form" [formGroup]="newCarrierForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="name" name="newCarrierName" type="text" [(ngModel)]="newCarrier.name" (ngModelChange)="onFormDataChange($event)">
+            <div [hidden]="newCarrierForm.controls['name'].valid || newCarrierForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </modal>
+
+</template>

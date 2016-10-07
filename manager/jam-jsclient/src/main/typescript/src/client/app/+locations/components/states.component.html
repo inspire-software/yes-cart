@@ -1,0 +1,31 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'LOCATION_COUNTRY_CODE' | translate }}</th>
+        <th>{{ 'LOCATION_STATE_CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredStates; let i = index" class="{{row == selectedState ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'LOCATION_COUNTRY_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode}}</a></td>
+          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'LOCATION_COUNTRY_NAME_LOCAL' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.displayName}}&nbsp;</a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

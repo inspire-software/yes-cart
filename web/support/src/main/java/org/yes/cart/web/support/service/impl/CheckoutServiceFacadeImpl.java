@@ -115,9 +115,8 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
         final String pgLabel = order.getPgLabel();
         final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel, order.getShop().getCode());
-        final PaymentGateway gateway = processor.getPaymentGateway();
 
-        if (gateway.getPaymentGatewayFeatures().isRequireDetails()) {
+        if (processor.isPaymentGatewayEnabled() && processor.getPaymentGateway().getPaymentGatewayFeatures().isRequireDetails()) {
             return processor.createPaymentsToAuthorize(
                     order,
                     true,

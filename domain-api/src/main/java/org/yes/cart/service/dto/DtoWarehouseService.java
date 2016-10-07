@@ -16,6 +16,7 @@
 
 package org.yes.cart.service.dto;
 
+import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopWarehouseDTO;
 import org.yes.cart.domain.dto.SkuWarehouseDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
@@ -24,6 +25,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.SkuWarehouseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -31,6 +33,19 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
+
+
+    /**
+     * Get all warehouses and their shop assignments.
+     *
+     * @return list of warehouses
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    Map<WarehouseDTO, Map<ShopDTO, Boolean>> getAllWithShops()
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Find warehouses, that assigned to given shop id.
@@ -42,7 +57,36 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    List<WarehouseDTO> findByShopId(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    Map<WarehouseDTO, Boolean> findAllByShopId(long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Find warehouses, that assigned to given shop id.
+     *
+     * @param shopId given shop id
+     * @param includeDisabled true to include disabled links
+     * @return list of assigned warehouses
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    Map<WarehouseDTO, Boolean> findByShopId(long shopId, boolean includeDisabled) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+
+    /**
+     * Get the assigned to carrier shops
+     *
+     * @param warehouseId warehouse PK
+     * @return list of assigned shops
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration error
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case if some problems with reflection
+     */
+    Map<ShopDTO, Boolean> getAssignedWarehouseShops(long warehouseId)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 
     /**
@@ -57,21 +101,22 @@ public interface DtoWarehouseService extends GenericDTOService<WarehouseDTO> {
      *
      * @param warehouseId warehouse id
      * @param shopId      shop id
-     * @return {@link ShopWarehouseDTO}
+     * @param soft true disables the link, false enabled the link right away
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case of reflection problem
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration problem
      */
-    ShopWarehouseDTO assignWarehouse(long warehouseId, long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+    void assignWarehouse(long warehouseId, long shopId, boolean soft) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Unassign given warehouse from shop
      *
      * @param warehouseId warehouse id
      * @param shopId      shop id
+     * @param soft true disables the link but does not remove it, false removed the ShopWarehouse link completely
      */
-    void unassignWarehouse(long warehouseId, long shopId);
+    void unassignWarehouse(long warehouseId, long shopId, boolean soft);
 
     /**
      * Remove sku warehouse object by given pk value

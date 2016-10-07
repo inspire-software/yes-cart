@@ -21,6 +21,7 @@ import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -49,6 +50,32 @@ public interface DtoPromotionService extends GenericDTOService<PromotionDTO> {
                                         String type,
                                         String action,
                                         Boolean enabled)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+
+    /**
+     * Promotions by filter
+     *
+     * @param shopCode shop
+     * @param currency currency
+     * @param filter filter
+     * @param page start page
+     * @param pageSize page size
+     * @return promotions
+     */
+    List<PromotionDTO> findBy(String shopCode, String currency, String filter, int page, int pageSize)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
+     * Customer search function to find promotions by given parameters.
+     *
+     * @param codes promo codes
+     *
+     * @return promotions that satisfy criteria
+     */
+    List<PromotionDTO> findByCodes(Set<String> codes)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

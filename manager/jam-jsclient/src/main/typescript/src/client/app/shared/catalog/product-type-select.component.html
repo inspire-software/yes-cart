@@ -1,0 +1,23 @@
+<ul class="nav nav-second-level item-list-control">
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="producttypeFilter" [(ngModel)]="producttypeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+  <li *ngIf="producttypeFilterRequired">
+    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+  </li>
+
+  <li *ngIf="producttypeFilterCapped">
+    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+  </li>
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let producttype of filteredProducttypes">
+    <a (click)="onSelectClick(producttype)" class="{{ (selectedProducttype != null && producttype != null && selectedProducttype.producttypeId == producttype.producttypeId) ? 'bg-info js-click' : 'js-click' }}" [title]="producttype.guid"><span>{{producttype.name}}</span></a>
+  </li>
+
+</ul>
+

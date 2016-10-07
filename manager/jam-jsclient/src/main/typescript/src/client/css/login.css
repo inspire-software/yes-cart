@@ -1,0 +1,39 @@
+body {
+  background: #fff;
+}
+
+.container.gear-top {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+.container.gear-top .vcenter {
+  margin-top: 15%;
+  height: 80%;
+}
+
+.whitebg {
+  padding: 10px;
+  /*    border-top: 1px #ccc solid;
+      border-left: 1px #ccc solid;
+          -webkit-box-shadow: 3px 3px 2px #888;
+             -moz-box-shadow: 3px 3px 2px #888;
+                  box-shadow: 3px 3px 2px #888;
+    */
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.gear-top {
+  background: #fff url(../assets/img/watergearsbg.png) no-repeat top left;
+}
+
+@media (min-width:768px) {
+
+  .gear-bottom {
+    background: transparent url(../assets/img/watergearsbg2.png) no-repeat bottom right;
+  }
+
+}

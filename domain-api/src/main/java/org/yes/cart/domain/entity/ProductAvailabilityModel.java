@@ -46,6 +46,13 @@ public interface ProductAvailabilityModel {
     boolean isPerpetual();
 
     /**
+     * Get product availability
+     *
+     * @return  Availability
+     */
+    int getAvailability();
+
+    /**
      * @return default sku for multisku
      */
     String getDefaultSkuCode();

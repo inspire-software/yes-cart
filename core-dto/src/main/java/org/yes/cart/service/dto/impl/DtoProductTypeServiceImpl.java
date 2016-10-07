@@ -94,6 +94,7 @@ public class DtoProductTypeServiceImpl
         if (StringUtils.isNotBlank(name)) {
             entities = service.getGenericDao().findByCriteria(
                     Restrictions.or(
+                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
                             Restrictions.ilike("name", name, MatchMode.ANYWHERE),
                             Restrictions.ilike("description", name, MatchMode.ANYWHERE)
                     )
@@ -104,6 +105,31 @@ public class DtoProductTypeServiceImpl
         final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductTypeDTO> findBy(final String name, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<ProductType> entities;
+
+        if (StringUtils.isNotBlank(name)) {
+            entities = service.getGenericDao().findByCriteria(
+                    page * pageSize, pageSize,
+                    Restrictions.or(
+                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
+                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                    )
+            );
+        } else {
+            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
+        }
+        final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
+        fillDTOs(entities, dtos);
+        return dtos;
+
     }
 
     /**

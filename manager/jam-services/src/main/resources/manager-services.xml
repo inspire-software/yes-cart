@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="manager-dto-services.xml"/>
+    <import resource="manager-file-services.xml"/>
+
+    <bean id="voSystemPreferencesService" class="org.yes.cart.service.vo.impl.VoSystemPreferencesServiceImpl">
+        <constructor-arg index="0" ref="dtoSystemService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+        <property name="skipAttributesInView">
+            <list>
+                <value>SYSTEM_ACTIVE_PAYMENT_GATEWAYS_LABEL</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="vShopCategoryService" class="org.yes.cart.service.vo.impl.VoShopCategoryServiceImpl">
+        <constructor-arg index="0" ref="dtoCategoryService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voShopService" class="org.yes.cart.service.vo.impl.VoShopServiceImpl">
+        <constructor-arg index="0" ref="languageService"/>
+        <constructor-arg index="1" ref="currencyService"/>
+        <constructor-arg index="2" ref="countryService"/>
+        <constructor-arg index="3" ref="dtoShopUrlService"/>
+        <constructor-arg index="4" ref="dtoShopService"/>
+        <constructor-arg index="5" ref="dtoAttributeService"/>
+        <constructor-arg index="6" ref="uiFederationFacade"/>
+        <constructor-arg index="7" ref="voAssemblySupport"/>
+        <constructor-arg index="8" ref="voIOSupport"/>
+        <property name="skipAttributesInView">
+            <list>
+                <value>CURRENCY</value>
+                <value>COUNTRY_SHIP</value>
+                <value>COUNTRY_BILL</value>
+                <value>SHOP_ACTIVE_PAYMENT_GATEWAYS_LABEL</value>
+                <value>SUPPORTED_LANGUAGES</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="voAttributeService" class="org.yes.cart.service.vo.impl.VoAttributeServiceImpl">
+        <constructor-arg index="0" ref="dtoEtypeService"/>
+        <constructor-arg index="1" ref="dtoAttributeGroupService"/>
+        <constructor-arg index="2" ref="dtoAttributeService"/>
+        <constructor-arg index="3" ref="dtoProductTypeService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voCategoryService" class="org.yes.cart.service.vo.impl.VoCategoryServiceImpl">
+        <constructor-arg index="0" ref="dtoCategoryService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+        <property name="skipContentAttributesInView" value="CONTENT_BODY_"/>
+    </bean>
+
+    <bean id="voContentService" class="org.yes.cart.service.vo.impl.VoContentServiceImpl">
+        <constructor-arg index="0" ref="dtoContentService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+        <property name="skipContentAttributesInView" value="CONTENT_BODY_"/>
+    </bean>
+
+    <bean id="voBrandService" class="org.yes.cart.service.vo.impl.VoBrandServiceImpl">
+        <constructor-arg index="0" ref="dtoBrandService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+    </bean>
+
+    <bean id="voProductTypeService" class="org.yes.cart.service.vo.impl.VoProductTypeServiceImpl">
+        <constructor-arg index="0" ref="dtoProductTypeService"/>
+        <constructor-arg index="1" ref="dtoProdTypeAttributeViewGroupService"/>
+        <constructor-arg index="2" ref="dtoProductTypeAttrService"/>
+        <constructor-arg index="3" ref="dtoAttributeService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voProductService" class="org.yes.cart.service.vo.impl.VoProductServiceImpl">
+        <constructor-arg index="0" ref="dtoAssociationService"/>
+        <constructor-arg index="1" ref="dtoProductService"/>
+        <constructor-arg index="2" ref="dtoProductSkuService"/>
+        <constructor-arg index="3" ref="dtoProductAssociationService"/>
+        <constructor-arg index="4" ref="dtoProductCategoryService"/>
+        <constructor-arg index="5" ref="dtoBrandService"/>
+        <constructor-arg index="6" ref="dtoProductTypeService"/>
+        <constructor-arg index="7" ref="dtoAttributeService"/>
+        <constructor-arg index="8" ref="uiFederationFacade"/>
+        <constructor-arg index="9" ref="voAssemblySupport"/>
+        <constructor-arg index="10" ref="voIOSupport"/>
+    </bean>
+
+    <bean id="voManagementService" class="org.yes.cart.service.vo.impl.VoManagementServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <property name="licenseTextResource" value="classpath:yc-license.txt"/>
+    </bean>
+
+    <bean id="voDashboardWidgetService" class="org.yes.cart.service.vo.impl.VoDashboardWidgetServiceImpl">
+        <constructor-arg index="0" ref="voManagementService"/>
+        <property name="plugins">
+            <list>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginOrdersInShops">
+                    <constructor-arg index="0" ref="customerOrderService"/>
+                </bean>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCustomersInShops">
+                    <constructor-arg index="0" ref="customerService"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="voLocationService" class="org.yes.cart.service.vo.impl.VoLocationServiceImpl">
+        <constructor-arg index="0" ref="dtoCountryService"/>
+        <constructor-arg index="1" ref="dtoStateService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voCarrierService" class="org.yes.cart.service.vo.impl.VoShippingServiceImpl">
+        <constructor-arg index="0" ref="dtoCarrierService"/>
+        <constructor-arg index="1" ref="dtoCarrierSlaService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voPaymentGatewayService" class="org.yes.cart.service.vo.impl.VoPaymentGatewayServiceImpl">
+        <constructor-arg index="0" ref="paymentModulesManager"/>
+        <constructor-arg index="1" ref="customerOrderPaymentService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voFulfilmentService" class="org.yes.cart.service.vo.impl.VoFulfilmentServiceImpl">
+        <constructor-arg index="0" ref="dtoWarehouseService"/>
+        <constructor-arg index="1" ref="dtoInventoryService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voPriceService" class="org.yes.cart.service.vo.impl.VoPriceServiceImpl">
+        <constructor-arg index="0" ref="dtoPriceListService"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voTaxService" class="org.yes.cart.service.vo.impl.VoTaxServiceImpl">
+        <constructor-arg index="0" ref="dtoTaxService"/>
+        <constructor-arg index="1" ref="dtoTaxConfigService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voPromotionService" class="org.yes.cart.service.vo.impl.VoPromotionServiceImpl">
+        <constructor-arg index="0" ref="dtoPromotionService"/>
+        <constructor-arg index="1" ref="dtoPromotionCouponService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="voRoleService" class="org.yes.cart.service.vo.impl.VoRoleServiceImpl">
+        <constructor-arg index="0" ref="userManagementService"/>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlowCancelAction" class="org.yes.cart.service.order.impl.CancelOrderAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlowCancelManualAction" class="org.yes.cart.service.order.impl.CancelOrderWithManualRefundAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlowApproveAction" class="org.yes.cart.service.order.impl.ApproveOrderAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
+        <constructor-arg index="0">
+            <map>
+                <entry key="os.waiting">
+                    <list>
+                        <value>cancel.order</value>
+                        <value>approve.order</value>
+                    </list>
+                </entry>
+                <entry key="os.waiting.payment">
+                    <list>
+                        <value>cancel.order</value>
+                    </list>
+                </entry>
+                <entry key="os.in.progress">
+                    <list>
+                        <value>cancel.order</value>
+                    </list>
+                </entry>
+                <entry key="os.partially.shipped">
+                    <list>
+                        <value>return.order</value>
+                    </list>
+                </entry>
+                <entry key="os.completed">
+                    <list>
+                        <value>return.order</value>
+                    </list>
+                </entry>
+                <entry key="os.cancelled.waiting.payment">
+                    <list>
+                        <value>cancel.order.refund</value>
+                        <value>cancel.order.manual.refund</value>
+                    </list>
+                </entry>
+                <entry key="os.returned.waiting.payment">
+                    <list>
+                        <value>cancel.order.refund</value>
+                        <value>cancel.order.manual.refund</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="approve.order" value-ref="defaultUiOrderFlowApproveAction"/>
+                <entry key="cancel.order" value-ref="defaultUiOrderFlowCancelAction"/>
+                <entry key="cancel.order.refund" value-ref="defaultUiOrderFlowCancelAction"/>
+                <entry key="cancel.order.manual.refund" value-ref="defaultUiOrderFlowCancelManualAction"/>
+                <entry key="return.order" value-ref="defaultUiOrderFlowCancelAction"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowPackAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.packing"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowMarkShipmentReadyAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.ready"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowStartShipmentAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.inprogress"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowStartShipmentManualAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionManualAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipment.inprogress"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowMarkShippedAction" class="org.yes.cart.service.order.impl.GenericDeliveryTransitionAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" value="ds.shipped"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlowUpdateRefAction" class="org.yes.cart.service.order.impl.UpdateDeliveryRefAction">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+    </bean>
+
+    <bean id="defaultUiOrderDeliveryFlow" class="org.yes.cart.service.order.impl.SimpleStaticOrderFlow">
+        <constructor-arg index="0">
+            <map>
+                <entry key="ds.inventory.allocated">
+                    <list>
+                        <value>pack.delivery</value>
+                    </list>
+                </entry>
+                <entry key="ds.packing">
+                    <list>
+                        <value>mark.ready.for.shipment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.ready">
+                    <list>
+                        <value>start.shipment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.ready.waiting.payment">
+                    <list>
+                        <value>start.shipment.manual.payment</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.inprogress">
+                    <list>
+                        <value>mark.shipped</value>
+                    </list>
+                </entry>
+                <entry key="ds.shipment.inprogress.waiting.payment">
+                    <list>
+                        <value>mark.shipped</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <map>
+                <entry key="pack.delivery" value-ref="defaultUiOrderDeliveryFlowPackAction"/>
+                <entry key="mark.ready.for.shipment" value-ref="defaultUiOrderDeliveryFlowMarkShipmentReadyAction"/>
+                <entry key="start.shipment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
+                <entry key="start.shipment.manual.payment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
+                <entry key="mark.shipped" value-ref="defaultUiOrderDeliveryFlowMarkShippedAction"/>
+                <entry key="update.external.ref" value-ref="defaultUiOrderDeliveryFlowUpdateRefAction"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="voCustomerOrderService" class="org.yes.cart.service.vo.impl.VoCustomerOrderServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerOrderService"/>
+        <constructor-arg index="1" ref="dtoPromotionService"/>
+        <constructor-arg index="2" ref="customerOrderPaymentService"/>
+        <constructor-arg index="3" ref="defaultUiOrderFlow"/>
+        <constructor-arg index="4" ref="defaultUiOrderDeliveryFlow"/>
+        <constructor-arg index="5" ref="uiFederationFacade"/>
+        <constructor-arg index="6" ref="voAssemblySupport"/>
+    </bean>
+
+
+    <bean id="voCustomerService" class="org.yes.cart.service.vo.impl.VoCustomerServiceImpl">
+        <constructor-arg index="0" ref="dtoCustomerService"/>
+        <constructor-arg index="1" ref="dtoAttributeService"/>
+        <constructor-arg index="2" ref="uiFederationFacade"/>
+        <constructor-arg index="3" ref="voAssemblySupport"/>
+        <constructor-arg index="4" ref="voIOSupport"/>
+    </bean>
+
+
+    <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
+        <constructor-arg index="0">
+            <map>
+                <entry key="category">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCategoryGUIDImpl">
+                                <constructor-arg index="0" ref="categoryService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCategoryURIImpl">
+                                <constructor-arg index="0" ref="categoryService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="content">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceContentGUIDImpl">
+                                <constructor-arg index="0" ref="contentService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceContentURIImpl">
+                                <constructor-arg index="0" ref="contentService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="attribute">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceAttributeCodeImpl">
+                                <constructor-arg index="0" ref="attributeService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="carriersla">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceCarrierSlaGUIDImpl">
+                                <constructor-arg index="0" ref="carrierSlaService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="manager">
+                    <map>
+                        <entry key="email">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceManagerEmailImpl">
+                                <constructor-arg index="0" ref="managerService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="producttype">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductTypeGUIDImpl">
+                                <constructor-arg index="0" ref="productTypeService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="product">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductGUIDImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductCodeImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceProductURIImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="sku">
+                    <map>
+                        <entry key="guid">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUGUIDImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUCodeImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                        <entry key="uri">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceSKUURIImpl">
+                                <constructor-arg index="0" ref="productService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="warehouse">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceWarehouseCodeImpl">
+                                <constructor-arg index="0" ref="warehouseService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="voPaymentService" class="org.yes.cart.service.vo.impl.VoPaymentServiceImpl">
+        <constructor-arg index="0">
+            <bean parent="txPayProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.service.dto.impl.DtoCustomerOrderPaymentServiceImpl">
+                        <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="customerOrderPaymentDao"/>
+                    </bean>
+                </property>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="uiFederationFacade"/>
+        <constructor-arg index="2" ref="voAssemblySupport"/>
+    </bean>
+
+
+
+</beans>

@@ -1,0 +1,57 @@
+<template [ngIf]="shop">
+
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{shop.name}}</h1>
+    </div>
+  </div>
+
+  <tabset>
+
+    <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+      <yc-shop-main></yc-shop-main>
+    </tab>
+
+    <tab heading="{{ 'TAB_SEO' | translate }}" (select)="tabSelected('SEO')">
+      <yc-shop-seo [shop]="shop" [reload]="reloadSEO"></yc-shop-seo>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_URL' | translate }}" (select)="tabSelected('Urls')">
+      <yc-shop-url [shop]="shop" [reload]="reloadUrls"></yc-shop-url>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_CURRENCY' | translate }}" (select)="tabSelected('Currency')">
+      <yc-shop-currency [shop]="shop" [reload]="reloadCurrency"></yc-shop-currency>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_LANGUAGE' | translate }}" (select)="tabSelected('Language')">
+      <yc-shop-language [shop]="shop"[reload]="reloadLanguage"></yc-shop-language>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
+      <yc-shop-catalog [shop]="shop" [reload]="reloadCatalogue"></yc-shop-catalog>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_LOCATIONS' | translate }}" (select)="tabSelected('Locations')">
+      <yc-shop-location [shop]="shop" [reload]="reloadLocations"></yc-shop-location>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_CARRIERS' | translate }}" (select)="tabSelected('Carriers')">
+      <yc-shop-carrier [shop]="shop" [reload]="reloadCarriers"></yc-shop-carrier>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_WAREHOUSES' | translate }}" (select)="tabSelected('Warehouse')">
+      <yc-shop-fulfilment-centre [shop]="shop" [reload]="reloadWarehouse"></yc-shop-fulfilment-centre>
+    </tab>
+
+    <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}" (select)="tabSelected('Attributes')">
+      <yc-shop-attributes [shop]="shop" [reload]="reloadAttributes"></yc-shop-attributes>
+    </tab>
+
+    <tab heading="{{ 'SHOP_TAB_PGS' | translate }}" (select)="tabSelected('PGs')">
+      <yc-shop-payment-gateways [shop]="shop" [reload]="reloadPGs"></yc-shop-payment-gateways>
+    </tab>
+
+  </tabset>
+
+</template>

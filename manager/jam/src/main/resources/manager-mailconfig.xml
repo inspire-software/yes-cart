@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- #################################  message consumers begin ######################################-->
+
+    <bean id="mailSenderBuilder" class="org.yes.cart.service.mail.impl.JavaMailSenderBuilderImpl">
+        <constructor-arg index="0" ref="shopService"/>
+    </bean>
+
+    <bean id="defaultMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${yum.mail.host}"/>
+        <property name="port" value="${yum.mail.port}"/>
+        <property name="username" value="${yum.mail.username}"/>
+        <property name="password" value="${yum.mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <!-- Use SMTP-AUTH to authenticate to SMTP server -->
+                <prop key="mail.smtp.auth">${yum.mail.smtp.auth.enable}</prop>
+                <!-- Use TLS to encrypt communication with SMTP server -->
+                <prop key="mail.smtp.starttls.enable">${yum.mail.smtp.starttls.enable}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailSenderFactory" class="org.yes.cart.service.mail.impl.JavaMailSenderFactoryImpl">
+        <constructor-arg index="0" ref="defaultMailSender"/>
+        <constructor-arg index="1" ref="mailSenderBuilder"/>
+    </bean>
+
+    <!-- #################################  message consumers end ######################################-->
+
+</beans>

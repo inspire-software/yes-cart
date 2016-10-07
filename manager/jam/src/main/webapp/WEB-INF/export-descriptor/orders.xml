@@ -1,0 +1,280 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.CustomerOrder</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>orders-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>select c from CustomerOrderEntity c</select-sql>
+
+    <export-columns>
+        
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Cart GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>cartGuid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Payment Gateway</column-header>
+            <field-type>FIELD</field-type>
+            <name>pgLabel</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Order Number</column-header>
+            <field-type>FIELD</field-type>
+            <name>ordernum</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Currency</column-header>
+            <field-type>FIELD</field-type>
+            <name>currency</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Net Total (without delivery)</column-header>
+            <field-type>FIELD</field-type>
+            <name>netPrice</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Gross Total (without delivery)</column-header>
+            <field-type>FIELD</field-type>
+            <name>grossPrice</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Has Promotions</column-header>
+            <field-type>FIELD</field-type>
+            <name>promoApplied</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Promotions</column-header>
+            <field-type>FIELD</field-type>
+            <name>appliedPromo</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Status</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderStatus</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Customer Email</column-header>
+            <field-type>FIELD</field-type>
+            <name>customer.email</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Shop code</column-header>
+            <field-type>FIELD</field-type>
+            <name>shop.code</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Language</column-header>
+            <field-type>FIELD</field-type>
+            <name>locale</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Billing Address</column-header>
+            <field-type>FIELD</field-type>
+            <name>billingAddress</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Shipping Address</column-header>
+            <field-type>FIELD</field-type>
+            <name>shippingAddress</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Has Multiple Delivery</column-header>
+            <field-type>FIELD</field-type>
+            <name>multipleShipmentOption</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Date</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderTimestamp</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Order Message</column-header>
+            <field-type>FIELD</field-type>
+            <name>orderMessage</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Coupon Codes</column-header>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name>coupons</name>
+            <export-descriptor>
+                <entity-type>org.yes.cart.domain.entity.PromotionCouponUsage</entity-type>
+                <export-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name/>
+                    <print-header>false</print-header>
+                    <column-delimiter>&#09;</column-delimiter>
+                    <text-qualifier> </text-qualifier>
+                </export-file-descriptor>
+                <select-sql/>
+                <export-columns>
+                    <column-descriptor>
+                        <column-header/>
+                        <field-type>FK_FIELD</field-type>
+                        <name>coupon.code</name>
+                    </column-descriptor>
+                </export-columns>
+            </export-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Delivery Details</column-header>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name>delivery</name>
+            <export-descriptor>
+                <entity-type>org.yes.cart.domain.entity.CustomerOrderDelivery</entity-type>
+                <export-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name/>
+                    <print-header>true</print-header>
+                    <column-delimiter>&#09;</column-delimiter>
+                    <text-qualifier>'</text-qualifier>
+                </export-file-descriptor>
+                <select-sql/>
+                <export-columns>
+                    <column-descriptor>
+                        <column-header>Delivery Number</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>deliveryNum</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Net Price for shipping</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>netPrice</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Gross Price for shipping</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>grossPrice</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Applied Promo</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>appliedPromo</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Delivery Status</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>deliveryStatus</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Delivery Group</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>deliveryGroup</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Shipping SLA</column-header>
+                        <field-type>FK_FIELD</field-type>
+                        <name>carrierSla.name</name>
+                    </column-descriptor>
+                </export-columns>
+            </export-descriptor>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Order Details</column-header>
+            <field-type>SLAVE_INLINE_FIELD</field-type>
+            <name>orderDetail</name>
+            <export-descriptor>
+                <entity-type>org.yes.cart.domain.entity.CustomerOrderDet</entity-type>
+                <export-file-descriptor>
+                    <file-encoding>UTF-8</file-encoding>
+                    <file-name/>
+                    <print-header>false</print-header>
+                    <column-delimiter>&#09;</column-delimiter>
+                    <text-qualifier>'</text-qualifier>
+                </export-file-descriptor>
+                <select-sql/>
+                <export-columns>
+                    <column-descriptor>
+                        <column-header>SKU</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>productSkuCode</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Name</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>productName</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Quantity</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>qty</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Net Price per unit</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>netPrice</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Gross Price per unit</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>grossPrice</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Tax Codes</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>taxCode</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Is a Gift</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>gift</name>
+                    </column-descriptor>
+                    <column-descriptor>
+                        <column-header>Applied Promotions</column-header>
+                        <field-type>FIELD</field-type>
+                        <name>appliedPromo</name>
+                    </column-descriptor>
+                </export-columns>
+            </export-descriptor>
+        </column-descriptor>
+    </export-columns>
+
+</export-descriptor>

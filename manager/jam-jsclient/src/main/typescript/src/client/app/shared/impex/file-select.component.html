@@ -1,0 +1,32 @@
+<ul class="nav nav-second-level item-list-control">
+
+  <li>
+    <form class="row">
+      <div class="col-xs-10">
+        <input class="filter-input" type="text" name="fileFilter" [(ngModel)]="fileFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+      </div>
+      <div class="col-xs-2">
+        <button type="button" (click)="onRefresh()"  class="btn btn-info btn-circle">
+          <i class="fa fa-refresh"></i>
+        </button>
+        <button type="button" (click)="onDeleteClick(selectedFile)" [disabled]="selectedFile == null" class="btn btn-danger btn-circle pull-right">
+          <i class="fa fa-remove"></i>
+        </button>
+      </div>
+    </form>
+  </li>
+
+  <li *ngIf="showNewLink">
+    <a class="js-click" (click)="onNewClick()"> <span class="label label-info"><i class="fa fa-plus"></i></span> {{ 'MODAL_BUTTON_UPLOAD' | translate }}</a>
+  </li>
+
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let file of filteredFiles">
+    <a (click)="onSelectClick(file)" class="{{ (selectedFile != null && file != null && selectedFile.first == file.first) ? 'bg-info js-click' : 'js-click' }}">{{file.second}}</a>
+  </li>
+
+</ul>
+

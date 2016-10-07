@@ -1,0 +1,102 @@
+<template [ngIf]="reports">
+  <div class="row">
+    <div>
+      <h1 class="page-header">{{ 'PANEL_REPORTS' | translate }}</h1>
+    </div>
+
+    <div class="text-right data-control">
+
+      <form class="pull-left">
+        <select class="filter-input" type="text" name="selectedReport" [(ngModel)]="selectedReport">
+          <option *ngFor="let report of reports" [value]="report.reportId">{{ 'REPORT_' + report.reportId | translate }}</option>
+        </select>
+      </form>
+
+      <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+        <i class="fa fa-play"></i>
+      </button>
+
+      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+        <i class="fa fa-plus"></i>
+      </button>
+
+      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+        <i class="fa fa-refresh"></i>
+      </button>
+
+      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 1" class="btn btn-danger btn-circle btn-xl" >
+        <i class="fa fa-remove"></i>
+      </button>
+
+
+    </div>
+
+    <div>
+
+      <div [hidden]="tabs.length > 0">
+        <p class="bg-info text-padding">{{ 'REPORT_SELECT_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+      </div>
+
+      <tabset>
+        <tab *ngFor="let tab of tabs; let i = index" heading="{{ (i+1) }} {{ 'REPORT_' + tab.descriptor.reportId | translate }}" (select)="tabSelected(i)">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <div class="panel-body">
+                <form>
+                  <fieldset>
+                    <div class="form-group" *ngFor="let requestParam of tab.request.parameters">
+                      <label>{{ 'REPORT_PARAM_' + requestParam.parameterId | translate }} {{ requestParam.mandatory ? ' *': ''}}</label>
+                      <template [ngIf]="requestParam.options != null">
+                        <select class="form-control" name="{{ requestParam.parameterId + '_' + i }}"  [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                          <option *ngFor="let opt of requestParam.options" value="{{ opt.first}}">{{ opt.second }}</option>
+                        </select>
+                      </template>
+                      <template [ngIf]="requestParam.options == null">
+                        <input class="form-control" name="{{ requestParam.parameterId + '_' + i }}" type="text" [(ngModel)]="requestParam.value" (ngModelChange)="onDataChange($event)" [disabled]="tab.running || tab.completed">
+                      </template>
+                    </div>
+                    <div class="form-group {{ tab.running && !tab.completed ? 'running-job-log' : '' }}" [hidden]="!tab.running && !tab.completed">
+                      <label>{{ 'REPORT_FILENAME' | translate }}</label>
+                      <div class="input-group">
+                        <input class="form-control" name="{{ 'filename_' + i }}" type="text" [ngModel]="tab.filename" [disabled]="true">
+                        <span class="input-group-btn">
+                          <button type="button" (click)="onDownloadClick()" class="btn" [disabled]="!tab.completed || !tab.success">
+                            <i class="fa fa-download"></i>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                    <div [hidden]="tab.success">
+                      <p class="bg-danger text-padding">{{ 'REPORT_NO_RESULTS' | translate }} </p>
+                    </div>
+                    <div [hidden]="!runnableReportTab">
+                      <p class="bg-success text-padding">{{ 'REPORT_RUN_TIP' | translate }} <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></p>
+                    </div>
+                  </fieldset>
+                </form>
+              </div>
+            </div>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+
+  </div>
+</template>
+
+
+<modal #selectFileModalDialog
+       title="{{ 'PANEL_REPORTS' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="selectedFile != null"
+       (closed)="onFilesConfirmationResult($event)">
+  <div class="item-list-overflow">
+
+    <yc-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></yc-file-select>
+
+  </div>
+
+</modal>
+

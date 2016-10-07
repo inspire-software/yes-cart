@@ -21,12 +21,12 @@
         <adapter-definition id="java-object" class="flex.messaging.services.remoting.adapters.JavaAdapter" default="true"/>
     </adapters>
 
-    <destination id="reindexService">
+    <!--<destination id="reindexService">
     	<properties>
     		<factory>spring</factory>
     		<source>reindexService</source>
     	</properties>
-    </destination>
+    </destination>-->
 
     <default-channels>
         <channel ref="my-amf"/>

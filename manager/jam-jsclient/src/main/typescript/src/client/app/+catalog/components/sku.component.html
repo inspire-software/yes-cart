@@ -1,0 +1,213 @@
+<template [ngIf]="sku">
+
+  <form role="form" [formGroup]="skuForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'GUID' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'GUID' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="sku.guid" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="skuForm.controls['guid'].valid || skuForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!skuForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!skuForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="sku.code" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="skuForm.controls['code'].valid || skuForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!skuForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!skuForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}" formControlName="manufacturerCode" name="manufacturerCode" type="text" [(ngModel)]="sku.manufacturerCode" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="skuForm.controls['manufacturerCode'].valid || skuForm.controls['manufacturerCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_BAR_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_BAR_CODE' | translate }}" formControlName="barCode" name="barCode" type="text" [(ngModel)]="sku.barCode" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="skuForm.controls['barCode'].valid || skuForm.controls['barCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_BAR_CODE' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="sku.rank" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="skuForm.controls['rank'].valid || skuForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'RANK_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="sku"
+                             value="name"
+                             defaultRequired="true"
+                             i18n="displayNames"
+                             [formGroup]="skuForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="sku.description" (ngModelChange)="onMainDataChange($event)">
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+
+      <tab heading="{{ 'TAB_SEO' | translate }}"  (select)="tabSelected('SEO')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/sku/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="sku.uri" (ngModelChange)="onMainDataChange($event)"/>
+                  </div>
+                  <div [hidden]="skuForm.controls['uri'].valid || skuForm.controls['uri'].pristine" class="alert alert-danger">
+                    <div [hidden]="!skuForm.controls['uri'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!skuForm.controls['uri'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                             [source]="sku"
+                             value="title"
+                             i18n="displayTitles"
+                             [formGroup]="skuForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                             [source]="sku"
+                             value="metakeywords"
+                             i18n="displayMetakeywords"
+                             [formGroup]="skuForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                             [source]="sku"
+                             value="metadescription"
+                             i18n="displayMetadescriptions"
+                             [formGroup]="skuForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+
+        <template [ngIf]="sku.skuId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+                </form>
+
+                <button type="button" (click)="onRowAdd()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <yc-attribute-values #attributeValuesComponent
+                                   [masterObject]="sku"
+                                   [avPrototype]="avPrototype"
+                                   [objectAttributes]="attributes"
+                                   [attributeFilter]="attributeFilter"
+                                   (dataSelected)="onSelectRow($event)"
+                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>

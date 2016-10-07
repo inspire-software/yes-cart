@@ -24,6 +24,8 @@ import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -32,8 +34,10 @@ import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueProductDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductDTOImpl;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.ObjectNotFoundException;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnableToWrapObjectException;
@@ -162,6 +166,101 @@ public class DtoProductServiceImpl
      */
     public DtoProductSkuService lookupDtoProductSkuService() {
         return null;
+    }
+
+    private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?' };
+    private final static char[] AVAILABILITY = new char[] { '@' };
+    static {
+        Arrays.sort(TAG_OR_CODE_OR_BRAND_OR_TYPE);
+        Arrays.sort(AVAILABILITY);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<ProductDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<ProductDTO> dtos = new ArrayList<>();
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+        CriteriaTuner tuner = null;
+
+        if (org.springframework.util.StringUtils.hasLength(filter)) {
+
+            final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
+
+            if (dateSearch != null) {
+
+                if (dateSearch.getFirst() != null) {
+
+                    criteria.add(Restrictions.le("availablefrom", dateSearch.getFirst()));
+
+                }
+
+                if (dateSearch.getSecond() != null) {
+
+                    criteria.add(Restrictions.ge("availableto", dateSearch.getSecond()));
+
+                }
+
+
+            } else {
+
+                final Pair<String, String> tagOrCodeOrBrandOrType = ComplexSearchUtils.checkSpecialSearch(filter, TAG_OR_CODE_OR_BRAND_OR_TYPE);
+
+                if (tagOrCodeOrBrandOrType != null) {
+
+                    if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                        criteria.add(Restrictions.or(
+                                Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE)
+                        ));
+
+                    } else if ("?".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                        tuner = new CriteriaTuner() {
+                            @Override
+                            public void tune(final Criteria crit) {
+                                crit.createAlias("brand", "brand");
+                                crit.createAlias("producttype", "producttype");
+                            }
+                        };
+
+                        criteria.add(Restrictions.or(
+                                Restrictions.ilike("brand.guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("brand.name", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("producttype.guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("producttype.name", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE)
+                        ));
+
+                    }
+
+                } else {
+
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("manufacturerCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("pimCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
+                    ));
+
+                }
+            }
+
+        }
+
+        final List<Product> entities = getService().getGenericDao().findByCriteria(tuner,
+                page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+        fillDTOs(entities, dtos);
+
+        return dtos;
     }
 
     /**
@@ -579,5 +678,16 @@ public class DtoProductServiceImpl
         return skuId == null || skuId.equals(productSkuId);
 
     }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueProductDTO dto = new AttrValueProductDTOImpl();
+        dto.setProductId(entityPk);
+        return dto;
+    }
+
 
 }

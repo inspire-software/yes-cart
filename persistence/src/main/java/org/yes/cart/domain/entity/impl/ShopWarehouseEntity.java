@@ -34,6 +34,7 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
     private Shop shop;
     private Warehouse warehouse;
     private Integer rank;
+    private boolean disabled;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -69,6 +70,14 @@ public class ShopWarehouseEntity implements org.yes.cart.domain.entity.ShopWareh
 
     public void setRank(Integer rank) {
         this.rank = rank;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public Date getCreatedTimestamp() {

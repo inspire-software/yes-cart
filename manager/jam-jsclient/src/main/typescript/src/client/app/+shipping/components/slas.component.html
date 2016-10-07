@@ -1,0 +1,39 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CARRIERSLA_CODE' | translate }}</th>
+        <th>{{ 'CARRIERSLA_SLATYPE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'CARRIERSLA_BILL' | translate }}</th>
+        <th>{{ 'CARRIERSLA_SHIP' | translate }}</th>
+        <th>{{ 'CARRIERSLA_PG' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredSlas; let i = index" class="{{row == selectedSla ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CARRIERSLA_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'CARRIERSLA_BILL' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.billingAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
+          <td title="{{ 'CARRIERSLA_SHIP' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.deliveryAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
+          <td title="{{ 'CARRIERSLA_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
+            <ul class="list-unstyled">
+              <li *ngFor="let pg of getPGNames(row)" [ngClass]="pg.active ? '' : 'text-strikethrough text-muted'">{{pg.name}}</li>
+            </ul>
+          </a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

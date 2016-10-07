@@ -1,3 +1,7 @@
+target/
+
+*.iml
+
 derby.log
 
 derbyinit.log
@@ -107,6 +111,24 @@ manager/server/yes-manager.iml
 manager/server/logs/net.authorize.aim.log
 
 manager/server/target/**
+
+manager/jam/jam.iml
+
+manager/jam/logs/net.authorize.aim.log
+
+manager/jam/target/**
+
+manager/jam-jsclient/jam-jsclient.iml
+
+manager/jam-jsclient/target/**
+
+manager/jam-services/jam-services.iml
+
+manager/jam-services/target/**
+
+manager/jam-vo/jam-vo.iml
+
+manager/jam-vo/target/**
 
 payment-api/payment-api.iml
 

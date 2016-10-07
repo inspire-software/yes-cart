@@ -17,6 +17,7 @@
 package org.yes.cart.cluster.node.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.cluster.node.ContextRspMessage;
 import org.yes.cart.cluster.node.Message;
@@ -69,11 +70,11 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final List<String> targets = message.getTargets();
 
-        final List<Node> cluster = new ArrayList<Node>(getYesNodes());
+        final List<Node> cluster = new ArrayList<Node>(getSfNodes());
         if (CollectionUtils.isNotEmpty(targets)) {
             final Iterator<Node> clusterIt = cluster.iterator();
             while (clusterIt.hasNext()) {
-                if (!targets.contains(clusterIt.next().getNodeId())) {
+                if (!targets.contains(clusterIt.next().getId())) {
                     clusterIt.remove();
                 }
             }
@@ -107,11 +108,11 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                 if (wse.getCause() instanceof ConnectException) {
 
-                    blacklist(yesNode.getNodeId());
+                    blacklist(yesNode.getId());
 
                     if (LOG.isErrorEnabled()) {
                         LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                                + yesNode.getId() + ":" + yesNode.getChannel()
                                 + "] . Blacklisting this node",
                                 wse);
                     }
@@ -120,7 +121,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                     if (LOG.isErrorEnabled()) {
                         LOG.error("Cannot send message [" + message + "] to  url ["
-                                + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                                + yesNode.getId() + ":" + yesNode.getChannel()
                                 + "] . Exception occurred during ws call",
                                 wse);
                     }
@@ -131,7 +132,7 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
                 if (LOG.isErrorEnabled()) {
                     LOG.error("Cannot send message [" + message + "] to  url ["
-                            + yesNode.getNodeId() + ":" + yesNode.getChannel()
+                            + yesNode.getId() + ":" + yesNode.getChannel()
                             + "] . Exception occurred during ws call",
                             e);
                 }
@@ -149,10 +150,13 @@ public class ManagerWsNodeServiceImpl extends AbstractWsNodeServiceImpl implemen
 
         final String userName = context.getAttribute(AsyncContext.USERNAME);
         final String password = context.getAttribute(AsyncContext.CREDENTIALS);
+        final String passwordHash = context.getAttribute(AsyncContext.CREDENTIALS_HASH);
+        final boolean hashed = StringUtils.isNotBlank(passwordHash);
+        final String pwd = hashed ? passwordHash : password;
 
         final int timeout = NumberUtils.toInt(getConfiguration().get(timeoutKey), 1000);
 
-        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, password, backdoorUrl, timeout);
+        return wsClientAbstractFactory.getFactory(WebServiceInboundChannel.class, userName, pwd, hashed, backdoorUrl, timeout);
 
     }
 

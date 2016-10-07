@@ -258,7 +258,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      */
     Map<String, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order, final boolean onePhysicalDelivery) throws SkuUnavailableException {
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId());
+        final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId(), false);
 
         // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
         final Map<String, List<CustomerOrderDet>> deliveryGroups = new TreeMap<String, List<CustomerOrderDet>>();

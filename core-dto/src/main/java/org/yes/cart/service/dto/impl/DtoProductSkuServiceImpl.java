@@ -28,6 +28,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -442,5 +443,15 @@ public class DtoProductSkuServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueProductSkuDTO dto = new AttrValueProductSkuDTOImpl();
+        dto.setSkuId(entityPk);
+        return dto;
     }
 }

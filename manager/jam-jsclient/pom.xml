@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.yes</groupId>
+        <artifactId>manager</artifactId>
+        <version>3.3.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>jam-jsclient</artifactId>
+    <packaging>pom</packaging>
+    <name>Yes cart JAM: JS client</name>
+    <description>Yes cart manager server JS client</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+
+        <filters>
+            <filter>${basedir}/../../env/maven/${env}/config-cluster.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-fs.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-db-${env.db}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-mail.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-cronjob.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-tomcat-ssl-${env.ssl}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-liqpay-${payment.liqpay.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-cybersource-${payment.cybersource.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-authorizenet-${payment.authorizenet.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-paypal-${payment.paypal.module}.properties</filter>
+            <filter>${basedir}/../../env/maven/${env}/config-module-postfinance-${payment.postfinance.module}.properties</filter>
+        </filters>
+
+        <plugins>
+            <!--
+                    Build node js application begin
+
+                    To build NodeJs application npm is used.
+
+                    First stage is to perform "npm install" which configures all the dependencies installs them.
+                    This is a heavy operation and is not necessary to be performed all the time, therefore it is
+                    executed in mvn "clean" phase. Note that clean is not part of the install lifecycle, so it
+                    must be run explicitly. This is don on purpose so that we do not re-run npm install all the
+                    time as it takes too long.
+
+                    Second phase is the app build which is also performed by npm using "npm run build.dev". This
+                    is what actually buids the application (Also this is what is run when you do "npm start").
+
+                    Therefore the general development process is (build from command line):
+                    1. mvn clean - to perform npm install and load all the heavy files in node_modules
+                    2. mvn process-sources - to perform the build.dev on npm (Note that this phase is picked up by
+                                             normal mvn install)
+
+                    When developing you should run "npm start" which listens for the changes and auto compiles all
+                    javascript and put it into target directory (i.e. dist/dev).
+
+                    This concludes the NodeJS part.
+
+                    The JAM part is now simple is uses "src/main/typescript/node_modules" and "src/main/typescript/dist/dev"
+                    as additional webresources, so maven war plugin can include these when packaging war file.
+
+                    When running JAM via IDE (e.g. Intellij) you will need to run extra tasks from command line to update
+                    the javascript that was recompiled by npm. "mvn validate -Pnodejs" this copies "dist/dev" to
+                    "jam/target/yes-manager/resources"
+            -->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <executions>
+                    <execution>
+                        <id>exec-npm-install</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>install</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>exec-npm-build</id>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>build.dev</argument>
+                            </arguments>
+                            <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <id>replace-assets</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${basedir}/src/main/typescript/dist/dev/index.html</file>
+                            <replacements>
+                                <!--TODO check how to build with correct path delimiter-->
+                                <replacement>
+                                    <token>href=".*assets\/main.css.*"</token>
+                                    <value>href="assets/main.css"</value>
+                                </replacement>
+                                <replacement>
+                                    <token>href=".*assets\/bootstrap.min.css.*"</token>
+                                    <value>href="assets/bootstrap.min.css"</value>
+                                </replacement>
+                                <replacement>
+                                    <token>href=".*assets\/font-awesome.min.css.*"</token>
+                                    <value>href="assets/font-awesome.min.css"</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build node js application end  -->
+
+        </plugins>
+
+    </build>
+</project>

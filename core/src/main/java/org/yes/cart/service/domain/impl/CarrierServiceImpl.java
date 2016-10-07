@@ -45,9 +45,11 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     /**
      * {@inheritDoc}
      */
-    public List<Carrier> findCarriersByShopId(final long shopId) {
-        final List<Carrier> rez  = getGenericDao().findByNamedQuery("CARRIER.BY.SHOPID", shopId);
-        return rez;
+    public List<Carrier> findCarriersByShopId(final long shopId, final boolean includeDisabled) {
+        if (includeDisabled) {
+            return getGenericDao().findByNamedQuery("CARRIER.BY.SHOPID", shopId);
+        }
+        return getGenericDao().findByNamedQuery("CARRIER.BY.SHOPID.ENABLEDONLY", shopId, Boolean.FALSE);
     }
 
     /**
@@ -56,7 +58,7 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     @Cacheable("carrierService-getCarriersByShopIdAndCurrency")
     public List<Carrier> getCarriersByShopId(final long shopId) {
         // This method must be READONLY transaction since we are modifying the list of SLA
-        final List<Carrier> rez  = findCarriersByShopId(shopId);
+        final List<Carrier> rez  = findCarriersByShopId(shopId, false);
         if (CollectionUtils.isEmpty(rez)) {
             return Collections.emptyList();
         }

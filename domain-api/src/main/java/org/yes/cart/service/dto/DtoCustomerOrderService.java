@@ -172,6 +172,15 @@ public interface DtoCustomerOrderService extends GenericDTOService<CustomerOrder
             String orderNum
     ) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get orders by filter.
+     *
+     * @param filter filter
+     * @param page start page
+     * @param pageSize page size
+     * @return list of orders
+     */
+    List<CustomerOrderDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Get localized name for all payment gateways on this server.

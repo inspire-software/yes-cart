@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd
+                           http://www.springframework.org/schema/aop
+			               http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+  <aop:aspectj-autoproxy/>
+
+  <import resource="classpath:manager-aspects.xml"/>
+
+  <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+  <bean id="viewResolver"
+    class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <property name="viewClass"
+      value="org.springframework.web.servlet.view.JstlView" />
+    <property name="prefix" value="/pages/" />
+    <property name="suffix" value=".jsp" />
+  </bean>
+
+  <security:http auto-config="true">
+    <security:anonymous enabled="false"/>
+    <security:intercept-url pattern="/pages/**" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN" />
+
+    <security:intercept-url pattern="/resources/index.html" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN" />
+
+    <security:intercept-url pattern="/resources/components/**" access="ROLE_SMADMIN,ROLE_SMSHOPADMIN,ROLE_SMWAREHOUSEADMIN,ROLE_SMCALLCENTER,ROLE_SMMARKETINGADMIN" />
+
+    <!--<security:http-basic />-->
+    <security:form-login
+      login-page="/login.jsp"
+      default-target-url="/pages/index.jsp"
+      authentication-failure-url="/login.jsp?error"
+      username-parameter="j_username"
+      password-parameter="j_password" />
+
+    <security:logout
+      logout-success-url="/login.jsp?logout"
+      delete-cookies="JSESSIONID"
+      invalidate-session="true"/>
+  </security:http>
+
+  <!--<bean id="entryPoint"
+        class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>-->
+
+  <security:global-method-security pre-post-annotations="enabled" secured-annotations="enabled"/>
+
+  <security:authentication-manager alias="authenticationManager">
+    <security:authentication-provider>
+      <security:password-encoder ref="passwordHashHelper"/>
+      <security:jdbc-user-service
+        data-source-ref="dataSourceSec"
+        group-authorities-by-username-query=""
+        users-by-username-query="SELECT m.email as username, m.password, m.enabled FROM TMANAGER m where m.email = ?"
+        authorities-by-username-query="SELECT mr.email as username, mr.code as authority FROM TMANAGERROLE mr  WHERE mr.email = ?"/>
+    </security:authentication-provider>
+  </security:authentication-manager>
+
+
+  <bean id="dataSourceSec" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiName" value="java:comp/env/jdbc/yesjndi"/>
+    <property name="lookupOnStartup" value="true"/>
+    <property name="cache" value="true"/>
+    <property name="proxyInterface" value="javax.sql.DataSource"/>
+  </bean>
+
+
+
+
+
+
+
+
+  <!-- #################################  message consumers begin ######################################-->
+
+  <import resource="classpath:manager-mailconfig.xml"/>
+
+  <!-- #################################  message consumers end ######################################-->
+
+  <import resource="classpath:jam-persistence.xml"/>
+
+  <import resource="classpath:core-config.xml"/>
+  <import resource="classpath:core-persistence.xml"/>
+  <import resource="classpath:core-io.xml"/>
+  <import resource="classpath:core-services.xml"/>
+  <import resource="classpath:core-dto-services.xml"/>
+  <import resource="classpath:manager-services-commands.xml"/>
+
+  <import resource="classpath:payment-persistence.xml"/>
+  <import resource="classpath:payment-api.xml"/>
+  <import resource="classpath:core-payments.xml"/>
+  <import resource="classpath:core-module-payment-base.xml"/>
+
+  <import resource="classpath:manager-cluster.xml"/>
+
+  <bean id="messageSource"
+        class="org.springframework.context.support.ResourceBundleMessageSource">
+    <property name="defaultEncoding" value="UTF-8"/>
+    <property name="basename" value="jam" />
+  </bean>
+
+  <import resource="classpath:manager-tools.xml"/>
+
+</beans>

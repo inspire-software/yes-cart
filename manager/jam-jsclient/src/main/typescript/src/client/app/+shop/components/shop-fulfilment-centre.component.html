@@ -1,0 +1,67 @@
+<template [ngIf]="shopCentresVO">
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="createNew()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="true"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'ASSIGNED' | translate }}</h3>
+      <span *ngFor="let supported of selectedCentres">
+        <a class="btn js-click" (click)=onSupportedCentreClick(supported)>{{supported.name}} <i class="fa fa-remove"></i></a>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-5">
+      <h3>{{ 'AVAILABLE' | translate }}</h3>
+      <span *ngFor="let available of availableCentres">
+        <a class="btn js-click" (click)=onAvailableCentreClick(available)>{{available.name}} <i class="fa fa-plus"></i></a>
+      </span>
+    </div>
+  </div>
+
+  <modal #editNewCentreName
+         title="{{ 'MODAL_CREATE_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+         [valid]="validForSave"
+         (closed)="editNewCentreNameModalResult($event)">
+    <form role="form" [formGroup]="newCentreForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="name" name="newCentreName" type="text" [(ngModel)]="newCentre.name" (ngModelChange)="onFormDataChange($event)">
+            <div [hidden]="newCentreForm.controls['name'].valid || newCentreForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="code" name="newCentreCode" type="text" [(ngModel)]="newCentre.code" (ngModelChange)="onFormDataChange($event)">
+            <div [hidden]="newCentreForm.controls['code'].valid || newCentreForm.controls['code'].pristine" class="alert alert-danger">
+              <div [hidden]="!newCentreForm.controls['code'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!newCentreForm.controls['code'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
+              {{ 'ALPHANUM_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </modal>
+
+</template>

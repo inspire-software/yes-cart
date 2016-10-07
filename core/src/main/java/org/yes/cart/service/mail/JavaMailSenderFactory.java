@@ -12,7 +12,7 @@ public interface JavaMailSenderFactory {
     /**
      * Get mail sender by shop code.
      *
-     * @param shopCode shop code (use DEFAULT for YUM mail)
+     * @param shopCode shop code (use DEFAULT for Admin mail)
      *
      * @return mail sender object
      */

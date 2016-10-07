@@ -1,0 +1,140 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_CUSTOMER_SERVICE_ORDERS' | translate }} {{ orderTransitionNumber ? (' / ' + orderTransitionNumber) : '' }}</h1>
+  </div>
+
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'customerorders'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px">
+      <i class="fa fa-chevron-left"></i>
+    </button>
+
+    <form class="pull-left" [hidden]="viewMode !== 'customerorders'">
+      <input class="filter-input" type="text" name="customerorderFilter" [(ngModel)]="customerorderFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+    </form>
+
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+      <i class="fa fa-filter"></i>
+    </button>
+
+    <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-ban"></i>
+    </button>
+
+    <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-reply"></i>
+    </button>
+
+    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-circle btn-xl">
+      <i class="fa fa-dollar"></i>
+    </button>
+
+    <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-dollar"></i>
+    </button>
+
+
+
+    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-circle btn-xl">
+      <i class="fa fa-archive"></i>
+    </button>
+
+    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-circle btn-xl">
+      <i class="fa fa-truck"></i>
+    </button>
+
+    <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl">
+      <i class="fa fa-truck"></i>
+    </button>
+
+    <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl">
+      <i class="fa fa-check"></i>
+    </button>
+
+    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-external-link"></i>
+    </button>
+
+
+
+
+
+    <button type="button" (click)="onRowEditSelected()" [disabled]="customerorderEdit != null || selectedCustomerorder == null" class="btn btn-circle btn-xl">
+      <i class="fa fa-edit"></i>
+    </button>
+
+    <yc-data-control [changed]="changed"
+                     [valid]="validForSave"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEventHandler()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+
+  </div>
+
+  <div [hidden]="viewMode !== 'customerorders'">
+
+    <div *ngIf="searchHelpShow">
+      <div class="bg-info text-padding">
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT' | translate }}</p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_PAYMENT' | translate }} <span><button type="button" (click)="onSearchStatusPayment()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CANCELLED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS' | translate }} <span><button type="button" (click)="onSearchAddress()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+      </div>
+    </div>
+
+    <div *ngIf="customerorderFilterRequired">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
+
+    <div *ngIf="customerorderFilterCapped">
+      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+    </div>
+
+    <yc-customerorders [customerorders]="customerorders" (dataSelected)="onCustomerorderSelected($event)"></yc-customerorders>
+  </div>
+
+  <div [hidden]="viewMode !== 'customerorder'">
+    <yc-customerorder [customerorder]="customerorderEdit" (dataSelected)="onCustomerdeliverySelected($event)"></yc-customerorder>
+  </div>
+
+  <modal #orderTransitionConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+         [valid]="orderTransitionValid"
+         (closed)="onOrderTransitionConfirmationResult($event)">
+
+    <form role="form">
+      <fieldset>
+        <div class="row">
+          <div class="col-xs-12" [hidden]="!orderTransitionNameOfflineNote">
+            <p class="bg-danger text-padding">{{ orderTransitionName + '.offlinenote' | translate }}</p>
+          </div>
+          <div class="col-xs-12">{{ orderTransitionName | translate:{order: orderTransitionNumber } }}</div>
+        </div>
+        <div class="row" [hidden]="!orderTransitionRequiresMessage">
+          <div class="col-lg-3">{{ 'CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" name="orderTransitionMessage" type="text" [(ngModel)]="orderTransitionMessage" (ngModelChange)="onTransitionMessageChange($event)">
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </modal>
+
+</div>

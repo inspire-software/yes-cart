@@ -43,4 +43,20 @@ public interface DtoTaxService extends GenericDTOService<TaxDTO> {
                                   String currency)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Taxes by filter
+     *
+     * @param shopCode shop
+     * @param currency currency
+     * @param filter filter
+     * @param page start page
+     * @param pageSize page size
+     * @return taxes
+     */
+    List<TaxDTO> findBy(String shopCode, String currency, String filter, int page, int pageSize)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+
 }

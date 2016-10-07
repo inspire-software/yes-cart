@@ -67,6 +67,19 @@ public interface CustomerShop extends Guidable {
      */
     void setShop(Shop shop);
 
+    /**
+     * Disable this customer in shop.
+     *
+     * @return true if this is disabled
+     */
+    boolean isDisabled();
+
+    /**
+     * Disable this customer in shop.
+     *
+     * @param disabled true if this is disabled
+     */
+    void setDisabled(boolean disabled);
 
 }
 

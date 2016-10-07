@@ -50,6 +50,7 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
     public <S> WsClientFactory<S> getFactory(final Class<S> service,
                                              final String userName,
                                              final String password,
+                                             final boolean hashed,
                                              final String url,
                                              final long timeout) {
 
@@ -58,7 +59,7 @@ public class WsClientAbstractFactoryImpl implements WsClientAbstractFactory, App
         LOG.debug("Creating WsClientFactory on {} to access {}", nodeService.getCurrentNodeId(),  service);
 
         try {
-            final String pwhash = passwordHashHelper.getHash(password);
+            final String pwhash = hashed ? password : passwordHashHelper.getHash(password);
             return new PerUserPerServiceClientFactory<S>(nodeService, service, userName, pwhash, url, timeout);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create password hash during WS client construction", e);

@@ -86,6 +86,14 @@ public interface PaymentProcessor {
     PaymentGateway getPaymentGateway();
 
     /**
+     * Check if this processor's PG is enabled. Processors are injected with PG in processor factory so it is possible that
+     * if PG was disabled then processor is set with null PG.
+     *
+     * @return true if online, false otherwise
+     */
+    boolean isPaymentGatewayEnabled();
+
+    /**
      * Create list of payment to authorize.
      *
      * @param order              order

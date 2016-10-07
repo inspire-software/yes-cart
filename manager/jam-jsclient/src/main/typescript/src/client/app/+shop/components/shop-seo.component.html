@@ -1,0 +1,50 @@
+<template [ngIf]="shopLocalization">
+
+
+  <div class="text-right data-control">
+    <yc-data-control [changed]="changed"
+                     [valid]="validForSave"
+                     (saveEvent)="onSaveHandler()"
+                     (discardEvent)="onDiscardEvent()"
+                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+  </div>
+
+  <form role="form" [formGroup]="shopSEOForm">
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-lg-9">
+          <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                         [source]="shopLocalization"
+                         value="title"
+                         i18n="displayTitles"
+                         [formGroup]="shopSEOForm"
+                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+          <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                         [source]="shopLocalization"
+                         value="metakeywords"
+                         i18n="displayMetakeywords"
+                         [formGroup]="shopSEOForm"
+                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+          <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                         [source]="shopLocalization"
+                         value="metadescription"
+                         i18n="displayMetadescriptions"
+                         [formGroup]="shopSEOForm"
+                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</template>

@@ -46,4 +46,21 @@ public interface DtoTaxConfigService extends GenericDTOService<TaxConfigDTO> {
 
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Manager search function.
+     *
+     * @param taxId tax id
+     * @param filter filter
+     * @param page start page
+     * @param pageSize page size
+     *
+     * @return list of tax configs
+     */
+    List<TaxConfigDTO> findBy(long taxId,
+                              String filter,
+                              int page,
+                              int pageSize)
+
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

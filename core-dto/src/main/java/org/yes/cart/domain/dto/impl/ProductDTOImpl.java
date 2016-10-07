@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.matcher.impl.IdentifiableMatcher;
 import org.yes.cart.domain.entity.AttrValueProduct;
 import org.yes.cart.domain.entity.ProductCategory;
+import org.yes.cart.domain.entity.ProductSku;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -143,6 +144,17 @@ public class ProductDTOImpl implements ProductDTO {
             readOnly = true
     )
     private Collection<AttrValueProductDTO> attributes;
+
+    @DtoCollection(
+            value = "sku",
+            dtoBeanKey = "org.yes.cart.domain.dto.ProductSkuDTO",
+            entityGenericType = ProductSku.class,
+            entityCollectionClass = HashSet.class,
+            dtoCollectionClass = ArrayList.class,
+            dtoToEntityMatcher = IdentifiableMatcher.class,
+            readOnly = true
+    )
+    private List<ProductSkuDTO> sku;
 
     /**
      * {@inheritDoc}
@@ -524,6 +536,20 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setDisplayMetadescriptions(final Map<String, String> displayMetadescriptions) {
         this.displayMetadescriptions = displayMetadescriptions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductSkuDTO> getSku() {
+        return sku;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSku(final List<ProductSkuDTO> sku) {
+        this.sku = sku;
     }
 
     @Override

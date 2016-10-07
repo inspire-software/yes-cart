@@ -28,6 +28,7 @@ import org.yes.cart.domain.dto.AttrValueDTO;
 import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl;
 import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
@@ -149,6 +150,19 @@ public class DtoContentServiceImpl
     /**
      * {@inheritDoc}
      */
+    protected void assemblyPostProcess(final CategoryDTO dto, final Category entity) {
+        if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
+            final Category parent = ((ContentService)getService()).getById(entity.getParentId());
+            if (parent != null) {
+                dto.setParentName(parent.getName());
+            }
+        }
+        super.assemblyPostProcess(dto, entity);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected void createPostProcess(final CategoryDTO dto, final Category entity) {
         bindDictionaryData(dto, entity);
         ensureBlankUriIsNull(entity);
@@ -192,6 +206,19 @@ public class DtoContentServiceImpl
         return getAllWithAvailabilityFilter(shopId, false);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CategoryDTO> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        ContentService contentService = (ContentService) service;
+
+        final List<CategoryDTO> contentDTO = new ArrayList<CategoryDTO>(pageSize);
+        fillDTOs(contentService.findBy(shopId, code, name, uri, page, pageSize), contentDTO);
+
+        return contentDTO;
+    }
 
     /**
      * {@inheritDoc}
@@ -451,5 +478,15 @@ public class DtoContentServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueCategoryDTO dto = new AttrValueCategoryDTOImpl();
+        dto.setCategoryId(entityPk);
+        return dto;
     }
 }

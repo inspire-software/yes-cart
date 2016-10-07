@@ -1,0 +1,31 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'DESCRIPTION' | translate }}</th>
+        <th>{{ 'TAX_RATE' | translate }}</th>
+        <th>{{ 'TAX_TYPE' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredTaxes; let i = index" class="{{row == selectedTax ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}</a>&nbsp;</td>
+          <td title="{{ 'TAX_RATE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.taxRate | ycprice }}%</a></td>
+          <td title="{{ 'TAX_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ (row.exclusiveOfPrice ? 'TAX_TYPE_EXCLUSIVE' : 'TAX_TYPE_INCLUSIVE') | translate }}</a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

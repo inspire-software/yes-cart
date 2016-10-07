@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- ########################################## bulk import ########################## -->
+
+    <import resource="core-federation-impex.xml"/>
+    <import resource="classpath:core-import.xml"/>
+
+    <bean id="bulkImportExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <description>
+            Thread pool (1, max int) for bulk imports since they may be slow.
+        </description>
+    </bean>
+
+    <bean id="importDataDescriptorResolver" class="org.yes.cart.bulkimport.service.impl.ImportDataDescriptorResolverImpl">
+        <constructor-arg index="0" ref="dataGroupService"/>
+        <constructor-arg index="1" ref="dataDescriptorService"/>
+    </bean>
+
+    <bean id="webInfXmlImportDataDescriptorTuplizer" class="org.yes.cart.bulkimport.service.impl.WebInfXmlImportDataDescriptorTuplizerImpl">
+        <constructor-arg index="0" value="import-descriptor"/>
+        <property name="dataDescriptorResolver" ref="importDataDescriptorResolver"/>
+        <property name="importDescriptorXStreamProvider" ref="importDescriptorXStreamProvider"/>
+    </bean>
+
+    <bean id="bulkImportService" class="org.yes.cart.bulkimport.service.impl.ImportDirectorImplService">
+        <description>
+            Import descriptor groups define set of descriptor that should be used in case we have a
+            zip import to define exactly what sort of entities we need to update.
+
+            It is recommended to craft these sets according to business model of the company
+            to maximise performance.
+        </description>
+        <constructor-arg index="0" value="${fs.config.bulkimport.absolute.archive.root}"/>
+        <constructor-arg index="1" value="${fs.config.bulkimport.absolute.import.root}"/>
+        <constructor-arg index="2" ref="importDataDescriptorResolver"/>
+        <constructor-arg index="3" ref="bulkImportExecutor"/>
+        <constructor-arg index="4" ref="nodeService"/>
+        <constructor-arg index="5" ref="webAppManagerAsyncContextFactory"/>
+        <constructor-arg index="6" ref="systemService"/>
+        <constructor-arg index="7">
+            <bean class="org.yes.cart.utils.impl.ZipUtils">
+                <constructor-arg index="0" value="Cp866"/>       <!--CPOINT-->
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="8" ref="uiFederationFacade"/>
+
+        <lookup-method name="getNewBulkImportService" bean="csvBulkImportService"/>
+        <lookup-method name="getNewBulkImportImagesService" bean="imagesBulkImportService"/>
+
+    </bean>
+
+</beans>
+        

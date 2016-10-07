@@ -21,10 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.dto.Payment;
-import org.yes.cart.service.order.OrderEvent;
-import org.yes.cart.service.order.OrderEventHandler;
-import org.yes.cart.service.order.OrderException;
-import org.yes.cart.service.order.OrderStateManager;
+import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
@@ -73,6 +70,10 @@ public class PaymentProcessedOrderEventHandlerImpl extends AbstractOrderEventHan
 
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (!paymentProcessor.isPaymentGatewayEnabled()) {
+                throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
+            }
+
             boolean handled = false;
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());

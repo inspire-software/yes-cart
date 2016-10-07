@@ -33,6 +33,10 @@ public class Pair<FIRST, SECOND> implements Serializable {
     private final FIRST first;
     private final SECOND second;
 
+    public static Pair of(Object first, Object second) {
+        return new Pair(first, second);
+    }
+
     public Pair(final FIRST first, final SECOND second) {
         this.first = first;
         this.second = second;

@@ -1,0 +1,14 @@
+<modal #contentTreeModalDialog
+       title="{{ 'PANEL_CMS_CONTENT' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="validForSelect"
+       (closed)="onSelectConfirmationResult($event)">
+  <div style="max-height: 400px;overflow-y: auto">
+    <yc-tree-view [nodes]="nodes"
+                  [selectedNode]="selectedNode"
+                  (onSelectedChanged)="onSelectNode($event)"
+                  (onRequestNodes)="onRequest($event)">
+    </yc-tree-view>
+  </div>
+</modal>

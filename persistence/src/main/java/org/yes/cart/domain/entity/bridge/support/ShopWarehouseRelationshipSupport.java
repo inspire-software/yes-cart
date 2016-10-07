@@ -39,17 +39,19 @@ public interface ShopWarehouseRelationshipSupport {
     /**
      * Get all warehouses that belong to given shop.
      *
-     * @param shop given shop
+     * @param shopId given shop
+     * @param includeDisabled true to include disabled links
      * @return list of warehouses
      */
-    Set<Long> getShopWarehouseIds(Shop shop);
+    Set<Long> getShopWarehouseIds(long shopId, boolean includeDisabled);
 
     /**
      * Get all warehouses that belong to given shop.
      *
-     * @param shop given shop
+     * @param shopId given shop
+     * @param includeDisabled true to include disabled links
      * @return list of warehouses PKs
      */
-    Set<Warehouse> getShopWarehouses(Shop shop);
+    List<Warehouse> getShopWarehouses(long shopId, boolean includeDisabled);
 
 }

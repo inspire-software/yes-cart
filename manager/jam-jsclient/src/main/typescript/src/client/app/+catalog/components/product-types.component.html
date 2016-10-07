@@ -1,0 +1,33 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</th>
+        <th>{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}</th>
+        <th>{{ 'PRODUCT_TYPE_FLAGS' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredProductTypes; let i = index" class="{{row == selectedProductType ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.guid}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uitemplate}}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.uisearchtemplate}}</a>&nbsp;</td>
+          <td title="{{ 'PRODUCT_TYPE_FLAGS' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getFlags(row)"></span></a>&nbsp;</td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

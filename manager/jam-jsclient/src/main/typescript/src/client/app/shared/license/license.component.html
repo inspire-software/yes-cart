@@ -1,0 +1,11 @@
+<div class="row">
+
+  <div class="col-xs-12">
+    <h3>{{ 'LICENSE_TITLE' | translate }}</h3>
+  </div>
+
+  <div class="col-xs-12" *ngIf="license">
+    <pre>{{ license.text }}</pre>
+  </div>
+
+</div>

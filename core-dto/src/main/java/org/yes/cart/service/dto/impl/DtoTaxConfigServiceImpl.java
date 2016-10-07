@@ -17,11 +17,16 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.util.StringUtils;
 import org.yes.cart.domain.dto.TaxConfigDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.TaxConfigDTOImpl;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.entity.TaxConfig;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -29,6 +34,7 @@ import org.yes.cart.service.domain.TaxConfigService;
 import org.yes.cart.service.dto.DtoTaxConfigService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,6 +71,75 @@ public class DtoTaxConfigServiceImpl
         final List<TaxConfigDTO> dtos = new ArrayList<TaxConfigDTO>();
         fillDTOs(configs, dtos);
         return dtos;
+    }
+
+    private final static char[] LOCATION = new char[] { '@' };
+    private final static char[] SKU = new char[] { '#' };
+    static {
+        Arrays.sort(LOCATION);
+        Arrays.sort(SKU);
+    }
+
+
+    /** {@inheritDoc} */
+    public List<TaxConfigDTO> findBy(final long taxId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<TaxConfigDTO> dtos = new ArrayList<>();
+
+
+        if (taxId > 0) {
+            // only allow lists for tax selection
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("tax.taxId", taxId));
+
+            if (StringUtils.hasLength(filter)) {
+
+                final Pair<String, String> locationSearch = ComplexSearchUtils.checkSpecialSearch(filter, LOCATION);
+                final Pair<String, String> skuSearch = locationSearch != null ? null : ComplexSearchUtils.checkSpecialSearch(filter, SKU);
+
+                if (locationSearch != null) {
+
+                    final String location = locationSearch.getSecond();
+
+                    criteria.add(Restrictions.or(
+                            Restrictions.eq("countryCode", location),
+                            Restrictions.ilike("stateCode", location, MatchMode.ANYWHERE)
+                    ));
+
+                } else if (skuSearch != null) {
+
+                    final String sku = skuSearch.getSecond();
+
+                    if ("!".equals(sku)) {
+                        criteria.add(Restrictions.or(
+                                Restrictions.isNull("productCode"),
+                                Restrictions.eq("productCode", "")
+                        ));
+                    } else {
+                        criteria.add(Restrictions.ilike("productCode", sku, MatchMode.ANYWHERE));
+                    }
+
+                } else {
+
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("countryCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("stateCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("productCode", filter, MatchMode.ANYWHERE)
+                    ));
+
+                }
+
+            }
+
+            final List<TaxConfig> entities = getService().getGenericDao().findByCriteria(
+                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+
+            fillDTOs(entities, dtos);
+        }
+
+        return dtos;
+
     }
 
     protected void createPostProcess(final TaxConfigDTO dto, final TaxConfig entity) {

@@ -35,6 +35,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     private static final SortedSet<String> NO_SKU = new TreeSet<String>();
 
     private final boolean available;
+    private final int availability;
     private boolean inStock;
     private final boolean perpetual;
     private final Map<String, BigDecimal> availableToSellQuantity;
@@ -47,6 +48,7 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
                                         final boolean availableNow,
                                         final Map<String, BigDecimal> inventoryQty) {
         this.defaultSku = defaultSku;
+        this.availability = availability;
         perpetual = availability == Product.AVAILABILITY_ALWAYS;
         boolean notForSale = availability == Product.AVAILABILITY_SHOWROOM;
         if (perpetual) {
@@ -87,6 +89,11 @@ public class ProductAvailabilityModelImpl implements ProductAvailabilityModel {
     /** {@inheritDoc} */
     public boolean isPerpetual() {
         return perpetual;
+    }
+
+    /** {@inheritDoc} */
+    public int getAvailability() {
+        return availability;
     }
 
     /** {@inheritDoc} */

@@ -1,0 +1,116 @@
+<template [ngIf]="sla">
+
+  <form role="form" [formGroup]="slaForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CARRIERSLA_CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="sla.code" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="slaForm.controls['code'].valid || slaForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!slaForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!slaForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_SLATYPE' | translate }}</label>
+                  <select class="form-control" formControlName="slaType" name="slaType" type="text"  [(ngModel)]="sla.slaType" (ngModelChange)="onDataChange($event)">
+                    <option value="F">{{ 'CARRIERSLA_SLATYPE_F' | translate }}</option>
+                    <option value="R">{{ 'CARRIERSLA_SLATYPE_R' | translate }}</option>
+                    <option value="W">{{ 'CARRIERSLA_SLATYPE_W' | translate }}</option>
+                    <option value="E">{{ 'CARRIERSLA_SLATYPE_E' | translate }}</option>
+                  </select>
+                  <div [hidden]="slaForm.controls['slaType'].valid || slaForm.controls['slaType'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group" [hidden]="sla.slaType != 'E'">
+                  <label>{{ 'CARRIERSLA_SCRIPT' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CARRIERSLA_SCRIPT' | translate }}" formControlName="script" name="script" type="text"    [(ngModel)]="sla.script" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="slaForm.controls['script'].valid || slaForm.controls['script'].pristine" class="alert alert-danger">
+                    {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_MAXDAYS' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CARRIERSLA_MAXDAYS' | translate }}" formControlName="maxDays" name="maxDays" type="text" [(ngModel)]="sla.maxDays" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="slaForm.controls['maxDays'].valid || slaForm.controls['maxDays'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div>
+                  <input formControlName="billingAddressNotRequired" name="billingAddressNotRequired" type="checkbox" [(ngModel)]="sla.billingAddressNotRequired" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'CARRIERSLA_NO_BILL' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="deliveryAddressNotRequired" name="deliveryAddressNotRequired" type="checkbox" [(ngModel)]="sla.deliveryAddressNotRequired" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'CARRIERSLA_NO_SHIP' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="sla"
+                             value="name"
+                             i18n="displayNames"
+                             [formGroup]="slaForm"
+                             defaultRequired="true"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'DESCRIPTION' | translate }}"
+                             [source]="sla"
+                             value="description"
+                             i18n="displayDescriptions"
+                             [formGroup]="slaForm"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_PG' | translate }}"  (select)="tabSelected('PG')">
+
+        <div class="row">
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'ASSIGNED' | translate }}</h3>
+            <span *ngFor="let supported of supportedPgs">
+              <a class="btn js-click" (click)=onSupportedPgClick(supported)><span [ngClass]="supported.active ? '' : 'text-strikethrough text-muted'">{{supported.name}}</span> <i class="fa fa-remove"></i></a>
+            </span>
+          </div>
+          <div class="col-md-6 col-lg-5">
+            <h3>{{ 'AVAILABLE' | translate }}</h3>
+            <span *ngFor="let available of availablePgs">
+              <a class="btn js-click" (click)=onAvailablePgClick(available)>{{available.name}} <i class="fa fa-plus"></i></a>
+            </span>
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>

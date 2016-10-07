@@ -1,0 +1,33 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}</th>
+        <th>{{ 'PRODUCT_BAR_CODE' | translate }}</th>
+        <th>{{ 'AV_RANK' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredSkus; let i = index" class="{{row == selectedSku ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.manufacturerCode}}</a>&nbsp;</td>
+          <td title="{{ 'NAME' | translate }} / {{ 'SEO_URI' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a> <span [innerHTML]="getUri(row)"></span></td>
+          <td title="{{ 'PRODUCT_BAR_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.barCode}}</a>&nbsp;</td>
+          <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a>&nbsp;</td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

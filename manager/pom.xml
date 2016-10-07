@@ -28,11 +28,13 @@
     <groupId>org.yes</groupId>
     <artifactId>manager</artifactId>
     <packaging>pom</packaging>
-    <name>Yes cart YUM modules</name>
+    <name>Yes cart Admin modules</name>
 
-    <modules>
-        <module>client</module>
-        <module>server</module>
-    </modules>
+  <modules>
+    <module>jam-vo</module>
+    <module>jam-services</module>
+    <module>jam-jsclient</module>
+    <module>jam</module>
+  </modules>
 
 </project>

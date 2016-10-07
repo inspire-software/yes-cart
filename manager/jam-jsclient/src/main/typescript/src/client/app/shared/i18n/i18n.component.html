@@ -1,0 +1,56 @@
+<fieldset [formGroup]="i18nForm">
+
+  <div class="row">
+    <div class="col-xs-12"><label>{{title}}</label></div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">{{ 'DEFAULT_VALUE' | translate }}</div>
+    <div class="col-xs-8 col-md-6">
+      <input class="form-control" formControlName="dataValue" name="dataValue" type="text" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()" [hidden]="!expandDefault">
+      <textarea class="form-control" formControlName="dataValueXL" name="dataValue" rows="6" [(ngModel)]="dataValue" (ngModelChange)="onDefaultValueChange()" [hidden]="expandDefault"></textarea>
+      <div [hidden]="i18nForm.controls['dataValue'].valid || i18nForm.controls['dataValueXL'].valid || (i18nForm.controls['dataValue'].pristine && i18nForm.controls['dataValueXL'].pristine)" class="alert alert-danger">
+        {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
+      </div>
+    </div>
+    <div class="col-xs-4 col-md-3">
+      <button class="btn btn-circle btn-sm" (click)="onExpandDefault()">
+        <i class="fa {{ expandDefault ? 'fa-expand':'fa-compress' }}"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="row" *ngFor="let row of dataI18n">
+    <div class="col-xs-3 col-md-3">
+      {{row.first}}
+    </div>
+    <div class="col-xs-5 col-md-6">
+      {{row.second}}
+    </div>
+    <div class="col-xs-4 col-md-3">
+      <button class="btn btn-circle btn-sm" (click)="onRowSelect(row)">
+        <i class="fa fa-edit"></i>
+      </button>
+      <button class="btn btn-danger btn-circle btn-sm" (click)="onRowDelete(row)">
+        <i class="fa fa-remove"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="form-group col-xs-3 col-md-3">
+      <input class="form-control" formControlName="addLang" placeholder="{{ 'LANGUAGE' | translate }}" name="selectedRow.first" type="text" [(ngModel)]="selectedRow.first">
+    </div>
+    <div class="form-group col-xs-5 col-md-6">
+      <input class="form-control" formControlName="addVal" placeholder="{{ 'VALUE' | translate }}" name="selectedRow.second" type="text" [(ngModel)]="selectedRow.second">
+    </div>
+    <div class="form-group col-xs-4 col-md-3">
+      <button class="btn btn-circle btn-sm" (click)="onRowAdd()" [disabled]="!i18nForm.controls['addLang'].valid || !i18nForm.controls['addVal'].valid">
+        <i class="fa fa-plus"></i>
+      </button>
+    </div>
+
+  </div>
+
+</fieldset>

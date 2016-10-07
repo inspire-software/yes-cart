@@ -22,6 +22,8 @@ import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
+import org.yes.cart.service.order.PGDisabledException;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
 import org.yes.cart.util.ShopCodeContext;
@@ -47,7 +49,7 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
     /**
      * {@inheritDoc}
      */
-    public boolean handle(final OrderEvent orderEvent) {
+    public boolean handle(final OrderEvent orderEvent) throws OrderException {
         synchronized (OrderEventHandler.syncMonitor) {
 
             final Logger log = ShopCodeContext.getLog(this);
@@ -56,6 +58,9 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             final CustomerOrderDelivery thisDelivery = orderEvent.getCustomerOrderDelivery();
 
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (!paymentProcessor.isPaymentGatewayEnabled()) {
+                throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
+            }
 
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
 

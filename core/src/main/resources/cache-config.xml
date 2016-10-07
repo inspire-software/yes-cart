@@ -818,6 +818,33 @@
         <entry key="Delete" value-ref="CustomerAll"/>
     </util:map>
 
+    <!-- ###################### Manager  ################################################################################################################## -->
+
+    <util:set id="ManagerAll">
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopFederationStrategy-admin"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopFederationStrategy-shop"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopFederationStrategy-shopId"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopFederationStrategy-shopCode"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+    </util:set>
+
+    <util:map id="ManagerCUD">
+        <entry key="Create" value-ref="ManagerAll"/>
+        <entry key="Update" value-ref="ManagerAll"/>
+        <entry key="Delete" value-ref="ManagerAll"/>
+    </util:map>
+
 
     <!-- ###################### Config  ################################################################################################################## -->
 
@@ -836,6 +863,9 @@
         <entry key="CarrierEntity"          value-ref="CarrierCUD"/>
         <entry key="CarrierSlaEntity"       value-ref="CarrierSlaCUD"/>
         <entry key="CustomerEntity"         value-ref="CustomerCUD"/>
+        <entry key="ManagerEntity"          value-ref="ManagerCUD"/>
+        <entry key="ManagerRoleEntity"      value-ref="ManagerCUD"/>
+        <entry key="ManagerShopEntity"      value-ref="ManagerCUD"/>
     </util:map>
 
 

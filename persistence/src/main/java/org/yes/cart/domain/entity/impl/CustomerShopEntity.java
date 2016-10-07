@@ -34,6 +34,7 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
 
     private Customer customer;
     private Shop shop;
+    private boolean disabled;
     private Date createdTimestamp;
     private Date updatedTimestamp;
     private String createdBy;
@@ -58,6 +59,14 @@ public class CustomerShopEntity implements org.yes.cart.domain.entity.CustomerSh
 
     public void setShop(Shop shop) {
         this.shop = shop;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(final boolean disabled) {
+        this.disabled = disabled;
     }
 
     public Date getCreatedTimestamp() {

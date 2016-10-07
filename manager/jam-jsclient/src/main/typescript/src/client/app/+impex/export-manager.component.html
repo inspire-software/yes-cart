@@ -1,0 +1,116 @@
+<div class="row">
+  <div>
+    <h1 class="page-header">{{ 'PANEL_SYSTEM_EXPORT' | translate }}</h1>
+  </div>
+
+  <div class="text-right data-control">
+
+    <button type="button" (click)="onRunHandler()" [disabled]="selectedTab < 0 || selectedTabRunning || selectedTabCompleted" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+      <i class="fa fa-play"></i>
+    </button>
+
+    <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+      <i class="fa fa-plus"></i>
+    </button>
+
+    <button type="button" (click)="onFileDownload()" class="btn btn-circle btn-xl">
+      <i class="fa fa-download"></i>
+    </button>
+
+    <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+      <i class="fa fa-refresh"></i>
+    </button>
+
+    <button type="button" (click)="onTabDeleteSelected()" [disabled]="selectedTab < 0 || selectedTabRunning" class="btn btn-danger btn-circle btn-xl" >
+      <i class="fa fa-remove"></i>
+    </button>
+
+
+  </div>
+
+  <div>
+    <div *ngIf="tabs.length == 0">
+      <p class="bg-info text-padding">{{ 'IMPEX_NEW_TIP' | translate }} <span><button type="button" (click)="onNewTabHandler()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+    </div>
+  </div>
+
+    <div>
+    <tabset>
+      <tab *ngFor="let tab of tabs; let i = index" heading="{{ ((i+1) + ' ' + tab.group.name) }}" (select)="tabSelected(i)">
+        <div>
+          <div *ngIf="tab.running">
+            <img src="">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div  class="panel-body">
+              <div class="form-group">
+                <label>&nbsp;</label>
+                <input class="form-control" name="fileName" type="text" [(ngModel)]="tab.file">
+              </div>
+              <div class="form-group">
+                <input class="form-control" name="token" type="text" [ngModel]="tab.status.token" [disabled]="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div *ngIf="tab.status.completion == null">
+            <p class="bg-info text-padding">{{ 'IMPEX_UPDATES_TIP' | translate }}</p>
+          </div>
+          <div *ngIf="tab.status.token == null">
+            <p class="bg-info text-padding">{{ 'IMPEX_START_TIP' | translate }} <span><button type="button" (click)="onRunHandler()" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></span></p>
+          </div>
+          <div *ngIf="tab.status.token != null">
+            <p class="bg-success text-padding">{{ 'IMPEX_STATUS_' + tab.status.state | translate }}</p>
+          </div>
+          <div *ngIf="tab.status.completion != null && tab.status.completion == 'OK'">
+            <p class="bg-success text-padding">{{ 'IMPEX_COMPLETED_OK' | translate }}</p>
+          </div>
+          <div *ngIf="tab.status.completion != null && tab.status.completion == 'OK'">
+            <p class="bg-success text-padding">{{ 'IMPEX_DOWNLOAD_TIP' | translate }} <span><button type="button" (click)="onFileDownload()" class="btn btn-circle"><i class="fa fa-download"></i></button></span></p>
+          </div>
+          <div *ngIf="tab.status.completion != null && tab.status.completion != 'OK'">
+            <p class="bg-danger text-padding">{{ 'IMPEX_COMPLETED_ERROR' | translate }}</p>
+          </div>
+          <div class="{{ tab.running ? 'running-job-log' : '' }}">
+            <textarea class="js-impex-result" [(ngModel)]="tab.status.report"></textarea>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+  </div>
+
+</div>
+
+
+<modal #selectGroupModalDialog
+       title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="selectedGroup != null"
+       (closed)="onGroupConfirmationResult($event)">
+
+  <div class="item-list-overflow">
+
+    <yc-data-group-select mode="export" (dataSelected)="onGroupSelect($event)"></yc-data-group-select>
+
+  </div>
+
+</modal>
+
+<modal #selectFileModalDialog
+       title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="selectedFile != null"
+       (closed)="onFilesConfirmationResult($event)">
+  <div class="item-list-overflow">
+
+    <yc-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></yc-file-select>
+
+  </div>
+
+</modal>
+

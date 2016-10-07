@@ -76,6 +76,21 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
      */
     List<T> findByCriteria(Criterion... criterion);
 
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param firstResult first result
+     * @param maxResults max results
+     * @param criterion given criteria
+     *
+     * @return list of found entities.
+     */
+    List<T> findByCriteria(int firstResult,
+                           int maxResults,
+                           Criterion... criterion);
+
+
     /**
      * Find single entity by criteria.
      *

@@ -1,0 +1,22 @@
+<ul class="nav nav-second-level item-list-control">
+
+  <li *ngIf="showNewLink">
+    <a class="js-click" (click)="onNewClick()"> <span class="label label-info"><i class="fa fa-plus"></i></span> {{ 'MODAL_BUTTON_CREATE' | translate }}</a>
+  </li>
+
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="shopFilter" [(ngModel)]="shopFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let shop of filteredShops">
+    <a (click)="onSelectClick(shop)" class="{{ (selectedShop != null && shop != null && selectedShop.shopId == shop.shopId) ? 'bg-info js-click' : 'js-click' }}"> <span [ngClass]="shop.disabled ? 'label label-danger':'label label-success'">{{shop.code}}</span> {{shop.name}} </a>
+  </li>
+
+</ul>
+

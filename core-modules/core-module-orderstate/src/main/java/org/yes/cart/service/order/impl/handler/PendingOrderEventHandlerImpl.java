@@ -98,6 +98,10 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            if (!paymentProcessor.isPaymentGatewayEnabled()) {
+                throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
+            }
+
             if (paymentProcessor.getPaymentGateway().getPaymentGatewayFeatures().isOnlineGateway()) {
                 final String result = paymentProcessor.authorize(orderEvent.getCustomerOrder(), orderEvent.getParams());
                 if (Payment.PAYMENT_STATUS_OK.equals(result)) {
@@ -131,7 +135,7 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
         final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(
-                orderDelivery.getCustomerOrder().getShop().getShopId());
+                orderDelivery.getCustomerOrder().getShop().getShopId(), false);
 
         if (CollectionUtils.isEmpty(warehouses)) {
 

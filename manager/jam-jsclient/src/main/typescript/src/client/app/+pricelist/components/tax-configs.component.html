@@ -1,0 +1,29 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'LOCATION_COUNTRY' | translate }}</th>
+        <th>{{ 'LOCATION_STATE_CODE' | translate }}</th>
+        <th>{{ 'SKU' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredTaxconfigs; let i = index" class="{{row == selectedTaxConfig ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'LOCATION_COUNTRY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.countryCode ? row.countryCode : '-'}}</a>&nbsp;</td>
+          <td title="{{ 'LOCATION_STATE_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.stateCode ? row.stateCode : '-' }}</a>&nbsp;</td>
+          <td title="{{ 'SKU' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.productCode ? row.productCode : '-' }}</a>&nbsp;</td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

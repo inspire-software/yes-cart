@@ -48,17 +48,20 @@ public class ShopWarehouseRelationshipSupportImpl implements ShopWarehouseRelati
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-shopWarehouses"/*, key ="shop.getShopId()"*/)
-    public Set<Warehouse> getShopWarehouses(final Shop shop) {
-        return new HashSet<Warehouse>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shop.getShopId()));
+    @Cacheable(value = "shopService-shopWarehouses")
+    public List<Warehouse> getShopWarehouses(final long shopId, final boolean includeDisabled) {
+        if (includeDisabled) {
+            return new ArrayList<Warehouse>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
+        }
+        return new ArrayList<Warehouse>(warehouseDao.findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopWarehousesIds"/*, key ="shop.getShopId()"*/)
-    public Set<Long> getShopWarehouseIds(final Shop shop) {
-        return transform(getShopWarehouses(shop));
+    @Cacheable(value = "shopService-shopWarehousesIds")
+    public Set<Long> getShopWarehouseIds(final long shopId, final boolean includeDisabled) {
+        return transform(getShopWarehouses(shopId, includeDisabled));
     }
 
     public Set<Long> transform(final Collection<Warehouse> warehouses) {

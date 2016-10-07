@@ -79,6 +79,18 @@ public interface CategoryService extends GenericService<Category> {
      */
     boolean isCategoryHasChildren(long categoryId);
 
+    /**
+     * Get categories by criteria.
+     *
+     * @param code code (GUID)
+     * @param name base name
+     * @param uri URI
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return one page of results
+     */
+    List<Category> findBy(String code, String name, String uri, int page, int pageSize);
 
     /**
      * Get the child categories without recursion, only one level down.

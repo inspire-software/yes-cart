@@ -1,0 +1,35 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'AV_TYPE' | translate }}</th>
+        <th>{{ 'AV_REGEX' | translate }}</th>
+        <th>{{ 'AV_RANK' | translate }}</th>
+        <th>{{ 'AV_SEARCH' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredAttributes; let i = index" class="{{row == selectedAttribute ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.etypeName}}</a></td>
+          <td title="{{ 'AV_REGEX' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.mandatory ? 'fa-check-circle' : 'fa-times-circle' }}"></i> {{row.regexp}}&nbsp;</a></td>
+          <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
+          <td title="{{ 'AV_SEARCH' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><span [innerHTML]="getSearchFlags(row)"></span></a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

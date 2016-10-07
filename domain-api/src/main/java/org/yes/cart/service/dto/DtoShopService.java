@@ -19,6 +19,7 @@ package org.yes.cart.service.dto;
 import org.yes.cart.domain.dto.ShopDTO;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -40,7 +41,7 @@ public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrV
      *
      * @return all supported currencies.
      */
-    Collection<String> getAllSupportedCurrenciesByShops();
+    List<String> getAllSupportedCurrenciesByShops();
 
     /**
      * Set supported currencies by given shop.

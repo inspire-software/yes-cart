@@ -1,0 +1,16 @@
+<ul class="nav nav-second-level item-list-control">
+  <li>
+    <form>
+      <input class="filter-input" type="text" name="currencyFilter" [(ngModel)]="currencyFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+    </form>
+  </li>
+</ul>
+
+<ul class="nav nav-second-level item-list">
+
+  <li *ngFor="let currency of filteredCurrencies">
+    <a (click)="onSelectClick(currency)" class="{{ (selectedCurrency != null && selectedCurrency == currency) ? 'bg-info js-click' : (isShopCurrency(currency) ? 'bg-success js-click' : 'js-click') }}">{{currency}}</a>
+  </li>
+
+</ul>
+

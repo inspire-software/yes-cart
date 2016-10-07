@@ -52,9 +52,29 @@ public interface DtoPriceListsService {
      * Price lists by filter.
      *
      * @param filter price list filter
-     * @return inventory
+     * @return price lists
      */
     List<PriceListDTO> getPriceList(PriceListFilter filter) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Price lists by filter
+     *
+     * @param shopId shop
+     * @param currency currency
+     * @param filter filter
+     * @param page start page
+     * @param pageSize page size
+     * @return price lists
+     */
+    List<PriceListDTO> findBy(long shopId, String currency, String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get by id
+     *
+     * @param id id
+     * @return price list entry
+     */
+    PriceListDTO getById(long id) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
      * Create or update price object.

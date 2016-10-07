@@ -1,0 +1,393 @@
+<template [ngIf]="product">
+
+  <form role="form" [formGroup]="productForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'GUID' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'GUID' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="product.guid" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['guid'].valid || productForm.controls['guid'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productForm.controls['guid'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!productForm.controls['guid'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="product.code" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['code'].valid || productForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!productForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_MANUFACTURER_CODE' | translate }}" formControlName="manufacturerCode" name="manufacturerCode" type="text" [(ngModel)]="product.manufacturerCode" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['manufacturerCode'].valid || productForm.controls['manufacturerCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_BRAND' | translate }}</label>
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'PRODUCT_BRAND' | translate }}" formControlName="brandName" name="brandName" type="text" [(ngModel)]="product.brand.name" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onEditBrand()" class="btn">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="productForm.controls['brandName'].valid || productForm.controls['brandName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TYPE' | translate }}</label>
+                  <div class="input-group">
+                    <input class="form-control" placeholder="{{ 'PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="productTypeName" type="text" [(ngModel)]="product.productType.name" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <span class="input-group-btn">
+                      <button type="button" (click)="onEditProductType()" class="btn">
+                        <i class="fa fa-edit"></i>
+                      </button>
+                    </span>
+                  </div>
+                  <div [hidden]="productForm.controls['productTypeName'].valid || productForm.controls['productTypeName'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="product"
+                             value="name"
+                             defaultRequired="true"
+                             i18n="displayNames"
+                             [formGroup]="productForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="product.description" (ngModelChange)="onMainDataChange($event)"></textarea>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TAB_AVAILABILITY' | translate }}"  (select)="tabSelected('Availability')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_AVAILABILITY' | translate }}</label>
+                  <select class="form-control" formControlName="availability" name="availability" [(ngModel)]="product.availability" (ngModelChange)="onMainDataChange($event)">
+                    <option value="1">{{ 'PRODUCT_AVAILABILITY_1' | translate }}</option>
+                    <option value="2">{{ 'PRODUCT_AVAILABILITY_2' | translate }}</option>
+                    <option value="4">{{ 'PRODUCT_AVAILABILITY_4' | translate }}</option>
+                    <option value="8">{{ 'PRODUCT_AVAILABILITY_8' | translate }}</option>
+                    <option value="16">{{ 'PRODUCT_AVAILABILITY_16' | translate }}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_FROM' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['availablefrom'].valid || productForm.controls['availablefrom'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TO' | translate }}</label>
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['availableto'].valid || productForm.controls['availableto'].pristine" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_MIN' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MIN' | translate }}" formControlName="minOrderQuantity" name="minOrderQuantity" type="text" [(ngModel)]="product.minOrderQuantity" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['minOrderQuantity'].valid || productForm.controls['minOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_MAX' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_MAX' | translate }}" formControlName="maxOrderQuantity" name="maxOrderQuantity" type="text" [(ngModel)]="product.maxOrderQuantity" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['maxOrderQuantity'].valid || productForm.controls['maxOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_ORDER_STEP' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_ORDER_STEP' | translate }}" formControlName="stepOrderQuantity" name="stepOrderQuantity" type="text" [(ngModel)]="product.stepOrderQuantity" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['stepOrderQuantity'].valid || productForm.controls['stepOrderQuantity'].pristine" class="alert alert-danger">
+                    {{ 'POS_DECIMAL_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'SKU' | translate }}"  (select)="tabSelected('SKU')">
+
+        <template [ngIf]="product.productId > 0">
+
+          <div class="panel-body">
+
+            <div class="row">
+              <yc-skus [skus]="product.sku" (dataSelected)="onSkuSelected($event)"></yc-skus>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_TEMPLATES' | translate }}"  (select)="tabSelected('Templates')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [ngModel]="product.productType?.uitemplate" [disabled]="true">
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_SEARCH_TEMPLATE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_SEARCH_TEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [ngModel]="product.productType?.uisearchtemplate" [disabled]="true">
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_SEO' | translate }}"  (select)="tabSelected('SEO')">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-lg-9">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'SEO_URI' | translate }}</label>
+                  <div class="input-group">
+                    <div class="input-group-addon">/product/</div>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="product.uri" (ngModelChange)="onMainDataChange($event)"/>
+                  </div>
+                  <div [hidden]="productForm.controls['uri'].valid || productForm.controls['uri'].pristine" class="alert alert-danger">
+                    <div [hidden]="!productForm.controls['uri'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!productForm.controls['uri'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"
+                             [source]="product"
+                             value="title"
+                             i18n="displayTitles"
+                             [formGroup]="productForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_KEYWORDS' | translate }}"
+                             [source]="product"
+                             value="metakeywords"
+                             i18n="displayMetakeywords"
+                             [formGroup]="productForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'SEO_DESCRIPTION' | translate }}"
+                             [source]="product"
+                             value="metadescription"
+                             i18n="displayMetadescriptions"
+                             [formGroup]="productForm"
+                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <input formControlName="featured" name="featured" type="checkbox" [(ngModel)]="product.featured" (ngModelChange)="onMainDataChange($event)">
+                  <label>{{ 'PRODUCT_FEATURED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_TAG' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TAG' | translate }}" formControlName="tag" name="tag" type="text" [(ngModel)]="product.tag" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['tag'].valid || productForm.controls['tag'].pristine" class="alert alert-danger">
+                    {{ 'TAGS_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TAB_EXTERNAL' | translate }}"  (select)="tabSelected('External')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_PIM_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_PIM_CODE' | translate }}" formControlName="pimCode" name="pimCode" type="text" [(ngModel)]="product.pimCode" (ngModelChange)="onMainDataChange($event)">
+                  <div [hidden]="productForm.controls['pimCode'].valid || productForm.controls['pimCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+
+        <template [ngIf]="product.productId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+                </form>
+
+                <button type="button" (click)="onRowAdd()" class="btn btn-circle btn-xl">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <yc-attribute-values #attributeValuesComponent
+                                   [masterObject]="product"
+                                   [avPrototype]="avPrototype"
+                                   [objectAttributes]="attributes"
+                                   [attributeFilter]="attributeFilter"
+                                   (dataSelected)="onSelectRow($event)"
+                                   (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
+      <tab heading="{{ 'PRODUCT_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
+        <yc-product-categories [product]="product" [reload]="reloadCatalogue"
+                               (dataChanged)="onCategoriesDataChanged($event)"></yc-product-categories>
+      </tab>
+
+    </tabset>
+  </form>
+
+</template>
+
+<modal #brandsModalDialog
+       title="{{ 'PRODUCT_BRAND' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="selectedBrand != null"
+       (closed)="onEditBrandModalResult($event)">
+
+  <yc-brand-select (dataSelected)="onBrandSelected($event)"></yc-brand-select>
+
+</modal>
+
+<modal #productTypesModalDialog
+       title="{{ 'PRODUCT_TYPE' | translate }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+       [valid]="selectedProductType != null"
+       (closed)="onEditProductTypeModalResult($event)">
+
+  <yc-product-type-select (dataSelected)="onProductTypeSelected($event)"></yc-product-type-select>
+
+</modal>

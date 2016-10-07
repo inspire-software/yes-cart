@@ -297,12 +297,61 @@ public interface GenericDAO<T, PK extends Serializable> {
     /**
      * Find entities by criteria.
      *
+     * @param firstResult first result
+     * @param maxResults max results
+     * @param criterion given criteria
+     *
+     * @return list of found entities.
+     */
+    List<T> findByCriteria(int firstResult,
+                           int maxResults,
+                           Criterion... criterion);
+
+    /**
+     * Find count by criteria.
+     *
+     * @param criterion given criteria
+     *
+     * @return list of found entities.
+     */
+    int findCountByCriteria(Criterion... criterion);
+
+    /**
+     * Find entities by criteria.
+     *
      * @param criteriaTuner optional criteria tuner.
      * @param criterion     given criteria
      *
      * @return list of found entities.
      */
-    List<T> findByCriteria(CriteriaTuner criteriaTuner, Criterion... criterion);
+    List<T> findByCriteria(CriteriaTuner criteriaTuner,
+                           Criterion... criterion);
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param criteriaTuner optional criteria tuner.
+     * @param firstResult first result
+     * @param maxResults max results
+     * @param criterion     given criteria
+     *
+     * @return list of found entities.
+     */
+    List<T> findByCriteria(CriteriaTuner criteriaTuner,
+                           int firstResult,
+                           int maxResults,
+                           Criterion... criterion);
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param criteriaTuner optional criteria tuner.
+     * @param criterion     given criteria
+     *
+     * @return count of found entities.
+     */
+    int findCountByCriteria(CriteriaTuner criteriaTuner,
+                            Criterion... criterion);
 
     /**
      * Find single entity by criteria.

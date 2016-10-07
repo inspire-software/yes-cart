@@ -1,0 +1,43 @@
+<div>
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+        <th>{{ 'PRICELIST_POLICY' | translate }}</th>
+        <th>{{ 'PRICELIST_QUANTITY' | translate }}</th>
+        <th>{{ 'PRICELIST_REGULAR' | translate }}</th>
+        <th>{{ 'PRICELIST_SALE' | translate }}</th>
+        <th>{{ 'PRICELIST_MIN' | translate }}</th>
+        <th>{{ 'PRICELIST_FROM' | translate }}</th>
+        <th>{{ 'PRICELIST_TO' | translate }}</th>
+        <th>{{ 'PRICELIST_TAG' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredPricelist; let i = index" class="{{row == selectedPricelist ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_POLICY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pricingPolicy}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_QUANTITY' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity}}</a></td>
+          <td title="{{ 'PRICELIST_REGULAR' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.regularPrice | ycprice}}</a></td>
+          <td title="{{ 'PRICELIST_SALE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.salePrice | ycprice}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_MIN' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.minimalPrice | ycprice}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_FROM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_TO' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.saleto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+</div>

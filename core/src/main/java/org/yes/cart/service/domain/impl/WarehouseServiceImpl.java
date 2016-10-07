@@ -24,6 +24,9 @@ import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.WarehouseService;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,9 +57,12 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-shopWarehouses"/*, key ="shop.getShopId()"*/)
-    public List<Warehouse> getByShopId(final long shopId) {
-        return getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId);
+    @Cacheable(value = "shopService-shopWarehouses")
+    public List<Warehouse> getByShopId(final long shopId, boolean includeDisabled) {
+        if (includeDisabled) {
+            return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
+        }
+        return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
     }
 
     /** {@inheritDoc} */
@@ -81,12 +87,30 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
-    public ShopWarehouse assignWarehouse(final long warehouseId, final long shopId) {
-        final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
-        shopWarehouse.setWarehouse(findById(warehouseId));
-        shopWarehouse.setShop(shopDao.findById(shopId));
-        shopWarehouse.setRank(DEFAULT_USAGE_RANK);
-        return shopWarehouseDao.create(shopWarehouse);
+    public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
+
+        final Warehouse warehouse = findById(warehouseId);
+        final Collection<ShopWarehouse> assigned = warehouse.getWarehouseShop();
+        for (final ShopWarehouse shop : assigned) {
+            if (shop.getShop().getShopId() == shopId) {
+                if (shop.isDisabled() && !soft) {
+                    shop.setDisabled(false);
+                    update(warehouse);
+                }
+                return;
+            }
+        }
+
+        final Shop shop = shopDao.findById(shopId);
+        if (shop != null) {
+            final ShopWarehouse shopWarehouse = shopWarehouseDao.getEntityFactory().getByIface(ShopWarehouse.class);
+            shopWarehouse.setWarehouse(warehouse);
+            shopWarehouse.setShop(shop);
+            shopWarehouse.setRank(DEFAULT_USAGE_RANK);
+            shopWarehouse.setDisabled(soft);
+            assigned.add(shopWarehouse);
+        }
+        update(warehouse);
     }
 
     /** {@inheritDoc} */
@@ -96,10 +120,23 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
     }, allEntries = true)
-    public void unassignWarehouse(final long warehouseId, final long shopId) {
-        final ShopWarehouse shopWarehouse = shopWarehouseDao.findSingleByNamedQuery(
-                "ASSIGNED.SHOPWAREHOUSE", warehouseId, shopId);
-        shopWarehouseDao.delete(shopWarehouse);
+    public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
+
+        final Warehouse warehouse = findById(warehouseId);
+        final Iterator<ShopWarehouse> assigned = warehouse.getWarehouseShop().iterator();
+        while (assigned.hasNext()) {
+            final ShopWarehouse shop = assigned.next();
+            if (shop.getShop().getShopId() == shopId) {
+                if (soft) {
+                    shop.setDisabled(true);
+                } else {
+                    assigned.remove();
+                }
+                update(warehouse);
+                break;
+            }
+        }
+
     }
 
 }

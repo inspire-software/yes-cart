@@ -85,6 +85,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
 
     public void deleteParameter(final String parameterLabel) {
         paymentGatewayParameterService.deleteByLabel(getLabel(), parameterLabel);
+        allParameters = null;
     }
 
     /**
@@ -93,6 +94,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
 
     public void addParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.create(paymentGatewayParameter);
+        allParameters = null;
     }
 
     /**
@@ -101,6 +103,7 @@ public abstract class AbstractPostFinancePaymentGatewayImpl implements Configura
 
     public void updateParameter(final PaymentGatewayParameter paymentGatewayParameter) {
         paymentGatewayParameterService.update(paymentGatewayParameter);
+        allParameters = null;
     }
 
 

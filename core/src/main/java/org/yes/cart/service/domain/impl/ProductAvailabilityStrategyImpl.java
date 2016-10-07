@@ -51,7 +51,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     /** {@inheritDoc} */
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final Product product) {
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
         final Map<String, BigDecimal> qty = skuWarehouseService.getProductAvailableToSellQuantity(product.getProductId(), warehouses);
         final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
 
@@ -79,7 +79,7 @@ public class ProductAvailabilityStrategyImpl implements ProductAvailabilityStrat
     public ProductAvailabilityModel getAvailabilityModel(final long shopId, final ProductSku sku) {
 
         final Product product = sku.getProduct();
-        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId);
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
         final Map<String, BigDecimal> qty = skuWarehouseService.getProductSkuAvailableToSellQuantity(sku.getCode(), warehouses);
         final boolean availableNow = isAvailableNow(product.getAvailability(), product.getAvailablefrom(), product.getAvailableto());
 

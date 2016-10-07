@@ -25,6 +25,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl;
 import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
@@ -107,6 +108,23 @@ public class DtoCategoryServiceImpl
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<CategoryDTO> findBy(final String code,
+                                    final String name,
+                                    final String uri,
+                                    final int page,
+                                    final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        CategoryService categoryService = (CategoryService) service;
+
+        final List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>(pageSize);
+        fillDTOs(categoryService.findBy(code, name, uri, page, pageSize), categoriesDTO);
+
+        return categoriesDTO;
+    }
 
     /**
      * {@inheritDoc}
@@ -153,6 +171,12 @@ public class DtoCategoryServiceImpl
             final Category link = ((CategoryService)getService()).getById(entity.getLinkToId());
             if (link != null) {
                 dto.setLinkToName(link.getName());
+            }
+        }
+        if (entity.getParentId() > 0L && entity.getParentId() != entity.getCategoryId()) {
+            final Category parent = ((CategoryService)getService()).getById(entity.getParentId());
+            if (parent != null) {
+                dto.setParentName(parent.getName());
             }
         }
         super.assemblyPostProcess(dto, entity);
@@ -209,8 +233,11 @@ public class DtoCategoryServiceImpl
      * {@inheritDoc}
      */
     public void remove(final long id) {
-        ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.findById(id));
-        super.remove(id);
+        final Category cat = service.findById(id);
+        if (cat != null && !cat.isRoot()) {
+            ((ShopCategoryService) shopCategoryGenericService).deleteAll(service.findById(id));
+            super.remove(id);
+        }
     }
 
     /**
@@ -399,5 +426,15 @@ public class DtoCategoryServiceImpl
     public AttrValueDTO createAndBindAttrVal(final long entityPk, final String attrName, final String attrValue)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
         throw new UnmappedInterfaceException("Not implemented");
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public AttrValueDTO getNewAttribute(final long entityPk) throws UnableToCreateInstanceException, UnmappedInterfaceException {
+        final AttrValueCategoryDTO dto = new AttrValueCategoryDTOImpl();
+        dto.setCategoryId(entityPk);
+        return dto;
     }
 }

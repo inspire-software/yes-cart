@@ -1,0 +1,154 @@
+<template [ngIf]="attribute">
+
+  <form role="form" [formGroup]="attributeForm">
+    <tabset>
+
+      <tab heading="{{ 'TAB_MAIN' | translate }}"  (select)="tabSelected('Main')">
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'CODE' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="attribute.code" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="attributeForm.controls['code'].valid || attributeForm.controls['code'].pristine" class="alert alert-danger">
+                    <div [hidden]="!attributeForm.controls['code'].hasError('checking')">
+                      {{ 'REMOTE_CHECK' | translate }}
+                    </div>
+                    <div [hidden]="!attributeForm.controls['code'].hasError('DUPLICATE')">
+                      {{ 'UNIQUE_REQUIRED' | translate }}
+                    </div>
+                    {{ 'ALPHANUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_TYPE' | translate }}</label>
+                  <select class="form-control" formControlName="etypeId" name="etypeId" type="text"  [(ngModel)]="attribute.etypeId" (ngModelChange)="onDataChange($event)">
+                    <option *ngFor="let et of etypes" value="{{et.etypeId}}">{{ et.businesstype }}</option>
+                  </select>
+                  <div [hidden]="attributeForm.controls['etypeId'].valid || attributeForm.controls['etypeId'].pristine" class="alert alert-danger">
+                    {{ 'SIMPLE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'DESCRIPTION' | translate }}</label>
+                  <textarea class="form-control"  rows="6" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="attribute.description" (ngModelChange)="onDataChange($event)"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'AV_RANK' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="attribute.rank" (ngModelChange)="onDataChange($event)">
+                  <div [hidden]="attributeForm.controls['rank'].valid || attributeForm.controls['rank'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'TAB_I18N' | translate }}"  (select)="tabSelected('I18n')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'NAME' | translate }}"
+                             [source]="attribute"
+                             value="name"
+                             i18n="displayNames"
+                             [formGroup]="attributeForm"
+                             defaultRequired="true"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_VALIDATION' | translate }}"  (select)="tabSelected('Valid')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div>
+                  <input formControlName="mandatory" name="mandatory" type="checkbox" [(ngModel)]="attribute.mandatory" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_MANDATORY' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="allowduplicate" name="allowduplicate" type="checkbox" [(ngModel)]="attribute.allowduplicate" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_DUPLICATE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="allowfailover" name="allowfailover" type="checkbox" [(ngModel)]="attribute.allowfailover" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_FAILOVER' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'ATTRIBUTE_REGEX' | translate }}"
+                             [source]="attribute"
+                             value="regexp"
+                             i18n="validationFailedMessage"
+                             [formGroup]="attributeForm"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_OPTIONS' | translate }}"  (select)="tabSelected('options')">
+
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-lg-9">
+              <yc-i18n-table title="{{ 'ATTRIBUTE_VALUES' | translate }}"
+                             [source]="attribute"
+                             value="val"
+                             i18n="choiceData"
+                             [formGroup]="attributeForm"
+                             (dataChanged)="onDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'ATTRIBUTE_TAB_SEARCH' | translate }}"  (select)="tabSelected('Search')">
+
+        <div class="row">
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div>
+                  <input formControlName="store" name="store" type="checkbox" [(ngModel)]="attribute.store" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_SI_STORE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="search" name="search" type="checkbox" [(ngModel)]="attribute.search" (ngModelChange)="onDataChangeSearch($event)">
+                  <label>{{ 'ATTRIBUTE_SI_SEARCH' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="primary" name="primary" type="checkbox" [(ngModel)]="attribute.primary" (ngModelChange)="onDataChangePrimary($event)">
+                  <label>{{ 'ATTRIBUTE_SI_PRIMARY' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="navigation" name="navigation" type="checkbox" [(ngModel)]="attribute.navigation" (ngModelChange)="onDataChange($event)">
+                  <label>{{ 'ATTRIBUTE_SI_NAV' | translate }}</label>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+
+      </tab>
+
+    </tabset>
+  </form>
+</template>
