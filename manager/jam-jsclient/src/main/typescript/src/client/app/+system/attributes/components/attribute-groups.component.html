@@ -12,9 +12,9 @@
       <tbody>
       <tr *ngFor="let row of filteredGroups; let i = index" class="{{row == selectedGroup ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
         </template>
       </tr>
       </tbody>

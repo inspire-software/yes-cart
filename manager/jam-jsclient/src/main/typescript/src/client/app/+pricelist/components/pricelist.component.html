@@ -19,16 +19,16 @@
       <tbody>
       <tr *ngFor="let row of filteredPricelist; let i = index" class="{{row == selectedPricelist ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_POLICY' | translate }}"><a (click)="onSelectRow(row)">{{row.pricingPolicy}}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_QUANTITY' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.quantity}}</a></td>
-          <td title="{{ 'PRICELIST_REGULAR' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.regularPrice | ycprice}}</a></td>
-          <td title="{{ 'PRICELIST_SALE' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.salePrice | ycprice}}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_MIN' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.minimalPrice | ycprice}}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_FROM' | translate }}"><a (click)="onSelectRow(row)">{{row.salefrom | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_TO' | translate }}"><a (click)="onSelectRow(row)">{{row.saleto | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PRICELIST_TAG' | translate }}"><a (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuCode}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.skuName}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_POLICY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.pricingPolicy}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_QUANTITY' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.quantity}}</a></td>
+          <td title="{{ 'PRICELIST_REGULAR' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.regularPrice | ycprice}}</a></td>
+          <td title="{{ 'PRICELIST_SALE' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.salePrice | ycprice}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_MIN' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.minimalPrice | ycprice}}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_FROM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.salefrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_TO' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.saleto | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PRICELIST_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}</a>&nbsp;</td>
         </template>
       </tr>
       </tbody>

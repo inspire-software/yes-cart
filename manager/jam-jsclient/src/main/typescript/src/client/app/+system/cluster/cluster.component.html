@@ -35,10 +35,10 @@
           <tbody>
           <tr *ngFor="let row of filteredCluster; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
             <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-              <td title="{{ 'CLUSTER_ID' | translate }}"><a (click)="onSelectRow(row)" title="{{row.channel ? row.channel : row.id}}">{{row.id}} <i class="fa fa-info-circle"></i></a></td>
-              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a (click)="onSelectRow(row)">{{row.nodeType}}</a></td>
-              <td title="{{ 'CLUSTER_CONFIG' | translate }}"><a (click)="onSelectRow(row)">{{row.nodeConfig}}</a></td>
-              <td title="{{ 'CLUSTER_FT_DISABLED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.ftIndexDisabled ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
+              <td title="{{ 'CLUSTER_ID' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.channel ? row.channel : row.id}}">{{row.id}} <i class="fa fa-info-circle"></i></a></td>
+              <td title="{{ 'CLUSTER_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeType}}</a></td>
+              <td title="{{ 'CLUSTER_CONFIG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.nodeConfig}}</a></td>
+              <td title="{{ 'CLUSTER_FT_DISABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.ftIndexDisabled ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
             </template>
           </tr>
           </tbody>

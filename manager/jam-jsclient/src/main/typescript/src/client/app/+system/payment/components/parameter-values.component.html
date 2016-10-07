@@ -11,8 +11,8 @@
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger': (isNewAttribute(row) ? 'text-success':'')" [title]="row.label">{{row.name}}</a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" [ngClass]="isRemovedAttribute(row) ? 'text-strikethrough text-danger text-force-break': (isNewAttribute(row) ? 'text-success text-force-break':'text-force-break')"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click" [title]="row.label">{{row.name}}</a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </template>
       </tr>
       </tbody>

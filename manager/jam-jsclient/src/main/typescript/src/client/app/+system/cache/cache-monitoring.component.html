@@ -53,12 +53,12 @@
           <tbody>
           <tr *ngFor="let row of filteredCaches; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
             <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-              <td title="{{ 'CACHE_NODE' | translate }}"><a (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
-              <td title="{{ 'CACHE_NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.cacheName}}</a></td>
-              <td title="{{ 'CACHE_SIZE' | translate }}"><a (click)="onSelectRow(row)">{{row.cacheSize}}</a></td>
-              <td title="{{ 'CACHE_HITS' | translate }}"><a (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>
-              <td title="{{ 'CACHE_SIZE_MEM' | translate }}"><a (click)="onSelectRow(row)">{{getMemSize(row)}}</a></td>
-              <td title="{{ 'CACHE_SIZE_DISK' | translate }}"><a (click)="onSelectRow(row)">{{getDiskSize(row)}}</a></td>
+              <td title="{{ 'CACHE_NODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)" title="{{row.nodeUri ? row.nodeUri : row.nodeId}}">{{row.nodeId}} <i class="fa fa-info-circle"></i></a></td>
+              <td title="{{ 'CACHE_NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheName}}</a></td>
+              <td title="{{ 'CACHE_SIZE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.cacheSize}}</a></td>
+              <td title="{{ 'CACHE_HITS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getHitsAndMissed(row)}}</a></td>
+              <td title="{{ 'CACHE_SIZE_MEM' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getMemSize(row)}}</a></td>
+              <td title="{{ 'CACHE_SIZE_DISK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{getDiskSize(row)}}</a></td>
             </template>
           </tr>
           </tbody>

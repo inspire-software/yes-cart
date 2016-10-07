@@ -165,6 +165,7 @@ export class ReportsComponent implements OnInit {
         window.postMessage(res, '*');
       }
       _sub.unsubscribe();
+      this.validateCurrentTabForm();
 
     });
 

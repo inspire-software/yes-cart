@@ -11,8 +11,8 @@
       <tbody>
       <tr *ngFor="let row of filteredCentres; let i = index" class="{{row == selectedCentre ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'DESCRIPTION' | translate }}"><a (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'DESCRIPTION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.description}}&nbsp;</a></td>
         </template>
       </tr>
       </tbody>

@@ -83,7 +83,7 @@
                     <td></td>
                   </tr>
                   <tr *ngFor="let delivery of customerorder.deliveries" class="{{delivery == selectedDelivery ? 'active' : ''}}">
-                    <th colspan="5">{{ 'CUSTOMERORDER_DELIVERY' | translate }}: <a class="{{ isDeliveryHasNextOption(delivery) ? 'js-click' : 'disabled' }} " (click)="onSelectDeliveryRow(delivery)">{{ delivery.deliveryNum }}</a> {{ delivery.carrierSlaName }} {{delivery.refNo}}</th>
+                    <th colspan="5">{{ 'CUSTOMERORDER_DELIVERY' | translate }}: <a class="{{ isDeliveryHasNextOption(delivery) ? 'js-click' : 'disabled' }} " (click)="onSelectDeliveryRow(delivery)">{{ delivery.deliveryNum }}</a> ( {{ delivery.carrierSlaName }} {{delivery.refNo}} )</th>
                     <td class="text-right">{{ delivery.price | ycprice }}</td>
                     <td title="{{ 'PROMO_APPLIED' | translate }}">
                       <a *ngFor="let deliveryPromo of getPromotions(delivery.appliedPromo)" title="{{deliveryPromo.name}}"><span class="label label-info">{{ deliveryPromo.code }}</span></a>&nbsp;
@@ -92,7 +92,7 @@
                   <tr>
                     <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }}</th>
                     <td class="text-right">{{ customerorder.currency }} {{ (customerorder.orderTotal) | ycprice }}</td>
-                    <td></td>
+                    <td>&nbsp;</td>
                   </tr>
                   <tr>
                     <th colspan="5">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }}: {{ customerorder.pgName }}</th>
@@ -182,6 +182,10 @@
                     <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }} <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
                     <td title="{{ 'PAYMENT_DETAILS' | translate }}">{{ row.transactionReferenceId }} <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
                     <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right">{{ row.orderCurrency }} {{ row.paymentAmount | ycprice }}</td>
+                  </tr>
+                  <tr>
+                    <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_ORDER' | translate }}</th>
+                    <td class="text-right">{{ customerorder.currency }} {{ (customerorder.orderTotal) | ycprice }}</td>
                   </tr>
                   <tr>
                     <th colspan="6">{{ 'CUSTOMERORDER_TOTAL_PAID' | translate }}: {{ customerorder.pgName }}</th>

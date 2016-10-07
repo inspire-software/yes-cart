@@ -19,16 +19,16 @@
       <tbody>
       <tr *ngFor="let row of filteredPromotions; let i = index" class="{{row == selectedPromotion ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'NAME' | translate }}"><a (click)="onSelectRow(row)">{{row.name}}</a></td>
-          <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)">{{row.rank}}</a></td>
-          <td title="{{ 'PROMOTION_TYPE' | translate }}"><a (click)="onSelectRow(row)">{{ 'PROMOTION_TYPE_' + row.promoType | translate }} / {{ 'PROMOTION_ACTION_' + row.promoAction | translate }} / {{ row.promoActionContext }}</a></td>
-          <td title="{{ 'PROMOTION_CAN_COMBINE' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.canBeCombined ? 'fa-check' : 'fa-remove' }}"></i></a></td>
-          <td title="{{ 'PROMOTION_COUPON_TRIGGERED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{ row.couponTriggered ? 'fa-check' : 'fa-remove' }}"></i></a></td>
-          <td title="{{ 'PROMOTION_TAG' | translate }}"><a (click)="onSelectRow(row)">{{row.tag}}&nbsp;</a></td>
-          <td title="{{ 'PROMOTION_ENABLED_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a (click)="onSelectRow(row)">{{row.enabledFrom | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PROMOTION_ENABLED_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a (click)="onSelectRow(row)">{{row.enabledTo | ycdatetime }}</a>&nbsp;</td>
-          <td title="{{ 'PROMOTION_ENABLED' | translate }}"><a (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
+          <td title="{{ 'AV_RANK' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.rank}}</a></td>
+          <td title="{{ 'PROMOTION_TYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ 'PROMOTION_TYPE_' + row.promoType | translate }} / {{ 'PROMOTION_ACTION_' + row.promoAction | translate }} / {{ row.promoActionContext }}</a></td>
+          <td title="{{ 'PROMOTION_CAN_COMBINE' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.canBeCombined ? 'fa-check' : 'fa-remove' }}"></i></a></td>
+          <td title="{{ 'PROMOTION_COUPON_TRIGGERED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.couponTriggered ? 'fa-check' : 'fa-remove' }}"></i></a></td>
+          <td title="{{ 'PROMOTION_TAG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.tag}}&nbsp;</a></td>
+          <td title="{{ 'PROMOTION_ENABLED_FROM' | translate }}" class="{{ isAvailableFromNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledFrom | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PROMOTION_ENABLED_TO' | translate }}" class="{{ isAvailableToNow(row) ? '' : 'bg-danger' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.enabledTo | ycdatetime }}</a>&nbsp;</td>
+          <td title="{{ 'PROMOTION_ENABLED' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{row.enabled ? 'fa-circle' : 'fa-circle-thin'}}"></i></a></td>
         </template>
       </tr>
       </tbody>

@@ -13,10 +13,10 @@
       <tbody>
       <tr *ngFor="let row of filteredCoupons; let i = index" class="{{row == selectedCoupon ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CODE' | translate }}"><a (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_LIMIT' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.usageLimit}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{row.usageLimitPerCustomer}}</a></td>
-          <td title="{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }}" class="{{ isExhausted(row) ? 'bg-danger' : '' }}"><a (click)="onSelectRow(row)">{{row.usageCount }}</a></td>
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'PROMOTION_COUPON_LIMIT' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimit}}</a></td>
+          <td title="{{ 'PROMOTION_COUPON_LIMIT_PER_CUSTOMER' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{row.usageLimitPerCustomer}}</a></td>
+          <td title="{{ 'PROMOTION_COUPON_USAGE_COUNT' | translate }}" class="{{ isExhausted(row) ? 'bg-danger' : '' }}"><a class="js-click" (click)="onSelectRow(row)">{{row.usageCount }}</a></td>
         </template>
       </tr>
       </tbody>

@@ -421,7 +421,7 @@
   "cancel.order.refund": "Refund for '{{order}}' is failed or is in processing state. Are you sure you would like to re-try request for refund?",
   "approve.order": "Do you want to approve the order '{{order}}'?",
   "approve.order.offlinenote": "Note: if this is offline payment mode please take payment now",
-  "return.order": "Do you want to create return the order '{{order}}'?",
+  "return.order": "Do you want to process return for the order '{{order}}'?",
   "return.order.offlinenote": "Note: if this is offline payment mode please refund payments now",
 
   "pack.delivery": "Do you want to mark delivery '{{order}}' as packing (i.e. preparing delivery for shipment)?",

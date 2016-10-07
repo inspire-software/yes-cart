@@ -320,6 +320,21 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     return row.paymentGatewayParameterId == 0 && row.value != null;
   }
 
+
+  getAttributeColor(row:PaymentGatewayParameterVO, removed:string, added:string, prestine:string) {
+
+    if (this.isRemovedAttribute(row)) {
+      return removed;
+    }
+
+    if (this.isNewAttribute(row)) {
+      return added;
+    }
+
+    return prestine;
+  }
+
+
   resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {

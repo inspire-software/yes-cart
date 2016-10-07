@@ -297,11 +297,11 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   getFilteredTaxConfig() {
-    this.taxesFilterRequired = !this.forceShowAll && (this.taxesFilter == null || this.taxesFilter.length < 2);
+    this.taxconfigsFilterRequired = !this.forceShowAll && (this.taxconfigsFilter == null || this.taxconfigsFilter.length < 2);
 
     console.debug('ShopTaxesComponent getFilteredTaxConfig' + (this.forceShowAll ? ' forcefully': ''));
 
-    if (this.selectedTax != null && !this.taxesFilterRequired) {
+    if (this.selectedTax != null && !this.taxconfigsFilterRequired) {
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
       var _sub:any = this._taxService.getFilteredTaxConfig(this.selectedTax, this.taxconfigsFilter, max).subscribe( alltaxes => {
         console.debug('ShopTaxesComponent getFilteredTaxConfig', alltaxes);
@@ -310,7 +310,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
         this.taxconfigEdit = null;
         this.changedSingleTaxconfig = false;
         this.validForSaveTaxconfig = true;
-        this.taxesFilterCapped = this.taxes.length >= max;
+        this.taxconfigsFilterCapped = this.taxconfigs.length >= max;
         this.viewMode = ShopTaxesComponent.CONFIGS;
         _sub.unsubscribe();
       });
@@ -320,7 +320,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
       this.taxconfigEdit = null;
       this.changedSingleTaxconfig = false;
       this.validForSaveTaxconfig = true;
-      this.taxesFilterCapped = false;
+      this.taxconfigsFilterCapped = false;
       this.viewMode = ShopTaxesComponent.CONFIGS;
     }
   }

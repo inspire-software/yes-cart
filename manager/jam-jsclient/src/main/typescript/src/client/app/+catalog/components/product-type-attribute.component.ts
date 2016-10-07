@@ -341,6 +341,21 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     return row.productTypeAttrId == 0;
   }
 
+
+  getAttributeColor(row:ProductTypeAttrVO, removed:string, added:string, prestine:string) {
+
+    if (this.isRemovedAttribute(row)) {
+      return removed;
+    }
+
+    if (this.isNewAttribute(row)) {
+      return added;
+    }
+
+    return prestine;
+  }
+
+
   resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {

@@ -16,13 +16,13 @@
       <tbody>
       <tr *ngFor="let row of filteredPayments; let i = index" class="{{row == selectedPayment ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'PAYMENT_DATE' | translate }}"><a (click)="onSelectRow(row)">{{ row.createdTimestamp | ycdatetime }}</a></td>
-          <td title="{{ 'PAYMENT_ORDER' | translate }}"><a (click)="onSelectRow(row)">{{ row.orderNumber }}</a></td>
-          <td title="{{ 'PAYMENT_DELIVERY' | translate }}"><a (click)="onSelectRow(row)">{{ row.orderShipment }}</a>&nbsp;</td>
-          <td title="{{ 'PAYMENT_OPERATION' | translate }}"><a (click)="onSelectRow(row)">{{ row.transactionGatewayLabel }} / {{ row.transactionOperation }}</a></td>
-          <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}"><a (click)="onSelectRow(row)">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }}</a> <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
-          <td title="{{ 'PAYMENT_DETAILS' | translate }}"><a (click)="onSelectRow(row)">{{ row.transactionReferenceId }}</a> <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
-          <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right"><a (click)="onSelectRow(row)">{{ row.orderCurrency }} {{ row.paymentAmount | ycprice }}</a></td>
+          <td title="{{ 'PAYMENT_DATE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.createdTimestamp | ycdatetime }}</a></td>
+          <td title="{{ 'PAYMENT_ORDER' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderNumber }}</a></td>
+          <td title="{{ 'PAYMENT_DELIVERY' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderShipment }}</a>&nbsp;</td>
+          <td title="{{ 'PAYMENT_OPERATION' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.transactionGatewayLabel }} / {{ row.transactionOperation }}</a></td>
+          <td title="{{ 'PAYMENT_RESULT_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('PAYMENT_RESULT_' + row.paymentProcessorResult) | translate }} {{ row.transactionOperationResultCode }}</a> <span *ngIf="row.transactionOperationResultMessage"><i title="{{ row.transactionOperationResultMessage }}" class="fa fa-info-circle"></i></span>&nbsp;</td>
+          <td title="{{ 'PAYMENT_DETAILS' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ row.transactionReferenceId }}</a> <span *ngIf="row.cardHolderName"><i title="{{ row.cardHolderName }}, {{row.cardNumber}} {{ row.cardExpireMonth }}/{{ row.cardExpireYear }}" class="fa fa-credit-card"></i></span></td>
+          <td title="{{ 'PAYMENT_AMOUNT' | translate }}" class="text-right"><a class="js-click" (click)="onSelectRow(row)">{{ row.orderCurrency }} {{ row.paymentAmount | ycprice }}</a></td>
         </template>
       </tr>
       </tbody>
