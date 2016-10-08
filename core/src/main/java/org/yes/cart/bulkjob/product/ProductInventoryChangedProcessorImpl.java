@@ -43,7 +43,7 @@ import java.util.List;
 public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDependentProcessorImpl
         implements ProductInventoryChangedProcessorInternal {
 
-    private static final String LAST_RUN_PREF = "JOB_PROD_INV_UPDATE_LAST_RUN_";
+    private static final String LAST_RUN_PREF = "JOB_PRODINVUP_LR_";
 
     private final SkuWarehouseService skuWarehouseService;
     private final ProductService productService;
