@@ -97,7 +97,7 @@ public class VoDashboardWidgetPluginOrdersInShops implements VoDashboardWidgetPl
 
         final int ordersWaiting = this.customerOrderService.findCountByCriteria(
                 Restrictions.in("shop.shopId", shops),
-                Restrictions.ne("orderStatus", CustomerOrder.ORDER_STATUS_WAITING)
+                Restrictions.eq("orderStatus", CustomerOrder.ORDER_STATUS_WAITING)
         );
 
 
