@@ -46,7 +46,7 @@ import java.util.*;
 public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRunDependentProcessorImpl
         implements BulkAwaitingInventoryDeliveriesProcessorInternal {
 
-    private static final String LAST_RUN_PREF = "JOB_DELWAITINV_LR_";
+    private static final String LAST_RUN_PREF = "JOB_DELWAITINV_LR";
 
     private final CustomerOrderService customerOrderService;
     private final OrderStateManager orderStateManager;

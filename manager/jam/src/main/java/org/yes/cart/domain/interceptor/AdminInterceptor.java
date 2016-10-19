@@ -17,19 +17,27 @@
 
 package org.yes.cart.domain.interceptor;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.type.Type;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
 import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.model.AsyncContext;
+import org.yes.cart.service.async.utils.RunAsUserAuthentication;
+import org.yes.cart.service.async.utils.ThreadLocalAsyncContextUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.ws.CacheDirector;
+import org.yes.cart.web.service.ws.client.AsyncContextFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -45,9 +53,12 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
     private ApplicationContext applicationContext;
     private NodeService nodeService;
+    private AsyncContextFactory asyncContextFactory;
 
     private Map<String, Map<String, Set<Pair<String, String>>>> entityOperationCache;
     private Set<String> cachedEntities;
+
+    private TaskExecutor executor;
 
     @Override
     public boolean onSave(Object entity, Serializable serializable, Object[] objects, String[] propertyNames, Type[] types) {
@@ -91,43 +102,88 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
     void invalidateCache(final String op, final String entityName, final Long pk) {
 
-        /*if (nodeService == null) {
-            synchronized (this) {
-                if (nodeService == null) {
-                    nodeService = applicationContext.getBean("nodeService", NodeService.class);
+        if (executor != null) {
+            if (nodeService == null) {
+                synchronized (this) {
+                    if (nodeService == null) {
+                        nodeService = applicationContext.getBean("nodeService", NodeService.class);
+                    }
+                    if (asyncContextFactory == null) {
+                        asyncContextFactory = applicationContext.getBean("webAppManagerAsyncContextFactory", AsyncContextFactory.class);
+                    }
                 }
             }
+
+            final Runnable evictCache = this.createEvictCacheRunnable(op, entityName, pk);
+
+            this.executor.execute(evictCache);
         }
-
-        final AsyncContext async = null; //todo getAsyncContext();
-        if (async == null) {
-            ShopCodeContext.getLog(this)
-                    .warn("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
-            return;
-        }
-
-        final List<Node> cluster = nodeService.getYesNodes();
-        final List<String> targets = new ArrayList<String>();
-        for (final Node node : cluster) {
-            targets.add(node.getNodeId());
-        }
-
-        final HashMap<String, Object> payload = new HashMap<String, Object>();
-        payload.put("entityOperation", op);
-        payload.put("entityName", entityName);
-        payload.put("pkValue", pk);
-
-        final RspMessage message = new ContextRspMessageImpl(
-                nodeService.getCurrentNodeId(),
-                targets,
-                "CacheDirector.onCacheableChange",
-                payload,
-                async
-        );
-
-        nodeService.broadcast(message);*/
 
     }
+
+    private Runnable createEvictCacheRunnable(final String op, final String entityName, final Long pk) {
+
+        final AsyncContext jobContext = ThreadLocalAsyncContextUtils.getContext();
+        final Authentication auth = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
+        final String username = auth != null && auth.isAuthenticated() ? auth.getName() : null;
+
+        return new Runnable() {
+
+            @Override
+            public void run() {
+
+                try {
+
+                    final AsyncContext threadContext;
+                    if (StringUtils.isBlank(username)) {
+                        threadContext = jobContext;
+                    } else {
+                        SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(username, "", Collections.EMPTY_LIST));
+                        final Map<String, Object> params = new HashMap<String, Object>();
+                        params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
+                        threadContext = asyncContextFactory.getInstance(params);
+                    }
+
+                    if (threadContext == null) {
+                        ShopCodeContext.getLog(this)
+                                .warn("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+                        return;
+                    }
+
+
+                    final List<Node> cluster = nodeService.getSfNodes();
+                    final List<String> targets = new ArrayList<String>();
+                    for (final Node node : cluster) {
+                        targets.add(node.getId());
+                    }
+
+                    final HashMap<String, Object> payload = new HashMap<String, Object>();
+                    payload.put("entityOperation", op);
+                    payload.put("entityName", entityName);
+                    payload.put("pkValue", pk);
+
+                    final RspMessage message = new ContextRspMessageImpl(
+                            nodeService.getCurrentNodeId(),
+                            targets,
+                            "CacheDirector.onCacheableChange",
+                            payload,
+                            threadContext
+                    );
+
+                    nodeService.broadcast(message);
+
+
+                } catch (Exception exp) {
+                    ShopCodeContext.getLog(this).error("Unable to perform cache eviction: " + exp.getMessage(), exp);
+                } finally {
+                    SecurityContextHolder.clearContext();
+                }
+
+            }
+        };
+
+    }
+
 
     private Long getPk(final Object entity) {
         if (entity instanceof Identifiable) {
@@ -145,19 +201,6 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         return false;
     }
 
-
-    /*private AsyncContext getAsyncContext() {
-
-        try {
-            final Map<String, Object> params = new HashMap<String, Object>();
-            params.put(AsyncContext.TIMEOUT_KEY, AttributeNamesKeys.System.SYSTEM_BACKDOOR_CACHE_TIMEOUT_MS);
-            return new AsyncFlexContextImpl(params);
-        } catch (IllegalStateException ise) {
-            // if we are here we are in async op already
-            return ThreadLocalAsyncContextUtils.getContext();
-        }
-    }*/
-
     /**
      * {@inheritDoc}
      */
@@ -171,4 +214,8 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
         this.cachedEntities = new HashSet<String>(this.entityOperationCache.keySet());
     }
 
+    /** IoC. Set configuration. */
+    public void setEntityOperationCacheExecutor(final TaskExecutor executor) {
+        this.executor = executor;
+    }
 }

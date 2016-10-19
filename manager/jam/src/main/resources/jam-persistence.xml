@@ -65,6 +65,14 @@
                         </entry>
                     </map>
                 </property>
+                <property name="entityOperationCacheExecutor">
+                    <bean class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+                        <description>
+                            Thread pool (1, max int) for bulk imports since they may be slow.
+                        </description>
+                        <property name="maxPoolSize" value="10"/>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="hibernateProperties">
