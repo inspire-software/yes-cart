@@ -115,10 +115,11 @@ public class AddressServiceImpl extends BaseGenericServiceImpl<Address> implemen
      */
     public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
 
-        final String type = customer != null ? customer.getCustomerType() : null;
+        final String customerType = customer != null ? customer.getCustomerType() : null;
 
         if (shop != null && address != null) {
-            final String format = shop.getAddressFormatByCountryAndCustomerTypeAndLocale(address.getCountryCode(), type, lang);
+            final String addressType = address.getAddressType();
+            final String format = shop.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType(address.getCountryCode(), lang, customerType, addressType);
             return orderAddressFormatter.formatAddress(address, format);
         }
         return orderAddressFormatter.formatAddress(address);

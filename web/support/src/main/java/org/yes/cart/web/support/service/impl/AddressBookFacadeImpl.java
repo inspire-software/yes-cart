@@ -178,9 +178,9 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     );
 
     /** {@inheritDoc} */
-    public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop) {
+    public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
-        final List<String> addressFormAttributes = getAddressFormAttributeList(customer);
+        final List<String> addressFormAttributes = getAddressFormAttributeList(customer, shop, addressType);
 
         List<Attribute> formFieldsConfig = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, addressFormAttributes);
         if (formFieldsConfig.isEmpty()) {
@@ -223,18 +223,14 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         return attributes;
     }
 
-    private List<String> getAddressFormAttributeList(final Customer customer) {
+    private List<String> getAddressFormAttributeList(final Customer customer, final Shop shop, final String addressType) {
 
         List<String> addressFormAttributes = new ArrayList<String>(DEFAULT_FIELDS);
 
-        final List<String> formConfigsToTry;
+        final List<String> formConfigsToTry = new ArrayList<>();
 
-        final String type = customer.getCustomerType();
-        if (StringUtils.isNotBlank(type)) {
-            formConfigsToTry = new ArrayList<String>(Arrays.asList(type + "_addressform", "default_addressform"));
-        } else {
-            formConfigsToTry = new ArrayList<String>(Arrays.asList("default_addressform"));
-        }
+        appendAddressFormAttributeDefinitions(customer, addressType, formConfigsToTry, shop.getCode() + "__");
+        appendAddressFormAttributeDefinitions(customer, addressType, formConfigsToTry, "");
 
         final List<Attribute> formConfigs = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, formConfigsToTry);
 
@@ -261,6 +257,18 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         }
 
         return addressFormAttributes;
+    }
+
+    private void appendAddressFormAttributeDefinitions(final Customer customer, final String addressType, final List<String> formConfigsToTry, final String prefix) {
+
+        final String type = customer.getCustomerType();
+        if (StringUtils.isNotBlank(type)) {
+            formConfigsToTry.add(prefix + type + "_addressform_" + addressType);
+            formConfigsToTry.add(prefix + type + "_addressform");
+        }
+        formConfigsToTry.add(prefix + "default_addressform_" + addressType);
+        formConfigsToTry.add(prefix + "default_addressform");
+
     }
 
     /** {@inheritDoc} */

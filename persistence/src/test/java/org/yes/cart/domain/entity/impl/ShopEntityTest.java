@@ -81,7 +81,7 @@ public class ShopEntityTest {
     public void testGetAddressFormatByCountryAndLocaleNoCfg() throws Exception {
 
         final ShopEntity shopEntity = new ShopEntity();
-        assertNull(shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "en", "B2B"));
+        assertNull(shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2B", "B"));
 
     }
 
@@ -89,6 +89,40 @@ public class ShopEntityTest {
     public void testGetAddressFormatByCountryAndLocaleBaseCfgOnly() throws Exception {
 
         final ShopEntity shopEntity = new ShopEntity();
+
+        final AttrValueShop av_def_b = context.mock(AttrValueShop.class, "av_b");
+        final Attribute a_def_b = context.mock(Attribute.class, "a_b");
+        final AttrValueShop av_code_b = context.mock(AttrValueShop.class, "av_code_b");
+        final Attribute a_code_b = context.mock(Attribute.class, "a_code_b");
+        final AttrValueShop av_lang_b = context.mock(AttrValueShop.class, "av_lang_b");
+        final Attribute a_lang_b = context.mock(Attribute.class, "a_lang_b");
+        final AttrValueShop av_code_lang_b = context.mock(AttrValueShop.class, "av_code_lang_b");
+        final Attribute a_code_lang_b = context.mock(Attribute.class, "a_code_lang_b");
+        final AttrValueShop av_type_b = context.mock(AttrValueShop.class, "av_type_b");
+        final Attribute a_type_b = context.mock(Attribute.class, "a_type_b");
+        final AttrValueShop av_type_lang_b = context.mock(AttrValueShop.class, "av_type_lang_b");
+        final Attribute a_type_lang_b = context.mock(Attribute.class, "a_type_lang_b");
+        final AttrValueShop av_code_type_b = context.mock(AttrValueShop.class, "av_code_type_b");
+        final Attribute a_code_type_b = context.mock(Attribute.class, "a_code_type_b");
+        final AttrValueShop av_code_lang_type_b = context.mock(AttrValueShop.class, "av_code_lang_type_b");
+        final Attribute a_code_lang_type_b = context.mock(Attribute.class, "a_code_lang_type_b");
+
+        final AttrValueShop av_def_s = context.mock(AttrValueShop.class, "av_s");
+        final Attribute a_def_s = context.mock(Attribute.class, "a_s");
+        final AttrValueShop av_code_s = context.mock(AttrValueShop.class, "av_code_s");
+        final Attribute a_code_s = context.mock(Attribute.class, "a_code_s");
+        final AttrValueShop av_lang_s = context.mock(AttrValueShop.class, "av_lang_s");
+        final Attribute a_lang_s = context.mock(Attribute.class, "a_lang_s");
+        final AttrValueShop av_code_lang_s = context.mock(AttrValueShop.class, "av_code_lang_s");
+        final Attribute a_code_lang_s = context.mock(Attribute.class, "a_code_lang_s");
+        final AttrValueShop av_type_s = context.mock(AttrValueShop.class, "av_type_s");
+        final Attribute a_type_s = context.mock(Attribute.class, "a_type_s");
+        final AttrValueShop av_type_lang_s = context.mock(AttrValueShop.class, "av_type_lang_s");
+        final Attribute a_type_lang_s = context.mock(Attribute.class, "a_type_lang_s");
+        final AttrValueShop av_code_type_s = context.mock(AttrValueShop.class, "av_code_type_s");
+        final Attribute a_code_type_s = context.mock(Attribute.class, "a_code_type_s");
+        final AttrValueShop av_code_lang_type_s = context.mock(AttrValueShop.class, "av_code_lang_type_s");
+        final Attribute a_code_lang_type_s = context.mock(Attribute.class, "a_code_lang_type_s");
 
         final AttrValueShop av_def = context.mock(AttrValueShop.class, "av");
         final Attribute a_def = context.mock(Attribute.class, "a");
@@ -107,7 +141,12 @@ public class ShopEntityTest {
         final AttrValueShop av_code_lang_type = context.mock(AttrValueShop.class, "av_code_lang_type");
         final Attribute a_code_lang_type = context.mock(Attribute.class, "a_code_lang_type");
 
-        shopEntity.setAttributes(Arrays.asList(av_def, av_code, av_lang, av_code_lang, av_type, av_type_lang, av_code_type, av_code_lang_type));
+
+        shopEntity.setAttributes(Arrays.asList(
+                av_def, av_code, av_lang, av_code_lang, av_type, av_type_lang, av_code_type, av_code_lang_type,
+                av_def_b, av_code_b, av_lang_b, av_code_lang_b, av_type_b, av_type_lang_b, av_code_type_b, av_code_lang_type_b,
+                av_def_s, av_code_s, av_lang_s, av_code_lang_s, av_type_s, av_type_lang_s, av_code_type_s, av_code_lang_type_s
+        ));
 
         context.checking(new Expectations() {{
 
@@ -143,20 +182,116 @@ public class ShopEntityTest {
             allowing(a_code_lang_type).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_GB_en_B2B"));
             allowing(av_code_lang_type).getVal(); will(returnValue("f1_gb_B2B_en"));
 
+
+
+
+            allowing(av_def_s).getAttribute(); will(returnValue(a_def_s));
+            allowing(a_def_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S"));
+            allowing(av_def_s).getVal();will(returnValue("f1_S"));
+
+            allowing(av_code_s).getAttribute(); will(returnValue(a_code_s));
+            allowing(a_code_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB"));
+            allowing(av_code_s).getVal(); will(returnValue("f1_gb_S"));
+
+            allowing(av_lang_s).getAttribute(); will(returnValue(a_lang_s));
+            allowing(a_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en"));
+            allowing(av_lang_s).getVal(); will(returnValue("f1_en_S"));
+
+            allowing(av_code_lang_s).getAttribute(); will(returnValue(a_code_lang_s));
+            allowing(a_code_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en"));
+            allowing(av_code_lang_s).getVal(); will(returnValue("f1_gb_en_S"));
+
+            allowing(av_type_s).getAttribute(); will(returnValue(a_type_s));
+            allowing(a_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_B2B"));
+            allowing(av_type_s).getVal(); will(returnValue("f1_B2B_S"));
+
+            allowing(av_type_lang_s).getAttribute(); will(returnValue(a_type_lang_s));
+            allowing(a_type_lang_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_en_B2B"));
+            allowing(av_type_lang_s).getVal(); will(returnValue("f1_B2B_en_S"));
+
+            allowing(av_code_type_s).getAttribute(); will(returnValue(a_code_type_s));
+            allowing(a_code_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_B2B"));
+            allowing(av_code_type_s).getVal(); will(returnValue("f1_gb_B2B_S"));
+
+            allowing(av_code_lang_type_s).getAttribute(); will(returnValue(a_code_lang_type_s));
+            allowing(a_code_lang_type_s).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_S_GB_en_B2B"));
+            allowing(av_code_lang_type_s).getVal(); will(returnValue("f1_gb_B2B_en_S"));
+
+
+
+
+            allowing(av_def_b).getAttribute(); will(returnValue(a_def_b));
+            allowing(a_def_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B"));
+            allowing(av_def_b).getVal();will(returnValue("f1_B"));
+
+            allowing(av_code_b).getAttribute(); will(returnValue(a_code_b));
+            allowing(a_code_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB"));
+            allowing(av_code_b).getVal(); will(returnValue("f1_gb_B"));
+
+            allowing(av_lang_b).getAttribute(); will(returnValue(a_lang_b));
+            allowing(a_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en"));
+            allowing(av_lang_b).getVal(); will(returnValue("f1_en_B"));
+
+            allowing(av_code_lang_b).getAttribute(); will(returnValue(a_code_lang_b));
+            allowing(a_code_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en"));
+            allowing(av_code_lang_b).getVal(); will(returnValue("f1_gb_en_B"));
+
+            allowing(av_type_b).getAttribute(); will(returnValue(a_type_b));
+            allowing(a_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_B2B"));
+            allowing(av_type_b).getVal(); will(returnValue("f1_B2B_B"));
+
+            allowing(av_type_lang_b).getAttribute(); will(returnValue(a_type_lang_b));
+            allowing(a_type_lang_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_en_B2B"));
+            allowing(av_type_lang_b).getVal(); will(returnValue("f1_B2B_en_B"));
+
+            allowing(av_code_type_b).getAttribute(); will(returnValue(a_code_type_b));
+            allowing(a_code_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_B2B"));
+            allowing(av_code_type_b).getVal(); will(returnValue("f1_gb_B2B_B"));
+
+            allowing(av_code_lang_type_b).getAttribute(); will(returnValue(a_code_lang_type_b));
+            allowing(a_code_lang_type_b).getCode(); will(returnValue(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_B_GB_en_B2B"));
+            allowing(av_code_lang_type_b).getVal(); will(returnValue("f1_gb_B2B_en_B"));
+
+
+
         }});
 
-        assertEquals("f1_gb_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "en", null));
-        assertEquals("f1_gb_B2B_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "en", "B2B"));
-        assertEquals("f1_gb_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "en", "B2C"));
-        assertEquals("f1_gb", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "fr", null));
-        assertEquals("f1_gb_B2B", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "fr", "B2B"));
-        assertEquals("f1_gb", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("GB", "fr", "B2C"));
-        assertEquals("f1_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "en", null));
-        assertEquals("f1_B2B_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "en", "B2B"));
-        assertEquals("f1_en", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "en", "B2C"));
-        assertEquals("f1", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "de", null));
-        assertEquals("f1_B2B", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "de", "B2B"));
-        assertEquals("f1", shopEntity.getAddressFormatByCountryAndCustomerTypeAndLocale("DE", "de", "B2C"));
+        assertEquals("f1_gb_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", null, "B"));
+        assertEquals("f1_gb_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", null, "S"));
+        assertEquals("f1_gb_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", null, "Z"));
+        assertEquals("f1_gb_B2B_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2B", "B"));
+        assertEquals("f1_gb_B2B_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2B", "S"));
+        assertEquals("f1_gb_B2B_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2B", "Z"));
+        assertEquals("f1_gb_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2C", "B"));
+        assertEquals("f1_gb_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2C", "S"));
+        assertEquals("f1_gb_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "en", "B2C", "Z"));
+        assertEquals("f1_gb_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", null, "B"));
+        assertEquals("f1_gb_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", null, "S"));
+        assertEquals("f1_gb", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", null, "Z"));
+        assertEquals("f1_gb_B2B_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2B", "B"));
+        assertEquals("f1_gb_B2B_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2B", "S"));
+        assertEquals("f1_gb_B2B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2B", "Z"));
+        assertEquals("f1_gb_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2C", "B"));
+        assertEquals("f1_gb_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2C", "S"));
+        assertEquals("f1_gb", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("GB", "fr", "B2C", "Z"));
+        assertEquals("f1_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", null, "B"));
+        assertEquals("f1_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", null, "S"));
+        assertEquals("f1_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", null, "Z"));
+        assertEquals("f1_B2B_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2B", "B"));
+        assertEquals("f1_B2B_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2B", "S"));
+        assertEquals("f1_B2B_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2B", "Z"));
+        assertEquals("f1_en_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2C", "B"));
+        assertEquals("f1_en_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2C", "S"));
+        assertEquals("f1_en", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "en", "B2C", "Z"));
+        assertEquals("f1_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", null, "B"));
+        assertEquals("f1_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", null, "S"));
+        assertEquals("f1", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", null, "Z"));
+        assertEquals("f1_B2B_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2B", "B"));
+        assertEquals("f1_B2B_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2B", "S"));
+        assertEquals("f1_B2B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2B", "Z"));
+        assertEquals("f1_B", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2C", "B"));
+        assertEquals("f1_S", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2C", "S"));
+        assertEquals("f1", shopEntity.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType("DE", "de", "B2C", "Z"));
 
         context.assertIsSatisfied();
 

@@ -57,7 +57,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Map<String, List<String>> supportedProfileFormAttributesByType = new HashMap<String, List<String>>();
     private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
 
-    private Map<String, Map<String, String>> addressFormattingByLanguageByCountryCode = new HashMap<String, Map<String, String>>();
+    private Map<String, String> addressFormattingByTypeByLanguageByCountryCodeByCustomerType = new HashMap<String, String>();
 
     public ShopEntity() {
     }
@@ -292,45 +292,67 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return supportedLanguagesAsList;
     }
 
-    public String getAddressFormatByCountryAndCustomerTypeAndLocale(final String countryCode, final String locale, final String customerType) {
-
-        Map<String, String> formatByCountryCode = addressFormattingByLanguageByCountryCode.get(locale);
-
-        if (formatByCountryCode == null) {
-            formatByCountryCode = new HashMap<String, String>();
-            addressFormattingByLanguageByCountryCode.put(locale, formatByCountryCode);
-        }
+    public String getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType(final String countryCode, final String locale, final String customerType, final String addressType) {
 
         final String countryKey = StringUtils.isNotBlank(customerType) ? countryCode + "_" + customerType : countryCode;
-        String format = formatByCountryCode.get(countryKey);
-        if (!formatByCountryCode.containsKey(countryKey)) {
+        final String formatKey = addressType + "#" + locale + "#" + countryKey;
+
+        String format = addressFormattingByTypeByLanguageByCountryCodeByCustomerType.get(formatKey);
+
+        if (format == null) {
+
+            final String addressTypePrefix = "_" + addressType;
+
             if (StringUtils.isNotBlank(customerType)) {
-                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale + "_" + customerType);
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + countryCode + "_" + locale + "_" + customerType);
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + countryCode + "_" + customerType);
+                }
                 if (format == null) {
                     format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + customerType);
                 }
                 if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + locale + "_" + customerType);
+                }
+                if (format == null) {
                     format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale + "_" + customerType);
+                }
+                if (format == null) {
+                    format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + customerType);
                 }
                 if (format == null) {
                     format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + customerType);
                 }
             }
             if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + countryCode + "_" + locale);
+            }
+            if (format == null) {
                 format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + countryCode);
             }
             if (format == null) {
                 format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + countryCode);
             }
             if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix + "_" + locale);
+            }
+            if (format == null) {
                 format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + "_" + locale);
+            }
+            if (format == null) {
+                format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX + addressTypePrefix);
             }
             if (format == null) {
                 format = getAttributeValueByCode(AttributeNamesKeys.Shop.ADDRESS_FORMATTER_PREFIX);
             }
-            formatByCountryCode.put(countryKey, format);
+            addressFormattingByTypeByLanguageByCountryCodeByCustomerType.put(formatKey, format);
         }
-
         return format;
     }
 

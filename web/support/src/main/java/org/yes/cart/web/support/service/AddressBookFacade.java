@@ -74,10 +74,11 @@ public interface AddressBookFacade {
      *
      * @param customer customer
      * @param shop shop
+     * @param addressType address type
      *
      * @return attributes that describe suitable address form
      */
-    List<AttrValue> getShopCustomerAddressAttributes(Customer customer, Shop shop);
+    List<AttrValue> getShopCustomerAddressAttributes(Customer customer, Shop shop, String addressType);
 
     /**
      * Create or update address object.

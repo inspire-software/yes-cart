@@ -368,8 +368,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
      */
     private String formatAddress(final Address address, final Shop shop, final Customer customer, final String lang) {
 
-        final String type = customer != null ? customer.getCustomerType() : null;
-        final String format = shop.getAddressFormatByCountryAndCustomerTypeAndLocale(address.getCountryCode(), type, lang);
+        final String customerType = customer != null ? customer.getCustomerType() : null;
+        final String addressType = address.getAddressType();
+        final String format = shop.getAddressFormatByCountryAndLocaleAndCustomerTypeAndAddressType(address.getCountryCode(), lang, customerType, addressType);
         return addressFormatter.formatAddress(address, format);
 
     }

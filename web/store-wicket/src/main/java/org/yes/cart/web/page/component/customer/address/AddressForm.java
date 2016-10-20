@@ -55,7 +55,6 @@ import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.util.WicketUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +138,7 @@ public class AddressForm extends Form<Address> {
 
         final String lang = getLocale().getLanguage();
         values = addressBookFacade
-                .getShopCustomerAddressAttributes(address.getCustomer(), ApplicationDirector.getCurrentShop());
+                .getShopCustomerAddressAttributes(address.getCustomer(), ApplicationDirector.getCurrentShop(), addressType);
 
 
         final Map<String, AttrValue> valuesMap = new HashMap<String, AttrValue>();
