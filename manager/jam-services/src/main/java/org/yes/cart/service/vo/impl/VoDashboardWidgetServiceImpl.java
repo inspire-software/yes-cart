@@ -69,4 +69,12 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
     public void setPlugins(final List<VoDashboardWidgetPlugin> plugins) {
         this.plugins = plugins;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void registerWidgetPlugin(final VoDashboardWidgetPlugin dashboardWidgetPlugin) {
+        if (!this.plugins.contains(dashboardWidgetPlugin)) {
+            this.plugins.add(dashboardWidgetPlugin);
+        }
+    }
 }

@@ -32,4 +32,11 @@ public interface VoDashboardWidgetService {
      */
     List<VoDashboardWidget> getDashboard() throws Exception;
 
+    /**
+     * Hook to add new plugins.
+     *
+     * @param dashboardWidgetPlugin single widget
+     */
+    void registerWidgetPlugin(VoDashboardWidgetPlugin dashboardWidgetPlugin);
+
 }

@@ -40,6 +40,7 @@
     <import resource="classpath:manager-files.xml"/>
     <import resource="classpath:manager-cronjob.xml"/>
     <import resource="classpath:manager-report.xml"/>
+    <import resource="classpath:manager-services-webcontextaware.xml"/>
 
     <context:component-scan base-package="org.yes.cart.service.endpoint,org.yes.cart.service.endpoint.impl" />
 

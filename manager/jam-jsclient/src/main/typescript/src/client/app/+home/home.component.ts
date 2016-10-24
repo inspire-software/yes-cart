@@ -16,14 +16,27 @@ import { ReportsService } from '../shared/services/index';
 })
 export class HomeComponent implements OnInit {
 
-  widgets:any = {};
+  private static _widgets:any = {};
 
   constructor(private _dashboardService:ReportsService) {
     console.debug('HomeComponent constructed');
   }
 
+  public get widgets():any {
+    return HomeComponent._widgets;
+  }
+
+  public set widgets(value:any) {
+    HomeComponent._widgets = value;
+  }
+
   ngOnInit() {
     console.debug('HomeComponent ngOnInit');
+
+    this.onRefreshHandler();
+  }
+
+  onRefreshHandler() {
 
     var _sub:any = this._dashboardService.getDashboard().subscribe((widgets:DashboardWidgetVO[]) => {
 

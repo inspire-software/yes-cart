@@ -579,6 +579,28 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
+    public Pair<Integer, Integer> getProductQtyAll() {
+
+        final int total = getGenericDao().findCountByCriteria();
+        final Date now = new Date();
+        final int active = getGenericDao().findCountByCriteria(
+                Restrictions.or(
+                        Restrictions.isNull("availablefrom"),
+                        Restrictions.eq("availability", Product.AVAILABILITY_PREORDER),
+                        Restrictions.ge("availablefrom", now)
+                ),
+                Restrictions.or(
+                        Restrictions.isNull("availableto"),
+                        Restrictions.lt("availableto", now)
+                )
+        );
+
+        return new Pair<>(total, active);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Product> getProductByCategory(
             final long categoryId,
             final int firstResult,

@@ -148,6 +148,7 @@ public class VoManagementServiceImpl implements VoManagementService {
                     final VoManagerRole link = new VoManagerRole();
                     link.setManagerId(voManager.getManagerId());
                     link.setRoleId(role.getRoleId());
+                    link.setCode(role.getCode());
                     voManagerRoles.add(link);
                 }
                 voManager.setManagerRoles(voManagerRoles);

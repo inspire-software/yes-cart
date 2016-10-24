@@ -30,6 +30,7 @@ public class VoManagerRole {
     private long managerId;
     @DtoField(value = "role.roleId", readOnly = true)
     private long roleId;
+    private String code;
 
     public long getManagerId() {
         return managerId;
@@ -45,5 +46,13 @@ public class VoManagerRole {
 
     public void setRoleId(long roleId) {
         this.roleId = roleId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(final String code) {
+        this.code = code;
     }
 }

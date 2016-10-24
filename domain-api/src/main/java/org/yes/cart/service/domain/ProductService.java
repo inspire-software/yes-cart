@@ -273,6 +273,13 @@ public interface ProductService extends GenericService<Product> {
     int getProductQty(Query query);
 
     /**
+     * Full count of products on the system.
+     *
+     * @return total and active
+     */
+    Pair<Integer, Integer> getProductQtyAll();
+
+    /**
      * Reindex the products.
      *
      * @return document quantity in index
