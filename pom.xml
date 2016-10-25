@@ -70,7 +70,6 @@
         <jackson.version>1.9.13</jackson.version>
         <GeDA.version>3.1.0</GeDA.version>
         <mysql-connector.version>5.1.13</mysql-connector.version>
-        <servlet-api.version>2.5</servlet-api.version>
 
         <!-- Groovy support -->
         <!--<groovy-all.version>1.7.4</groovy-all.version>-->
