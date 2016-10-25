@@ -28,6 +28,7 @@ import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.domain.ContentServiceTemplateSupport;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -358,6 +359,7 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
             if (category.isRoot() && category.getCategoryId() != root.getCategoryId()) {
                 catsIt.remove();
             } else {
+                final long currentCatId = category.getCategoryId();
                 while (category.getParentId() != root.getCategoryId()) {
                     if (category.isRoot()) {
                         // if this is root and not shop root matches then this is not this shop's content
@@ -365,6 +367,12 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
                         break;
                     }
                     category = proxy().findById(category.getParentId());
+                    if (category == null) {
+                        // could have happened if import created some reassignments and we loose path to root
+                        catsIt.remove();
+                        ShopCodeContext.getLog(this).warn("Found orphan content {}", currentCatId);
+                        break;
+                    }
                 }
             }
         }

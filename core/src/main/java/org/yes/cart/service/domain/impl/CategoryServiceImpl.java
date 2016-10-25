@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.util.DomainApiUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -569,6 +570,7 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
             if (category.isRoot()) {
                 catsIt.remove();
             } else {
+                final long currentCatId = category.getCategoryId();
                 while (category.getParentId() != root.getCategoryId()) {
                     if (category.isRoot()) {
                         // if this is root and not category root matches then this is content
@@ -576,6 +578,12 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                         break;
                     }
                     category = proxy().findById(category.getParentId());
+                    if (category == null) {
+                        // could have happened if import created some reassignments and we loose path to root
+                        catsIt.remove();
+                        ShopCodeContext.getLog(this).warn("Found orphan category {}", currentCatId);
+                        break;
+                    }
                 }
             }
         }
