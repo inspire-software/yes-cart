@@ -326,7 +326,7 @@ public class HttpUtil {
 
         final Map<String, List<String>> params = getParameters(request, pathVariables, removeDuplicates);
 
-        for (final Map.Entry<String, Object> param : (Set<Map.Entry>) request.getParameterMap().entrySet()) {
+        for (final Map.Entry<String, String[]> param : request.getParameterMap().entrySet()) {
 
             final String key = param.getKey();
 
@@ -338,16 +338,11 @@ public class HttpUtil {
                 values = params.get(key);
             }
 
-            if (param.getValue() instanceof String[]) {
-                for (final String value : (String[]) param.getValue()) {
+            if (param.getValue() != null) {
+                for (final String value : param.getValue()) {
                     if (!removeDuplicates || !values.contains(value)) {
                         values.add(value);
                     }
-                }
-            } else if (param.getValue() instanceof String) {
-                final String value = (String) param.getValue();
-                if (!removeDuplicates || !values.contains(value)) {
-                    values.add(value);
                 }
             }
 

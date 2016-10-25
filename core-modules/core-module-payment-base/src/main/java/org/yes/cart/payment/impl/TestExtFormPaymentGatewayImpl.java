@@ -27,11 +27,6 @@ import org.yes.cart.payment.dto.impl.PaymentImpl;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayParameter;
 import org.yes.cart.util.HttpParamsUtils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

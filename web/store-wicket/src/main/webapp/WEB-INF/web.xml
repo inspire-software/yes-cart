@@ -15,12 +15,14 @@
   ~    limitations under the License.
   -->
 
-<web-app version="2.5"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                             http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="YC_SF" version="3.0">
 
-    <display-name>Yes cart</display-name>
+    <display-name>Yes cart storefront</display-name>
 
     <context-param>
         <param-name>webAppRootKey</param-name>
@@ -226,6 +228,11 @@
         <servlet-name>spring-ws</servlet-name>
         <url-pattern>/services/*</url-pattern>
     </servlet-mapping>-->
+
+
+    <session-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
 
     <!-- Datasource Configuration, specified in the context.xml -->
     <!--<resource-ref>-->
