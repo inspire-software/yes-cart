@@ -15,7 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO} from './../../shared/model/index';
 import {ShopEventBus, ShopService, Util} from './../../shared/services/index';

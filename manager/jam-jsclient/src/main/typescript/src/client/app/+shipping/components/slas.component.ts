@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf, NgClass} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {CarrierSlaVO, PaymentGatewayInfoVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {Futures, Future} from './../../shared/event/index';
@@ -70,7 +69,7 @@ export class SlasComponent implements OnInit, OnDestroy {
   set paymentGateways(pgs:Array<PaymentGatewayInfoVO>) {
     pgs.forEach(pg => {
       this._pgs[pg.label] = pg;
-    })
+    });
   }
 
   @Input()
@@ -85,7 +84,7 @@ export class SlasComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private getPGNames(row:CarrierSlaVO):Array<PaymentGatewayInfoVO> {
+  getPGNames(row:CarrierSlaVO):Array<PaymentGatewayInfoVO> {
 
     let supported = row.supportedPaymentGateways;
     if (!supported) {

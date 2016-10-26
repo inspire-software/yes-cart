@@ -283,9 +283,9 @@ export class CategoryComponent implements OnInit, OnDestroy {
   protected onEditPriceTiers() {
     console.debug('CategoryComponent onCategoryProductTypeSelected handler');
     if (this._category.navigationByPriceTiers != null && this._category.navigationByPriceTiers.tiers != null) {
-      this.navigationByPriceTiers = Util.clone(this._category.navigationByPriceTiers)
+      this.navigationByPriceTiers = Util.clone(this._category.navigationByPriceTiers);
     } else {
-      this.navigationByPriceTiers = { tiers: [] }
+      this.navigationByPriceTiers = { tiers: [] };
     }
     this.categoryPriceTiersModalDialog.show();
   }

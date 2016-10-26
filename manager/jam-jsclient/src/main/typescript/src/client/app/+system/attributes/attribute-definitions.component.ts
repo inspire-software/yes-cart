@@ -15,14 +15,13 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {AttributeService, Util} from './../../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {AttributeGroupsComponent, AttributesComponent, AttributeComponent} from './components/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ProductAttributeUsageComponent} from './../../shared/attributes/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {EtypeVO, AttributeGroupVO, AttributeVO, Pair} from './../../shared/model/index';
+import {EtypeVO, AttributeGroupVO, AttributeVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {Config} from './../../shared/config/env.config';
 
@@ -44,8 +43,8 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private etypes:Array<EtypeVO> = [];
 
-  private groups:Array<AttributeGroupVO> = [];
-  private groupFilter:string;
+  groups:Array<AttributeGroupVO> = [];
+  groupFilter:string;
 
   private selectedGroup:AttributeGroupVO;
 
@@ -330,7 +329,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
       if (this.selectedAttribute != null) {
         this.onRowEditSelected();
       } else {
-        this.onRowNew()
+        this.onRowNew();
       }
     }
   }

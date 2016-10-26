@@ -15,8 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
-import {CatalogService, Util} from './../shared/services/index';
+import {CatalogService} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ProductTypesComponent, ProductTypeComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
@@ -263,7 +262,6 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
         var _sub:any = this._typeService.removeProductType(this.selectedType).subscribe(res => {
           _sub.unsubscribe();
           console.debug('CatalogTypeComponent removeType', this.selectedType);
-          let idx = this.types.indexOf(this.selectedType);
           this.selectedType = null;
           this.typeEdit = null;
           this.getFilteredTypes();

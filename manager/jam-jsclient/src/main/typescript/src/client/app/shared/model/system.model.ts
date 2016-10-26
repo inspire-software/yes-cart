@@ -19,7 +19,6 @@
  */
 
 
-import {Pair} from './common.model';
 import {AttrValueVO} from './attribute.model';
 
 

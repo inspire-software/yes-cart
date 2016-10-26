@@ -1,6 +1,6 @@
-import {Component, OnInit, OnChanges, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {NgClass, NgIf, NgFor} from '@angular/common';
-import {FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, FormGroup, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from '../validation/validators';
 
 import {Pair} from '../model/index';

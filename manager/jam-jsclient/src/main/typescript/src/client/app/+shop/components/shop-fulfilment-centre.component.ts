@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO, ValidationRequestVO} from './../../shared/model/index';
-import {FulfilmentService, ShopEventBus, Util} from './../../shared/services/index';
+import {FulfilmentService, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 

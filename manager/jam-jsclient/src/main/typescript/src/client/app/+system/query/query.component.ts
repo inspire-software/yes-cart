@@ -13,14 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ClusterNodeVO} from './../../shared/model/index';
-import {SystemService, ShopEventBus, Util} from './../../shared/services/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import {SystemService} from './../../shared/services/index';
 
 @Component({
   selector: 'yc-query',
@@ -94,7 +92,7 @@ export class QueryComponent implements OnInit {
       let _csv = '';
       _res.forEach(line => {
         line.forEach(col => {
-          _csv += col + ','
+          _csv += col + ',';
         });
         _csv += '\n';
       });

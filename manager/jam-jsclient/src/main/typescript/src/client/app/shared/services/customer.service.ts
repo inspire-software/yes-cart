@@ -16,9 +16,9 @@
 
 
 import {Injectable} from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CustomerVO, CustomerInfoVO, AttrValueCustomerVO, CustomerShopLinkVO, Pair} from '../model/index';
+import {CustomerVO, CustomerInfoVO, AttrValueCustomerVO, Pair} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';

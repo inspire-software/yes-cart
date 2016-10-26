@@ -15,7 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
@@ -219,7 +219,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         if (!customershop.disabled) {
           skipKeys.push('S' + customershop.shopId);
         } else {
-          disabledShops.push(customershop.shopId)
+          disabledShops.push(customershop.shopId);
         }
       });
     }

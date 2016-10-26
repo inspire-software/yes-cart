@@ -122,11 +122,4 @@ export class Util {
     return _csv;
   }
 
-  private static toTwoChars(num:number):string {
-    if (num > 9) {
-      return ''+num;
-    }
-    return '0'+num;
-  }
-
 }

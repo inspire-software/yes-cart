@@ -13,12 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {AttributeValuesComponent} from './../../shared/attributes/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -117,7 +115,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   getFormattedAddress(address:string) {
-    return address.replace("\r\n", "<br/>").replace("\r", "<br/>").replace("\n", "<br/>")
+    return address.replace('\r\n', '<br/>').replace('\r', '<br/>').replace('\n', '<br/>');
   }
 
   protected getUserIcon(row:CustomerOrderVO) {

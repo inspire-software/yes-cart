@@ -3,7 +3,7 @@ import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import { enableProdMode } from '@angular/core';
 import { PLATFORM_PIPES } from '@angular/core';
 import { HTTP_PROVIDERS, Http } from '@angular/http';
-import { TRANSLATE_PROVIDERS, TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
+import { TranslateService, TranslatePipe, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { bootstrap } from '@angular/platform-browser-dynamic';
 
 import {
@@ -24,14 +24,14 @@ import {
   AttributeService,
   SystemService,
   ImpexService,
-  ReportsService
+  ReportsService,
 } from './shared/services/index';
 
 import {
   YcDatePipe, YcDateTimePipe,
   YcQuantityPipe,
-  YcPricePipe
-} from './shared/pipes/index'
+  YcPricePipe,
+} from './shared/pipes/index';
 
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { AppComponent } from './app.component';

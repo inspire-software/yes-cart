@@ -15,7 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {CarrierVO, CarrierShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {I18nComponent} from './../../shared/i18n/index';

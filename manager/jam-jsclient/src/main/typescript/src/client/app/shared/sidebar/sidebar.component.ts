@@ -1,6 +1,5 @@
 import {Component,  OnInit} from '@angular/core';
 import {ACCORDION_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {Router, ROUTER_DIRECTIVES} from '@angular/router';
 import {ManagerInfoVO} from '../model/index';
 import {ManagementService} from '../services/index';

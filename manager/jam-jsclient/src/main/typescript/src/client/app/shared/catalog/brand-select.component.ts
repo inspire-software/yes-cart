@@ -13,9 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
+import {Component,  OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
 import {NgFor} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {BrandVO} from './../model/index';
 import {CatalogService} from './../services/index';

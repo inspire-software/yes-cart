@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {PIMService, Util} from './../shared/services/index';
 import {UiUtil} from './../shared/ui/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
@@ -454,7 +453,7 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
       if (this.selectedSku != null) {
         this.onRowEditSelected();
       } else {
-        this.onRowNew()
+        this.onRowNew();
       }
     }
     if (this.viewMode === CatalogProductsComponent.PRODUCT) {

@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {ProductTypeInfoVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {Config} from './../../shared/config/env.config';

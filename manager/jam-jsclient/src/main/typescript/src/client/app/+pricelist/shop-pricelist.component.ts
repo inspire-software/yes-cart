@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../shared/validation/validators';
 import {PricingService, Util} from './../shared/services/index';
@@ -27,7 +26,7 @@ import {ShopSelectComponent} from './../shared/shop/index';
 import {CurrencySelectComponent} from './../shared/price/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
 import {PriceListVO, ShopVO} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
+import {Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
 @Component({
@@ -132,7 +131,15 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
 
   newPricelistInstance():PriceListVO {
-    return { skuPriceId: 0, regularPrice: 0, minimalPrice: undefined, salePrice: undefined, salefrom: null, saleto:null, quantity: 1, currency: this.selectedCurrency, skuCode: '', skuName: '', shopCode: this.selectedShop.code, tag: null, pricingPolicy: null};
+    return {
+      skuPriceId: 0,
+      regularPrice: 0, minimalPrice: undefined, salePrice: undefined,
+      salefrom: null, saleto:null,
+      quantity: 1,
+      currency: this.selectedCurrency,
+      skuCode: '', skuName: '',
+      shopCode: this.selectedShop.code,
+      tag: null, pricingPolicy: null};
   }
 
   ngOnInit() {

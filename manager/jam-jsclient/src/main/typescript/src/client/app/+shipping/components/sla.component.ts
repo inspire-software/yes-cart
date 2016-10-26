@@ -125,7 +125,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   set paymentGateways(pgs:Array<PaymentGatewayInfoVO>) {
     pgs.forEach(pg => {
       this._pgs[pg.label] = pg;
-    })
+    });
   }
 
   @Input()

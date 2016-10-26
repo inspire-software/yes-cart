@@ -42,7 +42,7 @@ export class WindowMessageEventBus {
     window.addEventListener('message', function(event) {
       console.debug('emit window message event', event);
       that._messageSource.next(event);
-    })
+    });
   }
 
   public current():any {

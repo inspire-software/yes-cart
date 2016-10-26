@@ -15,14 +15,13 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {CatalogService, Util} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {CategoriesComponent, CategoryComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {CategorySelectComponent} from './../shared/catalog/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CategoryVO, BasicCategoryVO, AttrValueCategoryVO, Pair} from './../shared/model/index';
+import {CategoryVO, AttrValueCategoryVO, Pair} from './../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 

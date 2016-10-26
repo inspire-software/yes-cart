@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {FulfilmentCentreVO} from './../../shared/model/index';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {Futures, Future} from './../../shared/event/index';

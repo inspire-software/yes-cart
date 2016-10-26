@@ -18,7 +18,7 @@ import {NgIf} from '@angular/common';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {PricingService, Util} from './../../shared/services/index';
-import {PromotionVO, PromotionCouponVO, Pair} from './../../shared/model/index';
+import {PromotionVO, PromotionCouponVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {I18nComponent} from './../../shared/i18n/index';
@@ -326,7 +326,11 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
       this.validForGenerate = true;
       this.formResetCoupons();
-      this.generateCoupons = { promotioncouponId: 0, promotionId: this._promotion.promotionId, code: null, usageLimit: 1, usageLimitPerCustomer: 0, usageCount: 0 }
+      this.generateCoupons = {
+        promotioncouponId: 0,
+        promotionId: this._promotion.promotionId,
+        code: null, usageLimit: 1, usageLimitPerCustomer: 0, usageCount: 0
+      };
       this.generateCouponsModalDialog.show();
 
     }
@@ -360,7 +364,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
     if (!this.cannotExport) {
 
-      let myWindow = window.open("", "ExportPromotionCouponsInfo", "width=800,height=600");
+      let myWindow = window.open('', 'ExportPromotionCouponsInfo', 'width=800,height=600');
 
       var _csv:string = Util.toCsv(this.coupons, true);
       myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');

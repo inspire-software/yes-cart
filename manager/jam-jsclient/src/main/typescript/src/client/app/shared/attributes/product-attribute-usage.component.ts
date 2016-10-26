@@ -13,11 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {AttributeService, Util} from './../services/index';
+import {Component, OnInit, Input, ViewChild} from '@angular/core';
+import {AttributeService} from './../services/index';
 import {Pair} from './../model/index';
-import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
-import {FormValidationEvent} from './../event/index';
+import {ModalComponent, ModalResult} from './../modal/index';
 
 @Component({
   selector: 'yc-product-attribute-usage',

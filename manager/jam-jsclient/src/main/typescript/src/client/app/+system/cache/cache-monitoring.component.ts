@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../../shared/pagination/index';
 import {CacheInfoVO} from './../../shared/model/index';
-import {SystemService, ShopEventBus, Util} from './../../shared/services/index';
+import {SystemService, Util} from './../../shared/services/index';
 import {Futures, Future} from './../../shared/event/index';
 import {Config} from './../../shared/config/env.config';
 
@@ -139,7 +139,7 @@ export class CacheMonitoringComponent implements OnInit {
   protected onSaveHandler() {
     console.debug('CacheMonitoringComponent Save handler');
 
-    let myWindow = window.open("", "ExportCacheInfo", "width=800,height=600");
+    let myWindow = window.open('', 'ExportCacheInfo', 'width=800,height=600');
 
     var _csv:string = Util.toCsv(this.caches, true);
     myWindow.document.write('<textarea style="width:100%; height:100%">' + _csv + '</textarea>');

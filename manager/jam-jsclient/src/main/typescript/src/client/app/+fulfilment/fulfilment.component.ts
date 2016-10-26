@@ -15,13 +15,12 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
-import {I18nEventBus, ShopEventBus, FulfilmentService, Util} from './../shared/services/index';
+import {ShopEventBus, FulfilmentService, Util} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {FulfilmentCentresComponent, FulfilmentCentreComponent } from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {FulfilmentCentreShopLinkVO, FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, ShopVO} from './../shared/model/index';
+import {FulfilmentCentreVO, ShopVO} from './../shared/model/index';
 import {FormValidationEvent} from './../shared/event/index';
 
 @Component({

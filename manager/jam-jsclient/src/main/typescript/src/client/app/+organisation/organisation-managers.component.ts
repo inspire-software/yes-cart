@@ -15,15 +15,13 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
-import {ManagementService, OrganisationService, ShopEventBus, Util} from './../shared/services/index';
+import {OrganisationService, ShopEventBus} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ManagerComponent, ManagersComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
 import {ManagerInfoVO, ManagerVO, ShopVO, RoleVO} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import {FormValidationEvent} from './../shared/event/index';
 
 @Component({
   selector: 'yc-organisation-managers',

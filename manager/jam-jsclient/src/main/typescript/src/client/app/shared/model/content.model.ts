@@ -15,7 +15,7 @@
  */
 
 import {Pair} from './common.model';
-import {AttrValueVO, AttributeVO} from './attribute.model';
+import {AttrValueVO} from './attribute.model';
 
 
 export interface ContentVO {

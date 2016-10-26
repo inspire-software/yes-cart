@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
-import {ShopService, CatalogService, ShopEventBus, Util} from './../../shared/services/index';
+import {ShopService, CatalogService} from './../../shared/services/index';
 import {ShopVO, CategoryVO, BasicCategoryVO, ValidationRequestVO} from './../../shared/model/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';

@@ -13,17 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
+import {CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../pagination/index';
 import {AttrValueVO, AttributeVO, Pair} from './../model/index';
-import {ShopService, ShopEventBus, Util} from './../services/index';
+import {Util} from './../services/index';
 import {DataControlComponent} from './../sidebar/index';
 import {I18nComponent} from './../i18n/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 import {ProductAttributeSelectComponent} from './product-attribute-select.component';
-import {YcValidators} from './../validation/validators';
 import {FormValidationEvent, Futures, Future} from './../event/index';
 import {Config} from './../config/env.config';
 
@@ -493,20 +492,20 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   onFileClickRelay() {
-    console.debug("AttributeValuesComponent file upload relay button click");
+    console.debug('AttributeValuesComponent file upload relay button click');
     document.getElementById('avmodaluploadimage').click();
   }
 
   onImageFileSelected(event:any) {
     var srcElement:any = event.srcElement;
     var image:any = srcElement.files[0];
-    console.debug("AttributeValuesComponent image file selected", image.name);
+    console.debug('AttributeValuesComponent image file selected', image.name);
     var reader:FileReader = new FileReader();
 
     let that = this;
 
     reader.onloadend = function(e:any) {
-      console.debug("AttributeValuesComponent image file loaded", e.target.result);
+      console.debug('AttributeValuesComponent image file loaded', e.target.result);
       that.attributeToEdit.val = image.name;
       that.attributeToEdit.valBase64Data = e.target.result;
       that.processImageView(that.attributeToEdit);

@@ -16,9 +16,9 @@
 
 
 import {Injectable} from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
-import {CarrierShopLinkVO, CarrierLocaleVO, CarrierVO, ShopCarrierVO, CarrierSlaVO} from '../model/index';
+import {CarrierLocaleVO, CarrierVO, ShopCarrierVO, CarrierSlaVO} from '../model/index';
 import {ErrorEventBus} from './error-event-bus.service';
 import {Util} from './util';
 import {Observable}     from 'rxjs/Observable';

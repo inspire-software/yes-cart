@@ -19,12 +19,12 @@ import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms'
 import {YcValidators} from './../../shared/validation/validators';
 import {ShopVO, ContentVO, ContentWithBodyVO, AttrValueContentVO, ContentBodyVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {WindowMessageEventBus, Util} from './../../shared/services/index';
+import {WindowMessageEventBus} from './../../shared/services/index';
 import {UiUtil} from './../../shared/ui/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {ContentSelectComponent} from './../../shared/content/index';
 import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent, ModalAction, ModalResult} from './../../shared/modal/index';
+import {ModalComponent} from './../../shared/modal/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 
 
@@ -127,7 +127,7 @@ export class ContentComponent implements OnInit, OnDestroy {
           this.formChange();
         }
       }
-    })
+    });
 
   }
 
@@ -263,7 +263,7 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   protected onCMSEdit(body:ContentBodyVO) {
 
-    let myWindow = window.open("/yes-manager/resources/assets/editor/tinymce/editor.html", "CMS", "width=800,height=660");
+    let myWindow = window.open('/yes-manager/resources/assets/editor/tinymce/editor.html', 'CMS', 'width=800,height=660');
     myWindow.onload = function() {
 
       let msg = body;

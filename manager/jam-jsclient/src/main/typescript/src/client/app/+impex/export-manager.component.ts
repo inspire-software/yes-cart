@@ -13,12 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {CORE_DIRECTIVES} from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {DataGroupInfoVO, JobStatusVO, Pair} from './../shared/model/index';
-import {ImpexService, Util, I18nEventBus} from './../shared/services/index';
+import {ImpexService} from './../shared/services/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
 import {FileSelectComponent, DataGroupSelectComponent} from './../shared/impex/index';
 import {Futures, Future} from './../shared/event/index';
@@ -137,7 +137,7 @@ export class ExportManagerComponent implements OnInit {
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedFile != null) {
 
-        window.open("/yes-manager/service/filemanager/download?fileName=" + encodeURI(this.selectedFile.first), "DOWNLOAD", "width=300,height=100");
+        window.open('/yes-manager/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first), 'DOWNLOAD', 'width=300,height=100');
 
 
       }

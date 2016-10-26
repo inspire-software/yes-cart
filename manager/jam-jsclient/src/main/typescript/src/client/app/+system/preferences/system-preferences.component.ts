@@ -13,16 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit, OnChanges, ViewChild} from '@angular/core';
+import {CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../../shared/pagination/index';
-import {AttrValueSystemVO, AttributeVO, Pair} from './../../shared/model/index';
-import {SystemService, ShopEventBus, Util} from './../../shared/services/index';
+import {AttrValueSystemVO, Pair} from './../../shared/model/index';
+import {SystemService} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {YcValidators} from './../../shared/validation/validators';
+import {ModalComponent} from './../../shared/modal/index';
 
 @Component({
   selector: 'yc-system-preferences',

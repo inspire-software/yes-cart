@@ -16,7 +16,7 @@
 
 export interface RoleVO {
 
-  roleId : number
+  roleId : number;
 
   code : string;
 

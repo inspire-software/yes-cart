@@ -15,7 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ProductWithLinksVO, AttrValueProductVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
@@ -192,7 +192,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         valBase64Data: null,
         attribute: null,
         productId: this._product.productId
-      }
+      };
     } else {
       this.avPrototype = null;
     }

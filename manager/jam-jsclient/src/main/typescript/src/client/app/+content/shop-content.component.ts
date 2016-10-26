@@ -15,9 +15,8 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {Router, ActivatedRoute} from '@angular/router';
-import {ShopService, ContentService, ShopEventBus, Util} from './../shared/services/index';
+import {ShopService, ContentService, ShopEventBus} from './../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {ContentsComponent, ContentComponent} from './components/index';
 import {DataControlComponent} from './../shared/sidebar/index';

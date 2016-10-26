@@ -15,7 +15,7 @@
  */
 import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../../shared/validation/validators';
 import {ProductSkuVO, AttrValueProductSkuVO, Pair, ValidationRequestVO} from './../../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
@@ -164,7 +164,7 @@ export class SKUComponent implements OnInit, OnDestroy {
         valBase64Data: null,
         attribute: null,
         skuId: this._sku.skuId
-      }
+      };
     } else {
       this.avPrototype = null;
     }

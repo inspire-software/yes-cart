@@ -53,7 +53,7 @@ class TimedFunction implements Future {
       try {
         future();
       } catch(e) {
-        console.error("TimedFunction error executing timed task", e);
+        console.error('TimedFunction error executing timed task', e);
       }
     };
     this.delayMs = delayMs;
@@ -95,7 +95,7 @@ class ResettableTimedFunction implements Future {
       try {
         future();
       } catch(e) {
-        console.error("ResettableTimedFunction error executing timed task", e);
+        console.error('ResettableTimedFunction error executing timed task', e);
       }
     };
     this.delayMs = delayMs;

@@ -15,7 +15,6 @@
  */
 import {Component,  OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgFor} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {ShopVO, ShopSupportedCurrenciesVO} from './../model/index';
 import {ShopService} from './../services/index';

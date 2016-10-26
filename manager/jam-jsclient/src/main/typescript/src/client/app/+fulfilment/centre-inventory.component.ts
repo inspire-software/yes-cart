@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {YcValidators} from './../shared/validation/validators';
 import {FulfilmentService, Util} from './../shared/services/index';
@@ -25,7 +24,7 @@ import {DataControlComponent} from './../shared/sidebar/index';
 import {FulfilmentCentreSelectComponent} from './../shared/fulfilment/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
 import {InventoryVO, FulfilmentCentreInfoVO} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
+import {Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 
 @Component({

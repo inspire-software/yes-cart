@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {Http, Headers, RequestOptions} from '@angular/http';
 import {Config} from '../config/env.config';
 import {Util} from './util';
 import {DataGroupInfoVO, Pair, JobStatusVO} from '../model/index';

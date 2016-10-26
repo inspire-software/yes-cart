@@ -15,14 +15,12 @@
  */
 import {Component, OnInit, Input, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
-import {PaymentService, I18nEventBus, Util} from './../../shared/services/index';
+import {PaymentService, I18nEventBus} from './../../shared/services/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {GatewaysComponent, ParameterValuesComponent} from './components/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
 import {PaymentGatewayVO, PaymentGatewayParameterVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent} from './../../shared/event/index';
 
 @Component({
   selector: 'yc-payment-gateways',
@@ -39,12 +37,12 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   @Input() system:boolean = true;
   private  _shopCode:string;
 
-  private viewMode:string = PaymentGatewaysComponent.PGS;
+  viewMode:string = PaymentGatewaysComponent.PGS;
 
-  private gateways:Array<PaymentGatewayVO> = [];
-  private gatewayFilter:string;
+  gateways:Array<PaymentGatewayVO> = [];
+  gatewayFilter:string;
 
-  private selectedGateway:PaymentGatewayVO;
+  selectedGateway:PaymentGatewayVO;
 
   @ViewChild('featuresModalDialog')
   featuresModalDialog:ModalComponent;
@@ -52,9 +50,9 @@ export class PaymentGatewaysComponent implements OnInit, OnDestroy {
   @ViewChild('parameterValuesComponent')
   parameterValuesComponent:ParameterValuesComponent;
 
-  private paramFilter:string;
+  paramFilter:string;
 
-  private selectedParam:PaymentGatewayParameterVO;
+  selectedParam:PaymentGatewayParameterVO;
 
   update:Array<Pair<PaymentGatewayParameterVO, boolean>>;
 

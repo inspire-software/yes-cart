@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {NgIf, NgFor} from '@angular/common';
 import {ShopVO, ShopLanguagesVO} from './../../shared/model/index';
-import {ShopService, ShopEventBus, Util} from './../../shared/services/index';
+import {ShopService, Util} from './../../shared/services/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 
 @Component({

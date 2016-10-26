@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, AfterContentInit} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {ShopVO} from './../shared/model/index';
 import {Router, ActivatedRoute} from '@angular/router';
 import {ShopEventBus, ShopService} from './../shared/services/index';

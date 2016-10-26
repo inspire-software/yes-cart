@@ -13,8 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {ShopService, ContentService, ShopEventBus, Util} from './../services/index';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {ContentService} from './../services/index';
 import {ContentVO, ShopVO} from './../model/index';
 import {TreeViewComponent, ITreeNode} from './../tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';

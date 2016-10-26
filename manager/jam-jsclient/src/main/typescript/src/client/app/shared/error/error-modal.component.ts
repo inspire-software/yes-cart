@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
 import {ErrorEventBus, Util} from './../services/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 

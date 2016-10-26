@@ -16,7 +16,7 @@
 
 export interface CountryVO {
 
-  countryId : number
+  countryId : number;
 
   countryCode : string;
 
@@ -30,7 +30,7 @@ export interface CountryVO {
 
 export interface StateVO {
 
-  stateId : number
+  stateId : number;
 
   countryCode : string;
 

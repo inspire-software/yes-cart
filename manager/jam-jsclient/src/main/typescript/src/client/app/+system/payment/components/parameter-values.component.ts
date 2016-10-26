@@ -13,14 +13,13 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
+import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
+import {CORE_DIRECTIVES } from '@angular/common';
 import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {PaginationComponent} from './../../../shared/pagination/index';
 import {PaymentGatewayVO, PaymentGatewayParameterVO, Pair} from './../../../shared/model/index';
-import {ShopService, ShopEventBus, Util} from './../../../shared/services/index';
+import {Util} from './../../../shared/services/index';
 import {ModalComponent, ModalResult, ModalAction} from './../../../shared/modal/index';
-import {YcValidators} from './../../../shared/validation/validators';
 import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
 import {Config} from './../../../shared/config/env.config';
 

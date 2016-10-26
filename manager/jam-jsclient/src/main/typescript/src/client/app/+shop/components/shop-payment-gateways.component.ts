@@ -14,10 +14,9 @@
  *    limitations under the License.
  */
 import {Component, OnInit, Input} from '@angular/core';
-import {NgIf, NgFor, CORE_DIRECTIVES } from '@angular/common';
-import {ShopVO, ShopUrlVO, UrlVO} from './../../shared/model/index';
+import {CORE_DIRECTIVES } from '@angular/common';
+import {ShopVO} from './../../shared/model/index';
 import {PaymentGatewaysComponent} from './../../+system/payment/index';
-import {Config} from './../../shared/config/env.config';
 
 @Component({
   selector: 'yc-shop-payment-gateways',

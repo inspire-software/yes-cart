@@ -15,7 +15,6 @@
  */
 import {Component,  OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
 import {NgFor} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {Pair} from './../model/index';
 import {ImpexService, WindowMessageEventBus} from './../services/index';
@@ -53,7 +52,7 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
     this.winSub = WindowMessageEventBus.getWindowMessageEventBus().messageUpdated$.subscribe(content => {
       this.onRefresh();
-    })
+    });
 
   }
 
@@ -95,10 +94,10 @@ export class FileSelectComponent implements OnInit, OnDestroy {
 
     let that = this;
 
-    let myWindow = window.open("/yes-manager/resources/assets/uploader/uploader.html", "UPLOAD", "width=300,height=100");
+    let myWindow = window.open('/yes-manager/resources/assets/uploader/uploader.html', 'UPLOAD', 'width=300,height=100');
     myWindow.onbeforeunload = function() {
       that.onRefresh();
-    }
+    };
   }
 
   onSelectClick(file: Pair<string, string>) {

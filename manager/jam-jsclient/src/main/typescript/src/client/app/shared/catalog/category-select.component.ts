@@ -13,9 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {ShopService, CatalogService, ShopEventBus, Util} from './../services/index';
-import {CategoryVO, BasicCategoryVO} from './../model/index';
+import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
+import {CatalogService} from './../services/index';
+import {CategoryVO} from './../model/index';
 import {TreeViewComponent, ITreeNode} from './../tree-view/index';
 import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
 import {FormValidationEvent} from './../event/index';

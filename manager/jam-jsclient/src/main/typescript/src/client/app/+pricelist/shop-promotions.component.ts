@@ -15,7 +15,6 @@
  */
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {HTTP_PROVIDERS}    from '@angular/http';
 import {PricingService, Util} from './../shared/services/index';
 import {UiUtil} from './../shared/ui/index';
 import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
@@ -24,7 +23,7 @@ import {DataControlComponent} from './../shared/sidebar/index';
 import {ShopSelectComponent} from './../shared/shop/index';
 import {CurrencySelectComponent} from './../shared/price/index';
 import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {PromotionVO, ShopVO, Pair} from './../shared/model/index';
+import {PromotionVO, ShopVO} from './../shared/model/index';
 import {FormValidationEvent, Futures, Future} from './../shared/event/index';
 import {Config} from './../shared/config/env.config';
 

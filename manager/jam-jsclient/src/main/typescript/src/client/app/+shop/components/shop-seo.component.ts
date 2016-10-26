@@ -13,11 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, OnChanges, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ShopVO, ShopSeoVO} from './../../shared/model/index';
-import {ShopService, ShopEventBus} from './../../shared/services/index';
+import {ShopService} from './../../shared/services/index';
 import {I18nComponent} from './../../shared/i18n/index';
 import {DataControlComponent} from './../../shared/sidebar/index';
 import {Futures, Future} from './../../shared/event/index';
