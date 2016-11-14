@@ -60,13 +60,6 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>4</column-index>
-            <field-type>FIELD</field-type>
-            <data-type>BOOLEAN</data-type>
-            <name>navigation</name>
-        </column-descriptor>
-
-        <column-descriptor>
             <column-index>5</column-index>
             <field-type>FIELD</field-type>
             <name>navigationType</name>
@@ -82,7 +75,13 @@
             <value-regex-group>1</value-regex-group>
         </column-descriptor>
 
-
+        <column-descriptor>
+            <column-index>-1</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>visible</name>
+            <value-constant>true</value-constant>
+        </column-descriptor>
 
     </import-columns>
 </import-descriptor>

@@ -91,10 +91,17 @@
         </column-descriptor>
 
         <column-descriptor>
-            <column-index>6</column-index>
+            <column-index>7</column-index>
             <field-type>FIELD</field-type>
             <data-type>BOOLEAN</data-type>
             <name>mandatory</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-index>8</column-index>
+            <field-type>FIELD</field-type>
+            <data-type>BOOLEAN</data-type>
+            <name>navigation</name>
         </column-descriptor>
 
         <column-descriptor>
