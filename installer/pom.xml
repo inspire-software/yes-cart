@@ -131,6 +131,7 @@
                                     <artifactId>jam</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
+                                    <destFileName>yes-manager.war</destFileName>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.izpack.directory}</outputDirectory>
