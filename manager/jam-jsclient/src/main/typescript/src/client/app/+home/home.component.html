@@ -225,6 +225,30 @@
           </div>
         </div>
 
+        <div class="col-lg-3 col-md-6">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col-xs-3">
+                  <i class="fa fa-gears fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_TABLE_PAGE_SIZE')">{{ 'PANEL_UI_SETTINGS_PAGE_SIZE' | translate: { value: uiPagination }  }}</a></div>
+                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_CAP' | translate: { value: uiFilteMax }  }}</a></div>
+                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_NO_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_NO_CAP' | translate: { value: uiNoFilteMax }  }}</a></div>
+                </div>
+              </div>
+            </div>
+            <a>
+              <div class="panel-footer">
+                <span class="pull-left">{{ 'PANEL_UI_SETTINGS' | translate }}</span>
+                <form class="pull-right" [hidden]="uiSettingReadOnly"><input type="text" class="form-control" style="width: 80px;" name="uiSetting" [(ngModel)]="uiSetting" /></form>
+                <div class="clearfix"></div>
+              </div>
+            </a>
+          </div>
+        </div>
+
       </div>
 
       <!--<div class="col-lg-3 col-md-6">-->

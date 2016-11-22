@@ -6,6 +6,7 @@ import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus, Wi
 import { YcValidators } from './shared/validation/validators';
 import { ErrorModalComponent } from './shared/error/index';
 import { LicenseModalComponent } from './shared/license/index';
+import { CookieUtil } from './shared/cookies/index';
 
 import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -50,6 +51,32 @@ export class AppComponent implements OnDestroy {
     });
     I18nEventBus.getI18nEventBus().emit(userLang);
 
+    this.loadUiPrefrences();
+
+  }
+
+  loadUiPrefrences() {
+
+    console.debug('Load UI configurations');
+
+    this.configureIntPreference('UI_INPUT_DELAY');
+    this.configureIntPreference('UI_BULKSERVICE_DELAY');
+    this.configureIntPreference('UI_FILTER_CAP');
+    this.configureIntPreference('UI_FILTER_NO_CAP');
+    this.configureIntPreference('UI_TABLE_PAGE_SIZE');
+    this.configureIntPreference('UI_TABLE_PAGE_NUMS');
+
+  }
+
+  configureIntPreference(configName:string):void {
+    let cfg:any = Config;
+    let cookieName = 'YCJAM_' + configName;
+    let defaultValue = ''+cfg[configName];
+    let value = CookieUtil.readCookie(cookieName, defaultValue);
+    if (defaultValue !== value) {
+      cfg[configName] = parseInt(value);
+    }
+    console.debug('Load UI configuration', configName, value, defaultValue);
   }
 
 

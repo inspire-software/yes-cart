@@ -444,6 +444,15 @@
                         <configuration>
                             <target>
                                 <echo>=========================================================================================================================================================</echo>
+                                <echo>  __     __    _____                                       </echo>
+                                <echo>  \ \   / /   / ___ \   Pure Ecommerce ${project.version}  </echo>
+                                <echo>   \ \ / /   / /   \_\  http://www.yes-cart.org            </echo>
+                                <echo>    \   /   | |                                            </echo>
+                                <echo>     | |    | |     __                                     </echo>
+                                <echo>     | |     \ \___/ /                                     </echo>
+                                <echo>     |_|      \_____/   Buld no: ${buildNumber}            </echo>
+                                <echo> </echo>
+                                <echo>=========================================================================================================================================================</echo>
                                 <echo>Preparing to build YC ${project.artifactId}-${project.version}-rev.${buildNumber} with the following configurations:</echo>
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
