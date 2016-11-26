@@ -216,6 +216,29 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "productService-taggedProducts")
+    public List<ProductSearchResultDTO> getTaggedProducts(final long categoryId, final long shopId, final String tag) {
+
+        final List<Long> categories;
+        if (categoryId == 0) {
+            categories = null;
+        } else {
+            categories = Collections.singletonList(categoryId);
+        }
+
+        final int limit = categoryServiceFacade.getFeaturedListSizeConfig(categoryId, shopId);
+
+        final NavigationContext tagged = luceneQueryFactory.getFilteredNavigationQueryChain(shopId, categories, false,
+                Collections.singletonMap(ProductSearchQueryBuilder.PRODUCT_TAG_FIELD,
+                        (List) Arrays.asList(tag)));
+
+        return Collections.unmodifiableList(productService.getProductSearchResultDTOByQuery(
+                tagged.getProductQuery(), 0, limit, null, false).getResults());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<ProductSearchResultDTO> getListProducts(final List<String> productIds,
                                                         final long categoryId,
                                                         final long shopId) {

@@ -182,6 +182,17 @@ public interface ProductServiceFacade {
     /**
      * Get new products for given category. Limit is set by the category.
      *
+     * @param categoryId      category (optional)
+     * @param shopId          current shop
+     * @param tag             tag
+     *
+     * @return list of new products
+     */
+    List<ProductSearchResultDTO> getTaggedProducts(long categoryId, long shopId, String tag);
+
+    /**
+     * Get new products for given category. Limit is set by the category.
+     *
      * @param productIds      list of products
      * @param categoryId      category (optional), specify -1 for no limit
      * @param shopId          current shop
