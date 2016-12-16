@@ -37,4 +37,11 @@ public interface ProductTypeService extends GenericService<ProductType> {
      */
     List<ProductType> findByAttributeCode(String code);
 
+    /**
+     * Find all product types that are used in attribute navigation.
+     *
+     * @return list of product types
+     */
+    List<ProductType> findAllAssignedToCategories();
+
 }

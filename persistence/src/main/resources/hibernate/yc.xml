@@ -2852,6 +2852,13 @@
        ]]>
     </query>
 
+    <query name="PRODUCT.TYPES.ASSIGNED.TO.CATEGORIES">
+          <![CDATA[
+       select distinct c.productType
+       from  CategoryEntity c
+       ]]>
+    </query>
+
     <query name="PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE">
           <![CDATA[
        select attr

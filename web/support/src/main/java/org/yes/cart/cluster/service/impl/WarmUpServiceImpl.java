@@ -121,10 +121,8 @@ public class WarmUpServiceImpl implements WarmUpService {
         attributeService.getAllAttributeNames();
 
         final List<String> supportedLanguages = languageService.getSupportedLanguages();
-        final List<ProductType> types = productTypeService.findAll();
-        for (final ProductType type : types) {
-            // This is used by SKU attribute view
-            productTypeAttrService.getViewGroupsByProductTypeId(type.getProducttypeId());
+        final List<ProductType> navigatableTypes = productTypeService.findAllAssignedToCategories();
+        for (final ProductType type : navigatableTypes) {
             for (final String language : supportedLanguages) {
                 // This is used for Filtered navigation by attributes
                 productService.getDistinctAttributeValues(language, type.getProducttypeId());
