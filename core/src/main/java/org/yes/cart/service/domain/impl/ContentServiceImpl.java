@@ -350,8 +350,14 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
         final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
 
         final Category root = proxy().getRootContent(shopId);
-        final List<Category> cats =
-                getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+        List<Category> cats = new ArrayList<Category>();
+        if ((codeP != null || nameP != null) && uriP != null) {
+            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+        } else if (codeP == null && nameP == null && uriP != null) {
+            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
+        } else {
+            cats = getGenericDao().findAll();
+        }
 
         final Iterator<Category> catsIt = cats.iterator();
         while (catsIt.hasNext()) {
@@ -387,14 +393,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     @Cacheable(value = "contentService-byId")
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
-    }
-
-    private Set<Long> transform(final Collection<Category> categories) {
-        final Set<Long> result = new LinkedHashSet<Long>(categories.size());
-        for (Category category : categories) {
-            result.add(category.getCategoryId());
-        }
-        return result;
     }
 
     /**

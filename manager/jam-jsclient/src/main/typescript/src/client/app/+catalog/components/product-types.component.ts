@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ProductTypeInfoVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ProductTypeInfoVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-product-types',
   moduleId: module.id,
   templateUrl: 'product-types.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class ProductTypesComponent implements OnInit, OnDestroy {
-
-  _productTypes:Array<ProductTypeInfoVO> = [];
-
-  filteredProductTypes:Array<ProductTypeInfoVO>;
 
   @Input() selectedProductType:ProductTypeInfoVO;
 
   @Output() dataSelected: EventEmitter<ProductTypeInfoVO> = new EventEmitter<ProductTypeInfoVO>();
 
+  private _productTypes:Array<ProductTypeInfoVO> = [];
+
+  private filteredProductTypes:Array<ProductTypeInfoVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('ProductTypesComponent constructed');
+    LogUtil.debug('ProductTypesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('ProductTypesComponent ngOnInit');
+    LogUtil.debug('ProductTypesComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
     this.filterProductTypes();
   }
 
-  private filterProductTypes() {
-
-    this.filteredProductTypes = this._productTypes;
-    console.debug('ProductTypesComponent filterProductTypes', this.filteredProductTypes);
-
-    if (this.filteredProductTypes === null) {
-      this.filteredProductTypes = [];
-    }
-
-    let _total = this.filteredProductTypes.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('ProductTypesComponent ngOnDestroy');
+    LogUtil.debug('ProductTypesComponent ngOnDestroy');
     this.selectedProductType = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:ProductTypeInfoVO) {
-    console.debug('ProductTypesComponent onSelectRow handler', row);
+    LogUtil.debug('ProductTypesComponent onSelectRow handler', row);
     if (row == this.selectedProductType) {
       this.selectedProductType = null;
     } else {
@@ -128,5 +110,22 @@ export class ProductTypesComponent implements OnInit, OnDestroy {
     }
     return flags;
   }
+
+  private filterProductTypes() {
+
+    this.filteredProductTypes = this._productTypes;
+    LogUtil.debug('ProductTypesComponent filterProductTypes', this.filteredProductTypes);
+
+    if (this.filteredProductTypes === null) {
+      this.filteredProductTypes = [];
+    }
+
+    let _total = this.filteredProductTypes.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
 
 }

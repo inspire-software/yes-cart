@@ -13,24 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {Router, ActivatedRoute} from '@angular/router';
-import {ShopService, ContentService, ShopEventBus} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {ContentsComponent, ContentComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ContentSelectComponent} from './../shared/content/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {ShopVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ShopService, ContentService, ShopEventBus } from './../shared/services/index';
+import { ContentSelectComponent } from './../shared/content/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { ShopVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-shop-content',
   moduleId: module.id,
   templateUrl: 'shop-content.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, ContentsComponent, ContentSelectComponent, ContentComponent, ModalComponent, DataControlComponent ],
 })
 
 export class ShopContentComponent implements OnInit, OnDestroy {
@@ -38,10 +34,11 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private static CONTENTS:string = 'contents';
   private static CONTENT:string = 'content';
 
+  private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
   private viewMode:string = ShopContentComponent.CONTENTS;
 
-  shop:ShopVO = null;
+  private shop:ShopVO = null;
 
   private shopIdSub:any;
   private shopSub:any;
@@ -51,10 +48,10 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private contentFilterRequired:boolean = true;
   private contentFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedContent:ContentVO;
 
@@ -63,27 +60,29 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private contentAttributesUpdate:Array<Pair<AttrValueContentVO, boolean>>;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private deleteValue:String;
 
   @ViewChild('contentSelectComponent')
-  contentSelectComponent:ContentSelectComponent;
+  private contentSelectComponent:ContentSelectComponent;
+
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   constructor(private _contentService:ContentService,
               private _shopService:ShopService,
               private _route: ActivatedRoute,
               private _router: Router) {
-    console.debug('ShopContentComponent constructed');
+    LogUtil.debug('ShopContentComponent constructed');
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
       this.forceShowAll = false;
       this.getFilteredContents();
     });
   }
-
-  changed:boolean = false;
-  validForSave:boolean = false;
 
   newContentInstance():ContentWithBodyVO {
     return {
@@ -100,13 +99,13 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopContentComponent ngOnInit');
+    LogUtil.debug('ShopContentComponent ngOnInit');
 
     this.shopIdSub = this._route.params.subscribe(params => {
       let shopId = params['shopId'];
-      console.debug('ShopContentComponent shopId from params is ' + shopId);
+      LogUtil.debug('ShopContentComponent shopId from params is ' + shopId);
       var _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
-        console.debug('ShopContentComponent Retrieving existing shop', shop);
+        LogUtil.debug('ShopContentComponent Retrieving existing shop', shop);
         ShopEventBus.getShopEventBus().emit(shop);
         _sub.unsubscribe();
       });
@@ -121,7 +120,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('ShopContentComponent ngOnDestroy');
+    LogUtil.debug('ShopContentComponent ngOnDestroy');
     if (this.shopIdSub) {
       this.shopIdSub.unsubscribe();
     }
@@ -129,58 +128,43 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredContents() {
-    this.contentFilterRequired = !this.forceShowAll && (this.contentFilter == null || this.contentFilter.length < 2);
-
-    console.debug('ShopContentComponent getFilteredContents' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this.shop != null && !this.contentFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contentFilter, max).subscribe( allcontents => {
-        console.debug('ShopContentComponent getFilteredContent', allcontents);
-        this.contents = allcontents;
-        this.selectedContent = null;
-        this.contentEdit = null;
-        this.viewMode = ShopContentComponent.CONTENTS;
-        this.changed = false;
-        this.validForSave = false;
-        this.contentFilterCapped = this.contents.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.contents = [];
-      this.selectedContent = null;
-      this.contentEdit = null;
-      this.contentEditAttributes = null;
-      this.viewMode = ShopContentComponent.CONTENTS;
-      this.changed = false;
-      this.validForSave = false;
-      this.contentFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('ShopContentComponent refresh handler');
+    LogUtil.debug('ShopContentComponent refresh handler');
     this.getFilteredContents();
   }
 
-  onContentSelected(data:ContentVO) {
-    console.debug('ShopContentComponent onContentSelected', data);
+  protected onContentSelected(data:ContentVO) {
+    LogUtil.debug('ShopContentComponent onContentSelected', data);
     this.selectedContent = data;
   }
 
-  onContentChanged(event:FormValidationEvent<Pair<ContentWithBodyVO, Array<Pair<AttrValueContentVO, boolean>>>>) {
-    console.debug('ShopContentComponent onContentChanged', event);
+  protected onContentChanged(event:FormValidationEvent<Pair<ContentWithBodyVO, Array<Pair<AttrValueContentVO, boolean>>>>) {
+    LogUtil.debug('ShopContentComponent onContentChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.contentEdit = event.source.first;
     this.contentAttributesUpdate = event.source.second;
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+
+  protected onSearchParent() {
+    this.contentFilter = '^keyword';
+    this.searchHelpShow = false;
+  }
+
+  protected onSearchURI() {
+    this.contentFilter = '@uri';
+    this.searchHelpShow = false;
   }
 
   protected onForceShowAll() {
@@ -189,7 +173,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onBackToList() {
-    console.debug('ShopContentComponent onBackToList handler');
+    LogUtil.debug('ShopContentComponent onBackToList handler');
     if (this.viewMode === ShopContentComponent.CONTENT) {
       this.contentEdit = null;
       this.viewMode = ShopContentComponent.CONTENTS;
@@ -197,20 +181,20 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onViewTree() {
-    console.debug('ShopContentComponent onViewTree handler');
+    LogUtil.debug('ShopContentComponent onViewTree handler');
     this.contentSelectComponent.showDialog();
   }
 
   protected onContentTreeDataSelected(event:FormValidationEvent<ContentVO>) {
-    console.debug('ShopContentComponent onContentTreeDataSelected handler', event);
+    LogUtil.debug('ShopContentComponent onContentTreeDataSelected handler', event);
     if (event.valid) {
-      this.contentFilter = event.source.name;
+      this.contentFilter = '^' + event.source.name;
       this.getFilteredContents();
     }
   }
 
   protected onRowNew() {
-    console.debug('ShopContentComponent onRowNew handler');
+    LogUtil.debug('ShopContentComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === ShopContentComponent.CONTENTS) {
@@ -221,7 +205,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('ShopContentComponent onRowDelete handler', row);
+    LogUtil.debug('ShopContentComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -234,9 +218,9 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditContent(row:ContentVO) {
-    console.debug('ShopContentComponent onRowEditContent handler', row);
+    LogUtil.debug('ShopContentComponent onRowEditContent handler', row);
     var _sub:any = this._contentService.getContentById(this.selectedContent.contentId).subscribe(content => {
-      console.debug('ShopContentComponent getContentById', content);
+      LogUtil.debug('ShopContentComponent getContentById', content);
       this.contentEdit = content;
       _sub.unsubscribe();
       this.contentEditAttributes = [];
@@ -262,13 +246,13 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
       if (this.contentEdit != null) {
 
-        console.debug('ShopContentComponent Save handler content', this.contentEdit);
+        LogUtil.debug('ShopContentComponent Save handler content', this.contentEdit);
 
         var _sub:any = this._contentService.saveContent(this.contentEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.contentEdit.contentId;
-              console.debug('ShopContentComponent content changed', rez);
+              LogUtil.debug('ShopContentComponent content changed', rez);
               this.changed = false;
               this.selectedContent = rez;
               this.contentEdit = null;
@@ -278,7 +262,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
 
                 var _sub2:any = this._contentService.saveContentAttributes(this.contentAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
-                  console.debug('ShopContentComponent content attributes updated', rez);
+                  LogUtil.debug('ShopContentComponent content attributes updated', rez);
                   this.contentAttributesUpdate = null;
                   this.getFilteredContents();
                 });
@@ -295,7 +279,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopContentComponent discard handler');
+    LogUtil.debug('ShopContentComponent discard handler');
     if (this.viewMode === ShopContentComponent.CONTENT) {
       if (this.selectedContent != null) {
         this.onRowEditSelected();
@@ -306,20 +290,60 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopContentComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopContentComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedContent != null) {
-        console.debug('ShopContentComponent onDeleteConfirmationResult', this.selectedContent);
+        LogUtil.debug('ShopContentComponent onDeleteConfirmationResult', this.selectedContent);
 
         var _sub:any = this._contentService.removeContent(this.selectedContent).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('ShopContentComponent removeContent', this.selectedContent);
+          LogUtil.debug('ShopContentComponent removeContent', this.selectedContent);
           this.selectedContent = null;
           this.contentEdit = null;
           this.getFilteredContents();
         });
       }
+    }
+  }
+
+  protected onClearFilter() {
+
+    this.contentFilter = '';
+    this.getFilteredContents();
+
+  }
+
+
+  private getFilteredContents() {
+    this.contentFilterRequired = !this.forceShowAll && (this.contentFilter == null || this.contentFilter.length < 2);
+
+    LogUtil.debug('ShopContentComponent getFilteredContents' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this.shop != null && !this.contentFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._contentService.getFilteredContent(this.shop.shopId, this.contentFilter, max).subscribe( allcontents => {
+        LogUtil.debug('ShopContentComponent getFilteredContent', allcontents);
+        this.contents = allcontents;
+        this.selectedContent = null;
+        this.contentEdit = null;
+        this.viewMode = ShopContentComponent.CONTENTS;
+        this.changed = false;
+        this.validForSave = false;
+        this.contentFilterCapped = this.contents.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.contents = [];
+      this.selectedContent = null;
+      this.contentEdit = null;
+      this.contentEditAttributes = null;
+      this.viewMode = ShopContentComponent.CONTENTS;
+      this.changed = false;
+      this.validForSave = false;
+      this.contentFilterCapped = false;
     }
   }
 

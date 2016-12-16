@@ -13,31 +13,28 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {PricingService, Util} from './../shared/services/index';
-import {UiUtil} from './../shared/ui/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {PromotionsComponent, PromotionComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ShopSelectComponent} from './../shared/shop/index';
-import {CurrencySelectComponent} from './../shared/price/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {PromotionVO, ShopVO} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { PricingService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { PromotionVO, ShopVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { UiUtil } from './../shared/ui/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-shop-promotions',
   moduleId: module.id,
   templateUrl: 'shop-promotions.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, PromotionsComponent, PromotionComponent, ModalComponent, DataControlComponent, ShopSelectComponent, CurrencySelectComponent ],
 })
 
 export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   private static PROMOTIONS:string = 'promotions';
   private static PROMOTION:string = 'promotion';
+
+  private static _selectedShop:ShopVO;
+  private static _selectedCurrency:string;
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -48,37 +45,36 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   private promotionFilterRequired:boolean = true;
   private promotionFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
-  static _selectedShop:ShopVO;
-  static _selectedCurrency:string;
   private selectedPromotion:PromotionVO;
 
   private promotionEdit:PromotionVO;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   @ViewChild('disableConfirmationModalDialog')
-  disableConfirmationModalDialog:ModalComponent;
+  private disableConfirmationModalDialog:ModalComponent;
 
   private deleteValue:String;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private loading:boolean = false;
 
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   @ViewChild('selectShopModalDialog')
-  selectShopModalDialog:ModalComponent;
+  private selectShopModalDialog:ModalComponent;
 
   @ViewChild('selectCurrencyModalDialog')
-  selectCurrencyModalDialog:ModalComponent;
+  private selectCurrencyModalDialog:ModalComponent;
 
   constructor(private _promotionService:PricingService) {
-    console.debug('ShopPromotionsComponent constructed');
+    LogUtil.debug('ShopPromotionsComponent constructed');
   }
 
 
@@ -113,7 +109,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopPromotionsComponent ngOnInit');
+    LogUtil.debug('ShopPromotionsComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -123,22 +119,22 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('ShopPromotionsComponent ngOnDestroy');
+    LogUtil.debug('ShopPromotionsComponent ngOnDestroy');
   }
 
 
   protected onShopSelect() {
-    console.debug('ShopPromotionsComponent onShopSelect');
+    LogUtil.debug('ShopPromotionsComponent onShopSelect');
     this.selectShopModalDialog.show();
   }
 
   protected onShopSelected(event:ShopVO) {
-    console.debug('ShopPromotionsComponent onShopSelected');
+    LogUtil.debug('ShopPromotionsComponent onShopSelected');
     this.selectedShop = event;
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
-    console.debug('ShopPromotionsComponent onSelectShopResult modal result is ', modalresult);
+    LogUtil.debug('ShopPromotionsComponent onSelectShopResult modal result is ', modalresult);
     if (this.selectedShop == null) {
       this.selectShopModalDialog.show();
     } else if (this.selectedCurrency == null) {
@@ -149,17 +145,17 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onCurrencySelect() {
-    console.debug('ShopPromotionsComponent onCurrencySelect');
+    LogUtil.debug('ShopPromotionsComponent onCurrencySelect');
     this.selectCurrencyModalDialog.show();
   }
 
   protected onCurrencySelected(event:string) {
-    console.debug('ShopPromotionsComponent onCurrencySelected');
+    LogUtil.debug('ShopPromotionsComponent onCurrencySelected');
     this.selectedCurrency = event;
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {
-    console.debug('ShopPromotionsComponent onSelectCurrencyResult modal result is ', modalresult);
+    LogUtil.debug('ShopPromotionsComponent onSelectCurrencyResult modal result is ', modalresult);
     if (this.selectedCurrency == null) {
       this.selectCurrencyModalDialog.show();
     } else {
@@ -167,55 +163,24 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     }
   }
 
-
-
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredPromotions() {
-    this.promotionFilterRequired = !this.forceShowAll && (this.promotionFilter == null || this.promotionFilter.length < 2);
-
-    console.debug('ShopPromotionsComponent getFilteredPromotions' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this.selectedShop != null && this.selectedCurrency != null && !this.promotionFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, max).subscribe( allpromotions => {
-        console.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
-        this.promotions = allpromotions;
-        this.selectedPromotion = null;
-        this.promotionEdit = null;
-        this.viewMode = ShopPromotionsComponent.PROMOTIONS;
-        this.changed = false;
-        this.validForSave = false;
-        this.promotionFilterCapped = this.promotions.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.promotions = [];
-      this.selectedPromotion = null;
-      this.promotionEdit = null;
-      this.viewMode = ShopPromotionsComponent.PROMOTIONS;
-      this.changed = false;
-      this.validForSave = false;
-      this.promotionFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('ShopPromotionsComponent refresh handler');
+    LogUtil.debug('ShopPromotionsComponent refresh handler');
     this.getFilteredPromotions();
   }
 
-  onPromotionSelected(data:PromotionVO) {
-    console.debug('ShopPromotionsComponent onPromotionSelected', data);
+  protected onPromotionSelected(data:PromotionVO) {
+    LogUtil.debug('ShopPromotionsComponent onPromotionSelected', data);
     this.selectedPromotion = data;
   }
 
-  onPromotionChanged(event:FormValidationEvent<PromotionVO>) {
-    console.debug('ShopPromotionsComponent onPromotionChanged', event);
+  protected onPromotionChanged(event:FormValidationEvent<PromotionVO>) {
+    LogUtil.debug('ShopPromotionsComponent onPromotionChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.promotionEdit = event.source;
@@ -232,12 +197,17 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchType() {
-    this.promotionFilter = '?O';
+    this.promotionFilter = '!O';
+    //this.searchHelpShow = false; by design, do not collapse since need to see special character types
+  }
+
+  protected onSearchCondition() {
+    this.promotionFilter = '?shoppingCartItem.productSkuCode';
     this.searchHelpShow = false;
   }
 
   protected onSearchEnabled() {
-    this.promotionFilter = '+?O';
+    this.promotionFilter = '+!O';
     this.searchHelpShow = false;
   }
 
@@ -252,7 +222,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onBackToList() {
-    console.debug('ShopPromotionsComponent onBackToList handler');
+    LogUtil.debug('ShopPromotionsComponent onBackToList handler');
     if (this.viewMode === ShopPromotionsComponent.PROMOTION) {
       this.promotionEdit = null;
       this.viewMode = ShopPromotionsComponent.PROMOTIONS;
@@ -260,7 +230,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('ShopPromotionsComponent onRowNew handler');
+    LogUtil.debug('ShopPromotionsComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === ShopPromotionsComponent.PROMOTIONS) {
@@ -270,7 +240,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('ShopPromotionsComponent onRowDelete handler', row);
+    LogUtil.debug('ShopPromotionsComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -290,7 +260,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditPromotion(row:PromotionVO) {
-    console.debug('ShopPromotionsComponent onRowEditPromotion handler', row);
+    LogUtil.debug('ShopPromotionsComponent onRowEditPromotion handler', row);
     this.promotionEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -303,19 +273,29 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onRowCopySelected() {
+    if (this.selectedPromotion != null) {
+      var copy:PromotionVO = Util.clone(this.selectedPromotion);
+      copy.promotionId = 0;
+      copy.enabled = false;
+      this.onRowEditPromotion(copy);
+    }
+  }
+
+
   protected onSaveHandler() {
 
     if (this.validForSave && this.changed) {
 
       if (this.promotionEdit != null) {
 
-        console.debug('ShopPromotionsComponent Save handler promotion', this.promotionEdit);
+        LogUtil.debug('ShopPromotionsComponent Save handler promotion', this.promotionEdit);
 
         var _sub:any = this._promotionService.savePromotion(this.promotionEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.promotionEdit.promotionId;
-              console.debug('ShopPromotionsComponent promotion changed', rez);
+              LogUtil.debug('ShopPromotionsComponent promotion changed', rez);
               this.changed = false;
               this.selectedPromotion = rez;
               this.promotionEdit = null;
@@ -334,7 +314,7 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopPromotionsComponent discard handler');
+    LogUtil.debug('ShopPromotionsComponent discard handler');
     if (this.viewMode === ShopPromotionsComponent.PROMOTION) {
       if (this.selectedPromotion != null) {
         this.onRowEditSelected();
@@ -345,15 +325,15 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopPromotionsComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopPromotionsComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedPromotion != null) {
-        console.debug('ShopPromotionsComponent onDeleteConfirmationResult', this.selectedPromotion);
+        LogUtil.debug('ShopPromotionsComponent onDeleteConfirmationResult', this.selectedPromotion);
 
         var _sub:any = this._promotionService.removePromotion(this.selectedPromotion).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('ShopPromotionsComponent removePromotion', this.selectedPromotion);
+          LogUtil.debug('ShopPromotionsComponent removePromotion', this.selectedPromotion);
           this.selectedPromotion = null;
           this.promotionEdit = null;
           this.getFilteredPromotions();
@@ -364,14 +344,15 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
 
   protected onDisableConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopPromotionsComponent onDisableConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopPromotionsComponent onDisableConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedPromotion != null) {
         var _sub:any = this._promotionService.updatePromotionDisabledFlag(this.selectedPromotion, this.selectedPromotion.enabled).subscribe( done => {
-          console.debug('ShopPromotionsComponent updateDisabledFlag', done);
+          LogUtil.debug('ShopPromotionsComponent updateDisabledFlag', done);
           this.selectedPromotion.enabled = !this.selectedPromotion.enabled;
-          if (this.selectedPromotion.promotionId == this.promotionEdit.promotionId) {
+          if (this.promotionEdit != null && this.selectedPromotion.promotionId == this.promotionEdit.promotionId) {
+            this.promotionEdit = Util.clone(this.promotionEdit); // Trigger form INIT
             this.promotionEdit.enabled = this.selectedPromotion.enabled;
             if (!this.promotionEdit.enabled) {
               this.validForSave = false;
@@ -386,5 +367,43 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onClearFilter() {
+
+    this.promotionFilter = '';
+    this.getFilteredPromotions();
+
+  }
+
+
+  private getFilteredPromotions() {
+    this.promotionFilterRequired = !this.forceShowAll && (this.promotionFilter == null || this.promotionFilter.length < 2);
+
+    LogUtil.debug('ShopPromotionsComponent getFilteredPromotions' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this.selectedShop != null && this.selectedCurrency != null && !this.promotionFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, max).subscribe( allpromotions => {
+        LogUtil.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
+        this.promotions = allpromotions;
+        this.selectedPromotion = null;
+        this.promotionEdit = null;
+        this.viewMode = ShopPromotionsComponent.PROMOTIONS;
+        this.changed = false;
+        this.validForSave = false;
+        this.promotionFilterCapped = this.promotions.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.promotions = [];
+      this.selectedPromotion = null;
+      this.promotionEdit = null;
+      this.viewMode = ShopPromotionsComponent.PROMOTIONS;
+      this.changed = false;
+      this.validForSave = false;
+      this.promotionFilterCapped = false;
+    }
+  }
 
 }

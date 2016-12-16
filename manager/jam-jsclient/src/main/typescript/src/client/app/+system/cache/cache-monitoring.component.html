@@ -8,31 +8,32 @@
 
       <form class="pull-left">
         <input class="filter-input" type="text" name="cacheFilter" [(ngModel)]="cacheFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
-        <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+        <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+        <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
       </form>
 
-      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+      <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHESTATS' | translate }}">
         <i class="fa {{ selectedRow != null && selectedRow.stats ? 'fa-toggle-off' : 'fa-toggle-on' }}"></i>
       </button>
 
-      <button type="button" (click)="onRowDeleteSelected()" class="btn {{ selectedRow == null ? 'btn-danger' : 'btn-info' }} btn-circle btn-xl" >
+      <button type="button" (click)="onRowDeleteSelected()" class="btn {{ selectedRow == null ? 'btn-danger' : 'btn-info' }} btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CACHEEVICT' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
-      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
         <i class="fa fa-refresh"></i>
       </button>
 
-      <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+      <button type="button" (click)="onSaveHandler()" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
         <i class="fa fa-download"></i>
       </button>
 
     </div>
 
-    <div>
+    <div class="{{ loading ? 'loading-data' : '' }}">
 
       <div *ngIf="searchHelpShow">
-        <div class="bg-info text-padding">
+        <div class="bg-info text-padding block-margin-spacer">
           <p>{{ 'SEARCH_HELP_CACHE_TOP' | translate }} <span><button type="button" (click)="onTopSelected()" class="btn btn-circle"><i class="fa fa-sort-numeric-desc"></i></button></span></p>
           <p>{{ 'SEARCH_HELP_CACHE_SIZE' | translate }} <span><button type="button" (click)="onSizeSelected()" class="btn btn-circle"><i class="fa fa-calculator"></i></button></span></p>
         </div>

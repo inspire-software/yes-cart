@@ -13,18 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
-import {CatalogService} from './../services/index';
-import {CategoryVO} from './../model/index';
-import {TreeViewComponent, ITreeNode} from './../tree-view/index';
-import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
-import {FormValidationEvent} from './../event/index';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { CatalogService } from './../services/index';
+import { CategoryVO } from './../model/index';
+import { ITreeNode } from './../tree-view/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { FormValidationEvent } from './../event/index';
+import { LRUCache } from '../model/internal/cache.model';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-category-select',
   moduleId: module.id,
   templateUrl: 'category-select.component.html',
-  directives: [TreeViewComponent, ModalComponent],
 })
 
 /**
@@ -32,71 +33,32 @@ import {FormValidationEvent} from './../event/index';
  */
 export class CategorySelectComponent implements OnInit {
 
-  changed:boolean = false;
-
-  @ViewChild('catalogTreeModalDialog')
-  catalogTreeModalDialog:ModalComponent;
-
-  validForSelect:boolean = false;
-
-  nodes:Array<ITreeNode>;
-  selectedNode:ITreeNode;
+  private static _cache:LRUCache = new LRUCache();
 
   @Output() dataSelected: EventEmitter<FormValidationEvent<CategoryVO>> = new EventEmitter<FormValidationEvent<CategoryVO>>();
+
+  private changed:boolean = false;
+
+  @ViewChild('catalogTreeModalDialog')
+  private catalogTreeModalDialog:ModalComponent;
+
+  private validForSelect:boolean = false;
+
+  private nodes:Array<ITreeNode>;
+  private selectedNode:ITreeNode;
+
+  private loading:boolean = false;
 
   /**
    * Construct shop catalogues panel.
    * @param _categoryService
    */
   constructor(private _categoryService:CatalogService) {
-    console.debug('CategorySelectComponent constructed');
+    LogUtil.debug('CategorySelectComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('CategorySelectComponent ngOnInit');
-  }
-
-  /**
-   * Load data and adapt time.
-   */
-  loadData() {
-    console.debug('CategorySelectComponent loading categories');
-    var _subc:any = this._categoryService.getAllCategories().subscribe(
-        cats => {
-          console.debug('CategorySelectComponent all categories', cats);
-          this.nodes = this.adaptToTree(cats);
-          this.selectedNode = null;
-          this.changed = false;
-          this.validForSelect = false;
-          _subc.unsubscribe();
-      }
-    );
-  }
-
-  /**
-   * Adapt given list of categories to tree items for representation.
-   * @param vo
-   * @returns {Array<ITreeNode>}
-     */
-  adaptToTree(vo:Array<CategoryVO>):Array<ITreeNode> {
-    var rez:Array<ITreeNode> = [];
-    for (var idx = 0; idx < vo.length; idx++) {
-      var catVo:CategoryVO = vo[idx];
-      var node:ITreeNode = {
-        'id': catVo.categoryId.toString(),
-        'name': catVo.name,
-        'children': [],
-        'expanded': catVo.categoryId === 100, //the root is expanded by default
-        'selected': catVo.categoryId === 100, //treat root as already selected
-        'disabled': false,
-        'source': catVo
-      };
-      if (catVo.children !== null && catVo.children.length > 0) {
-        node.children = this.adaptToTree(catVo.children);
-      }
-      rez.push(node);
-    }
-    return rez;
+    LogUtil.debug('CategorySelectComponent ngOnInit');
   }
 
   /**
@@ -104,7 +66,7 @@ export class CategorySelectComponent implements OnInit {
    * @param node
    */
   onSelectNode(node:ITreeNode) {
-    console.debug('CategorySelectComponent selected node', node);
+    LogUtil.debug('CategorySelectComponent selected node', node);
     if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
@@ -113,24 +75,107 @@ export class CategorySelectComponent implements OnInit {
   }
 
   onRequest(parent:ITreeNode) {
-    console.debug('CategorySelectComponent onRequest node', parent);
+    LogUtil.debug('CategorySelectComponent onRequest node', parent);
+  }
+
+  onRefresh() {
+    LogUtil.debug('CategorySelectComponent onRefresh');
+    this.loadData(true);
+  }
+
+  collectExpanded(nodes:Array<ITreeNode>, expanded:any) {
+    nodes.forEach(node => {
+      if (node.expanded) {
+        expanded['ID' + node.id] = '1';
+      }
+      if (node.children != null && node.children.length > 0) {
+        this.collectExpanded(node.children, expanded);
+      }
+    });
   }
 
 
   public showDialog() {
-    console.debug('CategorySelectComponent showDialog');
+    LogUtil.debug('CategorySelectComponent showDialog');
     this.loadData();
     this.catalogTreeModalDialog.show();
   }
 
 
   protected onSelectConfirmationResult(modalresult: ModalResult) {
-    console.debug('CategorySelectComponent onSelectConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('CategorySelectComponent onSelectConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let selection = this.selectedNode != null ? this.selectedNode.source : null;
       this.dataSelected.emit({ source: selection, valid: true });
       this.selectedNode = null;
     }
+  }
+
+  /**
+   * Load data and adapt time.
+   */
+  private loadData(force:boolean = false) {
+    LogUtil.debug('CategorySelectComponent loading categories');
+
+    let cacheKey = 'catalog';
+
+    let cached = force ? null : CategorySelectComponent._cache.getValue(cacheKey);
+    if (cached) {
+
+      this.nodes = cached;
+      this.selectedNode = null;
+      this.changed = false;
+      this.validForSelect = false;
+
+    } else {
+
+      let expanded:any = {};
+      if (this.nodes) {
+        this.collectExpanded(this.nodes, expanded);
+      }
+      LogUtil.debug('ContentSelectComponent loadData expanded', expanded);
+
+      this.loading = true;
+      var _subc:any = this._categoryService.getAllCategories().subscribe(
+          cats => {
+          LogUtil.debug('CategorySelectComponent all categories', cats);
+          this.nodes = this.adaptToTree(cats, expanded);
+          CategorySelectComponent._cache.putValue(cacheKey, this.nodes, 1800000); // 30 mins
+          this.selectedNode = null;
+          this.changed = false;
+          this.validForSelect = false;
+          this.loading = false;
+          _subc.unsubscribe();
+        }
+      );
+    }
+  }
+
+  /**
+   * Adapt given list of categories to tree items for representation.
+   * @param vo
+   * @returns {Array<ITreeNode>}
+   */
+  private adaptToTree(vo:Array<CategoryVO>, expanded:any):Array<ITreeNode> {
+    var rez:Array<ITreeNode> = [];
+    for (var idx = 0; idx < vo.length; idx++) {
+      var catVo:CategoryVO = vo[idx];
+      var id:string = catVo.categoryId.toString();
+      var node:ITreeNode = {
+        'id': id,
+        'name': catVo.name,
+        'children': [],
+        'expanded': catVo.categoryId === 100 || expanded.hasOwnProperty('ID' + id), //the root is expanded by default
+        'selected': catVo.categoryId === 100, //treat root as already selected
+        'disabled': false,
+        'source': catVo
+      };
+      if (catVo.children !== null && catVo.children.length > 0) {
+        node.children = this.adaptToTree(catVo.children, expanded);
+      }
+      rez.push(node);
+    }
+    return rez;
   }
 
 }

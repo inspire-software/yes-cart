@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ProductSkuVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ProductSkuVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-skus',
   moduleId: module.id,
   templateUrl: 'skus.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class SKUsComponent implements OnInit, OnDestroy {
-
-  _skus:Array<ProductSkuVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredSkus:Array<ProductSkuVO>;
 
   @Input() selectedSku:ProductSkuVO;
 
   @Output() dataSelected: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
 
+  private _skus:Array<ProductSkuVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredSkus:Array<ProductSkuVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('SKUsComponent constructed');
+    LogUtil.debug('SKUsComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterSkus();
@@ -59,7 +57,7 @@ export class SKUsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('SKUsComponent ngOnInit');
+    LogUtil.debug('SKUsComponent ngOnInit');
   }
 
   @Input()
@@ -74,41 +72,8 @@ export class SKUsComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterSkus() {
-
-    if (this._filter) {
-      this.filteredSkus = this._skus.filter(sku =>
-        sku.guid.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.code.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.name.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.manufacturerCode && sku.manufacturerCode.toLowerCase().indexOf(this._filter) !== -1 ||
-        sku.barCode && sku.barCode.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('SKUsComponent filterSkus', this._filter);
-    } else {
-      this.filteredSkus = this._skus;
-      console.debug('SKUsComponent filterSkus no filter');
-    }
-
-    if (this.filteredSkus === null) {
-      this.filteredSkus = [];
-    }
-
-    var _sort = function(a:ProductSkuVO, b:ProductSkuVO):number {
-      return a.rank - b.rank;
-    };
-
-    this.filteredSkus.sort(_sort);
-
-    let _total = this.filteredSkus.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('SKUsComponent ngOnDestroy');
+    LogUtil.debug('SKUsComponent ngOnDestroy');
     this.selectedSku = null;
     this.dataSelected.emit(null);
   }
@@ -133,7 +98,7 @@ export class SKUsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:ProductSkuVO) {
-    console.debug('SKUsComponent onSelectRow handler', row);
+    LogUtil.debug('SKUsComponent onSelectRow handler', row);
     if (row == this.selectedSku) {
       this.selectedSku = null;
     } else {
@@ -149,4 +114,39 @@ export class SKUsComponent implements OnInit, OnDestroy {
     }
     return '';
   }
+
+
+  private filterSkus() {
+
+    if (this._filter) {
+      this.filteredSkus = this._skus.filter(sku =>
+        sku.guid.toLowerCase().indexOf(this._filter) !== -1 ||
+        sku.code.toLowerCase().indexOf(this._filter) !== -1 ||
+        sku.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        sku.manufacturerCode && sku.manufacturerCode.toLowerCase().indexOf(this._filter) !== -1 ||
+        sku.barCode && sku.barCode.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('SKUsComponent filterSkus', this._filter);
+    } else {
+      this.filteredSkus = this._skus;
+      LogUtil.debug('SKUsComponent filterSkus no filter');
+    }
+
+    if (this.filteredSkus === null) {
+      this.filteredSkus = [];
+    }
+
+    var _sort = function(a:ProductSkuVO, b:ProductSkuVO):number {
+      return a.rank - b.rank;
+    };
+
+    this.filteredSkus.sort(_sort);
+
+    let _total = this.filteredSkus.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
 }

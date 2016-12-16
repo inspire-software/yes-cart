@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {CustomerVO, CustomerInfoVO, AttrValueCustomerVO, Pair} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, Pair } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class CustomerService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('CustomerService constructed');
+    LogUtil.debug('CustomerService constructed');
   }
 
   /**
@@ -148,7 +149,7 @@ export class CustomerService {
 
   private handleError (error:any) {
 
-    console.error('CustomerService Server error: ', error);
+    LogUtil.error('CustomerService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

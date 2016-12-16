@@ -13,47 +13,47 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {BrandVO, AttrValueBrandVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { BrandVO, AttrValueBrandVO, Pair } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-brand',
   moduleId: module.id,
   templateUrl: 'brand.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent],
 })
 
 export class BrandComponent implements OnInit, OnDestroy {
 
-  _brand:BrandVO;
-  _attributes:AttrValueBrandVO[] = [];
-  attributeFilter:string;
-
-  _changes:Array<Pair<AttrValueBrandVO, boolean>>;
-
-  selectedRow:AttrValueBrandVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<BrandVO, Array<Pair<AttrValueBrandVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<BrandVO, Array<Pair<AttrValueBrandVO, boolean>>>>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _brand:BrandVO;
+  private _attributes:AttrValueBrandVO[] = [];
+  private attributeFilter:string;
 
-  brandForm:any;
-  brandFormSub:any;
+  private _changes:Array<Pair<AttrValueBrandVO, boolean>>;
+
+  private selectedRow:AttrValueBrandVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private brandForm:any;
+  private brandFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
+
+  private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('BrandComponent constructed');
+    LogUtil.debug('BrandComponent constructed');
 
     this.brandForm = fb.group({
       'name': ['', YcValidators.requiredNonBlankTrimmed],
@@ -67,42 +67,26 @@ export class BrandComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.brandForm.controls) {
-      this.brandForm.controls[key]['_pristine'] = true;
-      this.brandForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.brandFormSub = this.brandForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.brandForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'brandForm', 'brandFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.brandFormSub) {
-      console.debug('BrandComponent unbining form');
-      this.brandFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'brandFormSub');
   }
 
   formChange():void {
-    console.debug('BrandComponent validating formGroup is valid: ' + this.validForSave, this._brand);
-    this.dataChanged.emit({ source: new Pair(this._brand, this._changes), valid: this.validForSave });
+    LogUtil.debug('BrandComponent formChange', this.brandForm.valid, this._brand);
+    this.dataChanged.emit({ source: new Pair(this._brand, this._changes), valid: this.brandForm.valid });
   }
 
   @Input()
   set brand(brand:BrandVO) {
-    this._brand = brand;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'brandForm', '_brand', brand);
+    this._changes = [];
+
   }
 
   get brand():BrandVO {
@@ -118,30 +102,24 @@ export class BrandComponent implements OnInit, OnDestroy {
     return this._attributes;
   }
 
-  onMainDataChange(event:any) {
-    console.debug('BrandComponent main data changed', this._brand);
-    this.changed = true;
-  }
-
   onAttributeDataChanged(event:any) {
-    console.debug('BrandComponent attr data changed', this._brand);
-    this.changed = true;
+    LogUtil.debug('BrandComponent attr data changed', this._brand);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('BrandComponent ngOnInit');
+    LogUtil.debug('BrandComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('BrandComponent ngOnDestroy');
+    LogUtil.debug('BrandComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('BrandComponent tabSelected', tab);
+    LogUtil.debug('BrandComponent tabSelected', tab);
   }
 
 
@@ -158,12 +136,44 @@ export class BrandComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueBrandVO) {
-    console.debug('BrandComponent onSelectRow handler', row);
+    LogUtil.debug('BrandComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
       this.selectedRow = row;
     }
   }
+
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
 
 }

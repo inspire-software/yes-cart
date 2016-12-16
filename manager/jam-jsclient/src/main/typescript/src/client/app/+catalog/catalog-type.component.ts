@@ -13,22 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CatalogService} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {ProductTypesComponent, ProductTypeComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair} from './../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { CatalogService } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, Pair } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-catalog-types',
   moduleId: module.id,
   templateUrl: 'catalog-type.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, ProductTypesComponent, ProductTypeComponent, ModalComponent, DataControlComponent ],
 })
 
 export class CatalogTypeComponent implements OnInit, OnDestroy {
@@ -36,6 +32,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   private static TYPES:string = 'types';
   private static TYPE:string = 'type';
 
+  private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
   private viewMode:string = CatalogTypeComponent.TYPES;
 
@@ -44,10 +41,10 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   private typeFilterRequired:boolean = true;
   private typeFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedType:ProductTypeInfoVO;
 
@@ -56,23 +53,25 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   private typeAttributesUpdate:Array<Pair<ProductTypeAttrVO, boolean>>;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private deleteValue:String;
 
-  constructor(private _typeService:CatalogService) {
-    console.debug('CatalogTypeComponent constructed');
-  }
+  private loading:boolean = false;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  constructor(private _typeService:CatalogService) {
+    LogUtil.debug('CatalogTypeComponent constructed');
+  }
 
   newTypeInstance():ProductTypeVO {
     return { producttypeId: 0, guid: null, name: '', description: null, uitemplate: null, uisearchtemplate: null, ensemble: false, shippable: true, downloadable: false, digital:false, viewGroups: [] };
   }
 
   ngOnInit() {
-    console.debug('CatalogTypeComponent ngOnInit');
+    LogUtil.debug('CatalogTypeComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -82,58 +81,28 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('CatalogTypeComponent ngOnDestroy');
+    LogUtil.debug('CatalogTypeComponent ngOnDestroy');
   }
 
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredTypes() {
-    this.typeFilterRequired = !this.forceShowAll && (this.typeFilter == null || this.typeFilter.length < 2);
-
-    console.debug('CatalogTypeComponent getFilteredTypes' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (!this.typeFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._typeService.getFilteredProductTypes(this.typeFilter, max).subscribe( alltypes => {
-        console.debug('CatalogTypeComponent getFilteredTypes', alltypes);
-        this.types = alltypes;
-        this.selectedType = null;
-        this.typeEdit = null;
-        this.viewMode = CatalogTypeComponent.TYPES;
-        this.changed = false;
-        this.validForSave = false;
-        this.typeFilterCapped = this.types.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.types = [];
-      this.selectedType = null;
-      this.typeEdit = null;
-      this.typeEditAttributes = null;
-      this.viewMode = CatalogTypeComponent.TYPES;
-      this.changed = false;
-      this.validForSave = false;
-      this.typeFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('CatalogTypeComponent refresh handler');
+    LogUtil.debug('CatalogTypeComponent refresh handler');
     this.getFilteredTypes();
   }
 
-  onTypeSelected(data:ProductTypeInfoVO) {
-    console.debug('CatalogTypeComponent onTypeSelected', data);
+  protected onTypeSelected(data:ProductTypeInfoVO) {
+    LogUtil.debug('CatalogTypeComponent onTypeSelected', data);
     this.selectedType = data;
   }
 
-  onTypeChanged(event:FormValidationEvent<Pair<ProductTypeVO, Array<Pair<ProductTypeAttrVO, boolean>>>>) {
-    console.debug('CatalogTypeComponent onTypeChanged', event);
+  protected onTypeChanged(event:FormValidationEvent<Pair<ProductTypeVO, Array<Pair<ProductTypeAttrVO, boolean>>>>) {
+    LogUtil.debug('CatalogTypeComponent onTypeChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.typeEdit = event.source.first;
@@ -145,8 +114,23 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
     this.getFilteredTypes();
   }
 
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchCodeExact() {
+    this.searchHelpShow = false;
+    this.typeFilter = '!keyword';
+  }
+
+  protected onSearchCode() {
+    this.searchHelpShow = false;
+    this.typeFilter = '#code';
+  }
+
+
   protected onBackToList() {
-    console.debug('CatalogTypeComponent onBackToList handler');
+    LogUtil.debug('CatalogTypeComponent onBackToList handler');
     if (this.viewMode === CatalogTypeComponent.TYPE) {
       this.typeEdit = null;
       this.viewMode = CatalogTypeComponent.TYPES;
@@ -154,7 +138,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('CatalogTypeComponent onRowNew handler');
+    LogUtil.debug('CatalogTypeComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === CatalogTypeComponent.TYPES) {
@@ -165,7 +149,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('CatalogTypeComponent onRowDelete handler', row);
+    LogUtil.debug('CatalogTypeComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -178,7 +162,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditType(row:ProductTypeInfoVO) {
-    console.debug('CatalogTypeComponent onRowEditType handler', row);
+    LogUtil.debug('CatalogTypeComponent onRowEditType handler', row);
     let typeId = row.producttypeId;
     var _sub:any = this._typeService.getProductTypeById(typeId).subscribe(typ => {
       _sub.unsubscribe();
@@ -209,13 +193,13 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
       if (this.typeEdit != null) {
 
-        console.debug('CatalogTypeComponent Save handler type', this.typeEdit);
+        LogUtil.debug('CatalogTypeComponent Save handler type', this.typeEdit);
 
         var _sub:any = this._typeService.saveProductType(this.typeEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.typeEdit.producttypeId;
-              console.debug('CatalogTypeComponent type changed', rez);
+              LogUtil.debug('CatalogTypeComponent type changed', rez);
               this.changed = false;
               this.selectedType = rez;
               this.typeEdit = null;
@@ -225,7 +209,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
 
                 var _sub2:any = this._typeService.saveProductTypeAttributes(this.typeAttributesUpdate).subscribe(rez => {
                   _sub2.unsubscribe();
-                  console.debug('CatalogTypeComponent type attributes updated', rez);
+                  LogUtil.debug('CatalogTypeComponent type attributes updated', rez);
                   this.typeAttributesUpdate = null;
                   this.getFilteredTypes();
                 });
@@ -242,7 +226,7 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('CatalogTypeComponent discard handler');
+    LogUtil.debug('CatalogTypeComponent discard handler');
     if (this.viewMode === CatalogTypeComponent.TYPE) {
       if (this.selectedType != null) {
         this.onRowEditSelected();
@@ -253,15 +237,15 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('CatalogTypeComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('CatalogTypeComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedType != null) {
-        console.debug('CatalogTypeComponent onDeleteConfirmationResult', this.selectedType);
+        LogUtil.debug('CatalogTypeComponent onDeleteConfirmationResult', this.selectedType);
 
         var _sub:any = this._typeService.removeProductType(this.selectedType).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('CatalogTypeComponent removeType', this.selectedType);
+          LogUtil.debug('CatalogTypeComponent removeType', this.selectedType);
           this.selectedType = null;
           this.typeEdit = null;
           this.getFilteredTypes();
@@ -269,5 +253,38 @@ export class CatalogTypeComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  private getFilteredTypes() {
+    this.typeFilterRequired = !this.forceShowAll && (this.typeFilter == null || this.typeFilter.length < 2);
+
+    LogUtil.debug('CatalogTypeComponent getFilteredTypes' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (!this.typeFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._typeService.getFilteredProductTypes(this.typeFilter, max).subscribe( alltypes => {
+        LogUtil.debug('CatalogTypeComponent getFilteredTypes', alltypes);
+        this.types = alltypes;
+        this.selectedType = null;
+        this.typeEdit = null;
+        this.viewMode = CatalogTypeComponent.TYPES;
+        this.changed = false;
+        this.validForSave = false;
+        this.typeFilterCapped = this.types.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.types = [];
+      this.selectedType = null;
+      this.typeEdit = null;
+      this.typeEditAttributes = null;
+      this.viewMode = CatalogTypeComponent.TYPES;
+      this.changed = false;
+      this.validForSave = false;
+      this.typeFilterCapped = false;
+    }
+  }
+
 
 }

@@ -13,6 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+import { LogUtil } from './../log/index';
 
 export interface ErrorMessage {
 
@@ -33,6 +34,20 @@ export class Util {
    */
   public static clone<T> (object:T):T {
     return JSON.parse(JSON.stringify(object));
+  }
+
+  /**
+   * Copy values from one object to another.
+   *
+   * @param fromObject object
+   * @param toObject object
+   */
+  public static copyValues(fromObject:any, toObject:any):void {
+    for (var prop in fromObject) {
+      if (toObject.hasOwnProperty(prop)) {
+        toObject[prop] = fromObject[prop];
+      }
+    }
   }
 
   /**
@@ -76,20 +91,20 @@ export class Util {
             return { code: code, message: json.error };
           }
         } catch (err) {
-          console.debug('Unable to parse error.json()');
+          LogUtil.debug('Unable to parse error.json()');
         }
       }
       if (typeof(error.text) === 'function') {
         try {
           return { code: code, message: error.text() };
         } catch (err) {
-          console.debug('Unable to get error.text()');
+          LogUtil.debug('Unable to get error.text()');
         }
       }
       try {
         return { code: code, message: JSON.stringify(error) };
       } catch (err) {
-        console.debug('Unable to JSON.stringify(error)');
+        LogUtil.debug('Unable to JSON.stringify(error)');
       }
     }
     return { code: 500, message: 'Server Error' };

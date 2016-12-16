@@ -13,36 +13,34 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {CountryVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { CountryVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-country',
   moduleId: module.id,
   templateUrl: 'country.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES],
 })
 
 export class CountryComponent implements OnInit, OnDestroy {
 
-  _country:CountryVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<CountryVO>> = new EventEmitter<FormValidationEvent<CountryVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _country:CountryVO;
 
-  countryForm:any;
-  countryFormSub:any;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private countryForm:any;
+  private countryFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('CountryComponent constructed');
+    LogUtil.debug('CountryComponent constructed');
 
     this.countryForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
@@ -57,58 +55,38 @@ export class CountryComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.countryForm.controls) {
-      this.countryForm.controls[key]['_pristine'] = true;
-      this.countryForm.controls[key]['_touched'] = false;
-    }
+  formBind():void {
+    UiUtil.formBind(this, 'countryForm', 'countryFormSub', 'delayedChange', 'initialising');
   }
 
-  formBind():void {
-    this.countryFormSub = this.countryForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.countryForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
-  }
 
   formUnbind():void {
-    if (this.countryFormSub) {
-      console.debug('CountryComponent unbining form');
-      this.countryFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'countryFormSub');
   }
 
   formChange():void {
-    console.debug('CountryComponent validating formGroup is valid: ' + this.validForSave, this._country);
-    this.dataChanged.emit({ source: this._country, valid: this.validForSave });
+    LogUtil.debug('CountryComponent formChange', this.countryForm.valid, this._country);
+    this.dataChanged.emit({ source: this._country, valid: this.countryForm.valid });
   }
 
   @Input()
   set country(country:CountryVO) {
-    this._country = country;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'countryForm', '_country', country);
+
   }
 
   get country():CountryVO {
     return this._country;
   }
 
-  onDataChange(event:any) {
-    console.debug('CountryComponent onDataChange', event);
-    this.changed = true;
-  }
-
   ngOnInit() {
-    console.debug('CountryComponent ngOnInit');
+    LogUtil.debug('CountryComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('CountryComponent ngOnDestroy');
+    LogUtil.debug('CountryComponent ngOnDestroy');
     this.formUnbind();
   }
 

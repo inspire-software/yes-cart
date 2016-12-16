@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {StateVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { StateVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-states',
   moduleId: module.id,
   templateUrl: 'states.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class StatesComponent implements OnInit, OnDestroy {
-
-  _states:Array<StateVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredStates:Array<StateVO>;
 
   @Input() selectedState:StateVO;
 
   @Output() dataSelected: EventEmitter<StateVO> = new EventEmitter<StateVO>();
 
+  private _states:Array<StateVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredStates:Array<StateVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('StatesComponent constructed');
+    LogUtil.debug('StatesComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterStates();
@@ -60,7 +58,7 @@ export class StatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('StatesComponent ngOnInit');
+    LogUtil.debug('StatesComponent ngOnInit');
   }
 
   @Input()
@@ -75,30 +73,8 @@ export class StatesComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterStates() {
-    if (this._filter) {
-      this.filteredStates = this._states.filter(state =>
-          state.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
-          state.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          state.displayName && state.displayName.toLowerCase().indexOf(this._filter) !== -1
-      );
-    } else {
-      this.filteredStates = this._states;
-    }
-
-    if (this.filteredStates === null) {
-      this.filteredStates = [];
-    }
-
-    let _total = this.filteredStates.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('StatesComponent ngOnDestroy');
+    LogUtil.debug('StatesComponent ngOnDestroy');
     this.selectedState = null;
     this.dataSelected.emit(null);
   }
@@ -123,13 +99,36 @@ export class StatesComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:StateVO) {
-    console.debug('StatesComponent onSelectRow handler', row);
+    LogUtil.debug('StatesComponent onSelectRow handler', row);
     if (row == this.selectedState) {
       this.selectedState = null;
     } else {
       this.selectedState = row;
     }
     this.dataSelected.emit(this.selectedState);
+  }
+
+
+  private filterStates() {
+    if (this._filter) {
+      this.filteredStates = this._states.filter(state =>
+        state.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
+        state.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        state.displayName && state.displayName.toLowerCase().indexOf(this._filter) !== -1
+      );
+    } else {
+      this.filteredStates = this._states;
+    }
+
+    if (this.filteredStates === null) {
+      this.filteredStates = [];
+    }
+
+    let _total = this.filteredStates.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

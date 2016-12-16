@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { CatalogCategoryComponent, CatalogBrandComponent, CatalogTypeComponent, CatalogProductsComponent } from './index';
 
-export const CatalogRoutes: RouterConfig = [
+export const CatalogRoutes: Route[] = [
   {
     path: 'catalog/categories',
     component: CatalogCategoryComponent

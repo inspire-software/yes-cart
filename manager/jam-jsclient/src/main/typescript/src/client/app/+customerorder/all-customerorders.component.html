@@ -6,62 +6,63 @@
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'customerorders'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px">
+    <button type="button" (click)="onBackToList()" [hidden]="viewMode === 'customerorders'" class="btn btn-info btn-circle btn-xl pull-left" style="margin-right: 2px" title="{{ 'MODAL_BUTTON_BACK' | translate }}">
       <i class="fa fa-chevron-left"></i>
     </button>
 
     <form class="pull-left" [hidden]="viewMode !== 'customerorders'">
       <input class="filter-input" type="text" name="customerorderFilter" [(ngModel)]="customerorderFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+    <button type="button" (click)="onForceShowAll()" [hidden]="viewMode !== 'customerorders'" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl">
+    <button type="button" (click)="onApproveSelected()" [hidden]="!selectedCustomerorderApprovable" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERAPPROVE' | translate }}">
       <i class="fa fa-check"></i>
     </button>
 
-    <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl">
+    <button type="button" (click)="onCancelSelected()" [hidden]="!selectedCustomerorderCancellable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERCANCEL' | translate }}">
       <i class="fa fa-ban"></i>
     </button>
 
-    <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl">
+    <button type="button" (click)="onReturnSelected()" [hidden]="!selectedCustomerorderReturnable" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERRETURN' | translate }}">
       <i class="fa fa-reply"></i>
     </button>
 
-    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRefundSelected()" [hidden]="!selectedCustomerorderRefundable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUND' | translate }}">
       <i class="fa fa-dollar"></i>
     </button>
 
-    <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl">
+    <button type="button" (click)="onRefundManualSelected()" [hidden]="!selectedCustomerorderRefundableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_ORDERREFUNDOFFLINE' | translate }}">
       <i class="fa fa-dollar"></i>
     </button>
 
 
 
-    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onPackDeliverySelected()" [hidden]="!selectedCustomerdeliveryPackable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYPACK' | translate }}">
       <i class="fa fa-archive"></i>
     </button>
 
-    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onMarkReadyForShippingDeliverySelected()" [hidden]="!selectedCustomerdeliveryPacked" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIP' | translate }}">
       <i class="fa fa-check"></i>
     </button>
 
-    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onStartDeliverySelected()" [hidden]="!selectedCustomerdeliveryShippable" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPED' | translate }}">
       <i class="fa fa-truck"></i>
     </button>
 
-    <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl">
+    <button type="button" (click)="onShipDeliveryManualSelected()" [hidden]="!selectedCustomerdeliveryShippableManual" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
       <i class="fa fa-truck"></i>
     </button>
 
-    <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl">
+    <button type="button" (click)="onMarkShippedDeliverySelected()" [hidden]="!selectedCustomerdeliveryDelivered" class="btn btn-success btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYSHIPPEDOFFLINE' | translate }}">
       <i class="fa fa-check"></i>
     </button>
 
-    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onUpdateDeliveryRefSelected()" [hidden]="selectedCustomerdelivery == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELIVERYREF' | translate }}">
       <i class="fa fa-external-link"></i>
     </button>
 
@@ -69,7 +70,7 @@
 
 
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="customerorderEdit != null || selectedCustomerorder == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedCustomerorder == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
@@ -81,10 +82,10 @@
 
   </div>
 
-  <div [hidden]="viewMode !== 'customerorders'">
+  <div [hidden]="viewMode !== 'customerorders'" class="{{ loading ? 'loading-data' : '' }}">
 
     <div *ngIf="searchHelpShow">
-      <div class="bg-info text-padding">
+      <div class="bg-info text-padding block-margin-spacer">
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_OPEN' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_CUSTOMER_ORDERS_PAYMENT' | translate }} <span><button type="button" (click)="onSearchStatusPayment()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
@@ -108,16 +109,16 @@
     <yc-customerorders [customerorders]="customerorders" (dataSelected)="onCustomerorderSelected($event)"></yc-customerorders>
   </div>
 
-  <div [hidden]="viewMode !== 'customerorder'">
+  <div [hidden]="viewMode !== 'customerorder'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-customerorder [customerorder]="customerorderEdit" (dataSelected)="onCustomerdeliverySelected($event)"></yc-customerorder>
   </div>
 
-  <modal #orderTransitionConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
-         [valid]="orderTransitionValid"
-         (closed)="onOrderTransitionConfirmationResult($event)">
+  <yc-modal #orderTransitionConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+            [valid]="orderTransitionValid"
+            (closed)="onOrderTransitionConfirmationResult($event)">
 
     <form role="form">
       <fieldset>
@@ -135,6 +136,6 @@
         </div>
       </fieldset>
     </form>
-  </modal>
+  </yc-modal>
 
 </div>

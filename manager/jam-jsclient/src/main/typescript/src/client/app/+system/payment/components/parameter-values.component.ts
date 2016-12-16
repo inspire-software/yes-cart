@@ -13,67 +13,65 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../../../shared/pagination/index';
-import {PaymentGatewayVO, PaymentGatewayParameterVO, Pair} from './../../../shared/model/index';
-import {Util} from './../../../shared/services/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../../shared/modal/index';
-import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
-import {Config} from './../../../shared/config/env.config';
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { PaymentGatewayVO, PaymentGatewayParameterVO, Pair } from './../../../shared/model/index';
+import { Util } from './../../../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../../shared/modal/index';
+import { FormValidationEvent, Futures, Future } from './../../../shared/event/index';
+import { Config } from './../../../shared/config/env.config';
+import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
   selector: 'yc-parameter-values',
   moduleId: module.id,
   templateUrl: 'parameter-values.component.html',
-  directives: [PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
 })
 
 export class ParameterValuesComponent implements OnInit, OnChanges {
 
+  @Output() dataSelected: EventEmitter<PaymentGatewayParameterVO> = new EventEmitter<PaymentGatewayParameterVO>();
+  @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>>();
+
   private _paymentGateway:PaymentGatewayVO;
 
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
 
-  _objectAttributes:Array<PaymentGatewayParameterVO>;
-  objectAttributesRemove:Array<number>;
-  _attributeFilter:string;
-  filteredObjectAttributes:Array<PaymentGatewayParameterVO>;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private _objectAttributes:Array<PaymentGatewayParameterVO>;
+  private objectAttributesRemove:Array<number>;
+  private objectAttributesEdit:Array<number>;
+  private _attributeFilter:string;
+  private filteredObjectAttributes:Array<PaymentGatewayParameterVO>;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
   @ViewChild('editModalDialog')
-  editModalDialog:ModalComponent;
+  private editModalDialog:ModalComponent;
 
-  selectedRow:PaymentGatewayParameterVO;
+  private selectedRow:PaymentGatewayParameterVO;
 
-  attributeToEdit:PaymentGatewayParameterVO;
-  expandDefault:boolean = true;
-
-  @Output() dataSelected: EventEmitter<PaymentGatewayParameterVO> = new EventEmitter<PaymentGatewayParameterVO>();
-  @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<PaymentGatewayParameterVO, boolean>>>>();
+  private attributeToEdit:PaymentGatewayParameterVO;
+  private expandDefault:boolean = true;
 
   /**
    * Construct attribute panel
    */
   constructor() {
-    console.debug('ParameterValuesComponent constructed');
+    LogUtil.debug('ParameterValuesComponent constructed');
 
     this.attributeToEdit = null;
     let that = this;
@@ -85,7 +83,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
 
   @Input()
   set paymentGateway(paymentGateway:PaymentGatewayVO) {
-    console.debug('ParameterValuesComponent changed', paymentGateway);
+    LogUtil.debug('ParameterValuesComponent changed', paymentGateway);
     this._paymentGateway = paymentGateway;
     if (this._paymentGateway != null) {
       this._objectAttributes = this._paymentGateway.parameters.slice(0, this._paymentGateway.parameters.length);
@@ -105,32 +103,29 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     this.delayedFiltering.delay();
   }
 
-  /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('ParameterValuesComponent ngOnInit shop', this._paymentGateway);
+  ngOnInit() {
+    LogUtil.debug('ParameterValuesComponent ngOnInit shop', this._paymentGateway);
   }
 
   ngOnChanges(changes:any) {
-    console.debug('ParameterValuesComponent ngOnChanges', changes);
+    LogUtil.debug('ParameterValuesComponent ngOnChanges', changes);
     this.delayedFiltering.delay();
   }
 
-  private loadData() {
-    if (this._objectAttributes) {
+  onRowAdd() {
+    this.onRowEdit(this.newParamInstance());
+  }
 
-      console.debug('ParameterValuesComponent attributes', this._objectAttributes);
-      this.objectAttributesRemove = [];
-      this.filterAttributes();
-
-    } else {
-
-      this.objectAttributesRemove = null;
-      this.filteredObjectAttributes = [];
-
+  onRowEditSelected() {
+    if (this.selectedRow != null) {
+      this.onRowEdit(this.selectedRow);
     }
+  }
 
-    this.changed = false;
-    this.onSelectRow(null);
+  onRowDeleteSelected() {
+    if (this.selectedRow != null) {
+      this.onRowDelete(this.selectedRow);
+    }
   }
 
   /**
@@ -138,18 +133,12 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
    * @param row attribute to delete.
    */
   protected onRowDelete(row:PaymentGatewayParameterVO) {
-    console.debug('ParameterValuesComponent onRowDelete handler', row);
+    LogUtil.debug('ParameterValuesComponent onRowDelete handler', row);
     this.deleteConfirmationModalDialog.show();
   }
 
-  public onRowDeleteSelected() {
-    if (this.selectedRow != null) {
-      this.onRowDelete(this.selectedRow);
-    }
-  }
-
   protected onRowEdit(row:PaymentGatewayParameterVO) {
-    console.debug('ParameterValuesComponent onRowEdit handler', row);
+    LogUtil.debug('ParameterValuesComponent onRowEdit handler', row);
     this.validForSave = false;
     this.attributeToEdit = Util.clone(row);
     this.editModalDialog.show();
@@ -159,18 +148,8 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     return { paymentGatewayParameterId: 0, description: '', label:'', name: '', value: '', pgLabel:null};
   }
 
-  public onRowAdd() {
-    this.onRowEdit(this.newParamInstance());
-  }
-
-  public onRowEditSelected() {
-    if (this.selectedRow != null) {
-      this.onRowEdit(this.selectedRow);
-    }
-  }
-
   protected onSelectRow(row:PaymentGatewayParameterVO) {
-    console.debug('ParameterValuesComponent onSelectRow handler', row);
+    LogUtil.debug('ParameterValuesComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -179,7 +158,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     this.dataSelected.emit(this.selectedRow);
   }
 
-  onDataChange(event:any) {
+  protected onDataChange(event:any) {
 
     let val = this.attributeToEdit.value;
     let typ = 'Default';
@@ -214,31 +193,11 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
       this.validForSave = name != null && !(/^\s*$/.test(name)) && label != null && !(/^\s*$/.test(label));
     }
 
-    console.debug('ParameterValuesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-  private processDataChangesEvent() {
-
-    console.debug('ParameterValuesComponent data changes', this._paymentGateway);
-    if (this._paymentGateway && this._objectAttributes) {
-
-      let _update = <Array<Pair<PaymentGatewayParameterVO, boolean>>>[];
-      this._objectAttributes.forEach(attr => {
-        if (attr.paymentGatewayParameterId !== 0 || (attr.value !== null && /\S+.*\S+/.test(attr.value))) {
-          _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
-        }
-      });
-
-      console.debug('ParameterValuesComponent data changes update', _update);
-
-      this.dataChanged.emit({ source: _update, valid: this.validForSave });
-
-    }
-
+    LogUtil.debug('ParameterValuesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ParameterValuesComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ParameterValuesComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let attrToDelete = this.selectedRow.paymentGatewayParameterId;
       if (attrToDelete === 0) {
@@ -246,10 +205,11 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
           return attrVo.label === this.selectedRow.label;
         });
         this._objectAttributes[idx].value = null;
-        console.debug('ParameterValuesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
+        LogUtil.debug('ParameterValuesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
       } else {
-        console.debug('ParameterValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
+        LogUtil.debug('ParameterValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
         this.objectAttributesRemove.push(attrToDelete);
+        this.objectAttributesEdit.push(attrToDelete);
       }
       this.filterAttributes();
       this.onSelectRow(null);
@@ -261,10 +221,10 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
   }
 
   protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('ParameterValuesComponent onEditModalResult modal result is ', modalresult);
+    LogUtil.debug('ParameterValuesComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.attributeToEdit.paymentGatewayParameterId === 0) { // add new
-        console.debug('ParameterValuesComponent onEditModalResult add new attribute', this._objectAttributes);
+        LogUtil.debug('ParameterValuesComponent onEditModalResult add new attribute', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.label === this.attributeToEdit.label;} );
         if (idx == -1) {
           this._objectAttributes.push(this.attributeToEdit);
@@ -272,9 +232,10 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
           this._objectAttributes[idx] = this.attributeToEdit;
         }
       } else { // edit existing
-        console.debug('ParameterValuesComponent onEditModalResult update existing', this._objectAttributes);
+        LogUtil.debug('ParameterValuesComponent onEditModalResult update existing', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.paymentGatewayParameterId === this.attributeToEdit.paymentGatewayParameterId;} );
         this._objectAttributes[idx] = this.attributeToEdit;
+        this.objectAttributesEdit.push(this.attributeToEdit.paymentGatewayParameterId);
       }
       this.selectedRow = this.attributeToEdit;
       this.changed = true;
@@ -285,45 +246,27 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  private filterAttributes() {
-    let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
-    if (_filter) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-        val.label.toLowerCase().indexOf(_filter) !== -1 ||
-        val.name && val.name.toLowerCase().indexOf(_filter) !== -1 ||
-        val.description && val.description.toLowerCase().indexOf(_filter) !== -1 ||
-        val.value && val.value.toLowerCase().indexOf(_filter) !== -1
-      );
-      console.debug('ParameterValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
-    } else {
-      this.filteredObjectAttributes = this._objectAttributes;
-      console.debug('ParameterValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
-    }
-
-    if (this.filteredObjectAttributes === null) {
-      this.filteredObjectAttributes = [];
-    }
-
-    let _total = this.filteredObjectAttributes.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
-  isRemovedAttribute(row:PaymentGatewayParameterVO):boolean {
+  protected isRemovedAttribute(row:PaymentGatewayParameterVO):boolean {
     return this.objectAttributesRemove.indexOf(row.paymentGatewayParameterId) !== -1;
   }
 
-  isNewAttribute(row:PaymentGatewayParameterVO):boolean {
+  protected isEditedAttribute(row:PaymentGatewayParameterVO):boolean {
+    return this.objectAttributesEdit.indexOf(row.paymentGatewayParameterId) !== -1;
+  }
+
+  protected isNewAttribute(row:PaymentGatewayParameterVO):boolean {
     return row.paymentGatewayParameterId == 0 && row.value != null;
   }
 
 
-  getAttributeColor(row:PaymentGatewayParameterVO, removed:string, added:string, prestine:string) {
+  protected getAttributeColor(row:PaymentGatewayParameterVO, removed:string, edited:string, added:string, prestine:string) {
 
     if (this.isRemovedAttribute(row)) {
       return removed;
+    }
+
+    if (this.isEditedAttribute(row)) {
+      return edited;
     }
 
     if (this.isNewAttribute(row)) {
@@ -333,8 +276,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     return prestine;
   }
 
-
-  resetLastPageEnd() {
+  protected resetLastPageEnd() {
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
       this.pageEnd = this.totalItems;
@@ -343,7 +285,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  onPageChanged(event:any) {
+  protected onPageChanged(event:any) {
     this.pageStart = (event.page - 1) * this.itemsPerPage;
     let _pageEnd = this.pageStart + this.itemsPerPage;
     if (_pageEnd > this.totalItems) {
@@ -353,7 +295,7 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  public getDisplayValue(row:PaymentGatewayParameterVO):string {
+  protected getDisplayValue(row:PaymentGatewayParameterVO):string {
     if (row.value != null) {
       var _str:string = '' + row.value;
       if (_str  === 'true') {
@@ -368,8 +310,92 @@ export class ParameterValuesComponent implements OnInit, OnChanges {
     return '&nbsp;';
   }
 
-  onExpandDefault() {
+  protected onExpandDefault() {
     this.expandDefault = !this.expandDefault;
+  }
+
+  private loadData() {
+    if (this._objectAttributes) {
+
+      LogUtil.debug('ParameterValuesComponent attributes', this._objectAttributes);
+      this.objectAttributesRemove = [];
+      this.objectAttributesEdit = [];
+      this.filterAttributes();
+
+    } else {
+
+      this.objectAttributesRemove = null;
+      this.objectAttributesEdit = null;
+      this.filteredObjectAttributes = [];
+
+    }
+
+    this.changed = false;
+    this.onSelectRow(null);
+  }
+
+  private filterAttributes() {
+    let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
+    if (_filter) {
+      if (_filter === '###') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.value != null && val.value != '' && val.paymentGatewayParameterId > 0
+        );
+      } else if (_filter === '##0') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.value != null && val.value != ''
+        );
+      } else if (_filter === '#00') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.value != null && val.value != '' && val.paymentGatewayParameterId == 0
+        );
+      } else if (_filter === '#0#') {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          this.isEditedAttribute(val) || (val.paymentGatewayParameterId == 0 && val.value != null && val.value != '')
+        );
+      } else {
+        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+          val.label.toLowerCase().indexOf(_filter) !== -1 ||
+          val.name && val.name.toLowerCase().indexOf(_filter) !== -1 ||
+          val.description && val.description.toLowerCase().indexOf(_filter) !== -1 ||
+          val.value && val.value.toLowerCase().indexOf(_filter) !== -1
+        );
+      }
+      LogUtil.debug('ParameterValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+    } else {
+      this.filteredObjectAttributes = this._objectAttributes;
+      LogUtil.debug('ParameterValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
+    }
+
+    if (this.filteredObjectAttributes === null) {
+      this.filteredObjectAttributes = [];
+    }
+
+    let _total = this.filteredObjectAttributes.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
+  private processDataChangesEvent() {
+
+    LogUtil.debug('ParameterValuesComponent data changes', this._paymentGateway);
+    if (this._paymentGateway && this._objectAttributes) {
+
+      let _update = <Array<Pair<PaymentGatewayParameterVO, boolean>>>[];
+      this._objectAttributes.forEach(attr => {
+        if (attr.paymentGatewayParameterId !== 0 || (attr.value !== null && /\S+.*\S+/.test(attr.value))) {
+          _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
+        }
+      });
+
+      LogUtil.debug('ParameterValuesComponent data changes update', _update);
+
+      this.dataChanged.emit({ source: _update, valid: this.validForSave });
+
+    }
+
   }
 
 }

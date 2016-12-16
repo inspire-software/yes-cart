@@ -22,20 +22,20 @@
         <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 vcenter">
           <form class="whitebg" name="loginForm" action="" method="GET">
 
-          <div class="text-center clearfix">
-            <a href="http://yes-cart.org" target="_blank">
-              <img border="0" src="<%= APP_BASE %>assets/img/logo-button-100x100.png"/>
-            </a>
-          </div>
+            <div class="text-center clearfix">
+              <a href="http://yes-cart.org" target="_blank">
+                <img border="0" src="<%= APP_BASE %>assets/img/logo-button-100x100.png"/>
+              </a>
+            </div>
 
-          <div class="text-center clearfix">
-            <img border="0" src="<%= APP_BASE %>assets/img/ajax-loader.gif"/>
-          </div>
+            <div class="text-center clearfix">
+              <img border="0" src="<%= APP_BASE %>assets/img/ajax-loader.gif"/>
+            </div>
 
-          <div class="input-group input-sm">
-            Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
-            &copy; YesCart.org 2009 - <script>document.write(new Date().getFullYear())</script>
-          </div>
+            <div class="input-group input-sm">
+              Powered by <a href="http://yes-cart.org" target="_blank">YC - pure <sup>e</sup>Commerce</a><br/>
+              &copy; YesCart.org 2009 - <script>document.write(new Date().getFullYear())</script>
+            </div>
           </form>
         </div>
       </div>
@@ -46,24 +46,6 @@
   </yc-app>
 
   <script>
-  // function.name (all IE)
-  // Remove once https://github.com/angular/angular/issues/6501 is fixed.
-  /*! @source http://stackoverflow.com/questions/6903762/function-name-not-supported-in-ie*/
-  if (!Object.hasOwnProperty('name')) {
-    Object.defineProperty(Function.prototype, 'name', {
-      get: function() {
-        var matches = this.toString().match(/^\s*function\s*(\S*)\s*\(/);
-        var name = matches && matches.length > 1 ? matches[1] : "";
-        // For better performance only parse once, and then cache the
-        // result through a new accessor for repeated access.
-        Object.defineProperty(this, 'name', {value: name});
-        return name;
-      }
-    });
-  }
-  </script>
-
-  <script>
   // Fixes undefined module function in SystemJS bundle
   function module() {}
   </script>
@@ -71,12 +53,8 @@
   <!-- shims:js -->
   <!-- endinject -->
 
-  <% if (ENV === 'dev') { %>
-  <script>
-    System.config(<%=
-      JSON.stringify(SYSTEM_CONFIG, null, 2)
-    %>)
-  </script>
+  <% if (BUILD_TYPE === 'dev') { %>
+  <script src="<%= APP_BASE %>app/system-config.js"></script>
   <% } %>
 
   <!-- libs:js -->
@@ -85,7 +63,7 @@
   <!-- inject:js -->
   <!-- endinject -->
 
-  <% if (ENV === 'dev') { %>
+  <% if (BUILD_TYPE === 'dev') { %>
   <script>
   System.import('<%= BOOTSTRAP_MODULE %>')
     .catch(function (e) {

@@ -1,10 +1,24 @@
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 import { Component, OnInit } from '@angular/core';
-import { REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 import { DashboardWidgetVO } from '../shared/model/index';
 import { ReportsService } from '../shared/services/index';
 import { Config } from '../shared/config/env.config';
 import { CookieUtil } from '../shared/cookies/index';
+import { LogUtil } from './../shared/log/index';
 
 
 /**
@@ -14,18 +28,18 @@ import { CookieUtil } from '../shared/cookies/index';
   moduleId: module.id,
   selector: 'yc-home',
   templateUrl: 'home.component.html',
-  styleUrls: ['home.component.css'],
-  directives: [REACTIVE_FORM_DIRECTIVES, ROUTER_DIRECTIVES]
 })
 export class HomeComponent implements OnInit {
 
   private static _widgets:any = {};
 
-  uiSettingReadOnly:boolean = true;
-  uiSettingProperty:string = '';
+  private uiSettingReadOnly:boolean = true;
+  private uiSettingProperty:string = '';
+
+  private loading:boolean = false;
 
   constructor(private _dashboardService:ReportsService) {
-    console.debug('HomeComponent constructed');
+    LogUtil.debug('HomeComponent constructed');
   }
 
   public get widgets():any {
@@ -37,24 +51,26 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('HomeComponent ngOnInit');
+    LogUtil.debug('HomeComponent ngOnInit');
 
     this.onRefreshHandler();
   }
 
   onRefreshHandler() {
 
+    this.loading = true;
     var _sub:any = this._dashboardService.getDashboard().subscribe((widgets:DashboardWidgetVO[]) => {
 
-      console.debug('HomeComponent getDashboard', widgets);
+      LogUtil.debug('HomeComponent getDashboard', widgets);
 
       this.widgets = {};
       widgets.forEach(widget => {
         this.widgets[widget.widgetId] = widget;
       });
 
-      console.debug('HomeComponent widgets', this.widgets);
+      LogUtil.debug('HomeComponent widgets', this.widgets);
 
+      this.loading = false;
       _sub.unsubscribe();
 
     });
@@ -62,7 +78,7 @@ export class HomeComponent implements OnInit {
   }
 
   onChangeSettingClick(setting:string) {
-    console.debug('HomeComponent modify', this.uiSettingProperty, setting);
+    LogUtil.debug('HomeComponent modify', this.uiSettingProperty, setting);
     this.uiSettingReadOnly = this.uiSettingProperty === setting;
     this.uiSettingProperty = this.uiSettingReadOnly ? '' : setting;
   }

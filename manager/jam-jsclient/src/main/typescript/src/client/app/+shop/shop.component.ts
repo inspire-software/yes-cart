@@ -13,48 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, AfterContentInit} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ShopVO} from './../shared/model/index';
-import {Router, ActivatedRoute} from '@angular/router';
-import {ShopEventBus, ShopService} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
-import {
-  ShopMainComponent,
-  ShopSEOComponent,
-  ShopCurrencyComponent,
-  ShopLanguageComponent,
-  ShopUrlComponent,
-  ShopCatalogComponent,
-  ShopLocationComponent,
-  ShopCarrierComponent,
-  ShopFulfilmentCentreComponent,
-  ShopAttributesComponent,
-  ShopPaymentGatewaysComponent
-} from './components/index';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ShopVO } from './../shared/model/index';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ShopEventBus, ShopService } from './../shared/services/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-shop',
   moduleId: module.id,
   templateUrl: 'shop.component.html',
-  directives: [
-    TAB_DIRECTIVES, NgIf,
-    ShopMainComponent,
-    ShopSEOComponent,
-    ShopCurrencyComponent,
-    ShopLanguageComponent,
-    ShopUrlComponent,
-    ShopCatalogComponent,
-    ShopLocationComponent,
-    ShopCarrierComponent,
-    ShopFulfilmentCentreComponent,
-    ShopAttributesComponent,
-    ShopPaymentGatewaysComponent
-  ],
 })
 
-export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
+export class ShopComponent implements OnInit, OnDestroy {
 
   private shop:ShopVO;
 
@@ -75,7 +46,7 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
               private _router: Router) {
-    console.debug('ShopComponent constructed');
+    LogUtil.debug('ShopComponent constructed');
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
     });
@@ -84,15 +55,15 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   ngOnInit() {
     this.shopIdSub = this._route.params.subscribe(params => {
       let shopId = params['shopId'];
-      console.debug('ShopComponent shopId from params is ' + shopId);
+      LogUtil.debug('ShopComponent shopId from params is ' + shopId);
       if (shopId.indexOf('new_') != -1) {
         this._shopService.createShop().then(shop => {
-          console.debug('ShopComponent Creating new shop', shop);
+          LogUtil.debug('ShopComponent Creating new shop', shop);
           ShopEventBus.getShopEventBus().emit(shop);
         });
       } else {
         var _sub:any = this._shopService.getShop(+shopId).subscribe(shop => {
-          console.debug('ShopComponent Retrieving existing shop', shop);
+          LogUtil.debug('ShopComponent Retrieving existing shop', shop);
           ShopEventBus.getShopEventBus().emit(shop);
           _sub.unsubscribe();
         });
@@ -102,19 +73,15 @@ export class ShopComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   ngOnDestroy() {
-    console.debug('ShopComponent ngOnDestroy');
+    LogUtil.debug('ShopComponent ngOnDestroy');
     if (this.shopIdSub) {
       this.shopIdSub.unsubscribe();
     }
     this.shopSub.unsubscribe();
   }
 
-  ngAfterContentInit() {
-    console.debug('ShopComponent ngAfterContentInit');
-  }
-
   tabSelected(tab:any) {
-    console.debug('ShopComponent tabSelected', tab);
+    LogUtil.debug('ShopComponent tabSelected', tab);
 
     this.reloadCatalogue = tab === 'Catalogue';
     this.reloadAttributes = tab === 'Attributes';

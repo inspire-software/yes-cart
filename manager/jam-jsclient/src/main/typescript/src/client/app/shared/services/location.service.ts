@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {CountryVO, StateVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { CountryVO, StateVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class LocationService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('LocationService constructed');
+    LogUtil.debug('LocationService constructed');
   }
 
   /**
@@ -156,7 +157,7 @@ export class LocationService {
 
   private handleError (error:any) {
 
-    console.error('LocationService Server error: ', error);
+    LogUtil.error('LocationService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

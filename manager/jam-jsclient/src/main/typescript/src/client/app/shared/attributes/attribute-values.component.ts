@@ -13,25 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../pagination/index';
-import {AttrValueVO, AttributeVO, Pair} from './../model/index';
-import {Util} from './../services/index';
-import {DataControlComponent} from './../sidebar/index';
-import {I18nComponent} from './../i18n/index';
-import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
-import {ProductAttributeSelectComponent} from './product-attribute-select.component';
-import {FormValidationEvent, Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
-
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { AttrValueVO, AttributeVO, Pair } from './../model/index';
+import { Util } from './../services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { FormValidationEvent, Futures, Future } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-attribute-values',
   moduleId: module.id,
   templateUrl: 'attribute-values.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent, ProductAttributeSelectComponent]
 })
 
 export class AttributeValuesComponent implements OnInit, OnChanges {
@@ -41,51 +34,51 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   @Input() showHelp:boolean = false;
 
-  //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
-
-
-  _objectAttributes:Array<AttrValueVO>;
-  objectAttributesRemove:Array<number>;
-  objectAttributesEdit:Array<number>;
-  _attributeFilter:string;
-  filteredObjectAttributes:Array<AttrValueVO>;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  changed:boolean = false;
-  validForSave:boolean = false;
-
-  @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
-  @ViewChild('editModalDialog')
-  editModalDialog:ModalComponent;
-
-  @ViewChild('addModalDialog')
-  addModalDialog:ModalComponent;
-
-  selectedRow:AttrValueVO;
-  selectedAttribute:AttributeVO;
-
-  attributeToEdit:AttrValueVO;
-  attributeToEditImagePreviewAvailable:boolean = true;
-  attributeToEditImagePreview:string = '';
-
   @Output() dataSelected: EventEmitter<AttrValueVO> = new EventEmitter<AttrValueVO>();
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<AttrValueVO, boolean>>>>();
+
+  //paging
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
+  // Must use separate variables (not currentPage) for table since that causes
+  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
+
+
+  private _objectAttributes:Array<AttrValueVO>;
+  private objectAttributesRemove:Array<number>;
+  private objectAttributesEdit:Array<number>;
+  private _attributeFilter:string;
+  private filteredObjectAttributes:Array<AttrValueVO>;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  @ViewChild('deleteConfirmationModalDialog')
+  private deleteConfirmationModalDialog:ModalComponent;
+  @ViewChild('editModalDialog')
+  private editModalDialog:ModalComponent;
+
+  @ViewChild('addModalDialog')
+  private addModalDialog:ModalComponent;
+
+  private selectedRow:AttrValueVO;
+  private selectedAttribute:AttributeVO;
+
+  private attributeToEdit:AttrValueVO;
+  private attributeToEditImagePreviewAvailable:boolean = true;
+  private attributeToEditImagePreview:string = '';
 
   /**
    * Construct attribute panel
    */
   constructor() {
-    console.debug('AttributeValuesComponent constructed');
+    LogUtil.debug('AttributeValuesComponent constructed');
 
     this.attributeToEdit = null;
     let that = this;
@@ -111,69 +104,55 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     this.delayedFiltering.delay();
   }
 
-  /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('AttributeValuesComponent ngOnInit', this.masterObject);
+  get attributeToEditBoolean():boolean {
+    // Must use get/set because there is string to boolean conversion happens somewhere in binding,
+    // so: ngTrueValue="'true'" ngFalseValue="'false'" does not work
+    return this.attributeToEdit && ('' + this.attributeToEdit.val === 'true');
+  }
+
+  set attributeToEditBoolean(val:boolean) {
+    this.attributeToEdit.val = '' + val;
+  }
+
+  ngOnInit() {
+    LogUtil.debug('AttributeValuesComponent ngOnInit', this.masterObject);
   }
 
   ngOnChanges(changes:any) {
-    console.debug('AttributeValuesComponent ngOnChanges', changes);
+    LogUtil.debug('AttributeValuesComponent ngOnChanges', changes);
     this.delayedFiltering.delay();
   }
 
-  private loadData() {
-    if (this.masterObject && this._objectAttributes) {
 
-      console.debug('AttributeValuesComponent attributes', this._objectAttributes);
-      this.objectAttributesRemove = [];
-      this.objectAttributesEdit = [];
-      this.filterAttributes();
-
-    } else {
-
-      this.objectAttributesRemove = null;
-      this.objectAttributesEdit = null;
-      this.filteredObjectAttributes = [];
-
+  onRowAdd() {
+    if (this.avPrototype != null) {
+      this.addModalDialog.show();
     }
-
-    this.changed = false;
-    this.onSelectRow(null);
   }
 
-  /**
-   * Row delete handler.
-   * @param row attribute to delete.
-   */
-  protected onRowDelete(row:AttrValueVO) {
-    console.debug('AttributeValuesComponent onRowDelete handler', row);
-    this.deleteConfirmationModalDialog.show();
-  }
-
-  public onRowDeleteSelected() {
+  onRowDeleteSelected() {
     if (this.selectedRow != null) {
       this.onRowDelete(this.selectedRow);
     }
   }
 
-  protected onRowEdit(row:AttrValueVO) {
-    console.debug('AttributeValuesComponent onRowEdit handler', row);
-    this.validForSave = false;
-    this.attributeToEdit = Util.clone(row);
-    this.processImageView(this.attributeToEdit);
-    this.editModalDialog.show();
-  }
-
-  public onRowEditSelected() {
+  onRowEditSelected() {
     if (this.selectedRow != null) {
       this.onRowEdit(this.selectedRow);
     }
   }
 
-  public onRowAdd() {
-    if (this.avPrototype != null) {
-      this.addModalDialog.show();
-    }
+  protected onRowDelete(row:AttrValueVO) {
+    LogUtil.debug('AttributeValuesComponent onRowDelete handler', row);
+    this.deleteConfirmationModalDialog.show();
+  }
+
+  protected onRowEdit(row:AttrValueVO) {
+    LogUtil.debug('AttributeValuesComponent onRowEdit handler', row);
+    this.validForSave = false;
+    this.attributeToEdit = Util.clone(row);
+    this.processImageView(this.attributeToEdit);
+    this.editModalDialog.show();
   }
 
   protected onAttributeSelected(row:AttributeVO) {
@@ -181,7 +160,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   protected onAttributeAddModalResult(modalresult: ModalResult) {
-    console.debug('AttributeValuesComponent onAttributeAddModalResult modal result is ', modalresult);
+    LogUtil.debug('AttributeValuesComponent onAttributeAddModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.selectedAttribute.code;} );
@@ -198,7 +177,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   protected onSelectRow(row:AttrValueVO) {
-    console.debug('AttributeValuesComponent onSelectRow handler', row);
+    LogUtil.debug('AttributeValuesComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -207,7 +186,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     this.dataSelected.emit(this.selectedRow);
   }
 
-  onDataChange(event:any) {
+  protected onDataChange(event:any) {
 
     let val = this.attributeToEdit.val;
     let typ = this.attributeToEdit.attribute.etypeName;
@@ -242,31 +221,11 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       }
     }
 
-    console.debug('AttributeValuesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-  private processDataChangesEvent() {
-
-    console.debug('AttributeValuesComponent data changes', this.masterObject);
-    if (this.masterObject && this._objectAttributes) {
-
-      let _update = <Array<Pair<AttrValueVO, boolean>>>[];
-      this._objectAttributes.forEach(attr => {
-        if ((attr.attrvalueId !== 0 && this.isEditedAttribute(attr)) || (attr.attrvalueId === 0 && attr.val !== null && /\S+(.*\S)*/.test(attr.val) && !(/\* .+/.test(attr.val)))) {
-          _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
-        }
-      });
-
-      console.debug('AttributeValuesComponent data changes update', _update);
-
-      this.dataChanged.emit({ source: _update, valid: this.validForSave });
-
-    }
-
+    LogUtil.debug('AttributeValuesComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('AttributeValuesComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('AttributeValuesComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let attrToDelete = this.selectedRow.attrvalueId;
       if (attrToDelete === 0) {
@@ -274,9 +233,9 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           return attrVo.attribute.code === this.selectedRow.attribute.code;
         });
         this._objectAttributes[idx].val = null;
-        console.debug('AttributeValuesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
+        LogUtil.debug('AttributeValuesComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
       } else {
-        console.debug('AttributeValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
+        LogUtil.debug('AttributeValuesComponent onDeleteConfirmationResult attribute ' + attrToDelete);
         this.objectAttributesRemove.push(attrToDelete);
         this.objectAttributesEdit.push(attrToDelete);
       }
@@ -290,10 +249,10 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
   }
 
   protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('AttributeValuesComponent onEditModalResult modal result is ', modalresult);
+    LogUtil.debug('AttributeValuesComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.attributeToEdit.attrvalueId === 0) { // add new
-        console.debug('AttributeValuesComponent onEditModalResult add new attribute', this._objectAttributes);
+        LogUtil.debug('AttributeValuesComponent onEditModalResult add new attribute', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.attributeToEdit.attribute.code;} );
         if (idx != -1) {
           this._objectAttributes[idx] = this.attributeToEdit;
@@ -301,7 +260,7 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           this._objectAttributes.push(this.attributeToEdit);
         }
       } else { // edit existing
-        console.debug('AttributeValuesComponent onEditModalResult update existing', this._objectAttributes);
+        LogUtil.debug('AttributeValuesComponent onEditModalResult update existing', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attrvalueId === this.attributeToEdit.attrvalueId;} );
         this._objectAttributes[idx] = this.attributeToEdit;
         this.objectAttributesEdit.push(this.attributeToEdit.attrvalueId);
@@ -314,6 +273,175 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
       this.attributeToEdit = null;
     }
   }
+
+  protected isRemovedAttribute(row:AttrValueVO):boolean {
+    return this.objectAttributesRemove.indexOf(row.attrvalueId) !== -1;
+  }
+
+  protected isEditedAttribute(row:AttrValueVO):boolean {
+    return this.objectAttributesEdit.indexOf(row.attrvalueId) !== -1;
+  }
+
+  protected isNewAttribute(row:AttrValueVO):boolean {
+    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') !== 0;
+  }
+
+  protected isInheritedAttribute(row:AttrValueVO):boolean {
+    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') === 0;
+  }
+
+  protected getAttributeColor(row:AttrValueVO, removed:string, edited:string, added:string, inherited:string, prestine:string) {
+
+    if (this.isRemovedAttribute(row)) {
+      return removed;
+    }
+
+    if (this.isEditedAttribute(row)) {
+      return edited;
+    }
+
+    if (this.isNewAttribute(row)) {
+      return added;
+    }
+
+    if (this.isInheritedAttribute(row)) {
+      return inherited;
+    }
+
+    return prestine;
+  }
+
+  protected resetLastPageEnd() {
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
+  protected onPageChanged(event:any) {
+    this.pageStart = (event.page - 1) * this.itemsPerPage;
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
+  protected getDisplayValue(row:AttrValueVO):string {
+    if (row.val != null) {
+      if (row.attribute.etypeName === 'Boolean') {
+        if (('' + row.val)  === 'true') {
+          return '<i class="fa fa-check-circle"></i>';
+        } else {
+          return '<i class="fa fa-times-circle"></i>';
+        }
+      } else if (row.attribute.etypeName === 'HTML') {
+        return '<pre>' + row.val + '</pre>';
+      } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
+        return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
+      }
+      return row.val;
+    }
+    return '&nbsp;';
+  }
+
+  protected isBooleanEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Boolean';
+  }
+
+  protected isImageEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Image';
+  }
+
+  protected isLocalisableEditor():boolean {
+    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'String';
+  }
+
+  protected isTextAreaEditor():boolean {
+    return this.attributeToEdit &&
+      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML' || this.attributeToEdit.attribute.etypeName === 'Any');
+  }
+
+  protected isMiniTextEditor():boolean {
+    return this.attributeToEdit &&
+      (this.attributeToEdit.attribute.etypeName === 'Float' || this.attributeToEdit.attribute.etypeName === 'Integer'
+      || this.attributeToEdit.attribute.etypeName === 'Date');
+  }
+
+  protected isTextEditor():boolean {
+    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor() && !this.isMiniTextEditor();
+  }
+
+  processImageView(av:AttrValueVO) {
+    if (av.attribute.etypeName === 'Image') {
+      if (av.val != null) {
+        this.attributeToEditImagePreviewAvailable = av.valBase64Data != null;
+        if (this.attributeToEditImagePreviewAvailable) {
+          this.attributeToEditImagePreview = '<img src="' + av.valBase64Data + '"/>';
+        } else {
+          this.attributeToEditImagePreview = '&nbsp;';
+        }
+      } else {
+        this.attributeToEditImagePreviewAvailable = true;
+        this.attributeToEditImagePreview = '&nbsp;';
+      }
+    }
+  }
+
+  isFileUploadDisabled():boolean {
+    var input:any = document.getElementById('avmodaluploadimage');
+    return input == null || input.disabled;
+  }
+
+  onFileClickRelay() {
+    LogUtil.debug('AttributeValuesComponent file upload relay button click');
+    document.getElementById('avmodaluploadimage').click();
+  }
+
+  onImageFileSelected(event:any) {
+    var srcElement:any = event.srcElement;
+    var image:any = srcElement.files[0];
+    LogUtil.debug('AttributeValuesComponent image file selected', image.name);
+    var reader:FileReader = new FileReader();
+
+    let that = this;
+
+    reader.onloadend = function(e:any) {
+      LogUtil.debug('AttributeValuesComponent image file loaded', e.target.result);
+      that.attributeToEdit.val = image.name;
+      that.attributeToEdit.valBase64Data = e.target.result;
+      that.processImageView(that.attributeToEdit);
+      that.changed = true;
+      that.validForSave = true;
+      srcElement.value = '';
+    };
+    reader.readAsDataURL(image);
+  }
+
+
+  private loadData() {
+    if (this.masterObject && this._objectAttributes) {
+
+      LogUtil.debug('AttributeValuesComponent attributes', this._objectAttributes);
+      this.objectAttributesRemove = [];
+      this.objectAttributesEdit = [];
+      this.filterAttributes();
+
+    } else {
+
+      this.objectAttributesRemove = null;
+      this.objectAttributesEdit = null;
+      this.filteredObjectAttributes = [];
+
+    }
+
+    this.changed = false;
+    this.onSelectRow(null);
+  }
+
 
   private filterAttributes() {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
@@ -342,10 +470,10 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
           val.val && val.val.toLowerCase().indexOf(_filter) !== -1
         );
       }
-      console.debug('AttributeValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      LogUtil.debug('AttributeValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
     } else {
       this.filteredObjectAttributes = this._objectAttributes;
-      console.debug('AttributeValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
+      LogUtil.debug('AttributeValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
     }
 
     if (this.filteredObjectAttributes === null) {
@@ -359,161 +487,25 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
     }
   }
 
-  isRemovedAttribute(row:AttrValueVO):boolean {
-    return this.objectAttributesRemove.indexOf(row.attrvalueId) !== -1;
-  }
 
-  isEditedAttribute(row:AttrValueVO):boolean {
-    return this.objectAttributesEdit.indexOf(row.attrvalueId) !== -1;
-  }
+  private processDataChangesEvent() {
 
-  isNewAttribute(row:AttrValueVO):boolean {
-    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') !== 0;
-  }
+    LogUtil.debug('AttributeValuesComponent data changes', this.masterObject);
+    if (this.masterObject && this._objectAttributes) {
 
-  isInheritedAttribute(row:AttrValueVO):boolean {
-    return row.attrvalueId == 0 && row.val != null && row.val != '' && row.val.indexOf('* ') === 0;
-  }
-
-  getAttributeColor(row:AttrValueVO, removed:string, edited:string, added:string, inherited:string, prestine:string) {
-
-    if (this.isRemovedAttribute(row)) {
-      return removed;
-    }
-
-    if (this.isEditedAttribute(row)) {
-      return edited;
-    }
-
-    if (this.isNewAttribute(row)) {
-      return added;
-    }
-
-    if (this.isInheritedAttribute(row)) {
-      return inherited;
-    }
-
-    return prestine;
-  }
-
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
-    }
-  }
-
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
-    }
-  }
-
-  public getDisplayValue(row:AttrValueVO):string {
-    if (row.val != null) {
-      if (row.attribute.etypeName === 'Boolean') {
-        if (('' + row.val)  === 'true') {
-          return '<i class="fa fa-check-circle"></i>';
-        } else {
-          return '<i class="fa fa-times-circle"></i>';
+      let _update = <Array<Pair<AttrValueVO, boolean>>>[];
+      this._objectAttributes.forEach(attr => {
+        if ((attr.attrvalueId !== 0 && this.isEditedAttribute(attr)) || (attr.attrvalueId === 0 && attr.val !== null && /\S+(.*\S)*/.test(attr.val) && !(/\* .+/.test(attr.val)))) {
+          _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
         }
-      } else if (row.attribute.etypeName === 'HTML') {
-        return '<pre>' + row.val + '</pre>';
-      } else if (row.attribute.etypeName === 'Image' && row.valBase64Data) {
-        return '<img class="av-image-thumb" src="' + row.valBase64Data + '" alt="' + row.val + '"/>';
-      }
-      return row.val;
+      });
+
+      LogUtil.debug('AttributeValuesComponent data changes update', _update);
+
+      this.dataChanged.emit({ source: _update, valid: this.validForSave });
+
     }
-    return '&nbsp;';
-  }
 
-  isBooleanEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Boolean';
-  }
-
-  isImageEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'Image';
-  }
-
-  isLocalisableEditor():boolean {
-    return this.attributeToEdit && this.attributeToEdit.attribute.etypeName === 'String';
-  }
-
-  isTextAreaEditor():boolean {
-    return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML' || this.attributeToEdit.attribute.etypeName === 'Any');
-  }
-
-  isMiniTextEditor():boolean {
-    return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'Float' || this.attributeToEdit.attribute.etypeName === 'Integer'
-      || this.attributeToEdit.attribute.etypeName === 'Date');
-  }
-
-  isTextEditor():boolean {
-    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor() && !this.isMiniTextEditor();
-  }
-
-  get attributeToEditBoolean():boolean {
-    // Must use get/set because there is string to boolean conversion happens somewhere in binding,
-    // so: ngTrueValue="'true'" ngFalseValue="'false'" does not work
-    return this.attributeToEdit && ('' + this.attributeToEdit.val === 'true');
-  }
-
-  set attributeToEditBoolean(val:boolean) {
-    this.attributeToEdit.val = '' + val;
-  }
-
-  processImageView(av:AttrValueVO) {
-    if (av.attribute.etypeName === 'Image') {
-      if (av.val != null) {
-        this.attributeToEditImagePreviewAvailable = av.valBase64Data != null;
-        if (this.attributeToEditImagePreviewAvailable) {
-          this.attributeToEditImagePreview = '<img src="' + av.valBase64Data + '"/>';
-        } else {
-          this.attributeToEditImagePreview = '&nbsp;';
-        }
-      } else {
-        this.attributeToEditImagePreviewAvailable = true;
-        this.attributeToEditImagePreview = '&nbsp;';
-      }
-    }
-  }
-
-  isFileUploadDisabled():boolean {
-    var input:any = document.getElementById('avmodaluploadimage');
-    return input == null || input.disabled;
-  }
-
-  onFileClickRelay() {
-    console.debug('AttributeValuesComponent file upload relay button click');
-    document.getElementById('avmodaluploadimage').click();
-  }
-
-  onImageFileSelected(event:any) {
-    var srcElement:any = event.srcElement;
-    var image:any = srcElement.files[0];
-    console.debug('AttributeValuesComponent image file selected', image.name);
-    var reader:FileReader = new FileReader();
-
-    let that = this;
-
-    reader.onloadend = function(e:any) {
-      console.debug('AttributeValuesComponent image file loaded', e.target.result);
-      that.attributeToEdit.val = image.name;
-      that.attributeToEdit.valBase64Data = e.target.result;
-      that.processImageView(that.attributeToEdit);
-      that.changed = true;
-      that.validForSave = true;
-      srcElement.value = '';
-    };
-    reader.readAsDataURL(image);
   }
 
 }

@@ -13,20 +13,18 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {ShopVO, ShopSeoVO} from './../../shared/model/index';
-import {ShopService} from './../../shared/services/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {Futures, Future} from './../../shared/event/index';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ShopVO, ShopSeoVO } from './../../shared/model/index';
+import { ShopService } from './../../shared/services/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-seo',
   moduleId: module.id,
   templateUrl: 'shop-seo.component.html',
-  directives: [ I18nComponent, NgIf, REACTIVE_FORM_DIRECTIVES, DataControlComponent],
 })
 
 export class ShopSEOComponent implements OnInit, OnDestroy {
@@ -34,21 +32,26 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopLocalization:ShopSeoVO;
+  private shopLocalization:ShopSeoVO;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  validForm:boolean = false;
-  delayedChange:Future;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
-  shopSEOForm:any;
-  shopSEOFormSub:any;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private shopSEOForm:any;
+  private shopSEOFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
-    console.debug('ShopSEOComponent constructed');
+    LogUtil.debug('ShopSEOComponent constructed');
 
-    this.shopSEOForm = fb.group({});
+    this.shopSEOForm = fb.group({
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
+    });
 
     let that = this;
     this.delayedChange = Futures.perpetual(function() {
@@ -56,36 +59,19 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.shopSEOForm.controls) {
-      this.shopSEOForm.controls[key]['_pristine'] = true;
-      this.shopSEOForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.shopSEOFormSub = this.shopSEOForm.statusChanges.subscribe((data:any) => {
-      this.validForm = this.shopSEOForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'shopSEOForm', 'shopSEOFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.shopSEOFormSub) {
-      console.debug('ShopSEOComponent unbining form');
-      this.shopSEOFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'shopSEOFormSub');
   }
 
   formChange():void {
-    this.validForSave = this.validForm;
-    console.debug('ShopSEOComponent validating formGroup is valid: ' + this.validForSave, this.shopLocalization);
+    LogUtil.debug('ShopSEOComponent formChange', this.shopSEOForm.valid, this.shopLocalization);
+    this.changed = this.shopSEOForm.dirty;
+    this.validForSave = this.shopSEOForm.valid;
   }
 
   @Input()
@@ -108,44 +94,59 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
     return this._shop;
   }
 
+
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'shopSEOForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'shopSEOForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'shopSEOForm', 'meta', event);
+  }
+
+
   ngOnInit() {
-    console.debug('ShopSEOComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopSEOComponent ngOnInit shop', this.shop);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ShopSEOComponent ngOnDestroy');
+    LogUtil.debug('ShopSEOComponent ngOnDestroy');
     this.formUnbind();
   }
 
-  onDataChanged() {
-    console.debug('ShopSEOComponent data change');
-    this.changed = true;
-  }
-
   onSaveHandler() {
-    console.debug('ShopSEOComponent Save handler', this.shop);
+    LogUtil.debug('ShopSEOComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLocalization) {
       var _sub:any = this._shopService.saveShopLocalization(this.shopLocalization).subscribe(shopLocalization => {
-        console.debug('ShopSEOComponent Saved i18n', shopLocalization);
+        LogUtil.debug('ShopSEOComponent Saved i18n', shopLocalization);
+        this.initialising = true;
         this.shopLocalization = shopLocalization;
+        this.shopSEOForm.reset(this.shopLocalization);
         this.changed = false;
         this._reload = false;
         this.validForSave = false;
+        this.initialising = false;
         _sub.unsubscribe();
       });
     }
   }
 
   onDiscardEvent() {
-    console.debug('ShopSEOComponent Discard handler for shop', this.shop);
+    LogUtil.debug('ShopSEOComponent Discard handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShopLocalization(this.shop.shopId).subscribe(shopLocalization => {
-        console.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
+        LogUtil.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
+        this.initialising = true;
         this.shopLocalization = shopLocalization;
+        this.shopSEOForm.reset(this.shopLocalization);
         this.changed = false;
         this._reload = false;
         this.validForSave = false;
+        this.initialising = false;
         _sub.unsubscribe();
       });
     } else {
@@ -156,7 +157,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   }
 
   onRefreshHandler() {
-    console.debug('ShopSEOComponent Refresh handler');
+    LogUtil.debug('ShopSEOComponent Refresh handler');
     this.onDiscardEvent();
   }
 

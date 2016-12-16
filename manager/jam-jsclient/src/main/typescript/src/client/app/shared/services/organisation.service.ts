@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {RoleVO, ManagerInfoVO, ManagerVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { RoleVO, ManagerInfoVO, ManagerVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class OrganisationService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('OrganisationService constructed');
+    LogUtil.debug('OrganisationService constructed');
   }
 
   /**
@@ -115,7 +116,7 @@ export class OrganisationService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(manager:string, state:boolean) {
-    console.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
+    LogUtil.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -172,7 +173,7 @@ export class OrganisationService {
 
   private handleError (error:any) {
 
-    console.error('OrganisationService Server error: ', error);
+    LogUtil.error('OrganisationService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

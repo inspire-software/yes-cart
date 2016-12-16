@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {ManagerInfoVO, LicenseAgreementVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { ManagerInfoVO, LicenseAgreementVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class ManagementService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('ManagementService constructed');
+    LogUtil.debug('ManagementService constructed');
   }
 
   /**
@@ -77,7 +78,7 @@ export class ManagementService {
 
   private handleError (error:any) {
 
-    console.error('ManagementService Server error: ', error);
+    LogUtil.error('ManagementService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

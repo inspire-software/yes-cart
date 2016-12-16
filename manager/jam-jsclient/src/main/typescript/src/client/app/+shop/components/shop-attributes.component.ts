@@ -13,21 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {ShopVO, AttrValueShopVO, Pair} from './../../shared/model/index';
-import {ShopService} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent} from './../../shared/modal/index';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { ShopVO, AttrValueShopVO, Pair } from './../../shared/model/index';
+import { ShopService } from './../../shared/services/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-attributes',
   moduleId: module.id,
   templateUrl: 'shop-attributes.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, AttributeValuesComponent]
 })
 
 export class ShopAttributesComponent implements OnInit {
@@ -35,18 +30,20 @@ export class ShopAttributesComponent implements OnInit {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopAttributes:Array<AttrValueShopVO> = null;
-  attributeFilter:string;
+  private shopAttributes:Array<AttrValueShopVO> = null;
+  private attributeFilter:string;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
-  selectedRow:AttrValueShopVO;
+  private selectedRow:AttrValueShopVO;
 
-  update:Array<Pair<AttrValueShopVO, boolean>>;
+  private update:Array<Pair<AttrValueShopVO, boolean>>;
+
+  private searchHelpShow:boolean = false;
 
   /**
    * Construct shop attribute panel
@@ -54,7 +51,7 @@ export class ShopAttributesComponent implements OnInit {
    * @param _shopService shop service
    */
   constructor(private _shopService:ShopService) {
-    console.debug('ShopAttributeComponent constructed');
+    LogUtil.debug('ShopAttributeComponent constructed');
 
     this.update = [];
 
@@ -81,7 +78,7 @@ export class ShopAttributesComponent implements OnInit {
   }
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ShopAttributeComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopAttributeComponent ngOnInit shop', this.shop);
   }
 
   protected onRowDeleteSelected() {
@@ -97,7 +94,7 @@ export class ShopAttributesComponent implements OnInit {
   }
 
   protected onSelectRow(row:AttrValueShopVO) {
-    console.debug('ShopAttributeComponent onSelectRow handler', row);
+    LogUtil.debug('ShopAttributeComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -105,22 +102,22 @@ export class ShopAttributesComponent implements OnInit {
     }
   }
 
-  onDataChange(event:any) {
+  protected onDataChange(event:any) {
     this.validForSave = event.valid;
     this.update = event.source;
     this.changed = true;
-    console.debug('ShopAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    LogUtil.debug('ShopAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   protected onSaveHandler() {
-    console.debug('ShopAttributeComponent Save handler', this.shop);
+    LogUtil.debug('ShopAttributeComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.update) {
 
-      console.debug('ShopAttributeComponent Save handler update', this.update);
+      LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       var _sub:any = this._shopService.saveShopAttributes(this.update).subscribe(
           rez => {
-            console.debug('ShopAttributeComponent attributes', rez);
+            LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.shopAttributes = rez;
             this.changed = false;
             this.validForSave = false;
@@ -133,25 +130,55 @@ export class ShopAttributesComponent implements OnInit {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopAttributeComponent discard handler', this.shop);
+    LogUtil.debug('ShopAttributeComponent discard handler', this.shop);
     this.onRefreshHandler();
   }
 
   protected onRefreshHandler() {
-    console.debug('ShopAttributeComponent refresh handler', this.shop);
+    LogUtil.debug('ShopAttributeComponent refresh handler', this.shop);
     this.getShopAttributes();
+  }
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
   }
 
   /**
    * Read attributes, that belong to shop.
    */
   private getShopAttributes() {
-    console.debug('ShopAttributeComponent get attributes', this.shop);
+    LogUtil.debug('ShopAttributeComponent get attributes', this.shop);
     if (this.shop.shopId > 0) {
 
       var _sub:any = this._shopService.getShopAttributes(this.shop.shopId).subscribe(shopAttributes => {
 
-        console.debug('ShopAttributeComponent attributes', shopAttributes);
+        LogUtil.debug('ShopAttributeComponent attributes', shopAttributes);
         this.shopAttributes = shopAttributes;
         this.changed = false;
         this._reload = false;
@@ -164,5 +191,6 @@ export class ShopAttributesComponent implements OnInit {
       this.selectedRow = null;
     }
   }
+
 
 }

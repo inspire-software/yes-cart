@@ -298,10 +298,10 @@ public class VoProductServiceImpl implements VoProductService {
 
         if (CollectionUtils.isNotEmpty(vo.getProductCategories())) {
             for (final VoProductCategory productCategory : vo.getProductCategories()) {
-                final ProductCategoryDTO catDto = dtoProductCategoryService.getNew();
-                dtoProductCategoryService.create(
-                        voAssemblySupport.assembleDto(ProductCategoryDTO.class, VoProductCategory.class, catDto, productCategory)
-                );
+                final ProductCategoryDTO catDto = voAssemblySupport.assembleDto(
+                        ProductCategoryDTO.class, VoProductCategory.class, dtoProductCategoryService.getNew(), productCategory);
+                catDto.setProductId(dto.getProductId());
+                dtoProductCategoryService.create(catDto);
             }
         }
 

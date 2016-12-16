@@ -13,43 +13,40 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {DataGroupInfoVO, JobStatusVO, Pair} from './../shared/model/index';
-import {ImpexService} from './../shared/services/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {FileSelectComponent, DataGroupSelectComponent} from './../shared/impex/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
+import { ImpexService } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-export-manager',
   moduleId: module.id,
   templateUrl: 'export-manager.component.html',
-  directives: [TAB_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, FileSelectComponent, DataGroupSelectComponent, ModalComponent]
 })
 
 export class ExportManagerComponent implements OnInit {
 
-  selectedGroup:DataGroupInfoVO = null;
-  fileFilter:string = null;
-  selectedFile:Pair<string,string> = null;
+  private static tabs:Array<ExportTabData> = [ ];
 
-  static tabs:Array<ExportTabData> = [ ];
-  selectedTab:number = -1;
-  selectedTabRunning:boolean = false;
-  selectedTabCompleted:boolean = false;
+  private selectedGroup:DataGroupInfoVO = null;
+  private fileFilter:string = null;
+  private selectedFile:Pair<string,string> = null;
+
+  private selectedTab:number = -1;
+  private selectedTabRunning:boolean = false;
+  private selectedTabCompleted:boolean = false;
 
   @ViewChild('selectGroupModalDialog')
-  selectGroupModalDialog:ModalComponent;
+  private selectGroupModalDialog:ModalComponent;
 
   @ViewChild('selectFileModalDialog')
-  selectFileModalDialog:ModalComponent;
+  private selectFileModalDialog:ModalComponent;
 
-  delayedStatus:Future;
-  delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
+  private delayedStatus:Future;
+  private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
 
   /**
    * Construct export panel
@@ -57,7 +54,7 @@ export class ExportManagerComponent implements OnInit {
    * @param _exportService system service
    */
   constructor(private _exportService:ImpexService) {
-    console.debug('ExportManagerComponent constructed');
+    LogUtil.debug('ExportManagerComponent constructed');
     let that = this;
     this.delayedStatus = Futures.perpetual(function() {
       that.getStatusInfo();
@@ -75,7 +72,7 @@ export class ExportManagerComponent implements OnInit {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ExportManagerComponent ngOnInit');
+    LogUtil.debug('ExportManagerComponent ngOnInit');
   }
 
   protected tabSelected(idx:number) {
@@ -86,18 +83,18 @@ export class ExportManagerComponent implements OnInit {
   }
 
   protected onNewTabHandler() {
-    console.debug('ExportManagerComponent onNewTabHandler');
+    LogUtil.debug('ExportManagerComponent onNewTabHandler');
     this.selectedGroup = null;
     this.selectGroupModalDialog.show();
   }
 
   protected onGroupSelect(group:DataGroupInfoVO) {
-    console.debug('ExportManagerComponent onGroupSelect', group);
+    LogUtil.debug('ExportManagerComponent onGroupSelect', group);
     this.selectedGroup = group;
   }
 
   protected onGroupConfirmationResult(modalresult: ModalResult) {
-    console.debug('ExportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ExportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedGroup != null) {
         this.tabs.push({
@@ -114,12 +111,12 @@ export class ExportManagerComponent implements OnInit {
   }
 
   protected onFileSelect(file:Pair<string, string>) {
-    console.debug('ExportManagerComponent onFileSelect', file);
+    LogUtil.debug('ExportManagerComponent onFileSelect', file);
     this.selectedFile = file;
   }
 
   protected onFileDownload() {
-    console.debug('ExportManagerComponent onFileSelect');
+    LogUtil.debug('ExportManagerComponent onFileSelect');
     if (this.selectedTab >= 0) {
       let data = this.tabs[this.selectedTab];
       if (data.status.completion == 'OK') {
@@ -133,7 +130,7 @@ export class ExportManagerComponent implements OnInit {
   }
 
   protected onFilesConfirmationResult(modalresult: ModalResult) {
-    console.debug('ExportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ExportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedFile != null) {
 
@@ -160,17 +157,17 @@ export class ExportManagerComponent implements OnInit {
   }
 
   protected onRunHandler() {
-    console.debug('ExportManagerComponent Run handler');
+    LogUtil.debug('ExportManagerComponent Run handler');
 
     if (this.selectedTab >= 0) {
       let data = this.tabs[this.selectedTab];
       if (!data.running) {
 
-        console.debug('ExportManagerComponent exportFromFile', data.group.label, data.file);
+        LogUtil.debug('ExportManagerComponent exportFromFile', data.group.label, data.file);
 
         var _sub:any = this._exportService.exportToFile(data.group.label, data.file).subscribe(res => {
 
-          console.debug('ExportManagerComponent exportToFile', res);
+          LogUtil.debug('ExportManagerComponent exportToFile', res);
 
           data.status.token = res;
           data.running = true;
@@ -186,7 +183,7 @@ export class ExportManagerComponent implements OnInit {
   }
 
   protected onRefreshHandler() {
-    console.debug('ExportManagerComponent refresh handler');
+    LogUtil.debug('ExportManagerComponent refresh handler');
     this.getStatusInfo();
   }
 
@@ -194,7 +191,7 @@ export class ExportManagerComponent implements OnInit {
    * Read attributes.
    */
   private getStatusInfo() {
-    console.debug('ExportManagerComponent status');
+    LogUtil.debug('ExportManagerComponent status');
 
     this.tabs.forEach((tab:ExportTabData, idx:number) => {
 
@@ -202,7 +199,7 @@ export class ExportManagerComponent implements OnInit {
 
         var _sub:any = this._exportService.getExportStatus(tab.status.token).subscribe(update => {
 
-          console.debug('ExportManagerComponent getExportStatus', update);
+          LogUtil.debug('ExportManagerComponent getExportStatus', update);
           tab.status = update;
           tab.running = tab.status.completion == null;
           _sub.unsubscribe();

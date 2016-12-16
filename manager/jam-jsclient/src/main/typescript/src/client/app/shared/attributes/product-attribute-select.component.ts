@@ -13,61 +13,47 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {AttributeVO} from './../model/index';
-import {AttributeService} from './../services/index';
-import {Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
+import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { AttributeVO } from './../model/index';
+import { AttributeService } from './../services/index';
+import { Futures, Future } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-product-attribute-select',
   moduleId: module.id,
   templateUrl: 'product-attribute-select.component.html',
-  directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
 export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
+
+  @Output() dataSelected: EventEmitter<AttributeVO> = new EventEmitter<AttributeVO>();
 
   private filteredAttributes : AttributeVO[] = [];
   private attributeFilter : string;
 
   private selectedAttribute : AttributeVO = null;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
 
-  attributeFilterRequired:boolean = true;
-  attributeFilterCapped:boolean = false;
+  private attributeFilterRequired:boolean = true;
+  private attributeFilterCapped:boolean = false;
 
-  @Output() dataSelected: EventEmitter<AttributeVO> = new EventEmitter<AttributeVO>();
+  private loading:boolean = false;
 
   constructor (private _attributeService : AttributeService) {
-    console.debug('ProductAttributeSelectComponent constructed');
-  }
-
-  getAllAttributes() {
-
-    this.attributeFilterRequired = (this.attributeFilter == null || this.attributeFilter.length < 2);
-
-    if (!this.attributeFilterRequired) {
-      var _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
-        console.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
-        this.filteredAttributes = allattributes;
-        this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;
-        _sub.unsubscribe();
-      });
-    }
+    LogUtil.debug('ProductAttributeSelectComponent constructed');
   }
 
   ngOnDestroy() {
-    console.debug('ProductAttributeSelectComponent ngOnDestroy');
+    LogUtil.debug('ProductAttributeSelectComponent ngOnDestroy');
   }
 
   ngOnInit() {
-    console.debug('ProductAttributeSelectComponent ngOnInit');
+    LogUtil.debug('ProductAttributeSelectComponent ngOnInit');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.getAllAttributes();
@@ -76,7 +62,7 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
   }
 
   onSelectClick(attribute: AttributeVO) {
-    console.debug('ProductAttributeSelectComponent onSelectClick', attribute);
+    LogUtil.debug('ProductAttributeSelectComponent onSelectClick', attribute);
     this.selectedAttribute = attribute;
     this.dataSelected.emit(this.selectedAttribute);
   }
@@ -104,6 +90,23 @@ export class ProductAttributeSelectComponent implements OnInit, OnDestroy {
       flags += '<i class="fa fa-list-alt"></i>&nbsp;';
     }
     return flags;
+  }
+
+
+  private getAllAttributes() {
+
+    this.attributeFilterRequired = (this.attributeFilter == null || this.attributeFilter.length < 2);
+
+    if (!this.attributeFilterRequired) {
+      this.loading = true;
+      var _sub:any = this._attributeService.getFilteredAttributes('PRODUCT', this.attributeFilter, this.filterCap).subscribe(allattributes => {
+        LogUtil.debug('ProductAttributeSelectComponent getAllAttributes', allattributes);
+        this.filteredAttributes = allattributes;
+        this.attributeFilterCapped = this.filteredAttributes.length >= this.filterCap;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    }
   }
 
 

@@ -12,17 +12,18 @@
 
     <form class="pull-left" [hidden]="viewMode !== 'centres'">
       <input class="filter-input" type="text" name="centreFilter" [(ngModel)]="centreFilter" autocomplete="off"/>
+      <a class="js-click" (click)="onClearFilterCentre()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
     </form>
 
-    <button type="button" (click)="onRowNew()" [disabled]="centreEdit != null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="centreEdit != null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="centreEdit != null || selectedCentre == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="centreEdit != null || selectedCentre == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCentre == null || (centreEdit != null && centreEdit.warehouseId === 0)" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedCentre == null || (centreEdit != null && centreEdit.warehouseId === 0)" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
       <i class="fa fa-remove"></i>
     </button>
 
@@ -35,7 +36,7 @@
   </div>
 
 
-  <div [hidden]="viewMode !== 'centres'">
+  <div [hidden]="viewMode !== 'centres'" class="{{ loading ? 'loading-data' : '' }}">
     <yc-fulfilment-centres [centres]="centres" [filter]="centreFilter" (dataSelected)="onCentreSelected($event)"></yc-fulfilment-centres>
   </div>
 
@@ -43,14 +44,14 @@
     <yc-fulfilment-centre [centre]="centreEdit" [shops]="shops" (dataChanged)="onCentreChanged($event)"></yc-fulfilment-centre>
   </div>
 
-  <modal #deleteConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (closed)="onDeleteConfirmationResult($event)">
+  <yc-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </modal>
+  </yc-modal>
 
 
 </div>

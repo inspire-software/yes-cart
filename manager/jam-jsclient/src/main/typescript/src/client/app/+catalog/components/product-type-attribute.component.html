@@ -14,11 +14,11 @@
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
-          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}}</a></td>
-          <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click">{{row.rank}}</a></td>
-          <td title="{{ 'PRODUCT_TYPE_ATTR_CONFIG' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click text-force-break"><div [innerHTML]="getAttrFlags(row)"></div></a></td>
-          <td title="{{ 'AV_SEARCH' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click"><div [innerHTML]="getSearchFlags(row)"></div></a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click" [title]="row.attribute.code">{{row.attribute.name}}</a></td>
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click" [title]="row.attribute.code">{{row.attribute.etypeName}}</a></td>
+          <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click">{{row.rank}}</a></td>
+          <td title="{{ 'PRODUCT_TYPE_ATTR_CONFIG' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click text-force-break"><div [innerHTML]="getAttrFlags(row)"></div></a></td>
+          <td title="{{ 'AV_SEARCH' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click"><div [innerHTML]="getSearchFlags(row)"></div></a></td>
         </template>
       </tr>
       </tbody>
@@ -32,21 +32,21 @@
 
 
 
-  <modal #deleteConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (closed)="onDeleteConfirmationResult($event)">
+  <yc-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
-  </modal>
+  </yc-modal>
 
-  <modal #editModalDialog
-         title="{{ (attributeToEdit && attributeToEdit.attribute && attributeToEdit.attribute.name) ? attributeToEdit.attribute.name : '-' }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-         [valid]="validForSave"
-         (closed)="onEditModalResult($event)">
+  <yc-modal #editModalDialog
+            title="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
 
     <template [ngIf]="attributeToEdit && attributeToEdit.attribute == null">
 
@@ -69,6 +69,12 @@
       <form role="form">
         <fieldset>
           <div class="row">
+            <div class="col-md-6">{{ 'NAME' | translate }}</div>
+            <div class="col-md-6">
+              <input name="name" class="form-control" type="text" [ngModel]="attributeToEdit.attribute.name" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-6">{{ 'AV_RANK' | translate }}</div>
             <div class="col-md-6">
               <input name="rank" class="form-control" type="text" [(ngModel)]="attributeToEdit.rank" (ngModelChange)="onDataChange($event)" required>
@@ -87,25 +93,25 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">{{ 'ATTRIBUTE_SI_STORE' | translate }}</div>
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_STORE' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="store" type="checkbox" [ngModel]="attributeToEdit.store" disabled="disabled">
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">{{ 'ATTRIBUTE_SI_SEARCH' | translate }}</div>
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_SEARCH' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="search" type="checkbox" [ngModel]="attributeToEdit.search" disabled="disabled">
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">{{ 'ATTRIBUTE_SI_PRIMARY' | translate }}</div>
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_PRIMARY' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="primary" type="checkbox" [ngModel]="attributeToEdit.primary" disabled="disabled">
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">{{ 'ATTRIBUTE_SI_NAV' | translate }}</div>
+            <div class="col-md-6">{{ 'ATTRIBUTE_SI_NAV' | translate }} <i class="fa fa-question-circle" title="{{ 'ATTRIBUTE_SI_TIP' | translate }}"></i></div>
             <div class="col-md-6">
               <input name="navigation" type="checkbox" [ngModel]="attributeToEdit.navigation" [hidden]="attributeToEdit.navigation" disabled="disabled">
               <select name="navigationType" [(ngModel)]="attributeToEdit.navigationType"  (ngModelChange)="onDataChange($event)"
@@ -113,7 +119,7 @@
                 <option value="S">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_S' | translate }}</option>
                 <option value="R">{{ 'PRODUCT_TYPE_ATTR_CONFIG_NAV_TYPE_R' | translate }}</option>
               </select>
-              <button class="btn {{ editRanges ? '' : 'btn-info' }} btn-circle btn-sm" (click)="onToggleEditRanges()" [hidden]="!rangeNav" >
+              <button class="btn {{ editRanges ? '' : 'btn-info' }} btn-circle btn-sm" (click)="onToggleEditRanges()" [hidden]="!rangeNav"  title="{{ (editRanges ? 'ATTRIBUTE_SI_RANGE_TIP_EDIT' : 'ATTRIBUTE_SI_RANGE_TIP_READ') | translate }}">
                 <i class="fa fa-edit"></i>
               </button>
             </div>
@@ -146,6 +152,6 @@
 
     </template>
 
-  </modal>
+  </yc-modal>
 
 </template>

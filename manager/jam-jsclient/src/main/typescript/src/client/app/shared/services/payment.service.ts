@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {PaymentGatewayInfoVO, PaymentGatewayVO, PaymentGatewayParameterVO, Pair} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { PaymentGatewayInfoVO, PaymentGatewayVO, PaymentGatewayParameterVO, Pair } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class PaymentService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('PaymentService constructed');
+    LogUtil.debug('PaymentService constructed');
   }
 
   /**
@@ -98,7 +99,7 @@ export class PaymentService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(shopCode: string, pgLabel:string, state:boolean) {
-    console.debug('PaymentService change state PG ' + pgLabel + ' for ' + shopCode + ' to ' + state ? 'online' : 'offline');
+    LogUtil.debug('PaymentService change state PG ' + pgLabel + ' for ' + shopCode + ' to ' + state ? 'online' : 'offline');
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -129,7 +130,7 @@ export class PaymentService {
 
   private handleError (error:any) {
 
-    console.error('PaymentService Server error: ', error);
+    LogUtil.error('PaymentService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

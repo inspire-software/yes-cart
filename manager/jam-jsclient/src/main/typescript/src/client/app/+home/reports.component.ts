@@ -13,37 +13,34 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair} from './../shared/model/index';
-import {ReportsService, I18nEventBus} from './../shared/services/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {FileSelectComponent} from './../shared/impex/index';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ReportDescriptorVO, ReportRequestVO, ReportRequestParameterVO, Pair } from './../shared/model/index';
+import { ReportsService, I18nEventBus } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-reports',
   moduleId: module.id,
   templateUrl: 'reports.component.html',
-  directives: [TAB_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, FileSelectComponent, ModalComponent]
 })
 
 export class ReportsComponent implements OnInit {
 
-  reports:Array<ReportDescriptorVO> = [];
+  private static tabs:Array<QueryTabData> = [];
 
-  runnableReportTab:boolean = false;
-  selectedReport:string = null;
+  private reports:Array<ReportDescriptorVO> = [];
 
-  static tabs:Array<QueryTabData> = [  ];
-  selectedTab:number = 0;
+  private runnableReportTab:boolean = false;
+  private selectedReport:string = null;
 
-  fileFilter:string = null;
-  selectedFile:Pair<string,string> = null;
+  private selectedTab:number = 0;
+
+  private fileFilter:string = null;
+  private selectedFile:Pair<string,string> = null;
 
   @ViewChild('selectFileModalDialog')
-  selectFileModalDialog:ModalComponent;
+  private selectFileModalDialog:ModalComponent;
 
   /**
    * Construct reports panel
@@ -51,7 +48,7 @@ export class ReportsComponent implements OnInit {
    * @param _reportsService reports service
    */
   constructor(private _reportsService:ReportsService) {
-    console.debug('ReportsComponent constructed');
+    LogUtil.debug('ReportsComponent constructed');
 
   }
 
@@ -65,7 +62,7 @@ export class ReportsComponent implements OnInit {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ReportsComponent ngOnInit');
+    LogUtil.debug('ReportsComponent ngOnInit');
     this.onRefreshHandler();
   }
 
@@ -94,7 +91,7 @@ export class ReportsComponent implements OnInit {
 
         var _sub:any = this._reportsService.updateReportRequestValues(request).subscribe((res:ReportRequestVO) => {
 
-          console.debug('ReportsComponent request', res);
+          LogUtil.debug('ReportsComponent request', res);
 
           let _tab:QueryTabData = { descriptor: descriptor, request: res, running: false, completed: false, filename: null, success: true };
 
@@ -113,7 +110,7 @@ export class ReportsComponent implements OnInit {
 
   protected onDataChange(event:any) {
 
-    console.debug('ReportsComponent data change', event);
+    LogUtil.debug('ReportsComponent data change', event);
 
     this.validateCurrentTabForm();
 
@@ -123,7 +120,7 @@ export class ReportsComponent implements OnInit {
 
     let data:QueryTabData = this.tabs[this.selectedTab];
 
-    console.debug('ReportsComponent validating tab', data);
+    LogUtil.debug('ReportsComponent validating tab', data);
 
     let valid = data != null && !data.running && !data.completed;
     if (valid) {
@@ -136,7 +133,7 @@ export class ReportsComponent implements OnInit {
 
     this.runnableReportTab = valid;
 
-    console.debug('ReportsComponent tab is valid', this.runnableReportTab);
+    LogUtil.debug('ReportsComponent tab is valid', this.runnableReportTab);
 
   }
 
@@ -146,14 +143,14 @@ export class ReportsComponent implements OnInit {
   }
 
   protected onRunHandler() {
-    console.debug('ReportsComponent Run handler');
+    LogUtil.debug('ReportsComponent Run handler');
 
     let data = this.tabs[this.selectedTab];
     data.running = true;
 
     var _sub:any = this._reportsService.generateReport(data.request).subscribe(res => {
 
-      console.debug('ReportsComponent res', res);
+      LogUtil.debug('ReportsComponent res', res);
 
       data.running = false;
       data.filename = res;
@@ -172,7 +169,7 @@ export class ReportsComponent implements OnInit {
   protected onDownloadClick() {
 
     let data = this.tabs[this.selectedTab];
-    console.debug('ReportsComponent onDownloadClick handler', data);
+    LogUtil.debug('ReportsComponent onDownloadClick handler', data);
 
     if (data.completed) {
       this.fileFilter = data.filename;
@@ -182,13 +179,13 @@ export class ReportsComponent implements OnInit {
   }
 
   protected onFileSelect(file:Pair<string, string>) {
-    console.debug('ReportsComponent onFileSelect', file);
+    LogUtil.debug('ReportsComponent onFileSelect', file);
     this.selectedFile = file;
   }
 
 
   protected onFilesConfirmationResult(modalresult: ModalResult) {
-    console.debug('ReportsComponent onFilesConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ReportsComponent onFilesConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedFile != null) {
 
@@ -202,7 +199,7 @@ export class ReportsComponent implements OnInit {
 
 
   protected onRefreshHandler() {
-    console.debug('ReportsComponent refresh handler');
+    LogUtil.debug('ReportsComponent refresh handler');
     this.getReportInfo();
   }
 
@@ -210,11 +207,11 @@ export class ReportsComponent implements OnInit {
    * Read attributes.
    */
   private getReportInfo() {
-    console.debug('ReportsComponent get reports');
+    LogUtil.debug('ReportsComponent get reports');
 
     var _sub:any = this._reportsService.getReportDescriptors().subscribe(reports => {
 
-      console.debug('ReportsComponent reports', reports);
+      LogUtil.debug('ReportsComponent reports', reports);
       this.reports = reports;
       this.selectedReport = this.reports[0].reportId;
       _sub.unsubscribe();

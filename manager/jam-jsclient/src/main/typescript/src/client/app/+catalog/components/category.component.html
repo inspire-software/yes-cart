@@ -13,7 +13,7 @@
                 <div class="form-group">
                   <label>{{ 'CATEGORY_PARENT' | translate }}</label>
                   <div class="input-group">
-                    <input class="form-control" placeholder="{{ 'CATEGORY_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="category.parentName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <input class="form-control" placeholder="{{ 'CATEGORY_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="category.parentName" [readonly]="true"/>
                     <span class="input-group-btn">
                       <button type="button" (click)="onEditParent()" class="btn">
                         <i class="fa fa-edit"></i>
@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group" [hidden]="!(category.linkToId > 0)">
                   <label>{{ 'CATEGORY_LINK' | translate }}</label>
-                  <input class="form-control" formControlName="linkToName" name="linkToName" type="text" [ngModel]="category.linkToName" [disabled]="true"/>
+                  <input class="form-control" formControlName="linkToName" name="linkToName" type="text" [ngModel]="category.linkToName" [readonly]="true"/>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CODE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="category.guid" (ngModelChange)="onMainDataChange($event)"/>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="category.guid"/>
                   <div [hidden]="categoryForm.controls['guid'].valid || categoryForm.controls['guid'].pristine" class="alert alert-danger">
                     <div [hidden]="!categoryForm.controls['guid'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}
@@ -52,8 +52,7 @@
                              value="name"
                              defaultRequired="true"
                              i18n="displayNames"
-                             [formGroup]="categoryForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -62,28 +61,28 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'AV_RANK' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="category.rank" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="category.rank">
                   <div [hidden]="categoryForm.controls['rank'].valid || categoryForm.controls['rank'].pristine" class="alert alert-danger">
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CATEGORY_FROM' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
                   <div [hidden]="categoryForm.controls['availablefrom'].valid || categoryForm.controls['availablefrom'].pristine" class="alert alert-danger">
                     {{ 'DATE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CATEGORY_TO' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
                   <div [hidden]="categoryForm.controls['availableto'].valid || categoryForm.controls['availableto'].pristine" class="alert alert-danger">
                     {{ 'DATE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="category.description" (ngModelChange)="onMainDataChange($event)"></textarea>
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="category.description"></textarea>
                 </div>
               </fieldset>
             </div>
@@ -99,7 +98,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CATEGORY_TEMPLATE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="category.uitemplate" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="category.uitemplate">
                   <div [hidden]="categoryForm.controls['uitemplate'].valid || categoryForm.controls['uitemplate'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
@@ -120,7 +119,7 @@
                   <label>{{ 'SEO_URI' | translate }}</label>
                   <div class="input-group">
                     <div class="input-group-addon">/category/</div>
-                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="category.uri" (ngModelChange)="onMainDataChange($event)"/>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="category.uri"/>
                   </div>
                   <div [hidden]="categoryForm.controls['uri'].valid || categoryForm.controls['uri'].pristine" class="alert alert-danger">
                     <div [hidden]="!categoryForm.controls['uri'].hasError('checking')">
@@ -142,8 +141,7 @@
                              [source]="category"
                              value="title"
                              i18n="displayTitles"
-                             [formGroup]="categoryForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -153,8 +151,7 @@
                              [source]="category"
                              value="metakeywords"
                              i18n="displayMetakeywords"
-                             [formGroup]="categoryForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -164,8 +161,7 @@
                              [source]="category"
                              value="metadescription"
                              i18n="displayMetadescriptions"
-                             [formGroup]="categoryForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -181,12 +177,12 @@
             <div class="col-md-9 col-lg-6">
               <fieldset>
                 <div class="form-group">
-                  <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="navigationByAttributes" name="navigationByAttributes" type="checkbox" [(ngModel)]="category.navigationByAttributes">
                   <label>{{ 'CATEGORY_NAV_ATTR' | translate }}</label>
                 </div>
                 <div class="form-group" [hidden]="!category.navigationByAttributes">
                   <div class="input-group">
-                    <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="parentName" type="text" [(ngModel)]="category.productTypeName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <input class="form-control" placeholder="{{ 'CATEGORY_NAV_PRODUCT_TYPE' | translate }}" formControlName="productTypeName" name="parentName" type="text" [(ngModel)]="category.productTypeName" [readonly]="true"/>
                     <span class="input-group-btn">
                       <button type="button" (click)="onClearProductType()" class="btn">
                         <i class="fa fa-remove"></i>
@@ -201,11 +197,11 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <input formControlName="navigationByBrand" name="navigationByBrand" type="checkbox" [(ngModel)]="category.navigationByBrand" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="navigationByBrand" name="navigationByBrand" type="checkbox" [(ngModel)]="category.navigationByBrand">
                   <label>{{ 'CATEGORY_NAV_BRAND' | translate }}</label>
                 </div>
                 <div class="form-group">
-                  <input formControlName="navigationByPrice" name="navigationByPrice" type="checkbox" [(ngModel)]="category.navigationByPrice" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="navigationByPrice" name="navigationByPrice" type="checkbox" [(ngModel)]="category.navigationByPrice">
                   <label>{{ 'CATEGORY_NAV_PRICE' | translate }}</label>
                   <button class="btn btn-info btn-circle btn-sm" (click)="onEditPriceTiers()" [hidden]="!category.navigationByPrice" >
                     <i class="fa fa-edit"></i>
@@ -228,6 +224,18 @@
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
+        <template [ngIf]="!(category.categoryId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
+
         <template [ngIf]="category.categoryId > 0">
 
           <div class="panel-body">
@@ -236,17 +244,32 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
               </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
             </div>
 
             <div class="row">
@@ -273,12 +296,12 @@
 <yc-product-type-select #categoryProductTypeSelectComponent
                         (dataSelected)="onCategoryProductTypeSelected($event)"></yc-product-type-select>
 
-<modal #categoryPriceTiersModalDialog
-       title="{{ 'CATEGORY_NAV_PRICE' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-       [valid]="true"
-       (closed)="onEditPriceTiersModalResult($event)">
+<yc-modal #categoryPriceTiersModalDialog
+          title="{{ 'CATEGORY_NAV_PRICE' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+          [valid]="true"
+          (closed)="onEditPriceTiersModalResult($event)">
 
   <template [ngIf]="navigationByPriceTiers">
 
@@ -318,10 +341,10 @@
                     </button>
                   </div>
                   <div class="col-xs-4">
-                    <input class="form-control" name="priceTierFrom" type="text" [(ngModel)]="priceTier.from" (ngModelChange)="onMainDataChange($event)">
+                    <input class="form-control" name="priceTierFrom" type="text" [(ngModel)]="priceTier.from">
                   </div>
                   <div class="col-xs-4">
-                    <input class="form-control" name="priceTierTo" type="text" [(ngModel)]="priceTier.to" (ngModelChange)="onMainDataChange($event)">
+                    <input class="form-control" name="priceTierTo" type="text" [(ngModel)]="priceTier.to">
                   </div>
                 </div>
               </div>
@@ -342,4 +365,4 @@
     </div>
   </template>
 
-</modal>
+</yc-modal>

@@ -86,7 +86,7 @@ public class VoAttributeServiceImpl implements VoAttributeService {
 
     /** {@inheritDoc} */
     public List<VoAttribute> getFilteredAttributes(final String group, final String filter, final int max) throws Exception {
-        final List<AttributeDTO> attributeDTOs = dtoAttributeService.findAttributesBy(group, filter, filter, filter, 0, max);
+        final List<AttributeDTO> attributeDTOs = dtoAttributeService.findAttributesBy(group, filter, 0, max);
         return voAssemblySupport.assembleVos(VoAttribute.class, AttributeDTO.class, attributeDTOs);
     }
 

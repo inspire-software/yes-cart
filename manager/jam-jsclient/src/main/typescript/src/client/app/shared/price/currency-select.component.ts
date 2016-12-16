@@ -13,22 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {ShopVO, ShopSupportedCurrenciesVO} from './../model/index';
-import {ShopService} from './../services/index';
-import {Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
+import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ShopVO, ShopSupportedCurrenciesVO } from './../model/index';
+import { ShopService } from './../services/index';
+import { Futures, Future } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-currency-select',
   moduleId: module.id,
   templateUrl: 'currency-select.component.html',
-  directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
 export class CurrencySelectComponent implements OnInit, OnDestroy {
+
+  @Output() dataSelected: EventEmitter<string> = new EventEmitter<string>();
 
   private _shop : ShopVO;
 
@@ -37,15 +37,13 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
   private filteredCurrencies : string[] = [];
   private currencyFilter : string;
 
-  private selectedCentre : string = null;
+  private selectedCurrency : string = null;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  @Output() dataSelected: EventEmitter<string> = new EventEmitter<string>();
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   constructor (private _currencyService : ShopService) {
-    console.debug('CurrencySelectComponent constructed');
+    LogUtil.debug('CurrencySelectComponent constructed');
   }
 
   @Input()
@@ -58,11 +56,43 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
     this.getAllCurrencies();
   }
 
-  getAllCurrencies() {
+
+  ngOnDestroy() {
+    LogUtil.debug('CurrencySelectComponent ngOnDestroy');
+  }
+
+  ngOnInit() {
+    LogUtil.debug('CurrencySelectComponent ngOnInit');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterCurrencies();
+    }, this.delayedFilteringMs);
+
+    this.getAllCurrencies();
+
+  }
+
+  protected onSelectClick(currency: string) {
+    LogUtil.debug('CurrencySelectComponent onSelectClick', currency);
+    this.selectedCurrency = currency;
+    this.dataSelected.emit(this.selectedCurrency);
+  }
+
+  protected isShopCurrency(currency:string) {
+    return this.shopCurrencies.indexOf(currency) != -1;
+  }
+
+  protected onFilterChange() {
+
+    this.delayedFiltering.delay();
+
+  }
+
+  private getAllCurrencies() {
 
     if (this.shop != null) {
       var _sub:any = this._currencyService.getShopCurrencies(this.shop.shopId).subscribe((allcurrencies:ShopSupportedCurrenciesVO) => {
-        console.debug('CurrencySelectComponent getAllCurrencies', allcurrencies);
+        LogUtil.debug('CurrencySelectComponent getAllCurrencies', allcurrencies);
         this.currencies = allcurrencies.all;
         this.shopCurrencies = allcurrencies.supported;
         this.filterCurrencies();
@@ -84,10 +114,10 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
       this.filteredCurrencies = this.currencies.filter(currency =>
         currency.toLowerCase().indexOf(_filter) !== -1
       );
-      console.debug('CurrencySelectComponent filterCurrencies', _filter);
+      LogUtil.debug('CurrencySelectComponent filterCurrencies', _filter);
     } else {
       this.filteredCurrencies = this.currencies;
-      console.debug('CurrencySelectComponent filterCurrencies no filter');
+      LogUtil.debug('CurrencySelectComponent filterCurrencies no filter');
     }
 
     if (this.filteredCurrencies === null) {
@@ -116,38 +146,6 @@ export class CurrencySelectComponent implements OnInit, OnDestroy {
 
     this.filteredCurrencies.sort(_sort);
 
-
-  }
-
-
-  ngOnDestroy() {
-    console.debug('CurrencySelectComponent ngOnDestroy');
-  }
-
-  ngOnInit() {
-    console.debug('CurrencySelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCurrencies();
-    }, this.delayedFilteringMs);
-
-    this.getAllCurrencies();
-
-  }
-
-  onSelectClick(currency: string) {
-    console.debug('CurrencySelectComponent onSelectClick', currency);
-    this.selectedCentre = currency;
-    this.dataSelected.emit(this.selectedCentre);
-  }
-
-  isShopCurrency(currency:string) {
-    return this.shopCurrencies.indexOf(currency) != -1;
-  }
-
-  protected onFilterChange() {
-
-    this.delayedFiltering.delay();
 
   }
 

@@ -11,7 +11,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CODE' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="centre.code" (ngModelChange)="onDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="centre.code">
                   <div [hidden]="centreForm.controls['code'].valid || centreForm.controls['code'].pristine" class="alert alert-danger">
                     <div [hidden]="!centreForm.controls['code'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}
@@ -24,39 +24,39 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'NAME' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="centre.name" (ngModelChange)="onDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="centre.name">
                   <div [hidden]="centreForm.controls['name'].valid || centreForm.controls['name'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="centre.description" (ngModelChange)="onDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="centre.description">
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_COUNTRY' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="centre.countryCode" (ngModelChange)="onDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_COUNTRY_CODE' | translate }}" formControlName="countryCode" name="countryCode" type="text" [(ngModel)]="centre.countryCode">
                   <div [hidden]="centreForm.controls['countryCode'].valid || centreForm.controls['countryCode'].pristine" class="alert alert-danger">
                     {{ 'COUNTRY_CODE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_STATE_CODE' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="centre.stateCode" (ngModelChange)="onDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_STATE_CODE' | translate }}" formControlName="stateCode" name="stateCode" type="text" [(ngModel)]="centre.stateCode">
                   <div [hidden]="centreForm.controls['stateCode'].valid || centreForm.controls['stateCode'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_CITY' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_CITY' | translate }}" formControlName="city" name="city" type="text" [(ngModel)]="centre.city" (ngModelChange)="onDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_CITY' | translate }}" formControlName="city" name="city" type="text" [(ngModel)]="centre.city">
                   <div [hidden]="centreForm.controls['city'].valid || centreForm.controls['city'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'LOCATION_POST_CODE' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_POST_CODE' | translate }}" formControlName="postcode" name="postcode" type="text" [(ngModel)]="centre.postcode" (ngModelChange)="onDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'LOCATION_POST_CODE' | translate }}" formControlName="postcode" name="postcode" type="text" [(ngModel)]="centre.postcode">
                   <div [hidden]="centreForm.controls['postcode'].valid || centreForm.controls['postcode'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
@@ -70,6 +70,18 @@
       </tab>
 
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
+
+        <template [ngIf]="!(centre.warehouseId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
 
         <template [ngIf]="centre.warehouseId > 0">
 

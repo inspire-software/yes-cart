@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, InventoryVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { FulfilmentCentreInfoVO, FulfilmentCentreVO, ShopFulfilmentCentreVO, InventoryVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class FulfilmentService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('FulfilmentService constructed');
+    LogUtil.debug('FulfilmentService constructed');
   }
 
   /**
@@ -197,7 +198,7 @@ export class FulfilmentService {
 
   private handleError (error:any) {
 
-    console.error('FulfilmentService Server error: ', error);
+    LogUtil.error('FulfilmentService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

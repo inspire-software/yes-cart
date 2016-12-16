@@ -1,23 +1,24 @@
-<ul class="nav nav-second-level item-list-control">
-  <li>
-    <form>
-      <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
-    </form>
-  </li>
-  <li *ngIf="attributeFilterRequired">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </li>
+<div class=" {{ loading ? 'loading-data' : '' }}">
+  <ul class="nav nav-second-level item-list-control">
+    <li>
+      <form>
+        <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+      </form>
+    </li>
+    <li *ngIf="attributeFilterRequired">
+      <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </li>
 
-  <li *ngIf="attributeFilterCapped">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </li>
-</ul>
+    <li *ngIf="attributeFilterCapped">
+      <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+    </li>
+  </ul>
 
-<ul class="nav nav-second-level item-list">
+  <ul class="nav nav-second-level item-list">
 
-  <li *ngFor="let attribute of filteredAttributes">
-    <a (click)="onSelectClick(attribute)" class="{{ (selectedAttribute != null && attribute != null && selectedAttribute.attributeId == attribute.attributeId) ? 'bg-info js-click' : 'js-click' }}"  [title]="attribute.code">{{attribute.name}} <span [innerHTML]="getSearchFlags(attribute)"></span></a>
-  </li>
+    <li *ngFor="let attribute of filteredAttributes">
+      <a (click)="onSelectClick(attribute)" class="{{ (selectedAttribute != null && attribute != null && selectedAttribute.attributeId == attribute.attributeId) ? 'bg-info js-click' : 'js-click' }}"  [title]="attribute.code">{{attribute.name}} <span [innerHTML]="getSearchFlags(attribute)"></span></a>
+    </li>
 
-</ul>
-
+  </ul>
+</div>

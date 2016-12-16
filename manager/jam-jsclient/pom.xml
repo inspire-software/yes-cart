@@ -30,7 +30,28 @@
     <description>Yes cart manager server JS client</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <npm.goal>build.prod</npm.goal>
     </properties>
+
+    <profiles>
+
+        <profile>
+            <id>dev</id>
+            <properties>
+                <npm.goal>build.dev</npm.goal>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Special config for development via Intellij IDEA -->
+            <id>devIntellijIDEA</id>
+            <properties>
+                <npm.goal>build.dev</npm.goal>
+            </properties>
+        </profile>
+
+
+    </profiles>
 
     <build>
 
@@ -107,7 +128,7 @@
                             <executable>npm</executable>
                             <arguments>
                                 <argument>run</argument>
-                                <argument>build.dev</argument>
+                                <argument>${npm.goal}</argument>
                             </arguments>
                             <workingDirectory>${project.basedir}/src/main/typescript</workingDirectory>
                         </configuration>
@@ -117,40 +138,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>com.google.code.maven-replacer-plugin</groupId>
-                <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
-                <executions>
-                    <execution>
-                        <id>replace-assets</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>replace</goal>
-                        </goals>
-                        <configuration>
-                            <file>${basedir}/src/main/typescript/dist/dev/index.html</file>
-                            <replacements>
-                                <!--TODO check how to build with correct path delimiter-->
-                                <replacement>
-                                    <token>href=".*assets\/main.css.*"</token>
-                                    <value>href="assets/main.css"</value>
-                                </replacement>
-                                <replacement>
-                                    <token>href=".*assets\/bootstrap.min.css.*"</token>
-                                    <value>href="assets/bootstrap.min.css"</value>
-                                </replacement>
-                                <replacement>
-                                    <token>href=".*assets\/font-awesome.min.css.*"</token>
-                                    <value>href="assets/font-awesome.min.css"</value>
-                                </replacement>
-                            </replacements>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Build node js application end  -->
 
         </plugins>

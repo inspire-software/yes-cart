@@ -12,19 +12,19 @@
         </select>
       </form>
 
-      <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+      <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_REPORTRUN' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
-      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTADD' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
         <i class="fa fa-refresh"></i>
       </button>
 
-      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 1" class="btn btn-danger btn-circle btn-xl" >
+      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 0" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REPORTREMOVE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 
@@ -67,14 +67,20 @@
                         </span>
                       </div>
                     </div>
-                    <div [hidden]="tab.success">
-                      <p class="bg-danger text-padding">{{ 'REPORT_NO_RESULTS' | translate }} </p>
-                    </div>
-                    <div [hidden]="!runnableReportTab">
-                      <p class="bg-success text-padding">{{ 'REPORT_RUN_TIP' | translate }} <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></p>
-                    </div>
                   </fieldset>
                 </form>
+              </div>
+            </div>
+          </div>
+          <div class="row" [hidden]="tab.running">
+            <div class="col-xs-12">
+              <div class="panel-body">
+                <div [hidden]="tab.success">
+                  <p class="bg-danger text-padding">{{ 'REPORT_NO_RESULTS' | translate }} </p>
+                </div>
+                <div [hidden]="!runnableReportTab">
+                  <p class="bg-success text-padding">{{ 'REPORT_RUN_TIP' | translate }} <button type="button" (click)="onRunHandler()" [disabled]="!runnableReportTab" class="btn btn-info btn-circle hidden-sm hidden-xs"><i class="fa fa-play"></i></button></p>
+                </div>
               </div>
             </div>
           </div>
@@ -86,17 +92,17 @@
 </template>
 
 
-<modal #selectFileModalDialog
-       title="{{ 'PANEL_REPORTS' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
-       [valid]="selectedFile != null"
-       (closed)="onFilesConfirmationResult($event)">
+<yc-modal #selectFileModalDialog
+          title="{{ 'PANEL_REPORTS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="selectedFile != null"
+          (closed)="onFilesConfirmationResult($event)">
   <div class="item-list-overflow">
 
     <yc-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></yc-file-select>
 
   </div>
 
-</modal>
+</yc-modal>
 

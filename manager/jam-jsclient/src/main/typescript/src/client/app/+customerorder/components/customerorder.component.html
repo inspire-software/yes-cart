@@ -44,6 +44,10 @@
           <div class="col-xs-12">
             <div class="panel-body">
 
+              <div *ngIf="deliveryActionsAvailable">
+                <p class="bg-info text-padding block-margin-spacer">{{ 'CUSTOMERORDER_DELIVERY_TIP' | translate }}</p>
+              </div>
+
               <section class="no-more-tables">
                 <table class="table-bordered table-striped table-condensed cf">
                   <thead class="cf">

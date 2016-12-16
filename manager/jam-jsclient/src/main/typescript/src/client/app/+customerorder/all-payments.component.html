@@ -8,14 +8,15 @@
 
     <form class="pull-left">
       <input class="filter-input" type="text" name="paymentFilter" [(ngModel)]="paymentFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onRowInfoPaymentSelected()" [disabled]="selectedPayment == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowInfoPaymentSelected()" [disabled]="selectedPayment == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
       <i class="fa fa-info"></i>
     </button>
 
@@ -27,36 +28,39 @@
 
   </div>
 
-  <div *ngIf="searchHelpShow">
-    <div class="bg-info text-padding">
-      <p>{{ 'SEARCH_HELP_PAYMENT_DEFAULT' | translate }}</p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_INCOMING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentIncoming()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_OUTGOING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentOutgoing()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
-      <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+  <div  class="{{ loading ? 'loading-data' : '' }}">
+    <div *ngIf="searchHelpShow">
+      <div class="bg-info text-padding block-margin-spacer">
+        <p>{{ 'SEARCH_HELP_PAYMENT_DEFAULT' | translate }}</p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_COMPLETED' | translate }} <span><button type="button" (click)="onSearchStatusCompleted()" class="btn btn-circle"><i class="fa fa-check"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_INCOMING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentIncoming()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_OUTGOING' | translate }} <span><button type="button" (click)="onSearchStatusPaymentOutgoing()" class="btn btn-circle"><i class="fa fa-dollar"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_NUMBER' | translate }} <span><button type="button" (click)="onSearchNumber()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_CUSTOMER' | translate }} <span><button type="button" (click)="onSearchCustomer()" class="btn btn-circle"><i class="fa fa-user"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_PAYMENT_DETAILS' | translate }} <span><button type="button" (click)="onSearchDetails()" class="btn btn-circle"><i class="fa fa-home"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_CALENDAR' | translate }} <span><button type="button" (click)="onSearchDate()" class="btn btn-circle"><i class="fa fa-calendar"></i></button></span></p>
+      </div>
     </div>
+
+    <div *ngIf="paymentFilterRequired">
+      <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
+    </div>
+
+    <div *ngIf="paymentFilterCapped">
+      <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
+    </div>
+
+    <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)"></yc-payments>
+
   </div>
 
-  <div *ngIf="paymentFilterRequired">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </div>
-
-  <div *ngIf="paymentFilterCapped">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </div>
-
-  <yc-payments [payments]="payments" (dataSelected)="onPaymentSelected($event)"></yc-payments>
-
-  <modal #transactionDetailsModalDialog
-         title="{{ selectedPayment != null ? (selectedPayment.orderNumber + ' ' + selectedPayment.transactionOperation) : '' }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
-         [valid]="true">
+  <yc-modal #transactionDetailsModalDialog
+            title="{{ selectedPayment != null ? (selectedPayment.orderNumber + ' ' + selectedPayment.transactionOperation) : '' }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+            [valid]="true">
 
     <template [ngIf]="selectedPayment">
 
@@ -123,6 +127,6 @@
 
     </template>
 
-  </modal>
+  </yc-modal>
 
 </div>

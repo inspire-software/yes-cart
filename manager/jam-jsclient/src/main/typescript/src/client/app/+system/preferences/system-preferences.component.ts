@@ -13,39 +13,38 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnChanges, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {AttrValueSystemVO, Pair} from './../../shared/model/index';
-import {SystemService} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent} from './../../shared/modal/index';
+import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { AttrValueSystemVO, Pair } from './../../shared/model/index';
+import { SystemService } from './../../shared/services/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-system-preferences',
   moduleId: module.id,
   templateUrl: 'system-preferences.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, AttributeValuesComponent]
 })
 
 export class SystemPreferencesComponent implements OnInit, OnChanges {
 
-  system:any = { systemId: 100, name: 'YC' };
+  private system:any = { systemId: 100, name: 'YC' }; // tslint:disable-line:no-unused-variable
 
-  systemAttributes:Array<AttrValueSystemVO>;
-  attributeFilter:string;
+  private systemAttributes:Array<AttrValueSystemVO>;
+  private attributeFilter:string;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
-  selectedRow:AttrValueSystemVO;
+  private selectedRow:AttrValueSystemVO;
 
-  update:Array<Pair<AttrValueSystemVO, boolean>>;
+  private update:Array<Pair<AttrValueSystemVO, boolean>>;
+
+  private searchHelpShow:boolean = false;
+
+  private loading:boolean = false;
 
   /**
    * Construct shop attribute panel
@@ -53,7 +52,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
    * @param _systemService system service
    */
   constructor(private _systemService:SystemService) {
-    console.debug('ShopAttributeComponent constructed');
+    LogUtil.debug('ShopAttributeComponent constructed');
 
     this.update = [];
 
@@ -61,12 +60,12 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ShopAttributeComponent ngOnInit');
+    LogUtil.debug('ShopAttributeComponent ngOnInit');
     this.onRefreshHandler();
   }
 
   ngOnChanges(changes:any) {
-    console.debug('ShopAttributeComponent ngOnChanges', changes);
+    LogUtil.debug('ShopAttributeComponent ngOnChanges', changes);
     this.onRefreshHandler();
   }
 
@@ -83,7 +82,7 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   }
 
   protected onSelectRow(row:AttrValueSystemVO) {
-    console.debug('ShopAttributeComponent onSelectRow handler', row);
+    LogUtil.debug('ShopAttributeComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -91,24 +90,25 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
     }
   }
 
-  onDataChange(event:any) {
+  protected onDataChange(event:any) {
     this.validForSave = event.valid;
     this.update = event.source;
     this.changed = true;
-    console.debug('ShopAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+    LogUtil.debug('ShopAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   protected onSaveHandler() {
-    console.debug('ShopAttributeComponent Save handler');
+    LogUtil.debug('ShopAttributeComponent Save handler');
     if (this.update) {
 
-      console.debug('ShopAttributeComponent Save handler update', this.update);
+      LogUtil.debug('ShopAttributeComponent Save handler update', this.update);
 
       var _sub:any = this._systemService.saveShopAttributes(this.update).subscribe(
           rez => {
-            console.debug('ShopAttributeComponent attributes', rez);
+            LogUtil.debug('ShopAttributeComponent attributes', rez);
             this.systemAttributes = rez;
             this.changed = false;
+            this.validForSave = false;
             this.selectedRow = null;
             _sub.unsubscribe();
         }
@@ -117,27 +117,58 @@ export class SystemPreferencesComponent implements OnInit, OnChanges {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopAttributeComponent discard handler');
+    LogUtil.debug('ShopAttributeComponent discard handler');
     this.onRefreshHandler();
   }
 
   protected onRefreshHandler() {
-    console.debug('ShopAttributeComponent refresh handler');
+    LogUtil.debug('ShopAttributeComponent refresh handler');
     this.getSystemPreferences();
   }
 
-  /**
-   * Read attributes.
-   */
-  private getSystemPreferences() {
-    console.debug('ShopAttributeComponent get attributes');
 
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
+
+  private getSystemPreferences() {
+    LogUtil.debug('ShopAttributeComponent get attributes');
+
+    this.loading = true;
     var _sub:any = this._systemService.getSystemPreferences().subscribe(systemAttributes => {
 
-      console.debug('ShopAttributeComponent attributes', systemAttributes);
+      LogUtil.debug('ShopAttributeComponent attributes', systemAttributes);
       this.systemAttributes = systemAttributes;
       this.changed = false;
       this.selectedRow = null;
+      this.loading = false;
       _sub.unsubscribe();
 
     });

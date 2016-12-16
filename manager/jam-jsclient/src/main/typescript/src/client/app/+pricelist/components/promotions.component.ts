@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {PromotionVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { PromotionVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-promotions',
   moduleId: module.id,
   templateUrl: 'promotions.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class PromotionsComponent implements OnInit, OnDestroy {
-
-  _promotions:Array<PromotionVO> = [];
-
-  filteredPromotions:Array<PromotionVO>;
 
   @Input() selectedPromotion:PromotionVO;
 
   @Output() dataSelected: EventEmitter<PromotionVO> = new EventEmitter<PromotionVO>();
 
+  private _promotions:Array<PromotionVO> = [];
+
+  private filteredPromotions:Array<PromotionVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('PromotionsComponent constructed');
+    LogUtil.debug('PromotionsComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('PromotionsComponent ngOnInit');
+    LogUtil.debug('PromotionsComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class PromotionsComponent implements OnInit, OnDestroy {
     this.filterPromotions();
   }
 
-  private filterPromotions() {
-
-    this.filteredPromotions = this._promotions;
-    console.debug('PromotionsComponent filterPromotions', this.filteredPromotions);
-
-    if (this.filteredPromotions === null) {
-      this.filteredPromotions = [];
-    }
-
-    let _total = this.filteredPromotions.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('PromotionsComponent ngOnDestroy');
+    LogUtil.debug('PromotionsComponent ngOnDestroy');
     this.selectedPromotion = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class PromotionsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:PromotionVO) {
-    console.debug('PromotionsComponent onSelectRow handler', row);
+    LogUtil.debug('PromotionsComponent onSelectRow handler', row);
     if (row == this.selectedPromotion) {
       this.selectedPromotion = null;
     } else {
@@ -119,5 +101,20 @@ export class PromotionsComponent implements OnInit, OnDestroy {
     return row.enabledTo === null || (row.enabledTo > new Date());
   }
 
+  private filterPromotions() {
+
+    this.filteredPromotions = this._promotions;
+    LogUtil.debug('PromotionsComponent filterPromotions', this.filteredPromotions);
+
+    if (this.filteredPromotions === null) {
+      this.filteredPromotions = [];
+    }
+
+    let _total = this.filteredPromotions.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
 
 }

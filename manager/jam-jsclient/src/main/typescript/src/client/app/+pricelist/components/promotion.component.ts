@@ -13,82 +13,121 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {PricingService, Util} from './../../shared/services/index';
-import {PromotionVO, PromotionCouponVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {I18nComponent} from './../../shared/i18n/index';
-import {UiUtil} from './../../shared/ui/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {PromotionCouponsComponent} from './promotion-coupons.component';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { PricingService, Util } from './../../shared/services/index';
+import { PromotionVO, PromotionCouponVO, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-promotion',
   moduleId: module.id,
   templateUrl: 'promotion.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, I18nComponent, ModalComponent, PromotionCouponsComponent],
 })
 
 export class PromotionComponent implements OnInit, OnDestroy {
 
-  _promotion:PromotionVO;
-  coupons:PromotionCouponVO[] = [];
-  selectedCoupon:PromotionCouponVO = null;
+  /* tslint:disable */
+  private static TEMPLATES:any = {
+    PROMOTION_CONDITION_RULE_TEMPLATE_BUY_X_QTY: "shoppingCartItem.qty >= X",
+    PROMOTION_CONDITION_RULE_TEMPLATE_BUY_ONE_OF: "['X', 'Y', 'Z'].contains(shoppingCartItem.productSkuCode)",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_HAS_TAG: "customerTags.contains('X')",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_REGISTERED: "registered",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_FIRSTNAME: "customer.firstname == 'X'",
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_EMAIL_CONTAINS: "customer.email?.contains('X.com')",
 
-  couponFilter:string;
+    PROMOTION_CONDITION_RULE_TEMPLATE_ITEM_TOTAL_MORE_THAN: "shoppingCartItemTotal.priceSubTotal > X",
+
+    PROMOTION_CONDITION_RULE_TEMPLATE_ORDER_TOTAL_MORE_THAN: "shoppingCartOrderTotal.subTotal > X",
+
+    PROMOTION_CONDITION_RULE_TEMPLATE_CUSTOMER_TAG_FOR_COUNTRY_X: "def address = customer.getDefaultAddress('S');\naddress != null && address.countryCode == 'XX'"
+  };
+  /* tslint:enable */
+
+  @Output() dataChanged: EventEmitter<FormValidationEvent<PromotionVO>> = new EventEmitter<FormValidationEvent<PromotionVO>>();
+
+  private _promotion:PromotionVO;
+  private coupons:PromotionCouponVO[] = [];
+  private selectedCoupon:PromotionCouponVO = null;
+
+  private couponFilter:string;
   private forceShowAll:boolean = false;
   private couponFilterRequired:boolean = true;
   private couponFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
-  deleteValue:string = null;
+  private deleteValue:string = null;
 
-  @Output() dataChanged: EventEmitter<FormValidationEvent<PromotionVO>> = new EventEmitter<FormValidationEvent<PromotionVO>>();
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private initialising2:boolean = false; // tslint:disable-line:no-unused-variable
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private validForGenerate:boolean = true;
+  private delayedChange:Future;
 
-  validForGenerate:boolean = true;
+  private promotionForm:any;
+  private promotionFormSub:any; // tslint:disable-line:no-unused-variable
 
-  delayedChange:Future;
-
-  promotionForm:any;
-  promotionFormSub:any;
-
-  couponForm:any;
-  couponFormSub:any;
+  private couponForm:any;
+  private couponFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
-
+  private deleteConfirmationModalDialog:ModalComponent;
 
   @ViewChild('ruleHelpModalDialog')
-  ruleHelpModalDialog:ModalComponent;
-  selectedRuleTemplate:string;
-
+  private ruleHelpModalDialog:ModalComponent;
+  private selectedRuleTemplate:string;
+  private selectedRuleTemplateName:string;
 
   @ViewChild('generateCouponsModalDialog')
-  generateCouponsModalDialog:ModalComponent;
-  generateCoupons:PromotionCouponVO = null;
+  private generateCouponsModalDialog:ModalComponent;
+  private generateCoupons:PromotionCouponVO = null;
 
-  cannotExport:boolean = true;
+  private cannotExport:boolean = true;
+
+  private loading:boolean = false;
 
   constructor(private _promotionService:PricingService,
               fb: FormBuilder) {
-    console.debug('PromotionComponent constructed');
+    LogUtil.debug('PromotionComponent constructed');
+
+    let that = this;
+    let validCode = function(control:any):any {
+
+      let basic = Validators.required(control);
+      if (basic == null) {
+
+        let code = control.value;
+        if (that._promotion == null || !that.promotionForm || (!that.promotionForm.dirty && that._promotion.promotionId > 0)) {
+          return null;
+        }
+
+        basic = YcValidators.validCode(control);
+        if (basic == null) {
+          var req:ValidationRequestVO = {
+            subject: 'promotion',
+            subjectId: that._promotion.promotionId,
+            field: 'code',
+            value: code
+          };
+          return YcValidators.validRemoteCheck(control, req);
+        }
+      }
+      return basic;
+    };
+
 
     this.promotionForm = fb.group({
-      'code': ['', YcValidators.requiredValidCode],
+      'code': ['', validCode],
       'shopCode': ['', Validators.required],
       'currency': ['', Validators.required],
       'rank': ['', YcValidators.requiredRank],
@@ -101,6 +140,8 @@ export class PromotionComponent implements OnInit, OnDestroy {
       'availablefrom': ['', YcValidators.validDate],
       'availableto': ['', YcValidators.validDate],
       'tag': ['', YcValidators.nonBlankTrimmed],
+      'name': [''],
+      'description': [''],
     });
 
     this.couponForm = fb.group({
@@ -109,7 +150,6 @@ export class PromotionComponent implements OnInit, OnDestroy {
       'usageLimitPerCustomer': ['', YcValidators.requiredPositiveWholeNumber],
     });
 
-    let that = this;
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
@@ -120,57 +160,32 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.promotionForm.controls) {
-      this.promotionForm.controls[key]['_pristine'] = true;
-      this.promotionForm.controls[key]['_touched'] = false;
-    }
-  }
-
-  formResetCoupons():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.couponForm.controls) {
-      this.couponForm.controls[key]['_pristine'] = true;
-      this.couponForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.promotionFormSub = this.promotionForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = !this._promotion.enabled && this.promotionForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
-    this.couponFormSub = this.couponForm.statusChanges.subscribe((data:any) => {
-      this.validForGenerate = this.couponForm.valid;
-    });
+    UiUtil.formBind(this, 'promotionForm', 'promotionFormSub', 'delayedChange', 'initialising');
+    UiUtil.formBind(this, 'couponForm', 'couponFormSub', 'formChangeCoupons', 'initialising2', false);
   }
 
 
   formUnbind():void {
-    if (this.promotionFormSub) {
-      console.debug('PromotionComponent unbining form');
-      this.promotionFormSub.unsubscribe();
-    }
-    if (this.couponFormSub) {
-      console.debug('PromotionComponent unbining form');
-      this.couponFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'promotionFormSub');
+    UiUtil.formUnbind(this, 'couponFormSub');
   }
 
   formChange():void {
-    console.debug('PromotionComponent validating formGroup is valid: ' + this.validForSave, this._promotion);
-    this.dataChanged.emit({ source: this._promotion, valid: this.validForSave });
+    LogUtil.debug('PromotionComponent formChange', this.promotionForm.valid, this._promotion);
+    this.dataChanged.emit({ source: this._promotion, valid: !this._promotion.enabled && this.promotionForm.valid });
+  }
+
+  formChangeCoupons():void {
+    LogUtil.debug('PromotionComponent formChangeCoupons', this.couponForm.valid, this.couponForm.value);
+    this.validForGenerate = this.couponForm.valid;
   }
 
   @Input()
   set promotion(promotion:PromotionVO) {
-    this._promotion = promotion;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'promotionForm', '_promotion', promotion, promotion != null && promotion.promotionId > 0, ['code', 'promoType', 'promoAction', ]);
+
   }
 
   get promotion():PromotionVO {
@@ -194,41 +209,48 @@ export class PromotionComponent implements OnInit, OnDestroy {
     UiUtil.dateInputSetterProxy(this._promotion, 'enabledFrom', availablefrom);
   }
 
-
-  onMainDataChange(event:any) {
-    console.debug('PromotionComponent main data changed', this._promotion);
-    this.changed = true;
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'promotionForm', 'name', event);
   }
 
+  onDescriptionDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'promotionForm', 'description', event);
+  }
+
+
   ngOnInit() {
-    console.debug('PromotionComponent ngOnInit');
+    LogUtil.debug('PromotionComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('PromotionComponent ngOnDestroy');
+    LogUtil.debug('PromotionComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('PromotionComponent tabSelected', tab);
+    LogUtil.debug('PromotionComponent tabSelected', tab);
   }
 
   protected onRuleHelpClick() {
 
     this.selectedRuleTemplate = null;
+    this.selectedRuleTemplateName = null;
     this.ruleHelpModalDialog.show();
 
   }
 
   protected onSelectRuleTemplate(template:string) {
 
-    this.selectedRuleTemplate = template;
+    if (PromotionComponent.TEMPLATES.hasOwnProperty(template)) {
+      this.selectedRuleTemplate = PromotionComponent.TEMPLATES[template];
+      this.selectedRuleTemplateName = template;
+    }
 
   }
 
   protected onSelectRuleTemplateResult(modalresult: ModalResult) {
-    console.debug('PromotionComponent onSelectRuleTemplate modal result is ', modalresult);
+    LogUtil.debug('PromotionComponent onSelectRuleTemplate modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedRuleTemplate != null) {
@@ -238,20 +260,14 @@ export class PromotionComponent implements OnInit, OnDestroy {
         } else {
           this._promotion.eligibilityCondition = '(' + this._promotion.eligibilityCondition + ') && (' + this.selectedRuleTemplate + ')';
         }
-        this.changed = true;
         this.formChange();
       }
     }
   }
 
 
-  private isBlank(value:string):boolean {
-    return value === null || value === '' || /^\s+$/.test(value);
-  }
-
-
   protected onCouponSelected(data:PromotionCouponVO) {
-    console.debug('PromotionComponent onCouponSelected', data);
+    LogUtil.debug('PromotionComponent onCouponSelected', data);
     this.selectedCoupon = data;
   }
 
@@ -265,15 +281,15 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('PromotionComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('PromotionComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedCoupon != null) {
-        console.debug('PromotionComponent onDeleteConfirmationResult', this.selectedCoupon);
+        LogUtil.debug('PromotionComponent onDeleteConfirmationResult', this.selectedCoupon);
 
         var _sub:any = this._promotionService.removePromotionCoupon(this.selectedCoupon).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
+          LogUtil.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
           this.selectedCoupon = null;
           this.getFilteredPromotionCoupons();
         });
@@ -287,36 +303,9 @@ export class PromotionComponent implements OnInit, OnDestroy {
     this.getFilteredPromotionCoupons();
   }
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
-
-  }
-
-  protected getFilteredPromotionCoupons() {
-
-    this.couponFilterRequired = !this.forceShowAll && (this.couponFilter == null || this.couponFilter.length < 2);
-
-    console.debug('PromotionComponent getFilteredPromotionCoupons' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this._promotion != null && !this.couponFilterRequired) {
-
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._promotionService.getFilteredPromotionCoupons(this._promotion, this.couponFilter, max).subscribe(allcoupons => {
-        console.debug('PromotionComponent getFilteredPromotionCoupons', allcoupons);
-        this.coupons = allcoupons;
-        this.selectedCoupon = null;
-        this.couponFilterCapped = this.coupons.length >= max;
-        this.cannotExport = this.coupons.length == 0;
-        _sub.unsubscribe();
-      });
-
-    } else {
-      this.coupons = [];
-      this.selectedCoupon = null;
-      this.couponFilterCapped = false;
-      this.cannotExport = true;
-    }
 
   }
 
@@ -325,12 +314,15 @@ export class PromotionComponent implements OnInit, OnDestroy {
     if (this._promotion != null) {
 
       this.validForGenerate = true;
-      this.formResetCoupons();
-      this.generateCoupons = {
+
+      let couponConfig:PromotionCouponVO = {
         promotioncouponId: 0,
         promotionId: this._promotion.promotionId,
         code: null, usageLimit: 1, usageLimitPerCustomer: 0, usageCount: 0
       };
+
+      UiUtil.formInitialise(this, 'initialising2', 'couponForm', 'generateCoupons', couponConfig);
+
       this.generateCouponsModalDialog.show();
 
     }
@@ -339,15 +331,15 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
 
   protected onGenerateConfirmationResult(modalresult: ModalResult) {
-    console.debug('PromotionComponent onGenerateConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('PromotionComponent onGenerateConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.generateCoupons != null) {
-        console.debug('PromotionComponent onGenerateConfirmationResult', this.generateCoupons);
+        LogUtil.debug('PromotionComponent onGenerateConfirmationResult', this.generateCoupons);
 
         var _sub:any = this._promotionService.createPromotionCoupons(this.generateCoupons).subscribe(allcoupons => {
           _sub.unsubscribe();
-          console.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
+          LogUtil.debug('PromotionComponent removePromotionCoupon', this.selectedCoupon);
           this.coupons = allcoupons;
           this.selectedCoupon = null;
           this.couponFilterCapped = false;
@@ -360,7 +352,7 @@ export class PromotionComponent implements OnInit, OnDestroy {
 
   protected onDownloadHandler() {
 
-    console.debug('PromotionComponent onDownloadHandler');
+    LogUtil.debug('PromotionComponent onDownloadHandler');
 
     if (!this.cannotExport) {
 
@@ -372,5 +364,46 @@ export class PromotionComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onClearFilter() {
+
+    this.couponFilter = '';
+    this.delayedFiltering.delay();
+
+  }
+
+  private isBlank(value:string):boolean {
+    return value === null || value === '' || /^\s+$/.test(value);
+  }
+
+
+  private getFilteredPromotionCoupons() {
+
+    this.couponFilterRequired = !this.forceShowAll && (this.couponFilter == null || this.couponFilter.length < 2);
+
+    LogUtil.debug('PromotionComponent getFilteredPromotionCoupons' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this._promotion != null && !this.couponFilterRequired) {
+
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._promotionService.getFilteredPromotionCoupons(this._promotion, this.couponFilter, max).subscribe(allcoupons => {
+        LogUtil.debug('PromotionComponent getFilteredPromotionCoupons', allcoupons);
+        this.coupons = allcoupons;
+        this.selectedCoupon = null;
+        this.couponFilterCapped = this.coupons.length >= max;
+        this.cannotExport = this.coupons.length == 0;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+
+    } else {
+      this.coupons = [];
+      this.selectedCoupon = null;
+      this.couponFilterCapped = false;
+      this.cannotExport = true;
+    }
+
+  }
 
 }

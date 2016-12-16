@@ -11,14 +11,14 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'NAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="brand.name" (ngModelChange)="onMainDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="brand.name">
                   <div [hidden]="brandForm.controls['name'].valid || brandForm.controls['name'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="brand.description" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="brand.description">
                 </div>
               </fieldset>
             </div>
@@ -28,6 +28,18 @@
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
+        <template [ngIf]="!(brand.brandId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
+
         <template [ngIf]="brand.brandId > 0">
 
           <div class="panel-body">
@@ -36,17 +48,32 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
               </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
             </div>
 
             <div class="row">

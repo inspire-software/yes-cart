@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {BrandVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { BrandVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-brands',
   moduleId: module.id,
   templateUrl: 'brands.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class BrandsComponent implements OnInit, OnDestroy {
-
-  _brands:Array<BrandVO> = [];
-
-  filteredBrands:Array<BrandVO>;
 
   @Input() selectedBrand:BrandVO;
 
   @Output() dataSelected: EventEmitter<BrandVO> = new EventEmitter<BrandVO>();
 
+  private _brands:Array<BrandVO> = [];
+
+  private filteredBrands:Array<BrandVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('BrandsComponent constructed');
+    LogUtil.debug('BrandsComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('BrandsComponent ngOnInit');
+    LogUtil.debug('BrandsComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class BrandsComponent implements OnInit, OnDestroy {
     this.filterBrands();
   }
 
-  private filterBrands() {
-
-    this.filteredBrands = this._brands;
-    console.debug('BrandsComponent filterBrands', this.filteredBrands);
-
-    if (this.filteredBrands === null) {
-      this.filteredBrands = [];
-    }
-
-    let _total = this.filteredBrands.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('BrandsComponent ngOnDestroy');
+    LogUtil.debug('BrandsComponent ngOnDestroy');
     this.selectedBrand = null;
     this.dataSelected.emit(null);
   }
@@ -102,13 +84,29 @@ export class BrandsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:BrandVO) {
-    console.debug('BrandsComponent onSelectRow handler', row);
+    LogUtil.debug('BrandsComponent onSelectRow handler', row);
     if (row == this.selectedBrand) {
       this.selectedBrand = null;
     } else {
       this.selectedBrand = row;
     }
     this.dataSelected.emit(this.selectedBrand);
+  }
+
+  private filterBrands() {
+
+    this.filteredBrands = this._brands;
+    LogUtil.debug('BrandsComponent filterBrands', this.filteredBrands);
+
+    if (this.filteredBrands === null) {
+      this.filteredBrands = [];
+    }
+
+    let _total = this.filteredBrands.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

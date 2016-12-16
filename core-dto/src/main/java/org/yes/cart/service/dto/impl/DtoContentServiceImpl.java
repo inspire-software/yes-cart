@@ -32,6 +32,7 @@ import org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl;
 import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
@@ -207,18 +208,67 @@ public class DtoContentServiceImpl
     }
 
 
+    private final static char[] PARENT_OR_URI = new char[] { '^', '@' };
+    static {
+        Arrays.sort(PARENT_OR_URI);
+    }
+
     /**
      * {@inheritDoc}
      */
-    public List<CategoryDTO> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<CategoryDTO> findBy(final long shopId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         ContentService contentService = (ContentService) service;
 
         final List<CategoryDTO> contentDTO = new ArrayList<CategoryDTO>(pageSize);
-        fillDTOs(contentService.findBy(shopId, code, name, uri, page, pageSize), contentDTO);
+
+        final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+
+        if (parentOrUri == null) {
+
+            fillDTOs(contentService.findBy(shopId, filter, filter, filter, page, pageSize), contentDTO);
+
+        } else {
+
+            if ("@".equals(parentOrUri.getFirst())) {
+
+                fillDTOs(contentService.findBy(shopId, null, null, parentOrUri.getSecond(), page, pageSize), contentDTO);
+
+            } else if ("^".equals(parentOrUri.getFirst())) {
+
+                final List<Category> parents = contentService.findBy(shopId, parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+
+                if (!parents.isEmpty()) {
+
+                    final Set<Long> dedup = new HashSet<Long>();
+                    final List<Category> parentsWithChildren = new ArrayList<Category>();
+                    for (final Category parent : parents) {
+
+                        if (!dedup.contains(parent.getCategoryId())) {
+                            parentsWithChildren.add(parent);
+                            dedup.add(parent.getCategoryId());
+                        }
+                        for (final Category child : contentService.findChildContentWithAvailability(parent.getCategoryId(), false)) {
+                            if (!dedup.contains(child.getCategoryId())) {
+                                parentsWithChildren.add(child);
+                                dedup.add(child.getCategoryId());
+                            }
+                        }
+
+                    }
+
+                    fillDTOs(parentsWithChildren, contentDTO);
+
+                }
+
+            }
+
+        }
+
 
         return contentDTO;
     }
+
 
     /**
      * {@inheritDoc}

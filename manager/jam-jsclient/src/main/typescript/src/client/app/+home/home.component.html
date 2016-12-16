@@ -7,293 +7,294 @@
 
       <div class="text-right data-control">
 
-        <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+        <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
           <i class="fa fa-refresh"></i>
         </button>
 
       </div>
 
-      <div class="row">
+      <div class="{{ loading ? 'loading-data' : '' }}">
+        <div class="row">
 
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-          <div class="panel panel-yellow">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-shopping-cart fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.OrdersInShop.data.ordersToday }}</div>
-                  <div>{{ 'DASHBOARD_ORDERS_TODAY' | translate }}</div>
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
+            <div class="panel panel-yellow">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-shopping-cart fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.OrdersInShop.data.ordersToday }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_TODAY' | translate }}</div>
+                  </div>
                 </div>
               </div>
+              <a [routerLink]="['/customerorder/allorders']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
             </div>
-            <a [routerLink]="['/customerorder/allorders']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
+          </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
+            <div class="panel panel-yellow">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-shopping-cart fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.OrdersInShop.data.ordersThisWeek }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_THIS_WEEK' | translate }}</div>
+                  </div>
+                </div>
               </div>
-            </a>
+              <a [routerLink]="['/customerorder/allorders']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
+            <div class="panel panel-yellow">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-shopping-cart fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.OrdersInShop.data.ordersThisMonth }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_THIS_MONTH' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <a [routerLink]="['/customerorder/allorders']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
+            <div class="panel panel-red">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-shopping-cart fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.OrdersInShop.data.ordersWaiting }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_WAITING' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <a [routerLink]="['/customerorder/allorders']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-          <div class="panel panel-yellow">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-shopping-cart fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.OrdersInShop.data.ordersThisWeek }}</div>
-                  <div>{{ 'DASHBOARD_ORDERS_THIS_WEEK' | translate }}</div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-user fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.CustomersInShop.data.customersToday }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_TODAY' | translate }}</div>
+                  </div>
                 </div>
               </div>
+              <a [routerLink]="['/customer/allcustomers']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
             </div>
-            <a [routerLink]="['/customerorder/allorders']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
+          </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-user fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.CustomersInShop.data.customersThisWeek }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_WEEK' | translate }}</div>
+                  </div>
+                </div>
               </div>
-            </a>
+              <a [routerLink]="['/customer/allcustomers']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-user fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div class="huge">{{ widgets.CustomersInShop.data.customersThisMonth }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_MONTH' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <a [routerLink]="['/customer/allcustomers']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
 
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-          <div class="panel panel-yellow">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-shopping-cart fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.OrdersInShop.data.ordersThisMonth }}</div>
-                  <div>{{ 'DASHBOARD_ORDERS_THIS_MONTH' | translate }}</div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.CacheOverview">
+            <div class="panel panel-green">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-gears fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div *ngFor="let node of widgets.CacheOverview.data">{{ node.first }} {{ node.second }}</div>
+                  </div>
                 </div>
               </div>
+              <a [routerLink]="['/system/cache']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'PANEL_SYSTEM_CACHE' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
             </div>
-            <a [routerLink]="['/customerorder/allorders']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
           </div>
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.ReindexOverview">
+            <div class="panel panel-green">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-gears fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div>{{ widgets.ReindexOverview.data.ftNodes }}</div>
+                    <div>{{ widgets.ReindexOverview.data.productCountActive }} ({{ widgets.ReindexOverview.data.productCountTotal }})</div>
+                  </div>
+                </div>
+              </div>
+              <a [routerLink]="['/system/reindex']">
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'PANEL_SYSTEM_INDEX' | translate }}</span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-gears fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_TABLE_PAGE_SIZE')">{{ 'PANEL_UI_SETTINGS_PAGE_SIZE' | translate: { value: uiPagination }  }}</a></div>
+                    <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_CAP' | translate: { value: uiFilteMax }  }}</a></div>
+                    <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_NO_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_NO_CAP' | translate: { value: uiNoFilteMax }  }}</a></div>
+                  </div>
+                </div>
+              </div>
+              <a>
+                <div class="panel-footer">
+                  <span class="pull-left">{{ 'PANEL_UI_SETTINGS' | translate }}</span>
+                  <form class="pull-right" [hidden]="uiSettingReadOnly"><input type="text" class="form-control" style="width: 80px;" name="uiSetting" [(ngModel)]="uiSetting" /></form>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
         </div>
 
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-          <div class="panel panel-red">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-shopping-cart fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.OrdersInShop.data.ordersWaiting }}</div>
-                  <div>{{ 'DASHBOARD_ORDERS_WAITING' | translate }}</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/customerorder/allorders']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-user fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.CustomersInShop.data.customersToday }}</div>
-                  <div>{{ 'DASHBOARD_CUSTOMERS_TODAY' | translate }}</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/customer/allcustomers']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-user fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.CustomersInShop.data.customersThisWeek }}</div>
-                  <div>{{ 'DASHBOARD_CUSTOMERS_THIS_WEEK' | translate }}</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/customer/allcustomers']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-user fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div class="huge">{{ widgets.CustomersInShop.data.customersThisMonth }}</div>
-                  <div>{{ 'DASHBOARD_CUSTOMERS_THIS_MONTH' | translate }}</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/customer/allcustomers']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.CacheOverview">
-          <div class="panel panel-green">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-gears fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div *ngFor="let node of widgets.CacheOverview.data">{{ node.first }} {{ node.second }}</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/system/cache']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'PANEL_SYSTEM_CACHE' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6" *ngIf="widgets.ReindexOverview">
-          <div class="panel panel-green">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-gears fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div>{{ widgets.ReindexOverview.data.ftNodes }}</div>
-                  <div>{{ widgets.ReindexOverview.data.productCountActive }} ({{ widgets.ReindexOverview.data.productCountTotal }})</div>
-                </div>
-              </div>
-            </div>
-            <a [routerLink]="['/system/reindex']">
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'PANEL_SYSTEM_INDEX' | translate }}</span>
-                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6">
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <div class="row">
-                <div class="col-xs-3">
-                  <i class="fa fa-gears fa-5x"></i>
-                </div>
-                <div class="col-xs-9 text-right">
-                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_TABLE_PAGE_SIZE')">{{ 'PANEL_UI_SETTINGS_PAGE_SIZE' | translate: { value: uiPagination }  }}</a></div>
-                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_CAP' | translate: { value: uiFilteMax }  }}</a></div>
-                  <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_NO_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_NO_CAP' | translate: { value: uiNoFilteMax }  }}</a></div>
-                </div>
-              </div>
-            </div>
-            <a>
-              <div class="panel-footer">
-                <span class="pull-left">{{ 'PANEL_UI_SETTINGS' | translate }}</span>
-                <form class="pull-right" [hidden]="uiSettingReadOnly"><input type="text" class="form-control" style="width: 80px;" name="uiSetting" [(ngModel)]="uiSetting" /></form>
-                <div class="clearfix"></div>
-              </div>
-            </a>
-          </div>
-        </div>
-
-      </div>
-
-      <!--<div class="col-lg-3 col-md-6">-->
-        <!--<div class="panel panel-green">-->
-          <!--<div class="panel-heading">-->
-            <!--<div class="row">-->
-              <!--<div class="col-xs-3">-->
-                <!--<i class="fa fa-truck fa-5x"></i>-->
-              <!--</div>-->
-              <!--<div class="col-xs-9 text-right">-->
-                <!--<div class="huge">12</div>-->
-                <!--<div>Shipping</div>-->
+        <!--<div class="col-lg-3 col-md-6">-->
+          <!--<div class="panel panel-green">-->
+            <!--<div class="panel-heading">-->
+              <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                  <!--<i class="fa fa-truck fa-5x"></i>-->
+                <!--</div>-->
+                <!--<div class="col-xs-9 text-right">-->
+                  <!--<div class="huge">12</div>-->
+                  <!--<div>Shipping</div>-->
+                <!--</div>-->
               <!--</div>-->
             <!--</div>-->
+            <!--<a href="#">-->
+              <!--<div class="panel-footer">-->
+                <!--<span class="pull-left">View Details</span>-->
+                <!--<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>-->
+                <!--<div class="clearfix"></div>-->
+              <!--</div>-->
+            <!--</a>-->
           <!--</div>-->
-          <!--<a href="#">-->
-            <!--<div class="panel-footer">-->
-              <!--<span class="pull-left">View Details</span>-->
-              <!--<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>-->
-              <!--<div class="clearfix"></div>-->
-            <!--</div>-->
-          <!--</a>-->
         <!--</div>-->
-      <!--</div>-->
-      <!--<div class="col-lg-3 col-md-6">-->
-        <!--<div class="panel panel-red">-->
-          <!--<div class="panel-heading">-->
-            <!--<div class="row">-->
-              <!--<div class="col-xs-3">-->
-                <!--<i class="fa fa-dropbox fa-5x"></i>-->
-              <!--</div>-->
-              <!--<div class="col-xs-9 text-right">-->
-                <!--<div class="huge">11223</div>-->
-                <!--<div>Warehouse</div>-->
+        <!--<div class="col-lg-3 col-md-6">-->
+          <!--<div class="panel panel-red">-->
+            <!--<div class="panel-heading">-->
+              <!--<div class="row">-->
+                <!--<div class="col-xs-3">-->
+                  <!--<i class="fa fa-dropbox fa-5x"></i>-->
+                <!--</div>-->
+                <!--<div class="col-xs-9 text-right">-->
+                  <!--<div class="huge">11223</div>-->
+                  <!--<div>Warehouse</div>-->
+                <!--</div>-->
               <!--</div>-->
             <!--</div>-->
+            <!--<a href="#">-->
+              <!--<div class="panel-footer">-->
+                <!--<span class="pull-left">View Details</span>-->
+                <!--<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>-->
+                <!--<div class="clearfix"></div>-->
+              <!--</div>-->
+            <!--</a>-->
           <!--</div>-->
-          <!--<a href="#">-->
-            <!--<div class="panel-footer">-->
-              <!--<span class="pull-left">View Details</span>-->
-              <!--<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>-->
-              <!--<div class="clearfix"></div>-->
-            <!--</div>-->
-          <!--</a>-->
         <!--</div>-->
-      <!--</div>-->
+      </div>
     </div>
-

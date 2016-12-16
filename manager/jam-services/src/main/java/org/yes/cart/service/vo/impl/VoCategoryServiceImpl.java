@@ -152,7 +152,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
 
         int start = 0;
         do {
-            final List<CategoryDTO> batch = dtoCategoryService.findBy(filter, filter, filter, start, max);
+            final List<CategoryDTO> batch = dtoCategoryService.findBy(filter, start, max);
             if (batch.isEmpty()) {
                 break;
             }

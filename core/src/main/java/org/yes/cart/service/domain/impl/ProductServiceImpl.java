@@ -587,11 +587,11 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
                 Restrictions.or(
                         Restrictions.isNull("availablefrom"),
                         Restrictions.eq("availability", Product.AVAILABILITY_PREORDER),
-                        Restrictions.ge("availablefrom", now)
+                        Restrictions.le("availablefrom", now)
                 ),
                 Restrictions.or(
                         Restrictions.isNull("availableto"),
-                        Restrictions.lt("availableto", now)
+                        Restrictions.ge("availableto", now)
                 )
         );
 

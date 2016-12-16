@@ -13,51 +13,60 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO} from './../../shared/model/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO } from './../../shared/model/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-customerorder',
   moduleId: module.id,
   templateUrl: 'customerorder.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent],
 })
 
 export class CustomerOrderComponent implements OnInit, OnDestroy {
 
-  _customerorder:CustomerOrderVO;
-  _promotions:any = {};
-
-  selectedDelivery:CustomerOrderDeliveryInfoVO;
-  selectedLine:CustomerOrderLineVO;
-
-  changed:boolean = false;
-  validForSave:boolean = false;
-
   @Output() dataSelected: EventEmitter<CustomerOrderDeliveryInfoVO> = new EventEmitter<CustomerOrderDeliveryInfoVO>();
 
+  private _customerorder:CustomerOrderVO;
+  private _promotions:any = {};
+
+  private selectedDelivery:CustomerOrderDeliveryInfoVO;
+  private selectedLine:CustomerOrderLineVO;
+
+  private changed:boolean = false;
+
+  private  deliveryActionsAvailable:boolean = false;
+
   constructor(fb: FormBuilder) {
-    console.debug('CustomerOrderComponent constructed');
+    LogUtil.debug('CustomerOrderComponent constructed');
   }
 
   @Input()
   set customerorder(customerorder:CustomerOrderVO) {
+
+    let _availableActions = false;
+
     this._customerorder = customerorder;
     if (this._customerorder) {
       this._customerorder.promotions.forEach(promo => {
         this._promotions[promo.code] = promo;
       });
+      if (this._customerorder.deliveries) {
+        this._customerorder.deliveries.forEach(del => {
+          if (this.isDeliveryHasNextOption(del)) {
+            _availableActions = true;
+          }
+        });
+      }
     } else {
       this._promotions = {};
     }
     this.selectedLine = null;
     this.selectedDelivery = null;
     this.changed = false;
+
+    this.deliveryActionsAvailable = _availableActions;
   }
 
   get customerorder():CustomerOrderVO {
@@ -65,15 +74,15 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('CustomerOrderComponent ngOnInit');
+    LogUtil.debug('CustomerOrderComponent ngOnInit');
   }
 
   ngOnDestroy() {
-    console.debug('CustomerOrderComponent ngOnDestroy');
+    LogUtil.debug('CustomerOrderComponent ngOnDestroy');
   }
 
   tabSelected(tab:any) {
-    console.debug('CustomerOrderComponent tabSelected', tab);
+    LogUtil.debug('CustomerOrderComponent tabSelected', tab);
   }
 
   getLinePriceFlags(row:CustomerOrderLineVO):string {
@@ -110,7 +119,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
         promos.push(this._promotions[code]);
       });
     }
-    console.debug('CustomerOrderComponent getPromotions', codes, promos);
+    LogUtil.debug('CustomerOrderComponent getPromotions', codes, promos);
     return promos;
   }
 
@@ -138,7 +147,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
 
 
   protected onSelectLineRow(row:CustomerOrderLineVO) {
-    console.debug('CustomerOrdersComponent onSelectLineRow handler', row);
+    LogUtil.debug('CustomerOrdersComponent onSelectLineRow handler', row);
     let delivery = this._customerorder.deliveries.find(delivery => {
       return delivery.deliveryNum == row.deliveryNum;
     });
@@ -154,7 +163,7 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectDeliveryRow(row:CustomerOrderDeliveryInfoVO) {
-    console.debug('CustomerOrdersComponent onSelectDeliveryRow handler', row);
+    LogUtil.debug('CustomerOrdersComponent onSelectDeliveryRow handler', row);
     if (this.selectedDelivery != row && this.isDeliveryHasNextOption(row)) {
       this.selectedDelivery = row;
     } else {

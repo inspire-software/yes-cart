@@ -13,44 +13,49 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO} from './../../shared/model/index';
-import {ShopEventBus, ShopService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO } from './../../shared/model/index';
+import { ShopEventBus, ShopService, Util } from './../../shared/services/index';
+import { Futures, Future } from './../../shared/event/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-main',
   moduleId: module.id,
   templateUrl: 'shop-main.component.html',
-  directives: [DataControlComponent, NgIf, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 export class ShopMainComponent implements OnInit, OnDestroy {
 
-  shop:ShopVO;
-  shopDisabled:boolean = false;
+  private shop:ShopVO;
+  private shopDisabled:boolean = false;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
-  shopMainForm:any;
-  shopMainFormSub:any;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private shopMainForm:any;
+  private shopMainFormSub:any; // tslint:disable-line:no-unused-variable
 
   private shopSub:any;
 
   @ViewChild('disableConfirmationModalDialog')
-  disableConfirmationModalDialog:ModalComponent;
+  private disableConfirmationModalDialog:ModalComponent;
 
   private offValue:String;
 
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
 
-    console.debug('ShopMainComponent constructed');
+    LogUtil.debug('ShopMainComponent constructed');
+
+    let that = this;
 
     this.shopMainForm = fb.group({
         'code': ['', YcValidators.requiredValidCode],
@@ -60,37 +65,28 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     });
 
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
-      this.shop = Util.clone(shopevt);
-      this.changed = false;
       this.validForSave = false;
       this.shopDisabled = shopevt.disabled;
-      this.formReset();
+      UiUtil.formInitialise(this, 'initialising', 'shopMainForm', 'shop', Util.clone(shopevt), shopevt.shopId > 0, [ 'code' ]);
     });
 
+    this.delayedChange = Futures.perpetual(function() {
+      that.formChange();
+    }, 200);
   }
-
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.shopMainForm.controls) {
-      this.shopMainForm.controls[key]['_pristine'] = true;
-      this.shopMainForm.controls[key]['_touched'] = false;
-    }
-  }
-
 
   formBind():void {
-    this.shopMainFormSub = this.shopMainForm.statusChanges.subscribe((data:any) => {
-      if (this.changed) {
-        this.validForSave = this.shopMainForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'shopMainForm', 'shopMainFormSub', 'delayedChange', 'initialising');
   }
 
   formUnbind():void {
-    if (this.shopMainFormSub) {
-      console.debug('ShopMainComponent unbining form');
-      this.shopMainFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'shopMainFormSub');
+  }
+
+  formChange():void {
+    LogUtil.debug('ShopMainComponent formChange', this.shopMainForm.valid, this.shop);
+    this.changed = this.shopMainForm.dirty;
+    this.validForSave = this.shopMainForm.valid;
   }
 
 
@@ -98,27 +94,22 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
     this.onDiscardEvent();
     this.formBind();
-    console.debug('ShopMainComponent ngOnInit', this.shop);
+    LogUtil.debug('ShopMainComponent ngOnInit', this.shop);
 
   }
 
   ngOnDestroy() {
-    console.debug('ShopComponent ngOnDestroy');
+    LogUtil.debug('ShopComponent ngOnDestroy');
     if (this.shopSub) {
       this.shopSub.unsubscribe();
     }
     this.formUnbind();
   }
 
-  onDataChange(event:any) {
-    console.debug('ShopMainComponent data changed', event);
-    this.changed = true;
-  }
-
   onSaveHandler() {
-    console.debug('ShopMainComponent Save handler for shop id', this.shop);
+    LogUtil.debug('ShopMainComponent Save handler for shop id', this.shop);
     var _sub:any = this._shopService.saveShop(this.shop).subscribe(shop => {
-      console.debug('ShopMainComponent Shop service save', shop);
+      LogUtil.debug('ShopMainComponent Shop service save', shop);
       ShopEventBus.getShopEventBus().emit(shop);
       _sub.unsubscribe();
     });
@@ -130,12 +121,12 @@ export class ShopMainComponent implements OnInit, OnDestroy {
   }
 
 
-  protected onDisableConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopMainComponent onDisableConfirmationResult modal result is ', modalresult);
+  onDisableConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('ShopMainComponent onDisableConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      console.debug('ShopMainComponent Power off handler for shop', this.shop);
+      LogUtil.debug('ShopMainComponent Power off handler for shop', this.shop);
       var _sub:any = this._shopService.updateDisabledFlag(this.shop, !this.shop.disabled).subscribe(shop => {
-        console.debug('ShopMainComponent Shop service power off', shop);
+        LogUtil.debug('ShopMainComponent Shop service power off', shop);
         ShopEventBus.getShopEventBus().emit(shop);
         _sub.unsubscribe();
       });
@@ -144,16 +135,16 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
 
   onDiscardEvent() {
-    console.debug('ShopMainComponent Discard handler for shop', this.shop);
+    LogUtil.debug('ShopMainComponent Discard handler for shop', this.shop);
     this.shop = Util.clone(ShopEventBus.getShopEventBus().current());
     this.shopDisabled = this.shop.disabled;
     this.changed = false;
     this.validForSave = false;
-    this.formReset();
+    this.shopMainForm.reset(this.shop);
   }
 
   onRefreshHandler() {
-    console.debug('ShopMainComponent Refresh handler', this.shop);
+    LogUtil.debug('ShopMainComponent Refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShop(this.shop.shopId).subscribe(shop => {
         ShopEventBus.getShopEventBus().emit(shop);

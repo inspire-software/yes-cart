@@ -128,7 +128,7 @@ public class VoContentServiceImpl implements VoContentService {
     public List<VoContent> getFiltered(final long shopId, final String filter, final int max) throws Exception {
         if (federationFacade.isManageable(shopId, ShopDTO.class)){
 
-            final List<CategoryDTO> contentDTO = dtoContentService.findBy(shopId, filter, filter, filter, 0, max);
+            final List<CategoryDTO> contentDTO = dtoContentService.findBy(shopId, filter, 0, max);
             return voAssemblySupport.assembleVos(VoContent.class, CategoryDTO.class, contentDTO);
 
         }

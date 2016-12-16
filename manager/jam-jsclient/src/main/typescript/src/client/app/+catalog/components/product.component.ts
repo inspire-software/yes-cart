@@ -13,67 +13,57 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ProductWithLinksVO, AttrValueProductVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {UiUtil} from './../../shared/ui/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {ModalComponent, ModalAction, ModalResult} from './../../shared/modal/index';
-import {BrandSelectComponent, ProductTypeSelectComponent} from './../../shared/catalog/index';
-import {SKUsComponent} from './skus.component';
-import {ProductCategoryComponent} from './product-categories.component';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ProductWithLinksVO, AttrValueProductVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { UiUtil } from './../../shared/ui/index';
+import { BrandSelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-product',
   moduleId: module.id,
   templateUrl: 'product.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, BrandSelectComponent, ProductTypeSelectComponent, ModalComponent, I18nComponent, SKUsComponent, ProductCategoryComponent],
 })
 
 export class ProductComponent implements OnInit, OnDestroy {
 
-  _product:ProductWithLinksVO;
-  avPrototype:AttrValueProductVO;
-  _attributes:AttrValueProductVO[] = [];
-  attributeFilter:string;
-
-  _changes:Array<Pair<AttrValueProductVO, boolean>>;
-
-  selectedBrand:BrandVO;
-  selectedProductType:ProductTypeInfoVO;
-  selectedRow:AttrValueProductVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ProductWithLinksVO, Array<Pair<AttrValueProductVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ProductWithLinksVO, Array<Pair<AttrValueProductVO, boolean>>>>>();
   @Output() dataSelected: EventEmitter<ProductSkuVO> = new EventEmitter<ProductSkuVO>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _product:ProductWithLinksVO;
+  private avPrototype:AttrValueProductVO;
+  private _attributes:AttrValueProductVO[] = [];
+  private attributeFilter:string;
 
-  productForm:any;
-  productFormSub:any;
+  private _changes:Array<Pair<AttrValueProductVO, boolean>>;
+
+  private selectedRow:AttrValueProductVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private productForm:any;
+  private productFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('brandsModalDialog')
-  brandsModalDialog:ModalComponent;
+  private brandsModalDialog:BrandSelectComponent;
 
   @ViewChild('productTypesModalDialog')
-  productTypesModalDialog:ModalComponent;
+  private productTypesModalDialog:ProductTypeSelectComponent;
 
   private searchHelpShow:boolean = false;
 
   private reloadCatalogue:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('ProductComponent constructed');
+    LogUtil.debug('ProductComponent constructed');
 
 
     let that = this;
@@ -81,7 +71,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     let validUri = function(control:any):any {
 
       let uri = control.value;
-      if (!that.changed || uri == null || uri == '' || that._product == null) {
+      if (uri == null || uri == '' || that._product == null || !that.productForm || (!that.productForm.dirty && that._product.productId > 0)) {
         return null;
       }
 
@@ -96,7 +86,7 @@ export class ProductComponent implements OnInit, OnDestroy {
     let validGuid = function(control:any):any {
 
       let code = control.value;
-      if (!that.changed || code == null || code == '' || that._product == null) {
+      if (code == null || code == '' || that._product == null || !that.productForm || (!that.productForm.dirty && that._product.productId > 0)) {
         return null;
       }
 
@@ -110,13 +100,14 @@ export class ProductComponent implements OnInit, OnDestroy {
 
     let validCode = function(control:any):any {
 
-      let code = control.value;
-      if (!that.changed || code == null || code == '' || that._product == null) {
-        return null;
-      }
-
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.requiredValidCode(control);
       if (basic == null) {
+
+        let code = control.value;
+        if (that._product == null || !that.productForm || (!that.productForm.dirty && that._product.productId > 0)) {
+          return null;
+        }
+
         var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
@@ -142,6 +133,10 @@ export class ProductComponent implements OnInit, OnDestroy {
       'uri': ['', validUri],
       'uitemplate': [''],
       'uisearchtemplate': [''],
+      'name': [''],
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -150,40 +145,25 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.productForm.controls) {
-      this.productForm.controls[key]['_pristine'] = true;
-      this.productForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.productFormSub = this.productForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.productForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'productForm', 'productFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.productFormSub) {
-      console.debug('ProductComponent unbining form');
-      this.productFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'productFormSub');
   }
 
   formChange():void {
-    console.debug('ProductComponent validating formGroup is valid: ' + this.validForSave, this._product);
-    this.dataChanged.emit({ source: new Pair(this._product, this._changes), valid: this.validForSave });
+    LogUtil.debug('ProductComponent formChange', this.productForm.valid, this._product);
+    this.dataChanged.emit({ source: new Pair(this._product, this._changes), valid: this.productForm.valid });
   }
 
   @Input()
   set product(product:ProductWithLinksVO) {
-    this._product = product;
+
+    UiUtil.formInitialise(this, 'initialising', 'productForm', '_product', product);
+    this._changes = [];
     if (this._product != null) {
       this.avPrototype = {
         attrvalueId: 0,
@@ -196,23 +176,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     } else {
       this.avPrototype = null;
     }
-    this.changed = false;
-    this.formReset();
+
   }
 
   get product():ProductWithLinksVO {
     return this._product;
   }
-
-  @Input()
-  set attributes(attributes:AttrValueProductVO[]) {
-    this._attributes = attributes;
-  }
-
-  get attributes():AttrValueProductVO[] {
-    return this._attributes;
-  }
-
 
   get availableto():string {
     return UiUtil.dateInputGetterProxy(this._product, 'availableto');
@@ -230,43 +199,63 @@ export class ProductComponent implements OnInit, OnDestroy {
     UiUtil.dateInputSetterProxy(this._product, 'availablefrom', availablefrom);
   }
 
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'productForm', 'name', event);
+  }
 
-  onMainDataChange(event:any) {
-    console.debug('ProductComponent main data changed', this._product);
-    this.changed = true;
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'productForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'productForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'productForm', 'meta', event);
+  }
+
+  @Input()
+  set attributes(attributes:AttrValueProductVO[]) {
+    this._attributes = attributes;
+  }
+
+  get attributes():AttrValueProductVO[] {
+    return this._attributes;
   }
 
   onAttributeDataChanged(event:any) {
-    console.debug('ProductComponent attr data changed', this._product);
-    this.changed = true;
+    LogUtil.debug('ProductComponent attr data changed', this._product);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   onCategoriesDataChanged(event:any) {
-    console.debug('ProductComponent cat data changed', this._product);
-    this.changed = true;
+    LogUtil.debug('ProductComponent cat data changed', this._product);
     this._product.productCategories = event;
     this.delayedChange.delay();
   }
 
 
   ngOnInit() {
-    console.debug('ProductComponent ngOnInit');
+    LogUtil.debug('ProductComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ProductComponent ngOnDestroy');
+    LogUtil.debug('ProductComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('ProductComponent tabSelected', tab);
-
+    LogUtil.debug('ProductComponent tabSelected', tab);
     this.reloadCatalogue = tab === 'Catalogue';
-
   }
+
+  protected onRowAdd() {
+    this.attributeValuesComponent.onRowAdd();
+  }
+
 
   protected onRowDeleteSelected() {
     if (this.selectedRow != null) {
@@ -281,7 +270,7 @@ export class ProductComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueProductVO) {
-    console.debug('ProductComponent onSelectRow handler', row);
+    LogUtil.debug('ProductComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -289,59 +278,36 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onRowAdd() {
-    this.attributeValuesComponent.onRowAdd();
-  }
-
   protected onEditBrand() {
-    this.selectedBrand = null;
-    this.brandsModalDialog.show();
+    this.brandsModalDialog.showDialog();
   }
 
-  protected onBrandSelected(brand:BrandVO) {
-    console.debug('ProductComponent onBrandSelected', brand);
-    this.selectedBrand = brand;
-  }
-
-
-  protected onEditBrandModalResult(modalresult: ModalResult) {
-    console.debug('ProductComponent onEditBrandModalResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-
-      this._product.brand = this.selectedBrand;
-      this.changed = true;
-      this.productForm.updateValueAndValidity();
-    } else {
-      this.selectedBrand = null;
+  protected onBrandSelected(event:FormValidationEvent<BrandVO>) {
+    LogUtil.debug('ProductComponent onBrandSelected', event);
+    if (event.valid) {
+      this._product.brand = event.source;
+      this.delayedChange.delay();
     }
   }
-
 
   protected onEditProductType() {
-    this.selectedProductType = null;
-    this.productTypesModalDialog.show();
+    this.productTypesModalDialog.showDialog();
   }
 
 
-  protected onProductTypeSelected(productType:ProductTypeInfoVO) {
-    console.debug('ProductComponent onProductTypeSelected', productType);
-    this.selectedProductType = productType;
-  }
-
-
-  protected onEditProductTypeModalResult(modalresult: ModalResult) {
-    console.debug('ProductComponent onEditBrandModalResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-
-      this._product.productType = this.selectedProductType;
-      this.changed = true;
-      this.productForm.updateValueAndValidity();
-    } else {
-      this.selectedProductType = null;
+  protected onProductTypeSelected(event:FormValidationEvent<ProductTypeInfoVO>) {
+    LogUtil.debug('ProductComponent onProductTypeSelected', event);
+    if (event.valid) {
+      this._product.productType = event.source;
+      this.delayedChange.delay();
     }
   }
 
+  protected onClearFilter() {
 
+    this.attributeFilter = '';
+
+  }
 
   protected onSearchHelpToggle() {
     this.searchHelpShow = !this.searchHelpShow;
@@ -367,8 +333,8 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.attributeFilter = '#0#';
   }
 
-  onSkuSelected(data:ProductSkuVO) {
-    console.debug('ProductComponent onSkuSelected', data);
+  protected onSkuSelected(data:ProductSkuVO) {
+    LogUtil.debug('ProductComponent onSkuSelected', data);
     this.dataSelected.emit(data);
   }
 

@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FulfilmentCentreVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FulfilmentCentreVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-fulfilment-centres',
   moduleId: module.id,
   templateUrl: 'fulfilment-centres.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class FulfilmentCentresComponent implements OnInit, OnDestroy {
-
-  _centres:Array<FulfilmentCentreVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredCentres:Array<FulfilmentCentreVO>;
 
   @Input() selectedCentre:FulfilmentCentreVO;
 
   @Output() dataSelected: EventEmitter<FulfilmentCentreVO> = new EventEmitter<FulfilmentCentreVO>();
 
+  private _centres:Array<FulfilmentCentreVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredCentres:Array<FulfilmentCentreVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('FulfilmentCentresComponent constructed');
+    LogUtil.debug('FulfilmentCentresComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterCentres();
@@ -61,7 +59,7 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('FulfilmentCentresComponent ngOnInit');
+    LogUtil.debug('FulfilmentCentresComponent ngOnInit');
   }
 
   @Input()
@@ -76,32 +74,8 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterCentres() {
-    if (this._filter) {
-      this.filteredCentres = this._centres.filter(centre =>
-          centre.code.toLowerCase().indexOf(this._filter) !== -1 ||
-          centre.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          centre.description && centre.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('FulfilmentCentresComponent filterCentres', this._filter);
-    } else {
-      this.filteredCentres = this._centres;
-      console.debug('FulfilmentCentresComponent filterCentres no filter');
-    }
-
-    if (this.filteredCentres === null) {
-      this.filteredCentres = [];
-    }
-
-    let _total = this.filteredCentres.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('FulfilmentCentresComponent ngOnDestroy');
+    LogUtil.debug('FulfilmentCentresComponent ngOnDestroy');
     this.selectedCentre = null;
     this.dataSelected.emit(null);
   }
@@ -126,7 +100,7 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:FulfilmentCentreVO) {
-    console.debug('FulfilmentCentresComponent onSelectRow handler', row);
+    LogUtil.debug('FulfilmentCentresComponent onSelectRow handler', row);
     if (row == this.selectedCentre) {
       this.selectedCentre = null;
     } else {
@@ -134,5 +108,31 @@ export class FulfilmentCentresComponent implements OnInit, OnDestroy {
     }
     this.dataSelected.emit(this.selectedCentre);
   }
+
+
+  private filterCentres() {
+    if (this._filter) {
+      this.filteredCentres = this._centres.filter(centre =>
+        centre.code.toLowerCase().indexOf(this._filter) !== -1 ||
+        centre.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        centre.description && centre.description.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('FulfilmentCentresComponent filterCentres', this._filter);
+    } else {
+      this.filteredCentres = this._centres;
+      LogUtil.debug('FulfilmentCentresComponent filterCentres no filter');
+    }
+
+    if (this.filteredCentres === null) {
+      this.filteredCentres = [];
+    }
+
+    let _total = this.filteredCentres.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
 
 }

@@ -13,30 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../shared/validation/validators';
-import {PricingService, Util} from './../shared/services/index';
-import {UiUtil} from './../shared/ui/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {PriceListComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ShopSelectComponent} from './../shared/shop/index';
-import {CurrencySelectComponent} from './../shared/price/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {PriceListVO, ShopVO} from './../shared/model/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../shared/validation/validators';
+import { PricingService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { PriceListVO, ShopVO } from './../shared/model/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { UiUtil } from './../shared/ui/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-shop-pricelist',
   moduleId: module.id,
   templateUrl: 'shop-pricelist.component.html',
-  directives: [REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, NgIf, PriceListComponent, ModalComponent, DataControlComponent, ShopSelectComponent, CurrencySelectComponent ],
 })
 
 export class ShopPriceListComponent implements OnInit, OnDestroy {
+
+  private static _selectedShop:ShopVO;
+  private static _selectedCurrency:string;
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -46,38 +43,38 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   private pricelistFilterRequired:boolean = true;
   private pricelistFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
-  static _selectedShop:ShopVO;
-  static _selectedCurrency:string;
   private selectedPricelist:PriceListVO;
 
   private pricelistEdit:PriceListVO;
-  pricelistEditForm:any;
-  pricelistEditFormSub:any;
-  changedSingle:boolean = true;
-  validForSave:boolean = false;
+  private pricelistEditForm:any;
+  private pricelistEditFormSub:any; // tslint:disable-line:no-unused-variable
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   @ViewChild('editPricelistModalDialog')
-  editPricelistModalDialog:ModalComponent;
+  private editPricelistModalDialog:ModalComponent;
 
   @ViewChild('selectShopModalDialog')
-  selectShopModalDialog:ModalComponent;
+  private selectShopModalDialog:ModalComponent;
 
   @ViewChild('selectCurrencyModalDialog')
-  selectCurrencyModalDialog:ModalComponent;
+  private selectCurrencyModalDialog:ModalComponent;
 
   private deleteValue:String;
 
+  private loading:boolean = false;
+
   constructor(private _priceService:PricingService,
               fb: FormBuilder) {
-    console.debug('ShopPriceListComponent constructed');
+    LogUtil.debug('ShopPriceListComponent constructed');
 
     this.pricelistEditForm = fb.group({
       'skuCode': ['', YcValidators.requiredValidCode],
@@ -143,7 +140,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopPriceListComponent ngOnInit');
+    LogUtil.debug('ShopPriceListComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -153,54 +150,36 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('ShopPriceListComponent ngOnDestroy');
+    LogUtil.debug('ShopPriceListComponent ngOnDestroy');
     this.formUnbind();
   }
 
-
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.pricelistEditForm.controls) {
-      this.pricelistEditForm.controls[key]['_pristine'] = true;
-      this.pricelistEditForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.pricelistEditFormSub = this.pricelistEditForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.pricelistEditForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'pricelistEditForm', 'pricelistEditFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
-    if (this.pricelistEditFormSub) {
-      console.debug('ShopCatalogComponent unbining form');
-      this.pricelistEditFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'pricelistEditFormSub');
   }
 
-
-  onFormDataChange(event:any) {
-    console.debug('ShopPriceListComponent data changed', event);
-    this.changedSingle = true;
+  formChange():void {
+    LogUtil.debug('ShopPriceListComponent formChange', this.pricelistEditForm.valid, this.pricelistEdit);
+    this.validForSave = this.pricelistEditForm.valid;
   }
-
 
 
   protected onShopSelect() {
-    console.debug('ShopPriceListComponent onShopSelect');
+    LogUtil.debug('ShopPriceListComponent onShopSelect');
     this.selectShopModalDialog.show();
   }
 
   protected onShopSelected(event:ShopVO) {
-    console.debug('ShopPriceListComponent onShopSelected');
+    LogUtil.debug('ShopPriceListComponent onShopSelected');
     this.selectedShop = event;
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
-    console.debug('ShopPriceListComponent onSelectShopResult modal result is ', modalresult);
+    LogUtil.debug('ShopPriceListComponent onSelectShopResult modal result is ', modalresult);
     if (this.selectedShop == null) {
       this.selectShopModalDialog.show();
     } else if (this.selectedCurrency == null) {
@@ -211,17 +190,17 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   protected onCurrencySelect() {
-    console.debug('ShopPriceListComponent onCurrencySelect');
+    LogUtil.debug('ShopPriceListComponent onCurrencySelect');
     this.selectCurrencyModalDialog.show();
   }
 
   protected onCurrencySelected(event:string) {
-    console.debug('ShopPriceListComponent onCurrencySelected');
+    LogUtil.debug('ShopPriceListComponent onCurrencySelected');
     this.selectedCurrency = event;
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {
-    console.debug('ShopPriceListComponent onSelectCurrencyResult modal result is ', modalresult);
+    LogUtil.debug('ShopPriceListComponent onSelectCurrencyResult modal result is ', modalresult);
     if (this.selectedCurrency == null) {
       this.selectCurrencyModalDialog.show();
     } else {
@@ -229,51 +208,20 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     }
   }
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredPricelist() {
-    this.pricelistFilterRequired = !this.forceShowAll && (this.pricelistFilter == null || this.pricelistFilter.length < 2);
-
-    console.debug('ShopPriceListComponent getFilteredPricelist' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this.selectedShop != null && !this.pricelistFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._priceService.getFilteredPriceLists(this.selectedShop, this.selectedCurrency, this.pricelistFilter, max).subscribe( allpricelist => {
-        console.debug('ShopPriceListComponent getFilteredPricelist', allpricelist);
-        this.pricelist = allpricelist;
-        this.selectedPricelist = null;
-        this.pricelistEdit = null;
-        this.changedSingle = false;
-        this.validForSave = false;
-        this.pricelistFilterCapped = this.pricelist.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.pricelist = [];
-      this.selectedPricelist = null;
-      this.pricelistEdit = null;
-      this.changedSingle = false;
-      this.validForSave = false;
-      this.pricelistFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('ShopPriceListComponent refresh handler');
+    LogUtil.debug('ShopPriceListComponent refresh handler');
     this.getFilteredPricelist();
   }
 
-  onPricelistSelected(data:PriceListVO) {
-    console.debug('ShopPriceListComponent onPricelistSelected', data);
+  protected onPricelistSelected(data:PriceListVO) {
+    LogUtil.debug('ShopPriceListComponent onPricelistSelected', data);
     this.selectedPricelist = data;
-  }
-
-  protected onSearchHelpToggle() {
-    this.searchHelpShow = !this.searchHelpShow;
   }
 
   protected onSearchTag() {
@@ -286,22 +234,30 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
     this.searchHelpShow = false;
   }
 
+  protected onSearchExact() {
+    this.pricelistFilter = '!';
+    this.searchHelpShow = false;
+  }
+
   protected onForceShowAll() {
     this.forceShowAll = !this.forceShowAll;
     this.getFilteredPricelist();
   }
 
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
   protected onRowNew() {
-    console.debug('ShopPriceListComponent onRowNew handler');
-    this.changedSingle = false;
+    LogUtil.debug('ShopPriceListComponent onRowNew handler');
     this.validForSave = false;
-    this.formReset();
-    this.pricelistEdit = this.newPricelistInstance();
+    this.selectedPricelist = null;
+    UiUtil.formInitialise(this, 'initialising', 'pricelistEditForm', 'pricelistEdit', this.newPricelistInstance(), false, ['skuCode']);
     this.editPricelistModalDialog.show();
   }
 
   protected onRowDelete(row:PriceListVO) {
-    console.debug('ShopPriceListComponent onRowDelete handler', row);
+    LogUtil.debug('ShopPriceListComponent onRowDelete handler', row);
     this.deleteValue = row.skuCode;
     this.deleteConfirmationModalDialog.show();
   }
@@ -314,11 +270,9 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditPricelist(row:PriceListVO) {
-    console.debug('ShopPriceListComponent onRowEditPricelist handler', row);
-    this.formReset();
-    this.pricelistEdit = Util.clone(row);
-    this.changedSingle = false;
+    LogUtil.debug('ShopPriceListComponent onRowEditPricelist handler', row);
     this.validForSave = false;
+    UiUtil.formInitialise(this, 'initialising', 'pricelistEditForm', 'pricelistEdit', Util.clone(row), row.skuPriceId > 0, ['skuCode']);
     this.editPricelistModalDialog.show();
   }
 
@@ -338,22 +292,22 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   protected onSaveHandler() {
 
-    if (this.validForSave && this.changedSingle) {
+    if (this.validForSave && this.pricelistEditForm.dirty) {
 
       if (this.pricelistEdit != null) {
 
-        console.debug('ShopPriceListComponent Save handler pricelist', this.pricelistEdit);
+        LogUtil.debug('ShopPriceListComponent Save handler pricelist', this.pricelistEdit);
 
         var _sub:any = this._priceService.savePriceList(this.pricelistEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.pricelistEdit.skuPriceId;
-              console.debug('ShopPriceListComponent pricelist changed', rez);
-              this.changedSingle = false;
+              LogUtil.debug('ShopPriceListComponent pricelist changed', rez);
               this.selectedPricelist = rez;
-              this.pricelistEdit = null;
+              this.validForSave = false;
+              this.pricelistEdit = this.newPricelistInstance();
               if (pk == 0) {
-                this.pricelistFilter = rez.skuCode;
+                this.pricelistFilter = '!' + rez.skuCode;
               }
               this.getFilteredPricelist();
           }
@@ -365,7 +319,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopPriceListComponent discard handler');
+    LogUtil.debug('ShopPriceListComponent discard handler');
     if (this.selectedPricelist != null) {
       this.onRowEditSelected();
     } else {
@@ -374,33 +328,61 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
   }
 
   protected onEditPricelistResult(modalresult: ModalResult) {
-    console.debug('ShopPriceListComponent onEditPricelistResult modal result is ', modalresult);
+    LogUtil.debug('ShopPriceListComponent onEditPricelistResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       this.onSaveHandler();
-
-    } else {
-
-      this.pricelistEdit = null;
 
     }
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopPriceListComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopPriceListComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedPricelist != null) {
-        console.debug('ShopPriceListComponent onDeleteConfirmationResult', this.selectedPricelist);
+        LogUtil.debug('ShopPriceListComponent onDeleteConfirmationResult', this.selectedPricelist);
 
         var _sub:any = this._priceService.removePriceList(this.selectedPricelist).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('ShopPriceListComponent removePricelist', this.selectedPricelist);
+          LogUtil.debug('ShopPriceListComponent removePricelist', this.selectedPricelist);
           this.selectedPricelist = null;
           this.pricelistEdit = null;
           this.getFilteredPricelist();
         });
       }
+    }
+  }
+
+  protected onClearFilter() {
+
+    this.pricelistFilter = '';
+    this.getFilteredPricelist();
+
+  }
+
+  private getFilteredPricelist() {
+    this.pricelistFilterRequired = !this.forceShowAll && (this.pricelistFilter == null || this.pricelistFilter.length < 2);
+
+    LogUtil.debug('ShopPriceListComponent getFilteredPricelist' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this.selectedShop != null && !this.pricelistFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._priceService.getFilteredPriceLists(this.selectedShop, this.selectedCurrency, this.pricelistFilter, max).subscribe( allpricelist => {
+        LogUtil.debug('ShopPriceListComponent getFilteredPricelist', allpricelist);
+        this.pricelist = allpricelist;
+        this.selectedPricelist = null;
+        this.validForSave = false;
+        this.pricelistFilterCapped = this.pricelist.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.pricelist = [];
+      this.selectedPricelist = null;
+      this.validForSave = false;
+      this.pricelistFilterCapped = false;
     }
   }
 

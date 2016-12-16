@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { LicenseComponent } from './index';
 
-export const LicenseRoutes: RouterConfig = [
+export const LicenseRoutes: Route[] = [
   {
     path: 'license',
     component: LicenseComponent

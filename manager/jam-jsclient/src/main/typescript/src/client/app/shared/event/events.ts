@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import { LogUtil } from './../log/index';
+
 /**
  * Interface to allow passing of modified object together with validation result.
  */
@@ -53,7 +55,7 @@ class TimedFunction implements Future {
       try {
         future();
       } catch(e) {
-        console.error('TimedFunction error executing timed task', e);
+        LogUtil.error('TimedFunction error executing timed task', e);
       }
     };
     this.delayMs = delayMs;
@@ -95,7 +97,7 @@ class ResettableTimedFunction implements Future {
       try {
         future();
       } catch(e) {
-        console.error('ResettableTimedFunction error executing timed task', e);
+        LogUtil.error('ResettableTimedFunction error executing timed task', e);
       }
     };
     this.delayMs = delayMs;
@@ -108,19 +110,19 @@ class ResettableTimedFunction implements Future {
 
   public delay(ms?:number) {
     if (!this.isDone()) {
-      // console.debug('ResettableTimedFunction clear', this.ref);
+      // LogUtil.debug('ResettableTimedFunction clear', this.ref);
       clearTimeout(this.ref);
     }
     this.done = false;
     let delay = ( (typeof ms === 'undefined') ? this.delayMs : ms);
     this.ref = setTimeout(this.future, delay);
-    // console.debug('ResettableTimedFunction delay ' + delay, this.ref);
+    // LogUtil.debug('ResettableTimedFunction delay ' + delay, this.ref);
   }
 
   public cancel() {
     if (!this.isDone()) {
       clearTimeout(this.ref);
-      // console.debug('ResettableTimedFunction cancel', this.ref);
+      // LogUtil.debug('ResettableTimedFunction cancel', this.ref);
     }
   }
 

@@ -13,14 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Injectable} from '@angular/core';
-import {BehaviorSubject}    from 'rxjs/BehaviorSubject';
-import {Observable}    from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+import { Observable }    from 'rxjs/Observable';
+import { LogUtil } from './../log/index';
 
 @Injectable()
 export class WindowMessageEventBus {
 
   private static _windowMessageEventBus:WindowMessageEventBus;
+
+  messageUpdated$ : Observable<any>;
+
+  private _messageSource : BehaviorSubject<any>;
 
   public static init(windowMessageEventBus:WindowMessageEventBus) {
     WindowMessageEventBus._windowMessageEventBus = windowMessageEventBus;
@@ -30,17 +35,13 @@ export class WindowMessageEventBus {
     return WindowMessageEventBus._windowMessageEventBus;
   }
 
-  messageUpdated$ : Observable<any>;
-
-  private _messageSource : BehaviorSubject<any>;
-
   constructor() {
-    console.debug('WindowMessageEventBus constructed');
+    LogUtil.debug('WindowMessageEventBus constructed');
     this._messageSource = new BehaviorSubject<any>('init');
     this.messageUpdated$ = this._messageSource.asObservable();
     let that = this;
     window.addEventListener('message', function(event) {
-      console.debug('emit window message event', event);
+      LogUtil.debug('emit window message event', event);
       that._messageSource.next(event);
     });
   }

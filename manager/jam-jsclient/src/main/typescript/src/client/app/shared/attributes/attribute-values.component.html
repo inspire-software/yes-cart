@@ -28,19 +28,19 @@
 
 
 
-  <modal #deleteConfirmationModalDialog
+  <yc-modal #deleteConfirmationModalDialog
          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
          [valid]="true"
          (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.attribute.name + ': ' + selectedRow.val) : '') } }}
-  </modal>
+  </yc-modal>
 
-  <modal #editModalDialog
+  <yc-modal #editModalDialog
          title="{{ 'AV_ATTRIBUTE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
          [valid]="validForSave"
          (closed)="onEditModalResult($event)">
 
@@ -182,9 +182,9 @@
 
     </template>
 
-  </modal>
+  </yc-modal>
 
-  <modal #addModalDialog
+  <yc-modal #addModalDialog
          title="{{ 'AV_ATTRIBUTE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
@@ -197,6 +197,6 @@
       </div>
     </div>
 
-  </modal>
+  </yc-modal>
 
 </template>

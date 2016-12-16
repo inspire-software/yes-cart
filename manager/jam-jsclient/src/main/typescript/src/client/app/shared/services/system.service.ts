@@ -14,13 +14,14 @@
  *    limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {Util} from './util';
-import {AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO, JobStatusVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { AttrValueSystemVO, Pair, CacheInfoVO, ClusterNodeVO, JobStatusVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -36,7 +37,7 @@ export class SystemService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('SystemService constructed');
+    LogUtil.debug('SystemService constructed');
   }
 
 
@@ -202,7 +203,7 @@ export class SystemService {
 
   private handleError (error:any) {
 
-    console.error('SystemService Server error: ', error);
+    LogUtil.error('SystemService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

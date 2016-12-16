@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {TaxVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { TaxVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-taxes',
   moduleId: module.id,
   templateUrl: 'taxes.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class TaxesComponent implements OnInit, OnDestroy {
-
-  _taxes:Array<TaxVO> = [];
-
-  filteredTaxes:Array<TaxVO>;
 
   @Input() selectedTax:TaxVO;
 
   @Output() dataSelected: EventEmitter<TaxVO> = new EventEmitter<TaxVO>();
 
+  private _taxes:Array<TaxVO> = [];
+
+  private filteredTaxes:Array<TaxVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('TaxesComponent constructed');
+    LogUtil.debug('TaxesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('TaxesComponent ngOnInit');
+    LogUtil.debug('TaxesComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class TaxesComponent implements OnInit, OnDestroy {
     this.filterTaxes();
   }
 
-  private filterTaxes() {
-
-    this.filteredTaxes = this._taxes;
-    console.debug('TaxesComponent filterTaxes', this.filteredTaxes);
-
-    if (this.filteredTaxes === null) {
-      this.filteredTaxes = [];
-    }
-
-    let _total = this.filteredTaxes.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('TaxesComponent ngOnDestroy');
+    LogUtil.debug('TaxesComponent ngOnDestroy');
     this.selectedTax = null;
     this.dataSelected.emit(null);
   }
@@ -102,13 +84,29 @@ export class TaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:TaxVO) {
-    console.debug('TaxesComponent onSelectRow handler', row);
+    LogUtil.debug('TaxesComponent onSelectRow handler', row);
     if (row == this.selectedTax) {
       this.selectedTax = null;
     } else {
       this.selectedTax = row;
     }
     this.dataSelected.emit(this.selectedTax);
+  }
+
+  private filterTaxes() {
+
+    this.filteredTaxes = this._taxes;
+    LogUtil.debug('TaxesComponent filterTaxes', this.filteredTaxes);
+
+    if (this.filteredTaxes === null) {
+      this.filteredTaxes = [];
+    }
+
+    let _total = this.filteredTaxes.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

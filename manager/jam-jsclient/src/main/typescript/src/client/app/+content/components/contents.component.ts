@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ContentVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ContentVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-contents',
   moduleId: module.id,
   templateUrl: 'contents.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class ContentsComponent implements OnInit, OnDestroy {
-
-  _contents:Array<ContentVO> = [];
-
-  filteredContents:Array<ContentVO>;
 
   @Input() selectedContent:ContentVO;
 
   @Output() dataSelected: EventEmitter<ContentVO> = new EventEmitter<ContentVO>();
 
+  private _contents:Array<ContentVO> = [];
+
+  private filteredContents:Array<ContentVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('ContentsComponent constructed');
+    LogUtil.debug('ContentsComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('ContentsComponent ngOnInit');
+    LogUtil.debug('ContentsComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class ContentsComponent implements OnInit, OnDestroy {
     this.filterContents();
   }
 
-  private filterContents() {
-
-    this.filteredContents = this._contents;
-    console.debug('ContentsComponent filterContents', this.filteredContents);
-
-    if (this.filteredContents === null) {
-      this.filteredContents = [];
-    }
-
-    let _total = this.filteredContents.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('ContentsComponent ngOnDestroy');
+    LogUtil.debug('ContentsComponent ngOnDestroy');
     this.selectedContent = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class ContentsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:ContentVO) {
-    console.debug('ContentsComponent onSelectRow handler', row);
+    LogUtil.debug('ContentsComponent onSelectRow handler', row);
     if (row == this.selectedContent) {
       this.selectedContent = null;
     } else {
@@ -126,5 +108,20 @@ export class ContentsComponent implements OnInit, OnDestroy {
     return row.availableto === null || (row.availableto > new Date());
   }
 
+  private filterContents() {
+
+    this.filteredContents = this._contents;
+    LogUtil.debug('ContentsComponent filterContents', this.filteredContents);
+
+    if (this.filteredContents === null) {
+      this.filteredContents = [];
+    }
+
+    let _total = this.filteredContents.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
 
 }

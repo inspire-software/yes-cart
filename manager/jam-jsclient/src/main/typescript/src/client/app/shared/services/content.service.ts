@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO, Pair} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { ContentWithBodyVO, ContentVO, AttrValueContentVO, ContentBodyVO, Pair } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class ContentService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('ContentService constructed');
+    LogUtil.debug('ContentService constructed');
   }
 
   /**
@@ -157,7 +158,7 @@ export class ContentService {
 
   private handleError (error:any) {
 
-    console.error('ContentService Server error: ', error);
+    LogUtil.error('ContentService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

@@ -1,6 +1,6 @@
 <div class="row">
   <div>
-    <h1 class="page-header">{{ 'PANEL_INVENTORY_STOCK' | translate }} {{ selectedCentre != null ? (' / ' + selectedCentre.name) : '' }} {{ selectedInventory && (!inventoryEdit || inventoryEdit.skuWarehouseId > 0) ? (' / ' + selectedInventory.skuCode) : '' }}</h1>
+    <h1 class="page-header">{{ 'PANEL_INVENTORY_STOCK' | translate }} {{ selectedCentre != null ? (' / ' + selectedCentre.name) : '' }} {{ selectedInventory ? (' / ' + selectedInventory.skuCode) : '' }}</h1>
   </div>
 
 
@@ -8,40 +8,39 @@
 
     <form class="pull-left">
       <input class="filter-input" type="text" name="inventoryFilter" [(ngModel)]="inventoryFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
-      <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl ">
+    <button type="button" (click)="onForceShowAll()" class="btn {{ forceShowAll ? 'btn-danger' : '' }} btn-circle btn-xl " title="{{ (forceShowAll ? 'MODAL_BUTTON_ALLFILTEROFF' : 'MODAL_BUTTON_ALLFILTERON') | translate }}">
       <i class="fa fa-filter"></i>
     </button>
 
-    <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onFulfilmentCentreSelect()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_SELECTCENTRE' | translate }}">
       <i class="fa fa-sitemap"></i>
     </button>
 
-    <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null || inventoryEdit != null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="inventoryEdit != null || selectedInventory == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedInventory == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedInventory == null || (inventoryEdit != null && inventoryEdit.skuWarehouseId === 0)" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedInventory == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
       <i class="fa fa-remove"></i>
     </button>
 
-    <yc-data-control [changed]="changed"
-                     [valid]="validForSave"
-                     (saveEvent)="onSaveHandler()"
-                     (discardEvent)="onDiscardEventHandler()"
-                     (refreshEvent)="onRefreshHandler()"></yc-data-control>
+    <yc-data-control (refreshEvent)="onRefreshHandler()"></yc-data-control>
 
   </div>
 
 
   <div *ngIf="searchHelpShow">
-    <div class="bg-info text-padding">
+    <div class="bg-info text-padding block-margin-spacer">
+      <p>{{ 'SEARCH_HELP_INVENTORY_DEFAULT' | translate }}</p>
+      <p>{{ 'SEARCH_HELP_INVENTORY_EXACT' | translate }} <span><button type="button" (click)="onSearchExact()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_INVENTORY_LOW' | translate }} <span><button type="button" (click)="onSearchLow()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
       <p>{{ 'SEARCH_HELP_INVENTORY_RESERVED' | translate }} <span><button type="button" (click)="onSearchReserved()" class="btn btn-circle"><i class="fa fa-truck"></i></button></span></p>
     </div>
@@ -64,24 +63,26 @@
     <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
   </div>
 
-  <yc-inventory [inventory]="inventory" (dataSelected)="onInventorySelected($event)"></yc-inventory>
+  <div class="{{ loading ? 'loading-data' : '' }}">
+    <yc-inventory [inventory]="inventory" (dataSelected)="onInventorySelected($event)"></yc-inventory>
+  </div>
 
-  <modal #deleteConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (closed)="onDeleteConfirmationResult($event)">
+  <yc-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: deleteValue } }}
-  </modal>
+  </yc-modal>
 
 
-  <modal #editInventoryModalDialog
-         title="{{ inventoryEdit != null ? inventoryEdit.skuCode : '' }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
-         [valid]="validForSave"
-         (closed)="onEditInventoryResult($event)">
+  <yc-modal #editInventoryModalDialog
+            title="{{ inventoryEdit != null ? inventoryEdit.skuCode : '' }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditInventoryResult($event)">
 
     <template [ngIf]="inventoryEdit">
       <form role="form" [formGroup]="inventoryEditForm">
@@ -89,7 +90,7 @@
           <div class="row">
             <div class="col-lg-3">{{ 'CODE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventoryEdit.skuCode" (ngModelChange)="onFormDataChange($event)" [disabled]="inventoryEdit.skuWarehouseId > 0">
+              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventoryEdit.skuCode">
               <div [hidden]="inventoryEditForm.controls['skuCode'].valid || inventoryEditForm.controls['skuCode'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
@@ -98,25 +99,25 @@
           <div class="row">
             <div class="col-lg-3">{{ 'NAME' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="skuName" name="skuName" type="text" [(ngModel)]="inventoryEdit.skuName" [disabled]="true">
+              <input class="form-control" formControlName="skuName" name="skuName" type="text" [(ngModel)]="inventoryEdit.skuName" [readonly]="true">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-3">{{ 'INVENTORY_CENTRE_CODE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="warehouseCode" name="warehouseCode" type="text" [(ngModel)]="inventoryEdit.warehouseCode" [disabled]="true">
+              <input class="form-control" formControlName="warehouseCode" name="warehouseCode" type="text" [(ngModel)]="inventoryEdit.warehouseCode" [readonly]="true">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-3">{{ 'INVENTORY_CENTRE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="warehouseName" name="warehouseName" type="text" [(ngModel)]="inventoryEdit.warehouseName" [disabled]="true">
+              <input class="form-control" formControlName="warehouseName" name="warehouseName" type="text" [(ngModel)]="inventoryEdit.warehouseName" [readonly]="true">
             </div>
           </div>
           <div class="row">
             <div class="col-lg-3">{{ 'INVENTORY_STOCK' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="quantity" name="quantity" type="text" [(ngModel)]="inventoryEdit.quantity" (ngModelChange)="onFormDataChange($event)">
+              <input class="form-control" formControlName="quantity" name="quantity" type="text" [(ngModel)]="inventoryEdit.quantity">
               <div [hidden]="inventoryEditForm.controls['quantity'].valid || inventoryEditForm.controls['quantity'].pristine" class="alert alert-danger">
                 {{ 'POS_DECIMAL_REQUIRED' | translate }}
               </div>
@@ -125,26 +126,26 @@
           <div class="row">
             <div class="col-lg-3">{{ 'INVENTORY_RESERVED' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="reserved" name="reserved" type="text" [(ngModel)]="inventoryEdit.reserved" [disabled]="true">
+              <input class="form-control" formControlName="reserved" name="reserved" type="text" [(ngModel)]="inventoryEdit.reserved" [readonly]="true">
             </div>
           </div>
         </fieldset>
       </form>
     </template>
-  </modal>
+  </yc-modal>
 
-  <modal #selectCentreModalDialog
-         title="{{ 'PANEL_INVENTORY_WAREHOUSES' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
-         [valid]="selectedCentre != null"
-         (closed)="onSelectCentreResult($event)">
+  <yc-modal #selectCentreModalDialog
+            title="{{ 'PANEL_INVENTORY_WAREHOUSES' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+            [valid]="selectedCentre != null"
+            (closed)="onSelectCentreResult($event)">
 
     <div class="item-list-overflow">
       <yc-fulfilment-centre-select (dataSelected)="onFulfilmentCentreSelected($event)"></yc-fulfilment-centre-select>
     </div>
 
-  </modal>
+  </yc-modal>
 
 
 </div>

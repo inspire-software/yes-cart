@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {TaxConfigVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { TaxConfigVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-tax-configs',
   moduleId: module.id,
   templateUrl: 'tax-configs.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class TaxConfigsComponent implements OnInit, OnDestroy {
-
-  _taxconfigs:Array<TaxConfigVO> = [];
-
-  filteredTaxconfigs:Array<TaxConfigVO>;
 
   @Input() selectedTaxConfig:TaxConfigVO;
 
   @Output() dataSelected: EventEmitter<TaxConfigVO> = new EventEmitter<TaxConfigVO>();
 
+  private _taxconfigs:Array<TaxConfigVO> = [];
+
+  private filteredTaxconfigs:Array<TaxConfigVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('TaxConfigsComponent constructed');
+    LogUtil.debug('TaxConfigsComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('TaxConfigsComponent ngOnInit');
+    LogUtil.debug('TaxConfigsComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class TaxConfigsComponent implements OnInit, OnDestroy {
     this.filterTaxconfigs();
   }
 
-  private filterTaxconfigs() {
-
-    this.filteredTaxconfigs = this._taxconfigs;
-    console.debug('TaxConfigsComponent filterTaxconfigs', this.filteredTaxconfigs);
-
-    if (this.filteredTaxconfigs === null) {
-      this.filteredTaxconfigs = [];
-    }
-
-    let _total = this.filteredTaxconfigs.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('TaxConfigsComponent ngOnDestroy');
+    LogUtil.debug('TaxConfigsComponent ngOnDestroy');
     this.selectedTaxConfig = null;
     this.dataSelected.emit(null);
   }
@@ -102,13 +84,29 @@ export class TaxConfigsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:TaxConfigVO) {
-    console.debug('TaxConfigsComponent onSelectRow handler', row);
+    LogUtil.debug('TaxConfigsComponent onSelectRow handler', row);
     if (row == this.selectedTaxConfig) {
       this.selectedTaxConfig = null;
     } else {
       this.selectedTaxConfig = row;
     }
     this.dataSelected.emit(this.selectedTaxConfig);
+  }
+
+  private filterTaxconfigs() {
+
+    this.filteredTaxconfigs = this._taxconfigs;
+    LogUtil.debug('TaxConfigsComponent filterTaxconfigs', this.filteredTaxconfigs);
+
+    if (this.filteredTaxconfigs === null) {
+      this.filteredTaxconfigs = [];
+    }
+
+    let _total = this.filteredTaxconfigs.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

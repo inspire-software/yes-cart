@@ -10,7 +10,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CUSTOMER_EMAIL' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="manager.email" (ngModelChange)="onMainDataChanged($event)" [disabled]="manager.managerId > 0" autocomplete="off">
+                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_EMAIL' | translate }}" formControlName="email" name="email" type="text" [(ngModel)]="manager.email" autocomplete="off" >
                   <div [hidden]="managerForm.controls['email'].valid || managerForm.controls['email'].pristine" class="alert alert-danger">
                     <div [hidden]="!managerForm.controls['email'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}
@@ -23,14 +23,14 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'CUSTOMER_FIRSTNAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName" (ngModelChange)="onMainDataChanged($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_FIRSTNAME' | translate }}" formControlName="firstName" name="firstName" type="text" [(ngModel)]="manager.firstName">
                   <div [hidden]="managerForm.controls['firstName'].valid || managerForm.controls['firstName'].pristine" class="alert alert-danger">
                     {{ 'SIMPLE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CUSTOMER_LASTNAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName" (ngModelChange)="onMainDataChanged($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'CUSTOMER_LASTNAME' | translate }}" formControlName="lastName" name="lastName" type="text" [(ngModel)]="manager.lastName">
                   <div [hidden]="managerForm.controls['lastName'].valid || managerForm.controls['lastName'].pristine" class="alert alert-danger">
                     {{ 'SIMPLE_REQUIRED' | translate }}
                   </div>

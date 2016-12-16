@@ -13,21 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {OrganisationService, Util} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {RolesComponent, RoleComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {RoleVO} from './../shared/model/index';
-import {FormValidationEvent} from './../shared/event/index';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { OrganisationService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { RoleVO } from './../shared/model/index';
+import { FormValidationEvent } from './../shared/event/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-organisation-roles',
   moduleId: module.id,
   templateUrl: 'organisation-roles.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, RolesComponent, RoleComponent, ModalComponent, DataControlComponent ],
 })
 
 export class OrganisationRoleComponent implements OnInit, OnDestroy {
@@ -45,70 +41,61 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
   private roleEdit:RoleVO;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private deleteValue:String;
 
-  constructor(private _roleService:OrganisationService) {
-    console.debug('OrganisationRoleComponent constructed');
-  }
+  private loading:boolean = false;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  constructor(private _roleService:OrganisationService) {
+    LogUtil.debug('OrganisationRoleComponent constructed');
+  }
 
   newRoleInstance():RoleVO {
     return { roleId: 0, code: '', description: null};
   }
 
   ngOnInit() {
-    console.debug('OrganisationRoleComponent ngOnInit');
+    LogUtil.debug('OrganisationRoleComponent ngOnInit');
     this.onRefreshHandler();
   }
 
   ngOnDestroy() {
-    console.debug('OrganisationRoleComponent ngOnDestroy');
-  }
-
-  getAllRoles() {
-    var _sub:any = this._roleService.getAllRoles().subscribe( allroles => {
-      console.debug('OrganisationRoleComponent getAllRoles', allroles);
-      this.roles = allroles;
-      this.selectedRole = null;
-      this.roleEdit = null;
-      this.viewMode = OrganisationRoleComponent.ROLES;
-      this.changed = false;
-      this.validForSave = false;
-      _sub.unsubscribe();
-    });
+    LogUtil.debug('OrganisationRoleComponent ngOnDestroy');
   }
 
   protected onRefreshHandler() {
-    console.debug('OrganisationRoleComponent refresh handler');
+    LogUtil.debug('OrganisationRoleComponent refresh handler');
     this.getAllRoles();
   }
 
-  onRoleSelected(data:RoleVO) {
-    console.debug('OrganisationRoleComponent onRoleSelected', data);
+  protected onRoleSelected(data:RoleVO) {
+    LogUtil.debug('OrganisationRoleComponent onRoleSelected', data);
     this.selectedRole = data;
   }
 
-  onRoleChanged(event:FormValidationEvent<RoleVO>) {
-    console.debug('OrganisationRoleComponent onRoleChanged', event);
+  protected onRoleChanged(event:FormValidationEvent<RoleVO>) {
+    LogUtil.debug('OrganisationRoleComponent onRoleChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.roleEdit = event.source;
   }
 
   protected onBackToList() {
-    console.debug('OrganisationRoleComponent onBackToList handler');
+    LogUtil.debug('OrganisationRoleComponent onBackToList handler');
     if (this.viewMode === OrganisationRoleComponent.ROLE) {
-      this.roleEdit = null;
+      //this.roleEdit = null;
+      this.changed = false;
+      this.validForSave = false;
       this.viewMode = OrganisationRoleComponent.ROLES;
     }
   }
 
   protected onRowNew() {
-    console.debug('OrganisationRoleComponent onRowNew handler');
+    LogUtil.debug('OrganisationRoleComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === OrganisationRoleComponent.ROLES) {
@@ -118,7 +105,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('OrganisationRoleComponent onRowDelete handler', row);
+    LogUtil.debug('OrganisationRoleComponent onRowDelete handler', row);
     this.deleteValue = row.code;
     this.deleteConfirmationModalDialog.show();
   }
@@ -130,7 +117,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditRole(row:RoleVO) {
-    console.debug('OrganisationRoleComponent onRowEditRole handler', row);
+    LogUtil.debug('OrganisationRoleComponent onRowEditRole handler', row);
     this.roleEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -149,7 +136,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
 
       if (this.roleEdit != null) {
 
-        console.debug('OrganisationRoleComponent Save handler role', this.roleEdit);
+        LogUtil.debug('OrganisationRoleComponent Save handler role', this.roleEdit);
 
         var _sub:any = this._roleService.saveRole(this.roleEdit).subscribe(
             rez => {
@@ -158,16 +145,17 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
               if (idx !== -1) {
                 this.roles[idx] = rez;
                 this.roles = this.roles.slice(0, this.roles.length); // reset to propagate changes
-                console.debug('OrganisationRoleComponent role changed', rez);
+                LogUtil.debug('OrganisationRoleComponent role changed', rez);
               }
             } else {
               this.roles.push(rez);
               this.roleFilter = rez.code;
-              console.debug('OrganisationRoleComponent role added', rez);
+              LogUtil.debug('OrganisationRoleComponent role added', rez);
             }
             this.changed = false;
+            this.validForSave = false;
             this.selectedRole = rez;
-            this.roleEdit = null;
+            this.roleEdit = rez;
             this.viewMode = OrganisationRoleComponent.ROLES;
             _sub.unsubscribe();
           }
@@ -179,7 +167,7 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('OrganisationRoleComponent discard handler');
+    LogUtil.debug('OrganisationRoleComponent discard handler');
     if (this.viewMode === OrganisationRoleComponent.ROLE) {
       if (this.selectedRole != null) {
         this.onRowEditSelected();
@@ -190,23 +178,48 @@ export class OrganisationRoleComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('OrganisationRoleComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('OrganisationRoleComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedRole != null) {
-        console.debug('OrganisationRoleComponent onDeleteConfirmationResult', this.selectedRole);
+        LogUtil.debug('OrganisationRoleComponent onDeleteConfirmationResult', this.selectedRole);
 
         var _sub:any = this._roleService.removeRole(this.selectedRole).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('OrganisationRoleComponent removeRole', this.selectedRole);
+          LogUtil.debug('OrganisationRoleComponent removeRole', this.selectedRole);
           let idx = this.roles.indexOf(this.selectedRole);
           this.roles.splice(idx, 1);
           this.roles = this.roles.slice(0, this.roles.length); // reset to propagate changes
           this.selectedRole = null;
-          this.roleEdit = null;
+          this.changed = false;
+          this.validForSave = false;
+          //this.roleEdit = null;
+          this.viewMode = OrganisationRoleComponent.ROLES;
         });
       }
     }
+  }
+
+  protected onClearFilter() {
+
+    this.roleFilter = '';
+
+  }
+
+
+  private getAllRoles() {
+    this.loading = true;
+    var _sub:any = this._roleService.getAllRoles().subscribe( allroles => {
+      LogUtil.debug('OrganisationRoleComponent getAllRoles', allroles);
+      this.roles = allroles;
+      this.selectedRole = null;
+      //this.roleEdit = null;
+      this.viewMode = OrganisationRoleComponent.ROLES;
+      this.changed = false;
+      this.validForSave = false;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
   }
 
 }

@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CategoryVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { CategoryVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-categories',
   moduleId: module.id,
   templateUrl: 'categories.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class CategoriesComponent implements OnInit, OnDestroy {
-
-  _categories:Array<CategoryVO> = [];
-
-  filteredCategories:Array<CategoryVO>;
 
   @Input() selectedCategory:CategoryVO;
 
   @Output() dataSelected: EventEmitter<CategoryVO> = new EventEmitter<CategoryVO>();
 
+  private _categories:Array<CategoryVO> = [];
+
+  private filteredCategories:Array<CategoryVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CategoriesComponent constructed');
+    LogUtil.debug('CategoriesComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('CategoriesComponent ngOnInit');
+    LogUtil.debug('CategoriesComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     this.filterCategories();
   }
 
-  private filterCategories() {
-
-    this.filteredCategories = this._categories;
-    console.debug('CategoriesComponent filterCategories', this.filteredCategories);
-
-    if (this.filteredCategories === null) {
-      this.filteredCategories = [];
-    }
-
-    let _total = this.filteredCategories.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('CategoriesComponent ngOnDestroy');
+    LogUtil.debug('CategoriesComponent ngOnDestroy');
     this.selectedCategory = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:CategoryVO) {
-    console.debug('CategoriesComponent onSelectRow handler', row);
+    LogUtil.debug('CategoriesComponent onSelectRow handler', row);
     if (row == this.selectedCategory) {
       this.selectedCategory = null;
     } else {
@@ -132,7 +114,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       flags += '<i title="' + (row.productTypeName ? row.productTypeName : '') + '" class="fa fa-list-alt"></i>&nbsp;';
     }
     if (row.navigationByBrand) {
-      flags += '<i class="fa fa-trademark"></i>&nbsp;';
+      flags += '<i class="fa fa-copyright"></i>&nbsp;';
     }
     if (row.navigationByPrice) {
       flags += '<i class="fa fa-dollar"></i>&nbsp;';
@@ -148,5 +130,20 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     return row.availableto === null || (row.availableto > new Date());
   }
 
+  private filterCategories() {
+
+    this.filteredCategories = this._categories;
+    LogUtil.debug('CategoriesComponent filterCategories', this.filteredCategories);
+
+    if (this.filteredCategories === null) {
+      this.filteredCategories = [];
+    }
+
+    let _total = this.filteredCategories.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
 
 }

@@ -13,44 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {CarrierVO, CarrierShopLinkVO, ShopVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { CarrierVO, CarrierShopLinkVO, ShopVO, Pair } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-carrier',
   moduleId: module.id,
   templateUrl: 'carrier.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, I18nComponent],
 })
 
 export class CarrierComponent implements OnInit, OnDestroy {
 
-  _carrier:CarrierVO;
-
-  _shops:any = {};
-
-  availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
-  supportedShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierVO>> = new EventEmitter<FormValidationEvent<CarrierVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _carrier:CarrierVO;
 
-  carrierForm:any;
-  carrierFormSub:any;
+  private _shops:any = {};
+
+  private availableShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
+  private supportedShops:Array<Pair<ShopVO, CarrierShopLinkVO>> = [];
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private carrierForm:any;
+  private carrierFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('CarrierComponent constructed');
+    LogUtil.debug('CarrierComponent constructed');
 
-    this.carrierForm = fb.group({});
+    this.carrierForm = fb.group({
+      'name': [''],
+      'description': [''],
+      'carrierShops': ['']
+    });
 
     let that = this;
     this.delayedChange = Futures.perpetual(function() {
@@ -59,35 +59,22 @@ export class CarrierComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.carrierForm.controls) {
-      this.carrierForm.controls[key]['_pristine'] = true;
-      this.carrierForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.carrierFormSub = this.carrierForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.carrierForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'carrierForm', 'carrierFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.carrierFormSub) {
-      console.debug('CarrierComponent unbining form');
-      this.carrierFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'carrierFormSub');
   }
 
   formChange():void {
-    console.debug('CarrierComponent validating formGroup is valid: ' + this.validForSave, this._carrier);
-    this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
+    LogUtil.debug('CarrierComponent formChange', this.carrierForm.valid, this._carrier);
+    this.dataChanged.emit({ source: this._carrier, valid: this.carrierForm.valid });
+  }
+
+  formMarkDirty(field:string):void {
+    UiUtil.formMarkFieldDirty(this, 'carrierForm', field);
   }
 
   @Input()
@@ -95,20 +82,65 @@ export class CarrierComponent implements OnInit, OnDestroy {
     shops.forEach(shop => {
       this._shops['S' + shop.shopId] = shop;
     });
-    console.debug('CarrierComponent mapped shops', this._shops);
+    LogUtil.debug('CarrierComponent mapped shops', this._shops);
   }
 
   @Input()
   set carrier(carrier:CarrierVO) {
-    this._carrier = carrier;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'carrierForm', '_carrier', carrier);
     this.recalculateShops();
+
   }
 
   get carrier():CarrierVO {
     return this._carrier;
   }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'carrierForm', 'name', event);
+  }
+
+  onDescriptionDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'carrierForm', 'description', event);
+  }
+
+  onSupportedShopClick(supported:Pair<ShopVO, CarrierShopLinkVO>) {
+    LogUtil.debug('SlaComponent remove supported', supported);
+    let idx = this._carrier.carrierShops.findIndex(link =>
+      link.shopId == supported.first.shopId
+    );
+    if (idx != -1) {
+      this._carrier.carrierShops.splice(idx, 1);
+      this.recalculateShops();
+      this.formMarkDirty('carrierShops');
+      this.formChange();
+    }
+  }
+
+  onAvailableShopClick(available:Pair<ShopVO, CarrierShopLinkVO>) {
+    LogUtil.debug('SlaComponent add supported', available);
+    this._carrier.carrierShops.push(available.second);
+    this.recalculateShops();
+    this.formMarkDirty('carrierShops');
+    this.formChange();
+  }
+
+
+  ngOnInit() {
+    LogUtil.debug('CarrierComponent ngOnInit');
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('CarrierComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  tabSelected(tab:any) {
+    LogUtil.debug('CarrierComponent tabSelected', tab);
+  }
+
 
   private recalculateShops():void {
     if (this._carrier && this._carrier.carrierId > 0) {
@@ -120,6 +152,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
     }
   }
 
+
   private getAvailableShopNames():Array<Pair<ShopVO, CarrierShopLinkVO>> {
     let supported = this._carrier.carrierShops;
     let skipKeys = <Array<string>>[];
@@ -128,7 +161,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
         skipKeys.push('S' + carriershop.shopId);
       });
     }
-    console.debug('CarrierComponent supported', skipKeys);
+    LogUtil.debug('CarrierComponent supported', skipKeys);
 
     let labels = <Array<Pair<ShopVO, CarrierShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -141,7 +174,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('CarrierComponent available', labels);
+    LogUtil.debug('CarrierComponent available', labels);
     return labels;
   }
 
@@ -153,7 +186,7 @@ export class CarrierComponent implements OnInit, OnDestroy {
         keepKeys.push('S' + carriershop.shopId);
       });
     }
-    console.debug('CarrierComponent supported', keepKeys);
+    LogUtil.debug('CarrierComponent supported', keepKeys);
 
     let labels = <Array<Pair<ShopVO, CarrierShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -165,52 +198,9 @@ export class CarrierComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('CarrierComponent supported', labels);
+    LogUtil.debug('CarrierComponent supported', labels);
     return labels;
   }
-
-
-  onSupportedShopClick(supported:Pair<ShopVO, CarrierShopLinkVO>) {
-    console.debug('SlaComponent remove supported', supported);
-    let idx = this._carrier.carrierShops.findIndex(link =>
-      link.shopId == supported.first.shopId
-    );
-    if (idx != -1) {
-      this._carrier.carrierShops.splice(idx, 1);
-      this.recalculateShops();
-      this.changed = true;
-      this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
-    }
-  }
-
-  onAvailableShopClick(available:Pair<ShopVO, CarrierShopLinkVO>) {
-    console.debug('SlaComponent add supported', available);
-    this._carrier.carrierShops.push(available.second);
-    this.recalculateShops();
-    this.changed = true;
-    this.dataChanged.emit({ source: this._carrier, valid: this.validForSave });
-  }
-
-
-  onDataChanged(event:any) {
-    console.debug('CarrierComponent data changed', this._carrier);
-    this.changed = true;
-  }
-
-  ngOnInit() {
-    console.debug('CarrierComponent ngOnInit');
-    this.formBind();
-  }
-
-  ngOnDestroy() {
-    console.debug('CarrierComponent ngOnDestroy');
-    this.formUnbind();
-  }
-
-  tabSelected(tab:any) {
-    console.debug('CarrierComponent tabSelected', tab);
-  }
-
 
 
 }

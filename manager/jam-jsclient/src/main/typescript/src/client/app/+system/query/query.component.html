@@ -12,7 +12,7 @@
         </select>
       </form>
 
-      <button type="button" (click)="onRunHandler()" [disabled]="selectedNode == null" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+      <button type="button" (click)="onRunHandler()" [disabled]="selectedNode == null" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_QUERYRUN' | translate }}">
         <i class="fa fa-play"></i>
       </button>
 
@@ -22,15 +22,15 @@
         <option value="FT">FT</option>
       </select>
 
-      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+      <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUERYTABADD' | translate }}">
         <i class="fa fa-plus"></i>
       </button>
 
-      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+      <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
         <i class="fa fa-refresh"></i>
       </button>
 
-      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 1" class="btn btn-danger btn-circle btn-xl" >
+      <button type="button" (click)="onTabDeleteSelected()" [disabled]="tabs.length == 1" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUERYTABREMOVE' | translate }}">
         <i class="fa fa-remove"></i>
       </button>
 

@@ -13,22 +13,25 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {ShopVO} from './../model/index';
-import {ShopEventBus, ShopService} from './../services/index';
-import {Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
+import { Component,  OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ShopVO } from './../model/index';
+import { ShopEventBus, ShopService } from './../services/index';
+import { Futures, Future } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-shop-select',
   moduleId: module.id,
   templateUrl: 'shop-select.component.html',
-  directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
 export class ShopSelectComponent implements OnInit, OnDestroy {
+
+  @Input() showNewLink: boolean = true;
+
+  @Output() dataNew: EventEmitter<ShopVO> = new EventEmitter<ShopVO>();
+  @Output() dataSelected: EventEmitter<ShopVO> = new EventEmitter<ShopVO>();
 
   private shops : ShopVO[] = null;
   private filteredShops : ShopVO[] = [];
@@ -36,19 +39,14 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
 
   private selectedShop : ShopVO = null;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   private shopSub:any;
   private shopAllSub:any;
 
-  @Input() showNewLink: boolean = true;
-
-  @Output() dataNew: EventEmitter<ShopVO> = new EventEmitter<ShopVO>();
-  @Output() dataSelected: EventEmitter<ShopVO> = new EventEmitter<ShopVO>();
-
   constructor (private _shopService : ShopService) {
-    console.debug('ShopListComponent constructed selectedShop ', this.selectedShop);
+    LogUtil.debug('ShopListComponent constructed selectedShop ', this.selectedShop);
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.reloadShopList(shopevt);
     });
@@ -58,18 +56,8 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
     });
   }
 
-  getAllShops() {
-    var _sub:any = this._shopService.getAllShops().subscribe( allshops => {
-      console.debug('ShopListComponent getAllShops', allshops);
-      this.shops = allshops;
-      ShopEventBus.getShopEventBus().emitAll(this.shops);
-      this.reloadShopList(null);
-      _sub.unsubscribe();
-    });
-  }
-
   ngOnDestroy() {
-    console.debug('ShopListComponent ngOnDestroy');
+    LogUtil.debug('ShopListComponent ngOnDestroy');
     if (this.shopSub) {
       this.shopSub.unsubscribe();
     }
@@ -79,7 +67,7 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopListComponent ngOnInit');
+    LogUtil.debug('ShopListComponent ngOnInit');
     if (this.shops == null) {
       this.getAllShops();
     }
@@ -91,12 +79,12 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
   }
 
   onNewClick() {
-    console.debug('ShopListComponent onNewClick');
+    LogUtil.debug('ShopListComponent onNewClick');
     this.dataNew.emit(null);
   }
 
   onSelectClick(shop: ShopVO) {
-    console.debug('ShopListComponent onSelectClick', shop);
+    LogUtil.debug('ShopListComponent onSelectClick', shop);
     this.selectedShop = shop;
     this.dataSelected.emit(this.selectedShop);
   }
@@ -111,7 +99,7 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
    * Reload list of shops
    * @param shopVo shop that was changed or added
    */
-  reloadShopList(shopVo : ShopVO) {
+  private reloadShopList(shopVo : ShopVO) {
 
     if (this.shops != null) {
 
@@ -135,14 +123,24 @@ export class ShopSelectComponent implements OnInit, OnDestroy {
           shop.code.toLowerCase().indexOf(_filter) != -1 ||
           shop.name && shop.name.toLowerCase().indexOf(_filter) != -1
         );
-        console.debug('ShopListComponent reloadShopList filter: ' + _filter, this.filteredShops);
+        LogUtil.debug('ShopListComponent reloadShopList filter: ' + _filter, this.filteredShops);
       } else {
         this.filteredShops = this.shops;
-        console.debug('ShopListComponent reloadShopList no filter', this.filteredShops);
+        LogUtil.debug('ShopListComponent reloadShopList no filter', this.filteredShops);
       }
     }
 
     // this.getAllShops(); - no need to REST, we keep full list in the event bus
+  }
+
+  private getAllShops() {
+    var _sub:any = this._shopService.getAllShops().subscribe( allshops => {
+      LogUtil.debug('ShopListComponent getAllShops', allshops);
+      this.shops = allshops;
+      ShopEventBus.getShopEventBus().emitAll(this.shops);
+      this.reloadShopList(null);
+      _sub.unsubscribe();
+    });
   }
 
 }

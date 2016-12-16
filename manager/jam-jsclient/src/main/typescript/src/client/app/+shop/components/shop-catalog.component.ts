@@ -13,20 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopService, CatalogService} from './../../shared/services/index';
-import {ShopVO, CategoryVO, BasicCategoryVO, ValidationRequestVO} from './../../shared/model/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopService, CatalogService } from './../../shared/services/index';
+import { ShopVO, CategoryVO, BasicCategoryVO, ValidationRequestVO } from './../../shared/model/index';
+import { ITreeNode } from './../../shared/tree-view/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-catalog',
   moduleId: module.id,
   templateUrl: 'shop-catalog.component.html',
-  directives: [DataControlComponent, TreeViewComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 /**
@@ -34,25 +34,27 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
  */
 export class ShopCatalogComponent implements OnInit, OnDestroy {
 
+  private static _categories:Array<CategoryVO> = null;
+
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  changed:boolean = false;
-  existingShop:boolean = false;
+  private changed:boolean = false;
+  private existingShop:boolean = false;
 
-  newCategory:BasicCategoryVO;
+  private newCategory:BasicCategoryVO;
   @ViewChild('editNewCategoryName')
-  editNewCategoryName:ModalComponent;
-  newCategoryForm:any;
-  newCategoryFormSub:any;
-  changedSingle:boolean = true;
-  validForSave:boolean = false;
+  private editNewCategoryName:ModalComponent;
 
-  nodes:Array<ITreeNode>;
-  selectedNode:ITreeNode;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private newCategoryForm:any;
+  private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForSave:boolean = false;
 
-  static _categories:Array<CategoryVO> = null;
-  assigned:Array<CategoryVO> = null;
+  private nodes:Array<ITreeNode>;
+  private selectedNode:ITreeNode;
+
+  private assigned:Array<CategoryVO> = null;
 
   /**
    * Construct shop catalogues panel.
@@ -63,7 +65,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   constructor(private _categoryService:CatalogService,
               private _shopService:ShopService,
               fb: FormBuilder) {
-    console.debug('ShopCatalogComponent constructed');
+    LogUtil.debug('ShopCatalogComponent constructed');
 
     this.newCategory = this.newCategoryInstance();
 
@@ -72,7 +74,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (!that.changedSingle || code == null || code == '' || that.newCategory == null) {
+      if (code == null || code == '' || that.newCategory == null || !that.newCategoryForm || !that.newCategoryForm.dirty) {
         return null;
       }
 
@@ -120,12 +122,12 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopCatalogComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopCatalogComponent ngOnInit shop', this.shop);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ShopCatalogComponent ngOnDestroy');
+    LogUtil.debug('ShopCatalogComponent ngOnDestroy');
     this.formUnbind();
   }
 
@@ -133,33 +135,17 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     return { 'name': '', 'guid': '' };
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.newCategoryForm.controls) {
-      this.newCategoryForm.controls[key]['_pristine'] = true;
-      this.newCategoryForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.newCategoryFormSub = this.newCategoryForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.newCategoryForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
-    if (this.newCategoryFormSub) {
-      console.debug('ShopCatalogComponent unbining form');
-      this.newCategoryFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'newCategoryFormSub');
   }
 
-
-  onFormDataChange(event:any) {
-    console.debug('ShopCatalogComponent data changed', event);
-    this.changedSingle = true;
+  formChange():void {
+    LogUtil.debug('ShopCatalogComponent formChange', this.newCategoryForm.valid, this.newCategory);
+    this.validForSave = this.newCategoryForm.valid;
   }
 
 
@@ -167,23 +153,23 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * Load data and adapt time.
    */
   loadData() {
-    console.debug('ShopCatalogComponent loading categories', this.shop);
+    LogUtil.debug('ShopCatalogComponent loading categories', this.shop);
     this.existingShop = this.shop.shopId > 0;
     if (this.existingShop) {
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
-            console.debug('ShopCatalogComponent assigned categories', cats);
+            LogUtil.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
             var _assignedIds:Array<number> = this.adaptToIds(cats);
 
             var _subc:any = this._categoryService.getAllCategories().subscribe(
                 cats => {
-                  console.debug('ShopCatalogComponent all categories', cats);
+                  LogUtil.debug('ShopCatalogComponent all categories', cats);
                   this.categories = cats;
                   this.nodes = this.adaptToTree(cats, _assignedIds);
                   this.selectedNode = null;
-                  this.newCategory = { 'name': '', 'guid': '' };
+                  UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
                   this.changed = false;
                   this._reload = false;
                   _subc.unsubscribe();
@@ -223,6 +209,11 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
       };
       if (catVo.children !== null && catVo.children.length > 0) {
         node.children = this.adaptToTree(catVo.children, disabled);
+        node.children.forEach(child => {
+          if (child.disabled) {
+            node.expanded = true; // Expand parent if child is expanded
+          }
+        });
       }
       rez.push(node);
     }
@@ -234,10 +225,10 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param node
    */
   assignToShopClick(node:ITreeNode) {
-    console.debug('ShopCatalogComponent assignToShop ', node);
+    LogUtil.debug('ShopCatalogComponent assignToShop ', node);
     let catVo = node.source;
     this.assigned.push(catVo);
-    console.debug('ShopCatalogComponent disabled node', node);
+    LogUtil.debug('ShopCatalogComponent disabled node', node);
     node.disabled = true;
     node.expanded = false;
     this.selectedNode = null;
@@ -249,11 +240,11 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param cat category
      */
   onAssignedClick(cat:CategoryVO) {
-    console.debug('ShopCatalogComponent onAssigned', cat);
+    LogUtil.debug('ShopCatalogComponent onAssigned', cat);
     for (var idx = 0; idx < this.assigned.length; idx++) {
       var catVo : CategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
-        console.debug('ShopCatalogComponent remove from assigned', catVo);
+        LogUtil.debug('ShopCatalogComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
         this.changeDisabledState(catVo, this.nodes);
         this.changed = true;
@@ -267,7 +258,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
       var node:ITreeNode = nodes[idx];
       if (node.id === cat.categoryId.toString()) {
         node.disabled = false;
-        console.debug('ShopCatalogComponent enabled node', node);
+        LogUtil.debug('ShopCatalogComponent enabled node', node);
         return true;
       }
 
@@ -283,7 +274,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param node
    */
   onSelectNode(node:ITreeNode) {
-    console.debug('ShopCatalogComponent selected node', node);
+    LogUtil.debug('ShopCatalogComponent selected node', node);
     if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
@@ -291,7 +282,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
   }
 
   onRequest(parent:ITreeNode) {
-    console.debug('ShopCatalogComponent onRequest node', parent);
+    LogUtil.debug('ShopCatalogComponent onRequest node', parent);
   }
 
 
@@ -300,11 +291,9 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param parent parent of new catecory
    */
   createNew(parent:ITreeNode) {
-    console.debug('ShopCatalogComponent createNew for parent', parent);
-    this.changedSingle = false;
+    LogUtil.debug('ShopCatalogComponent createNew for parent', parent);
     this.validForSave = false;
-    this.newCategory = this.newCategoryInstance();
-    this.formReset();
+    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 
@@ -313,11 +302,10 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * @param modalresult
      */
   editNewCategoryNameModalResult(modalresult:ModalResult) {
-    console.debug('ShopCatalogComponent editNewCategoryNameModalResult modal result', modalresult);
+    LogUtil.debug('ShopCatalogComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
-          this.changedSingle = false;
           this.validForSave = false;
           this.onRefreshHandler();
         }
@@ -330,7 +318,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * Save assigned categories.
    */
   onSaveHandler() {
-    console.debug('ShopCatalogComponent Save handler for shop', this.shop);
+    LogUtil.debug('ShopCatalogComponent Save handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.saveShopCategories(this.shop.shopId, this.assigned).subscribe(
           cats => {
@@ -346,11 +334,11 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * Discard changes.
    */
   onDiscardEventHandler() {
-    console.debug('ShopCatalogComponent Discard handler for shop', this.shop);
+    LogUtil.debug('ShopCatalogComponent Discard handler for shop', this.shop);
     if (this.shop.shopId > 0) {
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
-            console.debug('ShopCatalogComponent assigned categories', cats);
+            LogUtil.debug('ShopCatalogComponent assigned categories', cats);
             this.assigned = cats;
             _subs.unsubscribe();
             var _assignedIds:Array<number> = this.adaptToIds(cats);
@@ -370,7 +358,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    * Load fresh data.
    */
   onRefreshHandler() {
-    console.debug('ShopCatalogComponent Refresh handler ', this.shop);
+    LogUtil.debug('ShopCatalogComponent Refresh handler ', this.shop);
     this.loadData();
   }
 

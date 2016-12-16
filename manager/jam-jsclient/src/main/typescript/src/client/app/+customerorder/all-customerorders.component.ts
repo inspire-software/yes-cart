@@ -13,23 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CustomerOrderService, I18nEventBus, ErrorEventBus} from './../shared/services/index';
-import {UiUtil} from './../shared/ui/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {CustomerOrdersComponent, CustomerOrderComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO} from './../shared/model/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { CustomerOrderService, I18nEventBus, ErrorEventBus } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO } from './../shared/model/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { UiUtil } from './../shared/ui/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-all-customerorders',
   moduleId: module.id,
   templateUrl: 'all-customerorders.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, CustomerOrdersComponent, CustomerOrderComponent, ModalComponent, DataControlComponent ],
 })
 
 export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
@@ -46,10 +42,10 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private customerorderFilterRequired:boolean = true;
   private customerorderFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedCustomerorder:CustomerOrderInfoVO;
 
@@ -69,25 +65,26 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   private selectedCustomerdeliveryShippableManual:boolean = false;
   private selectedCustomerdeliveryDelivered:boolean = false;
 
-
   @ViewChild('orderTransitionConfirmationModalDialog')
-  orderTransitionConfirmationModalDialog:ModalComponent;
-  orderTransitionName:string = '';
-  orderTransitionNameOfflineNote:boolean;
-  orderTransitionNumber:string = '';
-  orderTransitionRequiresMessage:boolean;
-  orderTransitionMessage:string;
-  orderTransitionValid:boolean = false;
+  private orderTransitionConfirmationModalDialog:ModalComponent;
+  private orderTransitionName:string = '';
+  private orderTransitionNameOfflineNote:boolean;
+  private orderTransitionNumber:string = '';
+  private orderTransitionRequiresMessage:boolean;
+  private orderTransitionMessage:string;
+  private orderTransitionValid:boolean = false;
+
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   constructor(private _customerorderService:CustomerOrderService) {
-    console.debug('AllCustomerOrdersComponent constructed');
+    LogUtil.debug('AllCustomerOrdersComponent constructed');
   }
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-
   ngOnInit() {
-    console.debug('AllCustomerOrdersComponent ngOnInit');
+    LogUtil.debug('AllCustomerOrdersComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -97,53 +94,23 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('AllCustomerOrdersComponent ngOnDestroy');
+    LogUtil.debug('AllCustomerOrdersComponent ngOnDestroy');
   }
 
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredCustomerorders() {
-    this.customerorderFilterRequired = !this.forceShowAll && (this.customerorderFilter == null || this.customerorderFilter.length < 2);
-
-    console.debug('AllCustomerOrdersComponent getFilteredCustomerorders' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (!this.customerorderFilterRequired) {
-      let lang = I18nEventBus.getI18nEventBus().current();
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, max).subscribe( allcustomerorders => {
-        console.debug('AllCustomerOrdersComponent getFilteredCustomerorders', allcustomerorders);
-        this.customerorders = allcustomerorders;
-        this.selectedCustomerorder = null;
-        this.customerorderEdit = null;
-        this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
-        this.changed = false;
-        this.validForSave = false;
-        this.customerorderFilterCapped = this.customerorders.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.customerorders = [];
-      this.selectedCustomerorder = null;
-      this.customerorderEdit = null;
-      this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
-      this.changed = false;
-      this.validForSave = false;
-      this.customerorderFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('AllCustomerOrdersComponent refresh handler');
+    LogUtil.debug('AllCustomerOrdersComponent refresh handler');
     this.getFilteredCustomerorders();
   }
 
-  onCustomerorderSelected(data:CustomerOrderInfoVO) {
-    console.debug('AllCustomerOrdersComponent onCustomerorderSelected', data);
+  protected onCustomerorderSelected(data:CustomerOrderInfoVO) {
+    LogUtil.debug('AllCustomerOrdersComponent onCustomerorderSelected', data);
     this.selectedCustomerorder = data;
 
     this.orderTransitionMessage = null;
@@ -184,8 +151,8 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
 
-  onCustomerdeliverySelected(data:CustomerOrderDeliveryInfoVO) {
-    console.debug('AllCustomerOrdersComponent onCustomerdeliverySelected', data);
+  protected onCustomerdeliverySelected(data:CustomerOrderDeliveryInfoVO) {
+    LogUtil.debug('AllCustomerOrdersComponent onCustomerdeliverySelected', data);
     this.selectedCustomerdelivery = data;
 
     if (this.selectedCustomerdelivery) {
@@ -225,7 +192,15 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.selectedCustomerdeliveryDelivered = selectedCustomerdeliveryDelivered;
 
     } else {
+
       this.onCustomerorderSelected(this.selectedCustomerorder);
+
+      this.selectedCustomerdeliveryPackable = false;
+      this.selectedCustomerdeliveryPacked = false;
+      this.selectedCustomerdeliveryShippable = false;
+      this.selectedCustomerdeliveryShippableManual = false;
+      this.selectedCustomerdeliveryDelivered = false;
+
     }
 
   }
@@ -286,7 +261,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   protected onBackToList() {
-    console.debug('AllCustomerOrdersComponent onBackToList handler');
+    LogUtil.debug('AllCustomerOrdersComponent onBackToList handler');
     if (this.viewMode === AllCustomerOrdersComponent.CUSTOMERORDER) {
       this.customerorderEdit = null;
       this.onCustomerdeliverySelected(null);
@@ -297,11 +272,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditCustomerorder(row:CustomerOrderInfoVO) {
-    console.debug('AllCustomerOrdersComponent onRowEditCustomerorder handler', row);
+    LogUtil.debug('AllCustomerOrdersComponent onRowEditCustomerorder handler', row);
 
     let lang = I18nEventBus.getI18nEventBus().current();
     var _sub:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
-      console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+      LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
       this.customerorderEdit = customerorder;
       this.changed = false;
@@ -321,7 +296,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onApproveSelected() {
     if (this.selectedCustomerorder != null) {
-      console.debug('AllCustomerOrdersComponent onApproveSelected handler', this.selectedCustomerorder);
+      LogUtil.debug('AllCustomerOrdersComponent onApproveSelected handler', this.selectedCustomerorder);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -335,7 +310,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onCancelSelected() {
     if (this.selectedCustomerorder != null) {
-      console.debug('AllCustomerOrdersComponent onCancelSelected handler', this.selectedCustomerorder);
+      LogUtil.debug('AllCustomerOrdersComponent onCancelSelected handler', this.selectedCustomerorder);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -349,7 +324,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onReturnSelected() {
     if (this.selectedCustomerorder != null) {
-      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+      LogUtil.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -363,7 +338,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onRefundSelected() {
     if (this.selectedCustomerorder != null) {
-      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+      LogUtil.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -377,7 +352,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onRefundManualSelected() {
     if (this.selectedCustomerorder != null) {
-      console.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
+      LogUtil.debug('AllCustomerOrdersComponent onReturnSelected handler', this.selectedCustomerorder);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
@@ -396,20 +371,21 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   protected onOrderTransitionConfirmationResult(modalresult: ModalResult) {
-    console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedCustomerorder != null && this.selectedCustomerdelivery == null) {
-        console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
+        LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
+        this.loading = true;
         var _sub:any = this._customerorderService.transitionOrder(
           this.selectedCustomerorder, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
-            console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
+            LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
               let lang = I18nEventBus.getI18nEventBus().current();
               var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
-                console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+                LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
                 if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
                   // We are editing
@@ -437,20 +413,22 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
             } else {
               ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
             }
+            this.loading = false;
             _sub.unsubscribe();
         });
 
       } else if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
-        console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
+        LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult', this.selectedCustomerorder);
 
+        this.loading = true;
         var _sub:any = this._customerorderService.transitionDelivery(
           this.selectedCustomerorder, this.selectedCustomerdelivery, this.orderTransitionName, this.orderTransitionMessage).subscribe((res:CustomerOrderTransitionResultVO) => {
-            console.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
+            LogUtil.debug('AllCustomerOrdersComponent onOrderTransitionConfirmationResult result', res);
             if (res.errorCode === '0') {
 
               let lang = I18nEventBus.getI18nEventBus().current();
               var _sub2:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe((customerorder:CustomerOrderVO) => {
-                console.debug('AllCustomerOrdersComponent getOrderById', customerorder);
+                LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
                 if (this.customerorderEdit != null && this.customerorderEdit.customerorderId == this.selectedCustomerorder.customerorderId) {
                   // We are editing
@@ -472,13 +450,13 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
                 let delivery:CustomerOrderDeliveryInfoVO = null;
                 if (this.selectedCustomerorder != null && this.selectedCustomerdelivery != null) {
-                  console.debug('AllCustomerOrdersComponent trying to re-select delivery', this.selectedCustomerdelivery);
+                  LogUtil.debug('AllCustomerOrdersComponent trying to re-select delivery', this.selectedCustomerdelivery);
                   let idx2 = customerorder.deliveries.findIndex(delivery => {
                     return delivery.deliveryNum == this.selectedCustomerdelivery.deliveryNum;
                   });
                   if (idx2 != -1) {
                     delivery = customerorder.deliveries[idx2];
-                    console.debug('AllCustomerOrdersComponent re-selected delivery', delivery);
+                    LogUtil.debug('AllCustomerOrdersComponent re-selected delivery', delivery);
                   }
                 }
                 this.onCustomerdeliverySelected(delivery);
@@ -491,6 +469,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
             } else {
               ErrorEventBus.getErrorEventBus().emit({ status: 500, message: res.errorCode, key: res.localizationKey, param: res.localizedMessageParameters });
             }
+            this.loading = false;
             _sub.unsubscribe();
           });
 
@@ -503,7 +482,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onUpdateDeliveryRefSelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onUpdateDeliveryRefSelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onUpdateDeliveryRefSelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
@@ -517,7 +496,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onPackDeliverySelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onPackDeliverySelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onPackDeliverySelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -531,7 +510,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onMarkReadyForShippingDeliverySelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onMarkReadyForShippingDeliverySelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onMarkReadyForShippingDeliverySelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -545,7 +524,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onStartDeliverySelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onStartDeliverySelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onStartDeliverySelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -559,7 +538,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onShipDeliveryManualSelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onShipDeliveryManualSelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onShipDeliveryManualSelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = true;
@@ -574,7 +553,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onMarkShippedDeliverySelected() {
     if (this.selectedCustomerdelivery != null) {
-      console.debug('AllCustomerOrdersComponent onMarkShippedDeliverySelected handler', this.selectedCustomerdelivery);
+      LogUtil.debug('AllCustomerOrdersComponent onMarkShippedDeliverySelected handler', this.selectedCustomerdelivery);
 
       this.orderTransitionMessage = null;
       this.orderTransitionRequiresMessage = false;
@@ -593,7 +572,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
       if (this.customerorderEdit != null) {
 
-        console.debug('AllCustomerOrdersComponent Save handler customerorder', this.customerorderEdit);
+        LogUtil.debug('AllCustomerOrdersComponent Save handler customerorder', this.customerorderEdit);
 
       }
 
@@ -602,7 +581,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('AllCustomerOrdersComponent discard handler');
+    LogUtil.debug('AllCustomerOrdersComponent discard handler');
     if (this.viewMode === AllCustomerOrdersComponent.CUSTOMERORDER) {
       if (this.selectedCustomerorder != null) {
         this.onRowEditSelected();
@@ -611,5 +590,44 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
 
+  protected onClearFilter() {
+
+    this.customerorderFilter = '';
+    this.getFilteredCustomerorders();
+
+  }
+
+
+  private getFilteredCustomerorders() {
+    this.customerorderFilterRequired = !this.forceShowAll && (this.customerorderFilter == null || this.customerorderFilter.length < 2);
+
+    LogUtil.debug('AllCustomerOrdersComponent getFilteredCustomerorders' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (!this.customerorderFilterRequired) {
+      this.loading = true;
+      let lang = I18nEventBus.getI18nEventBus().current();
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, max).subscribe( allcustomerorders => {
+        LogUtil.debug('AllCustomerOrdersComponent getFilteredCustomerorders', allcustomerorders);
+        this.customerorders = allcustomerorders;
+        this.selectedCustomerorder = null;
+        this.customerorderEdit = null;
+        this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
+        this.changed = false;
+        this.validForSave = false;
+        this.customerorderFilterCapped = this.customerorders.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.customerorders = [];
+      this.selectedCustomerorder = null;
+      this.customerorderEdit = null;
+      this.viewMode = AllCustomerOrdersComponent.CUSTOMERORDERS;
+      this.changed = false;
+      this.validForSave = false;
+      this.customerorderFilterCapped = false;
+    }
+  }
 
 }

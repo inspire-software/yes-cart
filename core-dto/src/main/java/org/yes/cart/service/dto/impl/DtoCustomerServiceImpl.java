@@ -103,15 +103,21 @@ public class DtoCustomerServiceImpl
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public CustomerDTO createForShop(final CustomerDTO instance, final long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        Customer customer = getPersistenceEntityFactory().getByIface(getEntityIFace());
+        assembler.assembleEntity(instance, customer, null, dtoFactory);
+        customer = ((CustomerService)service).create(customer, shopDao.findById(shopId));
+        return getById(customer.getCustomerId());
+    }
 
     /**
      * {@inheritDoc}
      */
     public CustomerDTO create(final CustomerDTO instance) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        Customer customer = getPersistenceEntityFactory().getByIface(getEntityIFace());
-        assembler.assembleEntity(instance, customer, null, dtoFactory);
-        customer = ((CustomerService)service).create(customer, null);
-        return getById(customer.getCustomerId());
+        throw new UnsupportedOperationException("Customers must have at least one shop assigned use #createForShop()");
     }
 
 

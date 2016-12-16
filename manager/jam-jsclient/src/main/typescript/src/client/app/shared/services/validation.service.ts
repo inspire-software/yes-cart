@@ -14,13 +14,14 @@
  *    limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {Util} from './util';
-import {ValidationRequestVO, ValidationResultVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { ValidationRequestVO, ValidationResultVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -36,7 +37,7 @@ export class ValidationService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('ValidationService constructed');
+    LogUtil.debug('ValidationService constructed');
   }
 
   /**
@@ -56,7 +57,7 @@ export class ValidationService {
 
   private handleError (error:any) {
 
-    console.error('ValidationService Server error: ', error);
+    LogUtil.error('ValidationService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

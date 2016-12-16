@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CountryVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { CountryVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-countries',
   moduleId: module.id,
   templateUrl: 'countries.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class CountriesComponent implements OnInit, OnDestroy {
-
-  _countries:Array<CountryVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredCountries:Array<CountryVO>;
 
   @Input() selectedCountry:CountryVO;
 
   @Output() dataSelected: EventEmitter<CountryVO> = new EventEmitter<CountryVO>();
 
+  private _countries:Array<CountryVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredCountries:Array<CountryVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CountriesComponent constructed');
+    LogUtil.debug('CountriesComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterCountries();
@@ -60,7 +58,7 @@ export class CountriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('CountriesComponent ngOnInit');
+    LogUtil.debug('CountriesComponent ngOnInit');
   }
 
   @Input()
@@ -75,32 +73,8 @@ export class CountriesComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterCountries() {
-    if (this._filter) {
-      this.filteredCountries = this._countries.filter(country =>
-          country.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
-          country.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          country.displayName && country.displayName.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('CountriesComponent filterCountries', this._filter);
-    } else {
-      this.filteredCountries = this._countries;
-      console.debug('CountriesComponent filterCountries no filter');
-    }
-
-    if (this.filteredCountries === null) {
-      this.filteredCountries = [];
-    }
-
-    let _total = this.filteredCountries.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('CountriesComponent ngOnDestroy');
+    LogUtil.debug('CountriesComponent ngOnDestroy');
     this.selectedCountry = null;
     this.dataSelected.emit(null);
   }
@@ -125,13 +99,37 @@ export class CountriesComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:CountryVO) {
-    console.debug('CountriesComponent onSelectRow handler', row);
+    LogUtil.debug('CountriesComponent onSelectRow handler', row);
     if (row == this.selectedCountry) {
       this.selectedCountry = null;
     } else {
       this.selectedCountry = row;
     }
     this.dataSelected.emit(this.selectedCountry);
+  }
+
+  private filterCountries() {
+    if (this._filter) {
+      this.filteredCountries = this._countries.filter(country =>
+        country.countryCode.toLowerCase().indexOf(this._filter) !== -1 ||
+        country.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        country.displayName && country.displayName.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('CountriesComponent filterCountries', this._filter);
+    } else {
+      this.filteredCountries = this._countries;
+      LogUtil.debug('CountriesComponent filterCountries no filter');
+    }
+
+    if (this.filteredCountries === null) {
+      this.filteredCountries = [];
+    }
+
+    let _total = this.filteredCountries.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

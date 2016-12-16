@@ -13,73 +13,69 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {ProductAttributeSelectComponent} from './../../shared/attributes/index';
-import {ProductTypeVO, ProductTypeAttrVO, AttributeVO, ProductTypeAttrNavigationRangeVO, Pair} from './../../shared/model/index';
-import {Util} from './../../shared/services/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { ProductTypeVO, ProductTypeAttrVO, AttributeVO, ProductTypeAttrNavigationRangeVO, Pair } from './../../shared/model/index';
+import { Util } from './../../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-product-type-attribute',
   moduleId: module.id,
   templateUrl: 'product-type-attribute.component.html',
-  directives: [PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent, ProductAttributeSelectComponent]
 })
 
 export class ProductTypeAttributeComponent implements OnInit, OnChanges {
 
   @Input() masterObject:ProductTypeVO;
 
-  //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
-  // Must use separate variables (not currentPage) for table since that causes
-  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
-
-
-  _objectAttributes:Array<ProductTypeAttrVO>;
-  objectAttributesRemove:Array<number>;
-  _attributeFilter:string;
-  filteredObjectAttributes:Array<ProductTypeAttrVO>;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  changed:boolean = false;
-  validForSave:boolean = false;
-
-  @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
-  @ViewChild('editModalDialog')
-  editModalDialog:ModalComponent;
-
-  selectedRow:ProductTypeAttrVO;
-
-  attributeToEdit:ProductTypeAttrVO;
-  enableEditRanges:boolean = false;
-  rangeNav:boolean = false;
-  showRanges:boolean = false;
-  editRanges:boolean = false;
-  duplicateAttribute:boolean = false;
-
   @Output() dataSelected: EventEmitter<ProductTypeAttrVO> = new EventEmitter<ProductTypeAttrVO>();
   @Output() dataChanged: EventEmitter<FormValidationEvent<Array<Pair<ProductTypeAttrVO, boolean>>>> = new EventEmitter<FormValidationEvent<Array<Pair<ProductTypeAttrVO, boolean>>>>();
+
+  //paging
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
+  // Must use separate variables (not currentPage) for table since that causes
+  // cyclic even update and then exception https://github.com/angular/angular/issues/6005
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
+
+
+  private _objectAttributes:Array<ProductTypeAttrVO>;
+  private objectAttributesRemove:Array<number>;
+  private objectAttributesEdit:Array<number>;
+  private _attributeFilter:string;
+  private filteredObjectAttributes:Array<ProductTypeAttrVO>;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  @ViewChild('deleteConfirmationModalDialog')
+  private deleteConfirmationModalDialog:ModalComponent;
+  @ViewChild('editModalDialog')
+  private editModalDialog:ModalComponent;
+
+  private selectedRow:ProductTypeAttrVO;
+
+  private attributeToEdit:ProductTypeAttrVO;
+  private enableEditRanges:boolean = false;
+  private rangeNav:boolean = false;
+  private showRanges:boolean = false;
+  private editRanges:boolean = false;
+  private duplicateAttribute:boolean = false;
 
   /**
    * Construct attribute panel
    */
   constructor() {
-    console.debug('ProductTypeAttributeComponent constructed');
+    LogUtil.debug('ProductTypeAttributeComponent constructed');
 
     this.attributeToEdit = null;
     let that = this;
@@ -107,34 +103,16 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ProductTypeAttributeComponent ngOnInit type', this.masterObject);
+    LogUtil.debug('ProductTypeAttributeComponent ngOnInit type', this.masterObject);
   }
 
   ngOnChanges(changes:any) {
-    console.debug('ProductTypeAttributeComponent ngOnChanges', changes);
+    LogUtil.debug('ProductTypeAttributeComponent ngOnChanges', changes);
     this.delayedFiltering.delay();
   }
 
-  private loadData() {
-    if (this.masterObject && this._objectAttributes) {
-
-      console.debug('ProductTypeAttributeComponent attributes', this._objectAttributes);
-      this.objectAttributesRemove = [];
-      this.filterAttributes();
-
-    } else {
-
-      this.objectAttributesRemove = null;
-      this.filteredObjectAttributes = [];
-
-    }
-
-    this.changed = false;
-    this.onSelectRow(null);
-  }
-
   public onRowAdd() {
-    console.debug('ProductTypeAttributeComponent onRowAdd handler');
+    LogUtil.debug('ProductTypeAttributeComponent onRowAdd handler');
 
     var _attr:ProductTypeAttrVO = {
       productTypeAttrId: 0, producttypeId: this.masterObject.producttypeId,
@@ -167,7 +145,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   }
 
   protected onRowDelete(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeAttributeComponent onRowDelete handler', row);
+    LogUtil.debug('ProductTypeAttributeComponent onRowDelete handler', row);
     this.deleteConfirmationModalDialog.show();
   }
 
@@ -178,7 +156,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   }
 
   protected onRowEdit(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeAttributeComponent onRowEdit handler', row);
+    LogUtil.debug('ProductTypeAttributeComponent onRowEdit handler', row);
     this.validForSave = false;
     this.enableEditRanges = false;
     this.attributeToEdit = Util.clone(row);
@@ -195,7 +173,7 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   }
 
   protected onSelectRow(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeAttributeComponent onSelectRow handler', row);
+    LogUtil.debug('ProductTypeAttributeComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -226,29 +204,11 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     let rank = this.attributeToEdit.rank;
     this.validForSave = !isNaN(rank);
 
-    console.debug('ProductTypeAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-  private processDataChangesEvent() {
-
-    console.debug('ProductTypeAttributeComponent data changes', this.masterObject);
-    if (this.masterObject && this._objectAttributes) {
-
-      let _update = <Array<Pair<ProductTypeAttrVO, boolean>>>[];
-      this._objectAttributes.forEach(attr => {
-        _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
-      });
-
-      console.debug('ProductTypeAttributeComponent data changes update', _update);
-
-      this.dataChanged.emit({ source: _update, valid: this.validForSave });
-
-    }
-
+    LogUtil.debug('ProductTypeAttributeComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ProductTypeAttributeComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ProductTypeAttributeComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let attrToDelete = this.selectedRow.productTypeAttrId;
       if (attrToDelete === 0) {
@@ -257,10 +217,11 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
         });
         this._objectAttributes.splice(idx, 1);
         this.objectAttributes = this._objectAttributes.slice(0, this._objectAttributes.length);  // reset to propagate changes
-        console.debug('ProductTypeAttributeComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
+        LogUtil.debug('ProductTypeAttributeComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
       } else {
-        console.debug('ProductTypeAttributeComponent onDeleteConfirmationResult attribute ' + attrToDelete);
+        LogUtil.debug('ProductTypeAttributeComponent onDeleteConfirmationResult attribute ' + attrToDelete);
         this.objectAttributesRemove.push(attrToDelete);
+        this.objectAttributesEdit.push(attrToDelete);
       }
       this.filterAttributes();
       this.onSelectRow(null);
@@ -270,10 +231,10 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   }
 
   protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('ProductTypeAttributeComponent onEditModalResult modal result is ', modalresult);
+    LogUtil.debug('ProductTypeAttributeComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.attributeToEdit.productTypeAttrId === 0) { // add new
-        console.debug('ProductTypeAttributeComponent onEditModalResult add new attribute', this._objectAttributes);
+        LogUtil.debug('ProductTypeAttributeComponent onEditModalResult add new attribute', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.attribute.code === this.attributeToEdit.attribute.code;} );
         if (idx != -1) {
           this._objectAttributes[idx] = this.attributeToEdit;
@@ -281,9 +242,10 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
           this._objectAttributes.push(this.attributeToEdit);
         }
       } else { // edit existing
-        console.debug('ProductTypeAttributeComponent onEditModalResult update existing', this._objectAttributes);
+        LogUtil.debug('ProductTypeAttributeComponent onEditModalResult update existing', this._objectAttributes);
         let idx = this._objectAttributes.findIndex(attrVo =>  {return attrVo.productTypeAttrId === this.attributeToEdit.productTypeAttrId;} );
         this._objectAttributes[idx] = this.attributeToEdit;
+        this.objectAttributesEdit.push(this.attributeToEdit.productTypeAttrId);
       }
       this.selectedRow = this.attributeToEdit;
       this.changed = true;
@@ -294,46 +256,12 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     }
   }
 
-  private filterAttributes() {
-    let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
-    let _si = this._attributeFilter === '#SI';
-    let _vis = this._attributeFilter === '+V';
-    let _inv = this._attributeFilter === '-V';
-    if (_vis || _inv) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-        (_vis && val.visible) || (_inv && !val.visible)
-      );
-      console.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
-    } else if (_si) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-        val.store || val.search || val.primary || val.navigation
-      );
-      console.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
-    } else if (_filter) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
-        val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
-        val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
-        val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1
-      );
-      console.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
-    } else {
-      this.filteredObjectAttributes = this._objectAttributes;
-      console.debug('ProductTypeAttributeComponent filterAttributes no filter', this.filteredObjectAttributes);
-    }
-
-    if (this.filteredObjectAttributes === null) {
-      this.filteredObjectAttributes = [];
-    }
-
-    let _total = this.filteredObjectAttributes.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   isRemovedAttribute(row:ProductTypeAttrVO):boolean {
     return this.objectAttributesRemove.indexOf(row.productTypeAttrId) !== -1;
+  }
+
+  isEditedAttribute(row:ProductTypeAttrVO):boolean {
+    return this.objectAttributesEdit.indexOf(row.productTypeAttrId) !== -1;
   }
 
   isNewAttribute(row:ProductTypeAttrVO):boolean {
@@ -341,10 +269,14 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
   }
 
 
-  getAttributeColor(row:ProductTypeAttrVO, removed:string, added:string, prestine:string) {
+  getAttributeColor(row:ProductTypeAttrVO, removed:string, edited:string, added:string, prestine:string) {
 
     if (this.isRemovedAttribute(row)) {
       return removed;
+    }
+
+    if (this.isEditedAttribute(row)) {
+      return edited;
     }
 
     if (this.isNewAttribute(row)) {
@@ -430,6 +362,89 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     this.attributeToEdit.rangeNavigation.ranges.splice(idx, 1);
     this.attributeToEdit.rangeNavigation.ranges = this.attributeToEdit.rangeNavigation.ranges.slice(0, this.attributeToEdit.rangeNavigation.ranges.length);
     this.onDataChange(this.attributeToEdit.rangeNavigation.ranges);
+  }
+
+  private loadData() {
+    if (this.masterObject && this._objectAttributes) {
+
+      LogUtil.debug('ProductTypeAttributeComponent attributes', this._objectAttributes);
+      this.objectAttributesRemove = [];
+      this.objectAttributesEdit = [];
+      this.filterAttributes();
+
+    } else {
+
+      this.objectAttributesRemove = null;
+      this.objectAttributesEdit = null;
+      this.filteredObjectAttributes = [];
+
+    }
+
+    this.changed = false;
+    this.onSelectRow(null);
+  }
+
+  private processDataChangesEvent() {
+
+    LogUtil.debug('ProductTypeAttributeComponent data changes', this.masterObject);
+    if (this.masterObject && this._objectAttributes) {
+
+      let _update = <Array<Pair<ProductTypeAttrVO, boolean>>>[];
+      this._objectAttributes.forEach(attr => {
+        _update.push(new Pair(attr, this.isRemovedAttribute(attr)));
+      });
+
+      LogUtil.debug('ProductTypeAttributeComponent data changes update', _update);
+
+      this.dataChanged.emit({ source: _update, valid: this.validForSave });
+
+    }
+
+  }
+
+
+  private filterAttributes() {
+    let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
+    let _si = this._attributeFilter === '#SI';
+    let _vis = this._attributeFilter === '+V';
+    let _inv = this._attributeFilter === '-V';
+    let _delta = this._attributeFilter === '###';
+    if (_vis || _inv) {
+      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        (_vis && val.visible) || (_inv && !val.visible)
+      );
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+    } else if (_si) {
+      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        val.store || val.search || val.primary || val.navigation
+      );
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' + _filter, this.filteredObjectAttributes);
+    } else if (_delta) {
+      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        this.isEditedAttribute(val) || this.isRemovedAttribute(val) || this.isNewAttribute(val)
+      );
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+    } else if (_filter) {
+      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
+        val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
+        val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1
+      );
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+    } else {
+      this.filteredObjectAttributes = this._objectAttributes;
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes no filter', this.filteredObjectAttributes);
+    }
+
+    if (this.filteredObjectAttributes === null) {
+      this.filteredObjectAttributes = [];
+    }
+
+    let _total = this.filteredObjectAttributes.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

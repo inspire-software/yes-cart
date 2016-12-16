@@ -13,20 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO, ShopCarrierVO, CarrierLocaleVO} from './../../shared/model/index';
-import {ShippingService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO, ShopCarrierVO, CarrierLocaleVO } from './../../shared/model/index';
+import { ShippingService, Util } from './../../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-carrier',
   moduleId: module.id,
   templateUrl: './shop-carrier.component.html',
-  directives: [ NgIf, NgFor, DataControlComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 export class ShopCarrierComponent implements OnInit, OnDestroy {
@@ -34,23 +33,23 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopCarriersVO:Array<ShopCarrierVO>;
-  availableCarriers:Array<ShopCarrierVO>;
-  selectedCarriers:Array<ShopCarrierVO>;
+  private shopCarriersVO:Array<ShopCarrierVO>;
+  private availableCarriers:Array<ShopCarrierVO>;
+  private selectedCarriers:Array<ShopCarrierVO>;
 
-  changed:boolean = false;
+  private changed:boolean = false;
 
-  newCarrier:CarrierLocaleVO;
+  private newCarrier:CarrierLocaleVO;
   @ViewChild('editNewCarrierName')
-  editNewCarrierName:ModalComponent;
-  newCarrierForm:any;
-  newCarrierFormSub:any;
-  changedSingle:boolean = true;
-  validForSave:boolean = false;
+  private editNewCarrierName:ModalComponent;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private newCarrierForm:any;
+  private newCarrierFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForSave:boolean = false;
 
   constructor(private _shippingService:ShippingService,
               fb: FormBuilder) {
-    console.debug('ShopCarrierComponent constructor');
+    LogUtil.debug('ShopCarrierComponent constructor');
 
     this.newCarrier = this.newCarrierInstance();
 
@@ -80,12 +79,12 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopCarrierComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopCarrierComponent ngOnInit shop', this.shop);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ShopCarrierComponent ngOnDestroy');
+    LogUtil.debug('ShopCarrierComponent ngOnDestroy');
     this.formUnbind();
   }
 
@@ -93,37 +92,98 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     return { carrierId: 0, name: '', description: null, displayNames: [], displayDescriptions: [] };
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.newCarrierForm.controls) {
-      this.newCarrierForm.controls[key]['_pristine'] = true;
-      this.newCarrierForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.newCarrierFormSub = this.newCarrierForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.newCarrierForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'newCarrierForm', 'newCarrierFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
-    if (this.newCarrierFormSub) {
-      console.debug('ShopCarrierComponent unbining form');
-      this.newCarrierFormSub.unsubscribe();
+    UiUtil.formUnbind(this, 'newCarrierFormSub');
+  }
+
+  formChange():void {
+    LogUtil.debug('ShopCarrierComponent formChange', this.newCarrierForm.valid, this.newCarrier);
+    this.validForSave = this.newCarrierForm.valid;
+  }
+
+  onDataChange() {
+    LogUtil.debug('ShopCarrierComponent data changed');
+    this.changed = true;
+  }
+
+  /**
+   * Fast create new category.
+   * @param parent parent of new catecory
+   */
+  createNew() {
+    LogUtil.debug('ShopCarrierComponent createNew');
+    this.validForSave = false;
+    UiUtil.formInitialise(this, 'initialising', 'newCarrierForm', 'newCarrier', this.newCarrierInstance());
+    this.editNewCarrierName.show();
+  }
+
+  /**
+   * Handle result of new category modal dialog.
+   * @param modalresult
+   */
+  editNewCarrierNameModalResult(modalresult:ModalResult) {
+    LogUtil.debug('ShopCarrierComponent editNewCarrierNameModalResult modal result', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      this._shippingService.createCarrier(this.newCarrier, this.shop.shopId).subscribe(
+          carVo => {
+            this.validForSave = false;
+            this.onRefreshHandler();
+        }
+      );
+
     }
   }
 
 
-  onFormDataChange(event:any) {
-    console.debug('ShopCarrierComponent data changed', event);
-    this.changedSingle = true;
+  onSaveHandler() {
+    LogUtil.debug('ShopCarrierComponent Save handler', this.shop);
+    if (this.shop.shopId > 0 && this.shopCarriersVO) {
+      var _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
+        this.shopCarriersVO = Util.clone(shopLanguagesVo);
+        this.remapCarriers();
+        this.changed = false;
+        this._reload = false;
+        _sub.unsubscribe();
+      });
+    }
   }
 
-  onDataChange() {
-    console.debug('ShopCarrierComponent data changed');
+  onDiscardEventHandler() {
+    LogUtil.debug('ShopCarrierComponent discard handler', this.shop);
+    this.onRefreshHandler();
+  }
+
+  onRefreshHandler() {
+    LogUtil.debug('ShopCarrierComponent refresh handler', this.shop);
+    if (this.shop.shopId > 0) {
+      var _sub:any = this._shippingService.getShopCarriers(this.shop.shopId).subscribe(shopCarriersVo => {
+        LogUtil.debug('ShopCarrierComponent getShopCarriers', shopCarriersVo);
+        this.shopCarriersVO  = Util.clone(shopCarriersVo);
+        this.remapCarriers();
+        this.changed = false;
+        this._reload = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.shopCarriersVO = null;
+    }
+  }
+
+  onAvailableCarrierClick(event:any) {
+    LogUtil.debug('ShopCarrierComponent onAvailableCarrierClick', event);
+    event.carrierShop.disabled = false;
+    this.remapCarriers();
+    this.changed = true;
+  }
+
+  onSupportedCarrierClick(event:any) {
+    LogUtil.debug('ShopCarrierComponent onSupportedCarrierClick', event);
+    event.carrierShop.disabled = true;
+    this.remapCarriers();
     this.changed = true;
   }
 
@@ -154,83 +214,6 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
     this.selectedCarriers = selectedCarriers;
     this.availableCarriers = availableCarriers;
 
-  }
-  /**
-   * Fast create new category.
-   * @param parent parent of new catecory
-   */
-  createNew() {
-    console.debug('ShopCarrierComponent createNew');
-    this.changedSingle = false;
-    this.validForSave = false;
-    this.newCarrier = this.newCarrierInstance();
-    this.formReset();
-    this.editNewCarrierName.show();
-  }
-
-  /**
-   * Handle result of new category modal dialog.
-   * @param modalresult
-   */
-  editNewCarrierNameModalResult(modalresult:ModalResult) {
-    console.debug('ShopCarrierComponent editNewCarrierNameModalResult modal result', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      this._shippingService.createCarrier(this.newCarrier, this.shop.shopId).subscribe(
-          carVo => {
-          this.onRefreshHandler();
-        }
-      );
-
-    }
-  }
-
-
-  onSaveHandler() {
-    console.debug('ShopCarrierComponent Save handler', this.shop);
-    if (this.shop.shopId > 0 && this.shopCarriersVO) {
-      var _sub:any = this._shippingService.saveShopCarriers(this.shopCarriersVO).subscribe(shopLanguagesVo => {
-        this.shopCarriersVO = Util.clone(shopLanguagesVo);
-        this.remapCarriers();
-        this.changed = false;
-        this._reload = false;
-        _sub.unsubscribe();
-      });
-    }
-  }
-
-  onDiscardEventHandler() {
-    console.debug('ShopCarrierComponent discard handler', this.shop);
-    this.onRefreshHandler();
-  }
-
-  onRefreshHandler() {
-    console.debug('ShopCarrierComponent refresh handler', this.shop);
-    if (this.shop.shopId > 0) {
-      var _sub:any = this._shippingService.getShopCarriers(this.shop.shopId).subscribe(shopCarriersVo => {
-        console.debug('ShopCarrierComponent getShopCarriers', shopCarriersVo);
-        this.shopCarriersVO  = Util.clone(shopCarriersVo);
-        this.remapCarriers();
-        this.changed = false;
-        this._reload = false;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.shopCarriersVO = null;
-    }
-  }
-
-  onAvailableCarrierClick(event:any) {
-    console.debug('ShopCarrierComponent onAvailableCarrierClick', event);
-    event.carrierShop.disabled = false;
-    this.remapCarriers();
-    this.changed = true;
-  }
-
-  onSupportedCarrierClick(event:any) {
-    console.debug('ShopCarrierComponent onSupportedCarrierClick', event);
-    event.carrierShop.disabled = true;
-    this.remapCarriers();
-    this.changed = true;
   }
 
 }

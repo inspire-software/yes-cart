@@ -168,7 +168,7 @@ public class DtoProductServiceImpl
         return null;
     }
 
-    private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?' };
+    private final static char[] TAG_OR_CODE_OR_BRAND_OR_TYPE = new char[] { '#', '?', '!' };
     private final static char[] AVAILABILITY = new char[] { '@' };
     static {
         Arrays.sort(TAG_OR_CODE_OR_BRAND_OR_TYPE);
@@ -211,7 +211,17 @@ public class DtoProductServiceImpl
 
                 if (tagOrCodeOrBrandOrType != null) {
 
-                    if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
+                    if ("!".equals(tagOrCodeOrBrandOrType.getFirst())) {
+
+                        criteria.add(Restrictions.or(
+                                Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT)
+                        ));
+
+                    } else if ("#".equals(tagOrCodeOrBrandOrType.getFirst())) {
 
                         criteria.add(Restrictions.or(
                                 Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),

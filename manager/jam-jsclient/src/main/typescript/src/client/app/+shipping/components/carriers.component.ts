@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CarrierVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { CarrierVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-carriers',
   moduleId: module.id,
   templateUrl: 'carriers.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class CarriersComponent implements OnInit, OnDestroy {
-
-  _carriers:Array<CarrierVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredCarriers:Array<CarrierVO>;
 
   @Input() selectedCarrier:CarrierVO;
 
   @Output() dataSelected: EventEmitter<CarrierVO> = new EventEmitter<CarrierVO>();
 
+  private _carriers:Array<CarrierVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredCarriers:Array<CarrierVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('CarriersComponent constructed');
+    LogUtil.debug('CarriersComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterCarriers();
@@ -61,7 +59,7 @@ export class CarriersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('CarriersComponent ngOnInit');
+    LogUtil.debug('CarriersComponent ngOnInit');
   }
 
   @Input()
@@ -76,31 +74,8 @@ export class CarriersComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterCarriers() {
-    if (this._filter) {
-      this.filteredCarriers = this._carriers.filter(carrier =>
-          carrier.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          carrier.description && carrier.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('CarriersComponent filterCarriers', this._filter);
-    } else {
-      this.filteredCarriers = this._carriers;
-      console.debug('CarriersComponent filterCarriers no filter');
-    }
-
-    if (this.filteredCarriers === null) {
-      this.filteredCarriers = [];
-    }
-
-    let _total = this.filteredCarriers.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('CarriersComponent ngOnDestroy');
+    LogUtil.debug('CarriersComponent ngOnDestroy');
     this.selectedCarrier = null;
     this.dataSelected.emit(null);
   }
@@ -125,13 +100,36 @@ export class CarriersComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:CarrierVO) {
-    console.debug('CarriersComponent onSelectRow handler', row);
+    LogUtil.debug('CarriersComponent onSelectRow handler', row);
     if (row == this.selectedCarrier) {
       this.selectedCarrier = null;
     } else {
       this.selectedCarrier = row;
     }
     this.dataSelected.emit(this.selectedCarrier);
+  }
+
+  private filterCarriers() {
+    if (this._filter) {
+      this.filteredCarriers = this._carriers.filter(carrier =>
+        carrier.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        carrier.description && carrier.description.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('CarriersComponent filterCarriers', this._filter);
+    } else {
+      this.filteredCarriers = this._carriers;
+      LogUtil.debug('CarriersComponent filterCarriers no filter');
+    }
+
+    if (this.filteredCarriers === null) {
+      this.filteredCarriers = [];
+    }
+
+    let _total = this.filteredCarriers.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

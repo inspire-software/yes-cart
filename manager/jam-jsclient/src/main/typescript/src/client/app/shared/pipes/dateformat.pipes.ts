@@ -29,7 +29,7 @@ export class YcDatePipe implements PipeTransform {
       return '';
     }
 
-    //console.debug('ycdatetime formatting', value);
+    //LogUtil.debug('ycdatetime formatting', value);
     return UiUtil.toDateString(value, false);
 
   }
@@ -43,7 +43,7 @@ export class YcDateTimePipe implements PipeTransform {
       return '';
     }
 
-    //console.debug('ycdatetime formatting', value);
+    //LogUtil.debug('ycdatetime formatting', value);
     return UiUtil.toDateString(value, true);
   }
 }

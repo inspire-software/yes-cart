@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {AttributeGroupVO} from './../../../shared/model/index';
-import {PaginationComponent} from './../../../shared/pagination/index';
-import {Futures, Future} from './../../../shared/event/index';
-import {Config} from './../../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { AttributeGroupVO } from './../../../shared/model/index';
+import { Futures, Future } from './../../../shared/event/index';
+import { Config } from './../../../shared/config/env.config';
+import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
   selector: 'yc-attribute-groups',
   moduleId: module.id,
   templateUrl: 'attribute-groups.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class AttributeGroupsComponent implements OnInit, OnDestroy {
-
-  _groups:Array<AttributeGroupVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredGroups:Array<AttributeGroupVO>;
 
   @Input() selectedGroup:AttributeGroupVO;
 
   @Output() dataSelected: EventEmitter<AttributeGroupVO> = new EventEmitter<AttributeGroupVO>();
 
+  private _groups:Array<AttributeGroupVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredGroups:Array<AttributeGroupVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('AttributeGroupsComponent constructed');
+    LogUtil.debug('AttributeGroupsComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterGroups();
@@ -60,7 +58,7 @@ export class AttributeGroupsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('AttributeGroupsComponent ngOnInit');
+    LogUtil.debug('AttributeGroupsComponent ngOnInit');
   }
 
   @Input()
@@ -75,32 +73,8 @@ export class AttributeGroupsComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterGroups() {
-    if (this._filter) {
-      this.filteredGroups = this._groups.filter(group =>
-          group.code.toLowerCase().indexOf(this._filter) !== -1 ||
-          group.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          group.description && group.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('AttributeGroupsComponent filterGroups', this._filter);
-    } else {
-      this.filteredGroups = this._groups;
-      console.debug('AttributeGroupsComponent filterGroups no filter');
-    }
-
-    if (this.filteredGroups === null) {
-      this.filteredGroups = [];
-    }
-
-    let _total = this.filteredGroups.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('AttributeGroupsComponent ngOnDestroy');
+    LogUtil.debug('AttributeGroupsComponent ngOnDestroy');
     this.selectedGroup = null;
     this.dataSelected.emit(null);
   }
@@ -125,13 +99,37 @@ export class AttributeGroupsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttributeGroupVO) {
-    console.debug('AttributeGroupsComponent onSelectRow handler', row);
+    LogUtil.debug('AttributeGroupsComponent onSelectRow handler', row);
     if (row == this.selectedGroup) {
       this.selectedGroup = null;
     } else {
       this.selectedGroup = row;
     }
     this.dataSelected.emit(this.selectedGroup);
+  }
+
+  private filterGroups() {
+    if (this._filter) {
+      this.filteredGroups = this._groups.filter(group =>
+        group.code.toLowerCase().indexOf(this._filter) !== -1 ||
+        group.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        group.description && group.description.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('AttributeGroupsComponent filterGroups', this._filter);
+    } else {
+      this.filteredGroups = this._groups;
+      LogUtil.debug('AttributeGroupsComponent filterGroups no filter');
+    }
+
+    if (this.filteredGroups === null) {
+      this.filteredGroups = [];
+    }
+
+    let _total = this.filteredGroups.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

@@ -13,41 +13,36 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../../shared/validation/validators';
-import {EtypeVO, AttributeVO, ValidationRequestVO} from './../../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../../shared/event/index';
-import {I18nComponent} from './../../../shared/i18n/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../../shared/validation/validators';
+import { EtypeVO, AttributeVO, ValidationRequestVO } from './../../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../../shared/event/index';
+import { UiUtil } from './../../../shared/ui/index';
+import { LogUtil } from './../../../shared/log/index';
 
 @Component({
   selector: 'yc-attribute',
   moduleId: module.id,
   templateUrl: 'attribute.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, I18nComponent],
 })
 
 export class AttributeComponent implements OnInit, OnDestroy {
 
-  @Input()
-  etypes:Array<EtypeVO> = [];
-
-  _attribute:AttributeVO;
+  @Input() etypes:Array<EtypeVO> = [];
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<AttributeVO>> = new EventEmitter<FormValidationEvent<AttributeVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _attribute:AttributeVO;
 
-  attributeForm:any;
-  attributeFormSub:any;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private attributeForm:any;
+  private attributeFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('AttributeComponent constructed');
+    LogUtil.debug('AttributeComponent constructed');
 
     let that = this;
 
@@ -55,8 +50,9 @@ export class AttributeComponent implements OnInit, OnDestroy {
 
       let basic = Validators.required(control);
       if (basic == null) {
+
         let code = control.value;
-        if (!that.changed || that._attribute == null) {
+        if (that._attribute == null || !that.attributeForm || (!that.attributeForm.dirty && that._attribute.attributeId > 0)) {
           return null;
         }
 
@@ -89,6 +85,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
       'search': [''],
       'primary': [''],
       'navigation': [''],
+      'name': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -96,80 +93,73 @@ export class AttributeComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.attributeForm.controls) {
-      this.attributeForm.controls[key]['_pristine'] = true;
-      this.attributeForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.attributeFormSub = this.attributeForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.attributeForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'attributeForm', 'attributeFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.attributeFormSub) {
-      console.debug('AttributeComponent unbining form');
-      this.attributeFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'attributeFormSub');
   }
 
   formChange():void {
-    console.debug('AttributeComponent validating formGroup is valid: ' + this.validForSave, this._attribute);
-    this.dataChanged.emit({ source: this._attribute, valid: this.validForSave });
+    LogUtil.debug('AttributeComponent formChange', this.attributeForm.valid, this._attribute);
+    this.dataChanged.emit({ source: this._attribute, valid: this.attributeForm.valid });
   }
 
   @Input()
   set attribute(attribute:AttributeVO) {
-    this._attribute = attribute;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'attributeForm', '_attribute', attribute, attribute != null && attribute.attributeId > 0, ['code']);
+
   }
 
   get attribute():AttributeVO {
     return this._attribute;
   }
 
-  onDataChange(event:any) {
-    console.debug('AttributeComponent data changed', this._attribute);
-    this.changed = true;
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'attributeForm', 'name', event);
+  }
+
+  onRegExpDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'attributeForm', 'regexp', event);
+  }
+
+  onValDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'attributeForm', 'val', event);
   }
 
   onDataChangePrimary(event:any) {
-    console.debug('AttributeComponent data changed', this._attribute);
+    LogUtil.debug('AttributeComponent data changed', this._attribute);
     if (this._attribute.primary && !this._attribute.search) {
-      this._attribute.search = true;
+      setTimeout(() => {
+        this._attribute.search = true;
+      }, 100);
     }
-    this.changed = true;
   }
 
   onDataChangeSearch(event:any) {
-    console.debug('AttributeComponent data changed', this._attribute);
+    LogUtil.debug('AttributeComponent data changed', this._attribute);
     if (this._attribute.primary && !this._attribute.search) {
-      this._attribute.primary = false;
+      setTimeout(() => {
+        this._attribute.primary = false;
+      }, 100);
     }
-    this.changed = true;
   }
 
   ngOnInit() {
-    console.debug('AttributeComponent ngOnInit');
+    LogUtil.debug('AttributeComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('AttributeComponent ngOnDestroy');
+    LogUtil.debug('AttributeComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('AttributeComponent tabSelected', tab);
+    LogUtil.debug('AttributeComponent tabSelected', tab);
   }
 
 

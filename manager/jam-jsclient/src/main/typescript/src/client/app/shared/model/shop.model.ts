@@ -19,8 +19,8 @@
  */
 
 
-import {Pair} from './common.model';
-import {AttrValueVO} from './attribute.model';
+import { Pair } from './common.model';
+import { AttrValueVO } from './attribute.model';
 
 /**
  * Represent simple data about shop

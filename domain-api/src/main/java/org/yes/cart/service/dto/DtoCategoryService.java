@@ -33,9 +33,7 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
     /**
      * Get categories by criteria.
      *
-     * @param code code (GUID)
-     * @param name base name
-     * @param uri URI
+     * @param filter filter
      * @param page page number starting from 0
      * @param pageSize size of page
      *
@@ -44,7 +42,7 @@ public interface DtoCategoryService extends GenericDTOService<CategoryDTO>, Gene
      * @throws UnmappedInterfaceException
      * @throws UnableToCreateInstanceException
      */
-    List<CategoryDTO> findBy(String code, String name, String uri, int page, int pageSize)
+    List<CategoryDTO> findBy(String filter, int page, int pageSize)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**

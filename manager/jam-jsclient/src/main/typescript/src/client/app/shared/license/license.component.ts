@@ -13,9 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit} from '@angular/core';
-import {ManagementService} from './../services/index';
-import {LicenseAgreementVO} from './../model/index';
+import { Component, OnInit } from '@angular/core';
+import { ManagementService } from './../services/index';
+import { LicenseAgreementVO } from './../model/index';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-license',
@@ -29,14 +30,14 @@ export class LicenseComponent implements OnInit {
   private license:LicenseAgreementVO;
 
   constructor(private _managementService:ManagementService) {
-    console.debug('LicenseComponent constructed');
+    LogUtil.debug('LicenseComponent constructed');
   }
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('LicenseComponent ngOnInit');
+    LogUtil.debug('LicenseComponent ngOnInit');
     var _sub:any = this._managementService.getMyAgreement().subscribe(license => {
-      console.debug('LicenseComponent event', license);
+      LogUtil.debug('LicenseComponent event', license);
       this.license = license;
       _sub.unsubscribe();
     });

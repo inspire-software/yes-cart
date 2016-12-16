@@ -11,7 +11,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CODE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="productType.guid" (ngModelChange)="onMainDataChange($event)"/>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="productType.guid"/>
                   <div [hidden]="productTypeForm.controls['guid'].valid || productTypeForm.controls['guid'].pristine" class="alert alert-danger">
                     <div [hidden]="!productTypeForm.controls['guid'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}
@@ -24,14 +24,14 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'NAME' | translate }}</label>
-                  <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="productType.name" (ngModelChange)="onMainDataChange($event)">
+                  <input autofocus class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text" [(ngModel)]="productType.name">
                   <div [hidden]="productTypeForm.controls['name'].valid || productTypeForm.controls['name'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="productType.description" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" type="text" [(ngModel)]="productType.description">
                 </div>
               </fieldset>
 
@@ -48,14 +48,14 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="productType.uitemplate">
                   <div [hidden]="productTypeForm.controls['uitemplate'].valid || productTypeForm.controls['uitemplate'].pristine" class="alert alert-danger">
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'PRODUCT_TYPE_UISEARCHTEMPLATE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [(ngModel)]="productType.uisearchtemplate" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'PRODUCT_TYPE_UITEMPLATE' | translate }}" formControlName="uisearchtemplate" name="uisearchtemplate" type="text" [(ngModel)]="productType.uisearchtemplate">
                   <div [hidden]="productTypeForm.controls['uisearchtemplate'].valid || productTypeForm.controls['uisearchtemplate'].pristine" class="alert alert-danger">
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
@@ -73,19 +73,19 @@
             <div class="panel-body">
               <fieldset>
                 <div>
-                  <input formControlName="ensemble" name="ensemble" type="checkbox" [(ngModel)]="productType.ensemble" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="ensemble" name="ensemble" type="checkbox" [(ngModel)]="productType.ensemble">
                   <label>{{ 'PRODUCT_TYPE_FLAG_ENSEMBLE' | translate }}</label>
                 </div>
                 <div>
-                  <input formControlName="shippable" name="shippable" type="checkbox" [(ngModel)]="productType.shippable" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="shippable" name="shippable" type="checkbox" [(ngModel)]="productType.shippable">
                   <label>{{ 'PRODUCT_TYPE_FLAG_SHIPPABLE' | translate }}</label>
                 </div>
                 <div>
-                  <input formControlName="downloadable" name="downloadable" type="checkbox" [(ngModel)]="productType.downloadable" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="downloadable" name="downloadable" type="checkbox" [(ngModel)]="productType.downloadable">
                   <label>{{ 'PRODUCT_TYPE_FLAG_DOWNLOADABLE' | translate }}</label>
                 </div>
                 <div>
-                  <input formControlName="digital" name="digital" type="checkbox" [(ngModel)]="productType.digital" (ngModelChange)="onMainDataChange($event)">
+                  <input formControlName="digital" name="digital" type="checkbox" [(ngModel)]="productType.digital">
                   <label>{{ 'PRODUCT_TYPE_FLAG_DIGITAL' | translate }}</label>
                 </div>
               </fieldset>
@@ -94,7 +94,19 @@
         </div>
       </tab>
 
-      <tab heading="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"  (select)="tabSelected('Groups')">
+      <tab heading="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}" (select)="tabSelected('Groups')">
+
+        <template [ngIf]="!(productType.producttypeId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
 
         <template [ngIf]="productType.producttypeId > 0">
           <div class="panel-body">
@@ -103,17 +115,18 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="groupFilter" [(ngModel)]="groupFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onClearFilterGroup()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
                 </form>
 
-                <button type="button" (click)="onGroupRowAdd()" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onGroupRowAdd()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 
-                <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onGroupRowEditSelected()" [disabled]="groupSelectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                <button type="button" (click)="onGroupRowDeleteSelected()" [disabled]="groupSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
@@ -133,8 +146,19 @@
         </template>
       </tab>
 
+      <tab heading="{{ 'TAB_TYPE_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
-      <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
+        <template [ngIf]="!(productType.producttypeId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
 
         <template [ngIf]="productType.producttypeId > 0">
 
@@ -144,18 +168,19 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
-                  <a class="js-click" (click)="onSearchHelpToggle()"><i class="fa fa-question-circle"></i></a>
+                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onAttributeRowAdd()" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onAttributeRowAdd()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 
-                <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onAttributeRowEditSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                <button type="button" (click)="onAttributeRowDeleteSelected()" [disabled]="attributeSelectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
@@ -163,10 +188,11 @@
             </div>
 
             <div class="row" *ngIf="searchHelpShow">
-              <div class="bg-info text-padding">
+              <div class="bg-info text-padding block-margin-spacer">
                 <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_SI' | translate }} <span><button type="button" (click)="onAttributeSearchIndexFilter()" class="btn btn-circle"><i class="fa fa-search"></i></button></span></p>
                 <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE' | translate }} <span><button type="button" (click)="onAttributeVisibleFilter()" class="btn btn-circle"><i class="fa fa-eye"></i></button></span></p>
                 <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_INVISIBLE' | translate }} <span><button type="button" (click)="onAttributeInvisibleFilter()" class="btn btn-circle"><i class="fa fa-eye-slash"></i></button></span></p>
+                <p>{{ 'SEARCH_HELP_PRODUCTTYPE_ATTR_CHANGES' | translate }} <span><button type="button" (click)="onAttributeChangesFilter()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
               </div>
             </div>
 

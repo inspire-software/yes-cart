@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { AllCustomerOrdersComponent, AllPaymentsComponent } from './index';
 
-export const CustomerOrdersRoutes: RouterConfig = [
+export const CustomerOrdersRoutes: Route[] = [
   {
     path: 'customerorder/allorders',
     component: AllCustomerOrdersComponent

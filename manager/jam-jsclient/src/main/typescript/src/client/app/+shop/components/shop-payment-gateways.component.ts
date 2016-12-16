@@ -13,16 +13,14 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {ShopVO} from './../../shared/model/index';
-import {PaymentGatewaysComponent} from './../../+system/payment/index';
+import { Component, OnInit, Input } from '@angular/core';
+import { ShopVO } from './../../shared/model/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-payment-gateways',
   moduleId: module.id,
   templateUrl: 'shop-payment-gateways.component.html',
-  directives: [CORE_DIRECTIVES, PaymentGatewaysComponent]
 })
 
 export class ShopPaymentGatewaysComponent implements OnInit {
@@ -37,7 +35,7 @@ export class ShopPaymentGatewaysComponent implements OnInit {
    * @param _shopService shop service
    */
   constructor() {
-    console.debug('ShopPaymentGatewaysComponent constructed');
+    LogUtil.debug('ShopPaymentGatewaysComponent constructed');
   }
 
   @Input()
@@ -70,7 +68,7 @@ export class ShopPaymentGatewaysComponent implements OnInit {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ShopPaymentGatewaysComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopPaymentGatewaysComponent ngOnInit shop', this.shop);
   }
 
 }

@@ -13,17 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {ShopVO, ShopLanguagesVO} from './../../shared/model/index';
-import {ShopService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
+import { Component, OnInit, Input } from '@angular/core';
+import { ShopVO, ShopLanguagesVO } from './../../shared/model/index';
+import { ShopService, Util } from './../../shared/services/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-language',
   moduleId: module.id,
   templateUrl: './shop-language.component.html',
-  directives: [ NgIf, NgFor, DataControlComponent],
 })
 
 export class ShopLanguageComponent implements OnInit {
@@ -31,13 +29,13 @@ export class ShopLanguageComponent implements OnInit {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopLanguagesVO:ShopLanguagesVO;
-  lang:ShopLanguagesVO;
+  private shopLanguagesVO:ShopLanguagesVO;
+  private lang:ShopLanguagesVO;
 
-  changed:boolean = false;
+  private changed:boolean = false;
 
   constructor(private _shopService:ShopService) {
-    console.debug('ShopLanguageComponent constructor');
+    LogUtil.debug('ShopLanguageComponent constructor');
   }
 
   @Input()
@@ -61,17 +59,17 @@ export class ShopLanguageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('ShopLanguageComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopLanguageComponent ngOnInit shop', this.shop);
   }
 
 
   onDataChange() {
-    console.debug('ShopLanguageComponent data changed');
+    LogUtil.debug('ShopLanguageComponent data changed');
     this.changed = true;
   }
 
   onSaveHandler() {
-    console.debug('ShopLanguageComponent Save handler', this.shop);
+    LogUtil.debug('ShopLanguageComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.lang) {
       var _sub:any = this._shopService.saveShopLanguages(this.lang).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO = Util.clone(shopLanguagesVo);
@@ -87,7 +85,7 @@ export class ShopLanguageComponent implements OnInit {
   }
 
   onDiscardEventHandler() {
-    console.debug('ShopLanguageComponent discard handler', this.shop);
+    LogUtil.debug('ShopLanguageComponent discard handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLanguagesVO) {
       this.lang = Util.clone(this.shopLanguagesVO);
       this.lang.all = this.lang.all.filter(obj => {
@@ -98,7 +96,7 @@ export class ShopLanguageComponent implements OnInit {
   }
 
   onRefreshHandler() {
-    console.debug('ShopLanguageComponent refresh handler', this.shop);
+    LogUtil.debug('ShopLanguageComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShopLanguages(this.shop.shopId).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO  = Util.clone(shopLanguagesVo);
@@ -116,14 +114,14 @@ export class ShopLanguageComponent implements OnInit {
   }
 
   onAvailableLanguageClick(event:any) {
-    console.debug('ShopLanguageComponent onAvailableLanguageClick', event);
+    LogUtil.debug('ShopLanguageComponent onAvailableLanguageClick', event);
     this.lang.supported.push(event.first);
     this.lang.all = this.lang.all.filter( obj => { return this.lang.supported.indexOf(obj.first) === -1; } );
     this.changed = true;
   }
 
   onSupportedLanguageClick(event:any) {
-    console.debug('ShopLanguageComponent onSupportedLanguageClick', event);
+    LogUtil.debug('ShopLanguageComponent onSupportedLanguageClick', event);
     this.lang.supported = this.lang.supported.filter( obj => {return obj !== event;});
     this.lang.all = Util.clone(this.shopLanguagesVO.all);
     this.lang.all = this.lang.all.filter( obj => { return this.lang.supported.indexOf(obj.first) === -1; } );

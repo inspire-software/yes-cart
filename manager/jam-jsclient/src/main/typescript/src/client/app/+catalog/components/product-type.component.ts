@@ -13,60 +13,59 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {ProductTypeGroupComponent} from './product-type-group.component';
-import {ProductTypeAttributeComponent} from './product-type-attribute.component';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { ProductTypeGroupComponent } from './product-type-group.component';
+import { ProductTypeAttributeComponent } from './product-type-attribute.component';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-product-type',
   moduleId: module.id,
   templateUrl: 'product-type.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, ProductTypeAttributeComponent, ProductTypeGroupComponent],
 })
 
 export class ProductTypeComponent implements OnInit, OnDestroy {
 
-  _productType:ProductTypeVO;
-  _attributes:ProductTypeAttrVO[] = [];
-  attributeFilter:string;
-
-  _changes:Array<Pair<ProductTypeAttrVO, boolean>>;
-
-  attributeSelectedRow:ProductTypeAttrVO;
-  groupSelectedRow:ProductTypeViewGroupVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ProductTypeVO, Array<Pair<ProductTypeAttrVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ProductTypeVO, Array<Pair<ProductTypeAttrVO, boolean>>>>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _productType:ProductTypeVO;
+  private _attributes:ProductTypeAttrVO[] = [];
+  private groupFilter:string;
+  private attributeFilter:string;
 
-  productTypeForm:any;
-  productTypeFormSub:any;
+  private _changes:Array<Pair<ProductTypeAttrVO, boolean>>;
+
+  private attributeSelectedRow:ProductTypeAttrVO;
+  private groupSelectedRow:ProductTypeViewGroupVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private productTypeForm:any;
+  private productTypeFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributesComponent')
-  attributesComponent:ProductTypeAttributeComponent;
+  private attributesComponent:ProductTypeAttributeComponent;
   @ViewChild('groupsComponent')
-  groupsComponent:ProductTypeGroupComponent;
+  private groupsComponent:ProductTypeGroupComponent;
 
   private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('ProductTypeComponent constructed');
+    LogUtil.debug('ProductTypeComponent constructed');
 
     let that = this;
 
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (!that.changed || code == null || code == '' || that._productType == null) {
+      if (code == null || code == '' || that._productType == null || !that.productTypeForm || (!that.productTypeForm.dirty && that._productType.producttypeId > 0)) {
         return null;
       }
 
@@ -97,42 +96,26 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.productTypeForm.controls) {
-      this.productTypeForm.controls[key]['_pristine'] = true;
-      this.productTypeForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.productTypeFormSub = this.productTypeForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.productTypeForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'productTypeForm', 'productTypeFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.productTypeFormSub) {
-      console.debug('ProductTypeComponent unbining form');
-      this.productTypeFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'productTypeFormSub');
   }
 
   formChange():void {
-    console.debug('ProductTypeComponent validating formGroup is valid: ' + this.validForSave, this._productType);
-    this.dataChanged.emit({ source: new Pair(this._productType, this._changes), valid: this.validForSave });
+    LogUtil.debug('ProductTypeComponent formChange', this.productTypeForm.valid, this._productType);
+    this.dataChanged.emit({ source: new Pair(this._productType, this._changes), valid: this.productTypeForm.valid });
   }
 
   @Input()
   set productType(productType:ProductTypeVO) {
-    this._productType = productType;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'productTypeForm', '_productType', productType);
+    this._changes = [];
+
   }
 
   get productType():ProductTypeVO {
@@ -148,36 +131,29 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
     return this._attributes;
   }
 
-  onMainDataChange(event:any) {
-    console.debug('ProductTypeComponent main data changed', this._productType);
-    this.changed = true;
-  }
-
   onAttributeDataChanged(event:any) {
-    console.debug('ProductTypeComponent attr data changed', this._productType);
-    this.changed = true;
+    LogUtil.debug('ProductTypeComponent attr data changed', this._productType);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   onGroupDataChanged(event:any) {
-    console.debug('ProductTypeComponent attr data changed', this._productType);
-    this.changed = true;
+    LogUtil.debug('ProductTypeComponent attr data changed', this._productType);
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('ProductTypeComponent ngOnInit');
+    LogUtil.debug('ProductTypeComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ProductTypeComponent ngOnDestroy');
+    LogUtil.debug('ProductTypeComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('ProductTypeComponent tabSelected', tab);
+    LogUtil.debug('ProductTypeComponent tabSelected', tab);
   }
 
   protected onAttributeRowAdd() {
@@ -197,12 +173,25 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
   }
 
   protected onAttributeSelectRow(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeComponent onSelectRow handler', row);
+    LogUtil.debug('ProductTypeComponent onSelectRow handler', row);
     if (row == this.attributeSelectedRow) {
       this.attributeSelectedRow = null;
     } else {
       this.attributeSelectedRow = row;
     }
+  }
+
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onClearFilterGroup() {
+
+    this.groupFilter = '';
+
   }
 
   protected onSearchHelpToggle() {
@@ -224,6 +213,11 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
     this.searchHelpShow = false;
   }
 
+  protected onAttributeChangesFilter() {
+    this.attributeFilter = '###';
+    this.searchHelpShow = false;
+  }
+
   protected onGroupRowAdd() {
     this.groupsComponent.onRowAdd();
   }
@@ -242,7 +236,7 @@ export class ProductTypeComponent implements OnInit, OnDestroy {
 
 
   protected onGroupSelectRow(row:ProductTypeViewGroupVO) {
-    console.debug('ProductTypeComponent onSelectRow handler', row);
+    LogUtil.debug('ProductTypeComponent onSelectRow handler', row);
     if (row == this.groupSelectedRow) {
       this.groupSelectedRow = null;
     } else {

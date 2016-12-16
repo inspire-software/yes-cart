@@ -13,42 +13,39 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { FulfilmentCentreVO, FulfilmentCentreShopLinkVO, ShopVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-fulfilment-centre',
   moduleId: module.id,
   templateUrl: 'fulfilment-centre.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES],
 })
 
 export class FulfilmentCentreComponent implements OnInit, OnDestroy {
 
-  _centre:FulfilmentCentreVO;
-
-  _shops:any = {};
-
-  availableShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
-  supportedShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<FulfilmentCentreVO>> = new EventEmitter<FormValidationEvent<FulfilmentCentreVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _centre:FulfilmentCentreVO;
 
-  centreForm:any;
-  centreFormSub:any;
+  private _shops:any = {};
+
+  private availableShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
+  private supportedShops:Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>> = [];
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private centreForm:any;
+  private centreFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('FulfilmentCentreComponent constructed');
+    LogUtil.debug('FulfilmentCentreComponent constructed');
 
     let that = this;
 
@@ -58,7 +55,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       if (basic == null) {
 
         let code = control.value;
-        if (!that.changed || that._centre == null) {
+        if (that._centre == null || !that.centreForm || !that.centreForm.dirty) {
           return null;
         }
 
@@ -84,6 +81,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       'stateCode': ['', YcValidators.nonBlankTrimmed],
       'city': ['', YcValidators.nonBlankTrimmed],
       'postcode': ['', YcValidators.nonBlankTrimmed],
+      'fulfilmentShops': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -92,35 +90,22 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.centreForm.controls) {
-      this.centreForm.controls[key]['_pristine'] = true;
-      this.centreForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.centreFormSub = this.centreForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.centreForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'centreForm', 'centreFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.centreFormSub) {
-      console.debug('FulfilmentCentreComponent unbining form');
-      this.centreFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'centreFormSub');
   }
 
   formChange():void {
-    console.debug('FulfilmentCentreComponent validating formGroup is valid: ' + this.validForSave, this._centre);
-    this.dataChanged.emit({ source: this._centre, valid: this.validForSave });
+    LogUtil.debug('FulfilmentCentreComponent formChange', this.centreForm.valid, this._centre);
+    this.dataChanged.emit({ source: this._centre, valid: this.centreForm.valid });
+  }
+
+  formMarkDirty(field:string):void {
+    UiUtil.formMarkFieldDirty(this, 'centreForm', field);
   }
 
   @Input()
@@ -128,20 +113,58 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
     shops.forEach(shop => {
       this._shops['S' + shop.shopId] = shop;
     });
-    console.debug('FulfilmentCentreComponent mapped shops', this._shops);
+    LogUtil.debug('FulfilmentCentreComponent mapped shops', this._shops);
   }
 
   @Input()
   set centre(centre:FulfilmentCentreVO) {
-    this._centre = centre;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'centreForm', '_centre', centre);
     this.recalculateShops();
+
   }
 
   get centre():FulfilmentCentreVO {
     return this._centre;
   }
+
+
+  onSupportedShopClick(supported:Pair<ShopVO, FulfilmentCentreShopLinkVO>) {
+    LogUtil.debug('SlaComponent remove supported', supported);
+    let idx = this._centre.fulfilmentShops.findIndex(link =>
+      link.shopId == supported.first.shopId
+    );
+    if (idx != -1) {
+      this._centre.fulfilmentShops.splice(idx, 1);
+      this.recalculateShops();
+      this.formMarkDirty('fulfilmentShops');
+      this.formChange();
+    }
+  }
+
+  onAvailableShopClick(available:Pair<ShopVO, FulfilmentCentreShopLinkVO>) {
+    LogUtil.debug('SlaComponent add supported', available);
+    this._centre.fulfilmentShops.push(available.second);
+    this.recalculateShops();
+    this.formMarkDirty('fulfilmentShops');
+    this.formChange();
+  }
+
+
+  ngOnInit() {
+    LogUtil.debug('FulfilmentCentreComponent ngOnInit');
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('FulfilmentCentreComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  tabSelected(tab:any) {
+    LogUtil.debug('FulfilmentCentreComponent tabSelected', tab);
+  }
+
 
   private recalculateShops():void {
     if (this._centre && this._centre.warehouseId > 0) {
@@ -161,7 +184,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
         skipKeys.push('S' + centreshop.shopId);
       });
     }
-    console.debug('FulfilmentCentreComponent supported', skipKeys);
+    LogUtil.debug('FulfilmentCentreComponent supported', skipKeys);
 
     let labels = <Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -174,7 +197,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('FulfilmentCentreComponent available', labels);
+    LogUtil.debug('FulfilmentCentreComponent available', labels);
     return labels;
   }
 
@@ -186,7 +209,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
         keepKeys.push('S' + centreshop.shopId);
       });
     }
-    console.debug('FulfilmentCentreComponent supported', keepKeys);
+    LogUtil.debug('FulfilmentCentreComponent supported', keepKeys);
 
     let labels = <Array<Pair<ShopVO, FulfilmentCentreShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -198,52 +221,9 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('FulfilmentCentreComponent supported', labels);
+    LogUtil.debug('FulfilmentCentreComponent supported', labels);
     return labels;
   }
-
-
-  onSupportedShopClick(supported:Pair<ShopVO, FulfilmentCentreShopLinkVO>) {
-    console.debug('SlaComponent remove supported', supported);
-    let idx = this._centre.fulfilmentShops.findIndex(link =>
-      link.shopId == supported.first.shopId
-    );
-    if (idx != -1) {
-      this._centre.fulfilmentShops.splice(idx, 1);
-      this.recalculateShops();
-      this.changed = true;
-      this.dataChanged.emit({ source: this._centre, valid: this.validForSave });
-    }
-  }
-
-  onAvailableShopClick(available:Pair<ShopVO, FulfilmentCentreShopLinkVO>) {
-    console.debug('SlaComponent add supported', available);
-    this._centre.fulfilmentShops.push(available.second);
-    this.recalculateShops();
-    this.changed = true;
-    this.dataChanged.emit({ source: this._centre, valid: this.validForSave });
-  }
-
-
-  onDataChange(event:any) {
-    console.debug('FulfilmentCentreComponent data changed', this._centre);
-    this.changed = true;
-  }
-
-  ngOnInit() {
-    console.debug('FulfilmentCentreComponent ngOnInit');
-    this.formBind();
-  }
-
-  ngOnDestroy() {
-    console.debug('FulfilmentCentreComponent ngOnDestroy');
-    this.formUnbind();
-  }
-
-  tabSelected(tab:any) {
-    console.debug('FulfilmentCentreComponent tabSelected', tab);
-  }
-
 
 
 }

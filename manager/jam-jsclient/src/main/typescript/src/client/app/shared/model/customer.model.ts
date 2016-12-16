@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-import {AttrValueVO} from './attribute.model';
+import { AttrValueVO } from './attribute.model';
 
 export interface CustomerInfoVO {
 

@@ -13,21 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
-import {ErrorEventBus, Util} from './../services/index';
-import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { ErrorEventBus, Util } from './../services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-error-modal',
   moduleId: module.id,
   templateUrl: 'error-modal.component.html',
-  directives: [ModalComponent]
 })
 
 export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('errorModalDialog')
-  errorModalDialog:ModalComponent;
+  private errorModalDialog:ModalComponent;
 
   private errorTitleKey:string = '';
   private errorTitleParams:any = {};
@@ -36,13 +36,51 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
   private errorSub:any;
 
   constructor() {
-    console.debug('ErrorModalComponent constructed');
+    LogUtil.debug('ErrorModalComponent constructed');
+  }
+
+  ngOnInit() {
+    LogUtil.debug('ErrorModalComponent ngOnInit');
+  }
+
+
+  ngOnDestroy() {
+    LogUtil.debug('ErrorModalComponent ngOnDestroy');
+    if (this.errorSub != null) {
+      this.errorSub.unsubscribe();
+    }
+  }
+
+  showErrorModal() {
+    LogUtil.debug('ErrorModalComponent showErrorModal', this.errorString, this.errorTitleKey, this.errorTitleParams);
+    if (this.errorModalDialog) {
+      this.errorModalDialog.show();
+    }
+  }
+
+  ngAfterViewInit() {
+    LogUtil.debug('ErrorModalComponent ngAfterViewInit');
+    // Here you get a reference to the modal so you can control it programmatically
+    this.errorSub = ErrorEventBus.getErrorEventBus().errorUpdated$.subscribe(event => {
+      LogUtil.debug('ErrorModalComponent error event', event);
+      if (event !== 'init') {
+        this.setErrorString(event);
+        this.showErrorModal();
+      }
+    });
+  }
+
+  protected onErrorResult(modalresult: ModalResult) {
+    LogUtil.debug('ErrorModalComponent onErrorResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      window.location.href = '../j_spring_security_logout'; //.reload();
+    }
   }
 
   private setErrorString(event:any) {
 
     let message = Util.determineErrorMessage(event);
-    console.debug('ErrorModalComponent setErrorString', message);
+    LogUtil.debug('ErrorModalComponent setErrorString', message);
 
     let key = 'MODAL_ERROR_MESSAGE';
     let keyParams:any = {};
@@ -81,46 +119,6 @@ export class ErrorModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.errorTitleKey = key;
     this.errorTitleParams = keyParams;
 
-  }
-
-  /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('ErrorModalComponent ngOnInit');
-  }
-
-
-  /** {@inheritDoc} */
-  public ngOnDestroy() {
-    console.debug('ErrorModalComponent ngOnDestroy');
-    if (this.errorSub != null) {
-      this.errorSub.unsubscribe();
-    }
-  }
-
-  protected showErrorModal() {
-    console.debug('ErrorModalComponent showErrorModal', this.errorString, this.errorTitleKey, this.errorTitleParams);
-    if (this.errorModalDialog) {
-      this.errorModalDialog.show();
-    }
-  }
-
-  public ngAfterViewInit() {
-    console.debug('ErrorModalComponent ngAfterViewInit');
-    // Here you get a reference to the modal so you can control it programmatically
-    this.errorSub = ErrorEventBus.getErrorEventBus().errorUpdated$.subscribe(event => {
-      console.debug('ErrorModalComponent error event', event);
-      if (event !== 'init') {
-        this.setErrorString(event);
-        this.showErrorModal();
-      }
-    });
-  }
-
-  protected onErrorResult(modalresult: ModalResult) {
-    console.debug('ErrorModalComponent onErrorResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      window.location.reload();
-    }
   }
 
 }

@@ -13,21 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ShopEventBus, FulfilmentService, Util} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {FulfilmentCentresComponent, FulfilmentCentreComponent } from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {FulfilmentCentreVO, ShopVO} from './../shared/model/index';
-import {FormValidationEvent} from './../shared/event/index';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { ShopEventBus, FulfilmentService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { FulfilmentCentreVO, ShopVO } from './../shared/model/index';
+import { FormValidationEvent } from './../shared/event/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-fulfilment',
   moduleId: module.id,
   templateUrl: 'fulfilment.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, FulfilmentCentresComponent, FulfilmentCentreComponent, ModalComponent, DataControlComponent ],
 })
 
 export class FulfilmentComponent implements OnInit, OnDestroy {
@@ -45,7 +41,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   private centreEdit:FulfilmentCentreVO;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private shops:Array<ShopVO> = [];
 
@@ -53,65 +49,53 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
   private shopAllSub:any;
 
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
   constructor(private _fulfilmentService:FulfilmentService) {
-    console.debug('FulfilmentComponent constructed');
+    LogUtil.debug('FulfilmentComponent constructed');
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
   }
-
-  changed:boolean = false;
-  validForSave:boolean = false;
 
   newCentreInstance():FulfilmentCentreVO {
     return { warehouseId: 0, code: '', name: '', description: null, countryCode: null, stateCode: null, city: null, postcode: null, fulfilmentShops: [] };
   }
 
   ngOnInit() {
-    console.debug('FulfilmentComponent ngOnInit');
+    LogUtil.debug('FulfilmentComponent ngOnInit');
     this.onRefreshHandler();
   }
 
   ngOnDestroy() {
-    console.debug('FulfilmentComponent ngOnDestroy');
+    LogUtil.debug('FulfilmentComponent ngOnDestroy');
     if (this.shopAllSub) {
       this.shopAllSub.unsubscribe();
     }
   }
 
-
-  getAllCentres() {
-    var _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe( allcentres => {
-      console.debug('FulfilmentComponent getAllCentres', allcentres);
-      this.centres = allcentres;
-      this.selectedCentre = null;
-      this.centreEdit = null;
-      this.viewMode = FulfilmentComponent.CENTRES;
-      this.changed = false;
-      this.validForSave = false;
-      _sub.unsubscribe();
-    });
-  }
-
   protected onRefreshHandler() {
-    console.debug('FulfilmentComponent refresh handler');
+    LogUtil.debug('FulfilmentComponent refresh handler');
     this.getAllCentres();
   }
 
-  onCentreSelected(data:FulfilmentCentreVO) {
-    console.debug('FulfilmentComponent onCentreSelected', data);
+  protected onCentreSelected(data:FulfilmentCentreVO) {
+    LogUtil.debug('FulfilmentComponent onCentreSelected', data);
     this.selectedCentre = data;
   }
 
-  onCentreChanged(event:FormValidationEvent<FulfilmentCentreVO>) {
-    console.debug('FulfilmentComponent onCentreChanged', event);
+  protected onCentreChanged(event:FormValidationEvent<FulfilmentCentreVO>) {
+    LogUtil.debug('FulfilmentComponent onCentreChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.centreEdit = event.source;
   }
 
   protected onBackToList() {
-    console.debug('FulfilmentComponent onBackToList handler');
+    LogUtil.debug('FulfilmentComponent onBackToList handler');
     if (this.viewMode === FulfilmentComponent.CENTRE) {
       this.centreEdit = null;
       this.viewMode = FulfilmentComponent.CENTRES;
@@ -119,7 +103,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('FulfilmentComponent onRowNew handler');
+    LogUtil.debug('FulfilmentComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === FulfilmentComponent.CENTRES) {
@@ -129,7 +113,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('FulfilmentComponent onRowDelete handler', row);
+    LogUtil.debug('FulfilmentComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -140,7 +124,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditCentre(row:FulfilmentCentreVO) {
-    console.debug('FulfilmentComponent onRowEditCentre handler', row);
+    LogUtil.debug('FulfilmentComponent onRowEditCentre handler', row);
     this.centreEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -157,7 +141,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
 
       if (this.centreEdit != null) {
 
-        console.debug('FulfilmentComponent Save handler centre', this.centreEdit);
+        LogUtil.debug('FulfilmentComponent Save handler centre', this.centreEdit);
 
         var _sub:any = this._fulfilmentService.saveFulfilmentCentre(this.centreEdit).subscribe(
             rez => {
@@ -166,12 +150,12 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
               if (idx !== -1) {
                 this.centres[idx] = rez;
                 this.centres = this.centres.slice(0, this.centres.length); // reset to propagate changes
-                console.debug('FulfilmentComponent centre changed', rez);
+                LogUtil.debug('FulfilmentComponent centre changed', rez);
               }
             } else {
               this.centres.push(rez);
               this.centreFilter = rez.name;
-              console.debug('FulfilmentComponent centre added', rez);
+              LogUtil.debug('FulfilmentComponent centre added', rez);
             }
             this.changed = false;
             this.selectedCentre = rez;
@@ -187,7 +171,7 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('FulfilmentComponent discard handler');
+    LogUtil.debug('FulfilmentComponent discard handler');
     if (this.viewMode === FulfilmentComponent.CENTRE) {
       if (this.selectedCentre != null) {
         this.onRowEditSelected();
@@ -198,14 +182,14 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('FulfilmentComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('FulfilmentComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
      if (this.selectedCentre != null) {
-        console.debug('FulfilmentComponent onDeleteConfirmationResult', this.selectedCentre);
+        LogUtil.debug('FulfilmentComponent onDeleteConfirmationResult', this.selectedCentre);
 
         var _sub:any = this._fulfilmentService.removeFulfilmentCentre(this.selectedCentre).subscribe(res => {
-          console.debug('FulfilmentComponent removeCentre', this.selectedCentre);
+          LogUtil.debug('FulfilmentComponent removeCentre', this.selectedCentre);
           let idx = this.centres.indexOf(this.selectedCentre);
           this.centres.splice(idx, 1);
           this.centres = this.centres.slice(0, this.centres.length); // reset to propagate changes
@@ -217,5 +201,25 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onClearFilterCentre() {
+
+    this.centreFilter = '';
+
+  }
+
+  private getAllCentres() {
+    this.loading = true;
+    var _sub:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe( allcentres => {
+      LogUtil.debug('FulfilmentComponent getAllCentres', allcentres);
+      this.centres = allcentres;
+      this.selectedCentre = null;
+      this.centreEdit = null;
+      this.viewMode = FulfilmentComponent.CENTRES;
+      this.changed = false;
+      this.validForSave = false;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
+  }
 
 }

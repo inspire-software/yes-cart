@@ -13,58 +13,55 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ProductSkuVO, AttrValueProductSkuVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ProductSkuVO, AttrValueProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-sku',
   moduleId: module.id,
   templateUrl: 'sku.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, I18nComponent],
 })
 
 export class SKUComponent implements OnInit, OnDestroy {
 
-  _sku:ProductSkuVO;
-  avPrototype:AttrValueProductSkuVO;
-  _attributes:AttrValueProductSkuVO[] = [];
-  attributeFilter:string;
-
-  _changes:Array<Pair<AttrValueProductSkuVO, boolean>>;
-
-  selectedRow:AttrValueProductSkuVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ProductSkuVO, Array<Pair<AttrValueProductSkuVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ProductSkuVO, Array<Pair<AttrValueProductSkuVO, boolean>>>>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _sku:ProductSkuVO;
+  private avPrototype:AttrValueProductSkuVO;
+  private _attributes:AttrValueProductSkuVO[] = [];
+  private attributeFilter:string;
 
-  skuForm:any;
-  skuFormSub:any;
+  private _changes:Array<Pair<AttrValueProductSkuVO, boolean>>;
+
+  private selectedRow:AttrValueProductSkuVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private skuForm:any;
+  private skuFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
   private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('SKUComponent constructed');
+    LogUtil.debug('SKUComponent constructed');
 
     let that = this;
 
     let validUri = function(control:any):any {
 
       let uri = control.value;
-      if (!that.changed || uri == null || uri == '' || that._sku == null) {
+      if (uri == null || uri == '' || that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
         return null;
       }
 
@@ -79,7 +76,7 @@ export class SKUComponent implements OnInit, OnDestroy {
     let validGuid = function(control:any):any {
 
       let code = control.value;
-      if (!that.changed || code == null || code == '' || that._sku == null) {
+      if (code == null || code == '' || that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
         return null;
       }
 
@@ -93,13 +90,14 @@ export class SKUComponent implements OnInit, OnDestroy {
 
     let validCode = function(control:any):any {
 
-      let code = control.value;
-      if (!that.changed || code == null || code == '' || that._sku == null) {
-        return null;
-      }
-
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.requiredValidCode(control);
       if (basic == null) {
+
+        let code = control.value;
+        if (that._sku == null || !that.skuForm || (!that.skuForm.dirty && that._sku.skuId > 0)) {
+          return null;
+        }
+
         var req:ValidationRequestVO = { subject: 'sku', subjectId: that._sku.skuId, field: 'code', value: code };
         return YcValidators.validRemoteCheck(control, req);
       }
@@ -114,6 +112,10 @@ export class SKUComponent implements OnInit, OnDestroy {
       'rank': ['', YcValidators.requiredRank],
       'description': [''],
       'uri': ['', validUri],
+      'name': [''],
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -122,40 +124,25 @@ export class SKUComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.skuForm.controls) {
-      this.skuForm.controls[key]['_pristine'] = true;
-      this.skuForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.skuFormSub = this.skuForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.skuForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'skuForm', 'skuFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.skuFormSub) {
-      console.debug('SKUComponent unbining form');
-      this.skuFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'skuFormSub');
   }
 
   formChange():void {
-    console.debug('SKUComponent validating formGroup is valid: ' + this.validForSave, this._sku);
-    this.dataChanged.emit({ source: new Pair(this._sku, this._changes), valid: this.validForSave });
+    LogUtil.debug('SKUComponent formChange', this.skuForm.valid, this._sku);
+    this.dataChanged.emit({ source: new Pair(this._sku, this._changes), valid: this.skuForm.valid });
   }
 
   @Input()
   set sku(sku:ProductSkuVO) {
-    this._sku = sku;
+
+    UiUtil.formInitialise(this, 'initialising', 'skuForm', '_sku', sku);
+    this._changes = [];
     if (this._sku != null) {
       this.avPrototype = {
         attrvalueId: 0,
@@ -168,12 +155,27 @@ export class SKUComponent implements OnInit, OnDestroy {
     } else {
       this.avPrototype = null;
     }
-    this.changed = false;
-    this.formReset();
+
   }
 
   get sku():ProductSkuVO {
     return this._sku;
+  }
+
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'name', event);
+  }
+
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'skuForm', 'meta', event);
   }
 
   @Input()
@@ -185,30 +187,24 @@ export class SKUComponent implements OnInit, OnDestroy {
     return this._attributes;
   }
 
-  onMainDataChange(event:any) {
-    console.debug('SKUComponent main data changed', this._sku);
-    this.changed = true;
-  }
-
   onAttributeDataChanged(event:any) {
-    console.debug('SKUComponent attr data changed', this._sku);
-    this.changed = true;
+    LogUtil.debug('SKUComponent attr data changed', this._sku);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('SKUComponent ngOnInit');
+    LogUtil.debug('SKUComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('SKUComponent ngOnDestroy');
+    LogUtil.debug('SKUComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('SKUComponent tabSelected', tab);
+    LogUtil.debug('SKUComponent tabSelected', tab);
   }
 
   protected onRowAdd() {
@@ -229,12 +225,18 @@ export class SKUComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueProductSkuVO) {
-    console.debug('SKUComponent onSelectRow handler', row);
+    LogUtil.debug('SKUComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
       this.selectedRow = row;
     }
+  }
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
   }
 
   protected onSearchHelpToggle() {

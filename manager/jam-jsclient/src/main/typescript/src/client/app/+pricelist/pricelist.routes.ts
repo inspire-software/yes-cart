@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { ShopPriceListComponent, ShopTaxesComponent, ShopPromotionsComponent } from './index';
 
-export const PriceListRoutes: RouterConfig = [
+export const PriceListRoutes: Route[] = [
   {
     path: 'pricelist/shop',
     component: ShopPriceListComponent

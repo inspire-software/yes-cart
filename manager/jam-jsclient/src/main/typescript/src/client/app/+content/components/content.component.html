@@ -13,7 +13,7 @@
                 <div class="form-group">
                   <label>{{ 'CONTENT_PARENT' | translate }}</label>
                   <div class="input-group">
-                    <input class="form-control" placeholder="{{ 'CONTENT_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="content.parentName" (ngModelChange)="onMainDataChange($event)" [disabled]="true"/>
+                    <input class="form-control" placeholder="{{ 'CONTENT_PARENT' | translate }}" formControlName="parentName" name="parentName" type="text" [(ngModel)]="content.parentName" [readonly]="true"/>
                     <span class="input-group-btn">
                       <button type="button" (click)="onEditParent()" class="btn">
                         <i class="fa fa-edit"></i>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group">
                   <label>{{ 'CODE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="content.guid" (ngModelChange)="onMainDataChange($event)"/>
+                  <input class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="guid" name="guid" type="text" [(ngModel)]="content.guid"/>
                   <div [hidden]="contentForm.controls['guid'].valid || contentForm.controls['guid'].pristine" class="alert alert-danger">
                     <div [hidden]="!contentForm.controls['guid'].hasError('checking')">
                       {{ 'REMOTE_CHECK' | translate }}
@@ -48,8 +48,7 @@
                              value="name"
                              defaultRequired="true"
                              i18n="displayNames"
-                             [formGroup]="contentForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -58,28 +57,28 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'AV_RANK' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="content.rank" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'AV_RANK' | translate }}" formControlName="rank" name="rank" type="text" [(ngModel)]="content.rank">
                   <div [hidden]="contentForm.controls['rank'].valid || contentForm.controls['rank'].pristine" class="alert alert-danger">
                     {{ 'NUM_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CONTENT_FROM' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availablefrom" name="availablefrom" type="text" [(ngModel)]="availablefrom">
                   <div [hidden]="contentForm.controls['availablefrom'].valid || contentForm.controls['availablefrom'].pristine" class="alert alert-danger">
                     {{ 'DATE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'CONTENT_TO' | translate }}</label>
-                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="yyyy-MM-dd HH:mm:SS" formControlName="availableto" name="availableto" type="text" [(ngModel)]="availableto">
                   <div [hidden]="contentForm.controls['availableto'].valid || contentForm.controls['availableto'].pristine" class="alert alert-danger">
                     {{ 'DATE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div class="form-group">
                   <label>{{ 'DESCRIPTION' | translate }}</label>
-                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="content.description" (ngModelChange)="onMainDataChange($event)"></textarea>
+                  <textarea class="form-control" placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" rows="4" [(ngModel)]="content.description"></textarea>
                 </div>
               </fieldset>
             </div>
@@ -95,7 +94,7 @@
               <fieldset>
                 <div class="form-group">
                   <label>{{ 'CONTENT_TEMPLATE' | translate }}</label>
-                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="content.uitemplate" (ngModelChange)="onMainDataChange($event)">
+                  <input class="form-control" placeholder="{{ 'CATEGORY_TEMPLATE' | translate }}" formControlName="uitemplate" name="uitemplate" type="text" [(ngModel)]="content.uitemplate">
                   <div [hidden]="contentForm.controls['uitemplate'].valid || contentForm.controls['uitemplate'].pristine" class="alert alert-danger">
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
@@ -127,7 +126,7 @@
                   <label>{{ 'SEO_URI' | translate }}</label>
                   <div class="input-group">
                     <div class="input-group-addon">/content/</div>
-                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="content.uri" (ngModelChange)="onMainDataChange($event)"/>
+                    <input class="form-control" placeholder="{{ 'SEO_URI' | translate }}" formControlName="uri" name="uri" type="text" [(ngModel)]="content.uri"/>
                   </div>
                   <div [hidden]="contentForm.controls['uri'].valid || contentForm.controls['uri'].pristine" class="alert alert-danger">
                     <div [hidden]="!contentForm.controls['uri'].hasError('checking')">
@@ -149,8 +148,7 @@
                              [source]="content"
                              value="title"
                              i18n="displayTitles"
-                             [formGroup]="contentForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -160,8 +158,7 @@
                              [source]="content"
                              value="metakeywords"
                              i18n="displayMetakeywords"
-                             [formGroup]="contentForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -171,8 +168,7 @@
                              [source]="content"
                              value="metadescription"
                              i18n="displayMetadescriptions"
-                             [formGroup]="contentForm"
-                             (dataChanged)="onMainDataChange($event)"></yc-i18n-table>
+                             (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -182,13 +178,25 @@
 
       <tab heading="{{ 'CONTENT_TAB_CMS' | translate }}"  (select)="tabSelected('CMS')">
 
+        <template [ngIf]="!(content.contentId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
+
         <div class="panel-body">
 
           <template [ngIf]="content.contentId > 0">
 
             <div class="panel panel-default" *ngFor="let body of content.contentBodies">
               <div class="panel-heading">
-                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-circle"><i class="fa fa-edit"></i></button></span> {{ content.name }} ({{ body.lang }})</h3>
+                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> {{ content.name }} ({{ body.lang }})</h3>
               </div>
               <div class="panel-body" [innerHTML]="getCMSPreview(body)"></div>
             </div>
@@ -201,6 +209,18 @@
 
       <tab heading="{{ 'TAB_ATTRIBUTES' | translate }}"  (select)="tabSelected('Attributes')">
 
+        <template [ngIf]="!(content.contentId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
+
         <template [ngIf]="content.contentId > 0">
 
           <div class="panel-body">
@@ -209,17 +229,32 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
               </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShow">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+                  <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+                </div>
+              </div>
+
             </div>
 
             <div class="row">

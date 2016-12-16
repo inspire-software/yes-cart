@@ -217,9 +217,12 @@ public class VoCustomerServiceImpl implements VoCustomerService {
         }
 
 
-        CustomerDTO customerDTO = dtoCustomerService.getNew();
-        customerDTO = dtoCustomerService.create(
-                voAssemblySupport.assembleDto(CustomerDTO.class, VoCustomerInfo.class, customerDTO, vo)
+        CustomerDTO customerDTO =
+            voAssemblySupport.assembleDto(CustomerDTO.class, VoCustomerInfo.class, dtoCustomerService.getNew(), vo);
+        customerDTO.setEmail(vo.getEmail());
+        customerDTO = dtoCustomerService.createForShop(
+                customerDTO,
+                vo.getCustomerShops().get(0).getShopId()
         );
 
         for (final VoCustomerShopLink link : vo.getCustomerShops()) {

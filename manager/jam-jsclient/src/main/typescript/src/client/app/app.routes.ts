@@ -1,4 +1,7 @@
-import { provideRouter, RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
+
+//import { AboutRoutes } from './about/index';
+//import { HomeRoutes } from './home/index';
 
 import { HomeRoutes } from './+home/home.routes';
 import { ShopRoutes } from './+shop/shop.routes';
@@ -21,7 +24,7 @@ import { LicenseRoutes } from './shared/license/license.routes';
 import { OrganisationRoutes } from './+organisation/organisation.routes';
 import { ImpexRoutes } from './+impex/impex.routes';
 
-const routes: RouterConfig = [
+export const routes: Routes = [
   ...HomeRoutes,
   ...ShopRoutes,
   ...LocationRoutes,
@@ -42,8 +45,4 @@ const routes: RouterConfig = [
   ...PaymentGatewaysRoutes,
   ...OrganisationRoutes,
   ...ImpexRoutes,
-];
-
-export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes),
 ];

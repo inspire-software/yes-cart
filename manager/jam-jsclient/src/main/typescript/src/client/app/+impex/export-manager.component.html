@@ -5,23 +5,23 @@
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="onRunHandler()" [disabled]="selectedTab < 0 || selectedTabRunning || selectedTabCompleted" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs">
+    <button type="button" (click)="onRunHandler()" [disabled]="selectedTab < 0 || selectedTabRunning || selectedTabCompleted" class="btn btn-info btn-circle btn-xl hidden-sm hidden-xs" title="{{ 'MODAL_BUTTON_IMPEXRUN' | translate }}">
       <i class="fa fa-play"></i>
     </button>
 
-    <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onNewTabHandler()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_IMPEXADD' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
 
-    <button type="button" (click)="onFileDownload()" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onFileDownload()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DOWNLOAD' | translate }}">
       <i class="fa fa-download"></i>
     </button>
 
-    <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl">
+    <button type="button" (click)="onRefreshHandler()" class="btn btn-info btn-circle btn-xl" title="{{ 'MODAL_BUTTON_REFRESH' | translate }}">
       <i class="fa fa-refresh"></i>
     </button>
 
-    <button type="button" (click)="onTabDeleteSelected()" [disabled]="selectedTab < 0 || selectedTabRunning" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onTabDeleteSelected()" [disabled]="selectedTab < 0 || selectedTabRunning" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_IMPEXREMOVE' | translate }}">
       <i class="fa fa-remove"></i>
     </button>
 
@@ -85,12 +85,12 @@
 </div>
 
 
-<modal #selectGroupModalDialog
-       title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
-       [valid]="selectedGroup != null"
-       (closed)="onGroupConfirmationResult($event)">
+<yc-modal #selectGroupModalDialog
+          title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="selectedGroup != null"
+          (closed)="onGroupConfirmationResult($event)">
 
   <div class="item-list-overflow">
 
@@ -98,19 +98,19 @@
 
   </div>
 
-</modal>
+</yc-modal>
 
-<modal #selectFileModalDialog
-       title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
-       [valid]="selectedFile != null"
-       (closed)="onFilesConfirmationResult($event)">
+<yc-modal #selectFileModalDialog
+          title="{{ 'PANEL_SYSTEM_EXPORT' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="selectedFile != null"
+          (closed)="onFilesConfirmationResult($event)">
   <div class="item-list-overflow">
 
     <yc-file-select mode="export" [filter]="fileFilter" [showNewLink]="false" (dataSelected)="onFileSelect($event)"></yc-file-select>
 
   </div>
 
-</modal>
+</yc-modal>
 

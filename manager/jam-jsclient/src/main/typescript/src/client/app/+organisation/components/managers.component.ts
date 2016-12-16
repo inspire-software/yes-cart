@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ManagerInfoVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ManagerInfoVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-managers',
   moduleId: module.id,
   templateUrl: 'managers.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class ManagersComponent implements OnInit, OnDestroy {
-
-  _managers:Array<ManagerInfoVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredManagers:Array<ManagerInfoVO>;
 
   @Input() selectedManager:ManagerInfoVO;
 
   @Output() dataSelected: EventEmitter<ManagerInfoVO> = new EventEmitter<ManagerInfoVO>();
 
+  private _managers:Array<ManagerInfoVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredManagers:Array<ManagerInfoVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('ManagersComponent constructed');
+    LogUtil.debug('ManagersComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterManagers();
@@ -60,7 +58,7 @@ export class ManagersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ManagersComponent ngOnInit');
+    LogUtil.debug('ManagersComponent ngOnInit');
   }
 
   @Input()
@@ -75,32 +73,8 @@ export class ManagersComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterManagers() {
-    if (this._filter) {
-      this.filteredManagers = this._managers.filter(manager =>
-        manager.email.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.firstName.toLowerCase().indexOf(this._filter) !== -1 ||
-        manager.lastName.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('ManagersComponent filterManagers', this._filter);
-    } else {
-      this.filteredManagers = this._managers;
-      console.debug('ManagersComponent filterManagers no filter');
-    }
-
-    if (this.filteredManagers === null) {
-      this.filteredManagers = [];
-    }
-
-    let _total = this.filteredManagers.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('ManagersComponent ngOnDestroy');
+    LogUtil.debug('ManagersComponent ngOnDestroy');
     this.selectedManager = null;
     this.dataSelected.emit(null);
   }
@@ -125,13 +99,37 @@ export class ManagersComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:ManagerInfoVO) {
-    console.debug('ManagersComponent onSelectRow handler', row);
+    LogUtil.debug('ManagersComponent onSelectRow handler', row);
     if (row == this.selectedManager) {
       this.selectedManager = null;
     } else {
       this.selectedManager = row;
     }
     this.dataSelected.emit(this.selectedManager);
+  }
+
+  private filterManagers() {
+    if (this._filter) {
+      this.filteredManagers = this._managers.filter(manager =>
+        manager.email.toLowerCase().indexOf(this._filter) !== -1 ||
+        manager.firstName !== null && manager.firstName.toLowerCase().indexOf(this._filter) !== -1 ||
+        manager.lastName !== null && manager.lastName.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('ManagersComponent filterManagers', this._filter);
+    } else {
+      this.filteredManagers = this._managers;
+      LogUtil.debug('ManagersComponent filterManagers no filter');
+    }
+
+    if (this.filteredManagers === null) {
+      this.filteredManagers = [];
+    }
+
+    let _total = this.filteredManagers.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

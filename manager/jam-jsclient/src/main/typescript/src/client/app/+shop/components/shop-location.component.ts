@@ -13,17 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {ShopVO, ShopLocationsVO, Pair} from './../../shared/model/index';
-import {ShopService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
+import { Component, OnInit, Input } from '@angular/core';
+import { ShopVO, ShopLocationsVO, Pair } from './../../shared/model/index';
+import { ShopService, Util } from './../../shared/services/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-location',
   moduleId: module.id,
   templateUrl: './shop-location.component.html',
-  directives: [ NgIf, NgFor, DataControlComponent],
 })
 
 export class ShopLocationComponent implements OnInit {
@@ -31,17 +29,17 @@ export class ShopLocationComponent implements OnInit {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopLocationsVO:ShopLocationsVO;
-  locs:ShopLocationsVO;
-  availableBilling:Array<Pair<string, string>> = [];
-  selectedBilling:Array<Pair<string, string>> = [];
-  availableShipping:Array<Pair<string, string>> = [];
-  selectedShipping:Array<Pair<string, string>> = [];
+  private shopLocationsVO:ShopLocationsVO;
+  private locs:ShopLocationsVO;
+  private availableBilling:Array<Pair<string, string>> = [];
+  private selectedBilling:Array<Pair<string, string>> = [];
+  private availableShipping:Array<Pair<string, string>> = [];
+  private selectedShipping:Array<Pair<string, string>> = [];
 
-  changed:boolean = false;
+  private changed:boolean = false;
 
   constructor(private _shopService:ShopService) {
-    console.debug('ShopLocationComponent constructor');
+    LogUtil.debug('ShopLocationComponent constructor');
   }
 
   @Input()
@@ -65,12 +63,12 @@ export class ShopLocationComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('ShopLocationComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopLocationComponent ngOnInit shop', this.shop);
   }
 
 
   onDataChange() {
-    console.debug('ShopLocationComponent data changed');
+    LogUtil.debug('ShopLocationComponent data changed');
     this.changed = true;
   }
 
@@ -113,7 +111,7 @@ export class ShopLocationComponent implements OnInit {
   }
 
   onSaveHandler() {
-    console.debug('ShopLocationComponent Save handler', this.shop);
+    LogUtil.debug('ShopLocationComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.locs) {
       var _sub:any = this._shopService.saveShopLocations(this.locs).subscribe(shopLocationsVo => {
         this.shopLocationsVO = Util.clone(shopLocationsVo);
@@ -127,7 +125,7 @@ export class ShopLocationComponent implements OnInit {
   }
 
   onDiscardEventHandler() {
-    console.debug('ShopLocationComponent discard handler', this.shop);
+    LogUtil.debug('ShopLocationComponent discard handler', this.shop);
     if (this.shop.shopId > 0 && this.shopLocationsVO) {
       this.locs = Util.clone(this.shopLocationsVO);
       this.remapSelections();
@@ -136,7 +134,7 @@ export class ShopLocationComponent implements OnInit {
   }
 
   onRefreshHandler() {
-    console.debug('ShopLocationComponent refresh handler', this.shop);
+    LogUtil.debug('ShopLocationComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShopLocations(this.shop.shopId).subscribe(shopLocationsVo => {
         this.shopLocationsVO  = Util.clone(shopLocationsVo);
@@ -152,21 +150,21 @@ export class ShopLocationComponent implements OnInit {
   }
 
   onAvailableBillingClick(event:any) {
-    console.debug('ShopLocationComponent onAvailableBillingClick', event);
+    LogUtil.debug('ShopLocationComponent onAvailableBillingClick', event);
     this.locs.supportedBilling.push(event.first);
     this.remapSelections();
     this.changed = true;
   }
 
   onAvailableShippingClick(event:any) {
-    console.debug('ShopLocationComponent onAvailableShippingClick', event);
+    LogUtil.debug('ShopLocationComponent onAvailableShippingClick', event);
     this.locs.supportedShipping.push(event.first);
     this.remapSelections();
     this.changed = true;
   }
 
   onSupportedBillingClick(event:any) {
-    console.debug('ShopLocationComponent onSupportedBillingClick', event);
+    LogUtil.debug('ShopLocationComponent onSupportedBillingClick', event);
     let idx = this.locs.supportedBilling.indexOf(event.first);
     if (idx != -1) {
       this.locs.supportedBilling.splice(idx, 1);
@@ -176,7 +174,7 @@ export class ShopLocationComponent implements OnInit {
   }
 
   onSupportedShippingClick(event:any) {
-    console.debug('ShopLocationComponent onSupportedBillingClick', event);
+    LogUtil.debug('ShopLocationComponent onSupportedBillingClick', event);
     let idx = this.locs.supportedShipping.indexOf(event.first);
     if (idx != -1) {
       this.locs.supportedShipping.splice(idx, 1);

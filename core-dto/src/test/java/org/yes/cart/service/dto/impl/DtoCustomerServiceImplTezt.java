@@ -54,7 +54,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreate() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         dtoService.remove(dto.getCustomerId());
     }
@@ -62,7 +62,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdate() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         dto.setFirstname("Jane");
         dto.setLastname("Gav");
@@ -75,7 +75,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateCustomerTags() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         dto.setFirstname("Jane");
         dto.setLastname("Gav");
@@ -96,7 +96,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testCreateEntityAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
@@ -112,7 +112,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testGetEntityAttributes() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
@@ -128,7 +128,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testUpdateEntityAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);
@@ -148,7 +148,7 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
     @Test
     public void testDeleteAttributeValue() throws Exception {
         CustomerDTO dto = getCustomerDto(getTestName());
-        dto = dtoService.create(dto);
+        dto = dtoService.createForShop(dto, 10L);
         assertTrue(dto.getCustomerId() > 0);
         AttributeDTO attrDto = dtoAttrService.getById(1030); //CUSTOMER_PHONE
         AttrValueCustomerDTO attrValueDTO = dtoFactory.getByIface(AttrValueCustomerDTO.class);

@@ -53,22 +53,22 @@
 
 </template>
 
-<modal #deleteConfirmationModalDialog
-       title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-       [valid]="true"
-       (closed)="onDeleteConfirmationResult($event)">
+<yc-modal #deleteConfirmationModalDialog
+          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
+          [valid]="true"
+          (closed)="onDeleteConfirmationResult($event)">
   {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? selectedRow.name : '') } }}
-</modal>
+</yc-modal>
 
 
-<modal #editModalDialog
-       title="{{ groupToEdit ? groupToEdit.name : '' }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-       [valid]="validForSave"
-       (closed)="onEditModalResult($event)">
+<yc-modal #editModalDialog
+          title="{{ 'PRODUCT_TYPE_TAB_GROUPS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+          [valid]="validForSave"
+          (closed)="onEditModalResult($event)">
 
   <template [ngIf]="groupToEdit">
 
@@ -85,6 +85,7 @@
             <yc-i18n-table title="{{ 'NAME' | translate }}"
                            [source]="groupToEdit"
                            value="name"
+                           defaultRequired="true"
                            i18n="displayNames"
                            (dataChanged)="onDataChange($event)"></yc-i18n-table>
           </div>
@@ -94,5 +95,5 @@
 
   </template>
 
-</modal>
+</yc-modal>
 

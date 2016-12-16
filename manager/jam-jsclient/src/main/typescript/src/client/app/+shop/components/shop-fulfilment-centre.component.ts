@@ -13,20 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO, ValidationRequestVO} from './../../shared/model/index';
-import {FulfilmentService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO, ShopFulfilmentCentreVO, FulfilmentCentreInfoVO, ValidationRequestVO } from './../../shared/model/index';
+import { FulfilmentService, Util } from './../../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-fulfilment-centre',
   moduleId: module.id,
   templateUrl: './shop-fulfilment-centre.component.html',
-  directives: [ NgIf, NgFor, DataControlComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
@@ -34,23 +33,23 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopCentresVO:Array<ShopFulfilmentCentreVO>;
-  availableCentres:Array<ShopFulfilmentCentreVO>;
-  selectedCentres:Array<ShopFulfilmentCentreVO>;
+  private shopCentresVO:Array<ShopFulfilmentCentreVO>;
+  private availableCentres:Array<ShopFulfilmentCentreVO>;
+  private selectedCentres:Array<ShopFulfilmentCentreVO>;
 
-  changed:boolean = false;
+  private changed:boolean = false;
 
-  newCentre:FulfilmentCentreInfoVO;
+  private newCentre:FulfilmentCentreInfoVO;
   @ViewChild('editNewCentreName')
-  editNewCentreName:ModalComponent;
-  newCentreForm:any;
-  newCentreFormSub:any;
-  changedSingle:boolean = true;
-  validForSave:boolean = false;
+  private editNewCentreName:ModalComponent;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private newCentreForm:any;
+  private newCentreFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForSave:boolean = false;
 
   constructor(private _fulfilmentService:FulfilmentService,
               fb: FormBuilder) {
-    console.debug('ShopFulfilmentCentreComponent constructor');
+    LogUtil.debug('ShopFulfilmentCentreComponent constructor');
 
     this.newCentre = this.newCentreInstance();
 
@@ -62,7 +61,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
 
       if (basic == null) {
         let code = control.value;
-        if (!that.changedSingle || that.newCentre == null) {
+        if (that.newCentre == null || !that.newCentreForm || !that.newCentreForm.dirty) {
           return null;
         }
 
@@ -107,12 +106,12 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopFulfilmentCentreComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopFulfilmentCentreComponent ngOnInit shop', this.shop);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ShopFulfilmentCentreComponent ngOnDestroy');
+    LogUtil.debug('ShopFulfilmentCentreComponent ngOnDestroy');
     this.formUnbind();
   }
 
@@ -120,37 +119,100 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     return { warehouseId: 0, code: '', name: '', description: null, countryCode: null, stateCode: null, city: null, postcode: null };
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.newCentreForm.controls) {
-      this.newCentreForm.controls[key]['_pristine'] = true;
-      this.newCentreForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.newCentreFormSub = this.newCentreForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.newCentreForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'newCentreForm', 'newCentreFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
     if (this.newCentreFormSub) {
-      console.debug('ShopFulfilmentCentreComponent unbining form');
-      this.newCentreFormSub.unsubscribe();
+      UiUtil.formUnbind(this, 'newCentreFormSub');
+    }
+  }
+
+  formChange():void {
+    LogUtil.debug('ShopFulfilmentCentreComponent formChange', this.newCentreForm.valid, this.newCentre);
+    this.validForSave = this.newCentreForm.valid;
+  }
+
+  onDataChange() {
+    LogUtil.debug('ShopFulfilmentCentreComponent data changed');
+    this.changed = true;
+  }
+
+  /**
+   * Fast create new category.
+   * @param parent parent of new catecory
+   */
+  createNew() {
+    LogUtil.debug('ShopFulfilmentCentreComponent createNew');
+    this.validForSave = false;
+    UiUtil.formInitialise(this, 'initialising', 'newCentreForm', 'newCentre', this.newCentreInstance());
+    this.editNewCentreName.show();
+  }
+
+  /**
+   * Handle result of new category modal dialog.
+   * @param modalresult
+   */
+  editNewCentreNameModalResult(modalresult:ModalResult) {
+    LogUtil.debug('ShopFulfilmentCentreComponent editNewCentreNameModalResult modal result', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
+          carVo => {
+            this.validForSave = false;
+            this.onRefreshHandler();
+        }
+      );
+
     }
   }
 
 
-  onFormDataChange(event:any) {
-    console.debug('ShopFulfilmentCentreComponent data changed', event);
-    this.changedSingle = true;
+  onSaveHandler() {
+    LogUtil.debug('ShopFulfilmentCentreComponent Save handler', this.shop);
+    if (this.shop.shopId > 0 && this.shopCentresVO) {
+      var _sub:any = this._fulfilmentService.saveShopFulfilmentCentres(this.shopCentresVO).subscribe(shopLanguagesVo => {
+        this.shopCentresVO = Util.clone(shopLanguagesVo);
+        this.remapCentres();
+        this.changed = false;
+        this._reload = false;
+        _sub.unsubscribe();
+      });
+    }
   }
 
-  onDataChange() {
-    console.debug('ShopFulfilmentCentreComponent data changed');
+  onDiscardEventHandler() {
+    LogUtil.debug('ShopFulfilmentCentreComponent discard handler', this.shop);
+    this.onRefreshHandler();
+  }
+
+  onRefreshHandler() {
+    LogUtil.debug('ShopFulfilmentCentreComponent refresh handler', this.shop);
+    if (this.shop.shopId > 0) {
+      var _sub:any = this._fulfilmentService.getShopFulfilmentCentres(this.shop.shopId).subscribe(shopCentresVo => {
+        LogUtil.debug('ShopFulfilmentCentreComponent getShopCentres', shopCentresVo);
+        this.shopCentresVO  = Util.clone(shopCentresVo);
+        this.remapCentres();
+        this.changed = false;
+        this._reload = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.shopCentresVO = null;
+    }
+  }
+
+  onAvailableCentreClick(event:any) {
+    LogUtil.debug('ShopFulfilmentCentreComponent onAvailableCentreClick', event);
+    event.fulfilmentShop.disabled = false;
+    this.remapCentres();
+    this.changed = true;
+  }
+
+  onSupportedCentreClick(event:any) {
+    LogUtil.debug('ShopFulfilmentCentreComponent onSupportedCentreClick', event);
+    event.fulfilmentShop.disabled = true;
+    this.remapCentres();
     this.changed = true;
   }
 
@@ -181,83 +243,6 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
     this.selectedCentres = selectedCentres;
     this.availableCentres = availableCentres;
 
-  }
-  /**
-   * Fast create new category.
-   * @param parent parent of new catecory
-   */
-  createNew() {
-    console.debug('ShopFulfilmentCentreComponent createNew');
-    this.changedSingle = false;
-    this.validForSave = false;
-    this.newCentre = this.newCentreInstance();
-    this.formReset();
-    this.editNewCentreName.show();
-  }
-
-  /**
-   * Handle result of new category modal dialog.
-   * @param modalresult
-   */
-  editNewCentreNameModalResult(modalresult:ModalResult) {
-    console.debug('ShopFulfilmentCentreComponent editNewCentreNameModalResult modal result', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
-          carVo => {
-          this.onRefreshHandler();
-        }
-      );
-
-    }
-  }
-
-
-  onSaveHandler() {
-    console.debug('ShopFulfilmentCentreComponent Save handler', this.shop);
-    if (this.shop.shopId > 0 && this.shopCentresVO) {
-      var _sub:any = this._fulfilmentService.saveShopFulfilmentCentres(this.shopCentresVO).subscribe(shopLanguagesVo => {
-        this.shopCentresVO = Util.clone(shopLanguagesVo);
-        this.remapCentres();
-        this.changed = false;
-        this._reload = false;
-        _sub.unsubscribe();
-      });
-    }
-  }
-
-  onDiscardEventHandler() {
-    console.debug('ShopFulfilmentCentreComponent discard handler', this.shop);
-    this.onRefreshHandler();
-  }
-
-  onRefreshHandler() {
-    console.debug('ShopFulfilmentCentreComponent refresh handler', this.shop);
-    if (this.shop.shopId > 0) {
-      var _sub:any = this._fulfilmentService.getShopFulfilmentCentres(this.shop.shopId).subscribe(shopCentresVo => {
-        console.debug('ShopFulfilmentCentreComponent getShopCentres', shopCentresVo);
-        this.shopCentresVO  = Util.clone(shopCentresVo);
-        this.remapCentres();
-        this.changed = false;
-        this._reload = false;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.shopCentresVO = null;
-    }
-  }
-
-  onAvailableCentreClick(event:any) {
-    console.debug('ShopFulfilmentCentreComponent onAvailableCentreClick', event);
-    event.fulfilmentShop.disabled = false;
-    this.remapCentres();
-    this.changed = true;
-  }
-
-  onSupportedCentreClick(event:any) {
-    console.debug('ShopFulfilmentCentreComponent onSupportedCentreClick', event);
-    event.fulfilmentShop.disabled = true;
-    this.remapCentres();
-    this.changed = true;
   }
 
 }

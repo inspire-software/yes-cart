@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {InventoryVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { InventoryVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-inventory',
   moduleId: module.id,
   templateUrl: 'inventory.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class InventoryComponent implements OnInit, OnDestroy {
-
-  _inventory:Array<InventoryVO> = [];
-
-  filteredInventory:Array<InventoryVO>;
 
   @Input() selectedInventory:InventoryVO;
 
   @Output() dataSelected: EventEmitter<InventoryVO> = new EventEmitter<InventoryVO>();
 
+  private _inventory:Array<InventoryVO> = [];
+
+  private filteredInventory:Array<InventoryVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('InventoryComponent constructed');
+    LogUtil.debug('InventoryComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('InventoryComponent ngOnInit');
+    LogUtil.debug('InventoryComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.filterInventory();
   }
 
-  private filterInventory() {
-
-    this.filteredInventory = this._inventory;
-    console.debug('InventoryComponent filterInventory', this.filteredInventory);
-
-    if (this.filteredInventory === null) {
-      this.filteredInventory = [];
-    }
-
-    let _total = this.filteredInventory.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('InventoryComponent ngOnDestroy');
+    LogUtil.debug('InventoryComponent ngOnDestroy');
     this.selectedInventory = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:InventoryVO) {
-    console.debug('InventoryComponent onSelectRow handler', row);
+    LogUtil.debug('InventoryComponent onSelectRow handler', row);
     if (row == this.selectedInventory) {
       this.selectedInventory = null;
     } else {
@@ -110,5 +92,22 @@ export class InventoryComponent implements OnInit, OnDestroy {
     }
     this.dataSelected.emit(this.selectedInventory);
   }
+
+  private filterInventory() {
+
+    this.filteredInventory = this._inventory;
+    LogUtil.debug('InventoryComponent filterInventory', this.filteredInventory);
+
+    if (this.filteredInventory === null) {
+      this.filteredInventory = [];
+    }
+
+    let _total = this.filteredInventory.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
+
 
 }

@@ -13,78 +13,105 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {ProductTypeVO} from './../model/index';
-import {CatalogService} from './../services/index';
-import {Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ProductTypeVO } from './../model/index';
+import { CatalogService } from './../services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { Futures, Future, FormValidationEvent } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-product-type-select',
   moduleId: module.id,
   templateUrl: 'product-type-select.component.html',
-  directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
 export class ProductTypeSelectComponent implements OnInit, OnDestroy {
 
-  private filteredProducttypes : ProductTypeVO[] = [];
-  private producttypeFilter : string;
+  @Output() dataSelected: EventEmitter<FormValidationEvent<ProductTypeVO>> = new EventEmitter<FormValidationEvent<ProductTypeVO>>();
 
-  private selectedProducttype : ProductTypeVO = null;
+  private changed:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
+  @ViewChild('productTypeModalDialog')
+  private productTypeModalDialog:ModalComponent;
 
-  producttypeFilterRequired:boolean = true;
-  producttypeFilterCapped:boolean = false;
+  private validForSelect:boolean = false;
 
-  @Output() dataSelected: EventEmitter<ProductTypeVO> = new EventEmitter<ProductTypeVO>();
+  private filteredProductTypes : ProductTypeVO[] = [];
+  private productTypeFilter : string;
 
-  constructor (private _producttypeService : CatalogService) {
-    console.debug('ProductTypeSelectComponent constructed');
-  }
+  private selectedProductType : ProductTypeVO = null;
 
-  getAllProducttypes() {
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
 
-    this.producttypeFilterRequired = (this.producttypeFilter == null || this.producttypeFilter.length < 2);
+  private productTypeFilterRequired:boolean = true;
+  private productTypeFilterCapped:boolean = false;
 
-    if (!this.producttypeFilterRequired) {
-      var _sub:any = this._producttypeService.getFilteredProductTypes(this.producttypeFilter, this.filterCap).subscribe(allproducttypes => {
-        console.debug('ProductTypeSelectComponent getAllProducttypes', allproducttypes);
-        this.filteredProducttypes = allproducttypes;
-        this.producttypeFilterCapped = this.filteredProducttypes.length >= this.filterCap;
-        _sub.unsubscribe();
-      });
-    }
+  private loading:boolean = false;
+
+  constructor (private _typeService : CatalogService) {
+    LogUtil.debug('ProductTypeSelectComponent constructed');
   }
 
   ngOnDestroy() {
-    console.debug('ProductTypeSelectComponent ngOnDestroy');
+    LogUtil.debug('ProductTypeSelectComponent ngOnDestroy');
   }
 
   ngOnInit() {
-    console.debug('ProductTypeSelectComponent ngOnInit');
+    LogUtil.debug('ProductTypeSelectComponent ngOnInit');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
-      that.getAllProducttypes();
+      that.getAllProductTypes();
     }, this.delayedFilteringMs);
 
   }
 
   onSelectClick(producttype: ProductTypeVO) {
-    console.debug('ProductTypeSelectComponent onSelectClick', producttype);
-    this.selectedProducttype = producttype;
-    this.dataSelected.emit(this.selectedProducttype);
+    LogUtil.debug('ProductTypeSelectComponent onSelectClick', producttype);
+    this.selectedProductType = producttype;
+    this.validForSelect = true;
   }
 
   protected onFilterChange() {
 
     this.delayedFiltering.delay();
 
+  }
+
+  public showDialog() {
+    LogUtil.debug('ProductTypeSelectComponent showDialog');
+    this.productTypeModalDialog.show();
+  }
+
+
+  protected onSelectConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('ProductTypeSelectComponent onSelectConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      this.dataSelected.emit({ source: this.selectedProductType, valid: true });
+      this.selectedProductType = null;
+    }
+  }
+
+  private getAllProductTypes() {
+
+    this.productTypeFilterRequired = (this.productTypeFilter == null || this.productTypeFilter.length < 2);
+
+    if (!this.productTypeFilterRequired) {
+      this.loading = true;
+      var _sub:any = this._typeService.getFilteredProductTypes(this.productTypeFilter, this.filterCap).subscribe(allproductTypes => {
+        LogUtil.debug('ProductTypeSelectComponent getAllProductTypes', allproductTypes);
+        this.selectedProductType = null;
+        this.changed = false;
+        this.validForSelect = false;
+        this.filteredProductTypes = allproductTypes;
+        this.productTypeFilterCapped = this.filteredProductTypes.length >= this.filterCap;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    }
   }
 
 }

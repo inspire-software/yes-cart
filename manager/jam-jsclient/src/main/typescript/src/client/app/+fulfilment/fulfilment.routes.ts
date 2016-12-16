@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { FulfilmentComponent, CentreInventoryComponent } from './index';
 
-export const FulfilmentRoutes: RouterConfig = [
+export const FulfilmentRoutes: Route[] = [
   {
     path: 'fulfilment/centres',
     component: FulfilmentComponent

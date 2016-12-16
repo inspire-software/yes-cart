@@ -1,14 +1,13 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { HTTP_PROVIDERS } from '@angular/http';
+import { Component, OnDestroy, Inject } from '@angular/core';
+import { Config } from './shared/index';
+import './operators';
 
-import { Config, SidebarComponent, ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, ValidationService } from './shared/index';
+import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, ValidationService } from './shared/services/index';
 import { YcValidators } from './shared/validation/validators';
-import { ErrorModalComponent } from './shared/error/index';
-import { LicenseModalComponent } from './shared/license/index';
 import { CookieUtil } from './shared/cookies/index';
+import { LogUtil } from './shared/log/index';
 
-import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/bundles/index';
 
 
 /**
@@ -18,11 +17,9 @@ import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
 @Component({
   moduleId: module.id,
   selector: 'yc-app',
-  viewProviders: [HTTP_PROVIDERS],
   templateUrl: 'app.component.html',
-  directives: [ROUTER_DIRECTIVES, SidebarComponent, ErrorModalComponent, LicenseModalComponent],
-  pipes: [TranslatePipe]
 })
+
 export class AppComponent implements OnDestroy {
 
   private langSub:any;
@@ -33,8 +30,8 @@ export class AppComponent implements OnDestroy {
               @Inject(WindowMessageEventBus) _windowMessageEventBus:WindowMessageEventBus,
               @Inject(ValidationService)     _validationService:ValidationService,
               translate: TranslateService) {
+    LogUtil.debug('Environment config', Config);
 
-    console.log('AppComponent environment config', Config);
     ErrorEventBus.init(_errorEventBus);
     ShopEventBus.init(_shopEventBus);
     I18nEventBus.init(_i18nEventBus);
@@ -43,7 +40,7 @@ export class AppComponent implements OnDestroy {
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
     userLang = /(uk|ru|en|de)/gi.test(userLang) ? userLang : 'en';     // TODO: move languages to config
-    console.log('AppComponent language', userLang);
+    LogUtil.debug('AppComponent language', userLang);
     translate.setDefaultLang('en');
 
     this.langSub = I18nEventBus.getI18nEventBus().i18nUpdated$.subscribe(lang => {
@@ -57,7 +54,7 @@ export class AppComponent implements OnDestroy {
 
   loadUiPrefrences() {
 
-    console.debug('Load UI configurations');
+    LogUtil.debug('Load UI configurations');
 
     this.configureIntPreference('UI_INPUT_DELAY');
     this.configureIntPreference('UI_BULKSERVICE_DELAY');
@@ -76,12 +73,12 @@ export class AppComponent implements OnDestroy {
     if (defaultValue !== value) {
       cfg[configName] = parseInt(value);
     }
-    console.debug('Load UI configuration', configName, value, defaultValue);
+    LogUtil.debug('Load UI configuration', configName, value, defaultValue);
   }
 
 
   ngOnDestroy() {
-    console.debug('AppComponent ngOnDestroy');
+    LogUtil.debug('AppComponent ngOnDestroy');
     if (this.langSub) {
       this.langSub.unsubscribe();
     }

@@ -13,72 +13,68 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavigationPriceTiersVO, CategoryNavigationPriceTierVO, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {Util} from './../../shared/services/index';
-import {UiUtil} from './../../shared/ui/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {CategorySelectComponent} from './../../shared/catalog/index';
-import {ProductTypeSelectComponent} from './../../shared/product/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent, ModalAction, ModalResult} from './../../shared/modal/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { CategoryVO, AttrValueCategoryVO, ProductTypeInfoVO, Pair, CategoryNavigationPriceTiersVO, CategoryNavigationPriceTierVO, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { Util } from './../../shared/services/index';
+import { UiUtil } from './../../shared/ui/index';
+import { CategorySelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { ModalComponent, ModalAction, ModalResult } from './../../shared/modal/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-category',
   moduleId: module.id,
   templateUrl: 'category.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, CategorySelectComponent, ProductTypeSelectComponent, I18nComponent, ModalComponent],
 })
 
 export class CategoryComponent implements OnInit, OnDestroy {
 
-  _category:CategoryVO;
-  _attributes:AttrValueCategoryVO[] = [];
-  attributeFilter:string;
-
-  navigationByPriceTiers:CategoryNavigationPriceTiersVO;
-  navigationByPriceTiersAddCurrency:string;
-
-  _changes:Array<Pair<AttrValueCategoryVO, boolean>>;
-
-  selectedRow:AttrValueCategoryVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<CategoryVO, Array<Pair<AttrValueCategoryVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<CategoryVO, Array<Pair<AttrValueCategoryVO, boolean>>>>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _category:CategoryVO;
+  private _attributes:AttrValueCategoryVO[] = [];
+  private attributeFilter:string;
 
-  categoryForm:any;
-  categoryFormSub:any;
+  private navigationByPriceTiers:CategoryNavigationPriceTiersVO;
+  private navigationByPriceTiersAddCurrency:string;
+
+  private _changes:Array<Pair<AttrValueCategoryVO, boolean>>;
+
+  private selectedRow:AttrValueCategoryVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private categoryForm:any;
+  private categoryFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('categoryParentSelectComponent')
-  categoryParentSelectComponent:CategorySelectComponent;
+  private categoryParentSelectComponent:CategorySelectComponent;
 
   @ViewChild('categoryProductTypeSelectComponent')
-  categoryProductTypeSelectComponent:ProductTypeSelectComponent;
+  private categoryProductTypeSelectComponent:ProductTypeSelectComponent;
 
   @ViewChild('categoryPriceTiersModalDialog')
-  categoryPriceTiersModalDialog:ModalComponent;
+  private categoryPriceTiersModalDialog:ModalComponent;
+
+  private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('CategoryComponent constructed');
+    LogUtil.debug('CategoryComponent constructed');
 
     let that = this;
 
     let validUri = function(control:any):any {
 
       let uri = control.value;
-      if (!that.changed || uri == null || uri == '' || that._category == null) {
+      if (uri == null || uri == '' || that._category == null || !that.categoryForm || (!that.categoryForm.dirty && that._category.categoryId > 0)) {
         return null;
       }
 
@@ -93,7 +89,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (!that.changed || code == null || code == '' || that._category == null) {
+      if (code == null || code == '' || that._category == null|| !that.categoryForm || (!that.categoryForm.dirty && that._category.categoryId > 0)) {
         return null;
       }
 
@@ -119,6 +115,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
       'navigationByBrand': [''],
       'navigationByPrice': [''],
       'productTypeName': [''],
+      'name': [''],
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -127,42 +127,26 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.categoryForm.controls) {
-      this.categoryForm.controls[key]['_pristine'] = true;
-      this.categoryForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.categoryFormSub = this.categoryForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this._category.categoryId != 100 && this.categoryForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'categoryForm', 'categoryFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.categoryFormSub) {
-      console.debug('CategoryComponent unbining form');
-      this.categoryFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'categoryFormSub');
   }
 
   formChange():void {
-    console.debug('CategoryComponent validating formGroup is valid: ' + this.validForSave, this._category);
-    this.dataChanged.emit({ source: new Pair(this._category, this._changes), valid: this.validForSave });
+    LogUtil.debug('CategoryComponent formChange', this.categoryForm.valid, this._category);
+    this.dataChanged.emit({ source: new Pair(this._category, this._changes), valid: (this._category.categoryId != 100 && this.categoryForm.valid) });
   }
 
   @Input()
   set category(category:CategoryVO) {
-    this._category = category;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'categoryForm', '_category', category);
+    this._changes = [];
+
   }
 
   get category():CategoryVO {
@@ -185,6 +169,22 @@ export class CategoryComponent implements OnInit, OnDestroy {
     UiUtil.dateInputSetterProxy(this._category, 'availablefrom', availablefrom);
   }
 
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'categoryForm', 'name', event);
+  }
+
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'categoryForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'categoryForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'categoryForm', 'meta', event);
+  }
+
   @Input()
   set attributes(attributes:AttrValueCategoryVO[]) {
     this._attributes = attributes;
@@ -194,30 +194,24 @@ export class CategoryComponent implements OnInit, OnDestroy {
     return this._attributes;
   }
 
-  onMainDataChange(event:any) {
-    console.debug('CategoryComponent main data changed', this._category);
-    this.changed = true;
-  }
-
   onAttributeDataChanged(event:any) {
-    console.debug('CategoryComponent attr data changed', this._category);
-    this.changed = true;
+    LogUtil.debug('CategoryComponent attr data changed', this._category);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('CategoryComponent ngOnInit');
+    LogUtil.debug('CategoryComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('CategoryComponent ngOnDestroy');
+    LogUtil.debug('CategoryComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('CategoryComponent tabSelected', tab);
+    LogUtil.debug('CategoryComponent tabSelected', tab);
   }
 
 
@@ -234,7 +228,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueCategoryVO) {
-    console.debug('CategoryComponent onSelectRow handler', row);
+    LogUtil.debug('CategoryComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -243,45 +237,46 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   protected onEditParent() {
-    console.debug('CategoryComponent onEditParent handler');
+    LogUtil.debug('CategoryComponent onEditParent handler');
     this.categoryParentSelectComponent.showDialog();
   }
 
   protected onCategoryParentSelected(event:FormValidationEvent<CategoryVO>) {
-    console.debug('CategoryComponent onCategoryParentSelected handler', event);
+    LogUtil.debug('CategoryComponent onCategoryParentSelected handler', event);
     if (event.valid) {
       this.category.parentId = event.source.categoryId;
       this.category.parentName = event.source.name;
-      this.changed = true;
+      this.delayedChange.delay();
     }
   }
 
   protected onClearProductType() {
-    console.debug('CategoryComponent onClearProductType handler');
+    LogUtil.debug('CategoryComponent onClearProductType handler');
     if (this._category) {
       this._category.productTypeId = 0;
       this._category.productTypeName = null;
+      this.delayedChange.delay();
     }
   }
 
 
   protected onEditProductType() {
-    console.debug('CategoryComponent onEditProductType handler');
+    LogUtil.debug('CategoryComponent onEditProductType handler');
     this.categoryProductTypeSelectComponent.showDialog();
   }
 
 
   protected onCategoryProductTypeSelected(event:FormValidationEvent<ProductTypeInfoVO>) {
-    console.debug('CategoryComponent onCategoryProductTypeSelected handler', event);
+    LogUtil.debug('CategoryComponent onCategoryProductTypeSelected handler', event);
     if (event.valid) {
       this.category.productTypeId = event.source.producttypeId;
       this.category.productTypeName = event.source.name;
-      this.changed = true;
+      this.delayedChange.delay();
     }
   }
 
   protected onEditPriceTiers() {
-    console.debug('CategoryComponent onCategoryProductTypeSelected handler');
+    LogUtil.debug('CategoryComponent onCategoryProductTypeSelected handler');
     if (this._category.navigationByPriceTiers != null && this._category.navigationByPriceTiers.tiers != null) {
       this.navigationByPriceTiers = Util.clone(this._category.navigationByPriceTiers);
     } else {
@@ -291,13 +286,13 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   protected onEditPriceTiersModalResult(modalresult: ModalResult) {
-    console.debug('CategoryComponent onEditPriceTiersModalResult modal result is ', modalresult);
+    LogUtil.debug('CategoryComponent onEditPriceTiersModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       this._category.navigationByPriceTiers = this.navigationByPriceTiers;
       this.navigationByPriceTiers = null;
-      this.changed = true;
       this.categoryForm.updateValueAndValidity();
+      this.delayedChange.delay();
     } else {
       this.navigationByPriceTiers = null;
     }
@@ -305,7 +300,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
 
   protected onNavPriceTierDelete(tier:Pair<string, Array<CategoryNavigationPriceTierVO>>, item:CategoryNavigationPriceTierVO) {
-    console.debug('CategoryComponent onNavPriceTierDelete handler', tier, item);
+    LogUtil.debug('CategoryComponent onNavPriceTierDelete handler', tier, item);
     let idx = tier.second.indexOf(item);
     if (idx != -1) {
       tier.second.splice(idx, 1);
@@ -314,15 +309,46 @@ export class CategoryComponent implements OnInit, OnDestroy {
   }
 
   protected onNavPriceTierAdd(tier:Pair<string, Array<CategoryNavigationPriceTierVO>>) {
-    console.debug('CategoryComponent onNavPriceTierAdd handler', tier);
+    LogUtil.debug('CategoryComponent onNavPriceTierAdd handler', tier);
     tier.second.push({ from: 0, to: 99 });
   }
 
   protected onEditPriceTiersAddCurrency() {
-    console.debug('CategoryComponent onEditPriceTiersAddCurrency handler');
+    LogUtil.debug('CategoryComponent onEditPriceTiersAddCurrency handler');
     if (this.navigationByPriceTiersAddCurrency != null && this.navigationByPriceTiersAddCurrency.length == 3) {
       this.navigationByPriceTiers.tiers.push({ first: this.navigationByPriceTiersAddCurrency, second: [] });
     }
   }
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
 
 }

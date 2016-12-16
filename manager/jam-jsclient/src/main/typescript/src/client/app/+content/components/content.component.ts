@@ -13,67 +13,63 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO, ContentVO, ContentWithBodyVO, AttrValueContentVO, ContentBodyVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {WindowMessageEventBus} from './../../shared/services/index';
-import {UiUtil} from './../../shared/ui/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {ContentSelectComponent} from './../../shared/content/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent} from './../../shared/modal/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO, ContentVO, ContentWithBodyVO, AttrValueContentVO, ContentBodyVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { WindowMessageEventBus } from './../../shared/services/index';
+import { UiUtil } from './../../shared/ui/index';
+import { ContentSelectComponent } from './../../shared/content/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-content',
   moduleId: module.id,
   templateUrl: 'content.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, ContentSelectComponent, I18nComponent, ModalComponent],
 })
 
 export class ContentComponent implements OnInit, OnDestroy {
 
-  @Input()
-  shop:ShopVO = null;
-
-  _content:ContentWithBodyVO;
-  _attributes:AttrValueContentVO[] = [];
-  attributeFilter:string;
-
-  _changes:Array<Pair<AttrValueContentVO, boolean>>;
-
-  selectedRow:AttrValueContentVO;
+  @Input() shop:ShopVO = null;
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _content:ContentWithBodyVO;
+  private _attributes:AttrValueContentVO[] = [];
+  private attributeFilter:string;
 
-  contentForm:any;
-  contentFormSub:any;
+  private _changes:Array<Pair<AttrValueContentVO, boolean>>;
 
-  winSub:any;
+  private selectedRow:AttrValueContentVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private contentForm:any;
+  private contentFormSub:any; // tslint:disable-line:no-unused-variable
+
+  private winSub:any;
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('contentParentSelectComponent')
-  contentParentSelectComponent:ContentSelectComponent;
+  private contentParentSelectComponent:ContentSelectComponent;
+
+  private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('ContentComponent constructed');
+    LogUtil.debug('ContentComponent constructed');
 
     let that = this;
 
     let validUri = function(control:any):any {
 
       let uri = control.value;
-      if (!that.changed || uri == null || uri == '' || that._content == null) {
+      if (uri == null || uri == '' || that._content == null || !that.contentForm || (!that.contentForm.dirty && that._content.contentId > 0)) {
         return null;
       }
 
@@ -88,7 +84,7 @@ export class ContentComponent implements OnInit, OnDestroy {
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (!that.changed || code == null || code == '' || that._content == null) {
+      if (code == null || code == '' || that._content == null || !that.contentForm || (!that.contentForm.dirty && that._content.contentId > 0)) {
         return null;
       }
 
@@ -109,6 +105,10 @@ export class ContentComponent implements OnInit, OnDestroy {
       'availablefrom': ['', YcValidators.validDate],
       'availableto': ['', YcValidators.validDate],
       'uri': ['', validUri],
+      'name': [''],
+      'title': [''],
+      'keywords': [''],
+      'meta': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -121,7 +121,7 @@ export class ContentComponent implements OnInit, OnDestroy {
         let _body:ContentBodyVO = this._content.contentBodies.find(body => {
           return body.lang == _update.lang;
         });
-        console.debug('ContentComponent update', _body, _update);
+        LogUtil.debug('ContentComponent update', _body, _update);
         if (_body != null) {
           _body.text = _update.text;
           this.formChange();
@@ -131,42 +131,26 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.contentForm.controls) {
-      this.contentForm.controls[key]['_pristine'] = true;
-      this.contentForm.controls[key]['_touched'] = false;
-    }
-  }
-
-
   formBind():void {
-    this.contentFormSub = this.contentForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.contentForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'contentForm', 'contentFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.contentFormSub) {
-      console.debug('ContentComponent unbining form');
-      this.contentFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'contentFormSub');
   }
 
   formChange():void {
-    console.debug('ContentComponent validating formGroup is valid: ' + this.validForSave, this._content);
-    this.dataChanged.emit({ source: new Pair(this._content, this._changes), valid: this.validForSave });
+    LogUtil.debug('ContentComponent formChange', this.contentForm.valid, this._content);
+    this.dataChanged.emit({ source: new Pair(this._content, this._changes), valid: this.contentForm.valid });
   }
 
   @Input()
   set content(content:ContentWithBodyVO) {
-    this._content = content;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'contentForm', '_content', content);
+    this._changes = [];
+
   }
 
   get content():ContentWithBodyVO {
@@ -189,6 +173,22 @@ export class ContentComponent implements OnInit, OnDestroy {
     UiUtil.dateInputSetterProxy(this._content, 'availablefrom', availablefrom);
   }
 
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'contentForm', 'name', event);
+  }
+
+  onTitleDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'contentForm', 'title', event);
+  }
+
+  onKeywordsDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'contentForm', 'keywords', event);
+  }
+
+  onMetaDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'contentForm', 'meta', event);
+  }
+
   @Input()
   set attributes(attributes:AttrValueContentVO[]) {
     this._attributes = attributes;
@@ -198,31 +198,25 @@ export class ContentComponent implements OnInit, OnDestroy {
     return this._attributes;
   }
 
-  onMainDataChange(event:any) {
-    console.debug('ContentComponent main data changed', this._content);
-    this.changed = true;
-  }
-
   onAttributeDataChanged(event:any) {
-    console.debug('ContentComponent attr data changed', this._content);
-    this.changed = true;
+    LogUtil.debug('ContentComponent attr data changed', this._content);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('ContentComponent ngOnInit');
+    LogUtil.debug('ContentComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ContentComponent ngOnDestroy');
+    LogUtil.debug('ContentComponent ngOnDestroy');
     this.formUnbind();
     this.winSub.unsubscribe();
   }
 
   tabSelected(tab:any) {
-    console.debug('ContentComponent tabSelected', tab);
+    LogUtil.debug('ContentComponent tabSelected', tab);
   }
 
 
@@ -239,7 +233,7 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueContentVO) {
-    console.debug('ContentComponent onSelectRow handler', row);
+    LogUtil.debug('ContentComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -248,16 +242,16 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   protected onEditParent() {
-    console.debug('ContentComponent onEditParent handler');
+    LogUtil.debug('ContentComponent onEditParent handler');
     this.contentParentSelectComponent.showDialog();
   }
 
   protected onContentParentSelected(event:FormValidationEvent<ContentVO>) {
-    console.debug('ContentComponent onContentParentSelected handler', event);
+    LogUtil.debug('ContentComponent onContentParentSelected handler', event);
     if (event.valid) {
       this.content.parentId = event.source.contentId;
       this.content.parentName = event.source.name;
-      this.changed = true;
+      this.delayedChange.delay();
     }
   }
 
@@ -276,5 +270,37 @@ export class ContentComponent implements OnInit, OnDestroy {
   protected getCMSPreview(body:ContentBodyVO) {
     return body.text;
   }
+
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
 
 }

@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {PaymentGatewayInfoVO} from './../../../shared/model/index';
-import {PaginationComponent} from './../../../shared/pagination/index';
-import {Futures, Future} from './../../../shared/event/index';
-import {Config} from './../../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { PaymentGatewayInfoVO } from './../../../shared/model/index';
+import { Futures, Future } from './../../../shared/event/index';
+import { Config } from './../../../shared/config/env.config';
+import { LogUtil } from './../../../shared/log/index';
 
 
 @Component({
   selector: 'yc-gateways',
   moduleId: module.id,
   templateUrl: 'gateways.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class GatewaysComponent implements OnInit, OnDestroy {
-
-  _gateways:Array<PaymentGatewayInfoVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredGateways:Array<PaymentGatewayInfoVO>;
 
   @Input() selectedGateway:PaymentGatewayInfoVO;
 
   @Output() dataSelected: EventEmitter<PaymentGatewayInfoVO> = new EventEmitter<PaymentGatewayInfoVO>();
 
+  private _gateways:Array<PaymentGatewayInfoVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredGateways:Array<PaymentGatewayInfoVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('GatewaysComponent constructed');
+    LogUtil.debug('GatewaysComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterGateways();
@@ -60,7 +58,7 @@ export class GatewaysComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('GatewaysComponent ngOnInit');
+    LogUtil.debug('GatewaysComponent ngOnInit');
   }
 
   @Input()
@@ -75,31 +73,8 @@ export class GatewaysComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterGateways() {
-    if (this._filter) {
-      this.filteredGateways = this._gateways.filter(country =>
-          country.label.toLowerCase().indexOf(this._filter) !== -1 ||
-          country.name.toLowerCase().indexOf(this._filter) !== -1
-      );
-      console.debug('GatewaysComponent filterGateways', this._filter);
-    } else {
-      this.filteredGateways = this._gateways;
-      console.debug('GatewaysComponent filterGateways no filter');
-    }
-
-    if (this.filteredGateways === null) {
-      this.filteredGateways = [];
-    }
-
-    let _total = this.filteredGateways.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('GatewaysComponent ngOnDestroy');
+    LogUtil.debug('GatewaysComponent ngOnDestroy');
     this.selectedGateway = null;
     this.dataSelected.emit(null);
   }
@@ -124,13 +99,36 @@ export class GatewaysComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:PaymentGatewayInfoVO) {
-    console.debug('GatewaysComponent onSelectRow handler', row);
+    LogUtil.debug('GatewaysComponent onSelectRow handler', row);
     if (row == this.selectedGateway) {
       this.selectedGateway = null;
     } else {
       this.selectedGateway = row;
     }
     this.dataSelected.emit(this.selectedGateway);
+  }
+
+  private filterGateways() {
+    if (this._filter) {
+      this.filteredGateways = this._gateways.filter(country =>
+        country.label.toLowerCase().indexOf(this._filter) !== -1 ||
+        country.name.toLowerCase().indexOf(this._filter) !== -1
+      );
+      LogUtil.debug('GatewaysComponent filterGateways', this._filter);
+    } else {
+      this.filteredGateways = this._gateways;
+      LogUtil.debug('GatewaysComponent filterGateways no filter');
+    }
+
+    if (this.filteredGateways === null) {
+      this.filteredGateways = [];
+    }
+
+    let _total = this.filteredGateways.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

@@ -13,23 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {CustomerOrderService} from './../shared/services/index';
-import {UiUtil} from './../shared/ui/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {PaymentsComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent} from './../shared/modal/index';
-import {PaymentVO} from './../shared/model/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { CustomerOrderService } from './../shared/services/index';
+import { ModalComponent } from './../shared/modal/index';
+import { PaymentVO } from './../shared/model/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { UiUtil } from './../shared/ui/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-all-payments',
   moduleId: module.id,
   templateUrl: 'all-payments.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, PaymentsComponent, ModalComponent, DataControlComponent ],
 })
 
 export class AllPaymentsComponent implements OnInit, OnDestroy {
@@ -42,25 +38,27 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
   private paymentFilterRequired:boolean = true;
   private paymentFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedPayment:PaymentVO;
 
   @ViewChild('transactionDetailsModalDialog')
-  transactionDetailsModalDialog:ModalComponent;
+  private transactionDetailsModalDialog:ModalComponent;
+
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   constructor(private _paymentService:CustomerOrderService) {
-    console.debug('AllPaymentsComponent constructed');
+    LogUtil.debug('AllPaymentsComponent constructed');
   }
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-
   ngOnInit() {
-    console.debug('AllPaymentsComponent ngOnInit');
+    LogUtil.debug('AllPaymentsComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -70,48 +68,23 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('AllPaymentsComponent ngOnDestroy');
+    LogUtil.debug('AllPaymentsComponent ngOnDestroy');
   }
 
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getFilteredPayments() {
-    this.paymentFilterRequired = !this.forceShowAll && (this.paymentFilter == null || this.paymentFilter.length < 2);
-
-    console.debug('AllPaymentsComponent getFilteredPayments' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (!this.paymentFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, max).subscribe( allpayments => {
-        console.debug('AllPaymentsComponent getFilteredPayments', allpayments);
-        this.payments = allpayments;
-        this.selectedPayment = null;
-        this.changed = false;
-        this.validForSave = false;
-        this.paymentFilterCapped = this.payments.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.payments = [];
-      this.selectedPayment = null;
-      this.changed = false;
-      this.validForSave = false;
-      this.paymentFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('AllPaymentsComponent refresh handler');
+    LogUtil.debug('AllPaymentsComponent refresh handler');
     this.getFilteredPayments();
   }
 
-  onPaymentSelected(data:PaymentVO) {
-    console.debug('AllPaymentsComponent onPaymentSelected', data);
+  protected onPaymentSelected(data:PaymentVO) {
+    LogUtil.debug('AllPaymentsComponent onPaymentSelected', data);
     this.selectedPayment = data;
   }
 
@@ -186,14 +159,50 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
 
     if (this.validForSave && this.changed) {
 
-      console.debug('AllPaymentsComponent Save handler payment', this.selectedPayment);
+      LogUtil.debug('AllPaymentsComponent Save handler payment', this.selectedPayment);
 
     }
 
   }
 
   protected onDiscardEventHandler() {
-    console.debug('AllPaymentsComponent discard handler');
+    LogUtil.debug('AllPaymentsComponent discard handler');
+  }
+
+
+  protected onClearFilter() {
+
+    this.paymentFilter = '';
+    this.getFilteredPayments();
+
+  }
+
+
+  private getFilteredPayments() {
+    this.paymentFilterRequired = !this.forceShowAll && (this.paymentFilter == null || this.paymentFilter.length < 2);
+
+    LogUtil.debug('AllPaymentsComponent getFilteredPayments' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (!this.paymentFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, max).subscribe( allpayments => {
+        LogUtil.debug('AllPaymentsComponent getFilteredPayments', allpayments);
+        this.payments = allpayments;
+        this.selectedPayment = null;
+        this.changed = false;
+        this.validForSave = false;
+        this.paymentFilterCapped = this.payments.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.payments = [];
+      this.selectedPayment = null;
+      this.changed = false;
+      this.validForSave = false;
+      this.paymentFilterCapped = false;
+    }
   }
 
 }

@@ -175,6 +175,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         return inventory;
     }
 
+    private final static char[] CODE = new char[] { '!' };
     private final static char[] LOW_OR_RESERVED = new char[] { '-', '+' };
     static {
         Arrays.sort(LOW_OR_RESERVED);
@@ -204,36 +205,84 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
 
                 } else {
 
-                    final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
-                        public void tune(final Criteria crit) {
-                            crit.createAlias("product", "prod");
-                            crit.setFetchMode("prod", FetchMode.JOIN);
-                        }
-                    }, Restrictions.or(
-                            Restrictions.or(
-                                    Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
-                            ),
-                            Restrictions.or(
-                                    Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
-                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
-                            )
-                    ));
+                    final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
 
-                    final List<String> skuCodes = new ArrayList<String>();
-                    for (final ProductSku sku : skus) {
-                        skuCodes.add(sku.getCode()); // sku codes from product match
-                    }
+                    if (byCode != null) {
 
-                    if (skuCodes.isEmpty()) {
-                        criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
-                    } else {
-                        criteria.add(
+
+                        final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                            public void tune(final Criteria crit) {
+                                crit.createAlias("product", "prod");
+                                crit.setFetchMode("prod", FetchMode.JOIN);
+                            }
+                        }, Restrictions.or(
                                 Restrictions.or(
-                                        Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
-                                        Restrictions.in("skuCode", skuCodes)
+                                        Restrictions.or(
+                                                Restrictions.ilike("prod.code", byCode.getSecond(), MatchMode.EXACT),
+                                                Restrictions.ilike("barCode", byCode.getSecond(), MatchMode.EXACT)
+                                        ),
+                                        Restrictions.or(
+                                                Restrictions.ilike("code", byCode.getSecond(), MatchMode.EXACT),
+                                                Restrictions.ilike("manufacturerCode", byCode.getSecond(), MatchMode.EXACT)
+                                        )
+
+                                ),
+                                Restrictions.or(
+                                        Restrictions.ilike("prod.manufacturerCode", byCode.getSecond(), MatchMode.EXACT),
+                                        Restrictions.ilike("prod.pimCode", byCode.getSecond(), MatchMode.EXACT)
                                 )
-                        );
+                        ));
+
+                        final List<String> skuCodes = new ArrayList<String>();
+                        for (final ProductSku sku : skus) {
+                            skuCodes.add(sku.getCode()); // sku codes from product match
+                        }
+
+                        if (skuCodes.isEmpty()) {
+                            criteria.add(Restrictions.ilike("skuCode", byCode.getSecond(), MatchMode.EXACT));
+                        } else {
+                            criteria.add(
+                                    Restrictions.or(
+                                            Restrictions.ilike("skuCode", byCode.getSecond(), MatchMode.EXACT),
+                                            Restrictions.in("skuCode", skuCodes)
+                                    )
+                            );
+                        }
+
+
+                    } else {
+
+                        final List<ProductSku> skus = productSkuDAO.findByCriteria(new CriteriaTuner() {
+                            public void tune(final Criteria crit) {
+                                crit.createAlias("product", "prod");
+                                crit.setFetchMode("prod", FetchMode.JOIN);
+                            }
+                        }, Restrictions.or(
+                                Restrictions.or(
+                                        Restrictions.ilike("prod.code", filter, MatchMode.ANYWHERE),
+                                        Restrictions.ilike("code", filter, MatchMode.ANYWHERE)
+                                ),
+                                Restrictions.or(
+                                        Restrictions.ilike("prod.name", filter, MatchMode.ANYWHERE),
+                                        Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                                )
+                        ));
+
+                        final List<String> skuCodes = new ArrayList<String>();
+                        for (final ProductSku sku : skus) {
+                            skuCodes.add(sku.getCode()); // sku codes from product match
+                        }
+
+                        if (skuCodes.isEmpty()) {
+                            criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));
+                        } else {
+                            criteria.add(
+                                    Restrictions.or(
+                                            Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE),
+                                            Restrictions.in("skuCode", skuCodes)
+                                    )
+                            );
+                        }
                     }
                 }
             }

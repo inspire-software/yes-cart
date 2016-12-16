@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-import {PromotionVO} from './pricelists.model';
+import { PromotionVO } from './pricelists.model';
 
 export interface CustomerOrderInfoVO {
 

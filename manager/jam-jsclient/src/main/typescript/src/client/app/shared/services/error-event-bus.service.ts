@@ -13,14 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Injectable} from '@angular/core';
-import {BehaviorSubject}    from 'rxjs/BehaviorSubject';
-import {Observable}    from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+import { Observable }    from 'rxjs/Observable';
+import { LogUtil } from './../log/index';
 
 @Injectable()
 export class ErrorEventBus {
 
   private static _errorEventBus:ErrorEventBus;
+
+  errorUpdated$ : Observable<any>;
+
+  private _errorSource : BehaviorSubject<any>;
 
   public static init(errorEventBus:ErrorEventBus) {
     ErrorEventBus._errorEventBus = errorEventBus;
@@ -30,19 +35,15 @@ export class ErrorEventBus {
     return ErrorEventBus._errorEventBus;
   }
 
-  errorUpdated$ : Observable<any>;
-
-  private _errorSource : BehaviorSubject<any>;
-
   constructor() {
-    console.debug('ErrorEventBus constructed');
+    LogUtil.debug('ErrorEventBus constructed');
     this._errorSource = new BehaviorSubject<any>('init');
     this.errorUpdated$ = this._errorSource.asObservable();
   }
 
   public emit(value: any): void {
     this._errorSource.next(value);
-    console.debug('emit error event', value);
+    LogUtil.debug('emit error event', value);
   }
 
   public current():any {

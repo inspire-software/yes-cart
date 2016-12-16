@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { BrandVO, AttrValueBrandVO, ProductTypeInfoVO, ProductTypeVO, ProductTypeAttrVO, BasicCategoryVO, CategoryVO, AttrValueCategoryVO, Pair } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class CatalogService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('CatalogService constructed');
+    LogUtil.debug('CatalogService constructed');
   }
 
   /**
@@ -342,7 +343,7 @@ export class CatalogService {
 
   private handleError (error:any) {
 
-    console.error('CatalogService Server error: ', error);
+    LogUtil.error('CatalogService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

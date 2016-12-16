@@ -334,7 +334,7 @@
                 <entry key="pack.delivery" value-ref="defaultUiOrderDeliveryFlowPackAction"/>
                 <entry key="mark.ready.for.shipment" value-ref="defaultUiOrderDeliveryFlowMarkShipmentReadyAction"/>
                 <entry key="start.shipment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
-                <entry key="start.shipment.manual.payment" value-ref="defaultUiOrderDeliveryFlowStartShipmentAction"/>
+                <entry key="start.shipment.manual.payment" value-ref="defaultUiOrderDeliveryFlowStartShipmentManualAction"/>
                 <entry key="mark.shipped" value-ref="defaultUiOrderDeliveryFlowMarkShippedAction"/>
                 <entry key="update.external.ref" value-ref="defaultUiOrderDeliveryFlowUpdateRefAction"/>
             </map>
@@ -471,6 +471,15 @@
                         <entry key="code">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServiceWarehouseCodeImpl">
                                 <constructor-arg index="0" ref="warehouseService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
+                <entry key="promotion">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServicePromotionCodeImpl">
+                                <constructor-arg index="0" ref="promotionService"/>
                             </bean>
                         </entry>
                     </map>

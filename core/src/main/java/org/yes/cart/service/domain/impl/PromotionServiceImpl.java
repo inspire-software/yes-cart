@@ -100,6 +100,23 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
         }
     }
 
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Long findPromotionIdByCode(final String code) {
+        List<Object> list = getGenericDao().findQueryObjectByNamedQuery("PROMOTION.ID.BY.CODE", code);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
+
+
     /** {@inheritDoc} */
     @CacheEvict(value = {
             "promotionService-promotionsByShopCode",

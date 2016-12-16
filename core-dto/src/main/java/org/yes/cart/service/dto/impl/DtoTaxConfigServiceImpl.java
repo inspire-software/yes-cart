@@ -74,7 +74,7 @@ public class DtoTaxConfigServiceImpl
     }
 
     private final static char[] LOCATION = new char[] { '@' };
-    private final static char[] SKU = new char[] { '#' };
+    private final static char[] SKU = new char[] { '#', '!' };
     static {
         Arrays.sort(LOCATION);
         Arrays.sort(SKU);
@@ -117,7 +117,8 @@ public class DtoTaxConfigServiceImpl
                                 Restrictions.eq("productCode", "")
                         ));
                     } else {
-                        criteria.add(Restrictions.ilike("productCode", sku, MatchMode.ANYWHERE));
+                        criteria.add(Restrictions.ilike("productCode", sku,
+                            "!".equals(skuSearch.getFirst()) ? MatchMode.EXACT : MatchMode.ANYWHERE));
                     }
 
                 } else {

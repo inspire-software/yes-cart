@@ -1,3 +1,15 @@
+<template [ngIf]="shopLocalization == null">
+
+  <div class="row">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</template>
+
 <template [ngIf]="shopLocalization">
 
 
@@ -18,8 +30,7 @@
                          [source]="shopLocalization"
                          value="title"
                          i18n="displayTitles"
-                         [formGroup]="shopSEOForm"
-                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+                         (dataChanged)="onTitleDataChange($event)"></yc-i18n-table>
         </div>
       </div>
 
@@ -29,8 +40,7 @@
                          [source]="shopLocalization"
                          value="metakeywords"
                          i18n="displayMetakeywords"
-                         [formGroup]="shopSEOForm"
-                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+                         (dataChanged)="onKeywordsDataChange($event)"></yc-i18n-table>
         </div>
       </div>
 
@@ -40,8 +50,7 @@
                          [source]="shopLocalization"
                          value="metadescription"
                          i18n="displayMetadescriptions"
-                         [formGroup]="shopSEOForm"
-                         (dataChanged)="onDataChanged()"></yc-i18n-table>
+                         (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
         </div>
       </div>
 

@@ -13,42 +13,39 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {DataGroupInfoVO, JobStatusVO, Pair} from './../shared/model/index';
-import {ImpexService} from './../shared/services/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {FileSelectComponent, DataGroupSelectComponent} from './../shared/impex/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { DataGroupInfoVO, JobStatusVO, Pair } from './../shared/model/index';
+import { ImpexService } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-import-manager',
   moduleId: module.id,
   templateUrl: 'import-manager.component.html',
-  directives: [TAB_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, FileSelectComponent, DataGroupSelectComponent, ModalComponent]
 })
 
 export class ImportManagerComponent implements OnInit {
 
-  selectedGroup:DataGroupInfoVO = null;
-  selectedFile:Pair<string,string> = null;
+  private static tabs:Array<ImportTabData> = [ ];
 
-  static tabs:Array<ImportTabData> = [ ];
-  selectedTab:number = -1;
-  selectedTabRunning:boolean = false;
-  selectedTabCompleted:boolean = false;
+  private selectedGroup:DataGroupInfoVO = null;
+  private selectedFile:Pair<string,string> = null;
+
+  private selectedTab:number = -1;
+  private selectedTabRunning:boolean = false;
+  private selectedTabCompleted:boolean = false;
 
   @ViewChild('selectGroupModalDialog')
-  selectGroupModalDialog:ModalComponent;
+  private selectGroupModalDialog:ModalComponent;
 
   @ViewChild('selectFileModalDialog')
-  selectFileModalDialog:ModalComponent;
+  private selectFileModalDialog:ModalComponent;
 
-  delayedStatus:Future;
-  delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
+  private delayedStatus:Future;
+  private delayedStatusMs:number = Config.UI_BULKSERVICE_DELAY;
 
   /**
    * Construct import panel
@@ -56,7 +53,7 @@ export class ImportManagerComponent implements OnInit {
    * @param _importService system service
    */
   constructor(private _importService:ImpexService) {
-    console.debug('ImportManagerComponent constructed');
+    LogUtil.debug('ImportManagerComponent constructed');
     let that = this;
     this.delayedStatus = Futures.perpetual(function() {
       that.getStatusInfo();
@@ -74,7 +71,7 @@ export class ImportManagerComponent implements OnInit {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ImportManagerComponent ngOnInit');
+    LogUtil.debug('ImportManagerComponent ngOnInit');
   }
 
   protected tabSelected(idx:number) {
@@ -85,18 +82,18 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onNewTabHandler() {
-    console.debug('ImportManagerComponent onNewTabHandler');
+    LogUtil.debug('ImportManagerComponent onNewTabHandler');
     this.selectedGroup = null;
     this.selectGroupModalDialog.show();
   }
 
   protected onGroupSelect(group:DataGroupInfoVO) {
-    console.debug('ImportManagerComponent onGroupSelect', group);
+    LogUtil.debug('ImportManagerComponent onGroupSelect', group);
     this.selectedGroup = group;
   }
 
   protected onGroupConfirmationResult(modalresult: ModalResult) {
-    console.debug('ImportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ImportManagerComponent onGroupConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedGroup != null) {
         this.selectedFile = null;
@@ -106,12 +103,12 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onFileSelect(file:Pair<string, string>) {
-    console.debug('ImportManagerComponent onFileSelect', file);
+    LogUtil.debug('ImportManagerComponent onFileSelect', file);
     this.selectedFile = file;
   }
 
   protected onFilesConfirmationResult(modalresult: ModalResult) {
-    console.debug('ImportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ImportManagerComponent onFilesConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedFile != null) {
         this.tabs.push({
@@ -142,17 +139,17 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onRunHandler() {
-    console.debug('ImportManagerComponent Run handler');
+    LogUtil.debug('ImportManagerComponent Run handler');
 
     if (this.selectedTab >= 0) {
       let data = this.tabs[this.selectedTab];
       if (!data.running) {
 
-        console.debug('ImportManagerComponent importFromFile', data.group.label, data.file.first);
+        LogUtil.debug('ImportManagerComponent importFromFile', data.group.label, data.file.first);
 
         var _sub:any = this._importService.importFromFile(data.group.label, data.file.first).subscribe(res => {
 
-          console.debug('ImportManagerComponent importFromFile', res);
+          LogUtil.debug('ImportManagerComponent importFromFile', res);
 
           data.status.token = res;
           data.running = true;
@@ -168,7 +165,7 @@ export class ImportManagerComponent implements OnInit {
   }
 
   protected onRefreshHandler() {
-    console.debug('ImportManagerComponent refresh handler');
+    LogUtil.debug('ImportManagerComponent refresh handler');
     this.getStatusInfo();
   }
 
@@ -176,7 +173,7 @@ export class ImportManagerComponent implements OnInit {
    * Read attributes.
    */
   private getStatusInfo() {
-    console.debug('ImportManagerComponent status');
+    LogUtil.debug('ImportManagerComponent status');
 
     this.tabs.forEach((tab:ImportTabData, idx:number) => {
 
@@ -184,7 +181,7 @@ export class ImportManagerComponent implements OnInit {
 
         var _sub:any = this._importService.getImportStatus(tab.status.token).subscribe(update => {
 
-          console.debug('ImportManagerComponent getImportStatus', update);
+          LogUtil.debug('ImportManagerComponent getImportStatus', update);
           tab.status = update;
           tab.running = tab.status.completion == null;
           _sub.unsubscribe();

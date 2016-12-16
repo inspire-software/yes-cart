@@ -1,5 +1,20 @@
-import {Component,  Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {NgClass} from '@angular/common';
+/*
+ * Copyright 2009 - 2016 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the 'License');
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an 'AS IS' BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+import { Component,  Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { LogUtil } from './../log/index';
 
 /**
  *
@@ -11,13 +26,12 @@ import {NgClass} from '@angular/common';
  *
  *
  * Shows a bootstrap modal dialog.
- * Set the body of the dialog by adding content to the modal tag: <modal>content here</modal>.
+ * Set the body of the dialog by adding content to the modal tag: <yc-modal>content here</yc-modal>.
  */
 @Component({
-  selector: 'modal',
+  selector: 'yc-modal',
   templateUrl: './modal.component.html',
   moduleId: module.id,
-  directives: [NgClass]
 })
 export class ModalComponent implements OnInit {
 
@@ -40,12 +54,12 @@ export class ModalComponent implements OnInit {
   showModal: boolean = false;
 
   constructor() {
-    console.debug('ModalComponent = ' + this.showModal);
+    LogUtil.debug('ModalComponent = ' + this.showModal);
   }
 
   ngOnInit() {
     this.loaded.next(this);
-    console.debug('ModalComponent inited');
+    LogUtil.debug('ModalComponent inited');
   }
 
 
@@ -67,7 +81,7 @@ export class ModalComponent implements OnInit {
   }
 
   cancelAction() {
-    console.debug('ModalComponent sending close event');
+    LogUtil.debug('ModalComponent sending close event');
     this.showModal = false;
     this.closed.next({
       action: ModalAction.CANCEL

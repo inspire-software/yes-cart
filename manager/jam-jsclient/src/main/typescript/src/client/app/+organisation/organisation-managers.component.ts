@@ -13,21 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {OrganisationService, ShopEventBus} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {ManagerComponent, ManagersComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {ManagerInfoVO, ManagerVO, ShopVO, RoleVO} from './../shared/model/index';
-import {FormValidationEvent} from './../shared/event/index';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { OrganisationService, ShopEventBus } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { ManagerInfoVO, ManagerVO, ShopVO, RoleVO } from './../shared/model/index';
+import { FormValidationEvent } from './../shared/event/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-organisation-managers',
   moduleId: module.id,
   templateUrl: 'organisation-managers.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, ManagerComponent, ManagersComponent, ModalComponent, DataControlComponent ],
 })
 
 export class OrganisationManagerComponent implements OnInit, OnDestroy {
@@ -47,84 +43,65 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   private roles:Array<RoleVO> = [];
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   @ViewChild('disableConfirmationModalDialog')
-  disableConfirmationModalDialog:ModalComponent;
+  private disableConfirmationModalDialog:ModalComponent;
 
   @ViewChild('resetConfirmationModalDialog')
-  resetConfirmationModalDialog:ModalComponent;
+  private resetConfirmationModalDialog:ModalComponent;
 
   private deleteValue:String;
   private shopAllSub:any;
 
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
   constructor(private _organisationService:OrganisationService) {
-    console.debug('OrganisationManagerComponent constructed');
+    LogUtil.debug('OrganisationManagerComponent constructed');
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
     });
   }
-
-  changed:boolean = false;
-  validForSave:boolean = false;
 
   newManagerInstance():ManagerVO {
     return { managerId: 0, email: '', firstName: '', lastName: '', enabled: null, managerShops: [], managerRoles: []};
   }
 
   ngOnInit() {
-    console.debug('OrganisationManagerComponent ngOnInit');
+    LogUtil.debug('OrganisationManagerComponent ngOnInit');
     this.getAllRoles();
     this.onRefreshHandler();
   }
 
   ngOnDestroy() {
-    console.debug('OrganisationManagerComponent ngOnDestroy');
+    LogUtil.debug('OrganisationManagerComponent ngOnDestroy');
     if (this.shopAllSub) {
       this.shopAllSub.unsubscribe();
     }
   }
 
-  getAllManagers() {
-    var _sub:any = this._organisationService.getAllManagers().subscribe( allmanagers => {
-      console.debug('OrganisationManagerComponent getAllManagers', allmanagers);
-      this.managers = allmanagers;
-      this.selectedManager = null;
-      this.managerEdit = null;
-      this.viewMode = OrganisationManagerComponent.MANAGERS;
-      this.changed = false;
-      this.validForSave = false;
-      _sub.unsubscribe();
-    });
-  }
-
-  getAllRoles() {
-    var _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
-      console.debug('OrganisationManagerComponent getAllManagers', allroles);
-      this.roles = allroles;
-      _sub.unsubscribe();
-    });
-  }
-
   protected onRefreshHandler() {
-    console.debug('OrganisationManagerComponent refresh handler');
+    LogUtil.debug('OrganisationManagerComponent refresh handler');
     this.getAllManagers();
   }
 
-  onManagerSelected(data:ManagerVO) {
-    console.debug('OrganisationManagerComponent onManagerSelected', data);
+  protected onManagerSelected(data:ManagerVO) {
+    LogUtil.debug('OrganisationManagerComponent onManagerSelected', data);
     this.selectedManager = data;
   }
 
-  onManagerChanged(event:FormValidationEvent<ManagerVO>) {
-    console.debug('OrganisationManagerComponent onManagerChanged', event);
+  protected onManagerChanged(event:FormValidationEvent<ManagerVO>) {
+    LogUtil.debug('OrganisationManagerComponent onManagerChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.managerEdit = event.source;
   }
 
   protected onBackToList() {
-    console.debug('OrganisationManagerComponent onBackToList handler');
+    LogUtil.debug('OrganisationManagerComponent onBackToList handler');
     if (this.viewMode === OrganisationManagerComponent.MANAGER) {
       this.managerEdit = null;
       this.viewMode = OrganisationManagerComponent.MANAGERS;
@@ -132,7 +109,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('OrganisationManagerComponent onRowNew handler');
+    LogUtil.debug('OrganisationManagerComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === OrganisationManagerComponent.MANAGERS) {
@@ -142,7 +119,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('OrganisationManagerComponent onRowDelete handler', row);
+    LogUtil.debug('OrganisationManagerComponent onRowDelete handler', row);
     this.deleteValue = row.email;
     this.deleteConfirmationModalDialog.show();
   }
@@ -154,9 +131,9 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditManager(row:ManagerInfoVO) {
-    console.debug('OrganisationManagerComponent onRowEditManager handler', row);
+    LogUtil.debug('OrganisationManagerComponent onRowEditManager handler', row);
     var _sub:any = this._organisationService.getManagerByEmail(row.email).subscribe( manager => {
-      console.debug('OrganisationManagerComponent get manager by email', manager);
+      LogUtil.debug('OrganisationManagerComponent get manager by email', manager);
       this.managerEdit = manager;
       this.changed = false;
       this.validForSave = false;
@@ -177,27 +154,28 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
       if (this.managerEdit != null) {
 
-        console.debug('OrganisationManagerComponent Save handler manager', this.managerEdit);
+        LogUtil.debug('OrganisationManagerComponent Save handler manager', this.managerEdit);
 
         var _sub:any = this._organisationService.saveManager(this.managerEdit).subscribe(
             rez => {
-            if (this.managerEdit.managerId > 0) {
-              let idx = this.managers.findIndex(rez => rez.managerId == this.managerEdit.managerId);
-              if (idx !== -1) {
-                this.managers[idx] = rez;
-                this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
-                console.debug('OrganisationManagerComponent manager changed', rez);
+              this.selectedManager = rez;
+              if (this.managerEdit.managerId > 0) {
+                let idx = this.managers.findIndex(rez => rez.managerId == this.managerEdit.managerId);
+                if (idx !== -1) {
+                  this.managers[idx] = rez;
+                  this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
+                  LogUtil.debug('OrganisationManagerComponent manager changed', rez);
+                }
+              } else {
+                this.managers.push(rez);
+                this.managerFilter = rez.email;
+                LogUtil.debug('OrganisationManagerComponent manager added', rez);
               }
-            } else {
-              this.managers.push(rez);
-              this.managerFilter = rez.email;
-              console.debug('OrganisationManagerComponent manager added', rez);
-            }
-            this.changed = false;
-            this.selectedManager = rez;
-            this.managerEdit = null;
-            this.viewMode = OrganisationManagerComponent.MANAGERS;
-            _sub.unsubscribe();
+              this.changed = false;
+              this.validForSave = false;
+              this.managerEdit = rez;
+              this.viewMode = OrganisationManagerComponent.MANAGERS;
+              _sub.unsubscribe();
           }
         );
       }
@@ -207,7 +185,7 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('OrganisationManagerComponent discard handler');
+    LogUtil.debug('OrganisationManagerComponent discard handler');
     if (this.viewMode === OrganisationManagerComponent.MANAGER) {
       if (this.selectedManager != null) {
         this.onRowEditSelected();
@@ -218,20 +196,21 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('OrganisationManagerComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('OrganisationManagerComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedManager != null) {
-        console.debug('OrganisationManagerComponent onDeleteConfirmationResult', this.selectedManager);
+        LogUtil.debug('OrganisationManagerComponent onDeleteConfirmationResult', this.selectedManager);
 
         var _sub:any = this._organisationService.removeManager(this.selectedManager.email).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('OrganisationManagerComponent removeManager', this.selectedManager);
+          LogUtil.debug('OrganisationManagerComponent removeManager', this.selectedManager);
           let idx = this.managers.indexOf(this.selectedManager);
           this.managers.splice(idx, 1);
           this.managers = this.managers.slice(0, this.managers.length); // reset to propagate changes
           this.selectedManager = null;
           this.managerEdit = null;
+          this.viewMode = OrganisationManagerComponent.MANAGERS;
         });
       }
     }
@@ -246,12 +225,12 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
 
   protected onDisableConfirmationResult(modalresult: ModalResult) {
-    console.debug('OrganisationManagerComponent onDisableConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('OrganisationManagerComponent onDisableConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedManager != null) {
         var _sub:any = this._organisationService.updateDisabledFlag(this.selectedManager.email, this.selectedManager.enabled).subscribe( done => {
-          console.debug('OrganisationManagerComponent updateDisabledFlag', done);
+          LogUtil.debug('OrganisationManagerComponent updateDisabledFlag', done);
           this.selectedManager.enabled = !this.selectedManager.enabled;
           this.changed = false;
           this.validForSave = false;
@@ -271,12 +250,12 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
 
 
   protected onResetConfirmationResult(modalresult: ModalResult) {
-    console.debug('OrganisationManagerComponent onResetConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('OrganisationManagerComponent onResetConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedManager != null) {
         var _sub:any = this._organisationService.resetPassword(this.selectedManager.email).subscribe( done => {
-          console.debug('OrganisationManagerComponent resetPassword', done);
+          LogUtil.debug('OrganisationManagerComponent resetPassword', done);
           this.changed = false;
           this.validForSave = false;
           _sub.unsubscribe();
@@ -285,5 +264,34 @@ export class OrganisationManagerComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onClearFilter() {
+
+    this.managerFilter = '';
+
+  }
+
+  private getAllManagers() {
+    this.loading = true;
+    var _sub:any = this._organisationService.getAllManagers().subscribe( allmanagers => {
+      LogUtil.debug('OrganisationManagerComponent getAllManagers', allmanagers);
+      this.managers = allmanagers;
+      this.selectedManager = null;
+      this.managerEdit = null;
+      this.viewMode = OrganisationManagerComponent.MANAGERS;
+      this.changed = false;
+      this.validForSave = false;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
+  }
+
+  private getAllRoles() {
+    var _sub:any = this._organisationService.getAllRoles().subscribe( allroles => {
+      LogUtil.debug('OrganisationManagerComponent getAllManagers', allroles);
+      this.roles = allroles;
+      _sub.unsubscribe();
+    });
+  }
 
 }

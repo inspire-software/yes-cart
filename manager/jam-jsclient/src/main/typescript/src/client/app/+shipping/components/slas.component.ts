@@ -13,48 +13,46 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf, NgClass} from '@angular/common';
-import {CarrierSlaVO, PaymentGatewayInfoVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { CarrierSlaVO, PaymentGatewayInfoVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-slas',
   moduleId: module.id,
   templateUrl: 'slas.component.html',
-  directives: [NgIf, NgClass, PaginationComponent],
 })
 
 export class SlasComponent implements OnInit, OnDestroy {
-
-  _slas:Array<CarrierSlaVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  _pgs:any = {};
-
-  filteredSlas:Array<CarrierSlaVO>;
 
   @Input() selectedSla:CarrierSlaVO;
 
   @Output() dataSelected: EventEmitter<CarrierSlaVO> = new EventEmitter<CarrierSlaVO>();
 
+  private _slas:Array<CarrierSlaVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private _pgs:any = {};
+
+  private filteredSlas:Array<CarrierSlaVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('SlasComponent constructed');
+    LogUtil.debug('SlasComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterSlas();
@@ -62,7 +60,7 @@ export class SlasComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('SlasComponent ngOnInit');
+    LogUtil.debug('SlasComponent ngOnInit');
   }
 
   @Input()
@@ -84,48 +82,8 @@ export class SlasComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  getPGNames(row:CarrierSlaVO):Array<PaymentGatewayInfoVO> {
-
-    let supported = row.supportedPaymentGateways;
-    if (!supported) {
-      return [ { name: '-', label: '-', active: true } ];
-    }
-
-    let labels = <Array<PaymentGatewayInfoVO>>[];
-    supported.forEach(label => {
-      if (this._pgs.hasOwnProperty(label)) {
-        labels.push(this._pgs[label]);
-      } else {
-        labels.push({ name: label, label: label, active: false });
-      }
-    });
-    return labels;
-  }
-
-  private filterSlas() {
-    if (this._filter) {
-      this.filteredSlas = this._slas.filter(sla =>
-          sla.code.toLowerCase().indexOf(this._filter) !== -1 ||
-          sla.name.toLowerCase().indexOf(this._filter) !== -1 ||
-          sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1
-      );
-    } else {
-      this.filteredSlas = this._slas;
-    }
-
-    if (this.filteredSlas === null) {
-      this.filteredSlas = [];
-    }
-
-    let _total = this.filteredSlas.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('SlasComponent ngOnDestroy');
+    LogUtil.debug('SlasComponent ngOnDestroy');
     this.selectedSla = null;
     this.dataSelected.emit(null);
   }
@@ -150,13 +108,54 @@ export class SlasComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:CarrierSlaVO) {
-    console.debug('SlasComponent onSelectRow handler', row);
+    LogUtil.debug('SlasComponent onSelectRow handler', row);
     if (row == this.selectedSla) {
       this.selectedSla = null;
     } else {
       this.selectedSla = row;
     }
     this.dataSelected.emit(this.selectedSla);
+  }
+
+
+  protected getPGNames(row:CarrierSlaVO):Array<PaymentGatewayInfoVO> {
+
+    let supported = row.supportedPaymentGateways;
+    if (!supported) {
+      return [ { name: '-', label: '-', active: true } ];
+    }
+
+    let labels = <Array<PaymentGatewayInfoVO>>[];
+    supported.forEach(label => {
+      if (this._pgs.hasOwnProperty(label)) {
+        labels.push(this._pgs[label]);
+      } else {
+        labels.push({ name: label, label: label, active: false });
+      }
+    });
+    return labels;
+  }
+
+  private filterSlas() {
+    if (this._filter) {
+      this.filteredSlas = this._slas.filter(sla =>
+        sla.code.toLowerCase().indexOf(this._filter) !== -1 ||
+        sla.name.toLowerCase().indexOf(this._filter) !== -1 ||
+        sla.description && sla.description.toLowerCase().indexOf(this._filter) !== -1
+      );
+    } else {
+      this.filteredSlas = this._slas;
+    }
+
+    if (this.filteredSlas === null) {
+      this.filteredSlas = [];
+    }
+
+    let _total = this.filteredSlas.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

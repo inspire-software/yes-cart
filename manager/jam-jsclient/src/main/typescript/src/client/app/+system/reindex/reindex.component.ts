@@ -13,20 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {ShopVO, JobStatusVO} from './../../shared/model/index';
-import {SystemService} from './../../shared/services/index';
-import {ShopSelectComponent} from './../../shared/shop/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ShopVO, JobStatusVO } from './../../shared/model/index';
+import { SystemService } from './../../shared/services/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-reindex',
   moduleId: module.id,
   templateUrl: 'reindex.component.html',
-  directives: [REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ShopSelectComponent]
 })
 
 export class ReindexComponent implements OnInit, OnDestroy {
@@ -38,7 +35,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
   private static _jobCompleted:boolean = false;
   private static _lastReport:string = '';
 
-  delayedUpdate:Future;
+  private delayedUpdate:Future;
   private _delayedFilteringMs:number = Config.UI_BULKSERVICE_DELAY;
 
 
@@ -48,7 +45,7 @@ export class ReindexComponent implements OnInit, OnDestroy {
    * @param _systemService system service
    */
   constructor(private _systemService:SystemService) {
-    console.debug('ReindexComponent constructed');
+    LogUtil.debug('ReindexComponent constructed');
 
   }
 
@@ -97,21 +94,20 @@ export class ReindexComponent implements OnInit, OnDestroy {
     return this._delayedFilteringMs;
   }
 
-  /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('ReindexComponent ngOnInit');
+  ngOnInit() {
+    LogUtil.debug('ReindexComponent ngOnInit');
     let that = this;
     this.delayedUpdate = Futures.perpetual(function() {
       that.getStatusUpdate();
     }, this._delayedFilteringMs);
     if (this.jobRunning) {
-      console.debug('ReindexComponent ngOnInit resuming updates');
+      LogUtil.debug('ReindexComponent ngOnInit resuming updates');
       this.getStatusUpdate();
     }
   }
 
-  public ngOnDestroy() {
-    console.debug('ReindexComponent ngOnDestroy');
+  ngOnDestroy() {
+    LogUtil.debug('ReindexComponent ngOnDestroy');
     this.delayedUpdate.cancel();
   }
 
@@ -122,18 +118,18 @@ export class ReindexComponent implements OnInit, OnDestroy {
   }
 
   protected onRefreshResults() {
-    console.debug('ReindexComponent onRefreshResults');
+    LogUtil.debug('ReindexComponent onRefreshResults');
     this.jobStatus = null;
     this.jobRunning = false;
     this.jobCompleted = false;
   }
 
   protected onReindexAll() {
-    console.debug('ReindexComponent onReindexAll');
+    LogUtil.debug('ReindexComponent onReindexAll');
     if (!this.jobRunning) {
       this.jobRunning = true;
       var _sub:any = this._systemService.reindexAllProducts().subscribe(status => {
-        console.debug('ReindexComponent onReindexAll', status);
+        LogUtil.debug('ReindexComponent onReindexAll', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;
         this.jobCompleted = this.jobStatus.completion != null;
@@ -149,11 +145,11 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
 
   protected onReindexOne() {
-    console.debug('ReindexComponent onReindexOne', this.selectedShop);
+    LogUtil.debug('ReindexComponent onReindexOne', this.selectedShop);
     if (!this.jobRunning && this.selectedShop != null) {
       this.jobRunning = true;
       var _sub:any = this._systemService.reindexShopProducts(this.selectedShop.shopId).subscribe(status => {
-        console.debug('ReindexComponent onReindexOne', status);
+        LogUtil.debug('ReindexComponent onReindexOne', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;
         this.jobCompleted = this.jobStatus.completion != null;
@@ -169,11 +165,11 @@ export class ReindexComponent implements OnInit, OnDestroy {
 
 
   protected getStatusUpdate() {
-    console.debug('ReindexComponent getStatusUpdate before', this.jobStatus);
+    LogUtil.debug('ReindexComponent getStatusUpdate before', this.jobStatus);
     if (!this.jobCompleted && this.jobStatus != null) {
       this.jobRunning = true;
       var _sub:any = this._systemService.getIndexJobStatus(this.jobStatus.token).subscribe(status => {
-        console.debug('ReindexComponent getStatusUpdate after', status);
+        LogUtil.debug('ReindexComponent getStatusUpdate after', status);
         this.jobStatus = status;
         this.lastReport = this.jobStatus.report;
         this.jobCompleted = this.jobStatus.completion != null;

@@ -13,42 +13,41 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {ClusterNodeVO} from './../../shared/model/index';
-import {SystemService, Util} from './../../shared/services/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit } from '@angular/core';
+import { ClusterNodeVO } from './../../shared/model/index';
+import { SystemService, Util } from './../../shared/services/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-cluster',
   moduleId: module.id,
   templateUrl: 'cluster.component.html',
-  directives: [PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES]
 })
 
 export class ClusterComponent implements OnInit {
 
-  cluster:Array<ClusterNodeVO> = [];
-  filteredCluster:Array<ClusterNodeVO> = [];
-  clusterFilter:string;
+  private cluster:Array<ClusterNodeVO> = [];
+  private filteredCluster:Array<ClusterNodeVO> = [];
+  private clusterFilter:string;
 
-  selectedRow:ClusterNodeVO;
+  private selectedRow:ClusterNodeVO;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
+
+  private loading:boolean = false;
 
   /**
    * Construct shop attribute panel
@@ -56,13 +55,13 @@ export class ClusterComponent implements OnInit {
    * @param _systemService system service
    */
   constructor(private _systemService:SystemService) {
-    console.debug('ClusterComponent constructed');
+    LogUtil.debug('ClusterComponent constructed');
 
   }
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ClusterComponent ngOnInit');
+    LogUtil.debug('ClusterComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -73,7 +72,7 @@ export class ClusterComponent implements OnInit {
 
 
   protected onSelectRow(row:ClusterNodeVO) {
-    console.debug('ClusterComponent onSelectRow handler', row);
+    LogUtil.debug('ClusterComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -82,7 +81,7 @@ export class ClusterComponent implements OnInit {
   }
 
   protected onSaveHandler() {
-    console.debug('ClusterComponent Save handler');
+    LogUtil.debug('ClusterComponent Save handler');
 
     let myWindow = window.open('', 'ExportClusterInfo', 'width=800,height=600');
 
@@ -92,31 +91,56 @@ export class ClusterComponent implements OnInit {
   }
 
   protected onRefreshHandler() {
-    console.debug('ClusterComponent refresh handler');
+    LogUtil.debug('ClusterComponent refresh handler');
     this.getClusterInfo();
-  }
-
-  /**
-   * Read attributes.
-   */
-  private getClusterInfo() {
-    console.debug('ClusterComponent get cluster');
-
-    var _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
-
-      console.debug('ClusterComponent cluster', cluster);
-      this.cluster = cluster;
-      this.selectedRow = null;
-      this.filterCluster();
-      _sub.unsubscribe();
-
-    });
-
   }
 
   protected onFilterChange() {
 
     this.delayedFiltering.delay();
+
+  }
+
+  protected onClearFilter() {
+
+    this.clusterFilter = '';
+    this.onFilterChange();
+
+  }
+
+  protected resetLastPageEnd() {
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
+  protected onPageChanged(event:any) {
+    this.pageStart = (event.page - 1) * this.itemsPerPage;
+    let _pageEnd = this.pageStart + this.itemsPerPage;
+    if (_pageEnd > this.totalItems) {
+      this.pageEnd = this.totalItems;
+    } else {
+      this.pageEnd = _pageEnd;
+    }
+  }
+
+  private getClusterInfo() {
+    LogUtil.debug('ClusterComponent get cluster');
+
+    this.loading = true;
+    var _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
+
+      LogUtil.debug('ClusterComponent cluster', cluster);
+      this.cluster = cluster;
+      this.selectedRow = null;
+      this.filterCluster();
+      this.loading = false;
+      _sub.unsubscribe();
+
+    });
 
   }
 
@@ -133,11 +157,11 @@ export class ClusterComponent implements OnInit {
         cluster.clusterId.toLowerCase().indexOf(_filter) !== -1 ||
         cluster.channel.toLowerCase().indexOf(_filter) !== -1
       );
-      console.debug('ClusterComponent filterCluster text', this.clusterFilter);
+      LogUtil.debug('ClusterComponent filterCluster text', this.clusterFilter);
 
     } else {
       this.filteredCluster = this.cluster;
-      console.debug('ClusterComponent filterCluster no filter');
+      LogUtil.debug('ClusterComponent filterCluster no filter');
     }
 
     if (this.filteredCluster === null) {
@@ -148,25 +172,6 @@ export class ClusterComponent implements OnInit {
     this.totalItems = _total;
     if (_total > 0) {
       this.resetLastPageEnd();
-    }
-  }
-
-  resetLastPageEnd() {
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
-    }
-  }
-
-  onPageChanged(event:any) {
-    this.pageStart = (event.page - 1) * this.itemsPerPage;
-    let _pageEnd = this.pageStart + this.itemsPerPage;
-    if (_pageEnd > this.totalItems) {
-      this.pageEnd = this.totalItems;
-    } else {
-      this.pageEnd = _pageEnd;
     }
   }
 

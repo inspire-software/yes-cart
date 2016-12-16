@@ -21,6 +21,7 @@ import org.yes.cart.domain.dto.AttributeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttributeDTOImpl;
 import org.yes.cart.domain.entity.Attribute;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.AttributeGroupService;
@@ -29,6 +30,8 @@ import org.yes.cart.service.domain.EtypeService;
 import org.yes.cart.service.dto.DtoAttributeService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -147,16 +150,30 @@ public class DtoAttributeServiceImpl
         return null;
     }
 
+    private final char[] CODE = new char[] { '#' };
+
     /** {@inheritDoc}  */
-    public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String code, final String name, final String description, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        final List<Attribute> attrs = ((AttributeService)service).findAttributesBy(attributeGroupCode, code, name, description, page, pageSize);
+    public List<AttributeDTO> findAttributesBy(final String attributeGroupCode, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final Pair<String, String> byCode = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+        if (byCode != null) {
+            final Attribute attr = ((AttributeService) service).findByAttributeCode(byCode.getSecond());
+            if (attr != null) {
+                final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(1);
+                fillDTOs(Arrays.asList(attr), attributesDTO);
+                return attributesDTO;
+            }
+            return Collections.emptyList();
+        }
+
+        final List<Attribute> attrs = ((AttributeService)service).findAttributesBy(attributeGroupCode, filter, filter, filter, page, pageSize);
         if (attrs != null) {
             final List<AttributeDTO> attributesDTO = new ArrayList<AttributeDTO>(attrs.size());
             fillDTOs(attrs, attributesDTO);
             return attributesDTO;
 
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /** {@inheritDoc}  */

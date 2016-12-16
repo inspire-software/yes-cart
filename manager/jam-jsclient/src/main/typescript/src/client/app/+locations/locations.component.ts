@@ -13,21 +13,17 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {LocationService, Util} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {CountriesComponent, CountryComponent, StatesComponent, StateComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {CountryVO, StateVO} from './../shared/model/index';
-import {FormValidationEvent} from './../shared/event/index';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { LocationService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { CountryVO, StateVO } from './../shared/model/index';
+import { FormValidationEvent } from './../shared/event/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-locations',
   moduleId: module.id,
   templateUrl: 'locations.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, CountriesComponent, CountryComponent, StatesComponent, StateComponent, ModalComponent, DataControlComponent ],
 })
 
 export class LocationsComponent implements OnInit, OnDestroy {
@@ -47,7 +43,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   private countryEdit:CountryVO;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private states:Array<StateVO> = [];
   private stateFilter:string;
@@ -58,12 +54,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
   private deleteValue:String;
 
-  constructor(private _locationService:LocationService) {
-    console.debug('LocationsComponent constructed');
-  }
+  private loading:boolean = false;
 
-  changed:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  constructor(private _locationService:LocationService) {
+    LogUtil.debug('LocationsComponent constructed');
+  }
 
   newCountryInstance():CountryVO {
     return { countryId: 0, countryCode: '',  isoCode: '', name: '', displayName: '' };
@@ -75,46 +73,16 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('LocationsComponent ngOnInit');
+    LogUtil.debug('LocationsComponent ngOnInit');
     this.onRefreshHandler();
   }
 
   ngOnDestroy() {
-    console.debug('LocationsComponent ngOnDestroy');
-  }
-
-
-  getAllLocations() {
-    var _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
-      console.debug('LocationsComponent getAllCountries', allcountries);
-      this.countries = allcountries;
-      this.selectedCountry = null;
-      this.countryEdit = null;
-      this.viewMode = LocationsComponent.COUNTRIES;
-      this.changed = false;
-      this.validForSave = false;
-      _sub.unsubscribe();
-    });
-  }
-
-  getAllStates() {
-    if (this.selectedCountry != null) {
-      var _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
-        console.debug('LocationsComponent getAllStates', allstates);
-        this.states = allstates;
-        this.selectedState = null;
-        this.stateEdit = null;
-        this.countryEdit = null;
-        this.viewMode = LocationsComponent.STATES;
-        this.changed = false;
-        this.validForSave = false;
-        _sub.unsubscribe();
-      });
-    }
+    LogUtil.debug('LocationsComponent ngOnDestroy');
   }
 
   protected onRefreshHandler() {
-    console.debug('LocationsComponent refresh handler');
+    LogUtil.debug('LocationsComponent refresh handler');
     if (this.viewMode === LocationsComponent.COUNTRIES ||
         this.viewMode === LocationsComponent.COUNTRY ||
         this.selectedCountry == null) {
@@ -124,33 +92,33 @@ export class LocationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onCountrySelected(data:CountryVO) {
-    console.debug('LocationsComponent onCountrySelected', data);
+  protected onCountrySelected(data:CountryVO) {
+    LogUtil.debug('LocationsComponent onCountrySelected', data);
     this.selectedCountry = data;
     this.stateFilter = '';
   }
 
-  onCountryChanged(event:FormValidationEvent<CountryVO>) {
-    console.debug('LocationsComponent onCountryChanged', event);
+  protected onCountryChanged(event:FormValidationEvent<CountryVO>) {
+    LogUtil.debug('LocationsComponent onCountryChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.countryEdit = event.source;
   }
 
-  onStateSelected(data:StateVO) {
-    console.debug('LocationsComponent onStateSelected', data);
+  protected onStateSelected(data:StateVO) {
+    LogUtil.debug('LocationsComponent onStateSelected', data);
     this.selectedState = data;
   }
 
-  onStateChanged(event:FormValidationEvent<StateVO>) {
-    console.debug('LocationsComponent onStateChanged', event);
+  protected onStateChanged(event:FormValidationEvent<StateVO>) {
+    LogUtil.debug('LocationsComponent onStateChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
     this.stateEdit = event.source;
   }
 
   protected onBackToList() {
-    console.debug('LocationsComponent onBackToList handler');
+    LogUtil.debug('LocationsComponent onBackToList handler');
     if (this.viewMode === LocationsComponent.STATE) {
       this.stateEdit = null;
       this.viewMode = LocationsComponent.STATES;
@@ -167,7 +135,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('LocationsComponent onRowNew handler');
+    LogUtil.debug('LocationsComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === LocationsComponent.COUNTRIES) {
@@ -180,7 +148,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('LocationsComponent onRowDelete handler', row);
+    LogUtil.debug('LocationsComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -195,7 +163,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditCountry(row:CountryVO) {
-    console.debug('LocationsComponent onRowEditCountry handler', row);
+    LogUtil.debug('LocationsComponent onRowEditCountry handler', row);
     this.countryEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -203,7 +171,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditState(row:StateVO) {
-    console.debug('LocationsComponent onRowEditState handler', row);
+    LogUtil.debug('LocationsComponent onRowEditState handler', row);
     this.stateEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -220,7 +188,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
 
   protected onRowList(row:CountryVO) {
-    console.debug('LocationsComponent onRowList handler', row);
+    LogUtil.debug('LocationsComponent onRowList handler', row);
     this.getAllStates();
   }
 
@@ -237,7 +205,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
 
       if (this.stateEdit != null) {
 
-        console.debug('LocationsComponent Save handler state', this.stateEdit);
+        LogUtil.debug('LocationsComponent Save handler state', this.stateEdit);
 
         var _sub:any = this._locationService.saveState(this.stateEdit).subscribe(
             rez => {
@@ -246,12 +214,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
               if (idx !== -1) {
                 this.states[idx] = rez;
                 this.states = this.states.slice(0, this.states.length); // reset to propagate changes
-                console.debug('LocationsComponent state changed', rez);
+                LogUtil.debug('LocationsComponent state changed', rez);
               }
             } else {
               this.states.push(rez);
               this.stateFilter = rez.name;
-              console.debug('LocationsComponent state added', rez);
+              LogUtil.debug('LocationsComponent state added', rez);
             }
             this.changed = false;
             this.selectedState = rez;
@@ -262,7 +230,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
         );
       } else if (this.countryEdit != null) {
 
-        console.debug('LocationsComponent Save handler country', this.countryEdit);
+        LogUtil.debug('LocationsComponent Save handler country', this.countryEdit);
 
         var _sub:any = this._locationService.saveCountry(this.countryEdit).subscribe(
             rez => {
@@ -271,12 +239,12 @@ export class LocationsComponent implements OnInit, OnDestroy {
               if (idx !== -1) {
                 this.countries[idx] = rez;
                 this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
-                console.debug('LocationsComponent country changed', rez);
+                LogUtil.debug('LocationsComponent country changed', rez);
               }
             } else {
               this.countries.push(rez);
               this.countryFilter = rez.countryCode;
-              console.debug('LocationsComponent country added', rez);
+              LogUtil.debug('LocationsComponent country added', rez);
             }
             this.changed = false;
             this.selectedCountry = rez;
@@ -292,7 +260,7 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('LocationsComponent discard handler');
+    LogUtil.debug('LocationsComponent discard handler');
     if (this.viewMode === LocationsComponent.STATE) {
       if (this.selectedState != null) {
         this.onRowEditSelected();
@@ -310,14 +278,14 @@ export class LocationsComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('LocationsComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('LocationsComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedState != null) {
-        console.debug('LocationsComponent onDeleteConfirmationResult', this.selectedState);
+        LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedState);
 
         var _sub:any = this._locationService.removeState(this.selectedState).subscribe(res => {
-          console.debug('LocationsComponent removeState', this.selectedState);
+          LogUtil.debug('LocationsComponent removeState', this.selectedState);
           let idx = this.states.indexOf(this.selectedState);
           this.states.splice(idx, 1);
           this.states = this.states.slice(0, this.states.length); // reset to propagate changes
@@ -327,10 +295,10 @@ export class LocationsComponent implements OnInit, OnDestroy {
         });
 
       } else if (this.selectedCountry != null) {
-        console.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
+        LogUtil.debug('LocationsComponent onDeleteConfirmationResult', this.selectedCountry);
 
         var _sub:any = this._locationService.removeCountry(this.selectedCountry).subscribe(res => {
-          console.debug('LocationsComponent removeCountry', this.selectedCountry);
+          LogUtil.debug('LocationsComponent removeCountry', this.selectedCountry);
           let idx = this.countries.indexOf(this.selectedCountry);
           this.countries.splice(idx, 1);
           this.countries = this.countries.slice(0, this.countries.length); // reset to propagate changes
@@ -339,6 +307,51 @@ export class LocationsComponent implements OnInit, OnDestroy {
           _sub.unsubscribe();
         });
       }
+    }
+  }
+
+  protected onClearFilterCountry() {
+
+    this.countryFilter = '';
+
+  }
+
+  protected onClearFilterState() {
+
+    this.stateFilter = '';
+
+  }
+
+  private getAllLocations() {
+    this.loading = true;
+    var _sub:any = this._locationService.getAllCountries().subscribe( allcountries => {
+      LogUtil.debug('LocationsComponent getAllCountries', allcountries);
+      this.countries = allcountries;
+      this.selectedCountry = null;
+      this.countryEdit = null;
+      this.viewMode = LocationsComponent.COUNTRIES;
+      this.changed = false;
+      this.validForSave = false;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
+  }
+
+  private getAllStates() {
+    if (this.selectedCountry != null) {
+      this.loading = true;
+      var _sub:any = this._locationService.getAllStates(this.selectedCountry).subscribe(allstates => {
+        LogUtil.debug('LocationsComponent getAllStates', allstates);
+        this.states = allstates;
+        this.selectedState = null;
+        this.stateEdit = null;
+        this.countryEdit = null;
+        this.viewMode = LocationsComponent.STATES;
+        this.changed = false;
+        this.validForSave = false;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
     }
   }
 

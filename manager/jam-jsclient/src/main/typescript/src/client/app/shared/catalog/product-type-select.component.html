@@ -1,23 +1,31 @@
-<ul class="nav nav-second-level item-list-control">
-  <li>
-    <form>
-      <input class="filter-input" type="text" name="producttypeFilter" [(ngModel)]="producttypeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
-    </form>
-  </li>
-  <li *ngIf="producttypeFilterRequired">
-    <p class="bg-danger text-padding">{{ 'FILTER_REQUIRED' | translate }}</p>
-  </li>
+<yc-modal #productTypeModalDialog
+          title="{{ 'PANEL_PIM_PRODUCT_TYPES' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="validForSelect"
+          (closed)="onSelectConfirmationResult($event)">
+  <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+    <ul class="nav nav-second-level item-list-control">
+      <li>
+        <form>
+          <input class="filter-input" type="text" name="productTypeFilter" [(ngModel)]="productTypeFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        </form>
+      </li>
+      <li *ngIf="productTypeFilterRequired">
+        <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+      </li>
 
-  <li *ngIf="producttypeFilterCapped">
-    <p class="bg-warning text-padding">{{ 'FILTER_CAPPED' | translate }}</p>
-  </li>
-</ul>
+      <li *ngIf="productTypeFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
+    </ul>
 
-<ul class="nav nav-second-level item-list">
+    <ul class="nav nav-second-level item-list">
 
-  <li *ngFor="let producttype of filteredProducttypes">
-    <a (click)="onSelectClick(producttype)" class="{{ (selectedProducttype != null && producttype != null && selectedProducttype.producttypeId == producttype.producttypeId) ? 'bg-info js-click' : 'js-click' }}" [title]="producttype.guid"><span>{{producttype.name}}</span></a>
-  </li>
+      <li *ngFor="let productType of filteredProductTypes">
+        <a (click)="onSelectClick(productType)" class="{{ (selectedProductType != null && productType != null && selectedProductType.producttypeId == productType.producttypeId) ? 'bg-info js-click' : 'js-click' }}">{{productType.name}}</a>
+      </li>
 
-</ul>
-
+    </ul>
+  </div>
+</yc-modal>

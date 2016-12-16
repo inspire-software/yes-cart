@@ -13,42 +13,40 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {StateVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { StateVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-state',
   moduleId: module.id,
   templateUrl: 'state.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES],
 })
 
 export class StateComponent implements OnInit, OnDestroy {
 
-  _state:StateVO;
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<StateVO>> = new EventEmitter<FormValidationEvent<StateVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _state:StateVO;
 
-  stateForm:any;
-  stateFormSub:any;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private stateForm:any;
+  private stateFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('StateComponent constructed');
+    LogUtil.debug('StateComponent constructed');
 
     this.stateForm = fb.group({
       'countryCode': ['', YcValidators.requiredValidCountryCode],
       'stateCode': ['', YcValidators.requiredNonBlankTrimmed],
       'name': ['', YcValidators.requiredNonBlankTrimmed],
-      'displayName': ['', YcValidators.nonBlankTrimmed],
+      'displayName': ['', YcValidators.requiredNonBlankTrimmed],
     });
 
     let that = this;
@@ -57,58 +55,39 @@ export class StateComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.stateForm.controls) {
-      this.stateForm.controls[key]['_pristine'] = true;
-      this.stateForm.controls[key]['_touched'] = false;
-    }
+  formBind():void {
+    UiUtil.formBind(this, 'stateForm', 'stateFormSub', 'delayedChange', 'initialising');
   }
 
-  formBind():void {
-    this.stateFormSub = this.stateForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.stateForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
-  }
 
   formUnbind():void {
-    if (this.stateFormSub) {
-      console.debug('StateComponent unbining form');
-      this.stateFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'stateFormSub');
   }
 
   formChange():void {
-    console.debug('StateComponent validating formGroup is valid: ' + this.validForSave, this._state);
-    this.dataChanged.emit({ source: this._state, valid: this.validForSave });
+    LogUtil.debug('StateComponent formChange', this.stateForm.valid, this._state);
+    this.dataChanged.emit({ source: this._state, valid: this.stateForm.valid });
   }
 
   @Input()
   set state(state:StateVO) {
-    this._state = state;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'stateForm', '_state', state, true, ['countryCode']);
+
   }
 
   get state():StateVO {
     return this._state;
   }
 
-  onDataChange(event:any) {
-    console.debug('StateComponent onDataChange', event);
-    this.changed = true;
-  }
 
   ngOnInit() {
-    console.debug('StateComponent ngOnInit');
+    LogUtil.debug('StateComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('StateComponent ngOnDestroy');
+    LogUtil.debug('StateComponent ngOnDestroy');
     this.formUnbind();
   }
 

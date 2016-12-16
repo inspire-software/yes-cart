@@ -12,9 +12,8 @@
                              [source]="carrier"
                              value="name"
                              i18n="displayNames"
-                             [formGroup]="carrierForm"
                              defaultRequired="true"
-                             (dataChanged)="onDataChanged()"></yc-i18n-table>
+                             (dataChanged)="onNameDataChange($event)"></yc-i18n-table>
             </div>
           </div>
 
@@ -24,14 +23,25 @@
                              [source]="carrier"
                              value="description"
                              i18n="displayDescriptions"
-                             [formGroup]="carrierForm"
-                             (dataChanged)="onDataChanged()"></yc-i18n-table>
+                             (dataChanged)="onDescriptionDataChange($event)"></yc-i18n-table>
             </div>
           </div>
         </div>
       </tab>
 
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
+
+        <template [ngIf]="!(carrier.carrierId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
 
         <template [ngIf]="carrier.carrierId > 0">
 

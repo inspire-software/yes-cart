@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {PriceListVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { PriceListVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-pricelist',
   moduleId: module.id,
   templateUrl: 'pricelist.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class PriceListComponent implements OnInit, OnDestroy {
-
-  _pricelist:Array<PriceListVO> = [];
-
-  filteredPricelist:Array<PriceListVO>;
 
   @Input() selectedPricelist:PriceListVO;
 
   @Output() dataSelected: EventEmitter<PriceListVO> = new EventEmitter<PriceListVO>();
 
+  private _pricelist:Array<PriceListVO> = [];
+
+  private filteredPricelist:Array<PriceListVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('PricelistComponent constructed');
+    LogUtil.debug('PricelistComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('PricelistComponent ngOnInit');
+    LogUtil.debug('PricelistComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class PriceListComponent implements OnInit, OnDestroy {
     this.filterPricelist();
   }
 
-  private filterPricelist() {
-
-    this.filteredPricelist = this._pricelist;
-    console.debug('PricelistComponent filterPricelist', this.filteredPricelist);
-
-    if (this.filteredPricelist === null) {
-      this.filteredPricelist = [];
-    }
-
-    let _total = this.filteredPricelist.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('PricelistComponent ngOnDestroy');
+    LogUtil.debug('PricelistComponent ngOnDestroy');
     this.selectedPricelist = null;
     this.dataSelected.emit(null);
   }
@@ -102,13 +84,29 @@ export class PriceListComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:PriceListVO) {
-    console.debug('PricelistComponent onSelectRow handler', row);
+    LogUtil.debug('PricelistComponent onSelectRow handler', row);
     if (row == this.selectedPricelist) {
       this.selectedPricelist = null;
     } else {
       this.selectedPricelist = row;
     }
     this.dataSelected.emit(this.selectedPricelist);
+  }
+
+  private filterPricelist() {
+
+    this.filteredPricelist = this._pricelist;
+    LogUtil.debug('PricelistComponent filterPricelist', this.filteredPricelist);
+
+    if (this.filteredPricelist === null) {
+      this.filteredPricelist = [];
+    }
+
+    let _total = this.filteredPricelist.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

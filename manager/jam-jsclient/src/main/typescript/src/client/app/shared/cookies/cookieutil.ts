@@ -21,19 +21,20 @@ export class CookieUtil {
    * Create cookie with given name/value for root path.
    */
   public static createCookie(name:string, value:string, days:number):void {
+    let expires = '';
     if (days) {
       var date = new Date();
       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      var expires = "; expires=" + date.toUTCString();
-    } else var expires = "";
-    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+      expires = '; expires=' + date.toUTCString();
+    }
+    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expires + '; path=/';
   }
 
   /*
    * Read cookie.
    */
   public static readCookie(name:string, def:string):string {
-    var nameEQ = encodeURIComponent(name) + "=";
+    var nameEQ = encodeURIComponent(name) + '=';
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
       var c = ca[i];
@@ -47,7 +48,7 @@ export class CookieUtil {
    * Write cookie with negative expiry time to remove it
    */
   public static eraseCookie(name:string):void {
-    CookieUtil.createCookie(name, "", -1);
+    CookieUtil.createCookie(name, '', -1);
   }
 
 }

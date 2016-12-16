@@ -15,13 +15,14 @@
  */
 
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Util} from './util';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { ShopVO, PriceListVO, TaxVO, TaxConfigVO, PromotionVO, PromotionCouponVO } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -37,7 +38,7 @@ export class PricingService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('PricingService constructed');
+    LogUtil.debug('PricingService constructed');
   }
 
   /**
@@ -292,7 +293,7 @@ export class PricingService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
-    console.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
+    LogUtil.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
 
     let headers = new Headers({ 'Content-Type': 'text/plain' });
     let options = new RequestOptions({ headers: headers });
@@ -352,7 +353,7 @@ export class PricingService {
 
   private handleError (error:any) {
 
-    console.error('PricingService Server error: ', error);
+    LogUtil.error('PricingService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

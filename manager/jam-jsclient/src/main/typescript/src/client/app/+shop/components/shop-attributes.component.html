@@ -1,16 +1,30 @@
+<template [ngIf]="shopAttributes == null">
+
+  <div class="row">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</template>
+
 <template [ngIf]="shopAttributes">
 
   <div class="text-right data-control">
 
     <form class="pull-left">
       <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
+      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+      <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
     </form>
 
-    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl">
+    <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
       <i class="fa fa-edit"></i>
     </button>
 
-    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" >
+    <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
       <i class="fa fa-remove"></i>
     </button>
 
@@ -20,6 +34,20 @@
                      (discardEvent)="onDiscardEventHandler()"
                      (refreshEvent)="onRefreshHandler()"></yc-data-control>
 
+
+  </div>
+
+
+  <div class="row">
+
+    <div *ngIf="searchHelpShow">
+      <div class="bg-info text-padding">
+        <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_AV_VALUES_NEW' | translate }} <span><button type="button" (click)="onSearchValuesNew()" class="btn btn-circle"><i class="fa fa-plus"></i></button></span></p>
+        <p>{{ 'SEARCH_HELP_AV_VALUES_NEW_ONLY' | translate }} <span><button type="button" (click)="onSearchValuesNewOnly()" class="btn btn-circle"><i class="fa fa-plus-circle"></i></button></span></p>
+      </div>
+    </div>
 
   </div>
 

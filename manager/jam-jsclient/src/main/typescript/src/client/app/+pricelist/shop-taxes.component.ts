@@ -13,32 +13,30 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../shared/validation/validators';
-import {PricingService, Util} from './../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {TaxesComponent, TaxConfigsComponent} from './components/index';
-import {DataControlComponent} from './../shared/sidebar/index';
-import {ShopSelectComponent} from './../shared/shop/index';
-import {CurrencySelectComponent} from './../shared/price/index';
-import {ModalComponent, ModalResult, ModalAction} from './../shared/modal/index';
-import {TaxVO, ShopVO, TaxConfigVO} from './../shared/model/index';
-import {Futures, Future} from './../shared/event/index';
-import {Config} from './../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../shared/validation/validators';
+import { PricingService, Util } from './../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { TaxVO, ShopVO, TaxConfigVO } from './../shared/model/index';
+import { Futures, Future } from './../shared/event/index';
+import { Config } from './../shared/config/env.config';
+import { UiUtil } from './../shared/ui/index';
+import { LogUtil } from './../shared/log/index';
 
 @Component({
   selector: 'yc-shop-taxes',
   moduleId: module.id,
   templateUrl: 'shop-taxes.component.html',
-  directives: [REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, NgIf, TaxesComponent, TaxConfigsComponent, ModalComponent, DataControlComponent, ShopSelectComponent, CurrencySelectComponent ],
 })
 
 export class ShopTaxesComponent implements OnInit, OnDestroy {
 
   private static TAXES:string = 'taxes';
   private static CONFIGS:string = 'taxconfigs';
+
+  private static _selectedShop:ShopVO;
+  private static _selectedCurrency:string;
 
   private viewMode:string = ShopTaxesComponent.TAXES;
 
@@ -56,49 +54,49 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   private taxconfigsFilterRequired:boolean = true;
   private taxconfigsFilterCapped:boolean = false;
 
-  delayedFilteringTax:Future;
-  delayedFilteringTaxConfig:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFilteringTax:Future;
+  private delayedFilteringTaxConfig:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
-  static _selectedShop:ShopVO;
-  static _selectedCurrency:string;
   private selectedTax:TaxVO;
   private selectedTaxconfig:TaxConfigVO;
 
   private taxEdit:TaxVO;
-  taxEditForm:any;
-  taxEditFormSub:any;
-  changedSingleTax:boolean = true;
-  validForSaveTax:boolean = false;
+  private taxEditForm:any;
+  private taxEditFormSub:any; // tslint:disable-line:no-unused-variable
+  private initialising:boolean = true; // tslint:disable-line:no-unused-variable
+  private validForSaveTax:boolean = false;
 
   private taxconfigEdit:TaxConfigVO;
-  taxconfigEditForm:any;
-  taxconfigEditFormSub:any;
-  changedSingleTaxconfig:boolean = true;
-  validForSaveTaxconfig:boolean = true;
+  private taxconfigEditForm:any;
+  private taxconfigEditFormSub:any; // tslint:disable-line:no-unused-variable
+  private initialising2:boolean = true; // tslint:disable-line:no-unused-variable
+  private validForSaveTaxconfig:boolean = true;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   @ViewChild('editTaxModalDialog')
-  editTaxModalDialog:ModalComponent;
+  private editTaxModalDialog:ModalComponent;
 
   @ViewChild('editTaxconfigModalDialog')
-  editTaxconfigModalDialog:ModalComponent;
+  private editTaxconfigModalDialog:ModalComponent;
 
   @ViewChild('selectShopModalDialog')
-  selectShopModalDialog:ModalComponent;
+  private selectShopModalDialog:ModalComponent;
 
   @ViewChild('selectCurrencyModalDialog')
-  selectCurrencyModalDialog:ModalComponent;
+  private selectCurrencyModalDialog:ModalComponent;
+
+  private loading:boolean = false;
 
   private deleteValue:String;
 
   constructor(private _taxService:PricingService,
               fb: FormBuilder) {
-    console.debug('ShopTaxesComponent constructed');
+    LogUtil.debug('ShopTaxesComponent constructed');
 
     this.taxEditForm = fb.group({
       'code': ['', YcValidators.requiredValidCode],
@@ -141,7 +139,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ShopTaxesComponent ngOnInit');
+    LogUtil.debug('ShopTaxesComponent ngOnInit');
     this.onRefreshHandler();
     let that = this;
     this.delayedFilteringTax = Futures.perpetual(function() {
@@ -154,77 +152,46 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('ShopTaxesComponent ngOnDestroy');
+    LogUtil.debug('ShopTaxesComponent ngOnDestroy');
     this.formUnbind();
   }
 
-
-  formResetTax():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.taxEditForm.controls) {
-      this.taxEditForm.controls[key]['_pristine'] = true;
-      this.taxEditForm.controls[key]['_touched'] = false;
-    }
-  }
-
-  formResetTaxconfig():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.taxconfigEditForm.controls) {
-      this.taxconfigEditForm.controls[key]['_pristine'] = true;
-      this.taxconfigEditForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.taxEditFormSub = this.taxEditForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingleTax) {
-        this.validForSaveTax = this.taxEditForm.valid;
-      }
-    });
-    this.taxconfigEditFormSub = this.taxconfigEditForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingleTaxconfig) {
-        this.validForSaveTaxconfig = this.taxconfigEditForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'taxEditForm', 'taxEditFormSub', 'formChangeTax', 'initialising', false);
+    UiUtil.formBind(this, 'taxconfigEditForm', 'taxconfigEditFormSub', 'formChangeTaxconfig', 'initialising2', false);
   }
 
   formUnbind():void {
-    if (this.taxEditFormSub) {
-      console.debug('ShopCatalogComponent unbining form');
-      this.taxEditFormSub.unsubscribe();
-    }
-    if (this.taxconfigEditFormSub) {
-      console.debug('ShopCatalogComponent unbining form');
-      this.taxconfigEditFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'taxEditFormSub');
+    UiUtil.formUnbind(this, 'taxconfigEditFormSub');
   }
 
 
-  onFormDataChangeTax(event:any) {
-    console.debug('ShopTaxesComponent tax data changed', event);
-    this.changedSingleTax = true;
+  formChangeTax():void {
+    LogUtil.debug('ShopTaxesComponent formChangeTax', this.taxEditForm.valid, this.taxEdit);
+    this.validForSaveTax = this.taxEditForm.valid;
   }
 
 
-  onFormDataChangeTaxconfig(event:any) {
-    console.debug('ShopTaxesComponent tax config data changed', event);
-    this.changedSingleTaxconfig = true;
+  formChangeTaxconfig():void {
+    LogUtil.debug('ShopTaxesComponent formChangeTaxconfig', this.taxconfigEditForm.valid, this.taxconfigEdit);
+    this.validForSaveTaxconfig = this.taxconfigEditForm.valid;
   }
 
 
 
   protected onShopSelect() {
-    console.debug('ShopTaxesComponent onShopSelect');
+    LogUtil.debug('ShopTaxesComponent onShopSelect');
     this.selectShopModalDialog.show();
   }
 
   protected onShopSelected(event:ShopVO) {
-    console.debug('ShopTaxesComponent onShopSelected');
+    LogUtil.debug('ShopTaxesComponent onShopSelected');
     this.selectedShop = event;
   }
 
   protected onSelectShopResult(modalresult: ModalResult) {
-    console.debug('ShopTaxesComponent onSelectShopResult modal result is ', modalresult);
+    LogUtil.debug('ShopTaxesComponent onSelectShopResult modal result is ', modalresult);
     if (this.selectedShop == null) {
       this.selectShopModalDialog.show();
     } else if (this.selectedCurrency == null) {
@@ -235,17 +202,17 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onCurrencySelect() {
-    console.debug('ShopTaxesComponent onCurrencySelect');
+    LogUtil.debug('ShopTaxesComponent onCurrencySelect');
     this.selectCurrencyModalDialog.show();
   }
 
   protected onCurrencySelected(event:string) {
-    console.debug('ShopTaxesComponent onCurrencySelected');
+    LogUtil.debug('ShopTaxesComponent onCurrencySelected');
     this.selectedCurrency = event;
   }
 
   protected onSelectCurrencyResult(modalresult: ModalResult) {
-    console.debug('ShopTaxesComponent onSelectCurrencyResult modal result is ', modalresult);
+    LogUtil.debug('ShopTaxesComponent onSelectCurrencyResult modal result is ', modalresult);
     if (this.selectedCurrency == null) {
       this.selectCurrencyModalDialog.show();
     } else {
@@ -253,88 +220,30 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     }
   }
 
-  onTaxFilterChange(event:any) {
+  protected onTaxFilterChange(event:any) {
 
     this.delayedFilteringTax.delay();
 
   }
 
-  onTaxConfigFilterChange(event:any) {
+  protected onTaxConfigFilterChange(event:any) {
 
     this.delayedFilteringTaxConfig.delay();
 
   }
 
-  getFilteredTax() {
-    this.taxesFilterRequired = !this.forceShowAll && (this.taxesFilter == null || this.taxesFilter.length < 2);
-
-    console.debug('ShopTaxesComponent getFilteredTax' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this.selectedShop != null && this.selectedCurrency != null && !this.taxesFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
-        console.debug('ShopTaxesComponent getFilteredTax', alltaxes);
-        this.taxes = alltaxes;
-        this.selectedTax = null;
-        this.taxEdit = null;
-        this.changedSingleTax = false;
-        this.validForSaveTax = false;
-        this.taxesFilterCapped = this.taxes.length >= max;
-        _sub.unsubscribe();
-        this.viewMode = ShopTaxesComponent.TAXES;
-      });
-    } else {
-      this.taxes = [];
-      this.selectedTax = null;
-      this.taxEdit = null;
-      this.changedSingleTax = false;
-      this.validForSaveTax = false;
-      this.taxesFilterCapped = false;
-      this.viewMode = ShopTaxesComponent.TAXES;
-    }
-  }
-
-  getFilteredTaxConfig() {
-    this.taxconfigsFilterRequired = !this.forceShowAll && (this.taxconfigsFilter == null || this.taxconfigsFilter.length < 2);
-
-    console.debug('ShopTaxesComponent getFilteredTaxConfig' + (this.forceShowAll ? ' forcefully': ''));
-
-    if (this.selectedTax != null && !this.taxconfigsFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._taxService.getFilteredTaxConfig(this.selectedTax, this.taxconfigsFilter, max).subscribe( alltaxes => {
-        console.debug('ShopTaxesComponent getFilteredTaxConfig', alltaxes);
-        this.taxconfigs = alltaxes;
-        this.selectedTaxconfig = null;
-        this.taxconfigEdit = null;
-        this.changedSingleTaxconfig = false;
-        this.validForSaveTaxconfig = true;
-        this.taxconfigsFilterCapped = this.taxconfigs.length >= max;
-        this.viewMode = ShopTaxesComponent.CONFIGS;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.taxconfigs = [];
-      this.selectedTaxconfig = null;
-      this.taxconfigEdit = null;
-      this.changedSingleTaxconfig = false;
-      this.validForSaveTaxconfig = true;
-      this.taxconfigsFilterCapped = false;
-      this.viewMode = ShopTaxesComponent.CONFIGS;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('ShopTaxesComponent refresh handler');
+    LogUtil.debug('ShopTaxesComponent refresh handler');
     this.getFilteredTax();
   }
 
-  onTaxSelected(data:TaxVO) {
-    console.debug('ShopTaxesComponent onTaxSelected', data);
+  protected onTaxSelected(data:TaxVO) {
+    LogUtil.debug('ShopTaxesComponent onTaxSelected', data);
     this.selectedTax = data;
   }
 
-  onTaxconfigSelected(data:TaxConfigVO) {
-    console.debug('ShopTaxesComponent onTaxconfigSelected', data);
+  protected onTaxconfigSelected(data:TaxConfigVO) {
+    LogUtil.debug('ShopTaxesComponent onTaxconfigSelected', data);
     this.selectedTaxconfig = data;
   }
 
@@ -366,6 +275,11 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
     this.searchHelpTaxConfigShow = false;
   }
 
+  protected onSearchSKUExact() {
+    this.taxesFilter = '!SKU';
+    this.searchHelpTaxConfigShow = false;
+  }
+
   protected onForceShowAll() {
     this.forceShowAll = !this.forceShowAll;
     if (this.viewMode == ShopTaxesComponent.CONFIGS) {
@@ -376,28 +290,29 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('ShopTaxesComponent onRowNew handler');
-    this.changedSingleTax = false;
+    LogUtil.debug('ShopTaxesComponent onRowNew handler');
     this.validForSaveTax = false;
     if (this.viewMode == ShopTaxesComponent.CONFIGS) {
-      this.formResetTaxconfig();
-      this.taxconfigEdit = this.newTaxConfigInstance();
+
+      UiUtil.formInitialise(this, 'initialising2', 'taxconfigEditForm', 'taxconfigEdit', this.newTaxConfigInstance());
       this.editTaxconfigModalDialog.show();
+
     } else {
-      this.formResetTax();
-      this.taxEdit = this.newTaxInstance();
+
+      UiUtil.formInitialise(this, 'initialising', 'taxEditForm', 'taxEdit', this.newTaxInstance(), false, ['code']);
       this.editTaxModalDialog.show();
+
     }
   }
 
   protected onRowTaxDelete(row:TaxVO) {
-    console.debug('ShopTaxesComponent onRowDelete handler', row);
+    LogUtil.debug('ShopTaxesComponent onRowDelete handler', row);
     this.deleteValue = row.code + (row.description ? ': ' + row.description : '');
     this.deleteConfirmationModalDialog.show();
   }
 
   protected onRowTaxConfigDelete(row:TaxConfigVO) {
-    console.debug('ShopTaxesComponent onRowTaxConfigDelete handler', row);
+    LogUtil.debug('ShopTaxesComponent onRowTaxConfigDelete handler', row);
     this.deleteValue =
       (row.countryCode ? row.countryCode + '/' : '-') +
       (row.stateCode ? row.stateCode + '/' : '-') +
@@ -415,20 +330,16 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
 
   protected onRowEditTax(row:TaxVO) {
-    console.debug('ShopTaxesComponent onRowEditTax handler', row);
-    this.formResetTax();
-    this.taxEdit = Util.clone(row);
-    this.changedSingleTax = false;
+    LogUtil.debug('ShopTaxesComponent onRowEditTax handler', row);
     this.validForSaveTax = false;
+    UiUtil.formInitialise(this, 'initialising', 'taxEditForm', 'taxEdit', Util.clone(row), row.taxId > 0, ['code']);
     this.editTaxModalDialog.show();
   }
 
   protected onRowEditTaxconfig(row:TaxConfigVO) {
-    console.debug('ShopTaxesComponent onRowEditTaxconfig handler', row);
-    this.formResetTaxconfig();
-    this.taxconfigEdit = Util.clone(row);
-    this.changedSingleTaxconfig = false;
+    LogUtil.debug('ShopTaxesComponent onRowEditTaxconfig handler', row);
     this.validForSaveTaxconfig = true;
+    UiUtil.formInitialise(this, 'initialising2', 'taxconfigEditForm', 'taxconfigEdit', Util.clone(row));
     this.editTaxconfigModalDialog.show();
   }
 
@@ -452,7 +363,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
 
   protected onRowList(row:TaxVO) {
-    console.debug('ShopTaxesComponent onRowList handler', row);
+    LogUtil.debug('ShopTaxesComponent onRowList handler', row);
     this.viewMode = ShopTaxesComponent.CONFIGS;
     this.forceShowAll = false;
   }
@@ -466,7 +377,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
 
   protected onBackToList() {
-    console.debug('ShopTaxesComponent onBackToList handler');
+    LogUtil.debug('ShopTaxesComponent onBackToList handler');
     if (this.viewMode === ShopTaxesComponent.CONFIGS) {
       this.taxEdit = null;
       this.viewMode = ShopTaxesComponent.TAXES;
@@ -479,16 +390,17 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
       if (this.validForSaveTaxconfig) {
 
-        console.debug('ShopTaxesComponent Save handler config', this.taxconfigEdit);
+        LogUtil.debug('ShopTaxesComponent Save handler config', this.taxconfigEdit);
 
         var _sub:any = this._taxService.createTaxConfig(this.taxconfigEdit).subscribe(
             rez => {
               _sub.unsubscribe();
-              console.debug('ShopTaxesComponent config changed', rez);
-              this.changedSingleTaxconfig = false;
+              let pk = this.taxconfigEdit.taxConfigId;
+              LogUtil.debug('ShopTaxesComponent config changed', rez);
               this.selectedTaxconfig = rez;
-              this.taxconfigEdit = null;
-              this.taxesFilter = rez.code;
+              if (pk == 0) {
+                this.taxconfigsFilter = rez.code;
+              }
               this.getFilteredTaxConfig();
           }
         );
@@ -496,18 +408,16 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
 
     } else if (this.taxEdit != null) {
 
-      if (this.validForSaveTax && this.changedSingleTax) {
+      if (this.validForSaveTax) {
 
-        console.debug('ShopTaxesComponent Save handler tax', this.taxEdit);
+        LogUtil.debug('ShopTaxesComponent Save handler tax', this.taxEdit);
 
         var _sub:any = this._taxService.saveTax(this.taxEdit).subscribe(
             rez => {
               _sub.unsubscribe();
               let pk = this.taxEdit.taxId;
-              console.debug('ShopTaxesComponent tax changed', rez);
-              this.changedSingleTax = false;
+              LogUtil.debug('ShopTaxesComponent tax changed', rez);
               this.selectedTax = rez;
-              this.taxEdit = null;
               if (pk == 0) {
                 this.taxesFilter = rez.code;
               }
@@ -521,7 +431,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopTaxesComponent discard handler');
+    LogUtil.debug('ShopTaxesComponent discard handler');
     if (this.selectedTax != null) {
       this.onRowEditSelected();
     } else {
@@ -530,7 +440,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onEditTaxResult(modalresult: ModalResult) {
-    console.debug('ShopTaxesComponent onEditTaxResult modal result is ', modalresult);
+    LogUtil.debug('ShopTaxesComponent onEditTaxResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       this.onSaveHandler();
@@ -547,31 +457,99 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopTaxesComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedTaxconfig != null) {
-        console.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTaxconfig);
+        LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTaxconfig);
 
         var _sub:any = this._taxService.removeTaxConfig(this.selectedTaxconfig).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('ShopTaxesComponent removeTax', this.selectedTaxconfig);
+          LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTaxconfig);
           this.selectedTaxconfig = null;
-          this.taxconfigEdit = null;
           this.getFilteredTaxConfig();
         });
 
       } else if (this.selectedTax != null) {
-        console.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTax);
+        LogUtil.debug('ShopTaxesComponent onDeleteConfirmationResult', this.selectedTax);
 
         var _sub:any = this._taxService.removeTax(this.selectedTax).subscribe(res => {
           _sub.unsubscribe();
-          console.debug('ShopTaxesComponent removeTax', this.selectedTax);
+          LogUtil.debug('ShopTaxesComponent removeTax', this.selectedTax);
           this.selectedTax = null;
-          this.taxEdit = null;
           this.getFilteredTax();
         });
       }
+    }
+  }
+
+  protected onClearFilterTax() {
+
+    this.taxesFilter = '';
+    this.delayedFilteringTax.delay();
+
+  }
+
+
+  protected onClearFilterTaxConfig() {
+
+    this.taxconfigsFilter = '';
+    this.delayedFilteringTaxConfig.delay();
+
+  }
+
+
+  private getFilteredTax() {
+    this.taxesFilterRequired = !this.forceShowAll && (this.taxesFilter == null || this.taxesFilter.length < 2);
+
+    LogUtil.debug('ShopTaxesComponent getFilteredTax' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this.selectedShop != null && this.selectedCurrency != null && !this.taxesFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._taxService.getFilteredTax(this.selectedShop, this.selectedCurrency, this.taxesFilter, max).subscribe( alltaxes => {
+        LogUtil.debug('ShopTaxesComponent getFilteredTax', alltaxes);
+        this.taxes = alltaxes;
+        this.selectedTax = null;
+        this.validForSaveTax = false;
+        this.taxesFilterCapped = this.taxes.length >= max;
+        _sub.unsubscribe();
+        this.viewMode = ShopTaxesComponent.TAXES;
+        this.loading = false;
+      });
+    } else {
+      this.taxes = [];
+      this.selectedTax = null;
+      this.validForSaveTax = false;
+      this.taxesFilterCapped = false;
+      this.viewMode = ShopTaxesComponent.TAXES;
+    }
+  }
+
+  private getFilteredTaxConfig() {
+    this.taxconfigsFilterRequired = !this.forceShowAll && (this.taxconfigsFilter == null || this.taxconfigsFilter.length < 2);
+
+    LogUtil.debug('ShopTaxesComponent getFilteredTaxConfig' + (this.forceShowAll ? ' forcefully': ''));
+
+    if (this.selectedTax != null && !this.taxconfigsFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._taxService.getFilteredTaxConfig(this.selectedTax, this.taxconfigsFilter, max).subscribe( alltaxes => {
+        LogUtil.debug('ShopTaxesComponent getFilteredTaxConfig', alltaxes);
+        this.taxconfigs = alltaxes;
+        this.selectedTaxconfig = null;
+        this.validForSaveTaxconfig = true;
+        this.taxconfigsFilterCapped = this.taxconfigs.length >= max;
+        this.viewMode = ShopTaxesComponent.CONFIGS;
+        _sub.unsubscribe();
+        this.loading = false;
+      });
+    } else {
+      this.taxconfigs = [];
+      this.selectedTaxconfig = null;
+      this.validForSaveTaxconfig = true;
+      this.taxconfigsFilterCapped = false;
+      this.viewMode = ShopTaxesComponent.CONFIGS;
     }
   }
 

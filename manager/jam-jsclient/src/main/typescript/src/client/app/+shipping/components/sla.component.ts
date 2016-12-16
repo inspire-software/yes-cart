@@ -13,43 +13,39 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {CarrierSlaVO, PaymentGatewayInfoVO, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { CarrierSlaVO, PaymentGatewayInfoVO, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-sla',
   moduleId: module.id,
   templateUrl: 'sla.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, I18nComponent],
 })
 
 export class SlaComponent implements OnInit, OnDestroy {
 
-  _sla:CarrierSlaVO;
-
-  _pgs:any = {};
-
-  availablePgs:Array<PaymentGatewayInfoVO> = [];
-  supportedPgs:Array<PaymentGatewayInfoVO> = [];
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<CarrierSlaVO>> = new EventEmitter<FormValidationEvent<CarrierSlaVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _sla:CarrierSlaVO;
 
-  slaForm:any;
-  slaFormSub:any;
+  private _pgs:any = {};
+
+  private availablePgs:Array<PaymentGatewayInfoVO> = [];
+  private supportedPgs:Array<PaymentGatewayInfoVO> = [];
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private slaForm:any;
+  private slaFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('SlaComponent constructed');
+    LogUtil.debug('SlaComponent constructed');
 
     let that = this;
 
@@ -59,7 +55,7 @@ export class SlaComponent implements OnInit, OnDestroy {
       if (basic == null) {
 
         let code = control.value;
-        if (!that.changed || that._sla == null) {
+        if (that._sla == null || !that.slaForm || (!that.slaForm.dirty && that._sla.carrierslaId > 0)) {
           return null;
         }
 
@@ -84,41 +80,32 @@ export class SlaComponent implements OnInit, OnDestroy {
       'script': ['', YcValidators.nonBlankTrimmed],
       'billingAddressNotRequired': [''],
       'deliveryAddressNotRequired': [''],
+      'name': [''],
+      'description': [''],
+      'supportedPaymentGateways': ['']
     });
 
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
-
-  }
-
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.slaForm.controls) {
-      this.slaForm.controls[key]['_pristine'] = true;
-      this.slaForm.controls[key]['_touched'] = false;
-    }
   }
 
   formBind():void {
-    this.slaFormSub = this.slaForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.slaForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'slaForm', 'slaFormSub', 'delayedChange', 'initialising');
   }
 
+
   formUnbind():void {
-    if (this.slaFormSub) {
-      console.debug('SlaComponent unbining form');
-      this.slaFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'slaFormSub');
   }
 
   formChange():void {
-    console.debug('SlaComponent validating formGroup is valid: ' + this.validForSave, this._sla);
-    this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
+    LogUtil.debug('SlaComponent formChange', this.slaForm.valid, this._sla);
+    this.dataChanged.emit({ source: this._sla, valid: this.slaForm.valid });
+  }
+
+  formMarkDirty(field:string):void {
+    UiUtil.formMarkFieldDirty(this, 'slaForm', field);
   }
 
   @Input()
@@ -126,26 +113,69 @@ export class SlaComponent implements OnInit, OnDestroy {
     pgs.forEach(pg => {
       this._pgs[pg.label] = pg;
     });
+    LogUtil.debug('SlaComponent mapped PGs', this._pgs);
   }
 
   @Input()
   set sla(sla:CarrierSlaVO) {
-    this._sla = sla;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'slaForm', '_sla', sla);
     this.recalculatePgs();
+
   }
 
   get sla():CarrierSlaVO {
     return this._sla;
   }
 
-  private recalculatePgs():void {
-    if (this._sla) {
-      this.availablePgs = this.getAvailablePGNames();
-      this.supportedPgs = this.getSupportedPGNames();
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'slaForm', 'name', event);
+  }
+
+  onDescriptionDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'slaForm', 'description', event);
+  }
+
+  onSupportedPgClick(supported:PaymentGatewayInfoVO) {
+    LogUtil.debug('SlaComponent remove supported', supported);
+    let idx = this._sla.supportedPaymentGateways.indexOf(supported.label);
+    if (idx != -1) {
+      this._sla.supportedPaymentGateways.splice(idx, 1);
+      this.recalculatePgs();
+      this.formMarkDirty('supportedPaymentGateways');
+      this.formChange();
     }
   }
+
+  onAvailablePgClick(available:PaymentGatewayInfoVO) {
+    LogUtil.debug('SlaComponent add supported', available);
+    if (this._sla.supportedPaymentGateways == null) {
+      this._sla.supportedPaymentGateways = [];
+    }
+    let idx = this._sla.supportedPaymentGateways.indexOf(available.label);
+    if (idx == -1) {
+      this._sla.supportedPaymentGateways.push(available.label);
+      this.recalculatePgs();
+      this.formMarkDirty('supportedPaymentGateways');
+      this.formChange();
+    }
+  }
+
+
+  ngOnInit() {
+    LogUtil.debug('SlaComponent ngOnInit');
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('SlaComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  tabSelected(tab:any) {
+    LogUtil.debug('SlaComponent tabSelected', tab);
+  }
+
 
   private getAvailablePGNames():Array<PaymentGatewayInfoVO> {
     let supported = this._sla.supportedPaymentGateways;
@@ -178,56 +208,12 @@ export class SlaComponent implements OnInit, OnDestroy {
     return labels;
   }
 
-  onSupportedPgClick(supported:PaymentGatewayInfoVO) {
-    console.debug('SlaComponent remove supported', supported);
-    let idx = this._sla.supportedPaymentGateways.indexOf(supported.label);
-    if (idx != -1) {
-      this._sla.supportedPaymentGateways.splice(idx, 1);
-      this.recalculatePgs();
-      this.changed = true;
-      this.validForSave = this.slaForm.valid;
-      console.debug('SlaComponent form changed PGs and valid: ' + this.validForSave);
-      this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
+  private recalculatePgs():void {
+    if (this._sla) {
+      this.availablePgs = this.getAvailablePGNames();
+      this.supportedPgs = this.getSupportedPGNames();
     }
   }
-
-  onAvailablePgClick(available:PaymentGatewayInfoVO) {
-    console.debug('SlaComponent add supported', available);
-    if (this._sla.supportedPaymentGateways == null) {
-      this._sla.supportedPaymentGateways = [];
-    }
-    let idx = this._sla.supportedPaymentGateways.indexOf(available.label);
-    if (idx == -1) {
-      this._sla.supportedPaymentGateways.push(available.label);
-      this.recalculatePgs();
-      this.changed = true;
-      this.validForSave = this.slaForm.valid;
-      console.debug('SlaComponent form changed PGs and valid: ' + this.validForSave);
-      this.dataChanged.emit({ source: this._sla, valid: this.validForSave });
-    }
-  }
-
-
-  onDataChange(event:any) {
-    console.debug('SlaComponent onDataChange', event);
-    this.changed = true;
-  }
-
-
-  ngOnInit() {
-    console.debug('SlaComponent ngOnInit');
-    this.formBind();
-  }
-
-  ngOnDestroy() {
-    console.debug('SlaComponent ngOnDestroy');
-    this.formUnbind();
-  }
-
-  tabSelected(tab:any) {
-    console.debug('SlaComponent tabSelected', tab);
-  }
-
 
 
 }

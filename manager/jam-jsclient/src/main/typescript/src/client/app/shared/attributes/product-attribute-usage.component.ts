@@ -13,16 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input, ViewChild} from '@angular/core';
-import {AttributeService} from './../services/index';
-import {Pair} from './../model/index';
-import {ModalComponent, ModalResult} from './../modal/index';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { AttributeService } from './../services/index';
+import { Pair } from './../model/index';
+import { ModalComponent, ModalResult } from './../modal/index';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-product-attribute-usage',
   moduleId: module.id,
   templateUrl: 'product-attribute-usage.component.html',
-  directives: [ModalComponent],
 })
 
 /**
@@ -30,12 +30,10 @@ import {ModalComponent, ModalResult} from './../modal/index';
  */
 export class ProductAttributeUsageComponent implements OnInit {
 
-  changed:boolean = false;
-
   @ViewChild('usageModalDialog')
-  usageModalDialog:ModalComponent;
+  private usageModalDialog:ModalComponent;
 
-  _attributeCode:string;
+  private _attributeCode:string;
 
   private usages:Array<Pair<number, string>> = [];
 
@@ -44,7 +42,7 @@ export class ProductAttributeUsageComponent implements OnInit {
    * @param _attributeService
    */
   constructor(private _attributeService:AttributeService) {
-    console.debug('ProductAttributeUsageComponent constructed');
+    LogUtil.debug('ProductAttributeUsageComponent constructed');
   }
 
   @Input()
@@ -58,32 +56,32 @@ export class ProductAttributeUsageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('ProductAttributeUsageComponent ngOnInit');
-  }
-
-  /**
-   * Load data and adapt time.
-   */
-  loadData() {
-    console.debug('ProductAttributeUsageComponent loading usages', this._attributeCode);
-    var _subc:any = this._attributeService.getProductTypesByAttributeCode(this._attributeCode).subscribe(
-        usage => {
-          console.debug('ProductAttributeUsageComponent all usages', usage);
-          this.usages = usage;
-          _subc.unsubscribe();
-      }
-    );
+    LogUtil.debug('ProductAttributeUsageComponent ngOnInit');
   }
 
 
   public showDialog() {
-    console.debug('ProductAttributeUsageComponent showDialog');
+    LogUtil.debug('ProductAttributeUsageComponent showDialog');
     this.usageModalDialog.show();
   }
 
 
   protected onConfirmationResult(modalresult: ModalResult) {
-    console.debug('ProductAttributeUsageComponent onSelectConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ProductAttributeUsageComponent onSelectConfirmationResult modal result is ', modalresult);
+  }
+
+  /**
+   * Load data and adapt time.
+   */
+  private loadData() {
+    LogUtil.debug('ProductAttributeUsageComponent loading usages', this._attributeCode);
+    var _subc:any = this._attributeService.getProductTypesByAttributeCode(this._attributeCode).subscribe(
+        usage => {
+        LogUtil.debug('ProductAttributeUsageComponent all usages', usage);
+        this.usages = usage;
+        _subc.unsubscribe();
+      }
+    );
   }
 
 }

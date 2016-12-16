@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 
-import {Pair} from './common.model';
-import {AttrValueVO} from './attribute.model';
-import {BrandVO, ProductTypeInfoVO} from './catalog.model';
+import { Pair } from './common.model';
+import { AttrValueVO } from './attribute.model';
+import { BrandVO, ProductTypeInfoVO } from './catalog.model';
 
 export interface AssociationVO {
 

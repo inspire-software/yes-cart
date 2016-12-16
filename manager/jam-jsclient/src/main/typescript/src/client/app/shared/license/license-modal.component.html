@@ -1,5 +1,5 @@
 
-  <modal #licenseModalDialog
+  <yc-modal #licenseModalDialog
          title="{{ 'MODAL_LICENSE_TITLE' | translate }}"
          cancelLabel="{{ 'MODAL_BUTTON_CLOSE' | translate }}"
          positiveLabel="{{ 'MODAL_BUTTON_AGREE' | translate }}"
@@ -8,5 +8,5 @@
     <div *ngIf="license">
       <pre style="max-height: 300px; overflow-y: auto">{{ license.text }}</pre>
     </div>
-  </modal>
+  </yc-modal>
 

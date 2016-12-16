@@ -13,23 +13,21 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, ViewChild} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {ShopVO, ShopUrlVO, UrlVO} from './../../shared/model/index';
-import {ShopService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO, ShopUrlVO, UrlVO } from './../../shared/model/index';
+import { ShopService, Util } from './../../shared/services/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-url',
   moduleId: module.id,
   templateUrl: 'shop-url.component.html',
-  directives: [DataControlComponent, PaginationComponent, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent]
 })
 
 export class ShopUrlComponent implements OnInit, OnDestroy {
@@ -38,37 +36,37 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   private _reload:boolean = false;
 
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
 
-  shopUrl:ShopUrlVO;
+  private shopUrl:ShopUrlVO;
   private urlFilter:string;
-  filteredShopUrl:Array<UrlVO>;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filteredShopUrl:Array<UrlVO>;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
-  changed:boolean = false;
-  changedSingle:boolean = false;
-  validForSave:boolean = false;
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
   @ViewChild('editModalDialog')
-  editModalDialog:ModalComponent;
+  private editModalDialog:ModalComponent;
 
-  selectedRow:UrlVO;
+  private selectedRow:UrlVO;
 
-  urlToEdit:UrlVO;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private urlToEdit:UrlVO;
 
-  shopUrlForm:any;
-  shopUrlFormSub:any;
+  private shopUrlForm:any;
+  private shopUrlFormSub:any; // tslint:disable-line:no-unused-variable
 
   /**
    * Construct shop url panel
@@ -77,7 +75,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
    */
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
-    console.debug('ShopUrlComponent constructed');
+    LogUtil.debug('ShopUrlComponent constructed');
 
     this.urlToEdit = this.newUrlInstance();
 
@@ -92,27 +90,18 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     return {'urlId': 0, 'url': '', 'theme' : '', 'primary': false};
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.shopUrlForm.controls) {
-      this.shopUrlForm.controls[key]['_pristine'] = true;
-      this.shopUrlForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.shopUrlFormSub = this.shopUrlForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.shopUrlForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'shopUrlForm', 'shopUrlFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
-    if (this.shopUrlFormSub) {
-      console.debug('ShopUrlComponent unbining form');
-      this.shopUrlFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'shopUrlFormSub');
+  }
+
+
+  formChange():void {
+    LogUtil.debug('AttributeComponent formChange', this.shopUrlForm.valid, this.urlToEdit);
+    this.validForSave = this.shopUrlForm.valid;
   }
 
   @Input()
@@ -136,8 +125,8 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('ShopUrlComponent ngOnInit shop', this.shop);
+  ngOnInit() {
+    LogUtil.debug('ShopUrlComponent ngOnInit shop', this.shop);
 
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
@@ -147,7 +136,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('ShopUrlComponent ngOnDestroy');
+    LogUtil.debug('ShopUrlComponent ngOnDestroy');
     this.formUnbind();
   }
 
@@ -157,7 +146,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
    * @param row url to delete.
    */
   protected onRowDelete(row:UrlVO) {
-    console.debug('ShopUrlComponent onRowDelete handler', row);
+    LogUtil.debug('ShopUrlComponent onRowDelete handler', row);
     this.deleteConfirmationModalDialog.show();
   }
 
@@ -168,11 +157,9 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEdit(row:UrlVO) {
-    console.debug('ShopUrlComponent onRowEdit handler', row);
-    this.formReset();
+    LogUtil.debug('ShopUrlComponent onRowEdit handler', row);
     this.validForSave = false;
-    this.urlToEdit = Util.clone(row);
-    this.changedSingle = false;
+    UiUtil.formInitialise(this, 'initialising', 'shopUrlForm', 'urlToEdit', Util.clone(row));
     this.editModalDialog.show();
   }
 
@@ -183,12 +170,9 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onRowPrimary(row:UrlVO) {
-    console.debug('ShopUrlComponent onRowPrimary handler', row);
+    LogUtil.debug('ShopUrlComponent onRowPrimary handler', row);
     if (row.primary === false) {
-      for (var idx = 0; idx < this.shopUrl.urls.length; idx++) {
-        var url:UrlVO = this.shopUrl.urls[idx];
-        url.primary = (url.urlId === row.urlId || (url.urlId === 0 && url.url === row.url)); // Match by id and url
-      }
+      this.resetPrimary(row);
     } else {
       // do not allow unsetting because we need at least one primary for emails to reference shop url
     }
@@ -202,7 +186,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:UrlVO) {
-    console.debug('ShopUrlComponent onRowPrimary handler', row);
+    LogUtil.debug('ShopUrlComponent onRowPrimary handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
@@ -211,26 +195,20 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('ShopUrlComponent onRowNew handler');
-    this.formReset();
+    LogUtil.debug('ShopUrlComponent onRowNew handler');
     this.validForSave = false;
-    this.urlToEdit = this.newUrlInstance();
+    UiUtil.formInitialise(this, 'initialising', 'shopUrlForm', 'urlToEdit', this.newUrlInstance());
     this.editModalDialog.show();
   }
 
-  onFilterChange(event:any) {
+  protected onFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  onDataChange(event:any) {
-    console.debug('ShopUrlComponent data changed', event);
-    this.changedSingle = true;
-  }
-
   protected onSaveHandler() {
-    console.debug('ShopUrlComponent Save handler', this.shop);
+    LogUtil.debug('ShopUrlComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.shopUrl) {
       var _sub:any = this._shopService.saveShopUrls(this.shopUrl).subscribe(
           rez => {
@@ -239,7 +217,6 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
             this._reload = false;
             this.selectedRow = null;
             this.filterUrls();
-            console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
             _sub.unsubscribe();
         }
       );
@@ -247,21 +224,21 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('ShopUrlComponent discard handler', this.shop);
+    LogUtil.debug('ShopUrlComponent discard handler', this.shop);
     this.onRefreshHandler();
   }
 
   protected onRefreshHandler() {
-    console.debug('ShopUrlComponent refresh handler', this.shop);
+    LogUtil.debug('ShopUrlComponent refresh handler', this.shop);
     this.getShopUrls();
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ShopUrlComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('ShopUrlComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       let urlToDelete = this.selectedRow.url;
       let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.url === urlToDelete;} );
-      console.debug('ShopUrlComponent onDeleteConfirmationResult index in array of urls ' + idx);
+      LogUtil.debug('ShopUrlComponent onDeleteConfirmationResult index in array of urls ' + idx);
       this.shopUrl.urls.splice(idx, 1);
       this.filterUrls();
       this.selectedRow = null;
@@ -270,70 +247,23 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   }
 
   protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('ShopUrlComponent onEditModalResult modal result is ', modalresult);
+    LogUtil.debug('ShopUrlComponent onEditModalResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.urlToEdit.urlId === 0) { // add new
-        console.debug('ShopUrlComponent onEditModalResult add new url', this.shopUrl);
+        LogUtil.debug('ShopUrlComponent onEditModalResult add new url', this.shopUrl);
         this.shopUrl.urls.push(this.urlToEdit);
         this.totalItems++;
       } else { // edit existing
-        console.debug('ShopUrlComponent onEditModalResult update existing', this.shopUrl);
+        LogUtil.debug('ShopUrlComponent onEditModalResult update existing', this.shopUrl);
         let idx = this.shopUrl.urls.findIndex(urlVo =>  {return urlVo.urlId === this.urlToEdit.urlId;} );
         this.shopUrl.urls[idx] = this.urlToEdit;
       }
       this.selectedRow = this.urlToEdit;
+      if (this.urlToEdit.primary) {
+        this.resetPrimary(this.urlToEdit);
+      }
       this.changed = true;
       this.filterUrls();
-    }
-  }
-
-  /**
-   * Read urls, that belong to shop.
-   */
-  private getShopUrls() {
-    console.debug('ShopUrlComponent get urls', this.shop);
-    if (this.shop.shopId > 0) {
-
-      this._shopService.getShopUrls(this.shop.shopId).subscribe(shopUrl => {
-
-        console.debug('ShopUrlComponent urls', this.shopUrl);
-        this.shopUrl = shopUrl;
-        this.changed = false;
-        this._reload = false;
-        this.selectedRow = null;
-
-        this.filterUrls();
-        console.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
-
-      });
-    } else {
-      this.shopUrl = null;
-      this.filteredShopUrl = [];
-      this.selectedRow = null;
-    }
-  }
-
-  private filterUrls() {
-    let _filter = this.urlFilter ? this.urlFilter.toLowerCase() : null;
-    if (_filter) {
-      this.filteredShopUrl = this.shopUrl.urls.filter(url =>
-        url.url.toLowerCase().indexOf(_filter) !== -1 ||
-        url.theme && url.theme.toLowerCase().indexOf(_filter) !== -1
-      );
-      console.debug('ShopUrlComponent filterUrls', _filter);
-    } else {
-      this.filteredShopUrl = this.shopUrl.urls;
-      console.debug('ShopUrlComponent filterUrls no filter');
-    }
-
-    if (this.filteredShopUrl === null) {
-      this.filteredShopUrl = [];
-    }
-
-    let _total = this.filteredShopUrl.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
     }
   }
 
@@ -357,5 +287,79 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  protected onClearFilter() {
+
+    this.urlFilter = '';
+    this.delayedFiltering.delay();
+
+  }
+
+
+  private resetPrimary(row:UrlVO) {
+    this.shopUrl.urls.forEach((url:UrlVO) => {
+      url.primary = (url.urlId === row.urlId || (url.urlId === 0 && url.url === row.url)); // Match by id and url
+    });
+  }
+
+
+  /**
+   * Read urls, that belong to shop.
+   */
+  private getShopUrls() {
+    LogUtil.debug('ShopUrlComponent get urls', this.shop);
+    if (this.shop.shopId > 0) {
+
+      this._shopService.getShopUrls(this.shop.shopId).subscribe(shopUrl => {
+
+        LogUtil.debug('ShopUrlComponent urls', this.shopUrl);
+        this.shopUrl = shopUrl;
+        this.changed = false;
+        this._reload = false;
+        this.selectedRow = null;
+
+        this.filterUrls();
+        LogUtil.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
+
+      });
+    } else {
+      this.shopUrl = null;
+      this.filteredShopUrl = [];
+      this.selectedRow = null;
+    }
+  }
+
+  private filterUrls() {
+    let _filter = this.urlFilter ? this.urlFilter.toLowerCase() : null;
+    let _urls:UrlVO[] = [];
+    if (_filter) {
+      _urls = this.shopUrl.urls.filter(url =>
+        url.url.toLowerCase().indexOf(_filter) !== -1 ||
+        url.theme && url.theme.toLowerCase().indexOf(_filter) !== -1
+      );
+      LogUtil.debug('ShopUrlComponent filterUrls', _filter);
+    } else {
+      _urls = this.shopUrl.urls;
+      LogUtil.debug('ShopUrlComponent filterUrls no filter');
+    }
+
+    if (_urls === null) {
+      _urls = [];
+    }
+
+    _urls.sort(function(a:UrlVO, b:UrlVO) {
+
+      return a.url > b.url ? 1 : -1;
+
+    });
+
+    this.filteredShopUrl = _urls;
+
+    let _total = this.filteredShopUrl.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
+  }
 
 }

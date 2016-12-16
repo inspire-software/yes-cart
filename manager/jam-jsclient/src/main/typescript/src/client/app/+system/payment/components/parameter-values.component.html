@@ -11,8 +11,8 @@
       <tbody>
       <tr *ngFor="let row of filteredObjectAttributes; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click" [title]="row.label">{{row.name}}</a></td>
-          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
+          <td title="{{ 'AV_ATTRIBUTE' | translate }}"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click" [title]="row.label">{{row.name}}</a></td>
+          <td title="{{ 'AV_VALUE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="{{ getAttributeColor(row, 'text-strikethrough text-danger', 'text-warning', 'text-success', '') }} js-click  text-force-break"><div [innerHTML]="getDisplayValue(row)"></div></a></td>
         </template>
       </tr>
       </tbody>
@@ -26,21 +26,21 @@
 
 
 
-  <modal #deleteConfirmationModalDialog
-         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_DELETE' | translate }}"
-         [valid]="true"
-         (closed)="onDeleteConfirmationResult($event)">
+  <yc-modal #deleteConfirmationModalDialog
+            title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+            [valid]="true"
+            (closed)="onDeleteConfirmationResult($event)">
     {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.name + ': ' + selectedRow.value) : '') } }}
-  </modal>
+  </yc-modal>
 
-  <modal #editModalDialog
-         title="{{ 'AV_ATTRIBUTE' | translate }}"
-         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-         positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
-         [valid]="validForSave"
-         (closed)="onEditModalResult($event)">
+  <yc-modal #editModalDialog
+            title="{{ 'AV_ATTRIBUTE' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
 
     <template [ngIf]="attributeToEdit">
       <form role="form">
@@ -79,6 +79,6 @@
         </fieldset>
       </form>
     </template>
-  </modal>
+  </yc-modal>
 
 </template>

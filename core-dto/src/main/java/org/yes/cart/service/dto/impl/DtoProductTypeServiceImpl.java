@@ -24,6 +24,7 @@ import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.ProductTypeDTOImpl;
 import org.yes.cart.domain.entity.ProductType;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.GenericService;
@@ -31,6 +32,7 @@ import org.yes.cart.service.domain.ProductTypeService;
 import org.yes.cart.service.dto.DtoProductTypeService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -107,6 +109,11 @@ public class DtoProductTypeServiceImpl
         return dtos;
     }
 
+    private final static char[] EXACT_OR_CODE = new char[] { '#', '!' };
+    static {
+        Arrays.sort(EXACT_OR_CODE);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -115,14 +122,39 @@ public class DtoProductTypeServiceImpl
         final List<ProductType> entities;
 
         if (StringUtils.isNotBlank(name)) {
-            entities = service.getGenericDao().findByCriteria(
-                    page * pageSize, pageSize,
-                    Restrictions.or(
-                            Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                            Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                    )
-            );
+
+            final Pair<String, String> exactOrCode = ComplexSearchUtils.checkSpecialSearch(name, EXACT_OR_CODE);
+
+            if (exactOrCode != null) {
+
+                if ("!".equals(exactOrCode.getFirst())) {
+
+                    entities = service.getGenericDao().findByCriteria(
+                            page * pageSize, pageSize,
+                            Restrictions.or(
+                                    Restrictions.ilike("guid", exactOrCode.getSecond(), MatchMode.EXACT),
+                                    Restrictions.ilike("name", exactOrCode.getSecond(), MatchMode.EXACT)
+                            )
+                    );
+
+                } else {
+
+                    return findByAttributeCode(exactOrCode.getSecond());
+
+                }
+
+            } else {
+
+                entities = service.getGenericDao().findByCriteria(
+                        page * pageSize, pageSize,
+                        Restrictions.or(
+                                Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
+                                Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                                Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                        )
+                );
+
+            }
         } else {
             entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
         }

@@ -13,45 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {PromotionCouponVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { PromotionCouponVO } from './../../shared/model/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-promotion-coupons',
   moduleId: module.id,
   templateUrl: 'promotion-coupons.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class PromotionCouponsComponent implements OnInit, OnDestroy {
-
-  _coupons:Array<PromotionCouponVO> = [];
-
-  filteredCoupons:Array<PromotionCouponVO>;
 
   @Input() selectedCoupon:PromotionCouponVO;
 
   @Output() dataSelected: EventEmitter<PromotionCouponVO> = new EventEmitter<PromotionCouponVO>();
 
+  private _coupons:Array<PromotionCouponVO> = [];
+
+  private filteredCoupons:Array<PromotionCouponVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('PromotionCouponsComponent constructed');
+    LogUtil.debug('PromotionCouponsComponent constructed');
   }
 
   ngOnInit() {
-    console.debug('PromotionCouponsComponent ngOnInit');
+    LogUtil.debug('PromotionCouponsComponent ngOnInit');
   }
 
   @Input()
@@ -60,24 +58,8 @@ export class PromotionCouponsComponent implements OnInit, OnDestroy {
     this.filterCoupons();
   }
 
-  private filterCoupons() {
-
-    this.filteredCoupons = this._coupons;
-    console.debug('PromotionCouponsComponent filterPromotions', this.filteredCoupons);
-
-    if (this.filteredCoupons === null) {
-      this.filteredCoupons = [];
-    }
-
-    let _total = this.filteredCoupons.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('PromotionCouponsComponent ngOnDestroy');
+    LogUtil.debug('PromotionCouponsComponent ngOnDestroy');
     this.selectedCoupon = null;
     this.dataSelected.emit(null);
   }
@@ -102,7 +84,7 @@ export class PromotionCouponsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:PromotionCouponVO) {
-    console.debug('PromotionCouponsComponent onSelectRow handler', row);
+    LogUtil.debug('PromotionCouponsComponent onSelectRow handler', row);
     if (row == this.selectedCoupon) {
       this.selectedCoupon = null;
     } else {
@@ -113,6 +95,23 @@ export class PromotionCouponsComponent implements OnInit, OnDestroy {
 
   protected isExhausted(row:PromotionCouponVO) {
     return row.usageLimit > 0 && row.usageLimit <= row.usageCount;
+  }
+
+
+  private filterCoupons() {
+
+    this.filteredCoupons = this._coupons;
+    LogUtil.debug('PromotionCouponsComponent filterPromotions', this.filteredCoupons);
+
+    if (this.filteredCoupons === null) {
+      this.filteredCoupons = [];
+    }
+
+    let _total = this.filteredCoupons.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

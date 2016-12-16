@@ -13,29 +13,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {ClusterNodeVO} from './../../shared/model/index';
-import {SystemService} from './../../shared/services/index';
+import { Component, OnInit } from '@angular/core';
+import { ClusterNodeVO } from './../../shared/model/index';
+import { SystemService } from './../../shared/services/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-query',
   moduleId: module.id,
   templateUrl: 'query.component.html',
-  directives: [TAB_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES]
 })
 
 export class QueryComponent implements OnInit {
 
-  cluster:Array<ClusterNodeVO> = [];
+  private static tabs:Array<QueryTabData> = [ { query: '', qtype: 'SQL', result: '', resultQuery: '' } ];
 
-  selectedNode:string = null;
-  selectedTabType:string = 'SQL';
+  private cluster:Array<ClusterNodeVO> = [];
 
-  static tabs:Array<QueryTabData> = [ { query: '', qtype: 'SQL', result: '', resultQuery: '' } ];
-  selectedTab:number = 0;
+  private selectedNode:string = null;
+  private selectedTabType:string = 'SQL';
+
+  private selectedTab:number = 0;
 
   /**
    * Construct shop attribute panel
@@ -43,7 +41,7 @@ export class QueryComponent implements OnInit {
    * @param _systemService system service
    */
   constructor(private _systemService:SystemService) {
-    console.debug('QueryComponent constructed');
+    LogUtil.debug('QueryComponent constructed');
 
   }
 
@@ -55,9 +53,8 @@ export class QueryComponent implements OnInit {
     QueryComponent.tabs = tabs;
   }
 
-  /** {@inheritDoc} */
-  public ngOnInit() {
-    console.debug('QueryComponent ngOnInit');
+  ngOnInit() {
+    LogUtil.debug('QueryComponent ngOnInit');
     this.onRefreshHandler();
   }
 
@@ -78,14 +75,14 @@ export class QueryComponent implements OnInit {
   }
 
   protected onRunHandler() {
-    console.debug('QueryComponent Run handler');
+    LogUtil.debug('QueryComponent Run handler');
 
     let data = this.tabs[this.selectedTab];
     let node = this.selectedNode;
 
     var _sub:any = this._systemService.runQuery(node, data.qtype, data.query).subscribe(res => {
 
-      console.debug('QueryComponent res', res);
+      LogUtil.debug('QueryComponent res', res);
 
       var _res:Array<Array<string>> = res;
 
@@ -107,19 +104,16 @@ export class QueryComponent implements OnInit {
   }
 
   protected onRefreshHandler() {
-    console.debug('QueryComponent refresh handler');
+    LogUtil.debug('QueryComponent refresh handler');
     this.getClusterInfo();
   }
 
-  /**
-   * Read attributes.
-   */
   private getClusterInfo() {
-    console.debug('QueryComponent get cluster');
+    LogUtil.debug('QueryComponent get cluster');
 
     var _sub:any = this._systemService.getClusterInfo().subscribe(cluster => {
 
-      console.debug('QueryComponent cluster', cluster);
+      LogUtil.debug('QueryComponent cluster', cluster);
       this.cluster = cluster;
       this.selectedNode = this.cluster[0].id;
       _sub.unsubscribe();

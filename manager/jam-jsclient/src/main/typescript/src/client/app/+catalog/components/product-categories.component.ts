@@ -13,20 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {CatalogService} from './../../shared/services/index';
-import {ProductVO, ProductCategoryVO, CategoryVO, BasicCategoryVO, ValidationRequestVO} from './../../shared/model/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {TreeViewComponent, ITreeNode} from './../../shared/tree-view/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
+import { Component, OnInit, OnDestroy, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { CatalogService } from './../../shared/services/index';
+import { ProductVO, ProductCategoryVO, CategoryVO, BasicCategoryVO, ValidationRequestVO } from './../../shared/model/index';
+import { ITreeNode } from './../../shared/tree-view/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-product-categories',
   moduleId: module.id,
   templateUrl: 'product-categories.component.html',
-  directives: [DataControlComponent, TreeViewComponent, REACTIVE_FORM_DIRECTIVES, ModalComponent],
 })
 
 /**
@@ -34,27 +34,29 @@ import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/ind
  */
 export class ProductCategoryComponent implements OnInit, OnDestroy {
 
+  private static _categories:Array<CategoryVO> = null;
+
+  @Output() dataChanged: EventEmitter<Array<ProductCategoryVO>> = new EventEmitter<Array<ProductCategoryVO>>();
+
   private _product:ProductVO;
   private _reload:boolean = false;
 
-  changed:boolean = false;
-  existingProduct:boolean = false;
+  private changed:boolean = false;
+  private existingProduct:boolean = false;
 
-  newCategory:BasicCategoryVO;
+  private newCategory:BasicCategoryVO;
   @ViewChild('editNewCategoryName')
-  editNewCategoryName:ModalComponent;
-  newCategoryForm:any;
-  newCategoryFormSub:any;
-  changedSingle:boolean = true;
-  validForSave:boolean = false;
+  private editNewCategoryName:ModalComponent;
 
-  nodes:Array<ITreeNode>;
-  selectedNode:ITreeNode;
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private newCategoryForm:any;
+  private newCategoryFormSub:any; // tslint:disable-line:no-unused-variable
+  private validForSave:boolean = false;
 
-  static _categories:Array<CategoryVO> = null;
-  assigned:Array<ProductCategoryVO> = null;
+  private nodes:Array<ITreeNode>;
+  private selectedNode:ITreeNode;
 
-  @Output() dataChanged: EventEmitter<Array<ProductCategoryVO>> = new EventEmitter<Array<ProductCategoryVO>>();
+  private assigned:Array<ProductCategoryVO> = null;
 
   /**
    * Construct product catalogues panel.
@@ -63,7 +65,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    */
   constructor(private _categoryService:CatalogService,
               fb: FormBuilder) {
-    console.debug('ProductCategoryComponent constructed');
+    LogUtil.debug('ProductCategoryComponent constructed');
 
     this.newCategory = this.newCategoryInstance();
 
@@ -72,7 +74,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (!that.changedSingle || code == null || code == '' || that.newCategory == null) {
+      if (code == null || code == '' || that.newCategory == null || !that.newCategoryForm || !that.newCategoryForm.dirty) {
         return null;
       }
 
@@ -120,12 +122,12 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ProductCategoryComponent ngOnInit product', this.product);
+    LogUtil.debug('ProductCategoryComponent ngOnInit product', this.product);
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('ProductCategoryComponent ngOnDestroy');
+    LogUtil.debug('ProductCategoryComponent ngOnDestroy');
     this.formUnbind();
   }
 
@@ -133,33 +135,17 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
     return { 'name': '', 'guid': '' };
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.newCategoryForm.controls) {
-      this.newCategoryForm.controls[key]['_pristine'] = true;
-      this.newCategoryForm.controls[key]['_touched'] = false;
-    }
-  }
-
   formBind():void {
-    this.newCategoryFormSub = this.newCategoryForm.statusChanges.subscribe((data:any) => {
-      if (this.changedSingle) {
-        this.validForSave = this.newCategoryForm.valid;
-      }
-    });
+    UiUtil.formBind(this, 'newCategoryForm', 'newCategoryFormSub', 'formChange', 'initialising', false);
   }
 
   formUnbind():void {
-    if (this.newCategoryFormSub) {
-      console.debug('ProductCategoryComponent unbining form');
-      this.newCategoryFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'newCategoryFormSub');
   }
 
-
-  onFormDataChange(event:any) {
-    console.debug('ProductCategoryComponent data changed', event);
-    this.changedSingle = true;
+  formChange():void {
+    LogUtil.debug('ProductCategoryComponent formChange', this.newCategoryForm.valid, this.newCategory);
+    this.validForSave = this.newCategoryForm.valid;
   }
 
 
@@ -167,19 +153,19 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * Load data and adapt time.
    */
   loadData() {
-    console.debug('ProductCategoryComponent loading categories', this.product);
-    this.existingProduct = this.product != null && this.product.productId > 0;
+    LogUtil.debug('ProductCategoryComponent loading categories', this.product);
+    this.existingProduct = this.product != null;
     if (this.existingProduct) {
         this.assigned = this._product.productCategories;
         var _assignedIds:Array<number> = this.adaptToIds(this.assigned);
 
         var _subc:any = this._categoryService.getAllCategories().subscribe(
             cats => {
-              console.debug('ProductCategoryComponent all categories', cats);
+              LogUtil.debug('ProductCategoryComponent all categories', cats);
               this.categories = cats;
               this.nodes = this.adaptToTree(cats, _assignedIds);
               this.selectedNode = null;
-              this.newCategory = { 'name': '', 'guid': '' };
+              UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
               this.changed = false;
               this._reload = false;
               _subc.unsubscribe();
@@ -217,6 +203,11 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
       };
       if (catVo.children !== null && catVo.children.length > 0) {
         node.children = this.adaptToTree(catVo.children, disabled);
+        node.children.forEach(child => {
+          if (child.disabled) {
+            node.expanded = true; // Expand parent if child is expanded
+          }
+        });
       }
       rez.push(node);
     }
@@ -228,10 +219,10 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param node
    */
   assignToProductClick(node:ITreeNode) {
-    console.debug('ProductCategoryComponent assignToProduct ', node);
+    LogUtil.debug('ProductCategoryComponent assignToProduct ', node);
     let catVo = node.source;
     this.assigned.push({ productCategoryId: 0,  productId: this._product.productId, categoryId: catVo.categoryId, categoryName: catVo.name, rank: 0 });
-    console.debug('ProductCategoryComponent disabled node', node);
+    LogUtil.debug('ProductCategoryComponent disabled node', node);
     node.disabled = true;
     node.expanded = false;
     this.selectedNode = null;
@@ -244,11 +235,11 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param cat category
      */
   onAssignedClick(cat:CategoryVO) {
-    console.debug('ProductCategoryComponent onAssigned', cat);
+    LogUtil.debug('ProductCategoryComponent onAssigned', cat);
     for (var idx = 0; idx < this.assigned.length; idx++) {
       var catVo : ProductCategoryVO = this.assigned[idx];
       if (catVo.categoryId === cat.categoryId) {
-        console.debug('ProductCategoryComponent remove from assigned', catVo);
+        LogUtil.debug('ProductCategoryComponent remove from assigned', catVo);
         this.assigned.splice(idx, 1);
         this.changeDisabledState(catVo, this.nodes);
         this.changed = true;
@@ -263,7 +254,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
       var node:ITreeNode = nodes[idx];
       if (node.id === cat.categoryId.toString()) {
         node.disabled = false;
-        console.debug('ProductCategoryComponent enabled node', node);
+        LogUtil.debug('ProductCategoryComponent enabled node', node);
         return true;
       }
 
@@ -279,7 +270,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param node
    */
   onSelectNode(node:ITreeNode) {
-    console.debug('ProductCategoryComponent selected node', node);
+    LogUtil.debug('ProductCategoryComponent selected node', node);
     if (node.disabled === false) {
       node.expanded = false; // collapse on selection, to prevent recursive selection (i.e. sub categories from same branch)
       this.selectedNode = node;
@@ -287,7 +278,7 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
   }
 
   onRequest(parent:ITreeNode) {
-    console.debug('ProductCategoryComponent onRequest node', parent);
+    LogUtil.debug('ProductCategoryComponent onRequest node', parent);
   }
 
 
@@ -296,11 +287,9 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param parent parent of new catecory
    */
   createNew(parent:ITreeNode) {
-    console.debug('ProductCategoryComponent createNew for parent', parent);
-    this.changedSingle = false;
+    LogUtil.debug('ProductCategoryComponent createNew for parent', parent);
     this.validForSave = false;
-    this.newCategory = this.newCategoryInstance();
-    this.formReset();
+    UiUtil.formInitialise(this, 'initialising', 'newCategoryForm', 'newCategory', this.newCategoryInstance());
     this.editNewCategoryName.show();
   }
 
@@ -309,11 +298,10 @@ export class ProductCategoryComponent implements OnInit, OnDestroy {
    * @param modalresult
      */
   editNewCategoryNameModalResult(modalresult:ModalResult) {
-    console.debug('ProductCategoryComponent editNewCategoryNameModalResult modal result', modalresult);
+    LogUtil.debug('ProductCategoryComponent editNewCategoryNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       this._categoryService.createCategory(this.newCategory, +this.selectedNode.id).subscribe(
         catVo => {
-          this.changedSingle = false;
           this.validForSave = false;
           this.loadData();
         }

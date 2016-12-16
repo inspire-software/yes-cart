@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-import {Pair} from './common.model';
+import { Pair } from './common.model';
 
 export interface DashboardWidgetVO {
 

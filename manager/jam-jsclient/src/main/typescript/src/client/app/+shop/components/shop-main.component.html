@@ -2,7 +2,7 @@
 
   <div class="text-right data-control">
 
-    <button type="button" (click)="onPowerOff()" [ngClass]="shopDisabled ? 'btn btn-danger btn-circle btn-xl':'btn btn-success btn-circle btn-xl'" [disabled]="shop.shopId <= 0">
+    <button type="button" (click)="onPowerOff()" [ngClass]="shopDisabled ? 'btn btn-danger btn-circle btn-xl':'btn btn-success btn-circle btn-xl'" [disabled]="shop.shopId <= 0" title="{{ (shopDisabled ? 'MODAL_BUTTON_DISABLE' : 'MODAL_BUTTON_ENABLE') | translate }}">
       <i class="fa fa-power-off"></i>
     </button>
 
@@ -20,25 +20,25 @@
           <fieldset>
             <div class="form-group">
               <label>{{ 'CODE' | translate }}</label>
-              <input autofocus  class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="shop.code" (ngModelChange)="onDataChange($event)" [disabled]="shop.shopId > 0">
+              <input autofocus  class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="shop.code">
               <div [hidden]="shopMainForm.controls['code'].valid || shopMainForm.controls['code'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
               <label>{{ 'NAME' | translate }}</label>
-              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="shop.name" (ngModelChange)="onDataChange($event)">
+              <input class="form-control" placeholder="{{ 'NAME' | translate }}" formControlName="name" name="name" type="text"  [(ngModel)]="shop.name">
               <div [hidden]="shopMainForm.controls['name'].valid || shopMainForm.controls['name'].pristine" class="alert alert-danger">
                 {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
               </div>
             </div>
             <div class="form-group">
               <label>{{ 'DESCRIPTION' | translate }}</label>
-              <textarea class="form-control"  placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" [(ngModel)]="shop.description" (ngModelChange)="onDataChange($event)"></textarea>
+              <textarea class="form-control"  placeholder="{{ 'DESCRIPTION' | translate }}" formControlName="description" name="description" [(ngModel)]="shop.description"></textarea>
             </div>
             <div class="form-group">
               <label>{{ 'SHOP_THEME_CHAIN' | translate }}</label>
-              <input class="form-control"  placeholder="{{ 'SHOP_THEME_CHAIN' | translate }}" formControlName="fspointer" name="fspointer" type="text" [(ngModel)]="shop.fspointer" (ngModelChange)="onDataChange($event)">
+              <input class="form-control"  placeholder="{{ 'SHOP_THEME_CHAIN' | translate }}" formControlName="fspointer" name="fspointer" type="text" [(ngModel)]="shop.fspointer">
             </div>
           </fieldset>
         </form>
@@ -50,12 +50,12 @@
 </template>
 
 
-<modal #disableConfirmationModalDialog
-       title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
-       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
-       positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
-       [valid]="true"
-       (closed)="onDisableConfirmationResult($event)">
+<yc-modal #disableConfirmationModalDialog
+          title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+          [valid]="true"
+          (closed)="onDisableConfirmationResult($event)">
   {{ 'MODAL_CONFIRM_MSG_OFF' | translate:{value: offValue } }}
-</modal>
+</yc-modal>
 

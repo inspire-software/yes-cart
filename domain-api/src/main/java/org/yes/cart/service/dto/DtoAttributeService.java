@@ -105,9 +105,7 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
      * Get attributes by criteria.
      *
      * @param attributeGroupCode group code
-     * @param code code (GUID)
-     * @param name base name
-     * @param description description
+     * @param filter filter
      * @param page page number starting from 0
      * @param pageSize size of page
      *
@@ -119,7 +117,7 @@ public interface DtoAttributeService extends GenericDTOService<AttributeDTO> {
      *          in case of configuration problem
      */
     List<AttributeDTO> findAttributesBy(
-            String attributeGroupCode, String code, String name, String description, int page, int pageSize)
+            String attributeGroupCode, String filter, int page, int pageSize)
                 throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
 }

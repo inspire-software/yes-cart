@@ -14,13 +14,14 @@
  *    limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
-import {Config} from '../config/env.config';
-import {Util} from './util';
-import {ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair} from '../model/index';
-import {ErrorEventBus} from './error-event-bus.service';
-import {Observable}     from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Headers, RequestOptions } from '@angular/http';
+import { Config } from '../config/env.config';
+import { Util } from './util';
+import { LogUtil } from './../log/index';
+import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair } from '../model/index';
+import { ErrorEventBus } from './error-event-bus.service';
+import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 /**
@@ -36,7 +37,7 @@ export class ShopService {
    * @param http http client.
    */
   constructor (private http: Http) {
-    console.debug('ShopService constructed');
+    LogUtil.debug('ShopService constructed');
   }
 
   /**
@@ -55,7 +56,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   getShop(id:number) {
-    console.debug('ShopService get shop by id ' + id);
+    LogUtil.debug('ShopService get shop by id ' + id);
     return this.http.get(this._serviceBaseUrl + '/' + id)
       .map(res => <ShopVO> res.json())
       .catch(this.handleError);
@@ -77,7 +78,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   saveShop(shop:ShopVO) {
-    console.debug('ShopService save shop ' + shop.shopId);
+    LogUtil.debug('ShopService save shop ' + shop.shopId);
 
     let body = JSON.stringify(shop);
     let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -100,7 +101,7 @@ export class ShopService {
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
   updateDisabledFlag(shop:ShopVO, state:boolean) {
-    console.debug('ShopService change state shop ' + shop.shopId + ' to ' + state ? 'online' : 'offline');
+    LogUtil.debug('ShopService change state shop ' + shop.shopId + ' to ' + state ? 'online' : 'offline');
 
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -117,7 +118,7 @@ export class ShopService {
    * @return {Promise<ShopSeoVO>}
    */
   getShopLocalization(shopId:number) {
-    console.debug('ShopService get shop localization info ' + shopId);
+    LogUtil.debug('ShopService get shop localization info ' + shopId);
     return this.http.get(this._serviceBaseUrl + '/localization/' + shopId)
       .map(res => <ShopSeoVO> res.json())
       .catch(this.handleError);
@@ -129,7 +130,7 @@ export class ShopService {
    * @returns {Promise<ShopSeoVO>}
      */
   saveShopLocalization(shopSeoVO:ShopSeoVO) {
-    console.debug('ShopService save localization info', shopSeoVO);
+    LogUtil.debug('ShopService save localization info', shopSeoVO);
 
     let body = JSON.stringify(shopSeoVO);
     let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -247,7 +248,7 @@ export class ShopService {
      */
   saveShopCategories(shopId:number, cats : CategoryVO[]) {
     let body = JSON.stringify(cats);
-    console.debug('Save assigned categories ', cats);
+    LogUtil.debug('Save assigned categories ', cats);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/categories/' + shopId, body, options)
@@ -301,7 +302,7 @@ export class ShopService {
 
   private handleError (error:any) {
 
-    console.error('ShopService Server error: ', error);
+    LogUtil.error('ShopService Server error: ', error);
     ErrorEventBus.getErrorEventBus().emit(error);
     let message = Util.determineErrorMessage(error);
     return Observable.throw(message.message || 'Server error');

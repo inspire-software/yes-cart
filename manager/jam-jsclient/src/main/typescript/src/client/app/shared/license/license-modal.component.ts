@@ -13,16 +13,16 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {ManagementService} from './../services/index';
-import {LicenseAgreementVO} from './../model/index';
-import {ModalComponent, ModalResult, ModalAction} from './../modal/index';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { ManagementService } from './../services/index';
+import { LicenseAgreementVO } from './../model/index';
+import { ModalComponent, ModalResult, ModalAction } from './../modal/index';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-license-modal',
   moduleId: module.id,
   templateUrl: 'license-modal.component.html',
-  directives: [ModalComponent]
 })
 
 export class LicenseModalComponent implements OnInit, AfterViewInit {
@@ -33,26 +33,26 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
   private license:LicenseAgreementVO;
 
   constructor(private _managementService:ManagementService) {
-    console.debug('LicenseModalComponent constructed');
+    LogUtil.debug('LicenseModalComponent constructed');
   }
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('LicenseModalComponent ngOnInit');
+    LogUtil.debug('LicenseModalComponent ngOnInit');
   }
 
   protected showErrorModal() {
-    console.debug('LicenseModalComponent showErrorModal', this.license);
+    LogUtil.debug('LicenseModalComponent showErrorModal', this.license);
     if (this.licenseModalDialog) {
       this.licenseModalDialog.show();
     }
   }
 
   public ngAfterViewInit() {
-    console.debug('LicenseModalComponent ngAfterViewInit');
+    LogUtil.debug('LicenseModalComponent ngAfterViewInit');
     // Here you get a reference to the modal so you can control it programmatically
     var _sub:any = this._managementService.getMyAgreement().subscribe(license => {
-      console.debug('LicenseModalComponent event', license);
+      LogUtil.debug('LicenseModalComponent event', license);
       this.license = license;
       if (!license.agreed) {
         this.showErrorModal();
@@ -62,10 +62,10 @@ export class LicenseModalComponent implements OnInit, AfterViewInit {
   }
 
   protected onAgreeResult(modalresult: ModalResult) {
-    console.debug('LicenseModalComponent onAgreeResult modal result is ', modalresult);
+    LogUtil.debug('LicenseModalComponent onAgreeResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
       var _sub:any = this._managementService.acceptMyAgreement().subscribe(license => {
-        console.debug('LicenseModalComponent event', license);
+        LogUtil.debug('LicenseModalComponent event', license);
         this.license = license;
         if (!license.agreed) {
           this.showErrorModal();

@@ -60,4 +60,14 @@ public interface PromotionService extends GenericService<Promotion> {
                                      String action,
                                      Boolean enabled);
 
+
+    /**
+     * Get promotion id by given code
+     *
+     * @param code given code
+     * @return promotion id if found otherwise null
+     */
+    Long findPromotionIdByCode(String code);
+
+
 }

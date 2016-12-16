@@ -103,6 +103,19 @@ public interface DtoCustomerService extends GenericDTOService<CustomerDTO>, Gene
     List<ShopDTO> getAvailableShop(long customerId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**
+     * Persist given DTO
+     *
+     * @param instance DTO to persist
+     * @return persisted DTO
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    CustomerDTO createForShop(CustomerDTO instance, long shopId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
+    /**
      * Grant given shop to user
      *
      * @param customerId user id

@@ -13,22 +13,22 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component,  OnInit, OnDestroy, Output, EventEmitter} from '@angular/core';
-import {NgFor} from '@angular/common';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {FulfilmentCentreInfoVO} from './../model/index';
-import {FulfilmentService} from './../services/index';
-import {Futures, Future} from './../event/index';
-import {Config} from './../config/env.config';
+import { Component,  OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { FulfilmentCentreInfoVO } from './../model/index';
+import { FulfilmentService } from './../services/index';
+import { Futures, Future } from './../event/index';
+import { Config } from './../config/env.config';
+import { LogUtil } from './../log/index';
 
 @Component({
   selector: 'yc-fulfilment-centre-select',
   moduleId: module.id,
   templateUrl: 'fulfilment-centre-select.component.html',
-  directives: [ROUTER_DIRECTIVES, NgFor],
 })
 
 export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
+
+  @Output() dataSelected: EventEmitter<FulfilmentCentreInfoVO> = new EventEmitter<FulfilmentCentreInfoVO>();
 
   private centres : FulfilmentCentreInfoVO[] = [];
   private filteredCentres : FulfilmentCentreInfoVO[] = [];
@@ -36,20 +36,45 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
 
   private selectedCentre : FulfilmentCentreInfoVO = null;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-
-  @Output() dataSelected: EventEmitter<FulfilmentCentreInfoVO> = new EventEmitter<FulfilmentCentreInfoVO>();
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   constructor (private _centreService : FulfilmentService) {
-    console.debug('FulfilmentCentreSelectComponent constructed');
+    LogUtil.debug('FulfilmentCentreSelectComponent constructed');
   }
 
-  getAllCentres() {
+
+  ngOnDestroy() {
+    LogUtil.debug('FulfilmentCentreSelectComponent ngOnDestroy');
+  }
+
+  ngOnInit() {
+    LogUtil.debug('FulfilmentCentreSelectComponent ngOnInit');
+    let that = this;
+    this.delayedFiltering = Futures.perpetual(function() {
+      that.filterCentres();
+    }, this.delayedFilteringMs);
+
+    this.getAllCentres();
+
+  }
+
+  protected onSelectClick(centre: FulfilmentCentreInfoVO) {
+    LogUtil.debug('FulfilmentCentreSelectComponent onSelectClick', centre);
+    this.selectedCentre = centre;
+    this.dataSelected.emit(this.selectedCentre);
+  }
+
+  protected onFilterChange() {
+
+    this.delayedFiltering.delay();
+
+  }
+
+  private getAllCentres() {
 
     var _sub:any = this._centreService.getAllFulfilmentCentres().subscribe( allcentres => {
-      console.debug('FulfilmentCentreSelectComponent getAllCentres', allcentres);
+      LogUtil.debug('FulfilmentCentreSelectComponent getAllCentres', allcentres);
       this.centres = allcentres;
       this.filterCentres();
       _sub.unsubscribe();
@@ -67,43 +92,15 @@ export class FulfilmentCentreSelectComponent implements OnInit, OnDestroy {
         centre.name.toLowerCase().indexOf(_filter) !== -1 ||
         centre.description && centre.description.toLowerCase().indexOf(_filter) !== -1
       );
-      console.debug('FulfilmentCentresComponent filterCentres', _filter);
+      LogUtil.debug('FulfilmentCentresComponent filterCentres', _filter);
     } else {
       this.filteredCentres = this.centres;
-      console.debug('FulfilmentCentresComponent filterCentres no filter');
+      LogUtil.debug('FulfilmentCentresComponent filterCentres no filter');
     }
 
     if (this.filteredCentres === null) {
       this.filteredCentres = [];
     }
-
-  }
-
-
-  ngOnDestroy() {
-    console.debug('FulfilmentCentreSelectComponent ngOnDestroy');
-  }
-
-  ngOnInit() {
-    console.debug('FulfilmentCentreSelectComponent ngOnInit');
-    let that = this;
-    this.delayedFiltering = Futures.perpetual(function() {
-      that.filterCentres();
-    }, this.delayedFilteringMs);
-
-    this.getAllCentres();
-
-  }
-
-  onSelectClick(centre: FulfilmentCentreInfoVO) {
-    console.debug('FulfilmentCentreSelectComponent onSelectClick', centre);
-    this.selectedCentre = centre;
-    this.dataSelected.emit(this.selectedCentre);
-  }
-
-  protected onFilterChange() {
-
-    this.delayedFiltering.delay();
 
   }
 

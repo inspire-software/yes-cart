@@ -29,6 +29,7 @@ import org.yes.cart.domain.dto.impl.AttrValueCategoryDTOImpl;
 import org.yes.cart.domain.dto.impl.CategoryDTOImpl;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.AttrValueEntityCategory;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
@@ -36,9 +37,7 @@ import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.utils.impl.AttrValueDTOComparatorImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -108,23 +107,6 @@ public class DtoCategoryServiceImpl
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<CategoryDTO> findBy(final String code,
-                                    final String name,
-                                    final String uri,
-                                    final int page,
-                                    final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
-
-        CategoryService categoryService = (CategoryService) service;
-
-        final List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>(pageSize);
-        fillDTOs(categoryService.findBy(code, name, uri, page, pageSize), categoriesDTO);
-
-        return categoriesDTO;
-    }
 
     /**
      * {@inheritDoc}
@@ -250,6 +232,69 @@ public class DtoCategoryServiceImpl
         fillDTOs(categories, dtos);
         return dtos;
     }
+
+
+    private final static char[] PARENT_OR_URI = new char[] { '^', '@' };
+    static {
+        Arrays.sort(PARENT_OR_URI);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<CategoryDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        CategoryService categoryService = (CategoryService) service;
+
+        final List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>(pageSize);
+
+        final Pair<String, String> parentOrUri = ComplexSearchUtils.checkSpecialSearch(filter, PARENT_OR_URI);
+
+        if (parentOrUri == null) {
+
+            fillDTOs(categoryService.findBy(filter, filter, filter, page, pageSize), categoriesDTO);
+
+        } else {
+
+            if ("@".equals(parentOrUri.getFirst())) {
+
+                fillDTOs(categoryService.findBy(null, null, parentOrUri.getSecond(), page, pageSize), categoriesDTO);
+
+            } else if ("^".equals(parentOrUri.getFirst())) {
+
+                final List<Category> parents = categoryService.findBy(parentOrUri.getSecond(), parentOrUri.getSecond(), parentOrUri.getSecond(), page, pageSize);
+
+                if (!parents.isEmpty()) {
+
+                    final Set<Long> dedup = new HashSet<Long>();
+                    final List<Category> parentsWithChildren = new ArrayList<Category>();
+                    for (final Category parent : parents) {
+
+                        if (!dedup.contains(parent.getCategoryId())) {
+                            parentsWithChildren.add(parent);
+                            dedup.add(parent.getCategoryId());
+                        }
+                        for (final Category child : categoryService.findChildCategoriesWithAvailability(parent.getCategoryId(), false)) {
+                            if (!dedup.contains(child.getCategoryId())) {
+                                parentsWithChildren.add(child);
+                                dedup.add(child.getCategoryId());
+                            }
+                        }
+
+                    }
+
+                    fillDTOs(parentsWithChildren, categoriesDTO);
+
+                }
+
+            }
+
+        }
+
+
+        return categoriesDTO;
+    }
+
 
     /**
      * {@inheritDoc}

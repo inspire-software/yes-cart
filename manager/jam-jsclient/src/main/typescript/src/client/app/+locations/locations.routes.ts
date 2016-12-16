@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { LocationsComponent } from './index';
 
-export const LocationRoutes: RouterConfig = [
+export const LocationRoutes: Route[] = [
   {
     path: 'locations',
     component: LocationsComponent

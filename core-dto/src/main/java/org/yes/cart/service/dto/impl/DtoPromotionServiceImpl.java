@@ -32,7 +32,6 @@ import org.yes.cart.service.domain.GenericService;
 import org.yes.cart.service.domain.PromotionService;
 import org.yes.cart.service.dto.DtoPromotionService;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -73,10 +72,10 @@ public class DtoPromotionServiceImpl
     }
 
 
-    private final static char[] TAG_OR_CODE_OR_ACTION = new char[] { '#', '?' };
+    private final static char[] TAG_OR_CODE_OR_CONDITION_OR_ACTION = new char[] { '#', '?', '!' };
     private final static char[] ENABLED = new char[] { '+', '-' };
     static {
-        Arrays.sort(TAG_OR_CODE_OR_ACTION);
+        Arrays.sort(TAG_OR_CODE_OR_CONDITION_OR_ACTION);
         Arrays.sort(ENABLED);
     }
 
@@ -141,22 +140,29 @@ public class DtoPromotionServiceImpl
 
                     if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
 
-                        final Pair<String, String> tagOrCodeOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : filter, TAG_OR_CODE_OR_ACTION);
+                        final Pair<String, String> tagOrCodeOrConditionOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : filter, TAG_OR_CODE_OR_CONDITION_OR_ACTION);
 
-                        if (tagOrCodeOrAction != null) {
+                        if (tagOrCodeOrConditionOrAction != null) {
 
-                            if ("#".equals(tagOrCodeOrAction.getFirst())) {
+                            if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
 
                                 criteria.add(Restrictions.or(
-                                        Restrictions.ilike("code", tagOrCodeOrAction.getSecond(), MatchMode.ANYWHERE),
-                                        Restrictions.ilike("tag", tagOrCodeOrAction.getSecond(), MatchMode.ANYWHERE)
+                                        Restrictions.ilike("code", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
+                                        Restrictions.ilike("tag", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
                                 ));
 
-                            } else if ("?".equals(tagOrCodeOrAction.getFirst())) {
+                            } else if ("!".equals(tagOrCodeOrConditionOrAction.getFirst())) {
 
                                 criteria.add(Restrictions.or(
-                                        Restrictions.ilike("promoType", tagOrCodeOrAction.getSecond(), MatchMode.EXACT),
-                                        Restrictions.ilike("promoAction", tagOrCodeOrAction.getSecond(), MatchMode.EXACT)
+                                        Restrictions.ilike("promoType", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.EXACT),
+                                        Restrictions.ilike("promoAction", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.EXACT)
+                                ));
+
+                            } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
+
+                                criteria.add(Restrictions.or(
+                                        Restrictions.ilike("eligibilityCondition", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
+                                        Restrictions.ilike("promoActionContext", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
                                 ));
 
                             }

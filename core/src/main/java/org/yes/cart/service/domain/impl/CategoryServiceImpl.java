@@ -312,6 +312,55 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
+
+        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
+        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
+        final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
+
+        final Category root = proxy().getRootCategory();
+        List<Category> cats = new ArrayList<Category>();
+        if ((codeP != null || nameP != null) && uriP != null) {
+            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
+        } else if (codeP == null && nameP == null && uriP != null) {
+            cats = getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.URI", page * pageSize, pageSize, uriP);
+        } else {
+            cats = getGenericDao().findAll();
+        }
+
+        final Iterator<Category> catsIt = cats.iterator();
+        while (catsIt.hasNext()) {
+            Category category = catsIt.next();
+            if (category.isRoot()) {
+                catsIt.remove();
+            } else {
+                final long currentCatId = category.getCategoryId();
+                while (category.getParentId() != root.getCategoryId()) {
+                    if (category.isRoot()) {
+                        // if this is root and not category root matches then this is content
+                        catsIt.remove();
+                        break;
+                    }
+                    category = proxy().findById(category.getParentId());
+                    if (category == null) {
+                        // could have happened if import created some reassignments and we loose path to root
+                        catsIt.remove();
+                        ShopCodeContext.getLog(this).warn("Found orphan category {}", currentCatId);
+                        break;
+                    }
+                }
+            }
+        }
+        return cats;
+    }
+
+
+
     /**
      * {@inheritDoc}
      */
@@ -547,47 +596,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     }, allEntries = true)
     public void delete(Category instance) {
         super.delete(instance);
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<Category> findBy(final String code, final String name, final String uri, final int page, final int pageSize) {
-
-        final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
-        final String nameP = StringUtils.isNotBlank(name) ? "%" + name.toLowerCase() + "%" : null;
-        final String uriP = StringUtils.isNotBlank(uri) ? "%" + uri.toLowerCase() + "%" : null;
-
-        final Category root = proxy().getRootCategory();
-        final List<Category> cats =
-                getGenericDao().findRangeByNamedQuery("CATEGORIES.BY.CODE.NAME.URI", page * pageSize, pageSize, codeP, nameP, uriP);
-
-        final Iterator<Category> catsIt = cats.iterator();
-        while (catsIt.hasNext()) {
-            Category category = catsIt.next();
-            if (category.isRoot()) {
-                catsIt.remove();
-            } else {
-                final long currentCatId = category.getCategoryId();
-                while (category.getParentId() != root.getCategoryId()) {
-                    if (category.isRoot()) {
-                        // if this is root and not category root matches then this is content
-                        catsIt.remove();
-                        break;
-                    }
-                    category = proxy().findById(category.getParentId());
-                    if (category == null) {
-                        // could have happened if import created some reassignments and we loose path to root
-                        catsIt.remove();
-                        ShopCodeContext.getLog(this).warn("Found orphan category {}", currentCatId);
-                        break;
-                    }
-                }
-            }
-        }
-        return cats;
     }
 
     private CategoryService proxy;

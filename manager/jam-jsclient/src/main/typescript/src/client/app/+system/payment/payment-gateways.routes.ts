@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { PaymentGatewaysComponent } from './index';
 
-export const PaymentGatewaysRoutes: RouterConfig = [
+export const PaymentGatewaysRoutes: Route[] = [
   {
     path: 'system/payment',
     component: PaymentGatewaysComponent

@@ -13,60 +13,60 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {AttributeValuesComponent} from './../../shared/attributes/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-customer',
   moduleId: module.id,
   templateUrl: 'customer.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES, AttributeValuesComponent, ModalComponent],
 })
 
 export class CustomerComponent implements OnInit, OnDestroy {
-
-  _customer:CustomerVO;
-  _attributes:AttrValueCustomerVO[] = [];
-  attributeFilter:string;
-
-  _shops:any = {};
-  resetShopName:string = null;
-  resetShop:ShopVO = null;
-
-  availableShops:Array<Pair<ShopVO, CustomerShopLinkVO>> = [];
-  supportedShops:Array<Pair<ShopVO, CustomerShopLinkVO>> = [];
-
-  _changes:Array<Pair<AttrValueCustomerVO, boolean>>;
-
-  selectedRow:AttrValueCustomerVO;
 
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<CustomerVO, Array<Pair<AttrValueCustomerVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<CustomerVO, Array<Pair<AttrValueCustomerVO, boolean>>>>>();
 
   @Output() passwordReset: EventEmitter<Pair<CustomerVO, ShopVO>> = new EventEmitter<Pair<CustomerVO, ShopVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _customer:CustomerVO;
+  private _attributes:AttrValueCustomerVO[] = [];
+  private attributeFilter:string;
 
-  customerForm:any;
-  customerFormSub:any;
+  private _shops:any = {};
+  private resetShopName:string = null;
+  private resetShop:ShopVO = null;
+
+  private availableShops:Array<Pair<ShopVO, CustomerShopLinkVO>> = [];
+  private supportedShops:Array<Pair<ShopVO, CustomerShopLinkVO>> = [];
+
+  private _changes:Array<Pair<AttrValueCustomerVO, boolean>>;
+
+  private selectedRow:AttrValueCustomerVO;
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private customerForm:any;
+  private customerFormSub:any; // tslint:disable-line:no-unused-variable
 
   @ViewChild('attributeValuesComponent')
-  attributeValuesComponent:AttributeValuesComponent;
+  private attributeValuesComponent:AttributeValuesComponent;
 
   @ViewChild('resetConfirmationModalDialog')
-  resetConfirmationModalDialog:ModalComponent;
+  private resetConfirmationModalDialog:ModalComponent;
+
+  private searchHelpShow:boolean = false;
 
   constructor(fb: FormBuilder) {
-    console.debug('CustomerComponent constructed');
+    LogUtil.debug('CustomerComponent constructed');
 
     this.customerForm = fb.group({
       'code': [''],
@@ -87,43 +87,28 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   }
 
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.customerForm.controls) {
-      this.customerForm.controls[key]['_pristine'] = true;
-      this.customerForm.controls[key]['_touched'] = false;
-    }
-  }
-
 
   formBind():void {
-    this.customerFormSub = this.customerForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.customerForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'customerForm', 'customerFormSub', 'delayedChange', 'initialising');
   }
 
 
   formUnbind():void {
-    if (this.customerFormSub) {
-      console.debug('CustomerComponent unbining form');
-      this.customerFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'customerFormSub');
   }
 
   formChange():void {
-    console.debug('CustomerComponent validating formGroup is valid: ' + this.validForSave, this._customer);
-    this.dataChanged.emit({ source: new Pair(this._customer, this._changes), valid: this.validForSave });
+    LogUtil.debug('CustomerComponent formChange', this.customerForm.valid, this._customer);
+    this.dataChanged.emit({ source: new Pair(this._customer, this._changes), valid: this.customerForm.valid });
   }
 
   @Input()
   set customer(customer:CustomerVO) {
-    this._customer = customer;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, ['email']);
+    this._changes = [];
     this.recalculateShops();
+
   }
 
   get customer():CustomerVO {
@@ -145,45 +130,27 @@ export class CustomerComponent implements OnInit, OnDestroy {
     shops.forEach(shop => {
       this._shops['S' + shop.shopId] = shop;
     });
-    console.debug('CustomerComponent mapped shops', this._shops);
-  }
-
-
-  private recalculateShops():void {
-
-    if (this._customer) {
-      this.availableShops = this.getAvailableShopNames();
-      this.supportedShops = this.getSupportedShopNames();
-    } else {
-      this.availableShops = this.getAvailableShopNames();
-      this.supportedShops = [];
-    }
-  }
-
-  onMainDataChange(event:any) {
-    console.debug('CustomerComponent main data changed', this._customer);
-    this.changed = true;
+    LogUtil.debug('CustomerComponent mapped shops', this._shops);
   }
 
   onAttributeDataChanged(event:any) {
-    console.debug('CustomerComponent attr data changed', this._customer);
-    this.changed = true;
+    LogUtil.debug('CustomerComponent attr data changed', this._customer);
     this._changes = event.source;
     this.delayedChange.delay();
   }
 
   ngOnInit() {
-    console.debug('CustomerComponent ngOnInit');
+    LogUtil.debug('CustomerComponent ngOnInit');
     this.formBind();
   }
 
   ngOnDestroy() {
-    console.debug('CustomerComponent ngOnDestroy');
+    LogUtil.debug('CustomerComponent ngOnDestroy');
     this.formUnbind();
   }
 
   tabSelected(tab:any) {
-    console.debug('CustomerComponent tabSelected', tab);
+    LogUtil.debug('CustomerComponent tabSelected', tab);
   }
 
 
@@ -200,13 +167,93 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:AttrValueCustomerVO) {
-    console.debug('CustomerComponent onSelectRow handler', row);
+    LogUtil.debug('CustomerComponent onSelectRow handler', row);
     if (row == this.selectedRow) {
       this.selectedRow = null;
     } else {
       this.selectedRow = row;
     }
   }
+
+  onSupportedShopClick(supported:Pair<ShopVO, CustomerShopLinkVO>) {
+    LogUtil.debug('CustomerComponent remove supported', supported);
+    let idx = this._customer.customerShops.findIndex(link =>
+      link.shopId == supported.first.shopId
+    );
+    if (idx != -1) {
+      this._customer.customerShops.splice(idx, 1);
+      this.recalculateShops();
+      this.formChange();
+    }
+  }
+
+  onAvailableShopClick(available:Pair<ShopVO, CustomerShopLinkVO>) {
+    LogUtil.debug('CustomerComponent add supported', available);
+    available.second.disabled = false;
+    this._customer.customerShops.push(available.second);
+    this.recalculateShops();
+    this.formChange();
+  }
+
+  onRowReset(shop:ShopVO) {
+    this.resetShopName = shop.code + ' ' + shop.name;
+    this.resetShop = shop;
+    this.resetConfirmationModalDialog.show();
+  }
+
+  protected onResetConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('CustomerComponent onResetConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      this.passwordReset.emit(new Pair(this._customer, this.resetShop));
+
+    }
+  }
+
+
+  protected onClearFilter() {
+
+    this.attributeFilter = '';
+
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchValues() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '###';
+  }
+
+  protected onSearchValuesNew() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '##0';
+  }
+
+  protected onSearchValuesNewOnly() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#00';
+  }
+
+  protected onSearchValuesChanges() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#0#';
+  }
+
+
+
+  private recalculateShops():void {
+
+    if (this._customer) {
+      this.availableShops = this.getAvailableShopNames();
+      this.supportedShops = this.getSupportedShopNames();
+    } else {
+      this.availableShops = this.getAvailableShopNames();
+      this.supportedShops = [];
+    }
+  }
+
 
 
   private getAvailableShopNames():Array<Pair<ShopVO, CustomerShopLinkVO>> {
@@ -223,7 +270,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         }
       });
     }
-    console.debug('CustomerComponent supported shops', skipKeys);
+    LogUtil.debug('CustomerComponent supported shops', skipKeys);
 
     let labels = <Array<Pair<ShopVO, CustomerShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -236,7 +283,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('CustomerComponent available shops', labels);
+    LogUtil.debug('CustomerComponent available shops', labels);
     return labels;
   }
 
@@ -250,7 +297,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
         }
       });
     }
-    console.debug('CustomerComponent supported', keepKeys);
+    LogUtil.debug('CustomerComponent supported', keepKeys);
 
     let labels = <Array<Pair<ShopVO, CustomerShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -262,45 +309,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('CustomerComponent supported', labels);
+    LogUtil.debug('CustomerComponent supported', labels);
     return labels;
   }
 
-  onSupportedShopClick(supported:Pair<ShopVO, CustomerShopLinkVO>) {
-    console.debug('CustomerComponent remove supported', supported);
-    let idx = this._customer.customerShops.findIndex(link =>
-      link.shopId == supported.first.shopId
-    );
-    if (idx != -1) {
-      this._customer.customerShops.splice(idx, 1);
-      this.recalculateShops();
-      this.changed = true;
-      this.formChange();
-    }
-  }
-
-  onAvailableShopClick(available:Pair<ShopVO, CustomerShopLinkVO>) {
-    console.debug('CustomerComponent add supported', available);
-    available.second.disabled = false;
-    this._customer.customerShops.push(available.second);
-    this.recalculateShops();
-    this.changed = true;
-    this.formChange();
-  }
-
-  onRowReset(shop:ShopVO) {
-    this.resetShopName = shop.code + ' ' + shop.name;
-    this.resetShop = shop;
-    this.resetConfirmationModalDialog.show();
-  }
-
-  protected onResetConfirmationResult(modalresult: ModalResult) {
-    console.debug('CustomerComponent onResetConfirmationResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-
-      this.passwordReset.emit(new Pair(this._customer, this.resetShop));
-
-    }
-  }
 
 }

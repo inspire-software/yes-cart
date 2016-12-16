@@ -1,4 +1,4 @@
-<modal #usageModalDialog
+<yc-modal #usageModalDialog
        title="{{ 'ATTRIBUTE_USAGE' | translate: { code: attributeCode } }}"
        cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
        positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
@@ -12,4 +12,4 @@
       <li *ngFor="let usage of usages">{{usage.second}}</li>
     </ul>
   </div>
-</modal>
+</yc-modal>

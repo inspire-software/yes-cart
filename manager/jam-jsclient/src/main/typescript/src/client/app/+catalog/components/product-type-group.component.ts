@@ -13,62 +13,59 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter} from '@angular/core';
-import {CORE_DIRECTIVES } from '@angular/common';
-import {REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO} from './../../shared/model/index';
-import {I18nComponent} from './../../shared/i18n/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnChanges, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { ProductTypeVO, ProductTypeAttrVO, ProductTypeViewGroupVO } from './../../shared/model/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { Util } from './../../shared/services/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-product-type-group',
   moduleId: module.id,
   templateUrl: 'product-type-group.component.html',
-  directives: [REACTIVE_FORM_DIRECTIVES, CORE_DIRECTIVES, ModalComponent, I18nComponent]
 })
 
 export class ProductTypeGroupComponent implements OnInit, OnChanges {
 
   @Input() masterObject:ProductTypeVO;
 
-  _groupFilter:string;
-  _objectAttributes:Array<ProductTypeAttrVO>;
-  _objectAttributesMap:any;
-  attributeFilter:string;
-  filteredObjectGroups:Array<ProductTypeViewGroupVO>;
-  removedObjectGroups:Array<ProductTypeViewGroupVO>;
-  filteredObjectAttributes:Array<ProductTypeAttrVO>;
-  delayedGroupFiltering:Future;
-  delayedAttributeFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  changed:boolean = false;
-  validForSave:boolean = false;
-
-  @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
-  @ViewChild('editModalDialog')
-  editModalDialog:ModalComponent;
-
-  selectedRow:ProductTypeViewGroupVO;
-  groupToEdit:ProductTypeViewGroupVO;
-
-  selectedRowAvailable:ProductTypeAttrVO[];
-  selectedRowAvailableFiltered:ProductTypeAttrVO[];
-  selectedRowAssigned:ProductTypeAttrVO[];
-  selectedRowAssignedExtra:string[];
-
   @Output() dataSelected: EventEmitter<ProductTypeViewGroupVO> = new EventEmitter<ProductTypeViewGroupVO>();
   @Output() dataChanged: EventEmitter<FormValidationEvent<ProductTypeVO>> = new EventEmitter<FormValidationEvent<ProductTypeVO>>();
+
+  private _groupFilter:string;
+  private _objectAttributes:Array<ProductTypeAttrVO>;
+  private _objectAttributesMap:any;
+  private attributeFilter:string;
+  private filteredObjectGroups:Array<ProductTypeViewGroupVO>;
+  private removedObjectGroups:Array<ProductTypeViewGroupVO>;
+  private delayedGroupFiltering:Future;
+  private delayedAttributeFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
+
+  @ViewChild('deleteConfirmationModalDialog')
+  private deleteConfirmationModalDialog:ModalComponent;
+  @ViewChild('editModalDialog')
+  private editModalDialog:ModalComponent;
+
+  private selectedRow:ProductTypeViewGroupVO;
+  private groupToEdit:ProductTypeViewGroupVO;
+
+  private selectedRowAvailable:ProductTypeAttrVO[];
+  private selectedRowAvailableFiltered:ProductTypeAttrVO[];
+  private selectedRowAssigned:ProductTypeAttrVO[];
+  private selectedRowAssignedExtra:string[];
 
   /**
    * Construct attribute panel
    */
   constructor() {
-    console.debug('ProductTypeGroupComponent constructed');
+    LogUtil.debug('ProductTypeGroupComponent constructed');
 
     this.groupToEdit = null;
     let that = this;
@@ -99,13 +96,208 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
 
   /** {@inheritDoc} */
   public ngOnInit() {
-    console.debug('ProductTypeGroupComponent ngOnInit', this.masterObject);
+    LogUtil.debug('ProductTypeGroupComponent ngOnInit', this.masterObject);
   }
 
   ngOnChanges(changes:any) {
-    console.debug('ProductTypeGroupComponent ngOnChanges', changes);
+    LogUtil.debug('ProductTypeGroupComponent ngOnChanges', changes);
     this.delayedGroupFiltering.delay();
   }
+
+  protected onSelectRow(row:ProductTypeViewGroupVO) {
+    LogUtil.debug('ProductTypeGroupComponent onSelectRow handler', row);
+    if (row == this.selectedRow) {
+      this.selectedRow = null;
+    } else {
+      this.selectedRow = row;
+      this.mapAttributesInGroup();
+    }
+    this.dataSelected.emit(this.selectedRow);
+  }
+
+  protected getAttrFlags(row:ProductTypeAttrVO) {
+    let flags = '';
+    if (row.visible) {
+      flags += '<i class="fa fa-eye"></i>&nbsp;';
+    }
+    if (row.similarity) {
+      flags += '<i class="fa fa-copy"></i>&nbsp;';
+    }
+    if (row.store) {
+      flags += '<i class="fa fa-save"></i>&nbsp;';
+    }
+    if (row.search) {
+      if (row.primary) {
+        flags += '<i class="fa fa-search-plus"></i>&nbsp;';
+      } else {
+        flags += '<i class="fa fa-search"></i>&nbsp;';
+      }
+    }
+    if (row.navigation) {
+      if (row.navigationType === 'R') {
+        flags += '<i class="fa fa-sliders"></i>&nbsp;';
+      } else {
+        flags += '<i class="fa fa-list-alt"></i>&nbsp;';
+      }
+    }
+    return flags;
+  }
+
+  protected onAssignedAttrClick(row:ProductTypeAttrVO) {
+    LogUtil.debug('ProductTypeGroupComponent onAssignedAttrClick handler', row);
+    let idx = this.selectedRow.attrCodeList.indexOf(row.attribute.code);
+    if (idx != -1) {
+      this.selectedRow.attrCodeList.splice(idx, 1);
+      let idx2 = this.selectedRowAssigned.indexOf(row);
+      this.selectedRowAssigned.splice(idx2, 1);
+      this.selectedRowAssigned = this.selectedRowAssigned.slice(0, this.selectedRowAssigned.length);
+      this.selectedRowAvailable.push(row);
+      this.changed = true;
+      this.filterAttributes();
+      this.processDataChangesEvent();
+    }
+  }
+
+  protected onAssignedAttrCodeClick(row:string) {
+    LogUtil.debug('ProductTypeGroupComponent onAssignedAttrCodeClick handler', row);
+    let idx = this.selectedRow.attrCodeList.indexOf(row);
+    if (idx != -1) {
+      this.selectedRow.attrCodeList.splice(idx, 1);
+      let idx2 = this.selectedRowAssignedExtra.indexOf(row);
+      this.selectedRowAssignedExtra.splice(idx2, 1);
+      this.selectedRowAssignedExtra = this.selectedRowAssignedExtra.slice(0, this.selectedRowAssignedExtra.length);
+      this.changed = true;
+      this.processDataChangesEvent();
+    }
+  }
+
+  protected onAvailableAttrClick(row:ProductTypeAttrVO) {
+    LogUtil.debug('ProductTypeGroupComponent onAvailableAttrClick handler', row);
+    let idx = this.selectedRow.attrCodeList.indexOf(row.attribute.code);
+    if (idx == -1) {
+      this.selectedRow.attrCodeList.push(row.attribute.code);
+      let idx2 = this.selectedRowAvailable.indexOf(row);
+      this.selectedRowAvailable.splice(idx2, 1);
+      this.selectedRowAssigned.push(row);
+      this.changed = true;
+      this.filterAttributes();
+      this.processDataChangesEvent();
+    }
+  }
+
+  protected onAttributeFilterChange() {
+    this.delayedAttributeFiltering.delay();
+  }
+
+
+  public onRowAdd() {
+    LogUtil.debug('ProductTypeGroupComponent onRowAdd handler');
+    this.groupToEdit = {
+      prodTypeAttributeViewGroupId: 0,
+      producttypeId: this.masterObject.producttypeId,
+      attrCodeList: [], rank: 500, name: '', displayNames: []
+    };
+    this.changed = false;
+    this.validForSave = false;
+    this.editModalDialog.show();
+
+  }
+
+
+  protected onRowDelete(row:ProductTypeViewGroupVO) {
+    LogUtil.debug('ProductTypeGroupComponent onRowDelete handler', row);
+    this.deleteConfirmationModalDialog.show();
+  }
+
+  public onRowDeleteSelected() {
+    if (this.selectedRow != null) {
+      this.onRowDelete(this.selectedRow);
+    }
+  }
+
+  protected onRowEdit(row:ProductTypeViewGroupVO) {
+    LogUtil.debug('ProductTypeGroupComponent onRowEdit handler', row);
+    this.groupToEdit = Util.clone(row);
+    this.changed = false;
+    this.validForSave = false;
+    this.editModalDialog.show();
+  }
+
+  public onRowEditSelected() {
+    if (this.selectedRow != null) {
+      this.onRowEdit(this.selectedRow);
+    }
+  }
+
+
+  onDataChange(event:any) {
+
+    this.changed = true;
+    this.validForSave = !isNaN(this.groupToEdit.rank) && this.groupToEdit.name != null && /\S+.*\S+/.test(this.groupToEdit.name);
+
+    LogUtil.debug('ProductTypeGroupComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
+  }
+
+
+  protected onDeleteConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('ProductTypeGroupComponent onDeleteConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      let attrToDelete = this.selectedRow.prodTypeAttributeViewGroupId;
+      if (attrToDelete === 0) {
+        let idx = this.masterObject.viewGroups.findIndex(attrVo => {
+          return attrVo.name === this.selectedRow.name;
+        });
+        this.masterObject.viewGroups.splice(idx, 1);
+        LogUtil.debug('ProductTypeGroupComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
+      } else {
+        LogUtil.debug('ProductTypeGroupComponent onDeleteConfirmationResult attribute ' + attrToDelete);
+        let idx = this.masterObject.viewGroups.findIndex(attrVo => {
+          return attrVo.prodTypeAttributeViewGroupId === attrToDelete;
+        });
+        this.masterObject.viewGroups.splice(idx, 1);
+        this.removedObjectGroups.push(this.selectedRow);
+      }
+      this.filterGroups();
+      this.onSelectRow(this.selectedRow); // deselect
+      this.changed = true;
+      this.processDataChangesEvent();
+    }
+  }
+
+  protected onEditModalResult(modalresult: ModalResult) {
+    LogUtil.debug('ProductTypeGroupComponent onEditModalResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      if (this.groupToEdit.prodTypeAttributeViewGroupId === 0) { // add new
+        LogUtil.debug('ProductTypeGroupComponent onEditModalResult add new attribute', this.masterObject.viewGroups);
+        this.masterObject.viewGroups.push(this.groupToEdit);
+      } else { // edit existing
+        LogUtil.debug('ProductTypeGroupComponent onEditModalResult update existing', this.masterObject.viewGroups);
+        let idx = this.masterObject.viewGroups.findIndex(attrVo => {
+          return attrVo.prodTypeAttributeViewGroupId === this.groupToEdit.prodTypeAttributeViewGroupId;
+        });
+        this.masterObject.viewGroups[idx] = this.groupToEdit;
+        this.masterObject.viewGroups = this.masterObject.viewGroups.slice(0, this.masterObject.viewGroups.length);
+      }
+      this.onSelectRow(this.groupToEdit);
+      this.changed = true;
+      this.filterGroups();
+      this.processDataChangesEvent();
+    } else {
+      this.groupToEdit = null;
+    }
+  }
+
+  private processDataChangesEvent() {
+
+    LogUtil.debug('ProductTypeAttributeComponent data changes', this.masterObject);
+    if (this.masterObject) {
+
+      this.dataChanged.emit({ source: this.masterObject, valid: this.validForSave });
+
+    }
+
+  }
+
 
   private loadAttributeData() {
     if (this.masterObject && this._objectAttributes) {
@@ -143,31 +335,34 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
   }
 
 
-  protected onSelectRow(row:ProductTypeViewGroupVO) {
-    console.debug('ProductTypeGroupComponent onSelectRow handler', row);
-    if (row == this.selectedRow) {
-      this.selectedRow = null;
-    } else {
-      this.selectedRow = row;
-      this.mapAttributesInGroup();
-    }
-    this.dataSelected.emit(this.selectedRow);
-  }
-
   private mapAttributesInGroup() {
 
     if (this.selectedRow.attrCodeList == null) {
       this.selectedRow.attrCodeList = [];
     }
 
+    let _sort = function(a:ProductTypeAttrVO, b:ProductTypeAttrVO) {
+      var rank:number = a.rank - b.rank;
+      if (rank == 0) {
+        return a.attribute.name > b.attribute.name ? 1 : -1;
+      }
+      return rank;
+    };
+
     let assignedCodes = this.selectedRow.attrCodeList;
 
-    this.selectedRowAssigned = this._objectAttributes.filter(attr =>
+    let _selectedRowAssigned = this._objectAttributes.filter(attr =>
       assignedCodes.indexOf(attr.attribute.code) != -1
     );
-    this.selectedRowAvailable = this._objectAttributes.filter(attr =>
+    _selectedRowAssigned.sort(_sort);
+    this.selectedRowAssigned = _selectedRowAssigned;
+
+    let _selectedRowAvailable = this._objectAttributes.filter(attr =>
       assignedCodes.indexOf(attr.attribute.code) == -1
     );
+    _selectedRowAvailable.sort(_sort);
+    this.selectedRowAvailable = _selectedRowAvailable;
+
     this.selectedRowAssignedExtra = [];
     assignedCodes.forEach(code => {
       let idx = this.selectedRowAssigned.findIndex(attr =>
@@ -202,183 +397,5 @@ export class ProductTypeGroupComponent implements OnInit, OnChanges {
 
   }
 
-
-  protected getAttrFlags(row:ProductTypeAttrVO) {
-    let flags = '';
-    if (row.visible) {
-      flags += '<i class="fa fa-eye"></i>&nbsp;';
-    }
-    if (row.similarity) {
-      flags += '<i class="fa fa-copy"></i>&nbsp;';
-    }
-    if (row.store) {
-      flags += '<i class="fa fa-save"></i>&nbsp;';
-    }
-    if (row.search) {
-      if (row.primary) {
-        flags += '<i class="fa fa-search-plus"></i>&nbsp;';
-      } else {
-        flags += '<i class="fa fa-search"></i>&nbsp;';
-      }
-    }
-    if (row.navigation) {
-      if (row.navigationType === 'R') {
-        flags += '<i class="fa fa-sliders"></i>&nbsp;';
-      } else {
-        flags += '<i class="fa fa-list-alt"></i>&nbsp;';
-      }
-    }
-    return flags;
-  }
-
-  protected onAssignedAttrClick(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeGroupComponent onAssignedAttrClick handler', row);
-    let idx = this.selectedRow.attrCodeList.indexOf(row.attribute.code);
-    if (idx != -1) {
-      this.selectedRow.attrCodeList.splice(idx, 1);
-      let idx2 = this.selectedRowAssigned.indexOf(row);
-      this.selectedRowAssigned.splice(idx2, 1);
-      this.selectedRowAssigned = this.selectedRowAssigned.slice(0, this.selectedRowAssigned.length);
-      this.selectedRowAvailable.push(row);
-      this.changed = true;
-      this.filterAttributes();
-      this.processDataChangesEvent();
-    }
-  }
-
-  protected onAssignedAttrCodeClick(row:string) {
-    console.debug('ProductTypeGroupComponent onAssignedAttrCodeClick handler', row);
-    let idx = this.selectedRow.attrCodeList.indexOf(row);
-    if (idx != -1) {
-      this.selectedRow.attrCodeList.splice(idx, 1);
-      let idx2 = this.selectedRowAssignedExtra.indexOf(row);
-      this.selectedRowAssignedExtra.splice(idx2, 1);
-      this.selectedRowAssignedExtra = this.selectedRowAssignedExtra.slice(0, this.selectedRowAssignedExtra.length);
-      this.changed = true;
-      this.processDataChangesEvent();
-    }
-  }
-
-  protected onAvailableAttrClick(row:ProductTypeAttrVO) {
-    console.debug('ProductTypeGroupComponent onAvailableAttrClick handler', row);
-    let idx = this.selectedRow.attrCodeList.indexOf(row.attribute.code);
-    if (idx == -1) {
-      this.selectedRow.attrCodeList.push(row.attribute.code);
-      let idx2 = this.selectedRowAvailable.indexOf(row);
-      this.selectedRowAvailable.splice(idx2, 1);
-      this.selectedRowAssigned.push(row);
-      this.changed = true;
-      this.filterAttributes();
-      this.processDataChangesEvent();
-    }
-  }
-
-  protected onAttributeFilterChange() {
-    this.delayedAttributeFiltering.delay();
-  }
-
-
-  public onRowAdd() {
-    console.debug('ProductTypeGroupComponent onRowAdd handler');
-    this.groupToEdit = {
-      prodTypeAttributeViewGroupId: 0,
-      producttypeId: this.masterObject.producttypeId,
-      attrCodeList: [], rank: 500, name: '', displayNames: []
-    };
-    this.changed = false;
-    this.validForSave = false;
-    this.editModalDialog.show();
-
-  }
-
-
-  protected onRowDelete(row:ProductTypeViewGroupVO) {
-    console.debug('ProductTypeGroupComponent onRowDelete handler', row);
-    this.deleteConfirmationModalDialog.show();
-  }
-
-  public onRowDeleteSelected() {
-    if (this.selectedRow != null) {
-      this.onRowDelete(this.selectedRow);
-    }
-  }
-
-  protected onRowEdit(row:ProductTypeViewGroupVO) {
-    console.debug('ProductTypeGroupComponent onRowEdit handler', row);
-    this.groupToEdit = row;
-    this.changed = false;
-    this.validForSave = false;
-    this.editModalDialog.show();
-  }
-
-  public onRowEditSelected() {
-    if (this.selectedRow != null) {
-      this.onRowEdit(this.selectedRow);
-    }
-  }
-
-
-  onDataChange(event:any) {
-
-    this.changed = true;
-    this.validForSave = !isNaN(this.groupToEdit.rank) && this.groupToEdit.name != null && /\S+.*\S+/.test(this.groupToEdit.name);
-
-    console.debug('ProductTypeGroupComponent data changed and ' + (this.validForSave ? 'is valid' : 'is NOT valid'), event);
-  }
-
-
-  protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('ProductTypeGroupComponent onDeleteConfirmationResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      let attrToDelete = this.selectedRow.prodTypeAttributeViewGroupId;
-      if (attrToDelete === 0) {
-        let idx = this.masterObject.viewGroups.findIndex(attrVo => {
-          return attrVo.name === this.selectedRow.name;
-        });
-        this.masterObject.viewGroups.splice(idx, 1);
-        console.debug('ProductTypeGroupComponent onDeleteConfirmationResult index in array of new attribute ' + idx);
-      } else {
-        console.debug('ProductTypeGroupComponent onDeleteConfirmationResult attribute ' + attrToDelete);
-        let idx = this.masterObject.viewGroups.findIndex(attrVo => {
-          return attrVo.prodTypeAttributeViewGroupId === attrToDelete;
-        });
-        this.masterObject.viewGroups.splice(idx, 1);
-        this.removedObjectGroups.push(this.selectedRow);
-      }
-      this.filterGroups();
-      this.onSelectRow(this.selectedRow); // deselect
-      this.changed = true;
-      this.processDataChangesEvent();
-    }
-  }
-
-  protected onEditModalResult(modalresult: ModalResult) {
-    console.debug('ProductTypeGroupComponent onEditModalResult modal result is ', modalresult);
-    if (ModalAction.POSITIVE === modalresult.action) {
-      if (this.groupToEdit.prodTypeAttributeViewGroupId === 0) { // add new
-        console.debug('ProductTypeGroupComponent onEditModalResult add new attribute', this.masterObject.viewGroups);
-        this.masterObject.viewGroups.push(this.groupToEdit);
-      } else { // edit existing
-        console.debug('ProductTypeGroupComponent onEditModalResult update existing', this.masterObject.viewGroups);
-      }
-      this.selectedRow = this.groupToEdit;
-      this.changed = true;
-      this.filterGroups();
-      this.processDataChangesEvent();
-    } else {
-      this.groupToEdit = null;
-    }
-  }
-
-  private processDataChangesEvent() {
-
-    console.debug('ProductTypeAttributeComponent data changes', this.masterObject);
-    if (this.masterObject) {
-
-      this.dataChanged.emit({ source: this.masterObject, valid: this.validForSave });
-
-    }
-
-  }
 
 }

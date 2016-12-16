@@ -20,7 +20,7 @@
     <title>YC - pure eCommerce</title>
     <link href="${pageContext.servletContext.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="${pageContext.servletContext.contextPath}/resources/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${pageContext.servletContext.contextPath}/resources/css/main.css" rel="stylesheet"/>
+    <link href="${pageContext.servletContext.contextPath}/resources/css/yc-main.css" rel="stylesheet"/>
     <script>
         window.opener.postMessage("ok", '*');
     </script>

@@ -13,46 +13,43 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {FormBuilder, Validators, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
-import {YcValidators} from './../../shared/validation/validators';
-import {ManagerVO, ManagerShopLinkVO, ManagerRoleLinkVO, ShopVO, RoleVO, Pair, ValidationRequestVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { YcValidators } from './../../shared/validation/validators';
+import { ManagerVO, ManagerShopLinkVO, ManagerRoleLinkVO, ShopVO, RoleVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { UiUtil } from './../../shared/ui/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-manager',
   moduleId: module.id,
   templateUrl: 'manager.component.html',
-  directives: [NgIf, REACTIVE_FORM_DIRECTIVES, TAB_DIRECTIVES],
 })
 
 export class ManagerComponent implements OnInit, OnDestroy {
 
-  _manager:ManagerVO;
-
-  _shops:any = {};
-  _roles:any = {};
-
-  availableShops:Array<Pair<ShopVO, ManagerShopLinkVO>> = [];
-  supportedShops:Array<Pair<ShopVO, ManagerShopLinkVO>> = [];
-
-  availableRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
-  supportedRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
-
   @Output() dataChanged: EventEmitter<FormValidationEvent<ManagerVO>> = new EventEmitter<FormValidationEvent<ManagerVO>>();
 
-  changed:boolean = false;
-  validForSave:boolean = false;
-  delayedChange:Future;
+  private _manager:ManagerVO;
 
-  managerForm:any;
-  managerFormSub:any;
+  private _shops:any = {};
+  private _roles:any = {};
+
+  private availableShops:Array<Pair<ShopVO, ManagerShopLinkVO>> = [];
+  private supportedShops:Array<Pair<ShopVO, ManagerShopLinkVO>> = [];
+
+  private availableRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
+  private supportedRoles:Array<Pair<RoleVO, ManagerRoleLinkVO>> = [];
+
+  private initialising:boolean = false; // tslint:disable-line:no-unused-variable
+  private delayedChange:Future;
+
+  private managerForm:any;
+  private managerFormSub:any; // tslint:disable-line:no-unused-variable
 
   constructor(fb: FormBuilder) {
-    console.debug('ManagerComponent constructed');
+    LogUtil.debug('ManagerComponent constructed');
 
     let that = this;
 
@@ -62,7 +59,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
       if (basic == null) {
 
         let email = control.value;
-        if (!that.changed || that._manager == null) {
+        if (that._manager == null || !that.managerForm || (!that.managerForm.dirty && that._manager.managerId > 0)) {
           return null;
         }
 
@@ -76,41 +73,30 @@ export class ManagerComponent implements OnInit, OnDestroy {
       'email': ['', validInput],
       'firstName': ['', Validators.required],
       'lastName': ['', Validators.required],
+      'managerShops': [''],
+      'managerRoles': [''],
     });
 
     this.delayedChange = Futures.perpetual(function() {
       that.formChange();
     }, 200);
-
-  }
-
-  formReset():void {
-    // Hack to reset NG2 forms see https://github.com/angular/angular/issues/4933
-    for(let key in this.managerForm.controls) {
-      this.managerForm.controls[key]['_pristine'] = true;
-      this.managerForm.controls[key]['_touched'] = false;
-    }
   }
 
   formBind():void {
-    this.managerFormSub = this.managerForm.statusChanges.subscribe((data:any) => {
-      this.validForSave = this.managerForm.valid;
-      if (this.changed) {
-        this.delayedChange.delay();
-      }
-    });
+    UiUtil.formBind(this, 'managerForm', 'managerFormSub', 'delayedChange', 'initialising');
   }
 
   formUnbind():void {
-    if (this.managerFormSub) {
-      console.debug('ManagerComponent unbining form');
-      this.managerFormSub.unsubscribe();
-    }
+    UiUtil.formUnbind(this, 'managerFormSub');
   }
 
   formChange():void {
-    console.debug('ManagerComponent validating formGroup is valid: ' + this.validForSave, this._manager);
-    this.dataChanged.emit({ source: this._manager, valid: this.validForSave });
+    LogUtil.debug('ManagerComponent formChange', this.managerForm.valid, this._manager);
+    this.dataChanged.emit({ source: this._manager, valid: this.managerForm.valid });
+  }
+
+  formMarkDirty(field:string):void {
+    UiUtil.formMarkFieldDirty(this, 'managerForm', field);
   }
 
   @Input()
@@ -118,7 +104,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
     shops.forEach(shop => {
       this._shops['S' + shop.shopId] = shop;
     });
-    console.debug('ManagerComponent mapped shops', this._shops);
+    LogUtil.debug('ManagerComponent mapped shops', this._shops);
   }
 
   @Input()
@@ -126,20 +112,76 @@ export class ManagerComponent implements OnInit, OnDestroy {
     roles.forEach(role => {
       this._roles['R' + role.roleId] = role;
     });
-    console.debug('ManagerComponent mapped roles', this._roles);
+    LogUtil.debug('ManagerComponent mapped roles', this._roles);
   }
 
   @Input()
   set manager(manager:ManagerVO) {
-    this._manager = manager;
-    this.changed = false;
-    this.formReset();
+
+    UiUtil.formInitialise(this, 'initialising', 'managerForm', '_manager', manager, manager != null && manager.managerId > 0, ['email']);
+
     this.recalculateShops();
     this.recalculateRoles();
   }
 
   get manager():ManagerVO {
     return this._manager;
+  }
+
+  onSupportedShopClick(supported:Pair<ShopVO, ManagerShopLinkVO>) {
+    LogUtil.debug('ManagerComponent remove supported', supported);
+    let idx = this._manager.managerShops.findIndex(link =>
+      link.shopId == supported.first.shopId
+    );
+    if (idx != -1) {
+      this._manager.managerShops.splice(idx, 1);
+      this.recalculateShops();
+      this.formMarkDirty('managerShops');
+      this.formChange();
+    }
+  }
+
+  onAvailableShopClick(available:Pair<ShopVO, ManagerShopLinkVO>) {
+    LogUtil.debug('ManagerComponent add supported', available);
+    this._manager.managerShops.push(available.second);
+    this.recalculateShops();
+    this.formMarkDirty('managerShops');
+    this.formChange();
+  }
+
+  onSupportedRoleClick(supported:Pair<RoleVO, ManagerRoleLinkVO>) {
+    LogUtil.debug('ManagerComponent remove supported role', supported);
+    let idx = this._manager.managerRoles.findIndex(link =>
+      link.roleId == supported.first.roleId
+    );
+    if (idx != -1) {
+      this._manager.managerRoles.splice(idx, 1);
+      this.recalculateRoles();
+      this.formMarkDirty('managerRoles');
+      this.formChange();
+    }
+  }
+
+  onAvailableRoleClick(available:Pair<RoleVO, ManagerRoleLinkVO>) {
+    LogUtil.debug('ManagerComponent add supported role', available);
+    this._manager.managerRoles.push(available.second);
+    this.recalculateRoles();
+    this.formMarkDirty('managerRoles');
+    this.formChange();
+  }
+
+  ngOnInit() {
+    LogUtil.debug('ManagerComponent ngOnInit');
+    this.formBind();
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('ManagerComponent ngOnDestroy');
+    this.formUnbind();
+  }
+
+  tabSelected(tab:any) {
+    LogUtil.debug('ManagerComponent tabSelected', tab);
   }
 
   private recalculateShops():void {
@@ -173,7 +215,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         skipKeys.push('S' + managershop.shopId);
       });
     }
-    console.debug('ManagerComponent supported shops', skipKeys);
+    LogUtil.debug('ManagerComponent supported shops', skipKeys);
 
     let labels = <Array<Pair<ShopVO, ManagerShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -186,7 +228,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('ManagerComponent available shops', labels);
+    LogUtil.debug('ManagerComponent available shops', labels);
     return labels;
   }
 
@@ -198,7 +240,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         keepKeys.push('S' + managershop.shopId);
       });
     }
-    console.debug('ManagerComponent supported', keepKeys);
+    LogUtil.debug('ManagerComponent supported', keepKeys);
 
     let labels = <Array<Pair<ShopVO, ManagerShopLinkVO>>>[];
     for (let key in this._shops) {
@@ -210,29 +252,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('ManagerComponent supported', labels);
+    LogUtil.debug('ManagerComponent supported', labels);
     return labels;
-  }
-
-  onSupportedShopClick(supported:Pair<ShopVO, ManagerShopLinkVO>) {
-    console.debug('ManagerComponent remove supported', supported);
-    let idx = this._manager.managerShops.findIndex(link =>
-      link.shopId == supported.first.shopId
-    );
-    if (idx != -1) {
-      this._manager.managerShops.splice(idx, 1);
-      this.recalculateShops();
-      this.changed = true;
-      this.dataChanged.emit({ source: this._manager, valid: this.validForSave });
-    }
-  }
-
-  onAvailableShopClick(available:Pair<ShopVO, ManagerShopLinkVO>) {
-    console.debug('ManagerComponent add supported', available);
-    this._manager.managerShops.push(available.second);
-    this.recalculateShops();
-    this.changed = true;
-    this.dataChanged.emit({ source: this._manager, valid: this.validForSave });
   }
 
   private getAvailableRoleNames():Array<Pair<RoleVO, ManagerRoleLinkVO>> {
@@ -244,7 +265,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         skipKeys.push('R' + managerrole.roleId);
       });
     }
-    console.debug('ManagerComponent supported roles', skipKeys);
+    LogUtil.debug('ManagerComponent supported roles', skipKeys);
 
     let labels = <Array<Pair<RoleVO, ManagerRoleLinkVO>>>[];
     for (let key in this._roles) {
@@ -257,7 +278,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('ManagerComponent available roles', labels);
+    LogUtil.debug('ManagerComponent available roles', labels);
     return labels;
   }
 
@@ -269,7 +290,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         keepKeys.push('R' + managerrole.roleId);
       });
     }
-    console.debug('ManagerComponent supported roles', keepKeys);
+    LogUtil.debug('ManagerComponent supported roles', keepKeys);
 
     let labels = <Array<Pair<RoleVO, ManagerRoleLinkVO>>>[];
     for (let key in this._roles) {
@@ -281,48 +302,8 @@ export class ManagerComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.debug('ManagerComponent supported roles', labels);
+    LogUtil.debug('ManagerComponent supported roles', labels);
     return labels;
-  }
-
-  onSupportedRoleClick(supported:Pair<RoleVO, ManagerRoleLinkVO>) {
-    console.debug('ManagerComponent remove supported role', supported);
-    let idx = this._manager.managerRoles.findIndex(link =>
-      link.roleId == supported.first.roleId
-    );
-    if (idx != -1) {
-      this._manager.managerRoles.splice(idx, 1);
-      this.recalculateRoles();
-      this.changed = true;
-      this.dataChanged.emit({ source: this._manager, valid: this.validForSave });
-    }
-  }
-
-  onAvailableRoleClick(available:Pair<RoleVO, ManagerRoleLinkVO>) {
-    console.debug('ManagerComponent add supported role', available);
-    this._manager.managerRoles.push(available.second);
-    this.recalculateRoles();
-    this.changed = true;
-    this.dataChanged.emit({ source: this._manager, valid: this.validForSave });
-  }
-
-  onMainDataChanged(event:any) {
-    console.debug('ManagerComponent data changed', this._manager);
-    this.changed = true;
-  }
-
-  ngOnInit() {
-    console.debug('ManagerComponent ngOnInit');
-    this.formBind();
-  }
-
-  ngOnDestroy() {
-    console.debug('ManagerComponent ngOnDestroy');
-    this.formUnbind();
-  }
-
-  tabSelected(tab:any) {
-    console.debug('ManagerComponent tabSelected', tab);
   }
 
 }

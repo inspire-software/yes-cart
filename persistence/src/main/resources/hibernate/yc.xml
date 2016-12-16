@@ -2621,6 +2621,13 @@
        ]]>
     </query>
 
+    <query name="CATEGORIES.BY.URI">
+        <![CDATA[
+       select c from CategoryEntity c
+        where (lower(c.seoInternal.uri) like ?1)
+       ]]>
+    </query>
+
     <query name="ROOTCONTENT.BY.SHOP.ID">
         <![CDATA[
        select c from CategoryEntity c, ShopEntity s WHERE c.guid = s.code AND c.parentId = 0 AND s.shopId = ?1
@@ -3601,6 +3608,14 @@
             where c.code = ?1
         ]]>
     </query>
+
+
+    <query name="PROMOTION.ID.BY.CODE">
+        <![CDATA[
+                 select p.promotionId from PromotionEntity p   where p.code = ?1
+        ]]>
+    </query>
+
 
     <query name="TAX.BY.SHOPCODE.CURRENCY">
         <![CDATA[

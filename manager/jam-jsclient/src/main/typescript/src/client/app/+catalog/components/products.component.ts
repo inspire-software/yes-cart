@@ -13,46 +13,44 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, Input, Output, EventEmitter} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {ProductVO} from './../../shared/model/index';
-import {PaginationComponent} from './../../shared/pagination/index';
-import {Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { ProductVO } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 
 @Component({
   selector: 'yc-products',
   moduleId: module.id,
   templateUrl: 'products.component.html',
-  directives: [NgIf, PaginationComponent],
 })
 
 export class ProductsComponent implements OnInit, OnDestroy {
-
-  _products:Array<ProductVO> = [];
-  _filter:string;
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-
-  filteredProducts:Array<ProductVO>;
 
   @Input() selectedProduct:ProductVO;
 
   @Output() dataSelected: EventEmitter<ProductVO> = new EventEmitter<ProductVO>();
 
+  private _products:Array<ProductVO> = [];
+  private _filter:string;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private filteredProducts:Array<ProductVO>;
+
   //paging
-  maxSize:number = Config.UI_TABLE_PAGE_NUMS;
-  itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
-  totalItems:number = 0;
-  currentPage:number = 1;
+  private maxSize:number = Config.UI_TABLE_PAGE_NUMS; // tslint:disable-line:no-unused-variable
+  private itemsPerPage:number = Config.UI_TABLE_PAGE_SIZE;
+  private totalItems:number = 0;
+  private currentPage:number = 1; // tslint:disable-line:no-unused-variable
   // Must use separate variables (not currentPage) for table since that causes
   // cyclic even update and then exception https://github.com/angular/angular/issues/6005
-  pageStart:number = 0;
-  pageEnd:number = this.itemsPerPage;
+  private pageStart:number = 0;
+  private pageEnd:number = this.itemsPerPage;
 
   constructor() {
-    console.debug('ProductsComponent constructed');
+    LogUtil.debug('ProductsComponent constructed');
     let that = this;
     this.delayedFiltering = Futures.perpetual(function() {
       that.filterProducts();
@@ -60,7 +58,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('ProductsComponent ngOnInit');
+    LogUtil.debug('ProductsComponent ngOnInit');
   }
 
   @Input()
@@ -75,24 +73,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.delayedFiltering.delay();
   }
 
-  private filterProducts() {
-
-    this.filteredProducts = this._products;
-    console.debug('ProductsComponent filterProducts', this.filteredProducts);
-
-    if (this.filteredProducts === null) {
-      this.filteredProducts = [];
-    }
-
-    let _total = this.filteredProducts.length;
-    this.totalItems = _total;
-    if (_total > 0) {
-      this.resetLastPageEnd();
-    }
-  }
-
   ngOnDestroy() {
-    console.debug('ProductsComponent ngOnDestroy');
+    LogUtil.debug('ProductsComponent ngOnDestroy');
     this.selectedProduct = null;
     this.dataSelected.emit(null);
   }
@@ -117,7 +99,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   protected onSelectRow(row:ProductVO) {
-    console.debug('ProductsComponent onSelectRow handler', row);
+    LogUtil.debug('ProductsComponent onSelectRow handler', row);
     if (row == this.selectedProduct) {
       this.selectedProduct = null;
     } else {
@@ -142,6 +124,22 @@ export class ProductsComponent implements OnInit, OnDestroy {
       return '<i  title="' + row.uri + '" class="fa fa-globe"></i>';
     }
     return '';
+  }
+
+  private filterProducts() {
+
+    this.filteredProducts = this._products;
+    LogUtil.debug('ProductsComponent filterProducts', this.filteredProducts);
+
+    if (this.filteredProducts === null) {
+      this.filteredProducts = [];
+    }
+
+    let _total = this.filteredProducts.length;
+    this.totalItems = _total;
+    if (_total > 0) {
+      this.resetLastPageEnd();
+    }
   }
 
 }

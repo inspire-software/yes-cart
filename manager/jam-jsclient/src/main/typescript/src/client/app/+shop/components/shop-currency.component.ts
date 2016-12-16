@@ -13,17 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, Input} from '@angular/core';
-import {NgIf, NgFor} from '@angular/common';
-import {ShopVO, ShopSupportedCurrenciesVO} from './../../shared/model/index';
-import {ShopService, Util} from './../../shared/services/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
+import { Component, OnInit, Input } from '@angular/core';
+import { ShopVO, ShopSupportedCurrenciesVO } from './../../shared/model/index';
+import { ShopService, Util } from './../../shared/services/index';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-shop-currency',
   moduleId: module.id,
   templateUrl: 'shop-currency.component.html',
-  directives: [ NgIf, NgFor, DataControlComponent],
 })
 
 export class ShopCurrencyComponent implements OnInit {
@@ -31,13 +29,13 @@ export class ShopCurrencyComponent implements OnInit {
   private _shop:ShopVO;
   private _reload:boolean = false;
 
-  shopSupportedCurrenciesVO:ShopSupportedCurrenciesVO;
-  curr:ShopSupportedCurrenciesVO;
+  private shopSupportedCurrenciesVO:ShopSupportedCurrenciesVO;
+  private curr:ShopSupportedCurrenciesVO;
 
-  changed:boolean = false;
+  private changed:boolean = false;
 
   constructor(private _shopService:ShopService) {
-    console.debug('ShopCurrencyComponent constructed');
+    LogUtil.debug('ShopCurrencyComponent constructed');
   }
 
   @Input()
@@ -61,20 +59,20 @@ export class ShopCurrencyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.debug('ShopCurrencyComponent ngOnInit shop', this.shop);
+    LogUtil.debug('ShopCurrencyComponent ngOnInit shop', this.shop);
   }
 
 
   onDataChange() {
-    console.debug('ShopCurrencyComponent data changed');
+    LogUtil.debug('ShopCurrencyComponent data changed');
     this.changed = true;
   }
 
   onSaveHandler() {
-    console.debug('ShopCurrencyComponent Save handler', this.shop);
+    LogUtil.debug('ShopCurrencyComponent Save handler', this.shop);
     if (this.shop.shopId > 0 && this.curr) {
       var _sub:any = this._shopService.saveShopCurrencies(this.curr).subscribe(shopSupportedCurrenciesVO => {
-        console.debug('ShopCurrencyComponent Saved currencies', shopSupportedCurrenciesVO);
+        LogUtil.debug('ShopCurrencyComponent Saved currencies', shopSupportedCurrenciesVO);
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
         Util.remove(this.curr.all, this.curr.supported);
@@ -86,7 +84,7 @@ export class ShopCurrencyComponent implements OnInit {
   }
 
   onDiscardEventHandler() {
-    console.debug('ShopCurrencyComponent discard handler', this.shop);
+    LogUtil.debug('ShopCurrencyComponent discard handler', this.shop);
     if (this.shop.shopId > 0 && this.shopSupportedCurrenciesVO) {
       this.curr = Util.clone(this.shopSupportedCurrenciesVO);
       Util.remove(this.curr.all, this.curr.supported);
@@ -95,7 +93,7 @@ export class ShopCurrencyComponent implements OnInit {
   }
 
   onRefreshHandler() {
-    console.debug('ShopCurrencyComponent refresh handler', this.shop);
+    LogUtil.debug('ShopCurrencyComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
       var _sub:any = this._shopService.getShopCurrencies(this.shop.shopId).subscribe(shopSupportedCurrenciesVO => {
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
@@ -111,14 +109,14 @@ export class ShopCurrencyComponent implements OnInit {
   }
 
   onAvailableCurrencyClick(event:any) {
-    console.debug('ShopCurrencyComponent onAvailableCurrencyClick', event);
+    LogUtil.debug('ShopCurrencyComponent onAvailableCurrencyClick', event);
     this.curr.supported.push(event);
     Util.remove(this.curr.all, this.curr.supported);
     this.changed = true;
   }
 
   onSupportedCurrencyClick(event:any) {
-    console.debug('ShopCurrencyComponent onSupportedCurrencyClick', event);
+    LogUtil.debug('ShopCurrencyComponent onSupportedCurrencyClick', event);
     this.curr.supported = this.curr.supported.filter( obj => {return obj !== event;});
     this.curr.all = Util.clone(this.shopSupportedCurrenciesVO.all);
     Util.remove(this.curr.all, this.curr.supported);

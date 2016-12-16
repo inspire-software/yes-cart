@@ -1,8 +1,8 @@
-import { RouterConfig } from '@angular/router';
+import { Route } from '@angular/router';
 
 import { OrganisationRoleComponent, OrganisationManagerComponent } from './index';
 
-export const OrganisationRoutes: RouterConfig = [
+export const OrganisationRoutes: Route[] = [
   {
     path: 'organisation/roles',
     component: OrganisationRoleComponent

@@ -13,23 +13,19 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
-import {NgIf} from '@angular/common';
-import {AttributeService, Util} from './../../shared/services/index';
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
-import {AttributeGroupsComponent, AttributesComponent, AttributeComponent} from './components/index';
-import {DataControlComponent} from './../../shared/sidebar/index';
-import {ProductAttributeUsageComponent} from './../../shared/attributes/index';
-import {ModalComponent, ModalResult, ModalAction} from './../../shared/modal/index';
-import {EtypeVO, AttributeGroupVO, AttributeVO} from './../../shared/model/index';
-import {FormValidationEvent, Futures, Future} from './../../shared/event/index';
-import {Config} from './../../shared/config/env.config';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { AttributeService, Util } from './../../shared/services/index';
+import { ProductAttributeUsageComponent } from './../../shared/attributes/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
+import { EtypeVO, AttributeGroupVO, AttributeVO } from './../../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
+import { Config } from './../../shared/config/env.config';
+import { LogUtil } from './../../shared/log/index';
 
 @Component({
   selector: 'yc-attribute-definitions',
   moduleId: module.id,
   templateUrl: 'attribute-definitions.component.html',
-  directives: [TAB_DIRECTIVES, NgIf, AttributeGroupsComponent, AttributesComponent, AttributeComponent, ProductAttributeUsageComponent, ModalComponent, DataControlComponent ],
 })
 
 export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
@@ -43,23 +39,23 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
   private etypes:Array<EtypeVO> = [];
 
-  groups:Array<AttributeGroupVO> = [];
-  groupFilter:string;
+  private groups:Array<AttributeGroupVO> = [];
+  private groupFilter:string;
 
   private selectedGroup:AttributeGroupVO;
 
   @ViewChild('deleteConfirmationModalDialog')
-  deleteConfirmationModalDialog:ModalComponent;
+  private deleteConfirmationModalDialog:ModalComponent;
 
   private attributes:Array<AttributeVO> = [];
   private attributeFilter:string;
   private attributeFilterRequired:boolean = true;
   private attributeFilterCapped:boolean = false;
 
-  delayedFiltering:Future;
-  delayedFilteringMs:number = Config.UI_INPUT_DELAY;
-  filterCap:number = Config.UI_FILTER_CAP;
-  filterNoCap:number = Config.UI_FILTER_NO_CAP;
+  private delayedFiltering:Future;
+  private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+  private filterCap:number = Config.UI_FILTER_CAP;
+  private filterNoCap:number = Config.UI_FILTER_NO_CAP;
 
   private selectedAttribute:AttributeVO;
 
@@ -68,16 +64,20 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   private deleteValue:String;
 
   @ViewChild('productAttributeUsages')
-  productAttributeUsages:ProductAttributeUsageComponent;
+  private productAttributeUsages:ProductAttributeUsageComponent;
 
-  productAttributeCode:string;
+  private searchHelpShow:boolean = false;
+
+  private productAttributeCode:string;
+
+  private loading:boolean = false;
+
+  private changed:boolean = false;
+  private validForSave:boolean = false;
 
   constructor(private _attributeService:AttributeService) {
-    console.debug('AttributeDefinitionsComponent constructed');
+    LogUtil.debug('AttributeDefinitionsComponent constructed');
   }
-
-  changed:boolean = false;
-  validForSave:boolean = false;
 
   newAttributeInstance():AttributeVO {
     let groupId = this.selectedGroup != null ? this.selectedGroup.attributegroupId : 0;
@@ -95,7 +95,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.debug('AttributeDefinitionsComponent ngOnInit');
+    LogUtil.debug('AttributeDefinitionsComponent ngOnInit');
     this.getAllEtypes();
     this.onRefreshHandler();
     let that = this;
@@ -106,68 +106,17 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.debug('AttributeDefinitionsComponent ngOnDestroy');
+    LogUtil.debug('AttributeDefinitionsComponent ngOnDestroy');
   }
 
-  getAllEtypes() {
-    var _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
-      console.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
-      this.etypes = alletypes;
-      _sub.unsubscribe();
-    });
-  }
-
-
-  getAllGroups() {
-    var _sub:any = this._attributeService.getAllGroups().subscribe( allgroups => {
-      console.debug('AttributeDefinitionsComponent getAllGroups', allgroups);
-      this.groups = allgroups;
-      this.selectedGroup = null;
-      this.viewMode = AttributeDefinitionsComponent.GROUPS;
-      this.changed = false;
-      this.validForSave = false;
-      _sub.unsubscribe();
-    });
-  }
-
-  onAttributeFilterChange(event:any) {
+  protected onAttributeFilterChange(event:any) {
 
     this.delayedFiltering.delay();
 
   }
 
-  getAllAttributes() {
-
-    this.attributeFilterRequired = !this.forceShowAll && (this.attributeFilter == null || this.attributeFilter.length < 2);
-
-    console.debug('AttributeDefinitionsComponent getAllAttributes' + (this.forceShowAll ? ' forcefully': ''), this.selectedGroup);
-
-    if (this.selectedGroup != null && !this.attributeFilterRequired) {
-      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
-        console.debug('AttributeDefinitionsComponent getAllAttributes', allattributes);
-        this.attributes = allattributes;
-        this.selectedAttribute = null;
-        this.attributeEdit = null;
-        this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-        this.changed = false;
-        this.validForSave = false;
-        this.attributeFilterCapped = this.attributes.length >= max;
-        _sub.unsubscribe();
-      });
-    } else {
-      this.attributes = [];
-      this.selectedAttribute = null;
-      this.attributeEdit = null;
-      this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
-      this.changed = false;
-      this.validForSave = false;
-      this.attributeFilterCapped = false;
-    }
-  }
-
   protected onRefreshHandler() {
-    console.debug('AttributeDefinitionsComponent refresh handler');
+    LogUtil.debug('AttributeDefinitionsComponent refresh handler');
     if (this.viewMode === AttributeDefinitionsComponent.GROUPS ||
         this.selectedGroup == null) {
       this.getAllGroups();
@@ -176,22 +125,22 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onGroupSelected(data:AttributeGroupVO) {
-    console.debug('AttributeDefinitionsComponent onGroupSelected', data);
+  protected onGroupSelected(data:AttributeGroupVO) {
+    LogUtil.debug('AttributeDefinitionsComponent onGroupSelected', data);
     this.selectedGroup = data;
     this.attributeFilter = '';
   }
 
-  onAttributeSelected(data:AttributeVO) {
-    console.debug('AttributeDefinitionsComponent onAttributeSelected', data);
+  protected onAttributeSelected(data:AttributeVO) {
+    LogUtil.debug('AttributeDefinitionsComponent onAttributeSelected', data);
     this.selectedAttribute = data;
   }
 
-  onAttributeChanged(event:FormValidationEvent<AttributeVO>) {
-    console.debug('AttributeDefinitionsComponent onAttributeChanged', event);
+  protected onAttributeChanged(event:FormValidationEvent<AttributeVO>) {
+    LogUtil.debug('AttributeDefinitionsComponent onAttributeChanged', event);
     this.changed = true;
     this.validForSave = event.valid;
-    this.attributeEdit = event.source;
+    //this.attributeEdit = event.source;
   }
 
   protected onForceShowAll() {
@@ -200,7 +149,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onBackToList() {
-    console.debug('AttributeDefinitionsComponent onBackToList handler');
+    LogUtil.debug('AttributeDefinitionsComponent onBackToList handler');
     if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTE) {
       this.attributeEdit = null;
       this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
@@ -213,7 +162,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowNew() {
-    console.debug('AttributeDefinitionsComponent onRowNew handler');
+    LogUtil.debug('AttributeDefinitionsComponent onRowNew handler');
     this.changed = false;
     this.validForSave = false;
     if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTES) {
@@ -223,7 +172,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowDelete(row:any) {
-    console.debug('AttributeDefinitionsComponent onRowDelete handler', row);
+    LogUtil.debug('AttributeDefinitionsComponent onRowDelete handler', row);
     this.deleteValue = row.name;
     this.deleteConfirmationModalDialog.show();
   }
@@ -237,7 +186,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowEditAttribute(row:AttributeVO) {
-    console.debug('AttributeDefinitionsComponent onRowEditAttribute handler', row);
+    LogUtil.debug('AttributeDefinitionsComponent onRowEditAttribute handler', row);
     this.attributeEdit = Util.clone(row);
     this.changed = false;
     this.validForSave = false;
@@ -251,7 +200,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onRowCopyAttribute(row:AttributeVO) {
-    console.debug('AttributeDefinitionsComponent onRowCopyAttribute handler', row);
+    LogUtil.debug('AttributeDefinitionsComponent onRowCopyAttribute handler', row);
     this.attributeEdit = Util.clone(row);
     this.attributeEdit.attributeId = 0;
     this.changed = false;
@@ -267,7 +216,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
 
   protected onRowList(row:AttributeGroupVO) {
-    console.debug('AttributeDefinitionsComponent onRowList handler', row);
+    LogUtil.debug('AttributeDefinitionsComponent onRowList handler', row);
     this.getAllAttributes();
   }
 
@@ -295,7 +244,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
 
       if (this.attributeEdit != null) {
 
-        console.debug('AttributeDefinitionsComponent Save handler attribute', this.attributeEdit);
+        LogUtil.debug('AttributeDefinitionsComponent Save handler attribute', this.attributeEdit);
 
         var _sub:any = this._attributeService.saveAttribute(this.attributeEdit).subscribe(
             rez => {
@@ -305,7 +254,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
                 if (idx !== -1) {
                   this.attributes[idx] = rez;
                   this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
-                  console.debug('AttributeDefinitionsComponent attribute changed', rez);
+                  LogUtil.debug('AttributeDefinitionsComponent attribute changed', rez);
                 }
                 this.changed = false;
                 this.selectedAttribute = rez;
@@ -313,7 +262,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
                 this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
               } else {
                 this.attributeFilter = rez.name;
-                console.debug('AttributeDefinitionsComponent attribute added', rez);
+                LogUtil.debug('AttributeDefinitionsComponent attribute added', rez);
                 this.getAllAttributes();
               }
           }
@@ -324,7 +273,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onDiscardEventHandler() {
-    console.debug('AttributeDefinitionsComponent discard handler');
+    LogUtil.debug('AttributeDefinitionsComponent discard handler');
     if (this.viewMode === AttributeDefinitionsComponent.ATTRIBUTE) {
       if (this.selectedAttribute != null) {
         this.onRowEditSelected();
@@ -335,19 +284,20 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   protected onDeleteConfirmationResult(modalresult: ModalResult) {
-    console.debug('AttributeDefinitionsComponent onDeleteConfirmationResult modal result is ', modalresult);
+    LogUtil.debug('AttributeDefinitionsComponent onDeleteConfirmationResult modal result is ', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
 
       if (this.selectedAttribute != null) {
-        console.debug('AttributeDefinitionsComponent onDeleteConfirmationResult', this.selectedAttribute);
+        LogUtil.debug('AttributeDefinitionsComponent onDeleteConfirmationResult', this.selectedAttribute);
 
         var _sub:any = this._attributeService.removeAttribute(this.selectedAttribute).subscribe(res => {
-          console.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
+          LogUtil.debug('AttributeDefinitionsComponent removeAttribute', this.selectedAttribute);
           let idx = this.attributes.indexOf(this.selectedAttribute);
           this.attributes.splice(idx, 1);
           this.attributes = this.attributes.slice(0, this.attributes.length); // reset to propagate changes
           this.selectedAttribute = null;
           this.attributeEdit = null;
+          this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
           _sub.unsubscribe();
         });
 
@@ -355,5 +305,81 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onClearFilterGrp() {
+
+    this.groupFilter = '';
+
+  }
+
+  protected onClearFilterAttr() {
+
+    this.attributeFilter = '';
+    this.onAttributeFilterChange({});
+  }
+
+  protected onSearchHelpToggle() {
+    this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onSearchAttrCode() {
+    this.searchHelpShow = false;
+    this.attributeFilter = '#';
+  }
+
+
+  private getAllEtypes() {
+    var _sub:any = this._attributeService.getAllEtypes().subscribe( alletypes => {
+      LogUtil.debug('AttributeDefinitionsComponent getAllEtypes', alletypes);
+      this.etypes = alletypes;
+      _sub.unsubscribe();
+    });
+  }
+
+
+  private getAllGroups() {
+    this.loading = true;
+    var _sub:any = this._attributeService.getAllGroups().subscribe( allgroups => {
+      LogUtil.debug('AttributeDefinitionsComponent getAllGroups', allgroups);
+      this.groups = allgroups;
+      this.selectedGroup = null;
+      this.viewMode = AttributeDefinitionsComponent.GROUPS;
+      this.changed = false;
+      this.validForSave = false;
+      this.loading = false;
+      _sub.unsubscribe();
+    });
+  }
+
+  private getAllAttributes() {
+
+    this.attributeFilterRequired = !this.forceShowAll && (this.attributeFilter == null || this.attributeFilter.length < 2);
+
+    LogUtil.debug('AttributeDefinitionsComponent getAllAttributes' + (this.forceShowAll ? ' forcefully': ''), this.selectedGroup);
+
+    if (this.selectedGroup != null && !this.attributeFilterRequired) {
+      this.loading = true;
+      let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
+      var _sub:any = this._attributeService.getFilteredAttributes(this.selectedGroup.code, this.attributeFilter, max).subscribe(allattributes => {
+        LogUtil.debug('AttributeDefinitionsComponent getAllAttributes', allattributes);
+        this.attributes = allattributes;
+        this.selectedAttribute = null;
+        this.attributeEdit = null;
+        this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+        this.changed = false;
+        this.validForSave = false;
+        this.attributeFilterCapped = this.attributes.length >= max;
+        this.loading = false;
+        _sub.unsubscribe();
+      });
+    } else {
+      this.attributes = [];
+      this.selectedAttribute = null;
+      this.attributeEdit = null;
+      this.viewMode = AttributeDefinitionsComponent.ATTRIBUTES;
+      this.changed = false;
+      this.validForSave = false;
+      this.attributeFilterCapped = false;
+    }
+  }
 
 }
