@@ -19,7 +19,7 @@
  */
 
 
-import {AttrValueVO} from './attribute.model';
+import { AttrValueVO } from './attribute.model';
 
 
 export interface AttrValueSystemVO extends AttrValueVO {
