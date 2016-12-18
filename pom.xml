@@ -444,15 +444,18 @@
                         <configuration>
                             <target>
                                 <echo>=========================================================================================================================================================</echo>
-                                <echo>|  __     __    _____                                       </echo>
-                                <echo>|  \ \   / /   / ___ \   Pure Ecommerce ${project.version}  </echo>
-                                <echo>|   \ \ / /   / /   \_\  http://www.yes-cart.org            </echo>
-                                <echo>|    \   /   | |                                            </echo>
-                                <echo>|     | |    | |     __                                     </echo>
-                                <echo>|     | |     \ \___/ /                                     </echo>
-                                <echo>|     |_|      \_____/   Buld no: ${buildNumber}            </echo>
-                                <echo>| </echo>
+                                <echo>|                                                                                                                                                        </echo>
+                                <echo>| __     _______                           ______                                                                                                        </echo>
+                                <echo>| \ \   / / ____|                         |  ____|                                                                                                       </echo>
+                                <echo>|  \ \_/ | |   ______ _ __  _   _ _ __ ___| |__   ___ ___  _ __ ___  _ __ ___   ___ _ __ ___ ___                                                         </echo>
+                                <echo>|   \   /| |  |______| '_ \| | | | '__/ _ |  __| / __/ _ \| '_ ` _ \| '_ ` _ \ / _ | '__/ __/ _ \                                                        </echo>
+                                <echo>|    | | | |____     | |_) | |_| | | |  __| |___| (_| (_) | | | | | | | | | | |  __| | | (_|  __/                                                        </echo>
+                                <echo>|    |_|  \_____|    | .__/ \__,_|_|  \___|______\___\___/|_| |_| |_|_| |_| |_|\___|_|  \___\___|                                                        </echo>
+                                <echo>|                    | |                                                                                                                                 </echo>
+                                <echo>|                    |_| http://www.yes-cart.org / ${project.version} build no: ${buildNumber}   </echo>
+                                <echo>|                                                                                                                                                        </echo>
                                 <echo>=========================================================================================================================================================</echo>
+                                <echo> </echo>
                                 <echo>Preparing to build YC ${project.artifactId}-${project.version}-rev.${buildNumber} with the following configurations:</echo>
                                 <echo> </echo>
                                 <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
