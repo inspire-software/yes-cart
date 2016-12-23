@@ -176,12 +176,28 @@
           depends-on="quartzSysProps1,quartzSysProps2">
         <property name="triggers">
             <list>
-                <ref bean="reindexDiscontinuedProductsTrigger" />
                 <!-- CPOINT: Uncomment this if you need global reindex instead of
                              only discontinued products.
-                     (This replaces reindexDiscontinuedProductsTrigger)
 
+                      reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
+                      that perform full reindex.
+
+                      Only one of these should be enabled. reindexDiscontinuedProductsTrigger is aimed at locating
+                      items that are no longer available and then removing them out of the search index.
+                      productsGlobalIndexProcessorTrigger simply does full reindex (that includes removing outdated).
+
+                      The enable/disable should be controlled by cron schedule set to far future (say 2099). By default
+                      only reindexDiscontinuedProductsTrigger is set to 5am daily and productsGlobalIndexProcessorTrigger
+                      is set to 2099 (i.e. disabled)
+                  -->
+                <ref bean="reindexDiscontinuedProductsTrigger" />
                 <ref bean="productsGlobalIndexProcessorTrigger" />
+                <!--
+                     Cron job that detect inventory changes between job runs and then
+                     re-indexes the SKU corresponding to those inventory items.
+                     This is needed for delta changes updates in index for example when
+                     inventory is updated either due to inventory update or changes caused
+                     by customer order
                   -->
                 <ref bean="productInventoryChangedProcessorJobCronTrigger" />
             </list>
