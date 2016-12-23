@@ -1,6 +1,7 @@
 /* Default theme css */
 @import "bootstrap.min.css";
 @import "bootstrap-theme.css";
+@import "fonts.css";
 @import "yc.css";
 
 /*
