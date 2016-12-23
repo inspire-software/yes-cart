@@ -85,6 +85,20 @@ public interface SystemService {
     String getDefaultShopURL();
 
     /**
+     * URL template for CMS.
+     *
+     * @return URL of default shop
+     */
+    String getPreviewShopURLTemplate();
+
+    /**
+     * URI CSS for CMS.
+     *
+     * @return URL of default shop
+     */
+    String getPreviewShopURICss();
+
+    /**
      * Get the mail templates directory.
      * Mail template directory has following structure:
      * <p/>

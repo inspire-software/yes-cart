@@ -54,6 +54,7 @@
         <constructor-arg index="6" ref="uiFederationFacade"/>
         <constructor-arg index="7" ref="voAssemblySupport"/>
         <constructor-arg index="8" ref="voIOSupport"/>
+        <constructor-arg index="9" ref="systemService"/>
         <property name="skipAttributesInView">
             <list>
                 <value>CURRENCY</value>

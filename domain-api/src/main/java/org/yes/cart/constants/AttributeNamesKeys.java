@@ -46,6 +46,14 @@ public interface AttributeNamesKeys {
          */
         String SYSTEM_DEFAULT_SHOP = "SYSTEM_DEFAULT_SHOP";
         /**
+         * CMS preview URL template.
+         */
+        String SYSTEM_PREVIEW_URL_TEMPLATE = "SYSTEM_PREVIEW_URL_TEMPLATE";
+        /**
+         * CMS preview URL template.
+         */
+        String SYSTEM_PREVIEW_URI_CSS = "SYSTEM_PREVIEW_URI_CSS";
+        /**
          * Size of the log tail in characters to show in Admin.
          */
         String IMPORT_JOB_LOG_SIZE = "IMPORT_JOB_LOG_SIZE";

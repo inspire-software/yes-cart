@@ -131,6 +131,20 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
+    public String getPreviewShopURLTemplate() {
+        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URL_TEMPLATE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getPreviewShopURICss() {
+        return proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_PREVIEW_URI_CSS);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getMailResourceDirectory() {
         return addTailFileSeparator(proxy().getAttributeValue(AttributeNamesKeys.System.SYSTEM_MAILTEMPLATES_FSPOINTER));
     }

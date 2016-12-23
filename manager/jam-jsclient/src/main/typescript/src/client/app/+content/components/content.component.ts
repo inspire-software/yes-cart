@@ -35,6 +35,9 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   @Input() shop:ShopVO = null;
 
+  @Input() shopPreviewUrl:string = '/';
+  @Input() shopPreviewCss:string = '/';
+
   @Output() dataChanged: EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>> = new EventEmitter<FormValidationEvent<Pair<ContentVO, Array<Pair<AttrValueContentVO, boolean>>>>>();
 
   private _content:ContentWithBodyVO;
@@ -257,10 +260,22 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   protected onCMSEdit(body:ContentBodyVO) {
 
+    let _shop = this.shop;
+    let _docBase = this.shopPreviewUrl;
+    let _css = this.shopPreviewCss;
+
     let myWindow = window.open('/yes-manager/resources/assets/editor/tinymce/editor.html', 'CMS', 'width=800,height=660');
     myWindow.onload = function() {
 
-      let msg = body;
+      let msg = {
+        shop: _shop,
+        docBase: _docBase,
+        previewCss: _css,
+        content: body
+      };
+
+      LogUtil.debug('ContentComponent onCMSEdit', msg);
+
       myWindow.postMessage(msg, '*');
 
     };
@@ -268,6 +283,22 @@ export class ContentComponent implements OnInit, OnDestroy {
   }
 
   protected getCMSPreview(body:ContentBodyVO) {
+
+    if (body.text && this.shopPreviewUrl !== null && this.shopPreviewUrl !== '/') {
+
+      let _previewBase = this.shopPreviewUrl;
+      let _preview = body.text;
+      // replace relative images
+      _preview = _preview.replace(/<img([^>]*)\ssrc=(['"])\/{0,1}([^'"]*)\2([^>]*)/gi, '<img$1 data-preview="enhanced" src=$2' + _previewBase + '$3$2$4');
+      // replace relative urls
+      _preview = _preview.replace(/href=(['"])\/{0,1}([^'"]*)\1/gi, 'href=$1' + _previewBase + '$2$1  data-preview="enhanced" target="_blank"');
+
+      LogUtil.debug('ContentComponent getCMSPreview ', _preview);
+
+      return _preview;
+
+    }
+
     return body.text;
   }
 

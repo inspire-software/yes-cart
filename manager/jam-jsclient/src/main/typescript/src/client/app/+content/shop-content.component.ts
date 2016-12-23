@@ -18,7 +18,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ShopService, ContentService, ShopEventBus } from './../shared/services/index';
 import { ContentSelectComponent } from './../shared/content/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { ShopVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
+import { ShopVO, ShopUrlVO, UrlVO, ContentWithBodyVO, ContentVO, AttrValueContentVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { LogUtil } from './../shared/log/index';
@@ -31,6 +31,9 @@ import { LogUtil } from './../shared/log/index';
 
 export class ShopContentComponent implements OnInit, OnDestroy {
 
+  private static DEFAULT_PREVIEW_URL:string = 'http://localhost:8080/yes-shop/';
+  private static DEFAULT_PREVIEW_CSS:string = 'wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css';
+
   private static CONTENTS:string = 'contents';
   private static CONTENT:string = 'content';
 
@@ -39,6 +42,9 @@ export class ShopContentComponent implements OnInit, OnDestroy {
   private viewMode:string = ShopContentComponent.CONTENTS;
 
   private shop:ShopVO = null;
+  private shopUrl:ShopUrlVO = null;
+  private shopPreviewUrl = ShopContentComponent.DEFAULT_PREVIEW_URL;
+  private shopPreviewCss = ShopContentComponent.DEFAULT_PREVIEW_CSS;
 
   private shopIdSub:any;
   private shopSub:any;
@@ -80,6 +86,7 @@ export class ShopContentComponent implements OnInit, OnDestroy {
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
       this.forceShowAll = false;
+      this.getShopUrls();
       this.getFilteredContents();
     });
   }
@@ -346,5 +353,28 @@ export class ShopContentComponent implements OnInit, OnDestroy {
       this.contentFilterCapped = false;
     }
   }
+
+  private getShopUrls() {
+    LogUtil.debug('ShopContentComponent get urls', this.shop);
+
+    this.shopUrl = null;
+    this.shopPreviewUrl = ShopContentComponent.DEFAULT_PREVIEW_URL;
+    this.shopPreviewCss = ShopContentComponent.DEFAULT_PREVIEW_CSS;
+
+    if (this.shop != null && this.shop.shopId > 0) {
+
+      this._shopService.getShopUrls(this.shop.shopId).subscribe(shopUrl => {
+
+        LogUtil.debug('ShopContentComponent urls', this.shopUrl);
+        this.shopUrl = shopUrl;
+        this.shopPreviewUrl = shopUrl.previewUrl;
+        this.shopPreviewCss = shopUrl.previewCss;
+
+      });
+
+    }
+
+  }
+
 
 }

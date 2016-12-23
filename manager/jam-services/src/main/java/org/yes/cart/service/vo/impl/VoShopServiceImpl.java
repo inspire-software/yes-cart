@@ -28,6 +28,7 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.domain.CountryService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
@@ -37,6 +38,7 @@ import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
 
@@ -56,6 +58,7 @@ public class VoShopServiceImpl implements VoShopService {
     private final LanguageService languageService;
     private final CurrencyService currencyService;
     private final CountryService countryService;
+    private final SystemService systemService;
 
     private final VoAttributesCRUDTemplate<VoAttrValueShop, AttrValueShopDTO> voAttributesCRUDTemplate;
 
@@ -72,6 +75,7 @@ public class VoShopServiceImpl implements VoShopService {
      * @param federationFacade  access.
      * @param voAssemblySupport vo support
      * @param voIOSupport vo support
+     * @param systemService system service
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
@@ -81,7 +85,8 @@ public class VoShopServiceImpl implements VoShopService {
                              final DtoAttributeService dtoAttributeService,
                              final FederationFacade federationFacade,
                              final VoAssemblySupport voAssemblySupport,
-                             final VoIOSupport voIOSupport) {
+                             final VoIOSupport voIOSupport,
+                             final SystemService systemService) {
         this.currencyService = currencyService;
         this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
@@ -91,6 +96,7 @@ public class VoShopServiceImpl implements VoShopService {
         this.languageService = languageService;
         this.voAssemblySupport = voAssemblySupport;
         this.voIOSupport = voIOSupport;
+        this.systemService = systemService;
 
         this.voAttributesCRUDTemplate =
                 new VoAttributesCRUDTemplate<VoAttrValueShop, AttrValueShopDTO>(
@@ -223,6 +229,34 @@ public class VoShopServiceImpl implements VoShopService {
             final VoShopUrl voShopUrl = new VoShopUrl();
             voShopUrl.setUrls(voAssemblySupport.assembleVos(VoShopUrlDetail.class, ShopUrlDTO.class, shopUrlDTO));
             voShopUrl.setShopId(shopId);
+
+            String previewURLTemplate = systemService.getPreviewShopURLTemplate();
+            if (previewURLTemplate == null) {
+                previewURLTemplate = "http://{primaryShopURL}:8080/";
+                ShopCodeContext.getLog(this).error("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
+            }
+
+            String primary = null;
+            if (voShopUrl.getUrls() == null || voShopUrl.getUrls().isEmpty()) {
+                primary = "localhost";
+            } else {
+                for (final VoShopUrlDetail url : voShopUrl.getUrls()) {
+                    if (primary == null || url.isPrimary()) {
+                        primary = url.getUrl();
+                    }
+                }
+            }
+
+            voShopUrl.setPreviewUrl(previewURLTemplate.replace("{primaryShopURL}", primary));
+
+            String previewURICss = systemService.getPreviewShopURICss();
+            if (previewURICss == null) {
+                previewURICss = "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
+                ShopCodeContext.getLog(this).error("Preview shop URI CSS is not configured, using '{}'", previewURICss);
+            }
+            voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);
+
+
             return voShopUrl;
         } else {
             throw new AccessDeniedException("Access is denied");

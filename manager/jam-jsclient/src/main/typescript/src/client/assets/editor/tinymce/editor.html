@@ -8,16 +8,32 @@
       return false;
     }
 
+    function previewURLConverter(url, node, on_save, name) {
+      // console.log('convert', url, node, on_save, name);
+      if (url.indexOf('http') === 0 || url.charAt(0) === '/') {
+        return url;
+      }
+      return '/' + url;
+    }
+
     window.addEventListener('message', function(event) {
 
       var _msg = event.data;
-      document.write('<form action="#" onsubmit="contentSubmit()"><textarea id="content" name="content">' + _msg.text + '</textarea></form>');
+      var _shop = _msg.shop;
+      var _docBase = _msg.docBase;
+      var _css = _msg.previewCss;
+      var _content = _msg.content;
+      var _lang = _content.lang;
 
-      window.contentlang = _msg.lang;
+      document.write('<form action="#" onsubmit="contentSubmit()" data-shop-docbase="' + _docBase + '" data-shop-css="' + _css + '"><textarea id="content" name="content">' + _content.text + '</textarea></form>');
+
+      window.contentlang = _lang;
 
       tinymce.init({
         selector: 'textarea',
-        language: _msg.lang,
+        urlconverter_callback : 'previewURLConverter',
+        language: _lang,
+        document_base_url: _docBase,
         height: 500,
         theme: 'modern',
         plugins: [
@@ -33,15 +49,16 @@
           { title: 'Two columns', content: '<div class="row"><div class="col-xs-12 col-md-6">Col 1</div><div class="col-xs-12 col-md-6">Col 2</div></div>' },
         ],
         content_css: [
-          '../../../css/bootstrap.min.css',
-          'skins/yc-cms.css'
+          _css
         ],
         force_p_newlines: false,
         forced_root_block: 'template'
       });
 
       var _load = document.getElementById('loading');
-      _load.parent.removeChild(_load);
+      if (_load && _load.parent) {
+        _load.parent.removeChild(_load);
+      }
 
     });
   </script>

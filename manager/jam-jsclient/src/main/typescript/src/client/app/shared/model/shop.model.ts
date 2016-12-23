@@ -53,7 +53,7 @@ export interface ShopSeoVO  {
 }
 
 /**
- * Record in shopo urls.
+ * Record in shop urls.
  */
 export interface UrlVO {
   urlId : number;
@@ -67,6 +67,8 @@ export interface UrlVO {
  */
 export interface ShopUrlVO {
   shopId : number;
+  previewUrl : string;
+  previewCss : string;
   urls : Array<UrlVO>;
 }
 

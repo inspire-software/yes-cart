@@ -32,6 +32,9 @@ public class VoShopUrl {
     @DtoField(value = "shop.shopId", readOnly = true)
     private long shopId;
 
+    private String previewUrl;
+    private String previewCss;
+
     private List<VoShopUrlDetail> urls = new ArrayList<>();
 
     public long getShopId() {
@@ -40,6 +43,22 @@ public class VoShopUrl {
 
     public void setShopId(long shopId) {
         this.shopId = shopId;
+    }
+
+    public String getPreviewUrl() {
+        return previewUrl;
+    }
+
+    public void setPreviewUrl(final String previewUrl) {
+        this.previewUrl = previewUrl;
+    }
+
+    public String getPreviewCss() {
+        return previewCss;
+    }
+
+    public void setPreviewCss(final String previewCss) {
+        this.previewCss = previewCss;
     }
 
     public List<VoShopUrlDetail> getUrls() {
