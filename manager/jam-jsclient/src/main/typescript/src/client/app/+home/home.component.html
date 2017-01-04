@@ -237,6 +237,7 @@
                     <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_TABLE_PAGE_SIZE')">{{ 'PANEL_UI_SETTINGS_PAGE_SIZE' | translate: { value: uiPagination }  }}</a></div>
                     <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_CAP' | translate: { value: uiFilteMax }  }}</a></div>
                     <div><a class="js-click" style="color: #fff" (click)="onChangeSettingClick('UI_FILTER_NO_CAP')">{{ 'PANEL_UI_SETTINGS_FILTER_NO_CAP' | translate: { value: uiNoFilteMax }  }}</a></div>
+                    <div><a class="js-click" style="color: #fff" (click)="onChangeLanguageClick()">{{ 'PANEL_UI_SETTINGS_LOCALE' | translate: { value: uiLang }  }}</a></div>
                   </div>
                 </div>
               </div>
@@ -244,6 +245,12 @@
                 <div class="panel-footer">
                   <span class="pull-left">{{ 'PANEL_UI_SETTINGS' | translate }}</span>
                   <form class="pull-right" [hidden]="uiSettingReadOnly"><input type="text" class="form-control" style="width: 80px;" name="uiSetting" [(ngModel)]="uiSetting" /></form>
+                  <form class="pull-right" [hidden]="uiLangReadOnly"><select type="text" class="form-control" style="width: 80px;" name="uiSetting" [(ngModel)]="uiLang">
+                    <option value="de">de</option>
+                    <option value="en">en</option>
+                    <option value="ru">ru</option>
+                    <option value="uk">uk</option>
+                  </select></form>
                   <div class="clearfix"></div>
                 </div>
               </a>

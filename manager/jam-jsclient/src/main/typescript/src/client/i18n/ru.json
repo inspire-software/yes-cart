@@ -172,6 +172,7 @@
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Страница: {{value}} ",
   "PANEL_UI_SETTINGS_FILTER_CAP": "С фильтром: {{value}} ",
   "PANEL_UI_SETTINGS_FILTER_NO_CAP": "Без фильтра: {{value}} ",
+  "PANEL_UI_SETTINGS_LOCALE": "Язык: {{value}} ",
 
   "SEO_URI": "URI",
   "SEO_TITLE": "Название окна",

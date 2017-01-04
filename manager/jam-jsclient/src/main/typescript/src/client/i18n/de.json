@@ -172,6 +172,7 @@
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Page size: {{value}} ",
   "PANEL_UI_SETTINGS_FILTER_CAP": "Filter max: {{value}} ",
   "PANEL_UI_SETTINGS_FILTER_NO_CAP": "No filter max: {{value}} ",
+  "PANEL_UI_SETTINGS_LOCALE": "Language: {{value}} ",
 
   "SEO_URI": "URI",
   "SEO_TITLE": "Window title",

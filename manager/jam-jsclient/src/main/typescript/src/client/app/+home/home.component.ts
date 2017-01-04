@@ -15,7 +15,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { DashboardWidgetVO } from '../shared/model/index';
-import { ReportsService } from '../shared/services/index';
+import { ReportsService, I18nEventBus } from '../shared/services/index';
 import { Config } from '../shared/config/env.config';
 import { CookieUtil } from '../shared/cookies/index';
 import { LogUtil } from './../shared/log/index';
@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit {
 
   private static _widgets:any = {};
 
+  private uiLangReadOnly:boolean = true;
   private uiSettingReadOnly:boolean = true;
   private uiSettingProperty:string = '';
 
@@ -81,6 +82,16 @@ export class HomeComponent implements OnInit {
     LogUtil.debug('HomeComponent modify', this.uiSettingProperty, setting);
     this.uiSettingReadOnly = this.uiSettingProperty === setting;
     this.uiSettingProperty = this.uiSettingReadOnly ? '' : setting;
+    if (!this.uiSettingReadOnly) {
+      this.uiLangReadOnly = true; // ensure lang is hidden
+    }
+  }
+
+  onChangeLanguageClick() {
+    LogUtil.debug('HomeComponent modify lang', this.uiLangReadOnly);
+    this.uiSettingReadOnly = true;   // ensure setting is hidden
+    this.uiSettingProperty = '';
+    this.uiLangReadOnly = !this.uiLangReadOnly;
   }
 
   get uiPagination():number {
@@ -105,6 +116,17 @@ export class HomeComponent implements OnInit {
 
   set uiNoFilteMax(maxResults:number) {
     Config.UI_FILTER_NO_CAP = maxResults;
+  }
+
+  get uiLang():string {
+      return I18nEventBus.getI18nEventBus().current();
+  }
+
+  set uiLang(lang:string) {
+    if (['uk','ru','en','de'].indexOf(lang) !== -1) {
+      I18nEventBus.getI18nEventBus().emit(lang);
+      CookieUtil.createCookie('YCJAM_UI_LANG', lang, 360);
+    }
   }
 
   get uiSetting():number {
