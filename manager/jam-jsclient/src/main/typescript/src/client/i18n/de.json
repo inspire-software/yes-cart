@@ -255,6 +255,7 @@
   "CARRIERSLA_SHIP": "Delivery",
   "CARRIERSLA_NO_SHIP": "Delivery address optional",
   "CARRIERSLA_PG": "Payment methods",
+  "CARRIERSLA_FC": "Fulfilment centres",
 
   "CATEGORY_NAV": "Navigation",
   "CATEGORY_NAV_ATTR": "Attribute navigation",
@@ -435,6 +436,11 @@
   "CUSTOMERORDER_PROMOTIONS": "Promotions",
   "CUSTOMERORDER_MANUAL_TRANSITION_MESSAGE": "Details",
   "CUSTOMERORDER_DELIVERY": "Delivery",
+  "CUSTOMERORDER_DELIVERY_D1": "Delivery (standard)",
+  "CUSTOMERORDER_DELIVERY_D2": "Delivery (preorder)",
+  "CUSTOMERORDER_DELIVERY_D3": "Delivery (backorder)",
+  "CUSTOMERORDER_DELIVERY_D4": "Delivery (electronic)",
+  "CUSTOMERORDER_DELIVERY_D5": "Delivery (mixed)",
   "CUSTOMERORDER_DELIVERY_TIP": "Delivery actions available. Click delivery link or item in a delivery link.",
   "CUSTOMERORDER_TOTAL_ITEM_LIST": "Items total before any discounts",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "Tax",
@@ -588,7 +594,7 @@
   "SEARCH_HELP_PRODUCTTYPE_ATTR_INVISIBLE": "To list attributes that are invisible use '-V'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_CHANGES": "To list all changes use '###'",
 
-  "SEARCH_HELP_PRICELIST_DEFAULT": "Default inventory search is partial by SKU code/name or product code/name",
+  "SEARCH_HELP_PRICELIST_DEFAULT": "Default prices search is partial by SKU code/name or product code/name",
   "SEARCH_HELP_PRICELIST_EXACT": "To search for exact SKU (code, PIM code, barcode or manufacturer code): Format: !SKU",
   "SEARCH_HELP_PRICELIST_TAG": "To search prices by tag or policy use #tag or #policy",
 

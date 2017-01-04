@@ -45,7 +45,7 @@ public interface Total extends Serializable {
      *
      * @return list price subtotal.
      */
-    public BigDecimal getListSubTotal();
+    BigDecimal getListSubTotal();
 
     /**
      * Get subtotal of all items sale price.
@@ -54,7 +54,7 @@ public interface Total extends Serializable {
      *
      * @return sale price subtotal.
      */
-    public BigDecimal getSaleSubTotal();
+    BigDecimal getSaleSubTotal();
 
     /**
      * Get subtotal of all items that do not have sale price.
@@ -63,7 +63,7 @@ public interface Total extends Serializable {
      *
      * @return sale price subtotal.
      */
-    public BigDecimal getNonSaleSubTotal();
+    BigDecimal getNonSaleSubTotal();
 
     /**
      * Get subtotal of all items final price.
@@ -72,7 +72,7 @@ public interface Total extends Serializable {
      *
      * @return final price subtotal.
      */
-    public BigDecimal getPriceSubTotal();
+    BigDecimal getPriceSubTotal();
 
     /**
      * Returns true if promotions have been applied to
@@ -96,21 +96,21 @@ public interface Total extends Serializable {
      *
      * @return cart subtotal.
      */
-    public BigDecimal getSubTotal();
+    BigDecimal getSubTotal();
 
      /**
      * Get sub total tax.
       *
      * @return sub total tax
      */
-    public BigDecimal getSubTotalTax();
+    BigDecimal getSubTotalTax();
 
     /**
      * Get sub total amount including tax.
      *
      * @return  sub total amount including tax.
      */
-    public BigDecimal getSubTotalAmount();
+    BigDecimal getSubTotalAmount();
 
     /**
      * Get delivery sale cost. The cost of delivery as it
@@ -118,14 +118,14 @@ public interface Total extends Serializable {
      *
      * @return delivery amount.
      */
-    public BigDecimal getDeliveryListCost();
+    BigDecimal getDeliveryListCost();
 
     /**
      * Get delivery cost. Cost of delivery less shipping promotions.
      *
      * @return delivery amount.
      */
-    public BigDecimal getDeliveryCost();
+    BigDecimal getDeliveryCost();
 
     /**
      * Returns true if promotions have been applied to this
@@ -148,28 +148,28 @@ public interface Total extends Serializable {
      *
      * @return delivery tax.
      */
-    public BigDecimal getDeliveryTax();
+    BigDecimal getDeliveryTax();
 
     /**
      * Get delivery amount including tax.
      *
      * @return delivery amount including tax
      */
-    public BigDecimal getDeliveryCostAmount();
+    BigDecimal getDeliveryCostAmount();
 
     /**
      * Get total = sub total + delivery cost
      *
      * @return total.
      */
-    public BigDecimal getTotal();
+    BigDecimal getTotal();
 
     /**
      * Get total tax.
      *
      * @return total tax.
      */
-    public BigDecimal getTotalTax();
+    BigDecimal getTotalTax();
 
     /**
      * Get total amount as it would be if we used
@@ -179,14 +179,14 @@ public interface Total extends Serializable {
      *
      * @return  total amount.
      */
-    public BigDecimal getListTotalAmount();
+    BigDecimal getListTotalAmount();
 
     /**
      * Get total amount to be paid.
      *
      * @return  total amount.
      */
-    public BigDecimal getTotalAmount();
+    BigDecimal getTotalAmount();
 
     /**
      * Add current total to given one to create a new total instance

@@ -39,7 +39,7 @@ public class StringMapAdapter extends XmlAdapter<StringMapAdapter.AdaptedMap, Ma
 
     }
 
-    @XmlType(name = "entry")
+    @XmlType(name = "string-entry")
     public static class Entry {
 
         @XmlAttribute(name = "key")

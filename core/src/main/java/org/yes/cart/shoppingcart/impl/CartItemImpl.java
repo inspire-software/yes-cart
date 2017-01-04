@@ -17,7 +17,10 @@
 package org.yes.cart.shoppingcart.impl;
 
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.yes.cart.service.order.DeliveryBucket;
+import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.MoneyUtils;
 
@@ -37,9 +40,12 @@ public class CartItemImpl implements CartItem {
     private static final BigDecimal DEFAULT_QUANTITY = BigDecimal.ONE; // do not simplify this, because of min quantity pair, triple , etc.
 
     private String productSkuCode;
+    private String productName;
 
     @JsonProperty("qty")
     private BigDecimal quantity = DEFAULT_QUANTITY;
+    private String supplierCode;
+    private String deliveryGroup;
 
     private BigDecimal price = BigDecimal.ZERO;
     private BigDecimal salePrice = BigDecimal.ZERO;
@@ -70,8 +76,66 @@ public class CartItemImpl implements CartItem {
      *
      * @throws IllegalArgumentException if productSku is null.
      */
-    void setProductSkuCode(final String productSkuCode) throws IllegalArgumentException {
+    void setProductSkuCode(final String productSkuCode) {
         this.productSkuCode = productSkuCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getProductName() {
+        return productName;
+    }
+
+    /**
+     * Set SKU name for this item (locale depends on cart locale)
+     *
+     * @param productName product name for this cart item
+     */
+    public void setProductName(final String productName) {
+        this.productName = productName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    /**
+     * Set supplier code for this item.
+     *
+     * @param supplierCode supplier code
+     */
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDeliveryGroup() {
+        return deliveryGroup;
+    }
+
+    /**
+     * Set delivery group for this item.
+     *
+     * @param deliveryGroup delivery group
+     */
+    public void setDeliveryGroup(final String deliveryGroup) {
+        this.deliveryGroup = deliveryGroup;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @JsonIgnore
+    public DeliveryBucket getDeliveryBucket() {
+
+        return ShoppingCartUtils.getDeliveryBucket(this);
+
     }
 
     /**

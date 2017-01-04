@@ -20,10 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.SkuWarehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -65,9 +62,11 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
 
         Customer cust = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 0);
+        ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 3, true);
 
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
+
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
         order.setPgLabel("testPaymentGatewayLabel");
         customerOrderService.update(order);
@@ -89,11 +88,10 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
             assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        SkuWarehouse skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW1"); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.findById(1L));
-        skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouseService.create(skuWarehouse);
+        Warehouse warehouse = warehouseService.findById(1L);
+        //need 2 items to push order back to life cycle
+        skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW2", BigDecimal.ONE);
+        Thread.sleep(100L);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -102,8 +100,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
             assertEquals("One item not enough to continue order processing. Must still waiting for inventory 0", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        skuWarehouse.setQuantity(BigDecimal.ONE.add(BigDecimal.ONE));
-        skuWarehouseService.update(skuWarehouse);
+        // credit one more
+        skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW2", BigDecimal.ONE);
+        Thread.sleep(100L);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         order = customerOrderService.findByReference(order.getCartGuid());
@@ -112,11 +111,9 @@ public class TestSkuWarehouseServiceImpl extends BaseCoreDBTestCase {
             assertEquals("One item not enough to continue order processing. Must still waiting for inventory 1", CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
         }
 
-        skuWarehouse = skuWarehouseService.getGenericDao().getEntityFactory().getByIface(SkuWarehouse.class);
-        skuWarehouse.setSkuCode("PREORDER-BACK-TO-FLOW0"); //need 2 items to push order back to life cycle
-        skuWarehouse.setWarehouse(warehouseService.findById(1L));
-        skuWarehouse.setQuantity(BigDecimal.ONE);
-        skuWarehouseService.create(skuWarehouse);
+        //need 2 items to push order back to life cycle
+        skuWarehouseService.credit(warehouse, "BACKORDER-BACK-TO-FLOW1", BigDecimal.ONE);
+        Thread.sleep(100L);
         bulkAwaitingInventoryDeliveriesProcessor.run();
 
         order = customerOrderService.findByReference(order.getCartGuid());

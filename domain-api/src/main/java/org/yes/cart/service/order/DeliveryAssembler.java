@@ -19,6 +19,8 @@ package org.yes.cart.service.order;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.util.Map;
+
 /**
  * Order delivery assembler responsible for shipment creation.
  * Order delivery can be split by several reasons like security,
@@ -59,12 +61,12 @@ public interface DeliveryAssembler {
     CustomerOrder assembleCustomerOrder(CustomerOrder order, ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
 
     /**
-     * Is order can be with multiple deliveries.
+     * Is order can be with multiple deliveries by supplier.
      *
      * @param order given order
-     * @return true in case if order can has multiple physical deliveries.
+     * @return true in case if order can has multiple physical deliveries by supplier.
      */
-    boolean isOrderMultipleDeliveriesAllowed(CustomerOrder order);
+    Map<String, Boolean> isOrderMultipleDeliveriesAllowed(CustomerOrder order);
 
 
 }

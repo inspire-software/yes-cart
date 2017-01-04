@@ -23,7 +23,9 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -47,22 +49,42 @@ public class DefaultDeliveryCostCalculationStrategy implements DeliveryCostCalcu
 
         cart.removeShipping();
 
-        if (cart.getCarrierSlaId() != null) {
-            final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-            if (carrierSla != null) {
+        if (!cart.getCarrierSlaId().isEmpty()) {
 
-                final DeliveryCostCalculationStrategy strategy = subStrategies.get(carrierSla.getSlaType());
-                if (strategy == null) {
+            Total total = null;
 
-                    ShopCodeContext.getLog(this).error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
+            final Set<Long> uniqueCarrierSlaIds = new HashSet<Long>(cart.getCarrierSlaId().values());
+            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<DeliveryCostCalculationStrategy>();
 
-                } else {
+            for (final Long carrierSlaId : uniqueCarrierSlaIds) {
 
-                    return strategy.calculate(cart);
+                final CarrierSla carrierSla = carrierSlaService.getById(carrierSlaId);
+                if (carrierSla != null) {
 
+                    final DeliveryCostCalculationStrategy strategy = subStrategies.get(carrierSla.getSlaType());
+                    if (strategy == null) {
+
+                        ShopCodeContext.getLog(this).error("CarrierSla.slaType [{}] is not mapped to DeliveryCostCalculationStrategy", carrierSla.getSlaType());
+
+                    } else {
+
+                        strategyExecutionPlan.add(strategy);
+
+                    }
+
+                }
+            }
+
+            for (final DeliveryCostCalculationStrategy strategy : strategyExecutionPlan) {
+
+                final Total subTotal = strategy.calculate(cart);
+                if (subTotal != null) {
+                    total = total == null ? subTotal : total.add(subTotal);
                 }
 
             }
+
+            return total;
         }
         return null;
 

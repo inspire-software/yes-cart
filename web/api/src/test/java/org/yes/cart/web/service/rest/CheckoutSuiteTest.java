@@ -235,7 +235,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -246,12 +246,13 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().string(StringContains.containsString("\"supplier\":\"WAREHOUSE_2")))
                 .andExpect(content().string(StringContains.containsString("\"carrierId\":1")))
                 .andExpect(content().string(StringContains.containsString("\"carrierslaId\":4")))
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -266,7 +267,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":4")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{\"WAREHOUSE_2\":4}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -516,7 +517,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -532,7 +533,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -547,7 +548,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":null")))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -604,7 +605,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .header("yc", uuid)
                     .content(delOptionBody))
                 .andDo(print());
-            fail("Cannot update address for non-auth user");
+            fail("Cannot preview for non-auth user");
         } catch (Exception exp) {
             assertTrue(exp.getCause() instanceof BadCredentialsException);
         }
@@ -617,7 +618,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .locale(locale)
                     .header("yc", uuid))
                 .andDo(print());
-            fail("Cannot update address for non-auth user");
+            fail("Cannot place order for non-auth user");
         } catch (Exception exp) {
             assertTrue(exp.getCause() instanceof BadCredentialsException);
         }
@@ -631,7 +632,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                     .locale(locale)
                     .header("yc", uuid))
                 .andDo(print());
-            fail("Cannot update address for non-auth user");
+            fail("Cannot view orders for non-auth user");
         } catch (Exception exp) {
             assertTrue(exp.getCause() instanceof BadCredentialsException);
         }
@@ -643,7 +644,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .locale(locale)
                 .header("yc", uuid))
                     .andDo(print());
-            fail("Cannot update address for non-auth user");
+            fail("Cannot view orders for non-auth user");
         } catch (Exception exp) {
             assertTrue(exp.getCause() instanceof BadCredentialsException);
         }
@@ -823,7 +824,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":null")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -839,7 +840,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -854,7 +855,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("deliveryAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billingAddressId\":" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separateBillingAddress\":false")))
-                .andExpect(content().string(StringContains.containsString("carrierSlaId\":4")))
+                .andExpect(content().string(StringContains.containsString("carrierSlaId\":{\"WAREHOUSE_2\":4}")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1116,10 +1117,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
+                .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1134,7 +1136,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(content().string(StringContains.containsString("carrier-sla-id=\"4")))
+                .andExpect(content().string(StringContains.containsString("carrier-sla-ids><selection supplier-code=\"WAREHOUSE_2\">4<")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1347,7 +1349,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"/>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
@@ -1362,7 +1364,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"/>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1379,7 +1381,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"/>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1392,10 +1394,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
+                .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1407,7 +1410,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"/>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1451,7 +1454,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><order-message>My Message</order-message></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-message>My Message</order-message></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();
@@ -1691,10 +1694,11 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(StringContains.containsString("carrier-id=\"1")))
                 .andExpect(content().string(StringContains.containsString("carriersla-id=\"4")))
+                .andExpect(content().string(StringContains.containsString("supplier>WAREHOUSE_2")))
                 .andExpect(header().string("yc", uuid));
 
         final ShippingOptionRO shippingOptionRO = new ShippingOptionRO();
-        shippingOptionRO.setCarrierslaId("4");
+        shippingOptionRO.setCarriersla("4-WAREHOUSE_2");
 
         final byte[] setCarrierCart = toJsonBytes(shippingOptionRO);
 
@@ -1709,7 +1713,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .andExpect(content().string(StringContains.containsString("delivery-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("billing-address-id=\"" + billingAddressId)))
                 .andExpect(content().string(StringContains.containsString("separate-billing-address=\"false")))
-                .andExpect(content().string(StringContains.containsString("carrier-sla-id=\"4")))
+                .andExpect(content().string(StringContains.containsString("carrier-sla-ids><selection supplier-code=\"WAREHOUSE_2\">4<")))
                 .andExpect(header().string("yc", uuid));
 
 

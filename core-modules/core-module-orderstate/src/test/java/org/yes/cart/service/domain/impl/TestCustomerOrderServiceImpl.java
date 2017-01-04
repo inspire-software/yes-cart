@@ -80,7 +80,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         //one delivery 16.77 usd
         commands.execute(shoppingCart,
-                (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "3"));
+                (Map) singletonMap(ShoppingCartCommand.CMD_SETCARRIERSLA, "3-WAREHOUSE_1|3-WAREHOUSE_2"));
 
 
         commands.execute(shoppingCart,
@@ -97,7 +97,9 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
         //2 x 7.99  usd
 
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, false);
+
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
 
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
         order.setPgLabel("testPaymentGatewayLabel");
@@ -119,43 +121,12 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     }
 
 
-    /**
-     * @return cart with one digital available product.
-     */
-    protected ShoppingCart getShoppingCart2(final String customerEmail) {
-        return getShoppingCart2(getEmptyCart(customerEmail));
-    }
-
-    private ShoppingCart getShoppingCart2(final ShoppingCart shoppingCart) {
-
-        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
-
-        // this digital product available
-        Map<String, String> param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST9");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
-        commands.execute(shoppingCart,
-                (Map) param);
-
-        param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "200.00");
-        commands.execute(shoppingCart,
-                (Map) param);
-
-        return shoppingCart;
-    }
-
-
-
-
-
     @Test
     public void testFindDeliveryAwaitingForInventory() throws Exception {
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 1);
+        final ShoppingCart shoppingCart = getShoppingCartWithPreorderItems(getTestName(), 1, true);
 
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, order.getOrderStatus());
         order.setPgLabel("testPaymentGatewayLabel");
         customerOrderService.update(order);
@@ -171,7 +142,7 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
 
         final List<Long> expected = new ArrayList<Long>();
         for (CustomerOrderDelivery delivery : order.getDelivery()) {
-            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT, delivery.getDeliveryStatus());
+            assertEquals(CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT, delivery.getDeliveryStatus());
             expected.add(delivery.getCustomerOrderDeliveryId());
         }
         assertEquals(1, expected.size());
@@ -183,11 +154,11 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
 
                 List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15330L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
@@ -207,11 +178,11 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
 
                 List<Long> rezIds  = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 ResultsIterator<CustomerOrderDelivery> rez  = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15340L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
@@ -231,11 +202,11 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
 
                 List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(
-                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(
-                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                        Arrays.asList(productSkuService.findById(15129L).getCode()), CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 for (count[0] = 0; rez.hasNext(); rez.next()) {
@@ -254,10 +225,10 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
             @Override
             protected void doInTransactionWithoutResult(final TransactionStatus transactionStatus) {
 
-                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                List<Long> rezIds = customerOrderService.findAwaitingDeliveriesIds(null, CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
-                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                ResultsIterator<CustomerOrderDelivery> rez = customerOrderService.findAwaitingDeliveries(null, CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
                         Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS));
 
                 for (count[0] = 0; rez.hasNext(); rez.next()) {

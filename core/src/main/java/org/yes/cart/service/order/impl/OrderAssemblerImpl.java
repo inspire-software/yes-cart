@@ -322,6 +322,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setProductName(
                     new FailoverStringI18NModel(sku.getDisplayName(), sku.getName()).getValue(customerOrder.getLocale()));
 
+            customerOrderDet.setSupplierCode(item.getSupplierCode());
         }
 
     }

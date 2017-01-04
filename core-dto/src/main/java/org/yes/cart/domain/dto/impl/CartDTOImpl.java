@@ -20,14 +20,16 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoCollection;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.matcher.impl.NoopMatcher;
+import org.yes.cart.service.order.DeliveryBucket;
+import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 import org.yes.cart.shoppingcart.*;
-import org.yes.cart.shoppingcart.impl.ImmutableCartItemImpl;
+import org.yes.cart.shoppingcart.impl.ShoppingCartUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Shopping cart default implementation.
@@ -48,6 +50,8 @@ import java.util.List;
 public class CartDTOImpl implements ShoppingCart, Serializable {
 
     private static final long serialVersionUID =  20110509L;
+
+    private static final DeliveryBucket DEFAULT = new DeliveryBucketImpl("", "");
 
     @DtoCollection(
             value = "cartItemList",
@@ -278,27 +282,32 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     }
 
     public List<CartItem> getCartItemList() {
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(getItems().size());
-        // first items (in the order they were added)
-        for (CartItem item : getItems()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        // gifts in the order promotions were applied
-        for (CartItem item : getGifts()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        return Collections.unmodifiableList(immutableItems);
+
+        return ShoppingCartUtils.getCartItemImmutableList(getItems(), getGifts());
+
+    }
+
+    public Map<DeliveryBucket, List<CartItem>> getCartItemMap() {
+
+        return ShoppingCartUtils.getCartItemImmutableMap(getItems(), getGifts());
+
     }
 
     public List<CartItem> getShippingList() {
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(getShipping().size());
-        // all shipping lines
-        for (CartItem item : getShipping()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        return Collections.unmodifiableList(immutableItems);
+
+        return ShoppingCartUtils.getShippingImmutableList(getShipping());
+
     }
 
+
+    public Map<DeliveryBucket, List<CartItem>> getShippingListMap() {
+
+        return ShoppingCartUtils.getShippingImmutableMap(getShipping());
+
+    }
+
+
+    /** {@inheritDoc} */
     public BigDecimal getProductSkuQuantity(final String sku) {
         final int skuIndex = indexOfProductSku(sku);
         if (skuIndex == -1) { //not found
@@ -308,14 +317,15 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
     }
 
     public int getCartItemsCount() {
-        BigDecimal quantity = BigDecimal.ZERO;
-        for (CartItem cartItem : getItems()) {
-            quantity = quantity.add(cartItem.getQty());
-        }
-        for (CartItem cartItem : getGifts()) {
-            quantity = quantity.add(cartItem.getQty());
-        }
-        return quantity.intValue();
+
+        return ShoppingCartUtils.getCartItemsCount(getItems(), getGifts());
+
+    }
+
+    public List<String> getCartItemsSuppliers() {
+
+        return ShoppingCartUtils.getCartItemsSuppliers(getItems(), getGifts());
+
     }
 
     public String getCustomerName() {
@@ -338,8 +348,20 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         return getOrderInfo().isDeliveryAddressNotRequired();
     }
 
-    public Long getCarrierSlaId() {
+    public Map<String, Long> getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
+    }
+
+    public boolean isAllCarrierSlaSelected() {
+
+        return ShoppingCartUtils.isAllCarrierSlaSelected(getItems(), getGifts(), getCarrierSlaId());
+
+    }
+
+    public boolean isAllCartItemsBucketed() {
+
+        return ShoppingCartUtils.isAllCartItemsBucketed(getItems(), getGifts());
+
     }
 
     public String getOrderMessage() {
@@ -350,26 +372,16 @@ public class CartDTOImpl implements ShoppingCart, Serializable {
         return (indexOfProductSku(skuCode) != -1);
     }
 
-    public int indexOfShipping(final String carrierSlaId) {
-        return indexOf(carrierSlaId, getShipping());
+    public int indexOfShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
+        return ShoppingCartUtils.indexOf(carrierSlaGUID, deliveryBucket, getShipping());
     }
 
     public int indexOfProductSku(final String skuCode) {
-        return indexOf(skuCode, getItems());
+        return ShoppingCartUtils.indexOf(skuCode, getItems());
     }
 
     public int indexOfGift(final String skuCode) {
-        return indexOf(skuCode, getGifts());
-    }
-
-    public int indexOf(final String skuCode, final List<? extends CartItem> items) {
-        for (int index = 0; index < items.size(); index++) {
-            final CartItem item = items.get(index);
-            if (item.getProductSkuCode().equals(skuCode)) {
-                return index;
-            }
-        }
-        return -1;
+        return ShoppingCartUtils.indexOf(skuCode, getGifts());
     }
 
 }

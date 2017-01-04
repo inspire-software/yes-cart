@@ -72,6 +72,20 @@ public interface Warehouse extends Auditable, Codable {
     void setName(String name);
 
     /**
+     * Get name.
+     *
+     * @return localisable name of warehouse.
+     */
+    String getDisplayName();
+
+    /**
+     * Set name of warehouse.
+     *
+     * @param name localisable name.
+     */
+    void setDisplayName(String name);
+
+    /**
      * @return description.
      */
     String getDescription();

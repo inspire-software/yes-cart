@@ -21,6 +21,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.shoppingcart.OrderInfo;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Dto
 public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
@@ -32,13 +34,15 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     @DtoField(readOnly = true)
     private boolean multipleDelivery;
     @DtoField(readOnly = true)
+    private boolean multipleDeliveryAvailable;
+    @DtoField(readOnly = true)
     private boolean separateBillingAddress;
     @DtoField(readOnly = true)
     private boolean billingAddressNotRequired;
     @DtoField(readOnly = true)
     private boolean deliveryAddressNotRequired;
     @DtoField(readOnly = true)
-    private Long carrierSlaId;
+    private Map<String, Long> carrierSlaId;
     @DtoField(readOnly = true)
     private Long billingAddressId;
     @DtoField(readOnly = true)
@@ -55,12 +59,18 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     }
 
 
-    public Long getCarrierSlaId() {
+    public Map<String, Long> getCarrierSlaId() {
+        if (this.carrierSlaId == null) {
+            this.carrierSlaId = new HashMap<String, Long>();
+        }
         return carrierSlaId;
     }
 
-    public void setCarrierSlaId(final Long carrierSlaId) {
-        this.carrierSlaId = carrierSlaId;
+    public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
+        this.getCarrierSlaId().clear();
+        if (carrierSlaId != null) {
+            this.carrierSlaId.putAll(carrierSlaId);
+        }
     }
 
     public Long getBillingAddressId() {
@@ -120,4 +130,11 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.multipleDelivery = multipleDelivery;
     }
 
+    public boolean isMultipleDeliveryAvailable() {
+        return multipleDeliveryAvailable;
+    }
+
+    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
+        this.multipleDeliveryAvailable = multipleDeliveryAvailable;
+    }
 }

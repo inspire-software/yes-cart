@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Hold specific order information.
@@ -40,7 +41,7 @@ public interface OrderInfo extends Serializable {
      *
      * @return carries sla id.
      */
-    Long getCarrierSlaId();
+    Map<String, Long> getCarrierSlaId();
 
     /**
      * Is billing address different from shipping address.
@@ -88,8 +89,15 @@ public interface OrderInfo extends Serializable {
     /**
      * Does order need multiple delivery.
      *
-     * @return true if need multiple delivery.
+     * @return true if multiple delivery has been selected.
      */
     boolean isMultipleDelivery();
+
+    /**
+     * Can order be split into multiple deliveries (some items dispatched sooner, e.g. in stock VS backorder).
+     *
+     * @return true if multiple delivery is available.
+     */
+    boolean isMultipleDeliveryAvailable();
 
 }

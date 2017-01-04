@@ -63,6 +63,9 @@ public class VoCarrierSla {
     @DtoField(value = "supportedPaymentGateways", converter = "CSVToList")
     private List<String> supportedPaymentGateways;
 
+    @DtoField(value = "supportedFulfilmentCentres", converter = "CSVToList")
+    private List<String> supportedFulfilmentCentres;
+
     @DtoField(value = "billingAddressNotRequired")
     private boolean billingAddressNotRequired;
 
@@ -155,6 +158,14 @@ public class VoCarrierSla {
 
     public void setSupportedPaymentGateways(final List<String> supportedPaymentGateways) {
         this.supportedPaymentGateways = supportedPaymentGateways;
+    }
+
+    public List<String> getSupportedFulfilmentCentres() {
+        return supportedFulfilmentCentres;
+    }
+
+    public void setSupportedFulfilmentCentres(final List<String> supportedFulfilmentCentres) {
+        this.supportedFulfilmentCentres = supportedFulfilmentCentres;
     }
 
     public boolean isBillingAddressNotRequired() {

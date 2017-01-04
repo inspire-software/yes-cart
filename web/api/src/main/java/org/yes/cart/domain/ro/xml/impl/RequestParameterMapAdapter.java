@@ -35,7 +35,7 @@ public class RequestParameterMapAdapter extends XmlAdapter<RequestParameterMapAd
     @XmlType(name = "parameters")
     public static class AdaptedMap {
 
-        public List<Entry> entry = new ArrayList<Entry>();
+        public List<Entry> parameter = new ArrayList<Entry>();
 
     }
 
@@ -52,9 +52,9 @@ public class RequestParameterMapAdapter extends XmlAdapter<RequestParameterMapAd
 
     @Override
     public Map<String, List> unmarshal(AdaptedMap adaptedMap) throws Exception {
-        if (adaptedMap != null && adaptedMap.entry != null && !adaptedMap.entry.isEmpty()) {
+        if (adaptedMap != null && adaptedMap.parameter != null && !adaptedMap.parameter.isEmpty()) {
             Map<String, List> map = new HashMap<String, List>();
-            for (Entry entry : adaptedMap.entry) {
+            for (Entry entry : adaptedMap.parameter) {
                 if (!map.containsKey(entry.key)) {
                     map.put(entry.key, new ArrayList());
                 }
@@ -75,7 +75,7 @@ public class RequestParameterMapAdapter extends XmlAdapter<RequestParameterMapAd
                         Entry entry = new Entry();
                         entry.key = mapEntry.getKey();
                         entry.value = String.valueOf(mapEntryItem);
-                        adaptedMap.entry.add(entry);
+                        adaptedMap.parameter.add(entry);
                     }
                 }
             }

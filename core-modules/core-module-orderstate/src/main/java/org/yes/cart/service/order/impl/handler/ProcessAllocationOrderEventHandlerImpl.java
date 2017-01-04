@@ -28,10 +28,13 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -100,52 +103,62 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
      */
     void allocateQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
+        if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
-        final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
+            final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(
-                orderDelivery.getCustomerOrder().getShop().getShopId(), false);
-
-        for (CustomerOrderDeliveryDet det : deliveryDetails) {
-
-            String skuCode = det.getProductSkuCode();
-            BigDecimal toAllocate = det.getQty();
-
-            for (Warehouse warehouse : warehouses) {
-
-                BigDecimal toAllocateInitial = toAllocate;
-                // We debit the inventory first to see how much we can take
-                toAllocate = skuWarehouseService.debit(warehouse, skuCode, toAllocate);
-
-                if (MoneyUtils.isFirstBiggerThanSecond(toAllocateInitial, toAllocate)) {
-                    // Then if we have taken something that is how much we void in reserve
-                    skuWarehouseService.voidReservation(warehouse, skuCode, toAllocateInitial.subtract(toAllocate));
-                }
-
-                if (MoneyUtils.isFirstEqualToSecond(toAllocate, BigDecimal.ZERO, Constants.DEFAULT_SCALE)) {
-
-                    break; // quantity allocated
-                }
-                
+            // map warehouses by code
+            final List<Warehouse> warehouses = warehouseService.getByShopId(
+                    orderDelivery.getCustomerOrder().getShop().getShopId(), false);
+            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+            for (final Warehouse warehouse : warehouses) {
+                warehouseByCode.put(warehouse.getCode(), warehouse);
             }
-            if (MoneyUtils.isFirstBiggerThanSecond(toAllocate, BigDecimal.ZERO)) {
+
+            for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
 
-                if (product == null
-                        || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
 
-                    /**
-                     * Availability.AVAILABILITY_BACKORDER -  can get more stock
-                     * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
-                     * Availability.AVAILABILITY_ALWAYS - always
-                     */
-                    throw new OrderItemAllocationException(
-                        skuCode,
-                        toAllocate,
-                        "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                                + " for sku = " + skuCode
-                                + " in delivery " + orderDelivery.getDeliveryNum());
+                    final String skuCode = det.getProductSkuCode();
+                    final BigDecimal toAllocate = det.getQty();
+                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
+
+                    if (selected == null) {
+                        ShopCodeContext.getLog(this).warn(
+                                "Warehouse is not found for delivery detail {}:{}",
+                                orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                        );
+
+                        /**
+                         * For allocation we always must have stock items with inventory supported availability
+                         */
+                        throw new OrderItemAllocationException(
+                                skuCode,
+                                toAllocate,
+                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                        + " for sku = " + skuCode
+                                        + " in delivery " + orderDelivery.getDeliveryNum());
+                    }
+
+                    final BigDecimal rem = skuWarehouseService.debit(selected, skuCode, toAllocate);
+
+                    if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                        /**
+                         * For allocation we always must have stock items with inventory supported availability
+                         */
+                        throw new OrderItemAllocationException(
+                                skuCode,
+                                toAllocate,
+                                "ProcessAllocationOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                        + " for sku = " + skuCode
+                                        + " in delivery " + orderDelivery.getDeliveryNum());
+                    }
+
+                    // Then if we have taken something that is how much we void in reserve
+                    skuWarehouseService.voidReservation(selected, skuCode, toAllocate);
+
                 }
             }
         }

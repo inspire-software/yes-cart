@@ -14,6 +14,8 @@
  *    limitations under the License.
  */
 
+import { Pair } from './common.model';
+
 export interface FulfilmentCentreInfoVO {
 
   warehouseId : number;
@@ -24,6 +26,8 @@ export interface FulfilmentCentreInfoVO {
   stateCode : string;
   city : string;
   postcode : string;
+
+  displayNames : Pair<string, string>[];
 
 }
 

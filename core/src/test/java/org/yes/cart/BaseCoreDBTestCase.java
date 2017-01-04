@@ -93,7 +93,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
-        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1-WAREHOUSE_1|1-WAREHOUSE_2|1");
 
         commands.execute(shoppingCart, (Map) params);
 
@@ -103,11 +103,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
     /**
      * @return cart with one digital available product.
      */
-    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final int skuCodeSetIdx) {
+    protected ShoppingCart getShoppingCartWithPreorderItems(final String prefix, final int skuCodeSetIdx, final boolean multi) {
         final String [][] skuCodeSet = new String [][] {
                 {"PREORDER-BACK-TO-FLOW0", "PREORDER-BACK-TO-FLOW1"},
                 {"PREORDER-BACK-TO-FLOW2", "PREORDER-BACK-TO-FLOW3"},
                 {"PREORDER-BACK-TO-FLOW4", "PREORDER-BACK-TO-FLOW5"},
+                {"BACKORDER-BACK-TO-FLOW1", "BACKORDER-BACK-TO-FLOW2"},
         };
         final String firstCode = skuCodeSet[skuCodeSetIdx][0];
         final String secondCode = skuCodeSet[skuCodeSetIdx][1];
@@ -116,13 +117,16 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
 
         // this digital product available
         Map<String, String> param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, firstCode/*firstSet ? "PREORDER-BACK-TO-FLOW0" : "PREORDER-BACK-TO-FLOW2"*/);
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, firstCode);
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
         param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, secondCode /*firstSet ? "PREORDER-BACK-TO-FLOW1" : "PREORDER-BACK-TO-FLOW3"*/);
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU, secondCode);
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "2.00");
         commands.execute(shoppingCart, (Map) param);
+
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
+
         return shoppingCart;
     }
 
@@ -132,7 +136,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
      *
      * @return cart
      */
-    protected ShoppingCart getShoppingCart() {
+    protected ShoppingCart getShoppingCart(final boolean multi) {
         String prefix = getTestName();
         ShoppingCart shoppingCart = getEmptyCartByPrefix(prefix);
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
@@ -169,10 +173,12 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
+
         return shoppingCart;
     }
 
-    protected ShoppingCart getShoppingCart2(String customerEmail) {
+    protected ShoppingCart getShoppingCart2(final String customerEmail, final boolean multi) {
         MutableShoppingCart shoppingCart = new ShoppingCartImpl();
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
@@ -187,7 +193,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
-        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1-WAREHOUSE_1|1-WAREHOUSE_2|1");
 
         commands.execute(shoppingCart, (Map) params);
 
@@ -228,7 +234,32 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart, (Map) param);
 
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, multi);
+
         return shoppingCart;
+    }
+
+
+    protected void prepareDeliveriesAndRecalculate(ShoppingCart shoppingCart) {
+
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS);
+
+        commands.execute(shoppingCart, (Map) params);
+
+    }
+
+    protected void prepareMultiDeliveriesAndRecalculate(ShoppingCart shoppingCart, boolean multi) {
+
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, Boolean.valueOf(multi).toString());
+
+        commands.execute(shoppingCart, (Map) params);
+
     }
 
     protected Customer createCustomer() {

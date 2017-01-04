@@ -14,9 +14,9 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { I18nEventBus, ShopEventBus, ShippingService, PaymentService, Util } from './../shared/services/index';
+import { I18nEventBus, ShopEventBus, ShippingService, FulfilmentService, PaymentService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CarrierVO, CarrierSlaVO, ShopVO } from './../shared/model/index';
+import { CarrierVO, CarrierSlaVO, ShopVO, PaymentGatewayInfoVO, FulfilmentCentreVO } from './../shared/model/index';
 import { FormValidationEvent } from './../shared/event/index';
 import { LogUtil } from './../shared/log/index';
 
@@ -47,7 +47,8 @@ export class ShippingComponent implements OnInit, OnDestroy {
 
   private slas:Array<CarrierSlaVO> = [];
   private slaFilter:string;
-  private pgs:Array<CarrierSlaVO> = [];
+  private pgs:Array<PaymentGatewayInfoVO> = [];
+  private fcs:Array<FulfilmentCentreVO> = [];
   private shops:Array<ShopVO> = [];
 
   private selectedSla:CarrierSlaVO;
@@ -64,7 +65,8 @@ export class ShippingComponent implements OnInit, OnDestroy {
   private validForSave:boolean = false;
 
   constructor(private _shippingService:ShippingService,
-              private _paymentService:PaymentService) {
+              private _paymentService:PaymentService,
+              private _fulfilmentService:FulfilmentService) {
     LogUtil.debug('ShippingComponent constructed');
     this.shopAllSub = ShopEventBus.getShopEventBus().shopsUpdated$.subscribe(shopsevt => {
       this.shops = shopsevt;
@@ -82,7 +84,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
       displayNames: [], displayDescriptions: [],
       maxDays: 1, slaType: 'F', script: '',
       billingAddressNotRequired: false, deliveryAddressNotRequired: false,
-      supportedPaymentGateways: []
+      supportedPaymentGateways: [], supportedFulfilmentCentres: []
     };
   }
 
@@ -353,6 +355,19 @@ export class ShippingComponent implements OnInit, OnDestroy {
       this.validForSave = false;
       this.loading = false;
       _sub.unsubscribe();
+
+      let lang = I18nEventBus.getI18nEventBus().current();
+      var _sub2:any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
+        LogUtil.debug('ShippingComponent getPaymentGateways', allpgs);
+        this.pgs = allpgs;
+        _sub2.unsubscribe();
+      });
+      var _sub3:any = this._fulfilmentService.getAllFulfilmentCentres().subscribe(allfcs => {
+        LogUtil.debug('ShippingComponent getAllFulfilmentCentres', allfcs);
+        this.fcs = allfcs;
+        _sub3.unsubscribe();
+      });
+
     });
   }
 
@@ -370,14 +385,6 @@ export class ShippingComponent implements OnInit, OnDestroy {
         this.validForSave = false;
         this.loading = false;
         _sub.unsubscribe();
-
-        let lang = I18nEventBus.getI18nEventBus().current();
-        var _sub2:any = this._paymentService.getPaymentGateways(lang).subscribe(allpgs => {
-          LogUtil.debug('ShippingComponent getPaymentGateways', allpgs);
-          this.pgs = allpgs;
-          _sub2.unsubscribe();
-        });
-
       });
     }
   }

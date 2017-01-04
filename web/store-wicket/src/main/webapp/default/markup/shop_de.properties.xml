@@ -90,8 +90,8 @@
     <entry key="shipmentStep">Versandart</entry>
     <entry key="paymentStep">Zahlung</entry>
     <entry key="paymentGatewayLabel">Zahlungsart</entry>
-    <entry key="multipleDeliveryLabel">Teillieferungen erwünscht</entry>
-    <entry key="multipleDeliveryHint">Diese Bestellung weist mehrere Teillieferungen auf</entry>
+    <entry key="multipleDeliveryLabel">Senden Sie Artikel, die verfügbar sind, so bald wie möglich</entry>
+    <entry key="multipleDeliveryHint">Einige Artikel, die nicht sofort verfügbar sind, werden in einer separaten Lieferung geliefert</entry>
     <entry key="paymentSubmit">Bezahlen</entry>
     <entry key="orderPlace">Zahlungspflichtig kaufen</entry>
     <entry key="checkoutTitle">Checkout</entry>
@@ -175,6 +175,14 @@
     <entry key="grandTotalAmount">Totalbetrag (inkl. MwSt.)</entry>
     <entry key="billingAddress">Adresse</entry>
     <entry key="orderVerification">Bestellung überprüfen und Zahlungsart wählen</entry>
+
+    <!-- ShippingDeliveriesView -->
+    <entry key="deliveryCarrierSelect">Versandart</entry>
+    <entry key="deliveryBucketCarrierSelect">Wählen Sie Versandart für Artikel von ${supplier}</entry>
+    <entry key="deliveryBucketCarrierSelectNone">Keine Verschiffenmethoden vorhanden für Artikel von ${supplier}. Sie müssen diese Artikel aus dem Warenkorb entfernen, um die Bestellung abzuschließen.</entry>
+    <entry key="deliveryBucketCarrier">Artikel von ${supplier}</entry>
+    <entry key="carrierSelectMultiSupplier">Die Artikel in Ihrem Warenkorb werden von mehr als einem Lieferanten geliefert</entry>
+    <entry key="carrierSelectMultiDelivery">Einige Artikel in Ihrem Warenkorb benötigen möglicherweise einige Zeit, um wieder auf Lager zu sein. Wenn Sie Einzelteile wünschen, die auf Lager sind, um so bald wie möglich versendet zu werden, dann wählen Sie Kästchen unten. Beachten Sie, dass sich die Lieferkosten erhöhen können.</entry>
 
     <!-- ShoppingCartView -->
     <entry key="product">Produkt</entry>

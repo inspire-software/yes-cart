@@ -52,8 +52,8 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     public void testCreateAndDelete() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        ShoppingCart shoppingCart = getShoppingCart(true);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
         customerOrderService.delete(order);
@@ -64,8 +64,8 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     public void testFindByGuid() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        ShoppingCart shoppingCart = getShoppingCart(true);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         long pk = order.getCustomerorderId();
         assertTrue(pk > 0);
         CustomerOrder order2 = customerOrderService.findByReference(shoppingCart.getGuid());
@@ -80,8 +80,8 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     public void testGetCustomerOrders() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        ShoppingCart shoppingCart = getShoppingCart(true);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         assertTrue(order.getCustomerorderId() > 0);
         assertEquals(1, customerOrderService.findCustomerOrders(customer, null).size());
     }
@@ -90,35 +90,38 @@ public class TestCustomerOrderServiceImpl extends BaseCoreDBTestCase {
     public void testPersistReassembledOrder1() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
-        assertEquals(4, order.getDelivery().size());
+        ShoppingCart shoppingCart = getShoppingCart(true);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
+        assertEquals(5, order.getDelivery().size());
     }
 
     @Test
     public void testPersistReassembledOrder2() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
-        assertEquals(2, order.getDelivery().size());
+        ShoppingCart shoppingCart = getShoppingCart(false);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
+        assertEquals(3, order.getDelivery().size());
     }
 
     @Test
     public void testPersistReassembledOrder3() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
-        assertFalse(customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart));
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, true);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
+        final Map<String, Boolean> allowed = customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart);
+        assertFalse(allowed.values().iterator().next());
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         assertEquals(2, order.getDelivery().size());
     }
 
     /**
      * @return cart with one digital available product.
      */
-    protected ShoppingCart getShoppingCart2(final String customerEmail) {
-        return getShoppingCart2(getEmptyCart(customerEmail));
+    protected ShoppingCart getShoppingCart2(final String customerEmail, final boolean multi) {
+        final ShoppingCart cart = getShoppingCart2(getEmptyCart(customerEmail));
+        prepareMultiDeliveriesAndRecalculate(cart, multi);
+        return cart;
     }
 
     private ShoppingCart getShoppingCart2(final ShoppingCart shoppingCart) {

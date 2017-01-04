@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.support.tokendriven.impl;
 
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.shoppingcart.impl.TotalImpl;
@@ -70,7 +71,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
                         new BigDecimal("87.99"),
                         new BigDecimal("86.99"),
                         new BigDecimal("85.99")
-                        );
+                );
             }
 
             @Override
@@ -86,13 +87,13 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             }
         });
 
-        cart.addProductSkuToCart("ABC", BigDecimal.TEN);
+        cart.addProductSkuToCart("ABC", "ABC", BigDecimal.TEN);
         cart.setProductSkuPrice("ABC", new BigDecimal("49.99"), new BigDecimal("99.99"));
         cart.setProductSkuPromotion("ABC", new BigDecimal("39.99"), "PROMO1");
-        cart.addGiftToCart("GIFT", BigDecimal.ONE, "GIFT");
+        cart.addGiftToCart("GIFT", "GIFT", BigDecimal.ONE, "GIFT");
         cart.setGiftPrice("GIFT", new BigDecimal("9.99"), new BigDecimal("9.99"));
-        cart.addShippingToCart("10", BigDecimal.ONE);
-        cart.setShippingPrice("10", new BigDecimal("4.99"), new BigDecimal("4.99"));
+        cart.addShippingToCart(new DeliveryBucketImpl("D1", "ABC"), "10", "Ship10", BigDecimal.ONE);
+        cart.setShippingPrice("10", new DeliveryBucketImpl("D1", "ABC"), new BigDecimal("4.99"), new BigDecimal("4.99"));
         cart.addCoupon("COUPON-001");
 
         cart.setCurrencyCode("EUR");
@@ -110,7 +111,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
         cart.getOrderInfo().setBillingAddressNotRequired(true);
         cart.getOrderInfo().setDeliveryAddressId(11L);
         cart.getOrderInfo().setDeliveryAddressNotRequired(true);
-        cart.getOrderInfo().setCarrierSlaId(12L);
+        cart.getOrderInfo().putCarrierSlaId("ABC", 12L);
         cart.getOrderInfo().setMultipleDelivery(true);
         cart.getOrderInfo().setOrderMessage("my message");
         cart.getOrderInfo().setPaymentGatewayLabel("pg1Label");
@@ -190,7 +191,8 @@ public abstract class AbstractShoppingCartStateSerializerTest {
         assertTrue(cart.getOrderInfo().isBillingAddressNotRequired());
         assertEquals(Long.valueOf(11L), cart.getOrderInfo().getDeliveryAddressId());
         assertTrue(cart.getOrderInfo().isDeliveryAddressNotRequired());
-        assertEquals(Long.valueOf(12L), cart.getOrderInfo().getCarrierSlaId());
+        assertNotNull(cart.getOrderInfo().getCarrierSlaId());
+        assertEquals(Long.valueOf(12L), cart.getOrderInfo().getCarrierSlaId().get("ABC"));
         assertTrue(cart.getOrderInfo().isMultipleDelivery());
         assertEquals("my message", cart.getOrderInfo().getOrderMessage());
         assertEquals("pg1Label", cart.getOrderInfo().getPaymentGatewayLabel());
@@ -280,7 +282,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             sale = sale.add(itemQty.multiply(itemSale));
             promo = promo.add(itemQty.multiply(itemPromo));
 
-            cart.addProductSkuToCart("ABC-" + i, itemQty);
+            cart.addProductSkuToCart("ABC-" + i, "ABC", itemQty);
             cart.setProductSkuPrice("ABC-" + i, itemSale, itemList);
             if (isPromo) {
                 cart.setProductSkuPromotion("ABC-" + i, itemPromo, "IPROMO-" + i);
@@ -295,7 +297,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
             list = list.add(itemQty.multiply(itemList));
             sale = sale.add(itemQty.multiply(itemSale));
 
-            cart.addGiftToCart("ABC-" + i, itemQty, "CPROMO-" + i);
+            cart.addGiftToCart("ABC-" + i, "GIFT", itemQty, "CPROMO-" + i);
             cart.setGiftPrice("ABC-" + i, itemSale, itemList);
         }
         for (int i = 0; i < couponCount; i++) {
@@ -355,7 +357,7 @@ public abstract class AbstractShoppingCartStateSerializerTest {
         cart.getOrderInfo().setSeparateBillingAddress(true);
         cart.getOrderInfo().setBillingAddressId(10L + counter);
         cart.getOrderInfo().setDeliveryAddressId(12L + counter);
-        cart.getOrderInfo().setCarrierSlaId(20L);
+        cart.getOrderInfo().putCarrierSlaId(null, 20L);
         cart.getOrderInfo().setMultipleDelivery(true);
         cart.getOrderInfo().setOrderMessage("Some message" + counter + " on my order");
         cart.getOrderInfo().setPaymentGatewayLabel("courierPaymentGatewayLabel");

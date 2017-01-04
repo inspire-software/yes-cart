@@ -114,6 +114,7 @@
             <bean class="org.yes.cart.service.order.impl.handler.CancelOrderEventHandlerImpl">
                 <constructor-arg index="0" ref="warehouseService"/>
                 <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
             </bean>
         </property>
     </bean>
@@ -175,6 +176,7 @@
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
                 <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
     </bean>
@@ -186,6 +188,7 @@
                 <constructor-arg index="0" ref="paymentProcessorFactory"/>
                 <constructor-arg index="1" ref="warehouseService"/>
                 <constructor-arg index="2" ref="skuWarehouseService"/>
+                <constructor-arg index="3" ref="productService"/>
             </bean>
         </property>
     </bean>

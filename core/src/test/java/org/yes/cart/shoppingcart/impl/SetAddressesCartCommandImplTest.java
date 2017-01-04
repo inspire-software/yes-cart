@@ -73,7 +73,8 @@ public class SetAddressesCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -111,7 +112,8 @@ public class SetAddressesCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 

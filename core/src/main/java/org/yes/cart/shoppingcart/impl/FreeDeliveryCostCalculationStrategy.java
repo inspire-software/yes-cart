@@ -19,10 +19,15 @@ package org.yes.cart.shoppingcart.impl;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -33,8 +38,7 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
 
     private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
-    private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal QTY = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
 
     private final CarrierSlaService carrierSlaService;
     private final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver;
@@ -51,58 +55,85 @@ public class FreeDeliveryCostCalculationStrategy implements DeliveryCostCalculat
     /** {@inheritDoc} */
     public Total calculate(final MutableShoppingCart cart) {
 
-        cart.removeShipping();
+        if (!cart.getCarrierSlaId().isEmpty()) {
 
-        if (cart.getCarrierSlaId() != null) {
-            final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-            if (carrierSla != null && CarrierSla.FREE.equals(carrierSla.getSlaType())) {
+            Total total = null;
 
-                final String carrierSlaId = carrierSla.getGuid();
+            final Set<DeliveryBucket> cartBuckets = new HashSet<DeliveryBucket>(cart.getCartItemMap().keySet());
+            final Set<DeliveryBucket> supplierBuckets = new HashSet<DeliveryBucket>();
 
-                final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                        cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
-                        cart.getShoppingContext().getCountryCode(),
-                        cart.getShoppingContext().getStateCode()
-                );
+            for (final Map.Entry<String, Long> supplierCarrierSla : cart.getCarrierSlaId().entrySet()) {
 
-                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
-
-                final SkuPrice price = getSkuPrice(cart, carrierSlaId, policy, qty);
-
-                if (price != null && price.getSkuPriceId() > 0L) {
-
-                    // Price acts only as a marker for regional availability
-
-                    final BigDecimal listPrice = ZERO;
-                    cart.addShippingToCart(carrierSlaId, qty);
-                    cart.setShippingPrice(carrierSlaId, listPrice, listPrice);
-                    final BigDecimal deliveryListCost = ZERO;
-
-                    return new TotalImpl(
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            false,
-                            null,
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            deliveryListCost,
-                            deliveryListCost,
-                            false,
-                            null,
-                            Total.ZERO,
-                            deliveryListCost,
-                            deliveryListCost,
-                            Total.ZERO,
-                            deliveryListCost,
-                            deliveryListCost
-                    );
+                supplierBuckets.clear();
+                for (final DeliveryBucket bucket : cartBuckets) {
+                    if (bucket.getSupplier().equals(supplierCarrierSla.getKey())) {
+                        supplierBuckets.add(bucket);
+                    }
 
                 }
 
+                if (supplierBuckets.isEmpty()) {
+                    continue; // no buckets for this selection
+                }
+
+                final CarrierSla carrierSla = carrierSlaService.getById(supplierCarrierSla.getValue());
+                if (carrierSla != null && CarrierSla.FREE.equals(carrierSla.getSlaType())) {
+
+                    final String carrierSlaGUID = carrierSla.getGuid();
+                    final String carrierSlaName = new FailoverStringI18NModel(
+                            carrierSla.getDisplayName(),
+                            carrierSla.getName()).getValue(cart.getCurrentLocale());
+
+                    final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
+                            cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
+                            cart.getShoppingContext().getCountryCode(),
+                            cart.getShoppingContext().getStateCode()
+                    );
+
+                    final BigDecimal qty = QTY;
+
+                    final SkuPrice price = getSkuPrice(cart, carrierSlaGUID, policy, qty);
+
+                    if (price != null && price.getSkuPriceId() > 0L) {
+
+                        // Price acts only as a marker for regional availability
+                        final BigDecimal listPrice = ZERO;
+                        final BigDecimal deliveryListCost = ZERO;
+
+                        for (final DeliveryBucket bucket : supplierBuckets) {
+                            // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
+                            cart.addShippingToCart(bucket, carrierSlaGUID, carrierSlaName, qty);
+                            cart.setShippingPrice(carrierSlaGUID, bucket, listPrice, listPrice);
+                        }
+
+                        total = new TotalImpl(
+                                Total.ZERO,
+                                Total.ZERO,
+                                Total.ZERO,
+                                Total.ZERO,
+                                false,
+                                null,
+                                Total.ZERO,
+                                Total.ZERO,
+                                Total.ZERO,
+                                deliveryListCost,
+                                deliveryListCost,
+                                false,
+                                null,
+                                Total.ZERO,
+                                deliveryListCost,
+                                deliveryListCost,
+                                Total.ZERO,
+                                deliveryListCost,
+                                deliveryListCost
+                        );
+
+                    }
+
+                }
             }
+
+            return total;
         }
         return null;
     }

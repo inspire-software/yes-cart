@@ -132,9 +132,9 @@ public class SearchController {
      *     &lt;page-number&gt;0&lt;/page-number&gt;
      *     &lt;page-size&gt;10&lt;/page-size&gt;
      *     &lt;parameters&gt;
-     *         &lt;entry key="query"&gt;Mini mouse&lt;/entry&gt;
-     *         &lt;entry key="query"&gt;red&lt;/entry&gt;
-     *         &lt;entry key="price"&gt;EUR-_-500-_-1000&lt;/entry&gt;
+     *         &lt;parameter key="query"&gt;Mini mouse&lt;/entry&gt;
+     *         &lt;parameter key="query"&gt;red&lt;/entry&gt;
+     *         &lt;parameter key="price"&gt;EUR-_-500-_-1000&lt;/entry&gt;
      *     &lt;/parameters&gt;
      *     &lt;sort-descending&gt;false&lt;/sort-descending&gt;
      * &lt;/search&gt;
@@ -450,7 +450,7 @@ public class SearchController {
      *         &lt;page-number&gt;0&lt;/page-number&gt;
      *         &lt;page-size&gt;10&lt;/page-size&gt;
      *         &lt;parameters&gt;
-     *             &lt;entry key="query"&gt;Mini mouse red&lt;/entry&gt;
+     *             &lt;parameter key="query"&gt;Mini mouse red&lt;/entry&gt;
      *         &lt;/parameters&gt;
      *         &lt;sort-descending&gt;false&lt;/sort-descending&gt;
      *     &lt;/search&gt;

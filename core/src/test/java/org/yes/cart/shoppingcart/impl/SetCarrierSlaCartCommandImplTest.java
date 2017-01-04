@@ -46,7 +46,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -57,7 +58,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -82,7 +83,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -90,12 +92,12 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR");
             put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
             put(ShoppingCartCommand.CMD_SETSHOP, "10");
-            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123");
+            put(ShoppingCartCommand.CMD_SETCARRIERSLA, "123-Main");
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("Main").intValue());
         assertEquals(345, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -122,7 +124,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -136,7 +139,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -164,7 +167,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         }});
 
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -179,7 +183,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -206,7 +210,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -222,7 +227,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -249,7 +254,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -264,7 +270,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -292,7 +298,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             allowing(delivery).getStateCode(); will(returnValue("GB-CAM"));
         }});
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -308,7 +315,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -339,7 +346,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -354,7 +362,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -384,7 +392,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -400,7 +409,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertEquals(345, shoppingCart.getOrderInfo().getDeliveryAddressId().intValue());
         assertTrue(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -430,7 +439,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -445,7 +455,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());
@@ -476,7 +486,8 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getOrderInfo().setBillingAddressId(234L);
         shoppingCart.getOrderInfo().setDeliveryAddressId(345L);
 
-        assertNull(shoppingCart.getCarrierSlaId());
+        assertNotNull(shoppingCart.getCarrierSlaId());
+        assertTrue(shoppingCart.getCarrierSlaId().isEmpty());
         assertNotNull(shoppingCart.getOrderInfo().getBillingAddressId());
         assertNotNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
 
@@ -492,7 +503,7 @@ public class SetCarrierSlaCartCommandImplTest extends BaseCoreDBTestCase {
             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
         }});
 
-        assertEquals(123, shoppingCart.getCarrierSlaId().intValue());
+        assertEquals(123, shoppingCart.getCarrierSlaId().get("").intValue());
         assertEquals(234, shoppingCart.getOrderInfo().getBillingAddressId().intValue());
         assertNull(shoppingCart.getOrderInfo().getDeliveryAddressId());
         assertFalse(shoppingCart.getOrderInfo().isBillingAddressNotRequired());

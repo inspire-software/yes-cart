@@ -175,6 +175,7 @@
                 <value>removeAllSkuCmd</value>
                 <value>removeOneSkuCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
+                <value>splitCartItemsCmd</value>
                 <value>setCarrierSlaCmd</value>
                 <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
@@ -202,6 +203,7 @@
                 <value>expireCartCmd</value>
                 <value>loginCmd</value>
                 <value>setBillingAddressSeparateCmd</value>
+                <value>splitCartItemsCmd</value>
                 <value>setCarrierSlaCmd</value>
                 <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>

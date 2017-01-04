@@ -195,6 +195,22 @@ public interface CarrierSlaDTO extends Identifiable, Codable {
      */
     void setSupportedPaymentGateways(String supportedPaymentGateways);
 
+
+    /**
+     * Get supported warehouse codes CSV
+     *
+     * @return CSV warehouse codes
+     */
+    String getSupportedFulfilmentCentres();
+
+    /**
+     * Set supported warehouse codes CSV
+     *
+     * @param supportedFulfilmentCentres CSV warehouse codes
+     */
+    void setSupportedFulfilmentCentres(String supportedFulfilmentCentres);
+
+
     /**
      * Get carrier.
      *

@@ -37,12 +37,12 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.*;
 import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.*;
+import org.yes.cart.shoppingcart.support.CommandConfig;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.rest.impl.AddressSupportMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
-import org.yes.cart.shoppingcart.support.CommandConfig;
 import org.yes.cart.web.support.service.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -179,7 +179,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -232,11 +232,12 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -494,7 +495,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -547,11 +548,12 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -639,8 +641,8 @@ public class CartController {
      * <pre><code>
      *    &lt;parameters&gt;
      *    &lt;entries&gt;
-     *        &lt;entry key="addToCartCmd"&gt;BENDER-ua&lt;/entry&gt;
-     *        &lt;entry key="qty"&gt;1&lt;/entry&gt;
+     *        &lt;parameter key="addToCartCmd"&gt;BENDER-ua&lt;/entry&gt;
+     *        &lt;parameter key="qty"&gt;1&lt;/entry&gt;
      *    &lt;/entries&gt;
      *    &lt;/parameters&gt;
      * </code></pre>
@@ -711,7 +713,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -764,11 +766,12 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -834,15 +837,36 @@ public class CartController {
 
     }
 
-
-    private List<CarrierRO> cartCarrierOptionsInternal() {
+    private void performOrderSplittingBeforeShipping() {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart);
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SPLITCARTITEMS,
+                cart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
 
-        final List<CarrierRO> ros = mappingMixin.map(carriers, CarrierRO.class, Carrier.class);
+    }
 
+
+    private List<CartCarrierRO> cartCarrierOptionsInternal() {
+
+        final ShoppingCart cart = cartMixin.getCurrentCart();
+
+        final List<String> suppliers = cart.getCartItemsSuppliers();
+        final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
+
+        final List<CartCarrierRO> ros = new ArrayList<CartCarrierRO>();
+        for (final String supplier : suppliers) {
+
+            final CartCarrierRO cartCarrier = new CartCarrierRO();
+            cartCarrier.setSupplier(supplier);
+            cartCarrier.setSupplierName(supplierNames.get(supplier));
+
+            final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
+
+            cartCarrier.setCarriers(mappingMixin.map(carriers, CarrierRO.class, Carrier.class));
+            ros.add(cartCarrier);
+        }
         return ros;
 
     }
@@ -870,36 +894,35 @@ public class CartController {
      *     <tr><td>JSON array object CarrierRO</td><td>
      * <pre><code>
      * [{
-     *     "carrierId": 1,
-     *     "name": "Test carrier 1",
-     *     "description": null,
-     *     "worldwide": true,
-     *     "country": true,
-     *     "state": true,
-     *     "local": true,
-     *     "displayNames": null,
-     *     "displayDescriptions": null,
-     *     "carrierSla": [{
-     *         "carrierslaId": 4,
-     *         "name": "14",
-     *         "description": null,
-     *         "currency": "EUR",
-     *         "maxDays": null,
-     *         "slaType": "F",
-     *         "price": 10.00,
-     *         "percent": 0.00,
-     *         "script": null,
-     *         "priceNotLess": null,
-     *         "percentNotLess": null,
-     *         "costNotLess": null,
-     *         "carrierId": 1,
-     *         "displayNames": null,
-     *         "displayDescriptions": null,
-     *         "supportedPaymentGateways": "testPaymentGatewayLabel,courierPaymentGatewayLabel",
-     *         "billingAddressNotRequired": false,
-     *         "deliveryAddressNotRequired": false
-     *     }]
-     * }]
+     *    "supplier": "WAREHOUSE_2",
+     *    "supplierName": "Second warehouse",
+     *    "carriers": [{
+     *        "carrierId": 1,
+     *        "name": "Test carrier 1",
+     *        "description": null,
+     *        "worldwide": true,
+     *        "country": true,
+     *        "state": true,
+     *        "local": true,
+     *        "displayNames": null,
+     *        "displayDescriptions": null,
+     *        "carrierSla": [{
+     *            "carrierslaId": 4,
+     *                  "code": "4_CARRIERSLA",
+     *                  "name": "14",
+     *                  "description": null,
+     *                  "maxDays": null,
+     *                  "slaType": "F",
+     *                  "carrierId": 1,
+     *                  "displayNames": null,
+     *                  "displayDescriptions": null,
+     *                  "supportedPaymentGateways": "testPaymentGatewayLabel,courierPaymentGatewayLabel",
+     *                  "supportedFulfilmentCentres": "WAREHOUSE_1,WAREHOUSE_2,WAREHOUSE_3",
+     *                  "billingAddressNotRequired": false,
+     *                  "deliveryAddressNotRequired": false
+     *            }]
+     *        }]
+     *    }]
      * </code></pre>
      *     </td></tr>
      * </table>
@@ -914,9 +937,10 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE }
     )
-    public @ResponseBody List<CarrierRO> cartCarrierOptions(final HttpServletRequest request,
+    public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final HttpServletRequest request,
                                                             final HttpServletResponse response) {
 
+        performOrderSplittingBeforeShipping();
         cartMixin.persistShoppingCart(request, response);
         return cartCarrierOptionsInternal();
 
@@ -971,11 +995,12 @@ public class CartController {
             method = RequestMethod.GET,
             produces = { MediaType.APPLICATION_XML_VALUE }
     )
-    public @ResponseBody CarrierListRO cartCarrierOptionsXML(final HttpServletRequest request,
-                                                             final HttpServletResponse response) {
+    public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final HttpServletRequest request,
+                                                                 final HttpServletResponse response) {
 
+        performOrderSplittingBeforeShipping();
         cartMixin.persistShoppingCart(request, response);
-        return new CarrierListRO(cartCarrierOptionsInternal());
+        return new CartCarrierListRO(cartCarrierOptionsInternal());
 
     }
 
@@ -999,7 +1024,7 @@ public class CartController {
      *     <tr><td>JSON example (see {@link ShippingOptionRO})</td><td>
      * <pre><code>
      * {
-     *     "carrierslaId": "4",
+     *     "carrierslaId": "4-WAREHOUSE_2|1-WAREHOUSE_1",
      *     "billingAddressId": null,
      *     "deliveryAddressId": null
      * }
@@ -1080,7 +1105,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -1133,11 +1158,12 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -1199,71 +1225,119 @@ public class CartController {
                                                       final HttpServletResponse response) {
 
 
-        final long carrierId = NumberUtils.toLong(shippingOption.getCarrierslaId());
+        final String carriersla = shippingOption.getCarriersla();
 
-        if (carrierId > 0L) {
+        if (StringUtils.isNotBlank(carriersla)) {
 
-            final ShoppingCart cart = cartMixin.getCurrentCart();
+            final String[] slaIds = StringUtils.split(carriersla, '|');
 
-            final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart);
-            CarrierSla carrierSla = null;
-            if (CollectionUtils.isNotEmpty(carriers)) {
-                for (final Carrier carrier : carriers) {
-                    for (final CarrierSla sla : carrier.getCarrierSla()) {
-                        if (sla.getCarrierslaId() == carrierId) {
-                            carrierSla = sla;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (carrierSla != null) {
+            if (slaIds != null && slaIds.length > 0) {
 
-                final boolean billingNotRequired = carrierSla.isBillingAddressNotRequired();
-                final boolean deliveryNotRequired = carrierSla.isDeliveryAddressNotRequired();
+                final ShoppingCart cart = cartMixin.getCurrentCart();
 
-                final long billingAddressId = NumberUtils.toLong(shippingOption.getBillingAddressId(),
-                        cart.getOrderInfo().getBillingAddressId() != null ? cart.getOrderInfo().getBillingAddressId() : 0L);
-                final long deliveryAddressId = NumberUtils.toLong(shippingOption.getDeliveryAddressId(),
-                        cart.getOrderInfo().getDeliveryAddressId() != null ? cart.getOrderInfo().getDeliveryAddressId() : 0L);
+                final Map<String, Long> selection = new HashMap<String, Long>();
+                for (final String slaIdRaw : slaIds) {
 
-                Address billing = null;
-                Address delivery = null;
+                    final int sepPos = slaIdRaw.indexOf('-');
+                    final String[] slaId = sepPos == -1 ? new String[] { slaIdRaw } : new String[] { slaIdRaw.substring(0, sepPos), slaIdRaw.substring(sepPos + 1) };
 
-                if (billingAddressId > 0L || deliveryAddressId > 0L) {
+                    final long slaPkvalue = NumberUtils.toLong(slaId[0]);
+                    final String supplier = slaId.length > 1 ? slaId[1] : "";
 
-                    final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
-
-                    if (customer != null) {
-                        for (final Address address : customer.getAddress()) {
-                            if (address.getAddressId() == billingAddressId) {
-                                billing = address;
-                            }
-                            if (address.getAddressId() == deliveryAddressId) {
-                                delivery = address;
+                    CarrierSla carrierSla = null;
+                    if (slaPkvalue > 0) {
+                        final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, supplier);
+                        if (CollectionUtils.isNotEmpty(carriers)) {
+                            for (final Carrier carrier : carriers) {
+                                for (final CarrierSla sla : carrier.getCarrierSla()) {
+                                    if (sla.getCarrierslaId() == slaPkvalue) {
+                                        carrierSla = sla;
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
-                }
 
-                if ((billing != null || billingNotRequired) && (delivery != null || deliveryNotRequired)) {
+                    if (slaPkvalue <= 0 || carrierSla != null) {
+                        final Long current = cart.getCarrierSlaId().get(supplier);
 
-                    final Map<String, Object> params = new HashMap<String, Object>();
-                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
-                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, carrierSla.isBillingAddressNotRequired());
-                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
-                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, carrierSla.isDeliveryAddressNotRequired());
-                    params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
-
-                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart, params);
-
-                    shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
-                            cart,
-                            (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
-
+                        if ((slaPkvalue <= 0L && current != null && current > 0L) ||
+                                (slaPkvalue > 0L && (current == null || !current.equals(slaPkvalue)))) {
+                            selection.put(supplier, slaPkvalue);
+                        }
+                    }
 
                 }
 
+                if (!selection.isEmpty()) {
+
+                    final Map<String, Long> slaSelection = new HashMap<String, Long>();
+                    slaSelection.putAll(cart.getCarrierSlaId());
+                    final StringBuilder slaSelectionParam = new StringBuilder();
+                    for (final Map.Entry<String, Long> one : selection.entrySet()) {
+                        if (slaSelectionParam.length() > 0) {
+                            slaSelectionParam.append('|');
+                        }
+                        if (one.getValue() <= 0) {
+                            slaSelection.remove(one.getKey());
+                        } else {
+                            slaSelection.put(one.getKey(), one.getValue());
+                        }
+                        slaSelectionParam.append(one.getValue());
+                        if (StringUtils.isNotBlank(one.getKey())) {
+                            slaSelectionParam.append('-').append(one.getKey());
+                        }
+
+                    }
+
+                    final Pair<Boolean, Boolean> notRequired = shippingServiceFacade.isAddressNotRequired(slaSelection.values());
+
+                    final boolean billingNotRequired = notRequired.getFirst();
+                    final boolean deliveryNotRequired = notRequired.getSecond();
+
+                    final long billingAddressId = NumberUtils.toLong(shippingOption.getBillingAddressId(),
+                            cart.getOrderInfo().getBillingAddressId() != null ? cart.getOrderInfo().getBillingAddressId() : 0L);
+                    final long deliveryAddressId = NumberUtils.toLong(shippingOption.getDeliveryAddressId(),
+                            cart.getOrderInfo().getDeliveryAddressId() != null ? cart.getOrderInfo().getDeliveryAddressId() : 0L);
+
+                    Address billing = null;
+                    Address delivery = null;
+
+                    if (billingAddressId > 0L || deliveryAddressId > 0L) {
+
+                        final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
+
+                        if (customer != null) {
+                            for (final Address address : customer.getAddress()) {
+                                if (address.getAddressId() == billingAddressId) {
+                                    billing = address;
+                                }
+                                if (address.getAddressId() == deliveryAddressId) {
+                                    delivery = address;
+                                }
+                            }
+                        }
+                    }
+
+                    if ((billing != null || billingNotRequired) && (delivery != null || deliveryNotRequired)) {
+
+                        final Map<String, Object> params = new HashMap<String, Object>();
+                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, slaSelectionParam.toString());
+                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, billingNotRequired);
+                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billing);
+                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, deliveryNotRequired);
+                        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, delivery);
+
+                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart, params);
+
+                        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
+                                cart,
+                                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_RECALCULATEPRICE, ShoppingCartCommand.CMD_RECALCULATEPRICE));
+
+
+                    }
+                }
             }
 
         }
@@ -1516,7 +1590,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -1569,11 +1643,12 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -1903,7 +1978,7 @@ public class CartController {
      *         "separateBillingAddress": false,
      *         "billingAddressNotRequired": false,
      *         "deliveryAddressNotRequired": false,
-     *         "carrierSlaId": 4,
+     *         "carrierSlaId": {"WAREHOUSE_2":4},
      *         "billingAddressId": 2,
      *         "deliveryAddressId": 2,
      *         "orderMessage": "My Message"
@@ -1956,12 +2031,13 @@ public class CartController {
      * 	&lt;/items&gt;
      * 	&lt;order-info billing-address-id="4"
      * 				billing-address-not-required="false"
-     * 				carrier-sla-id="4"
      * 				delivery-address-id="4"
      * 				delivery-address-not-required="false"
      * 				multiple-delivery="false"
      * 			    payment-gateway-label="courierPaymentGatewayLabel"
-     * 				separate-billing-address="false"/&gt;
+     * 				separate-billing-address="false"&gt;
+     * 			&lt;carrier-sla-ids&gt;&lt;selection supplier-code="WAREHOUSE_2"&gt;4&lt;/selection&gt;&lt;/carrier-sla-ids&gt;
+     * 	&lt;/order-info&gt;
      * 	&lt;shipping-costs&gt;
      * 		&lt;shipping-cost  gift="false"
      * 					    gross-price="10.00"
@@ -2316,7 +2392,7 @@ public class CartController {
             return review;
         }
 
-        if (cart.getCarrierSlaId() == null) {
+        if (!cart.isAllCarrierSlaSelected()) {
             // Must select a carrier
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);
@@ -2445,7 +2521,7 @@ public class CartController {
 
         } catch (SkuUnavailableException skuUnavailable) {
 
-            ShopCodeContext.getLog(this).error(skuUnavailable.getMessage(), skuUnavailable);
+            ShopCodeContext.getLog(this).warn(skuUnavailable.getMessage());
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

@@ -70,6 +70,31 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
     void setSkuName(String skuName);
 
     /**
+     * @return supplier code.
+     */
+    String getSupplierCode();
+
+    /**
+     * Set supplier code (fulfilment centre/warehouse code).
+     *
+     * @param supplierCode supplier code
+     */
+    void setSupplierCode(String supplierCode);
+
+
+    /**
+     * @return delivery group.
+     */
+    String getDeliveryGroup();
+
+    /**
+     * Set delivery group
+     *
+     * @param deliveryGroup delivery group
+     */
+    void setDeliveryGroup(String deliveryGroup);
+
+    /**
      * Get quantity.
      * @return  quantity.
      */

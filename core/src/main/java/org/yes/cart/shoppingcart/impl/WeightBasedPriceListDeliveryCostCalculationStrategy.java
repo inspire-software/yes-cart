@@ -22,15 +22,18 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -39,8 +42,10 @@ import java.math.RoundingMode;
  */
 public class WeightBasedPriceListDeliveryCostCalculationStrategy implements DeliveryCostCalculationStrategy {
 
-    private static final BigDecimal SINGLE = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-    private static final BigDecimal MULTI = new BigDecimal(2).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+
+    private static final BigDecimal QTY = new BigDecimal(1).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+
     private static final BigDecimal MAX = new BigDecimal(Integer.MAX_VALUE);
 
     private final CarrierSlaService carrierSlaService;
@@ -61,92 +66,125 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
     /** {@inheritDoc} */
     public Total calculate(final MutableShoppingCart cart) {
 
-        cart.removeShipping();
+        if (!cart.getCarrierSlaId().isEmpty()) {
 
-        if (cart.getCarrierSlaId() != null) {
-            final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-            if (carrierSla != null && CarrierSla.WEIGHT_VOLUME.equals(carrierSla.getSlaType())) {
+            Total total = null;
 
-                final String carrierSlaId = carrierSla.getGuid();
+            for (final Map.Entry<String, Long> supplierCarrierSla : cart.getCarrierSlaId().entrySet()) {
 
-                final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                        cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
-                        cart.getShoppingContext().getCountryCode(),
-                        cart.getShoppingContext().getStateCode()
-                );
-
-                final BigDecimal qty = cart.getOrderInfo().isMultipleDelivery() ? MULTI : SINGLE;
-
-                final Pair<BigDecimal, BigDecimal> weightAndVolume = determineProductWeightAndVolume(cart);
-
-                final boolean useWeight = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getFirst(), BigDecimal.ZERO);
-                final boolean useVolume = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getSecond(), BigDecimal.ZERO);
-
-                final SkuPrice priceByWeightMax = useWeight ? getSkuPrice(cart, carrierSlaId + "_KGMAX", policy, MAX) : null;
-                final SkuPrice priceByWeight = useWeight && isValidPrice(priceByWeightMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByWeightMax.getQuantity(), weightAndVolume.getFirst()) ? getSkuPrice(cart, carrierSlaId + "_KG", policy, weightAndVolume.getFirst()) : null;
-                final SkuPrice priceByVolumeMax = useVolume ? getSkuPrice(cart, carrierSlaId + "_M3MAX", policy, MAX) : null;
-                final SkuPrice priceByVolume = useVolume && isValidPrice(priceByVolumeMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByVolumeMax.getQuantity(), weightAndVolume.getSecond()) ? getSkuPrice(cart, carrierSlaId + "_M3", policy, weightAndVolume.getSecond()) : null;
-
-                SkuPrice price = null;
-                if (useWeight && useVolume) {
-
-                    if (isValidPrice(priceByWeight) && isValidPrice(priceByVolume)) {
-                        // Assign price only if we have both valid prices
-
-                        final BigDecimal salePriceByWeight = MoneyUtils.minPositive(priceByWeight.getRegularPrice(), priceByWeight.getSalePriceForCalculation());
-                        final BigDecimal salePriceByVolume = MoneyUtils.minPositive(priceByVolume.getRegularPrice(), priceByVolume.getSalePriceForCalculation());
-
-                        if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(salePriceByVolume, salePriceByWeight)) {
-                            // Volume has higher cost
-                            price = priceByVolume;
-                        } else {
-                            // Weight has higher cost
-                            price = priceByWeight;
-                        }
-
+                final Map<DeliveryBucket, List<CartItem>> cartBuckets = new HashMap<DeliveryBucket, List<CartItem>>();
+                for (final Map.Entry<DeliveryBucket, List<CartItem>> bucket : cart.getCartItemMap().entrySet()) {
+                    // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
+                    if (bucket.getKey().getSupplier().equals(supplierCarrierSla.getKey())) {
+                        cartBuckets.put(bucket.getKey(), bucket.getValue());
                     }
 
-                } else if (useWeight) {
-                    // Only weight is available
-                    price = priceByWeight;
-                } else if (useVolume) {
-                    // Only volume is available
-                    price = priceByVolume;
                 }
 
-                if (isValidPrice(price)) {
+                if (cartBuckets.isEmpty()) {
+                    continue; // no buckets for this selection
+                }
 
-                    final BigDecimal salePrice = MoneyUtils.minPositive(price.getRegularPrice(), price.getSalePriceForCalculation());
+                final CarrierSla carrierSla = carrierSlaService.getById(supplierCarrierSla.getValue());
+                if (carrierSla != null && CarrierSla.WEIGHT_VOLUME.equals(carrierSla.getSlaType())) {
 
-                    cart.addShippingToCart(carrierSlaId, qty);
-                    cart.setShippingPrice(carrierSlaId, salePrice, salePrice);
-                    final BigDecimal deliveryCost = salePrice.multiply(qty).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+                    final String carrierSlaGUID = carrierSla.getGuid();
+                    final String carrierSlaName = new FailoverStringI18NModel(
+                            carrierSla.getDisplayName(),
+                            carrierSla.getName()).getValue(cart.getCurrentLocale());
 
-                    return new TotalImpl(
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            false,
-                            null,
-                            Total.ZERO,
-                            Total.ZERO,
-                            Total.ZERO,
-                            deliveryCost,
-                            deliveryCost,
-                            false,
-                            null,
-                            Total.ZERO,
-                            deliveryCost,
-                            deliveryCost,
-                            Total.ZERO,
-                            deliveryCost,
-                            deliveryCost
+                    final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
+                            cart.getShoppingContext().getShopCode(), cart.getCurrencyCode(), cart.getCustomerEmail(),
+                            cart.getShoppingContext().getCountryCode(),
+                            cart.getShoppingContext().getStateCode()
                     );
 
-                }
+                    final BigDecimal qty = QTY;
 
+                    for (final Map.Entry<DeliveryBucket, List<CartItem>> bucketAndItems : cartBuckets.entrySet()) {
+                        // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
+
+                        final Pair<BigDecimal, BigDecimal> weightAndVolume = determineProductWeightAndVolume(bucketAndItems.getValue());
+
+                        final boolean useWeight = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getFirst(), BigDecimal.ZERO);
+                        final boolean useVolume = MoneyUtils.isFirstBiggerThanSecond(weightAndVolume.getSecond(), BigDecimal.ZERO);
+
+                        final SkuPrice priceByWeightMax = useWeight ? getSkuPrice(cart, carrierSlaGUID + "_KGMAX", policy, MAX) : null;
+                        final SkuPrice priceByWeight = useWeight && isValidPrice(priceByWeightMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByWeightMax.getQuantity(), weightAndVolume.getFirst()) ? getSkuPrice(cart, carrierSlaGUID + "_KG", policy, weightAndVolume.getFirst()) : null;
+                        final SkuPrice priceByVolumeMax = useVolume ? getSkuPrice(cart, carrierSlaGUID + "_M3MAX", policy, MAX) : null;
+                        final SkuPrice priceByVolume = useVolume && isValidPrice(priceByVolumeMax) && MoneyUtils.isFirstBiggerThanOrEqualToSecond(priceByVolumeMax.getQuantity(), weightAndVolume.getSecond()) ? getSkuPrice(cart, carrierSlaGUID + "_M3", policy, weightAndVolume.getSecond()) : null;
+
+                        SkuPrice price = null;
+                        if (useWeight && useVolume) {
+
+                            if (isValidPrice(priceByWeight) && isValidPrice(priceByVolume)) {
+                                // Assign price only if we have both valid prices
+
+                                final BigDecimal salePriceByWeight = MoneyUtils.minPositive(priceByWeight.getRegularPrice(), priceByWeight.getSalePriceForCalculation());
+                                final BigDecimal salePriceByVolume = MoneyUtils.minPositive(priceByVolume.getRegularPrice(), priceByVolume.getSalePriceForCalculation());
+
+                                if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(salePriceByVolume, salePriceByWeight)) {
+                                    // Volume has higher cost
+                                    price = priceByVolume;
+                                } else {
+                                    // Weight has higher cost
+                                    price = priceByWeight;
+                                }
+
+                            }
+
+                        } else if (useWeight) {
+                            // Only weight is available
+                            price = priceByWeight;
+                        } else if (useVolume) {
+                            // Only volume is available
+                            price = priceByVolume;
+                        }
+
+                        if (isValidPrice(price)) {
+
+                            final BigDecimal salePrice = MoneyUtils.minPositive(price.getRegularPrice(), price.getSalePriceForCalculation());
+
+                            cart.addShippingToCart(bucketAndItems.getKey(), carrierSlaGUID, carrierSlaName, qty);
+                            cart.setShippingPrice(carrierSlaGUID, bucketAndItems.getKey(), salePrice, salePrice);
+                            final BigDecimal deliveryCost = salePrice.multiply(qty).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+
+                            final Total bucketTotal = new TotalImpl(
+                                    Total.ZERO,
+                                    Total.ZERO,
+                                    Total.ZERO,
+                                    Total.ZERO,
+                                    false,
+                                    null,
+                                    Total.ZERO,
+                                    Total.ZERO,
+                                    Total.ZERO,
+                                    deliveryCost,
+                                    deliveryCost,
+                                    false,
+                                    null,
+                                    Total.ZERO,
+                                    deliveryCost,
+                                    deliveryCost,
+                                    Total.ZERO,
+                                    deliveryCost,
+                                    deliveryCost
+                            );
+
+                            // Add bucket total to delivery cost
+                            total = total == null ? bucketTotal : total.add(bucketTotal);
+
+                        } else {
+                            // If at least one bucket cannot be delivered, none should
+                            return null;
+
+                        }
+                    }
+
+                }
             }
+
+            return total;
         }
         return null;
     }
@@ -155,12 +193,12 @@ public class WeightBasedPriceListDeliveryCostCalculationStrategy implements Deli
         return price != null && price.getSkuPriceId() > 0L;
     }
 
-    protected Pair<BigDecimal, BigDecimal> determineProductWeightAndVolume(final MutableShoppingCart cart) {
+    protected Pair<BigDecimal, BigDecimal> determineProductWeightAndVolume(List<CartItem> cartItems) {
 
         BigDecimal weight = BigDecimal.ZERO;
         BigDecimal volume = BigDecimal.ZERO;
 
-        for (final CartItem cartItem : cart.getCartItemList()) {
+        for (final CartItem cartItem : cartItems) {
 
             Product product = productService.getProductBySkuCode(cartItem.getProductSkuCode());
 

@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { CarrierSlaVO, PaymentGatewayInfoVO, ValidationRequestVO } from './../../shared/model/index';
+import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -37,6 +37,11 @@ export class SlaComponent implements OnInit, OnDestroy {
 
   private availablePgs:Array<PaymentGatewayInfoVO> = [];
   private supportedPgs:Array<PaymentGatewayInfoVO> = [];
+
+  private _fcs:any = {};
+
+  private availableFcs:Array<FulfilmentCentreInfoVO> = [];
+  private supportedFcs:Array<FulfilmentCentreInfoVO> = [];
 
   private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
@@ -82,7 +87,8 @@ export class SlaComponent implements OnInit, OnDestroy {
       'deliveryAddressNotRequired': [''],
       'name': [''],
       'description': [''],
-      'supportedPaymentGateways': ['']
+      'supportedPaymentGateways': [''],
+      'supportedFulfilmentCentres': ['']
     });
 
     this.delayedChange = Futures.perpetual(function() {
@@ -117,10 +123,19 @@ export class SlaComponent implements OnInit, OnDestroy {
   }
 
   @Input()
+  set fulfilmentCentres(fcs:Array<FulfilmentCentreInfoVO>) {
+    fcs.forEach(fc => {
+      this._fcs[fc.code] = fc;
+    });
+    LogUtil.debug('SlaComponent mapped FCs', this._fcs);
+  }
+
+  @Input()
   set sla(sla:CarrierSlaVO) {
 
     UiUtil.formInitialise(this, 'initialising', 'slaForm', '_sla', sla);
     this.recalculatePgs();
+    this.recalculateFcs();
 
   }
 
@@ -137,7 +152,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   }
 
   onSupportedPgClick(supported:PaymentGatewayInfoVO) {
-    LogUtil.debug('SlaComponent remove supported', supported);
+    LogUtil.debug('SlaComponent remove supported PG', supported);
     let idx = this._sla.supportedPaymentGateways.indexOf(supported.label);
     if (idx != -1) {
       this._sla.supportedPaymentGateways.splice(idx, 1);
@@ -148,7 +163,7 @@ export class SlaComponent implements OnInit, OnDestroy {
   }
 
   onAvailablePgClick(available:PaymentGatewayInfoVO) {
-    LogUtil.debug('SlaComponent add supported', available);
+    LogUtil.debug('SlaComponent add supported PG', available);
     if (this._sla.supportedPaymentGateways == null) {
       this._sla.supportedPaymentGateways = [];
     }
@@ -161,6 +176,31 @@ export class SlaComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  onSupportedFcClick(supported:FulfilmentCentreInfoVO) {
+    LogUtil.debug('SlaComponent remove supported FC', supported);
+    let idx = this._sla.supportedFulfilmentCentres.indexOf(supported.code);
+    if (idx != -1) {
+      this._sla.supportedFulfilmentCentres.splice(idx, 1);
+      this.recalculateFcs();
+      this.formMarkDirty('supportedFulfilmentCentres');
+      this.formChange();
+    }
+  }
+
+  onAvailableFcClick(available:FulfilmentCentreInfoVO) {
+    LogUtil.debug('SlaComponent add supported FC', available);
+    if (this._sla.supportedFulfilmentCentres == null) {
+      this._sla.supportedFulfilmentCentres = [];
+    }
+    let idx = this._sla.supportedFulfilmentCentres.indexOf(available.code);
+    if (idx == -1) {
+      this._sla.supportedFulfilmentCentres.push(available.code);
+      this.recalculateFcs();
+      this.formMarkDirty('supportedFulfilmentCentres');
+      this.formChange();
+    }
+  }
 
   ngOnInit() {
     LogUtil.debug('SlaComponent ngOnInit');
@@ -212,6 +252,47 @@ export class SlaComponent implements OnInit, OnDestroy {
     if (this._sla) {
       this.availablePgs = this.getAvailablePGNames();
       this.supportedPgs = this.getSupportedPGNames();
+    }
+  }
+
+
+
+  private getAvailableFCNames():Array<FulfilmentCentreInfoVO> {
+    let supported = this._sla.supportedFulfilmentCentres;
+
+    let labels = <Array<FulfilmentCentreInfoVO>>[];
+    for (let key in this._fcs) {
+      if (!supported || supported.indexOf(key) == -1) {
+        labels.push(this._fcs[key]);
+      }
+    }
+
+    return labels;
+  }
+
+  private getSupportedFCNames():Array<FulfilmentCentreInfoVO> {
+
+    let supported = this._sla.supportedFulfilmentCentres;
+    if (!supported) {
+      return [ ];
+    }
+
+    let labels = <Array<FulfilmentCentreInfoVO>>[];
+    supported.forEach(code => {
+      if (this._fcs.hasOwnProperty(code)) {
+        labels.push(this._fcs[code]);
+      } else {
+        labels.push({ warehouseId: 0, code: code, name: code, description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] });
+      }
+    });
+    return labels;
+  }
+
+
+  private recalculateFcs():void {
+    if (this._sla) {
+      this.availableFcs = this.getAvailableFCNames();
+      this.supportedFcs = this.getSupportedFCNames();
     }
   }
 

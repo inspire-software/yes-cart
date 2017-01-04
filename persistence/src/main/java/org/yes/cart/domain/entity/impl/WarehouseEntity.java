@@ -34,6 +34,7 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     private String code;
     private String name;
+    private String displayName;
     private String description;
     private String countryCode;
     private String stateCode;
@@ -73,6 +74,14 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(final String displayName) {
+        this.displayName = displayName;
     }
 
     public String getDescription() {

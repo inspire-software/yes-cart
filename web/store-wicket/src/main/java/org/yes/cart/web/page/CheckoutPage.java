@@ -62,7 +62,7 @@ import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.header.CheckoutHeader;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.js.ServerSideJs;
-import org.yes.cart.web.page.component.shipping.ShippingView;
+import org.yes.cart.web.page.component.shipping.ShippingDeliveriesView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.*;
 
@@ -262,6 +262,9 @@ public class CheckoutPage extends AbstractWebPage {
             }
             return createAddressFragment();
         } else if (STEP_SHIPMENT.equals(currentStep)) {
+
+            performOrderSplittingBeforeShipping();
+
             return createShippmentFragment();
         } else if (STEP_PAY.equals(currentStep)) {
             // Need to make sure we execute commands before we recreate order (we may need to choose another SLA)
@@ -275,7 +278,7 @@ public class CheckoutPage extends AbstractWebPage {
                 setResponsePage(this.getClass(), parameters);
                 return createAddressFragment();
             }
-            if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
+            if (!cart.isAllCarrierSlaSelected() || cart.getShippingList().isEmpty()) {
                 // Must select a carrier
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_SHIPMENT);
@@ -289,6 +292,18 @@ public class CheckoutPage extends AbstractWebPage {
         } else {
             return createLoginFragment();
         }
+    }
+
+    private void performOrderSplittingBeforeShipping() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SPLITCARTITEMS,
+                cart,
+                (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SPLITCARTITEMS, ShoppingCartCommand.CMD_SPLITCARTITEMS));
+
+        persistCartIfNecessary();
+
     }
 
     private void recreateOrderBeforePayment() {
@@ -392,7 +407,8 @@ public class CheckoutPage extends AbstractWebPage {
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
         final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
-        final boolean showMultipleDelivery = checkoutServiceFacade.isMultipleDeliveryAllowedForCart(shoppingCart);
+        final boolean showMultipleDelivery = orderInfo.isMultipleDeliveryAvailable();
+        final boolean multipleDelivery = orderInfo.isMultipleDelivery();
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
                 ApplicationDirector.getShoppingCart(),
@@ -402,7 +418,7 @@ public class CheckoutPage extends AbstractWebPage {
         rez.addOrReplace(new Label(PAYMENT_FRAGMENT_PAYMENT_FORM));
         rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid(), false));
 
-        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new PropertyModel(orderInfo, "multipleDelivery")) {
+        final Component multiDelivery = new CheckBox(PAYMENT_FRAGMENT_MD_CHECKBOX, new Model<Boolean>(multipleDelivery)) {
 
             /** {@inheritDoc} */
             protected boolean wantOnSelectionChangedNotifications() {
@@ -497,17 +513,17 @@ public class CheckoutPage extends AbstractWebPage {
                 });
 
         rez.addOrReplace(
-                        new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
-                                .add(multiDelivery)
-                                .add(
-                                        new Label(PAYMENT_FRAGMENT_MD_LABEL,
-                                                getLocalizer().getString(PAYMENT_FRAGMENT_MD_LABEL, this)
+                new Form(PAYMENT_FRAGMENT_OPTIONS_FORM)
+                        .add(multiDelivery)
+                        .add(
+                                new Label(PAYMENT_FRAGMENT_MD_LABEL,
+                                        getLocalizer().getString(PAYMENT_FRAGMENT_MD_LABEL, this)
 
-                                        ).setVisible(showMultipleDelivery)
+                                ).setVisible(showMultipleDelivery)
 
-                                )
-                                .add(pgSelector)
-                );
+                        )
+                        .add(pgSelector)
+        );
 
 
         return rez;
@@ -604,7 +620,7 @@ public class CheckoutPage extends AbstractWebPage {
     private MarkupContainer createShippmentFragment() {
         return new Fragment(CONTENT_VIEW, SHIPMENT_FRAGMENT, this)
                 .add(
-                        new ShippingView(SHIPMENT_VIEW)
+                        new ShippingDeliveriesView(SHIPMENT_VIEW, false)
                 );
     }
 
@@ -706,6 +722,5 @@ public class CheckoutPage extends AbstractWebPage {
         persistCartIfNecessary();
 
     }
-
 
 }

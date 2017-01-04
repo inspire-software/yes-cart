@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -38,7 +39,15 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
      *
      * @param carrierSlaId selected sla id.
      */
-    void setCarrierSlaId(Long carrierSlaId);
+    void setCarrierSlaId(Map<String, Long> carrierSlaId);
+
+    /**
+     * Set carrier shipping SLA.
+     *
+     * @param supplier supplier.
+     * @param carrierSlaId selected sla id.
+     */
+    void putCarrierSlaId(String supplier, Long carrierSlaId);
 
     /**
      * Set billing address different from shipping address flag.
@@ -88,4 +97,13 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
      * @param multipleDelivery multiple delivery for order.
      */
     void setMultipleDelivery(boolean multipleDelivery);
+
+
+    /**
+     * Set if multiple delivery for order available.
+     *
+     * @param multipleDeliveryAvailable multiple delivery is available for order.
+     */
+    void setMultipleDeliveryAvailable(boolean multipleDeliveryAvailable);
+
 }

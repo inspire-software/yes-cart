@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CarrierVO } from './../../shared/model/index';
+import { CarrierVO, ShopVO } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -36,6 +36,8 @@ export class CarriersComponent implements OnInit, OnDestroy {
   private _filter:string;
   private delayedFiltering:Future;
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
+
+  private _shops:any = {};
 
   private filteredCarriers:Array<CarrierVO>;
 
@@ -60,6 +62,14 @@ export class CarriersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     LogUtil.debug('CarriersComponent ngOnInit');
+  }
+
+  @Input()
+  set shops(shops:Array<ShopVO>) {
+    shops.forEach(shop => {
+      this._shops['S' + shop.shopId] = shop;
+    });
+    LogUtil.debug('CarrierComponent mapped shops', this._shops);
   }
 
   @Input()
@@ -109,6 +119,22 @@ export class CarriersComponent implements OnInit, OnDestroy {
     this.dataSelected.emit(this.selectedCarrier);
   }
 
+  protected getShopNames(row:CarrierVO):CarrierShop[] {
+    let shops:CarrierShop[] = [];
+    if (row.carrierShops != null && row.carrierShops.length > 0) {
+      row.carrierShops.forEach( carrierShop => {
+        let key = 'S' + carrierShop.shopId;
+        if (this._shops.hasOwnProperty(key)) {
+          let shop:ShopVO = this._shops[key];
+          shops.push({ code: shop.code, name: shop.name, active: !shop.disabled && !carrierShop.disabled });
+        }
+      });
+    } else {
+      shops.push({ code: '-', name: '-', active: false });
+    }
+    return shops;
+  }
+
   private filterCarriers() {
     if (this._filter) {
       this.filteredCarriers = this._carriers.filter(carrier =>
@@ -131,5 +157,13 @@ export class CarriersComponent implements OnInit, OnDestroy {
       this.resetLastPageEnd();
     }
   }
+
+}
+
+interface CarrierShop {
+
+  code: string;
+  name: string;
+  active: boolean;
 
 }

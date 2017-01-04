@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl.handler;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.payment.dto.Payment;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
@@ -62,13 +63,15 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
      * @param paymentProcessorFactory to funds return
      * @param warehouseService        to locate warehouse, that belong to shop where order was created
      * @param skuWarehouseService     to credit quantity on warehouse
+     * @param productService          product service
      */
     public CancelOrderWithRefundOrderEventHandlerImpl(
             final PaymentProcessorFactory paymentProcessorFactory,
             final WarehouseService warehouseService,
-            final SkuWarehouseService skuWarehouseService) {
+            final SkuWarehouseService skuWarehouseService,
+            final ProductService productService) {
 
-        super(warehouseService, skuWarehouseService);
+        super(warehouseService, skuWarehouseService, productService);
         this.paymentProcessorFactory = paymentProcessorFactory;
 
     }

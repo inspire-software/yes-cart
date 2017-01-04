@@ -105,12 +105,6 @@
     </div>
 
     <div class="container active-step-holder">
-        <div class="col-xs-12">
-            <form wicket:id="billingTheSameForm">
-                <input type="checkbox" wicket:id="billingTheSame">
-                <label><wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message></label>
-            </form>
-        </div>
 
         <div class="col-xs-12 no-margin">
             <wicket:container wicket:id="shippingAddress">
@@ -121,6 +115,13 @@
             <wicket:container wicket:id="billingAddress">
                 [Shipping address]
             </wicket:container>
+        </div>
+
+        <div class="col-xs-12 margin-top10">
+            <form wicket:id="billingTheSameForm" class="margin-top10">
+                <input type="checkbox" wicket:id="billingTheSame">
+                <label><wicket:message key="billingAddrTheSame">[Billing address the same]</wicket:message></label>
+            </form>
         </div>
 
         <div class="col-xs-12 address-step-btn">
@@ -315,13 +316,10 @@
         </div>
 
         <div class="col-xs-12 payment-form">
-            <form wicket:id="paymentOptionsForm" class="form-horizontal">
-                <div class="col-xs-12 no-padding form-group">
-                    <label class="control-label col-xs-12 col-sm-3 col-md-2" wicket:id="multipleDeliveryLabel">[multiple delivery]</label>
-                    <div class="col-xs-1">
-                        <input wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint" type="checkbox">
-                    </div>
-                </div>
+            <form wicket:id="paymentOptionsForm">
+                <input type="checkbox" wicket:id="multipleDelivery" wicket:message="title:multipleDeliveryHint">
+                <label wicket:id="multipleDeliveryLabel">[send available sooner]</label>
+
                 <div class="clearfix"></div>
                 <div wicket:id="paymentGateway" class="col-xs-12 no-padding form-group">
                     <div wicket:id="pgList" class="radio">

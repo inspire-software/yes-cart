@@ -16,12 +16,15 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a read only container that allows to provide a view of cart with a different shipping
@@ -34,15 +37,16 @@ import java.util.List;
 public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCart {
 
     private final ShoppingCart original;
-    private final Long carrierSlaId;
+    private final Map<String, Long> carrierSlaId;
 
     private final MutableShoppingContext shoppingContext = new ShoppingContextImpl();
     private final MutableOrderInfo orderInfo = new OrderInfoImpl();
 
-    public ShoppingCartShippingCostContainerImpl(final ShoppingCart original, final Long carrierSlaId) {
+    public ShoppingCartShippingCostContainerImpl(final ShoppingCart original, final String supplier, final Long carrierSlaId) {
 
         this.original = original;
-        this.carrierSlaId = carrierSlaId;
+
+        this.carrierSlaId = Collections.singletonMap(supplier, carrierSlaId);
 
         this.shoppingContext.setCountryCode(original.getShoppingContext().getCountryCode());
         this.shoppingContext.setCustomerEmail(original.getShoppingContext().getCustomerEmail());
@@ -63,7 +67,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
 
         this.orderInfo.setBillingAddressId(original.getOrderInfo().getBillingAddressId());
         this.orderInfo.setBillingAddressNotRequired(original.getOrderInfo().isBillingAddressNotRequired());
-        this.orderInfo.setCarrierSlaId(carrierSlaId);
+        this.orderInfo.setCarrierSlaId(this.carrierSlaId);
         this.orderInfo.setDeliveryAddressId(original.getOrderInfo().getDeliveryAddressId());
         this.orderInfo.setDeliveryAddressNotRequired(original.getOrderInfo().isDeliveryAddressNotRequired());
         this.orderInfo.setMultipleDelivery(original.getOrderInfo().isMultipleDelivery());
@@ -84,8 +88,18 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
+    public Map<DeliveryBucket, List<CartItem>> getCartItemMap() {
+        return original.getCartItemMap();
+    }
+
+    @Override
     public List<CartItem> getShippingList() {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Map<DeliveryBucket, List<CartItem>> getShippingListMap() {
+        return original.getShippingListMap();
     }
 
     @Override
@@ -96,6 +110,11 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     @Override
     public int getCartItemsCount() {
         return original.getCartItemsCount();
+    }
+
+    @Override
+    public List<String> getCartItemsSuppliers() {
+        return Collections.singletonList(this.carrierSlaId.keySet().iterator().next());
     }
 
     @Override
@@ -149,8 +168,18 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public Long getCarrierSlaId() {
+    public Map<String, Long> getCarrierSlaId() {
         return carrierSlaId;
+    }
+
+    @Override
+    public boolean isAllCarrierSlaSelected() {
+        return true;
+    }
+
+    @Override
+    public boolean isAllCartItemsBucketed() {
+        return false;
     }
 
     @Override
@@ -169,8 +198,8 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public int indexOfShipping(final String carrierSlaId) {
-        return original.indexOfShipping(carrierSlaId);
+    public int indexOfShipping(final String carrierSlaId, final DeliveryBucket deliveryBucket) {
+        return original.indexOfShipping(carrierSlaId, deliveryBucket);
     }
 
     @Override
@@ -235,17 +264,17 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
+    public boolean addProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
         return false;
     }
 
     @Override
-    public boolean addShippingToCart(final String carrierSlaId, final BigDecimal quantity) {
+    public boolean addShippingToCart(final DeliveryBucket deliveryBucket, final String carrierSlaGUID, final String carrierSlaName, final BigDecimal quantity) {
         return false;
     }
 
     @Override
-    public boolean addGiftToCart(final String sku, final BigDecimal quantity, final String promotionCode) {
+    public boolean addGiftToCart(final String sku, final String skuName, final BigDecimal quantity, final String promotionCode) {
         return false;
     }
 
@@ -255,12 +284,17 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
+    public boolean setProductSkuDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
+        return false;
+    }
+
+    @Override
     public boolean removeCartItem(final String productSku) {
         return false;
     }
 
     @Override
-    public boolean removeShipping(final String carrierSlaId) {
+    public boolean removeShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
         return false;
     }
 
@@ -290,7 +324,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setShippingPrice(final String carrierSlaId, final BigDecimal salePrice, final BigDecimal listPrice) {
+    public boolean setShippingPrice(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal salePrice, final BigDecimal listPrice) {
         return false;
     }
 
@@ -310,7 +344,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setShippingPromotion(final String carrierSlaId, final BigDecimal promoPrice, final String promoCode) {
+    public boolean setShippingPromotion(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal promoPrice, final String promoCode) {
         return false;
     }
 
@@ -320,7 +354,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setShippingTax(final String carrierSlaPk, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
+    public boolean setShippingTax(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
         return false;
     }
 

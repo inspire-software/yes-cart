@@ -51,6 +51,10 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
 
     @DtoField(value = "qty", readOnly = true)
     private BigDecimal qty;
+    @DtoField(readOnly = true)
+    private String supplierCode;
+    @DtoField(readOnly = true)
+    private String deliveryGroup;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -114,185 +118,166 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
 
     }
 
-    /** {@inheritDoc} */
     public long getId() {
         return customerOrderDeliveryDetId;
     }
 
-    /** {@inheritDoc} */
     public long getCustomerOrderDeliveryDetId() {
         return customerOrderDeliveryDetId;
     }
 
-    /** {@inheritDoc} */
     public void setCustomerOrderDeliveryDetId(final long customerOrderDeliveryDetId) {
         this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
     }
 
-    /** {@inheritDoc} */
     public String getSkuCode() {
         return skuCode;
     }
 
-    /** {@inheritDoc} */
     public void setSkuCode(final String skuCode) {
         this.skuCode = skuCode;
     }
 
-    /** {@inheritDoc} */
     public String getSkuName() {
         return skuName;
     }
 
-    /** {@inheritDoc} */
     public void setSkuName(final String skuName) {
         this.skuName = skuName;
     }
 
-    /** {@inheritDoc} */
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getDeliveryGroup() {
+        return deliveryGroup;
+    }
+
+    public void setDeliveryGroup(final String deliveryGroup) {
+        this.deliveryGroup = deliveryGroup;
+    }
+
     public BigDecimal getQty() {
         return qty;
     }
 
-    /** {@inheritDoc} */
     public void setQty(final BigDecimal qty) {
         this.qty = qty;
         calculateLineTotal();
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getPrice() {
         return price;
     }
 
-    /** {@inheritDoc} */
     public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getNetPrice() {
         return netPrice;
     }
 
-    /** {@inheritDoc} */
     public void setNetPrice(final BigDecimal netPrice) {
         this.netPrice = netPrice;
         calculateLineTotal();
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getGrossPrice() {
         return grossPrice;
     }
 
-    /** {@inheritDoc} */
     public void setGrossPrice(final BigDecimal grossPrice) {
         this.grossPrice = grossPrice;
         calculateLineTotal();
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getTaxRate() {
         return taxRate;
     }
 
-    /** {@inheritDoc} */
     public void setTaxRate(final BigDecimal taxRate) {
         this.taxRate = taxRate;
     }
 
-    /** {@inheritDoc} */
     public String getTaxCode() {
         return taxCode;
     }
 
-    /** {@inheritDoc} */
     public void setTaxCode(final String taxCode) {
         this.taxCode = taxCode;
     }
 
-    /** {@inheritDoc} */
     public boolean isTaxExclusiveOfPrice() {
         return taxExclusiveOfPrice;
     }
 
-    /** {@inheritDoc} */
     public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getListPrice() {
         return listPrice;
     }
 
-    /** {@inheritDoc} */
     public void setListPrice(final BigDecimal listPrice) {
         this.listPrice = listPrice;
     }
 
-    /** {@inheritDoc} */
     public BigDecimal getSalePrice() {
         return salePrice;
     }
 
-    /** {@inheritDoc} */
     public void setSalePrice(final BigDecimal salePrice) {
         this.salePrice = salePrice;
     }
 
-    /** {@inheritDoc} */
     public boolean isGift() {
         return gift;
     }
 
-    /** {@inheritDoc} */
     public void setGift(final boolean gift) {
         this.gift = gift;
     }
 
-    /** {@inheritDoc} */
     public boolean isPromoApplied() {
         return promoApplied;
     }
 
-    /** {@inheritDoc} */
     public void setPromoApplied(final boolean promoApplied) {
         this.promoApplied = promoApplied;
     }
 
-    /** {@inheritDoc} */
     public String getAppliedPromo() {
         return appliedPromo;
     }
 
-    /** {@inheritDoc} */
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
     }
 
-    /** {@inheritDoc} */
     public String getDeliveryNum() {
         return deliveryNum;
     }
 
-    /** {@inheritDoc} */
     public void setDeliveryNum(final String deliveryNum) {
         this.deliveryNum = deliveryNum;
     }
 
-    /** {@inheritDoc} */
     public String getDeliveryStatusLabel() {
         return deliveryStatusLabel;
     }
 
-    /** {@inheritDoc} */
     public void setDeliveryStatusLabel(final String deliveryStatusLabel) {
         this.deliveryStatusLabel = deliveryStatusLabel;
     }
 
-    /** {@inheritDoc} */
     public String toString() {
         return "CustomerOrderDeliveryDetailDTOImpl{" +
                 "customerorderdeliveryId=" + customerOrderDeliveryDetId +

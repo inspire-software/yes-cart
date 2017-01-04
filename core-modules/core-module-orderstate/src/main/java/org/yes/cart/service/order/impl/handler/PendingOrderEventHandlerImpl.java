@@ -19,8 +19,6 @@ package org.yes.cart.service.order.impl.handler;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.util.CollectionUtils;
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.ProductService;
@@ -30,12 +28,11 @@ import org.yes.cart.service.order.*;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Initial {@link CustomerOrder#ORDER_STATUS_PENDING} state.
@@ -131,65 +128,80 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
      */
     void reserveQuantity(final CustomerOrderDelivery orderDelivery) throws OrderItemAllocationException {
 
+        if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
-        final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
+            final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(
-                orderDelivery.getCustomerOrder().getShop().getShopId(), false);
-
-        if (CollectionUtils.isEmpty(warehouses)) {
-
-            ShopCodeContext.getLog(this).error("No warehouses assigned to shop {}", orderDelivery.getCustomerOrder().getShop().getCode());
-
-            throw new OrderItemAllocationException(
-                    "N/A",
-                    BigDecimal.ZERO,
-                    "PendingOrderEventHandlerImpl. No warehouses assigned to " + orderDelivery.getCustomerOrder().getShop().getCode());
-        }
-
-
-        for (CustomerOrderDeliveryDet det : deliveryDetails) {
-            String skuCode = det.getProductSkuCode();
-            BigDecimal toReserve = det.getQty();
-            for (Warehouse warehouse : warehouses) {
-
-                toReserve = skuWarehouseService.reservation(warehouse, skuCode, toReserve);
-                if (BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE).equals(toReserve.setScale(Constants.DEFAULT_SCALE))) {
-                    break; // quantity allocated
-                }
+            // map warehouses by code
+            final List<Warehouse> warehouses = warehouseService.getByShopId(
+                    orderDelivery.getCustomerOrder().getShop().getShopId(), false);
+            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+            for (final Warehouse warehouse : warehouses) {
+                warehouseByCode.put(warehouse.getCode(), warehouse);
             }
 
-            if (MoneyUtils.isFirstBiggerThanSecond(toReserve, BigDecimal.ZERO)) {
+            final Date now = now();
+
+            for (CustomerOrderDeliveryDet det : deliveryDetails) {
 
                 final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                // there may not be this product anymore potentially, so it can be null
+                // Null products are treated as AVAILABILITY_STANDARD
+                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
 
-                if (product == null
-                        || Product.AVAILABILITY_STANDARD == product.getAvailability()) {
+                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
 
-                    /**
-                     * Availability.AVAILABILITY_BACKORDER -  can get more stock
-                     * Availability.AVAILABILITY_PREORDER - can pre-order from manufacturer
-                     * Availability.AVAILABILITY_ALWAYS - always
-                     */
-                    throw new OrderItemAllocationException(
-                            skuCode,
-                            toReserve,
-                            "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
-                            + " for sku = " + skuCode
-                            + " in delivery " + orderDelivery.getDeliveryNum());
+                    if (selected == null) {
+                        throw new OrderItemAllocationException(
+                                "N/A",
+                                BigDecimal.ZERO,
+                                "PendingOrderEventHandlerImpl. Warehouse '" + det.getSupplierCode() +
+                                        "' is not found for " + orderDelivery.getDeliveryNum() + ":" + det.getProductSkuCode());
+                    }
 
-                } else if (Product.AVAILABILITY_PREORDER == product.getAvailability()
-                        || Product.AVAILABILITY_BACKORDER == product.getAvailability()) {
 
-                    // If we have preorder or backorder we need to record reservations
-                    final Warehouse first = warehouses.iterator().next();
-                    skuWarehouseService.reservation(first, skuCode, toReserve, true);
+                    final String skuCode = det.getProductSkuCode();
+                    final BigDecimal toReserve = det.getQty();
+
+                    final int availability;
+                    final Date availableFrom;
+                    final Date availableTo;
+                    if (product != null) {
+                        availability = product.getAvailability();
+                        availableFrom = product.getAvailablefrom();
+                        availableTo = product.getAvailableto();
+                    } else { // default behaviour for SKU not in PIM
+                        availability = Product.AVAILABILITY_STANDARD;
+                        availableFrom = null;
+                        availableTo = null;
+                    }
+
+                    final boolean preorder = availability == Product.AVAILABILITY_PREORDER && !DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now) && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
+                    final boolean backorder = availability == Product.AVAILABILITY_BACKORDER;
+
+                    final BigDecimal rem = skuWarehouseService.reservation(selected, skuCode, toReserve, backorder || preorder);
+
+                    if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                        /**
+                         * For reservation we always must have stock items with inventory supported availability
+                         */
+                        throw new OrderItemAllocationException(
+                                skuCode,
+                                toReserve,
+                                "PendingOrderEventHandlerImpl. Can not allocate total qty = " + det.getQty()
+                                        + " for sku = " + skuCode
+                                        + " in delivery " + orderDelivery.getDeliveryNum());
+                    }
 
                 }
             }
         }
         orderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
 
+    }
+
+    Date now() {
+        return new Date();
     }
 
     /**

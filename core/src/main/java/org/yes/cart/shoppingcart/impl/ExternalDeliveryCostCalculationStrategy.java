@@ -26,6 +26,9 @@ import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * User: denispavlov
  * Date: 13-10-20
@@ -43,26 +46,45 @@ public class ExternalDeliveryCostCalculationStrategy implements DeliveryCostCalc
     /** {@inheritDoc} */
     public Total calculate(final MutableShoppingCart cart) {
 
-        cart.removeShipping();
+        if (!cart.getCarrierSlaId().isEmpty()) {
 
-        if (cart.getCarrierSlaId() != null) {
-            final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-            if (carrierSla != null && CarrierSla.EXTERNAL.equals(carrierSla.getSlaType())) {
+            Total total = null;
 
-                final Object strategy = applicationContext.getBean(carrierSla.getScript());
-                if (strategy instanceof DeliveryCostCalculationStrategy) {
+            final Set<Long> uniqueCarrierSlaIds = new HashSet<Long>(cart.getCarrierSlaId().values());
+            final Set<DeliveryCostCalculationStrategy> strategyExecutionPlan = new HashSet<DeliveryCostCalculationStrategy>();
 
-                    return ((DeliveryCostCalculationStrategy) strategy).calculate(cart);
+            for (final Long carrierSlaId : uniqueCarrierSlaIds) {
 
-                } else {
+                final CarrierSla carrierSla = carrierSlaService.getById(carrierSlaId);
+                if (carrierSla != null && CarrierSla.EXTERNAL.equals(carrierSla.getSlaType())) {
 
-                    ShopCodeContext.getLog(this).error("CarrierSla.script [{}] is not a bean of type DeliveryCostCalculationStrategy", carrierSla.getScript());
+                    final Object strategy = applicationContext.getBean(carrierSla.getScript());
+                    if (strategy instanceof DeliveryCostCalculationStrategy) {
 
+                        strategyExecutionPlan.add((DeliveryCostCalculationStrategy) strategy);
+
+                    } else {
+
+                        ShopCodeContext.getLog(this).error("CarrierSla.script [{}] is not a bean of type DeliveryCostCalculationStrategy", carrierSla.getScript());
+
+                    }
+
+                }
+            }
+
+            for (final DeliveryCostCalculationStrategy strategy : strategyExecutionPlan) {
+
+                final Total subTotal = strategy.calculate(cart);
+                if (subTotal != null) {
+                    total = total == null ? subTotal : total.add(subTotal);
                 }
 
             }
+
+            return total;
         }
         return null;
+
     }
 
     /** {@inheritDoc} */

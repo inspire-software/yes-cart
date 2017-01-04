@@ -683,14 +683,19 @@ public class PaymentProcessedOrderEventHandlerImplTest extends AbstractEventHand
         assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
 
         assertTrue(customerOrder.getDelivery().size() == 4);
-        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+        assertDeliveryStates(customerOrder.getDelivery(), new HashMap<String, String>() {{
+            put(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+            put(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+            put(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+            put(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+        }});
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
                 Arrays.asList("689.74",                     "259.74",                   "84.77",                            "444.95",                   "84.77"),
                 Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,                PaymentGateway.AUTH,        PaymentGateway.AUTH),
                 Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_PROCESSING),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,                      Boolean.FALSE,               Boolean.FALSE)
+                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,                      Boolean.FALSE,              Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());

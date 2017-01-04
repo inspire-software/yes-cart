@@ -489,6 +489,11 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     runningTotal = runningTotal.add(amountAndTax.getFirst());
                     runningTotalTax = runningTotalTax.add(amountAndTax.getSecond());
                     rez.add(payment);
+                } else {
+                    for (final CustomerOrderPayment existingPayment : existing) {
+                        runningTotal = runningTotal.add(existingPayment.getPaymentAmount());
+                        runningTotalTax = runningTotalTax.add(existingPayment.getTaxAmount());
+                    }
                 }
             }
         }
@@ -571,13 +576,15 @@ public class PaymentProcessorImpl implements PaymentProcessor {
                     final BigDecimal shipping = paymentLine.getUnitPrice().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
                     final BigDecimal shippingTax = paymentLine.getTaxAmount().setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
                     itemsAndShipping = itemsAndShipping.add(shipping);
+                    itemsAndShippingTax = itemsAndShippingTax.add(shippingTax);
                     shippingOnly = shippingOnly.add(shipping);
                     shippingOnlyTax = shippingOnlyTax.add(shippingTax);
                 } else {
                     // unit price already includes item level promotions
                     final BigDecimal item = paymentLine.getQuantity().multiply(paymentLine.getUnitPrice()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
-                    final BigDecimal itemTax = paymentLine.getQuantity().multiply(paymentLine.getTaxAmount()).setScale(Constants.DEFAULT_SCALE, BigDecimal.ROUND_HALF_UP);
+                    final BigDecimal itemTax = paymentLine.getTaxAmount();
                     itemsAndShipping = itemsAndShipping.add(item);
+                    itemsAndShippingTax = itemsAndShippingTax.add(itemTax);
                     itemsOnly = itemsOnly.add(item);
                     itemsOnlyTax = itemsOnlyTax.add(itemTax);
                 }

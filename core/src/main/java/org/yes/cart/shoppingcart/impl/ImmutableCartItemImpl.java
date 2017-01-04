@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
@@ -44,10 +45,38 @@ public class ImmutableCartItemImpl implements CartItem {
     }
 
     /**
-     * @return product sku code.
+     * {@inheritDoc}
      */
     public String getProductSkuCode() {
         return cartItem.getProductSkuCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getProductName() {
+        return cartItem.getProductName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupplierCode() {
+        return cartItem.getSupplierCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDeliveryGroup() {
+        return cartItem.getDeliveryGroup();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public DeliveryBucket getDeliveryBucket() {
+        return cartItem.getDeliveryBucket();
     }
 
     /**

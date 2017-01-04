@@ -68,6 +68,9 @@ public class CarrierSlaRO implements Serializable {
     @DtoField(value = "supportedPaymentGateways", readOnly = true)
     private String supportedPaymentGateways;
 
+    @DtoField(value = "supportedFulfilmentCentres", readOnly = true)
+    private String supportedFulfilmentCentres;
+
     @DtoField(value = "billingAddressNotRequired", readOnly = true)
     private boolean billingAddressNotRequired;
 
@@ -161,6 +164,15 @@ public class CarrierSlaRO implements Serializable {
 
     public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
         this.supportedPaymentGateways = supportedPaymentGateways;
+    }
+
+    @XmlElement(name = "supported-fulfilment-centres")
+    public String getSupportedFulfilmentCentres() {
+        return supportedFulfilmentCentres;
+    }
+
+    public void setSupportedFulfilmentCentres(final String supportedFulfilmentCentres) {
+        this.supportedFulfilmentCentres = supportedFulfilmentCentres;
     }
 
     @XmlAttribute(name = "billing-address-not-required")

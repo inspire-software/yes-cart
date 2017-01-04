@@ -19,7 +19,9 @@ package org.yes.cart.domain.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.impl.ShoppingCartUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,8 +36,15 @@ public class CartItemDTOImpl implements CartItem, Serializable {
     @DtoField(readOnly = true)
     private String productSkuCode;
 
+    @DtoField(readOnly = true)
+    private String productName;
+
     @DtoField(value = "qty", readOnly = true)
     private BigDecimal qty = DEFAULT_QUANTITY;
+    @DtoField(readOnly = true)
+    private String supplierCode;
+    @DtoField(readOnly = true)
+    private String deliveryGroup;
 
     @DtoField(readOnly = true)
     private BigDecimal price = BigDecimal.ZERO;
@@ -70,6 +79,36 @@ public class CartItemDTOImpl implements CartItem, Serializable {
 
     public void setProductSkuCode(final String productSkuCode) {
         this.productSkuCode = productSkuCode;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(final String productName) {
+        this.productName = productName;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getDeliveryGroup() {
+        return deliveryGroup;
+    }
+
+    public void setDeliveryGroup(final String deliveryGroup) {
+        this.deliveryGroup = deliveryGroup;
+    }
+
+    public DeliveryBucket getDeliveryBucket() {
+
+        return ShoppingCartUtils.getDeliveryBucket(this);
+
     }
 
     public BigDecimal getQty() {

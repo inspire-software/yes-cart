@@ -323,9 +323,7 @@ public class ContentController {
      *     <tr><td>XML variables to dynamic content</td><td>
      * <pre><code>
      *         &lt;parameters&gt;
-     *             &lt;entries&gt;
-     *                 &lt;entry key="datetime"&gt;2015-01-01&lt;/entry&gt;
-     *             &lt;/entries&gt;
+     *             &lt;parameter key="datetime"&gt;2015-01-01&lt;/entry&gt;
      *         &lt;/parameters&gt;
      * </code></pre>
      *     </td></tr>

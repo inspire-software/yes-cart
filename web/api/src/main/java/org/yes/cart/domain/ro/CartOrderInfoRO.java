@@ -18,11 +18,16 @@ package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.ro.xml.impl.CarrierSlaMapAdapter;
+import org.yes.cart.domain.ro.xml.impl.StringMapAdapter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Dto
 @XmlRootElement(name = "cart-order-info")
@@ -41,7 +46,7 @@ public class CartOrderInfoRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean deliveryAddressNotRequired;
     @DtoField(readOnly = true)
-    private Long carrierSlaId;
+    private Map<String, Long> carrierSlaId;
     @DtoField(readOnly = true)
     private Long billingAddressId;
     @DtoField(readOnly = true)
@@ -59,13 +64,20 @@ public class CartOrderInfoRO implements Serializable {
     }
 
 
-    @XmlAttribute(name = "carrier-sla-id")
-    public Long getCarrierSlaId() {
+    @XmlJavaTypeAdapter(CarrierSlaMapAdapter.class)
+    @XmlElement(name = "carrier-sla-ids")
+    public Map<String, Long> getCarrierSlaId() {
+        if (this.carrierSlaId == null) {
+            this.carrierSlaId = new HashMap<String, Long>();
+        }
         return carrierSlaId;
     }
 
-    public void setCarrierSlaId(final Long carrierSlaId) {
-        this.carrierSlaId = carrierSlaId;
+    public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
+        this.getCarrierSlaId().clear();
+        if (carrierSlaId != null) {
+            this.carrierSlaId.putAll(carrierSlaId);
+        }
     }
 
     @XmlAttribute(name = "billing-address-id")

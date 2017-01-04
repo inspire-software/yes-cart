@@ -25,19 +25,42 @@ public class SkuUnavailableException extends OrderAssemblyException {
 
     private final String skuCode;
     private final String skuName;
+    private final boolean onlineNow;
 
 
-    public SkuUnavailableException(final String skuCode, final String skuName) {
-        super("Sku " + skuCode + ":" + skuName + " is not available");
+    public SkuUnavailableException(final String skuCode, final String skuName, final boolean onlineNow) {
+        super("Sku " + skuCode + ":" + skuName + " is not available, cause: " + (onlineNow ? " out of stock" : "offline"));
         this.skuCode = skuCode;
         this.skuName = skuName;
+        this.onlineNow = onlineNow;
     }
 
+    /**
+     * Sku code as stated in cart item
+     *
+     * @return code
+     */
     public String getSkuCode() {
         return skuCode;
     }
 
+    /**
+     * Sku name as stated in cart item
+     *
+     * @return code
+     */
     public String getSkuName() {
         return skuName;
+    }
+
+    /**
+     * Flag to determine if the product is online at the time of throuwing exception.
+     * true if online (then this is thrown due to item being out of stock), false if offline.
+     * Unresolved SKU are always assumed to be online.
+     *
+     * @return online flag
+     */
+    public boolean isOnlineNow() {
+        return onlineNow;
     }
 }

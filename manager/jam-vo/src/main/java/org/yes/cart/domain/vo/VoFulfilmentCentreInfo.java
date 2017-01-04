@@ -18,6 +18,9 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
+
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -51,6 +54,8 @@ public class VoFulfilmentCentreInfo {
     @DtoField(value = "postcode")
     private String postcode;
 
+    @DtoField(value = "displayNames", converter = "DisplayValues")
+    private List<MutablePair<String, String>> displayNames;
 
     public long getWarehouseId() {
         return warehouseId;
@@ -115,4 +120,13 @@ public class VoFulfilmentCentreInfo {
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
     }
+
+    public List<MutablePair<String, String>> getDisplayNames() {
+        return displayNames;
+    }
+
+    public void setDisplayNames(final List<MutablePair<String, String>> displayNames) {
+        this.displayNames = displayNames;
+    }
+
 }

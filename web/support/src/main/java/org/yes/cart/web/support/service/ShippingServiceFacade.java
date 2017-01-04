@@ -22,7 +22,9 @@ import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -30,6 +32,15 @@ import java.util.List;
  * Time: 11:55
  */
 public interface ShippingServiceFacade {
+
+    /**
+     * Check if adddresses are required given current SLA selection.
+     *
+     * @param carrierSlaIds SLA ids
+     *
+     * @return billing (first) and shipping (second) not-required flags
+     */
+    Pair<Boolean, Boolean> isAddressNotRequired(Collection<Long> carrierSlaIds);
 
     /**
      * Determine if address is skippable. We can skip over the address step
@@ -48,20 +59,22 @@ public interface ShippingServiceFacade {
      * to be careful - hence left uncached OOTB.
      *
      * @param shoppingCart current cart
+     * @param supplier supplier
      *
      * @return applicable carriers
      */
-    List<Carrier> findCarriers(ShoppingCart shoppingCart);
+    List<Carrier> findCarriers(ShoppingCart shoppingCart, String supplier);
 
     /**
      * Get SLA from list of carrier choices.
      *
      * @param shoppingCart current cart
+     * @param supplier supplier
      * @param carriersChoices choices given to this cart (e.g. from #findCarriers method)
      *
      * @return selected Carrier and SLA pair or pair with null's if none selected
      */
-    Pair<Carrier, CarrierSla> getCarrierSla(ShoppingCart shoppingCart, List<Carrier> carriersChoices);
+    Pair<Carrier, CarrierSla> getCarrierSla(ShoppingCart shoppingCart, String supplier, List<Carrier> carriersChoices);
 
     /**
      * Get cart total price model (or blank object) with respect to current shop tax display settings.
@@ -73,5 +86,25 @@ public interface ShippingServiceFacade {
      * @return price (or blank object)
      */
     ProductPriceModel getCartShippingTotal(ShoppingCart cart);
+
+    /**
+     * Get cart total price model (or blank object) with respect to current shop tax display settings.
+     *
+     * If tax info is enabled then prices can be shown as net or gross.
+     *
+     * @param cart      current cart
+     *
+     * @return price (or blank object)
+     */
+    ProductPriceModel getCartShippingSupplierTotal(ShoppingCart cart, String supplier);
+
+    /**
+     * Get cart items suppliers.
+     *
+     * @param cart cart with items
+     *
+     * @return suppliers for cart items in the cart
+     */
+    Map<String, String> getCartItemsSuppliers(ShoppingCart cart);
 
 }

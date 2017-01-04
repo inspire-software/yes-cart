@@ -111,10 +111,21 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
 
     private void mergeOrderInfo(final ShoppingCart shoppingCart, final ShoppingCart oldCart, final Map<String, Object> cmdParams) {
 
-        final OrderInfo shoppingCartInfo = shoppingCart.getOrderInfo();
         final OrderInfo oldCartInfo = oldCart.getOrderInfo();
-        if ((shoppingCartInfo.getCarrierSlaId() == null || shoppingCartInfo.getCarrierSlaId() == 0L) &&
-                oldCartInfo.getCarrierSlaId() != null && oldCartInfo.getCarrierSlaId() > 0L) {
+
+        final Map<String, Long> slaSelection = shoppingCart.getCarrierSlaId();
+        final StringBuilder slaSelectionParam = new StringBuilder();
+        for (final Map.Entry<String, Long> sla : slaSelection.entrySet()) {
+            if (slaSelectionParam.length() > 0) {
+                slaSelectionParam.append('|');
+            }
+            slaSelectionParam.append(sla.getValue());
+            if (StringUtils.isNotBlank(sla.getKey())) {
+                slaSelectionParam.append('-').append(sla.getKey());
+            }
+        }
+
+        if (!slaSelection.isEmpty()) {
 
             cmdParams.clear();
 
@@ -125,7 +136,7 @@ public class CartUpdateProcessorImpl implements CartUpdateProcessor {
             cmdParams.clear();
 
             // Need to reinstate old addresses too because method may not be applicable for different address
-            cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA, oldCartInfo.getCarrierSlaId().toString());
+            cmdParams.put(ShoppingCartCommand.CMD_SETCARRIERSLA, slaSelectionParam.toString());
             if (oldCartInfo.getBillingAddressId() != null) {
                 final Address billing = addressService.findById(oldCartInfo.getBillingAddressId());
                 if (billing != null) {

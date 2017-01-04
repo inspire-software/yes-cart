@@ -113,10 +113,10 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * Create customer order from shopping cart.
      *
      * @param shoppingCart        shopping cart
-     * @param onePhysicalDelivery true if need to create one physical delivery.
+     *
      * @return created order.
      */
-    CustomerOrder createFromCart(ShoppingCart shoppingCart, boolean onePhysicalDelivery) throws OrderAssemblyException;
+    CustomerOrder createFromCart(ShoppingCart shoppingCart) throws OrderAssemblyException;
 
     /**
      * Find order by reference (cart guid or order number).
@@ -155,7 +155,7 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
      * @param shoppingCart cart to  check
      * @return true if order can be with several physical deliveries
      */
-    boolean isOrderMultipleDeliveriesAllowed(ShoppingCart shoppingCart);
+    Map<String, Boolean> isOrderMultipleDeliveriesAllowed(ShoppingCart shoppingCart);
 
 
 }

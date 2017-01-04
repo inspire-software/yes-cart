@@ -16,9 +16,12 @@
 
 package org.yes.cart.promotion.impl.action;
 
+import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.SkuPrice;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.PriceService;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -45,11 +48,14 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
     private final PriceService priceService;
     private final ShopService shopService;
+    private final ProductService productService;
 
     public OrderGiftPromotionAction(final PriceService priceService,
-                                    final ShopService shopService) {
+                                    final ShopService shopService,
+                                    final ProductService productService) {
         this.priceService = priceService;
         this.shopService = shopService;
+        this.productService = productService;
     }
 
 
@@ -100,6 +106,21 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
     }
 
 
+    private String getSkuName(final String code, final String lang) {
+
+        final ProductSku sku = this.productService.getProductSkuByCode(code);
+
+        if (sku == null) {
+            return code;
+        }
+
+        return new FailoverStringI18NModel(
+                sku.getDisplayName(),
+                sku.getName()
+        ).getValue(lang);
+
+    }
+
     /** {@inheritDoc} */
     public void perform(final Map<String, Object> context) {
 
@@ -112,7 +133,7 @@ public class OrderGiftPromotionAction extends AbstractOrderPromotionAction imple
 
             // add gift and set its price, we assume gift are in whole units
             final BigDecimal giftQty = BigDecimal.ONE.multiply(ctx.getMultiplier(itemTotal.getPriceSubTotal())).setScale(0, RoundingMode.HALF_UP).setScale(2);
-            cart.addGiftToCart(ctx.getSubject(), giftQty, getPromotionCode(context));
+            cart.addGiftToCart(ctx.getSubject(), getSkuName(ctx.getSubject(), cart.getCurrentLocale()), giftQty, getPromotionCode(context));
             final BigDecimal minimal = MoneyUtils.minPositive(giftValue.getSalePriceForCalculation(), giftValue.getRegularPrice());
             cart.setGiftPrice(ctx.getSubject(), minimal, giftValue.getRegularPrice());
 

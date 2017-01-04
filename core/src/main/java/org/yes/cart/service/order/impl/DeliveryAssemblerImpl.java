@@ -18,24 +18,22 @@ package org.yes.cart.service.order.impl;
 
 import org.springframework.util.Assert;
 import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.service.domain.CarrierSlaService;
-import org.yes.cart.service.domain.ProductService;
-import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
-import org.yes.cart.service.order.DeliveryAssembler;
-import org.yes.cart.service.order.OrderAssemblyException;
-import org.yes.cart.service.order.SkuUnavailableException;
+import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.DomainApiUtils;
-import org.yes.cart.util.MoneyUtils;
-import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Order delivery assembler responsible for shipment creation.
@@ -67,19 +65,14 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
 
     private final EntityFactory entityFactory;
-    private final WarehouseService warehouseService;
-    private final SkuWarehouseService skuWarehouseService;
     private final CarrierSlaService carrierSlaService;
-    private final ProductService productService;
+    private final OrderSplittingStrategy orderSplittingStrategy;
 
     public DeliveryAssemblerImpl(final WarehouseService warehouseService,
-                                 final SkuWarehouseService skuWarehouseService,
                                  final CarrierSlaService carrierSlaService,
-                                 final ProductService productService) {
-        this.productService = productService;
+                                 final OrderSplittingStrategy orderSplittingStrategy) {
+        this.orderSplittingStrategy = orderSplittingStrategy;
         this.entityFactory = warehouseService.getGenericDao().getEntityFactory();
-        this.warehouseService = warehouseService;
-        this.skuWarehouseService = skuWarehouseService;
         this.carrierSlaService = carrierSlaService;
     }
 
@@ -96,11 +89,11 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                                                final boolean onePhysicalDelivery) throws OrderAssemblyException {
 
 
-        final Map<String, List<CustomerOrderDet>> groups = getDeliveryGroups(order, onePhysicalDelivery);
+        final Map<DeliveryBucket, List<CustomerOrderDet>> groups = getDeliveryGroups(order, onePhysicalDelivery);
 
         int idx = 0;
 
-        for (Map.Entry<String, List<CustomerOrderDet>> entry : groups.entrySet()) {
+        for (Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : groups.entrySet()) {
 
             final List<CustomerOrderDet> items = entry.getValue();
 
@@ -111,7 +104,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                     entry.getKey(),
                     idx);
 
-            if (CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())) {
+            if (CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey().getGroup())) {
                 // this is electronic delivery
                 customerOrderDelivery.setPrice(BigDecimal.ZERO);
                 customerOrderDelivery.setListPrice(BigDecimal.ZERO);
@@ -126,8 +119,8 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
 
                 final Total cartTotal = shoppingCart.getTotal();
 
-                final String shippingSlaId = customerOrderDelivery.getCarrierSla().getGuid();
-                final int index = shoppingCart.indexOfShipping(shippingSlaId);
+                final String shippingSlaGUID = customerOrderDelivery.getCarrierSla().getGuid();
+                final int index = shoppingCart.indexOfShipping(shippingSlaGUID, entry.getKey());
                 final CartItem shipping = index > -1 ? shoppingCart.getShippingList().get(index) : null;
 
                 if (cartTotal == null
@@ -138,7 +131,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                         || shipping.getGrossPrice() == null
                         || shipping.getTaxRate() == null
                         || shipping.getTaxCode() == null) {
-                    throw new OrderAssemblyException("No delivery total");
+                    throw new OrderAssemblyException("No delivery total for: " + entry.getKey());
                 }
 
                 customerOrderDelivery.setPrice(shipping.getPrice());
@@ -178,6 +171,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setQty(orderDet.getQty());
         deliveryDet.setProductSkuCode(orderDet.getProductSkuCode());
         deliveryDet.setProductName(orderDet.getProductName());
+        deliveryDet.setSupplierCode(orderDet.getSupplierCode());
         deliveryDet.setPrice(orderDet.getPrice());
         deliveryDet.setSalePrice(orderDet.getSalePrice());
         deliveryDet.setListPrice(orderDet.getListPrice());
@@ -206,19 +200,20 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
     private CustomerOrderDelivery createOrderDelivery(final CustomerOrder order,
                                                       final ShoppingCart shoppingCart,
                                                       final List<CustomerOrderDet> items,
-                                                      final String deliveryGroup,
+                                                      final DeliveryBucket deliveryGroup,
                                                       final int idx) {
         Assert.notNull(order, "Expecting order, but found null");
         Assert.notNull(shoppingCart, "Expecting shopping cart, but found null");
         final CustomerOrderDelivery customerOrderDelivery = entityFactory.getByIface(CustomerOrderDelivery.class);
-        if (shoppingCart.getCarrierSlaId() != null) {
-            customerOrderDelivery.setCarrierSla(carrierSlaService.getById(shoppingCart.getCarrierSlaId()));
+        if (!shoppingCart.getCarrierSlaId().isEmpty()) {
+            final Long carrierSlaId = shoppingCart.getCarrierSlaId().get(deliveryGroup.getSupplier());
+            customerOrderDelivery.setCarrierSla(carrierSlaId != null ? carrierSlaService.getById(carrierSlaId) : null);
         } else {
             customerOrderDelivery.setCarrierSla(null);
         }
 
         customerOrderDelivery.setDeliveryNum(order.getOrdernum() + "-" + idx);
-        customerOrderDelivery.setDeliveryGroup(deliveryGroup);
+        customerOrderDelivery.setDeliveryGroup(deliveryGroup.getGroup());
 
         customerOrderDelivery.setDeliveryStatus(CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT);
         customerOrderDelivery.setCustomerOrder(order);
@@ -231,20 +226,12 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
     }
 
     /**
-     * Is order can be with multiple deliveries.
-     *
-     * @param order given order
-     * @return true in case if order can has multiple physical deliveries.
+     * {@inheritDoc}
      */
-    public boolean isOrderMultipleDeliveriesAllowed(final CustomerOrder order) {
+    public Map<String, Boolean> isOrderMultipleDeliveriesAllowed(final CustomerOrder order) {
 
-        try {
-            final Map<String, List<CustomerOrderDet>> deliveryGroups = getDeliveryGroups(order, false);
-            return (getPhysicalDeliveriesQty(deliveryGroups) > 1);
-        } catch (SkuUnavailableException e) {
-            ShopCodeContext.getLog(this).warn("Unable to determine multi delivery, order contains unavailable sku. {}", order.getOrdernum(), e.getMessage());
-        }
-        return false;
+        return orderSplittingStrategy.isMultipleDeliveriesAllowed(order.getShop().getShopId(),
+                new ArrayList<CartItem>(order.getOrderDetail()));
 
     }
 
@@ -256,147 +243,13 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
      * @param onePhysicalDelivery true if need to create one physical delivery.
      * @return true in case if order can has single delivery.
      */
-    Map<String, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order, final boolean onePhysicalDelivery) throws SkuUnavailableException {
+    Map<DeliveryBucket, List<CustomerOrderDet>> getDeliveryGroups(final CustomerOrder order,
+                                                                  final boolean onePhysicalDelivery)
+            throws SkuUnavailableException {
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(order.getShop().getShopId(), false);
+        return (Map) orderSplittingStrategy.determineDeliveryBuckets(order.getShop().getShopId(),
+                new ArrayList<CartItem>(order.getOrderDetail()), onePhysicalDelivery);
 
-        // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
-        final Map<String, List<CustomerOrderDet>> deliveryGroups = new TreeMap<String, List<CustomerOrderDet>>();
-
-        for (CustomerOrderDet customerOrderDet : order.getOrderDetail()) {
-
-            final Pair<BigDecimal, BigDecimal> quantity = skuWarehouseService.findQuantity(
-                    warehouses,
-                    customerOrderDet.getProductSkuCode()
-            );
-
-            // qty on warehouse minus reserved qty.
-            // allocation occurs when payment was successful or offline payment was approved.
-            final BigDecimal rest = MoneyUtils.notNull(quantity.getFirst(), BigDecimal.ZERO)
-                    .add(MoneyUtils.notNull(quantity.getSecond(), BigDecimal.ZERO).negate());
-
-            final String deliveryGroup = getDeliveryGroup(rest, customerOrderDet);
-
-            if (!deliveryGroups.containsKey(deliveryGroup)) {
-                deliveryGroups.put(deliveryGroup, new ArrayList<CustomerOrderDet>());
-            }
-
-            deliveryGroups.get(deliveryGroup).add(customerOrderDet);
-
-        }
-
-        if (onePhysicalDelivery) {
-
-            final int deliveryQty = getPhysicalDeliveriesQty(deliveryGroups);
-
-            if (deliveryQty == 1) {
-
-                return deliveryGroups;
-
-            } else if (deliveryQty > 1) {
-                final List<String> removeGroups = new ArrayList<String>();
-                final List<CustomerOrderDet> collector = new ArrayList<CustomerOrderDet>(5);
-                deliveryGroups.put(
-                        CustomerOrderDelivery.MIX_DELIVERY_GROUP,
-                        collector
-                );
-
-
-                for (Map.Entry<String, List<CustomerOrderDet>> entry : deliveryGroups.entrySet()) {
-                    if (
-                            !(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(entry.getKey())
-                                    ||
-                                    CustomerOrderDelivery.MIX_DELIVERY_GROUP.equals(entry.getKey()))
-                            ) {
-                        removeGroups.add(entry.getKey());
-                        collector.addAll(entry.getValue());
-
-                    }
-                }
-
-                deliveryGroups.keySet().removeAll(removeGroups);
-
-            }
-
-
-        }
-
-        return deliveryGroups;
-    }
-
-
-    private int getPhysicalDeliveriesQty(final Map<String, List<CustomerOrderDet>> deliveryMap) {
-        int qty = deliveryMap.size();
-        if (deliveryMap.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP) != null) {
-            qty--;
-        }
-        return qty;
-    }
-
-
-    /**
-     * Get the delivery group of product sku.
-     * <p/>
-     * All physical goods, that has not limitation by quantity or availability
-     * will be collected into {@link CustomerOrderDelivery}#STANDARD_DELIVERY_GROUP
-     *
-     * @param rest             not reserved quantity on warehouses
-     * @param customerOrderDet order detail record
-     * @return delivery group label
-     */
-    String getDeliveryGroup(final BigDecimal rest, final CustomerOrderDet customerOrderDet) throws SkuUnavailableException {
-
-        final Date now = now();
-
-        final Product product = productService.getProductBySkuCode(customerOrderDet.getProductSkuCode());
-        final int availability;
-        final Date availableFrom;
-        final Date availableTo;
-        final boolean digital;
-        if (product != null) {
-            availability = product.getAvailability();
-            availableFrom = product.getAvailablefrom();
-            availableTo = product.getAvailableto();
-            digital = product.getProducttype().isDigital();
-        } else { // default behaviour for SKU not in PIM
-            availability = Product.AVAILABILITY_STANDARD;
-            availableFrom = null;
-            availableTo = null;
-            digital = false;
-        }
-
-        final boolean isAvailableNow = DomainApiUtils.isObjectAvailableNow(true, availableFrom, availableTo, now);
-        final boolean isAvailableLater = availability == Product.AVAILABILITY_PREORDER && DomainApiUtils.isObjectAvailableNow(true, null, availableTo, now);
-
-        // Must not create orders with items that are unavailable
-        if (!isAvailableNow && !isAvailableLater) {
-            throw new SkuUnavailableException(customerOrderDet.getProductSkuCode(), customerOrderDet.getProductName());
-        }
-
-        if (availability == Product.AVAILABILITY_ALWAYS) {
-
-            if (digital) {
-                return CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP;
-            }
-            return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
-        }
-
-        if (availability == Product.AVAILABILITY_PREORDER && !isAvailableNow) {
-            // preorders that are launched become standard
-            return CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP;
-        }
-
-        if ((availability == Product.AVAILABILITY_PREORDER || availability == Product.AVAILABILITY_BACKORDER)
-                && MoneyUtils.isFirstBiggerThanSecond(customerOrderDet.getQty(), rest)) {
-            // Only allow wait of inventory on back orders and preorders if we do not have enough stock
-            return CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP;
-        }
-        return CustomerOrderDelivery.STANDARD_DELIVERY_GROUP;
-
-    }
-
-    Date now() {
-        return new Date();
     }
 
 }

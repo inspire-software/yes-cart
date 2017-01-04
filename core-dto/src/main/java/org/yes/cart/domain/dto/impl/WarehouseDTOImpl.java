@@ -20,6 +20,8 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.dto.WarehouseDTO;
 
+import java.util.Map;
+
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
@@ -54,6 +56,8 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "postcode")
     private String postcode;
 
+    @DtoField(value = "displayName", converter = "i18nStringConverter")
+    private Map<String, String> displayNames;
 
 
     /** {@inheritDoc}*/
@@ -89,6 +93,21 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     /** {@inheritDoc}*/
     public void setName(final String name) {
         this.name = name;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, String> getDisplayNames() {
+        return displayNames;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setDisplayNames(final Map<String, String> displayNames) {
+        this.displayNames = displayNames;
     }
 
     /** {@inheritDoc}*/

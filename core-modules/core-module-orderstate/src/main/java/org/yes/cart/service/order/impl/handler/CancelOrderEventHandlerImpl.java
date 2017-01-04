@@ -16,21 +16,21 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -42,17 +42,21 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
     private final WarehouseService warehouseService;
     private final SkuWarehouseService skuWarehouseService;
+    private final ProductService productService;
 
 
     /**
      * @param warehouseService    to locate warehouse, that belong to shop where order was created
      * @param skuWarehouseService to credit quantity on warehouse
+     * @param productService      product service
      */
     public CancelOrderEventHandlerImpl(
             final WarehouseService warehouseService,
-            final SkuWarehouseService skuWarehouseService) {
+            final SkuWarehouseService skuWarehouseService,
+            final ProductService productService) {
         this.warehouseService = warehouseService;
         this.skuWarehouseService = skuWarehouseService;
+        this.productService = productService;
     }
 
     /**
@@ -99,22 +103,53 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         }
 
         if (voidCredit || voidReservation) {
+
+            // map warehouses by code
             final List<Warehouse> warehouses = warehouseService.getByShopId(
                     delivery.getCustomerOrder().getShop().getShopId(), false);
+            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+            for (final Warehouse warehouse : warehouses) {
+                warehouseByCode.put(warehouse.getCode(), warehouse);
+            }
 
             for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
+
                 final String skuCode = det.getProductSkuCode();
-                BigDecimal toCredit = det.getQty();
-                for (Warehouse wh : warehouses) {
-                    if (voidReservation) {
-                        // this delivery was not completed, so can just void reservation
-                        toCredit = skuWarehouseService.voidReservation(wh, skuCode, toCredit);
-                    } else if (voidCredit) {
-                        // this delivery is completed, so need to credit qty
-                        toCredit = skuWarehouseService.credit(wh, skuCode, toCredit);
-                    }
-                    if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE), toCredit.setScale(Constants.DEFAULT_SCALE))) {
-                        break;
+                final BigDecimal toCredit = det.getQty();
+
+                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+
+                if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
+
+                    final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
+
+                    if (selected == null) {
+                        ShopCodeContext.getLog(this).warn(
+                                "Warehouse is not found for delivery detail {}:{}",
+                                delivery.getDeliveryNum(), det.getProductSkuCode()
+                        );
+                    } else {
+
+                        if (voidReservation) {
+                            // this delivery was not completed, so can just void reservation
+                            final BigDecimal rem = skuWarehouseService.voidReservation(selected, skuCode, toCredit);
+                            if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                                ShopCodeContext.getLog(this).warn(
+                                        "Could not void all reservation {}:{}",
+                                        delivery.getDeliveryNum(), det.getProductSkuCode()
+                                );
+                            }
+                        } else if (voidCredit) {
+                            // this delivery is completed, so need to credit qty
+                            final BigDecimal rem = skuWarehouseService.credit(selected, skuCode, toCredit);
+                            if (MoneyUtils.isFirstBiggerThanSecond(rem, BigDecimal.ZERO)) {
+                                ShopCodeContext.getLog(this).warn(
+                                        "Could not credit all reservation {}:{}",
+                                        delivery.getDeliveryNum(), det.getProductSkuCode()
+                                );
+                            }
+                        }
+
                     }
                 }
 

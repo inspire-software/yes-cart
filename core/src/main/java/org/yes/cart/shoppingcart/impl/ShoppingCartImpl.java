@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
@@ -147,35 +148,59 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     /** {@inheritDoc} */
     @JsonIgnore
-    public Long getCarrierSlaId() {
+    public Map<String, Long> getCarrierSlaId() {
         return getOrderInfo().getCarrierSlaId();
     }
 
     /** {@inheritDoc} */
     @JsonIgnore
+    public boolean isAllCarrierSlaSelected() {
+
+        return ShoppingCartUtils.isAllCarrierSlaSelected(getItems(), getGifts(), getCarrierSlaId());
+
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean isAllCartItemsBucketed() {
+
+        return ShoppingCartUtils.isAllCartItemsBucketed(getItems(), getGifts());
+
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
     public List<CartItem> getCartItemList() {
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(getItems().size());
-        // first items (in the order they were added)
-        for (CartItem item : getItems()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        // gifts in the order promotions were applied
-        for (CartItem item : getGifts()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        return Collections.unmodifiableList(immutableItems);
+
+        return ShoppingCartUtils.getCartItemImmutableList(getItems(), getGifts());
+
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public Map<DeliveryBucket, List<CartItem>> getCartItemMap() {
+
+        return ShoppingCartUtils.getCartItemImmutableMap(getItems(), getGifts());
+
     }
 
     /** {@inheritDoc} */
     @JsonIgnore
     public List<CartItem> getShippingList() {
-        final List<CartItem> immutableItems = new ArrayList<CartItem>(getShipping().size());
-        // all shipping lines
-        for (CartItem item : getShipping()) {
-            immutableItems.add(new ImmutableCartItemImpl(item));
-        }
-        return Collections.unmodifiableList(immutableItems);
+
+        return ShoppingCartUtils.getShippingImmutableList(getShipping());
+
     }
+
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public Map<DeliveryBucket, List<CartItem>> getShippingListMap() {
+
+        return ShoppingCartUtils.getShippingImmutableMap(getShipping());
+
+    }
+
 
     /** {@inheritDoc} */
     public BigDecimal getProductSkuQuantity(final String sku) {
@@ -187,7 +212,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean addProductSkuToCart(final String sku, final BigDecimal quantity) {
+    public boolean addProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
 
         final int skuIndex = indexOfProductSku(sku);
         if (skuIndex != -1) {
@@ -197,28 +222,32 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
         final CartItemImpl newItem = new CartItemImpl();
         newItem.setProductSkuCode(sku);
+        newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
         getItems().add(newItem);
         return true;
     }
 
     /** {@inheritDoc} */
-    public boolean addShippingToCart(final String carrierSlaId, final BigDecimal quantity) {
-        final int shipIndex = indexOfShipping(carrierSlaId);
+    public boolean addShippingToCart(final DeliveryBucket deliveryBucket, final String carrierSlaGUID, final String carrierSlaName, final BigDecimal quantity) {
+        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
             getShipping().get(shipIndex).addQuantity(quantity);
             return false;
         }
 
         final CartItemImpl newItem = new CartItemImpl();
-        newItem.setProductSkuCode(carrierSlaId);
+        newItem.setProductSkuCode(carrierSlaGUID);
+        newItem.setProductName(carrierSlaName);
         newItem.setQuantity(quantity);
+        newItem.setSupplierCode(deliveryBucket.getSupplier());
+        newItem.setDeliveryGroup(deliveryBucket.getGroup());
         getShipping().add(newItem);
         return true;
     }
 
     /** {@inheritDoc} */
-    public boolean addGiftToCart(final String sku, final BigDecimal quantity, final String promotionCode) {
+    public boolean addGiftToCart(final String sku, final String skuName, final BigDecimal quantity, final String promotionCode) {
 
         final int skuIndex = indexOfGift(sku);
         if (skuIndex != -1) {
@@ -230,6 +259,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
         final CartItemImpl newItem = new CartItemImpl();
         newItem.setProductSkuCode(sku);
+        newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
         newItem.setGift(true);
         newItem.setPromoApplied(true);
@@ -272,9 +302,30 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         if (skuIndex == -1) { //not found
             getItems().add(newItem);
         } else {
+            newItem.setSupplierCode(getItems().get(skuIndex).getSupplierCode());
             getItems().set(skuIndex, newItem);
         }
         return true;
+    }
+
+    /** {@inheritDoc} */
+    public boolean setProductSkuDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
+
+        final int skuIndex = indexOfProductSku(sku);
+        if (skuIndex == -1) { //not found
+            return false;
+        }
+
+        final CartItemImpl item = getItems().get(skuIndex);
+        final DeliveryBucket bucket = item.getDeliveryBucket();
+
+        if ((bucket == null && deliveryBucket != null) ||
+                (bucket != null && !bucket.equals(deliveryBucket))) {
+            item.setSupplierCode(deliveryBucket.getSupplier());
+            item.setDeliveryGroup(deliveryBucket.getGroup());
+            return true;
+        }
+        return false;
     }
 
     /** {@inheritDoc} */
@@ -346,8 +397,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean removeShipping(final String carrierSlaId) {
-        final int skuIndex = indexOfShipping(carrierSlaId);
+    public boolean removeShipping(final String carrierSlaGUID, final DeliveryBucket deliveryBucket) {
+        final int skuIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (skuIndex != -1) {
             getItems().remove(skuIndex);
             return true;
@@ -384,8 +435,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean setShippingPrice(final String carrierSlaId, final BigDecimal salePrice, final BigDecimal listPrice) {
-        final int shipIndex = indexOfShipping(carrierSlaId);
+    public boolean setShippingPrice(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal salePrice, final BigDecimal listPrice) {
+        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
             final CartItemImpl shipItem = getShipping().get(shipIndex);
             shipItem.setPrice(salePrice);
@@ -445,8 +496,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean setShippingPromotion(final String carrierSlaId, final BigDecimal promoPrice, final String promoCode) {
-        final int shipIndex = indexOfShipping(carrierSlaId);
+    public boolean setShippingPromotion(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal promoPrice, final String promoCode) {
+        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
             final CartItemImpl shipItem = getShipping().get(shipIndex);
             shipItem.setPrice(promoPrice);
@@ -472,8 +523,8 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean setShippingTax(final String carrierSlaPk, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
-        final int shipIndex = indexOfShipping(carrierSlaPk);
+    public boolean setShippingTax(final String carrierSlaGUID, final DeliveryBucket deliveryBucket, final BigDecimal netPrice, final BigDecimal grossPrice, final BigDecimal rate, final String taxCode, final boolean exclPrice) {
+        final int shipIndex = indexOfShipping(carrierSlaGUID, deliveryBucket);
         if (shipIndex != -1) {
             final CartItemImpl shipItem = getShipping().get(shipIndex);
             shipItem.setNetPrice(netPrice);
@@ -558,41 +609,33 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     /** {@inheritDoc} */
     @JsonIgnore
     public int getCartItemsCount() {
-        BigDecimal quantity = BigDecimal.ZERO;
-        for (CartItem cartItem : getItems()) {
-            quantity = quantity.add(cartItem.getQty());
-        }
-        for (CartItem cartItem : getGifts()) {
-            quantity = quantity.add(cartItem.getQty());
-        }
-        return quantity.intValue();
+
+        return ShoppingCartUtils.getCartItemsCount(getItems(), getGifts());
+
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public List<String> getCartItemsSuppliers() {
+
+        return ShoppingCartUtils.getCartItemsSuppliers(getItems(), getGifts());
+
     }
 
     /** {@inheritDoc} */
     public int indexOfProductSku(final String skuCode) {
-        return indexOf(skuCode, getItems());
+        return ShoppingCartUtils.indexOf(skuCode, getItems());
     }
 
     /** {@inheritDoc} */
-    public int indexOfShipping(final String carrierSlaId) {
-        return indexOf(carrierSlaId, getShipping());
+    public int indexOfShipping(final String carrierSlaId, final DeliveryBucket deliveryBucket) {
+        return ShoppingCartUtils.indexOf(carrierSlaId, deliveryBucket, getShipping());
     }
 
     /** {@inheritDoc} */
     public int indexOfGift(final String skuCode) {
-        return indexOf(skuCode, getGifts());
+        return ShoppingCartUtils.indexOf(skuCode, getGifts());
     }
-
-    public int indexOf(final String skuCode, final List<? extends CartItem> items) {
-        for (int index = 0; index < items.size(); index++) {
-            final CartItem item = items.get(index);
-            if (item.getProductSkuCode().equals(skuCode)) {
-                return index;
-            }
-        }
-        return -1;
-    }
-
 
 
     /** {@inheritDoc} */

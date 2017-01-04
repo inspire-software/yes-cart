@@ -1337,6 +1337,7 @@ ul.feedbackPanel {
     margin: 20px 0 40px 0;
     font-size: 16px;
     padding: 0;
+    line-height: 32px;
 }
 
 ul.feedbackPanel > li {

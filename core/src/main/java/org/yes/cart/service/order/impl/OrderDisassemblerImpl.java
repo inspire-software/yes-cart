@@ -21,17 +21,10 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.order.OrderDisassembler;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.MutableOrderInfo;
-import org.yes.cart.shoppingcart.MutableShoppingContext;
-import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Transform {@link org.yes.cart.domain.entity.CustomerOrder} to {@link org.yes.cart.shoppingcart.ShoppingCart}.
@@ -65,24 +58,41 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         shoppingCart.initialise(amountCalculationStrategy);
 
         //fill cart item list
-        for (CustomerOrderDet orderDet :customerOrder.getOrderDetail()) {
-            if(orderDet.isGift()) {
-                shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getQty(), orderDet.getAppliedPromo());
-                shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
-            } else {
-                shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getQty());
-                shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
-                if (orderDet.isFixedPrice()) {
-                    // Offers in existing order
-                    shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+        if (CollectionUtils.isEmpty(customerOrder.getDelivery())) {
+            // fill from order if no deliveries are available
+            for (CustomerOrderDet orderDet : customerOrder.getOrderDetail()) {
+                if (orderDet.isGift()) {
+                    shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
+                    shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                } else {
+                    shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
+                    shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                    if (orderDet.isFixedPrice()) {
+                        // Offers in existing order
+                        shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                    }
+                }
+                shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
+            }
+        } else {
+            // fill from delivery details
+            for (CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+                for (CustomerOrderDeliveryDet orderDet : delivery.getDetail()) {
+                    if (orderDet.isGift()) {
+                        shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
+                        shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                    } else {
+                        shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
+                        shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                        if (orderDet.isFixedPrice()) {
+                            // Offers in existing order
+                            shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
+                        }
+                    }
+                    shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 }
             }
         }
-
-        //fill deliveries (shipping is calculated)
-//        for (CustomerOrderDelivery orderDelivery : customerOrder.getDelivery())  {
-//            shoppingCart.addShippingToCart(String.valueOf( orderDelivery.getCarrierSla().getCarrierslaId()), BigDecimal.ONE);
-//        }
 
         //coupons
         for(PromotionCouponUsage coupons : customerOrder.getCoupons()) {
@@ -97,10 +107,30 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
 
-        final CustomerOrderDelivery firstDelivery = getFirstDelivery(customerOrder);
-        if (firstDelivery != null) {
-            mutableOrderInfo.setCarrierSlaId(firstDelivery.getCarrierSla().getCarrierslaId());
+        final Collection<CustomerOrderDelivery> deliveries = customerOrder.getDelivery();
+        final Map<String, Integer> noOfStdDeliveriesBySupplier = new HashMap<String, Integer>();
+        boolean multi = false;
+        if (CollectionUtils.isNotEmpty(deliveries)) {
+            for (final CustomerOrderDelivery delivery : deliveries) {
+                // Preset shipping methods by supplier from first item in the delivery
+                final CartItem first = CollectionUtils.isNotEmpty(delivery.getDetail()) ? delivery.getDetail().iterator().next() : null;
+                final String supplier = first != null && first.getSupplierCode() != null ? first.getSupplierCode() : "";
+                mutableOrderInfo.putCarrierSlaId(supplier, delivery.getCarrierSla().getCarrierslaId());
+                // Count standard deliveries (electronics is always separate)
+                if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())) {
+                    Integer count = noOfStdDeliveriesBySupplier.get(supplier);
+                    if (count == null) {
+                        noOfStdDeliveriesBySupplier.put(supplier, 1);
+                    } else {
+                        noOfStdDeliveriesBySupplier.put(supplier, count + 1);
+                        multi = true;
+                    }
+                }
+            }
         }
+
+        mutableOrderInfo.setMultipleDelivery(multi);
+        mutableOrderInfo.setMultipleDeliveryAvailable(multi);
 
         if (customerOrder.getBillingAddressDetails() != null) {
             mutableOrderInfo.setBillingAddressId(customerOrder.getBillingAddressDetails().getAddressId());
@@ -128,17 +158,6 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         }
 
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
-        if (CollectionUtils.isNotEmpty(customerOrder.getDelivery())) {
-            int count = 0;
-            for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
-                if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(delivery.getDeliveryGroup())) {
-                    count++; // NON Electronic only
-                }
-            }
-            mutableOrderInfo.setMultipleDelivery(count > 1);
-        } else {
-            mutableOrderInfo.setMultipleDelivery(false);
-        }
 
         mutableShoppingContext.setCustomerEmail(customerOrder.getEmail());
         mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, customerOrder.getShop()));
@@ -154,16 +173,6 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         shoppingCart.markDirty();
 
         return shoppingCart;
-    }
-
-    private CustomerOrderDelivery getFirstDelivery(final CustomerOrder customerOrder) {
-
-        final Collection<CustomerOrderDelivery> deliveries = customerOrder.getDelivery();
-        if (CollectionUtils.isNotEmpty(deliveries)) {
-            return deliveries.iterator().next();
-        }
-        return null;
-
     }
 
 

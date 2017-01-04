@@ -22,22 +22,25 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.domain.SkuWarehouseService;
+import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderAssembler;
 import org.yes.cart.service.order.impl.DeliveryAssemblerImpl;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -53,6 +56,8 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     private OrderAssembler orderAssembler;
     private CustomerOrderService customerOrderService;
     private CustomerOrderPaymentService customerOrderPaymentService;
+    private SkuWarehouseService skuWarehouseService;
+    private WarehouseService warehouseService;
     private DeliveryAssemblerImpl deliveryAssembler;
 
     @Before
@@ -61,6 +66,8 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         orderAssembler = (OrderAssembler) ctx().getBean(ServiceSpringKeys.ORDER_ASSEMBLER);
         customerOrderService = (CustomerOrderService) ctx().getBean(ServiceSpringKeys.CUSTOMER_ORDER_SERVICE);
         customerOrderPaymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
+        warehouseService = (WarehouseService) ctx().getBean("warehouseService");
+        skuWarehouseService = (SkuWarehouseService) ctx().getBean("skuWarehouseService");
         deliveryAssembler = (DeliveryAssemblerImpl) ctx().getBean(ServiceSpringKeys.DELIVERY_ASSEMBLER);
 
         super.setUp();
@@ -69,7 +76,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     @Test
     public void testHandlePaymentCallbackEnoughStock() throws Exception {
         Customer customer = createCustomer();
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
         customerOrder.setPgLabel("testExtFormPaymentGatewayLabel");
@@ -102,14 +109,7 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
     @Test
     public void testHandlePaymentCallbackOutOfStock() throws Exception {
         Customer customer = createCustomer();
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
-
-        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
-        Map<String, String> param = new HashMap<String, String>();
-        param = new HashMap<String, String>();
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST1");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "20000.00");
-        commands.execute(shoppingCart, (Map) param);
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), false);
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, true);
@@ -118,6 +118,14 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
         assertEquals("Order must be in ORDER_STATUS_NONE state",
                 CustomerOrder.ORDER_STATUS_NONE,
                 customerOrder.getOrderStatus());
+
+        // Simulate out of stock condition in time period between we go off to external form and then come back with payment callback
+        final Warehouse warehouse = warehouseService.findById(1L);
+        assertNotNull(warehouse);
+        final Pair<BigDecimal, BigDecimal> quantityAndReserve = skuWarehouseService.findQuantity(Arrays.asList(warehouse), "CC_TEST1");
+        skuWarehouseService.debit(warehouse, "CC_TEST1", quantityAndReserve.getFirst());
+        // end Simulate
+
         final String ordGuid = customerOrder.getCartGuid();
         ShopCodeContext.setShopCode(customerOrder.getShop().getCode());
         paymentCallBackHandlerFacade.handlePaymentCallback(

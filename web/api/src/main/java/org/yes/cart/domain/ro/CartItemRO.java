@@ -39,6 +39,10 @@ public class CartItemRO implements Serializable {
 
     @DtoField(value = "qty", readOnly = true)
     private BigDecimal quantity = DEFAULT_QUANTITY;
+    @DtoField(readOnly = true)
+    private String supplierCode;
+    @DtoField(readOnly = true)
+    private String deliveryGroup;
 
     @DtoField(readOnly = true)
     private BigDecimal price = BigDecimal.ZERO;
@@ -87,6 +91,25 @@ public class CartItemRO implements Serializable {
     public void setQuantity(final BigDecimal quantity) {
         this.quantity = quantity;
     }
+
+    @XmlAttribute(name = "supplier-code")
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    @XmlAttribute(name = "delivery-group")
+    public String getDeliveryGroup() {
+        return deliveryGroup;
+    }
+
+    public void setDeliveryGroup(final String deliveryGroup) {
+        this.deliveryGroup = deliveryGroup;
+    }
+
 
     @XmlAttribute(name = "price")
     public BigDecimal getPrice() {

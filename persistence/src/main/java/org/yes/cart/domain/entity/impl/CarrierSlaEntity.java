@@ -43,6 +43,8 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private String script;
     private String supportedPaymentGateways;
     private List<String> supportedPaymentGatewaysAsList;
+    private String supportedFulfilmentCentres;
+    private List<String> supportedFulfilmentCentresAsList;
     private boolean billingAddressNotRequired;
     private boolean deliveryAddressNotRequired;
     private Carrier carrier;
@@ -133,6 +135,27 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
         }
         return supportedPaymentGatewaysAsList;
+    }
+
+    public String getSupportedFulfilmentCentres() {
+        return supportedFulfilmentCentres;
+    }
+
+    public void setSupportedFulfilmentCentres(final String supportedFulfilmentCentres) {
+        this.supportedFulfilmentCentres = supportedFulfilmentCentres;
+        this.supportedFulfilmentCentresAsList = null;
+    }
+
+    public List<String> getSupportedFulfilmentCentresAsList() {
+        if (supportedFulfilmentCentresAsList == null) {
+            if (supportedFulfilmentCentres != null) {
+                supportedFulfilmentCentresAsList = Arrays.asList(supportedFulfilmentCentres.split(","));
+            } else {
+                supportedFulfilmentCentresAsList = Collections.emptyList();
+            }
+
+        }
+        return supportedFulfilmentCentresAsList;
     }
 
     public boolean isBillingAddressNotRequired() {

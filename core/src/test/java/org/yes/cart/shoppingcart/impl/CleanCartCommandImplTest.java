@@ -42,7 +42,7 @@ public class CleanCartCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
-        shoppingCart.addProductSkuToCart("ABC", BigDecimal.ONE);
+        shoppingCart.addProductSkuToCart("ABC", "ABC", BigDecimal.ONE);
         shoppingCart.getOrderInfo().setOrderMessage("hi, I'm a cart");
         String oldGuid = shoppingCart.getGuid();
 

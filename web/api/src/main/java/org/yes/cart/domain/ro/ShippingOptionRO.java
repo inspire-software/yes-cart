@@ -30,17 +30,17 @@ public class ShippingOptionRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
-    private String carrierslaId;
+    private String carriersla;
     private String billingAddressId;
     private String deliveryAddressId;
 
-    @XmlElement(name = "carriersla-id")
-    public String getCarrierslaId() {
-        return carrierslaId;
+    @XmlElement(name = "carriersla")
+    public String getCarriersla() {
+        return carriersla;
     }
 
-    public void setCarrierslaId(final String carrierslaId) {
-        this.carrierslaId = carrierslaId;
+    public void setCarriersla(final String carriersla) {
+        this.carriersla = carriersla;
     }
 
     @XmlElement(name = "billing-address-id")

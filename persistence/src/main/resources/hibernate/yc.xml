@@ -1431,6 +1431,7 @@
         <property name="name" type="string" length="64" not-null="true">
             <column name="NAME" length="64" not-null="true"/>
         </property>
+        <property name="displayName" column="DISPLAYNAME" type="string" length="4000"/>
         <property name="description" length="4000" type="string">
             <column name="DESCRIPTION" length="4000"/>
         </property>
@@ -2048,6 +2049,9 @@
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
+
+        <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ODET_CUSTORDER">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
@@ -2153,6 +2157,9 @@
 
         <property name="productSkuCode" column="CODE" type="string" length="255" not-null="true"/>
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
+
+        <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
             <column name="CUSTOMERORDERDELIVERY_ID" not-null="true"/>
         </many-to-one>
@@ -2230,6 +2237,7 @@
         <property name="deliveryAddressNotRequired" column="DELIVERY_ADDRESS_NOT_REQUIRED" type="boolean" not-null="true"/>
 
         <property name="supportedPaymentGateways" column="SUPPORTED_PGS" type="string" length="1024"/>
+        <property name="supportedFulfilmentCentres" column="SUPPORTED_FCS" type="string" length="1024"/>
 
         <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CSLA_CARR" lazy="false">
             <column name="CARRIER_ID" not-null="true"/>

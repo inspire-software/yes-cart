@@ -144,9 +144,17 @@ public class SkuWarehouseEntity implements org.yes.cart.domain.entity.SkuWarehou
                 && MoneyUtils.isFirstBiggerThanSecond(getQuantity(), getReserved());
     }
 
+    public boolean isAvailableToSell(final BigDecimal required) {
+        return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getAvailableToSell(), required);
+    }
+
+    public boolean isAvailableToAllocate(final BigDecimal required) {
+        return MoneyUtils.isFirstBiggerThanOrEqualToSecond(getQuantity(), required);
+    }
+
     public BigDecimal getAvailableToSell() {
-        return getQuantity().subtract(
-                MoneyUtils.notNull(getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)));
+        return MoneyUtils.notNull(getQuantity()).subtract(
+                MoneyUtils.notNull(getReserved(), BigDecimal.ZERO));
     }
 }
 

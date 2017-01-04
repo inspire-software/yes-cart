@@ -3,8 +3,6 @@ package org.yes.cart.shoppingcart.support.impl;
 import org.junit.Test;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
-import org.yes.cart.shoppingcart.support.CartDetuplizationException;
-import org.yes.cart.shoppingcart.support.CartTuplizationException;
 
 import java.math.BigDecimal;
 
@@ -22,7 +20,7 @@ public class AbstractCryptedTuplizerImplTest {
 
         final ShoppingCartImpl cart = new ShoppingCartImpl();
 
-        cart.addProductSkuToCart("SKU001", BigDecimal.ONE);
+        cart.addProductSkuToCart("SKU001", "SKU001", BigDecimal.ONE);
         cart.setProductSkuPrice("SKU001", new BigDecimal("9.99"), new BigDecimal("9.99"));
 
         final AbstractCryptedTuplizerImpl tup = new AbstractCryptedTuplizerImpl(

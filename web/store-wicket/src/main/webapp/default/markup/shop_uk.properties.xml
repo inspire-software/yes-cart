@@ -90,8 +90,8 @@
     <entry key="shipmentStep">Доставка</entry>
     <entry key="paymentStep">Оплата</entry>
     <entry key="paymentGatewayLabel">Спосіб оплати</entry>
-    <entry key="multipleDeliveryLabel">Множинна доставка</entry>
-    <entry key="multipleDeliveryHint">Це замовлення може бути доставлене частинами</entry>
+    <entry key="multipleDeliveryLabel">Надіслати товари, які доступні в даний час якомога швидше</entry>
+    <entry key="multipleDeliveryHint">Деякі товари, які на даний момент недоступні будуть доставлені окремою доставкою</entry>
     <entry key="paymentSubmit">Сплатити</entry>
     <entry key="orderPlace">Оформити замовлення</entry>
     <entry key="checkoutTitle">Оформлення покупки</entry>
@@ -175,6 +175,14 @@
     <entry key="grandTotalAmount">Сума (з ПДВ)</entry>
     <entry key="billingAddress">Адреса</entry>
     <entry key="orderVerification">Перевірте замовлення та виберіть спосіб оплати</entry>
+
+    <!-- ShippingDeliveriesView -->
+    <entry key="deliveryCarrierSelect">Спосіб доставки</entry>
+    <entry key="deliveryBucketCarrierSelect">Виберіть спосіб доставки для продукції, що поставляється ${supplier}</entry>
+    <entry key="deliveryBucketCarrierSelectNone">Немає способів доставки, доступних для продукції, що поставляється ${supplier}. Вам потрібно буде видалити ці елементи з кошика для завершення замовлення.</entry>
+    <entry key="deliveryBucketCarrier">Товари, що поставляються ${supplier}</entry>
+    <entry key="carrierSelectMultiSupplier">Товари в вашому кошику будуть доставлені декількома постачальниками</entry>
+    <entry key="carrierSelectMultiDelivery">Для деяких товарів в вашому кошику може знадобитися деякий час щоб знову опинитися в наявності. Якщо ви хочете відправити товари, які є в наявності на даний момент якомога швидше, то встановіть прапорець нижче. Слід зазначити, що витрати на доставку можуть збільшитися в результаті даної дії.</entry>
 
     <!-- ShoppingCartView -->
     <entry key="product">Найменування</entry>

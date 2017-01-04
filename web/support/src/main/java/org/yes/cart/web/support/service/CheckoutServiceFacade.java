@@ -32,6 +32,7 @@ import org.yes.cart.shoppingcart.Total;
 
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -180,7 +181,7 @@ public interface CheckoutServiceFacade {
      *
      * @return true if allowed
      */
-    boolean isMultipleDeliveryAllowedForCart(ShoppingCart shoppingCart);
+    Map<String, Boolean> isMultipleDeliveryAllowedForCart(ShoppingCart shoppingCart);
 
     /**
      * Persist changes to DB.

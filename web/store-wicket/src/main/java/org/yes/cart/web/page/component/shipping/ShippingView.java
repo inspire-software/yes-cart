@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
@@ -38,6 +39,7 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -71,20 +73,23 @@ public class ShippingView extends BaseComponent {
 
     private CarrierSla carrierSla;
 
+    private String supplier;
+
     /**
      * Construct shipping panel.
      *
      * @param id panel id
      */
-    public ShippingView(final String id) {
+    public ShippingView(final String id, final String supplier) {
 
         super(id);
 
+        this.supplier = supplier;
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Customer customer = customerServiceFacade.getCheckoutCustomer(ApplicationDirector.getCurrentShop(), cart);
 
         final Map<String, Object> contentParams = new HashMap<>();
-        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart());
+        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart(), this.supplier);
         final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
         for (Carrier carrier : carriers) {
             carrierSlas.addAll(carrier.getCarrierSla());
@@ -92,7 +97,7 @@ public class ShippingView extends BaseComponent {
 
         // Restore carrier by sla from shopping cart into current model.
         final Pair<Carrier, CarrierSla> selection =
-                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), carriers);
+                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), this.supplier, carriers);
 
         setCarrier(selection.getFirst());
         setCarrierSla(selection.getSecond());
@@ -107,10 +112,18 @@ public class ShippingView extends BaseComponent {
             protected void onSelectionChanged(final Object descriptor) {
                 super.onSelectionChanged(carrierSla);
 
+
+                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+                final Set<Long> slaSelection = new HashSet<Long>(cart.getCarrierSlaId().values());
+                slaSelection.add(carrierSla.getCarrierslaId());
+
+                final Pair<Boolean, Boolean> addressNotRequired = shippingServiceFacade.isAddressNotRequired(slaSelection);
+
                 final Address billingAddress;
                 final Address shippingAddress;
                 if (customer != null &&
-                        (!carrierSla.isBillingAddressNotRequired() || !carrierSla.isDeliveryAddressNotRequired())) {
+                        (!addressNotRequired.getFirst() || !addressNotRequired.getSecond())) {
                     final Address billingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
                     final Address shippingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
 
@@ -147,14 +160,12 @@ public class ShippingView extends BaseComponent {
 
                 }
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETCARRIERSLA, cart,
                         (Map) new HashMap() {{
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()));
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, carrierSla.isBillingAddressNotRequired());
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA, String.valueOf(carrierSla.getCarrierslaId()) + '-' + supplier);
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_NOT_REQUIRED, addressNotRequired.getFirst());
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_BILLING_ADDRESS, billingAddress);
-                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, carrierSla.isDeliveryAddressNotRequired());
+                            put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_NOT_REQUIRED, addressNotRequired.getSecond());
                             put(ShoppingCartCommand.CMD_SETCARRIERSLA_P_DELIVERY_ADDRESS, shippingAddress);
                         }}
                 );
@@ -199,14 +210,46 @@ public class ShippingView extends BaseComponent {
 
         add(form);
 
-        addShippingOptionFeedback();
+        if (carriers.isEmpty()) {
+            addNoShippingOptionFeedback();
+        } else {
+            addShippingOptionFeedback();
+        }
 
+    }
+
+    private void addNoShippingOptionFeedback() {
+
+        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+
+        final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
+        String supplierName = supplierNames.get(this.supplier);
+        if (supplierName == null) {
+            supplierName = this.supplier;
+        }
+
+        warn(
+                getLocalizer().getString("deliveryBucketCarrierSelectNone", this, new Model<Serializable>(new ValueMap(
+                        Collections.singletonMap("supplier", supplierName)
+                )))
+        );
     }
 
     private void addShippingOptionFeedback() {
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
-            info(getLocalizer().getString("carrierSelect", this));
+        if (cart.getCarrierSlaId().get(this.supplier) == null || cart.getCarrierSlaId().get(this.supplier) <= 0L) {
+
+            final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
+            String supplierName = supplierNames.get(this.supplier);
+            if (supplierName == null) {
+                supplierName = this.supplier;
+            }
+
+            info(
+                    getLocalizer().getString("deliveryBucketCarrierSelect", this, new Model<Serializable>(new ValueMap(
+                            Collections.singletonMap("supplier", supplierName)
+                    )))
+            );
         }
     }
 
@@ -223,14 +266,14 @@ public class ShippingView extends BaseComponent {
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         final Total total = cart.getTotal();
-        final Long slaId = cart.getCarrierSlaId();
-
-        final ProductPriceModel model = shippingServiceFacade.getCartShippingTotal(cart);
+        final Long slaId = cart.getCarrierSlaId().get(this.supplier);
 
         if (slaId == null) {
             form.addOrReplace(new Label(PRICE_LABEL));
             form.addOrReplace(new Label(PRICE_VIEW));
         } else {
+            final ProductPriceModel model = shippingServiceFacade.getCartShippingSupplierTotal(cart, this.supplier);
+
             form.addOrReplace(new Label(PRICE_LABEL, getLocalizer().getString(PRICE_LABEL, this)));
             form.addOrReplace(
                     new PriceView(

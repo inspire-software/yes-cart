@@ -42,6 +42,8 @@ public class VoCustomerOrderLine {
 
     @DtoField(value = "qty", readOnly = true)
     private BigDecimal qty;
+    @DtoField(value = "supplierCode", readOnly = true)
+    private String supplierCode;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -110,6 +112,14 @@ public class VoCustomerOrderLine {
 
     public void setQty(final BigDecimal qty) {
         this.qty = qty;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
     }
 
     public BigDecimal getPrice() {

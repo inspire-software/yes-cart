@@ -72,8 +72,8 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
     public void testRetreiveCreatedOrder() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        ShoppingCart shoppingCart = getShoppingCart();
-        CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        ShoppingCart shoppingCart = getShoppingCart(true);
+        CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         long pk = order.getCustomerorderId();
         assertNotNull(dtoService.getById(pk));
     }
@@ -82,8 +82,8 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
     public void testFindDeliveryByOrderNumber() throws Exception {
 
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCart();
-        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        final ShoppingCart shoppingCart = getShoppingCart(true);
+        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         final String orderNum = order.getOrdernum();
         final List<CustomerOrderDeliveryDTO> shipments = dtoService.findDeliveryByOrderNumber(orderNum);
         assertTrue("Cant get deliveries for order num " + orderNum , !shipments.isEmpty());
@@ -92,14 +92,14 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
             assertTrue("At lest one item in shipment must be present", !dto.getDetail().isEmpty());
             deliveryNumsSet.add(dto.getDeliveryNum());
         }
-        assertEquals(4, deliveryNumsSet.size());
+        assertEquals(5, deliveryNumsSet.size());
     }
 
     @Test
     public void testFindDeliveryDetails()      throws Exception {
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCart();
-        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        final ShoppingCart shoppingCart = getShoppingCart(true);
+        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
         final String orderNum = order.getOrdernum();
         final List<CustomerOrderDeliveryDetailDTO> details = dtoService.findDeliveryDetailsByOrderNumber(orderNum);
         assertTrue(!details.isEmpty());
@@ -108,16 +108,16 @@ public class DtoCustomerOrderServiceImplTezt extends BaseCoreDBTestCase {
             assertEquals("ds.fullfillment", det.getDeliveryStatusLabel());
             deliveryNumsSet.add(det.getDeliveryNum());
         }
-        assertEquals(4, deliveryNumsSet.size());
+        assertEquals(5, deliveryNumsSet.size());
 
 
     }
 
     @Test
-    public void testFindDeliveryDetailsNoDeliveries()      throws Exception {
+    public void testFindDeliveryDetailsNoDeliveries() throws Exception {
         final Customer customer = createCustomer();
-        final ShoppingCart shoppingCart = getShoppingCart();
-        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart, false);
+        final ShoppingCart shoppingCart = getShoppingCart(true);
+        final CustomerOrder order = customerOrderService.createFromCart(shoppingCart);
 
         getTx().execute(new TransactionCallbackWithoutResult() {
             @Override

@@ -119,7 +119,9 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
             default: cart = getStdCart(customer.getEmail()); break;
         }
 
-        CustomerOrder customerOrder = orderService.createFromCart(cart, onePhysicalDelivery);
+        prepareMultiDeliveriesAndRecalculate(cart, !onePhysicalDelivery);
+
+        CustomerOrder customerOrder = orderService.createFromCart(cart);
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel(pgLabel);
         orderService.update(customerOrder);
@@ -276,7 +278,7 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
-        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1-WAREHOUSE_1|1-WAREHOUSE_2|1");
 
         commands.execute(shoppingCart, (Map) params);
 

@@ -569,6 +569,7 @@
                 <constructor-arg index="3"  ref="customerOrderDeliveryDao"/>
                 <constructor-arg index="4"  ref="orderAssembler"/>
                 <constructor-arg index="5"  ref="deliveryAssembler"/>
+                <constructor-arg index="6"  ref="orderSplittingStrategy"/>
             </bean>
         </property>
     </bean>
@@ -706,6 +707,7 @@
     <bean id="promoActionItemGift" class="org.yes.cart.promotion.impl.action.ItemGiftPromotionAction">
         <constructor-arg index="0" ref="priceService"/>
         <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="productService"/>
     </bean>
 
     <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
@@ -714,6 +716,7 @@
     <bean id="promoActionOrderGift" class="org.yes.cart.promotion.impl.action.OrderGiftPromotionAction">
         <constructor-arg index="0" ref="priceService"/>
         <constructor-arg index="1" ref="shopService"/>
+        <constructor-arg index="2" ref="productService"/>
     </bean>
 
     <bean id="promoActionShippingDiscount" class="org.yes.cart.promotion.impl.action.ShippingDiscountPromotionAction"/>
@@ -911,11 +914,17 @@
         </property>
     </bean>
 
+    <bean id="orderSplittingStrategy" class="org.yes.cart.service.order.impl.OrderSplittingStrategyImpl">
+        <constructor-arg index="0" ref="shopService"/>
+        <constructor-arg index="1" ref="productService"/>
+        <constructor-arg index="2" ref="warehouseService"/>
+        <constructor-arg index="3" ref="skuWarehouseService"/>
+    </bean>
+
     <bean id="deliveryAssembler" class="org.yes.cart.service.order.impl.DeliveryAssemblerImpl">
         <constructor-arg index="0" ref="warehouseService"/>
-        <constructor-arg index="1" ref="skuWarehouseService"/>        
-        <constructor-arg index="2" ref="carrierSlaService"/>
-        <constructor-arg index="3" ref="productService"/>
+        <constructor-arg index="1" ref="carrierSlaService"/>
+        <constructor-arg index="2" ref="orderSplittingStrategy"/>
     </bean>
 
 

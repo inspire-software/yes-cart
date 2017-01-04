@@ -18,6 +18,10 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Igor Azarny iazarny@yahoo.com
  * Date: 19-May-2011
@@ -27,10 +31,11 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
+    private boolean multipleDeliveryAvailable;
     private boolean separateBillingAddress;
     private boolean billingAddressNotRequired;
     private boolean deliveryAddressNotRequired;
-    private Long carrierSlaId;
+    private Map<String, Long> carrierSlaId;
     private Long billingAddressId;
     private Long deliveryAddressId;
     private String orderMessage;
@@ -40,28 +45,41 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return orderMessage;
     }
 
-    /**
-         * Set order message.
-         *
-         * @param orderMessage order message.
-         */
+    /** {@inheritDoc} */
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
     }
 
 
     /** {@inheritDoc} */
-    public Long getCarrierSlaId() {
-        return carrierSlaId;
+    public Map<String, Long> getCarrierSlaId() {
+        if (this.carrierSlaId == null) {
+            this.carrierSlaId = new HashMap<String, Long>();
+        }
+        return Collections.unmodifiableMap(carrierSlaId);
     }
 
-    /**
-         * Set carrier shipping SLA.
-         *
-         * @param carrierSlaId selected sla id.
-         */
-    public void setCarrierSlaId(final Long carrierSlaId) {
-        this.carrierSlaId = carrierSlaId;
+    /** {@inheritDoc} */
+    public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
+        if (this.carrierSlaId == null) {
+            this.carrierSlaId = new HashMap<String, Long>();
+        }
+        this.carrierSlaId.clear();
+        if (carrierSlaId != null) {
+            this.carrierSlaId.putAll(carrierSlaId);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void putCarrierSlaId(final String supplier, final Long carrierSlaId) {
+        if (this.carrierSlaId == null) {
+            this.carrierSlaId = new HashMap<String, Long>();
+        }
+        if (carrierSlaId == null) {
+            this.carrierSlaId.remove(supplier);
+        } else {
+            this.carrierSlaId.put(supplier == null ? "" : supplier, carrierSlaId);
+        }
     }
 
     /** {@inheritDoc} */
@@ -69,11 +87,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return billingAddressId;
     }
 
-    /**
-         * Set billing address.
-         *
-         * @param billingAddressId billing address.
-         */
+    /** {@inheritDoc} */
     public void setBillingAddressId(final Long billingAddressId) {
         this.billingAddressId = billingAddressId;
     }
@@ -83,11 +97,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return deliveryAddressId;
     }
 
-    /**
-         * Set delivery address.
-         *
-         * @param deliveryAddressId delivery address.
-         */
+    /** {@inheritDoc} */
     public void setDeliveryAddressId(final Long deliveryAddressId) {
         this.deliveryAddressId = deliveryAddressId;
     }
@@ -97,11 +107,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return separateBillingAddress;
     }
 
-    /**
-         * Set billing address different from shipping address flag.
-         *
-         * @param separateBillingAddress flag.
-         */
+    /** {@inheritDoc} */
     public void setSeparateBillingAddress(final boolean separateBillingAddress) {
         this.separateBillingAddress = separateBillingAddress;
     }
@@ -111,11 +117,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return billingAddressNotRequired;
     }
 
-    /**
-     * Set billing address not required for this order flag.
-     *
-     * @param billingAddressNotRequired flag.
-     */
+    /** {@inheritDoc} */
     public void setBillingAddressNotRequired(final boolean billingAddressNotRequired) {
         this.billingAddressNotRequired = billingAddressNotRequired;
     }
@@ -125,11 +127,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return deliveryAddressNotRequired;
     }
 
-    /**
-     * Set delivery address not required for this order flag.
-     *
-     * @param deliveryAddressNotRequired flag.
-     */
+    /** {@inheritDoc} */
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
@@ -139,28 +137,28 @@ public class OrderInfoImpl implements MutableOrderInfo {
         return paymentGatewayLabel;
     }
 
-    /**
-         * Set selected payment gateway.
-         *
-         * @param paymentGatewayLabel selected payment gateway.
-         */
+    /** {@inheritDoc} */
     public void setPaymentGatewayLabel(final String paymentGatewayLabel) {
         this.paymentGatewayLabel = paymentGatewayLabel;
     }
-
 
     /** {@inheritDoc} */
     public boolean isMultipleDelivery() {
         return multipleDelivery;
     }
 
-    /**
-         * Set multiple delivery for order.
-         *
-         * @param multipleDelivery multiple delivery for order.
-         */
+    /** {@inheritDoc} */
     public void setMultipleDelivery(final boolean multipleDelivery) {
         this.multipleDelivery = multipleDelivery;
     }
 
+    /** {@inheritDoc} */
+    public boolean isMultipleDeliveryAvailable() {
+        return multipleDeliveryAvailable;
+    }
+
+    /** {@inheritDoc} */
+    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
+        this.multipleDeliveryAvailable = multipleDeliveryAvailable;
+    }
 }

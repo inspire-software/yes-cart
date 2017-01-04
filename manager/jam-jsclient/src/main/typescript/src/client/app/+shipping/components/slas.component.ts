@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { CarrierSlaVO, PaymentGatewayInfoVO } from './../../shared/model/index';
+import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { Config } from './../../shared/config/env.config';
 import { LogUtil } from './../../shared/log/index';
@@ -38,6 +38,7 @@ export class SlasComponent implements OnInit, OnDestroy {
   private delayedFilteringMs:number = Config.UI_INPUT_DELAY;
 
   private _pgs:any = {};
+  private _fcs:any = {};
 
   private filteredSlas:Array<CarrierSlaVO>;
 
@@ -68,6 +69,15 @@ export class SlasComponent implements OnInit, OnDestroy {
     pgs.forEach(pg => {
       this._pgs[pg.label] = pg;
     });
+    LogUtil.debug('SlasComponent mapped PGs', this._pgs);
+  }
+
+  @Input()
+  set fulfilmentCentres(fcs:Array<FulfilmentCentreInfoVO>) {
+    fcs.forEach(fc => {
+      this._fcs[fc.code] = fc;
+    });
+    LogUtil.debug('SlasComponent mapped FCs', this._fcs);
   }
 
   @Input()
@@ -131,6 +141,25 @@ export class SlasComponent implements OnInit, OnDestroy {
         labels.push(this._pgs[label]);
       } else {
         labels.push({ name: label, label: label, active: false });
+      }
+    });
+    return labels;
+  }
+
+
+  protected getFCNames(row:CarrierSlaVO):Array<FulfilmentCentreInfoVO> {
+
+    let supported = row.supportedFulfilmentCentres;
+    if (!supported) {
+      return [ { warehouseId: 0, code: '-', name: '-', description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] } ];
+    }
+
+    let labels = <Array<FulfilmentCentreInfoVO>>[];
+    supported.forEach(code => {
+      if (this._fcs.hasOwnProperty(code)) {
+        labels.push(this._fcs[code]);
+      } else {
+        labels.push({ warehouseId: 0, code: code, name: code, description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] });
       }
     });
     return labels;

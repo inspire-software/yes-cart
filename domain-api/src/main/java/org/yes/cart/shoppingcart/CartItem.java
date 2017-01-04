@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart;
 
+import org.yes.cart.service.order.DeliveryBucket;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -32,6 +34,28 @@ public interface CartItem extends Serializable {
      * @return product sku code.
      */
     String getProductSkuCode();
+
+    /**
+     * Get product name in CustomerOrder.locale.
+     *
+     * @return copy of product name
+     */
+    String getProductName();
+
+    /**
+     * @return supplier code.
+     */
+    String getSupplierCode();
+
+    /**
+     * @return delivery group.
+     */
+    String getDeliveryGroup();
+
+    /**
+     * @return delivery bucket.
+     */
+    DeliveryBucket getDeliveryBucket();
 
     /**
      * @return quantity of the above sku to be purchased

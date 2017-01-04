@@ -46,7 +46,7 @@
 
 
   <div [hidden]="viewMode !== 'carriers'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-carriers [carriers]="carriers" [filter]="carrierFilter" (dataSelected)="onCarrierSelected($event)"></yc-carriers>
+    <yc-carriers [carriers]="carriers" [shops]="shops" [filter]="carrierFilter" (dataSelected)="onCarrierSelected($event)"></yc-carriers>
   </div>
 
   <div [hidden]="viewMode !== 'carrier'">
@@ -54,11 +54,11 @@
   </div>
 
   <div [hidden]="viewMode !== 'slas'" class="{{ loading ? 'loading-data' : '' }}">
-    <yc-slas [slas]="slas" [paymentGateways]="pgs" [filter]="slaFilter" (dataSelected)="onSlaSelected($event)"></yc-slas>
+    <yc-slas [slas]="slas" [paymentGateways]="pgs" [fulfilmentCentres]="fcs" [filter]="slaFilter" (dataSelected)="onSlaSelected($event)"></yc-slas>
   </div>
 
   <div [hidden]="viewMode !== 'sla'">
-    <yc-sla [sla]="slaEdit" [paymentGateways]="pgs" (dataChanged)="onSlaChanged($event)"></yc-sla>
+    <yc-sla [sla]="slaEdit" [paymentGateways]="pgs" [fulfilmentCentres]="fcs" (dataChanged)="onSlaChanged($event)"></yc-sla>
   </div>
 
 

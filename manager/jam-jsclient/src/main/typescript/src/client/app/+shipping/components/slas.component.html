@@ -10,6 +10,7 @@
         <th>{{ 'CARRIERSLA_BILL' | translate }}</th>
         <th>{{ 'CARRIERSLA_SHIP' | translate }}</th>
         <th>{{ 'CARRIERSLA_PG' | translate }}</th>
+        <th>{{ 'CARRIERSLA_FC' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -23,6 +24,11 @@
           <td title="{{ 'CARRIERSLA_PG' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
             <ul class="list-unstyled">
               <li *ngFor="let pg of getPGNames(row)" [ngClass]="pg.active ? '' : 'text-strikethrough text-muted'">{{pg.name}}</li>
+            </ul>
+          </a></td>
+          <td title="{{ 'CARRIERSLA_FC' | translate }}"><a class="js-click" (click)="onSelectRow(row)">
+            <ul class="list-unstyled">
+              <li *ngFor="let fc of getFCNames(row)">{{fc.name}}</li>
             </ul>
           </a></td>
         </template>

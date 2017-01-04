@@ -22,7 +22,9 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerOrderService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 import org.yes.cart.util.MoneyUtils;
@@ -59,25 +61,27 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart1(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
         assertEquals(1, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d1));
+        assertEquals(2, dgroups.get(d1).size());
     }
 
     @Test
     public void testGetDeliveryGroupsStandardInsufficient() throws Exception {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
-        //two delivery will be planed , because of of the sku has not enough quantity
+        // if sku is out of stock then we cannot create order
         ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
-        assertEquals(1, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        try {
+            deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+            fail("Must not allow creating orders with unavailable SKU");
+        } catch (SkuUnavailableException sue) {
+            assertEquals("Sku CC_TEST4-M:cc test 4 m is not available, cause:  out of stock", sue.getMessage());
+        }
     }
 
     @Test
@@ -87,11 +91,26 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         //Standard and back order with inventory. Only one delivery must be planned
         ShoppingCart shoppingCart = getShoppingCart3(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
         assertEquals(1, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d1));
+        assertEquals(2, dgroups.get(d1).size());
+    }
+
+    @Test
+    public void testGetDeliveryGroupsStandardAndBackorderSingle() throws Exception {
+        Customer customer = createCustomer();
+        assertFalse(customer.getAddress().isEmpty());
+        ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
+        CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        assertEquals(1, dgroups.size());
+        final DeliveryBucket d5 = new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d5));
+        assertEquals(2, dgroups.get(d5).size());
     }
 
     @Test
@@ -99,20 +118,21 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart4(customer.getEmail());
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
         assertEquals(2, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d1));
+        assertNotNull(dgroups.get(d3));
+        assertEquals(1, dgroups.get(d1).size());
+        assertEquals(1, dgroups.get(d3).size());
 
         // Ensure that they are ordered
-        final Iterator<String> sequence = Arrays.asList(
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
-                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).iterator();
-        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+        final Iterator<DeliveryBucket> sequence = Arrays.asList(d1, d3).iterator();
+        for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
             assertEquals(sequence.next(), entry.getKey());
         }
 
@@ -123,20 +143,21 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart5(customer.getEmail());
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
         assertEquals(2, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d1));
+        assertNotNull(dgroups.get(d3));
+        assertEquals(1, dgroups.get(d1).size());
+        assertEquals(1, dgroups.get(d3).size());
 
         // Ensure that they are ordered
-        final Iterator<String> sequence = Arrays.asList(
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
-                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).iterator();
-        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+        final Iterator<DeliveryBucket> sequence = Arrays.asList(d1, d3).iterator();
+        for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
             assertEquals(sequence.next(), entry.getKey());
         }
     }
@@ -146,20 +167,21 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Customer customer = createCustomer();
         assertFalse(customer.getAddress().isEmpty());
         ShoppingCart shoppingCart = getShoppingCart6(customer.getEmail());
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
         assertEquals(2, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).size());
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d2 = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
+        assertNotNull(dgroups.get(d1));
+        assertNotNull(dgroups.get(d2));
+        assertEquals(1, dgroups.get(d2).size());
+        assertEquals(2, dgroups.get(d1).size());
 
         // Ensure that they are ordered
-        final Iterator<String> sequence = Arrays.asList(
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
-                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).iterator();
-        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+        final Iterator<DeliveryBucket> sequence = Arrays.asList(d1, d2).iterator();
+        for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
             assertEquals(sequence.next(), entry.getKey());
         }
     }
@@ -173,26 +195,30 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         //Standard, back order without inventory & pre order with inventory. Ordered qty not covered by inventory.
         // 4 deliveries must be planned, because of pre order will wait
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
+        prepareMultiDeliveriesAndRecalculate(shoppingCart, true);
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
-        Map<String, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, false);
-        assertEquals(4, dgroups.size());
-        assertNotNull(dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
-        assertNotNull(dgroups.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP).size());
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP).size());
-        assertEquals(2, dgroups.get(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP).size());
-        assertEquals(1, dgroups.get(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP).size());
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        Map<DeliveryBucket, List<CustomerOrderDet>> dgroups = deliveryAssembler.getDeliveryGroups(customerOrder, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        assertEquals(5, dgroups.size());
+        final DeliveryBucket d11 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "");
+        final DeliveryBucket d1 = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d2 = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d3 = new DeliveryBucketImpl(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP, "WAREHOUSE_1");
+        final DeliveryBucket d44 = new DeliveryBucketImpl(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP, "");
+        assertNotNull(dgroups.get(d11));
+        assertNotNull(dgroups.get(d1));
+        assertNotNull(dgroups.get(d2));
+        assertNotNull(dgroups.get(d3));
+        assertNotNull(dgroups.get(d44));
+        assertEquals(1, dgroups.get(d11).size());
+        assertEquals(1, dgroups.get(d1).size());
+        assertEquals(1, dgroups.get(d2).size());
+        assertEquals(1, dgroups.get(d3).size());
+        assertEquals(2, dgroups.get(d44).size());
 
         // Ensure that they are ordered
-        final Iterator<String> sequence = Arrays.asList(
-                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP,
-                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP,
-                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
-                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP).iterator();
-        for (final Map.Entry<String, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
+        final Iterator<DeliveryBucket> sequence = Arrays.asList(d11, d44, d1, d2, d3).iterator();
+        for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> entry : dgroups.entrySet()) {
             assertEquals(sequence.next(), entry.getKey());
         }
     }
@@ -204,7 +230,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         ShoppingCart shoppingCart = getShoppingCart7(customer.getEmail());
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull("Customer can not be null", shoppingCart.getCustomerEmail());
-        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, false);
+        customerOrder = deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
         customerOrder = customerOrderService.create(customerOrder);
         assertTrue(customerOrder.getCustomerorderId() > 0);
         for (CustomerOrderDelivery cod : customerOrder.getDelivery()) {
@@ -249,6 +275,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST3"));
 
+        prepareDeliveriesAndRecalculate(shoppingCart);
+
         return shoppingCart;
     }
 
@@ -262,6 +290,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4-M"));
+
+        prepareDeliveriesAndRecalculate(shoppingCart);
 
         return shoppingCart;
     }
@@ -281,6 +311,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST4"));
         commands.execute(shoppingCart,
                 (Map) singletonMap(ShoppingCartCommand.CMD_ADDTOCART, "CC_TEST5"));
+
+        prepareDeliveriesAndRecalculate(shoppingCart);
 
         return shoppingCart;
     }
@@ -303,8 +335,9 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         Map<String, String> param = new HashMap<String, String>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST5");
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "23.00");
-        commands.execute(shoppingCart,
-                (Map) param);
+        commands.execute(shoppingCart, (Map) param);
+
+        prepareDeliveriesAndRecalculate(shoppingCart);
 
         return shoppingCart;
     }
@@ -322,7 +355,7 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
 
         Map<String, String> param = new HashMap<String, String>();
         param.put(ShoppingCartCommand.CMD_SETQTYSKU, "CC_TEST4");
-        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "34.00");
+        param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "1.00");
         commands.execute(shoppingCart,
                 (Map) param);
 
@@ -331,6 +364,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "23.00");
         commands.execute(shoppingCart,
                 (Map) param);
+
+        prepareDeliveriesAndRecalculate(shoppingCart);
 
         return shoppingCart;
     }
@@ -363,6 +398,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         param.put(ShoppingCartCommand.CMD_SETQTYSKU_P_QTY, "3.00");
         commands.execute(shoppingCart,
                 (Map) param);
+
+        prepareDeliveriesAndRecalculate(shoppingCart);
 
         return shoppingCart;
     }
@@ -414,6 +451,8 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         commands.execute(shoppingCart,
                 (Map) param);
 
+        prepareDeliveriesAndRecalculate(shoppingCart);
+
         return shoppingCart;
     }
 
@@ -427,13 +466,13 @@ public class DeliveryAssemblerImplTest extends BaseCoreDBTestCase {
         final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
 
         params.put(ShoppingCartCommand.CMD_LOGIN, ShoppingCartCommand.CMD_LOGIN);
-        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1");
+        params.put(ShoppingCartCommand.CMD_SETCARRIERSLA, "1-WAREHOUSE_1|1-WAREHOUSE_2|1");
         params.put(ShoppingCartCommand.CMD_SETSHOP, "10");
         params.put(ShoppingCartCommand.CMD_CHANGELOCALE, "en");
         params.put(ShoppingCartCommand.CMD_CHANGECURRENCY, "USD");
-        commands.execute(shoppingCart,
-                (Map) params);
+        commands.execute(shoppingCart, (Map) params);
 
         return shoppingCart;
     }
+
 }

@@ -75,7 +75,7 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
 
     this.centreForm = fb.group({
       'code': ['', validCode],
-      'name': ['', YcValidators.requiredNonBlankTrimmed],
+      'name': [''],
       'description': [''],
       'countryCode': ['', YcValidators.validCountryCode],
       'stateCode': ['', YcValidators.nonBlankTrimmed],
@@ -128,6 +128,9 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
     return this._centre;
   }
 
+  onNameDataChange(event:FormValidationEvent<any>) {
+    UiUtil.formI18nDataChange(this, 'centreForm', 'name', event);
+  }
 
   onSupportedShopClick(supported:Pair<ShopVO, FulfilmentCentreShopLinkVO>) {
     LogUtil.debug('SlaComponent remove supported', supported);

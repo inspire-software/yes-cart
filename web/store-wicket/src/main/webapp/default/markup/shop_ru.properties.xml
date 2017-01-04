@@ -90,8 +90,8 @@
     <entry key="shipmentStep">Доставка</entry>
     <entry key="paymentStep">Оплата</entry>
     <entry key="paymentGatewayLabel">Метод оплаты</entry>
-    <entry key="multipleDeliveryLabel">Множественная доставка</entry>
-    <entry key="multipleDeliveryHint">Этот заказ может быть доставлен по частям</entry>
+    <entry key="multipleDeliveryLabel">Отправить товары, которые доступны в настоящее время как можно скорее</entry>
+    <entry key="multipleDeliveryHint">Некоторые товары, которые на данный момент недоступны будут доставлены в отдельной доставкой</entry>
     <entry key="paymentSubmit">Оплатить</entry>
     <entry key="orderPlace">Оформить заказ</entry>
     <entry key="checkoutTitle">Оформление покупки</entry>
@@ -175,6 +175,14 @@
     <entry key="grandTotalAmount">Сумма (с НДС)</entry>
     <entry key="billingAddress">Адрес</entry>
     <entry key="orderVerification">Проверьте заказ и выберите метод оплаты</entry>
+
+    <!-- ShippingDeliveriesView -->
+    <entry key="deliveryCarrierSelect">Способ доставки</entry>
+    <entry key="deliveryBucketCarrierSelect">Выберите способ доставки для продукции, поставляемой ${supplier}</entry>
+    <entry key="deliveryBucketCarrierSelectNone">Нет способов доставки, доступных для продукции, поставляемой ${supplier}. Вам нужно будет удалить эти элементы из корзины для завершения заказа.</entry>
+    <entry key="deliveryBucketCarrier">Товары, поставляемые ${supplier}</entry>
+    <entry key="carrierSelectMultiSupplier">Товары в вашей корзине будут доставлены несколькими поставщиками</entry>
+    <entry key="carrierSelectMultiDelivery">Для некоторых товаров в вашей корзине может потребоваться некоторое время чтобы вновь оказаться в наличии. Если вы хотите отправить товары, которые есть в наличии на данный момент как можно скорее, то установите флажок ниже. Следует отметить, что затраты на доставку могут увеличиться в результате данного действия.</entry>
 
     <!-- ShoppingCartView -->
     <entry key="product">Наименование</entry>

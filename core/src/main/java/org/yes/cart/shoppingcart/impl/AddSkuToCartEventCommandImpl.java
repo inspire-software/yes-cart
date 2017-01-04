@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
@@ -106,8 +107,14 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
                            final String skuCode,
                            final Map<String, Object> parameters) {
         if (productSku != null) {
+
+            final String skuName = new FailoverStringI18NModel(
+                    productSku.getDisplayName(),
+                    productSku.getName()
+            ).getValue(shoppingCart.getCurrentLocale());
+
             shoppingCart.addProductSkuToCart(productSku.getCode(),
-                    getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())));
+                    skuName, getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode())));
             recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);
@@ -118,7 +125,7 @@ public class AddSkuToCartEventCommandImpl extends AbstractSkuCartCommandImpl {
         } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
             // if we have no product for SKU, make sure we have price for this SKU
             shoppingCart.addProductSkuToCart(skuCode,
-                    getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode)));
+                    skuCode, getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode)));
             recalculatePricesInCart(shoppingCart);
             markDirty(shoppingCart);
             final Logger log = ShopCodeContext.getLog(this);

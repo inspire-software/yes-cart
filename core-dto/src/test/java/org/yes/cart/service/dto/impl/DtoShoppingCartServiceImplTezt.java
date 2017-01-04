@@ -70,7 +70,7 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
 
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         assertNotNull(customerOrder);
@@ -181,7 +181,8 @@ public class DtoShoppingCartServiceImplTezt extends BaseCoreDBTestCase {
         assertFalse(reassembledOI.isSeparateBillingAddress());
         assertFalse(reassembledOI.isBillingAddressNotRequired());
         assertFalse(reassembledOI.isDeliveryAddressNotRequired());
-        assertNull(reassembledOI.getCarrierSlaId());
+        assertNotNull(reassembledOI.getCarrierSlaId());
+        assertTrue(reassembledOI.getCarrierSlaId().isEmpty());
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 

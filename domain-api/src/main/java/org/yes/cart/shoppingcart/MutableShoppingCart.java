@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart;
 
+import org.yes.cart.service.order.DeliveryBucket;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -53,35 +55,35 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * Add product sku to cart.
      *
      * @param sku      product sku to add
-     * @param quantity the quantity to add
-     * @return true if item has been added to the cart as a separate cart item,
+     * @param skuName  product name to add
+     * @param quantity the quantity to add  @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart
      *         product sku.
      */
-    boolean addProductSkuToCart(String sku, BigDecimal quantity);
+    boolean addProductSkuToCart(String sku, String skuName, BigDecimal quantity);
 
     /**
      * Add product sku to cart.
      *
-     * @param carrierSlaId sla pk to add
-     * @param quantity     the quantity of this SLA (i.e. number of deliveries)
-     * @return true if item has been added to the cart as a separate cart item,
+     * @param carrierSlaGUID sla pk to add
+     * @param carrierSlaName sla name
+     * @param quantity     the quantity of this SLA (i.e. number of deliveries)  @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart
      *         shipping SLA.
      */
-    boolean addShippingToCart(String carrierSlaId, BigDecimal quantity);
+    boolean addShippingToCart(DeliveryBucket deliveryBucket, String carrierSlaGUID, String carrierSlaName, BigDecimal quantity);
 
     /**
      * Add product sku to cart.
      *
      * @param sku      product sku to add
+     * @param skuName  product name to add
      * @param quantity the quantity to add
-     * @param promotionCode promotion code fof promotion that resulted in this gift
-     * @return true if item has been added to the cart as a separate cart item,
+     * @param promotionCode promotion code fof promotion that resulted in this gift   @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart
      *         product sku.
      */
-    boolean addGiftToCart(String sku, BigDecimal quantity, String promotionCode);
+    boolean addGiftToCart(String sku, String skuName, BigDecimal quantity, String promotionCode);
 
     /**
      * Set sku quantity, in case if sku not present in cart it will be added.
@@ -95,6 +97,15 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     boolean setProductSkuToCart(String sku, BigDecimal quantity);
 
     /**
+     * Set sku supplier to be used.
+     *
+     * @param sku            product sku
+     * @param deliveryBucket delivery bucket to add this sku to
+     * @return true if bucket had been set, false otherwise.
+     */
+    boolean setProductSkuDeliveryBucket(String sku, DeliveryBucket deliveryBucket);
+
+    /**
      * Removes the cart item from shopping cart.
      *
      * @param productSku product sku
@@ -105,10 +116,11 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Removes the shipping from shopping cart.
      *
-     * @param carrierSlaId carrier SLA PK
+     * @param carrierSlaGUID carrier SLA GUID
+     * @param deliveryBucket bucket
      * @return true if item has been removed, false if item was not present in the cart.
      */
-    boolean removeShipping(String carrierSlaId);
+    boolean removeShipping(String carrierSlaGUID, DeliveryBucket deliveryBucket);
 
     /**
      * Removes all shipping lines from shopping cart.
@@ -164,12 +176,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Set shipping price and clear all promotion details
      *
-     * @param carrierSlaId   carrier sla PK
+     * @param carrierSlaGUID carrier sla GUID
+     * @param deliveryBucket bucket
      * @param salePrice      price to set - sale price without promos
      * @param listPrice      list price - without discounts, promos, etc.
      * @return true if price has been set
      */
-    boolean setShippingPrice(String carrierSlaId, BigDecimal salePrice, BigDecimal listPrice);
+    boolean setShippingPrice(String carrierSlaGUID, DeliveryBucket deliveryBucket, BigDecimal salePrice, BigDecimal listPrice);
 
     /**
      * Set gift product sku promotion details
@@ -204,12 +217,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Set shipping promotion details
      *
-     * @param carrierSlaId   carrier sla PK
+     * @param carrierSlaGUID carrier sla GUID
+     * @param deliveryBucket bucket
      * @param promoPrice     price to set
      * @param promoCode      promotion code that activated this discount
      * @return true if price has been set
      */
-    boolean setShippingPromotion(String carrierSlaId, BigDecimal promoPrice, String promoCode);
+    boolean setShippingPromotion(String carrierSlaGUID, DeliveryBucket deliveryBucket, BigDecimal promoPrice, String promoCode);
 
     /**
      * Set product sku taxes
@@ -228,7 +242,8 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     /**
      * Set shipping taxes
      *
-     * @param carrierSlaPk   carrier sla PK
+     * @param carrierSlaGUID carrier sla GUID
+     * @param deliveryBucket bucket
      * @param netPrice       price before tax
      * @param grossPrice     price after tax
      * @param rate           tax rate
@@ -237,7 +252,7 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      *
      * @return true if tax has been set
      */
-    boolean setShippingTax(String carrierSlaPk, BigDecimal netPrice, BigDecimal grossPrice, BigDecimal rate, String taxCode, boolean exclPrice);
+    boolean setShippingTax(String carrierSlaGUID, DeliveryBucket deliveryBucket, BigDecimal netPrice, BigDecimal grossPrice, BigDecimal rate, String taxCode, boolean exclPrice);
 
     /**
      * @param coupon coupon code

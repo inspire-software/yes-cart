@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
@@ -23,6 +24,7 @@ import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,25 +56,55 @@ public class SetCarrierSlaCartCommandImpl extends AbstractCartCommandImpl implem
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
-            final String val = (String) parameters.get(getCmdKey());
-            final Long slaPkvalue = val != null ? NumberUtils.createLong(val) : null;
-            if ((slaPkvalue == null && shoppingCart.getOrderInfo().getCarrierSlaId() != null)
-                    || (slaPkvalue != null && !slaPkvalue.equals(shoppingCart.getOrderInfo().getCarrierSlaId()))) {
-                ShopCodeContext.getLog(this).debug("Set carrier sla to {}", slaPkvalue);
+            final String slaIdsRaw = (String) parameters.get(getCmdKey());
+            final String[] slaIds = StringUtils.split(slaIdsRaw, '|');
 
-                shoppingCart.getOrderInfo().setCarrierSlaId(slaPkvalue);
-                setAddressNotRequiredFlags(shoppingCart, parameters);
+            if (slaIds != null && slaIds.length > 0) {
 
-                if (slaPkvalue != null) {
-                    setAddressParametersIfRequired(shoppingCart, parameters);
-                } else {
-                    shoppingCart.getOrderInfo().setBillingAddressId(null);
-                    shoppingCart.getOrderInfo().setDeliveryAddressId(null);
-                    shoppingCart.getShoppingContext().setCountryCode(null);
-                    shoppingCart.getShoppingContext().setStateCode(null);
+                final Map<String, Long> selection = new HashMap<String, Long>();
+                for (final String slaIdRaw : slaIds) {
+
+                    final int sepPos = slaIdRaw.indexOf('-');
+                    final String[] slaId = sepPos == -1 ? new String[] { slaIdRaw } : new String[] { slaIdRaw.substring(0, sepPos), slaIdRaw.substring(sepPos + 1) };
+
+                    final long slaPkvalue = NumberUtils.toLong(slaId[0]);
+                    final String supplier = slaId.length > 1 ? slaId[1] : "";
+
+                    final Long current = shoppingCart.getCarrierSlaId().get(supplier);
+
+                    if ((slaPkvalue <= 0L && current != null && current > 0L) ||
+                            (slaPkvalue > 0L && (current == null || !current.equals(slaPkvalue)))) {
+                        selection.put(supplier, slaPkvalue);
+                    }
+
                 }
-                recalculate(shoppingCart);
-                markDirty(shoppingCart);
+
+                if (!selection.isEmpty()) {
+
+                    for (final Map.Entry<String, Long> slaSelection : selection.entrySet()) {
+                        ShopCodeContext.getLog(this).debug("Set carrier sla to {} for '{}'", slaSelection.getValue(), slaSelection.getKey());
+                        if (slaSelection.getValue() <= 0L) {
+                            shoppingCart.getOrderInfo().putCarrierSlaId(slaSelection.getKey(), null);
+                        } else {
+                            shoppingCart.getOrderInfo().putCarrierSlaId(slaSelection.getKey(), slaSelection.getValue());
+                        }
+                    }
+
+                    final boolean hasSelection = !shoppingCart.getCarrierSlaId().isEmpty();
+
+                    setAddressNotRequiredFlags(shoppingCart, parameters);
+
+                    if (hasSelection) {
+                        setAddressParametersIfRequired(shoppingCart, parameters);
+                    } else {
+                        shoppingCart.getOrderInfo().setBillingAddressId(null);
+                        shoppingCart.getOrderInfo().setDeliveryAddressId(null);
+                        shoppingCart.getShoppingContext().setCountryCode(null);
+                        shoppingCart.getShoppingContext().setStateCode(null);
+                    }
+                    recalculate(shoppingCart);
+                    markDirty(shoppingCart);
+                }
             }
         }
     }

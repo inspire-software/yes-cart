@@ -69,5 +69,6 @@ export interface CarrierSlaVO {
   deliveryAddressNotRequired : boolean;
 
   supportedPaymentGateways : Array<string>;
+  supportedFulfilmentCentres : Array<string>;
 
 }

@@ -19,12 +19,11 @@ package org.yes.cart.domain.entity;
 import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 /**
  * Represent sku in order with quantity and price in order currency.
- * At this moment prices in shopiing cart items list and here without
- * catalog promotions. TODO: V2 add catalog promotion sku price modificators
  * <p/>
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 07-May-2011
@@ -257,6 +256,19 @@ public interface CustomerOrderDet extends Auditable, CartItem {
      * @param productName copy of product name
      */
     void setProductName(String productName);
+
+    /**
+     * @return supplier code.
+     */
+    String getSupplierCode();
+
+    /**
+     * Set supplier code (fulfilment centre/warehouse code).
+     *
+     * @param supplierCode supplier code
+     */
+    void setSupplierCode(String supplierCode);
+
 
     /**
      * @return order holding this detail

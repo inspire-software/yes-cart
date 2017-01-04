@@ -36,7 +36,7 @@ public class QuantityMapAdapter extends XmlAdapter<QuantityMapAdapter.AdaptedMap
     @XmlType(name = "quantities-map")
     public static class AdaptedMap {
 
-        public List<Entry> entry = new ArrayList<Entry>();
+        public List<Entry> quantity = new ArrayList<Entry>();
 
     }
 
@@ -53,9 +53,9 @@ public class QuantityMapAdapter extends XmlAdapter<QuantityMapAdapter.AdaptedMap
 
     @Override
     public Map<String, BigDecimal> unmarshal(AdaptedMap adaptedMap) throws Exception {
-        if (adaptedMap != null && adaptedMap.entry != null && !adaptedMap.entry.isEmpty()) {
+        if (adaptedMap != null && adaptedMap.quantity != null && !adaptedMap.quantity.isEmpty()) {
             Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
-            for(Entry entry : adaptedMap.entry) {
+            for(Entry entry : adaptedMap.quantity) {
                 map.put(entry.key, new BigDecimal(entry.value));
             }
             return map;
@@ -71,7 +71,7 @@ public class QuantityMapAdapter extends XmlAdapter<QuantityMapAdapter.AdaptedMap
                 Entry entry = new Entry();
                 entry.key = mapEntry.getKey();
                 entry.value = mapEntry.getValue().toPlainString();
-                adaptedMap.entry.add(entry);
+                adaptedMap.quantity.add(entry);
             }
             return adaptedMap;
         }

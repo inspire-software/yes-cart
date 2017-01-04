@@ -23,9 +23,14 @@ import org.junit.Test;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.CarrierSlaService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -46,8 +51,7 @@ public class PriceListDeliveryCostCalculationStrategyTest {
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(null));
-            one(cart).removeShipping();
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.emptyMap()));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, null, null).calculate(cart);
@@ -63,11 +67,13 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
+            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
             one(carrierSlaService).getById(123L); will(returnValue(null));
-            one(cart).removeShipping();
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, null, null).calculate(cart);
@@ -82,18 +88,16 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(false));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -101,16 +105,20 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cart).removeShipping();
             one(cost).getSkuPriceId(); will(returnValue(345L));
             one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
             one(cost).getSalePriceForCalculation(); will(returnValue(null));
-            one(cart).addShippingToCart("CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", new BigDecimal("10.00"), new BigDecimal("10.00"));
+            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -143,18 +151,16 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(false));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -162,16 +168,20 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cart).removeShipping();
             one(cost).getSkuPriceId(); will(returnValue(345L));
             one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
             one(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
-            one(cart).addShippingToCart("CSL001", new BigDecimal("1.00"));
-            one(cart).setShippingPrice("CSL001", new BigDecimal("8.00"), new BigDecimal("8.00"));
+            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -205,18 +215,16 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(false));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -224,12 +232,39 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
             one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
-            one(cart).removeShipping();
             one(cost).getSkuPriceId(); will(returnValue(0L));
+        }});
+
+        final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
+
+        assertNull(delTotal);
+
+        context.assertIsSatisfied();
+    }
+
+
+    @Test
+    public void testCalculateSingleNoBucket() throws Exception {
+
+        final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
+        final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
+        final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
+        final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
+            one(cart).getCartItemMap(); will(returnValue(Collections.singletonMap(bucket1, Collections.emptyList())));
+            one(bucket1).getSupplier(); will(returnValue(""));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -245,18 +280,21 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
+        final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        buckets.put(bucket1, Collections.EMPTY_LIST);
+        buckets.put(bucket2, Collections.EMPTY_LIST);
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -264,16 +302,23 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(buckets));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
+            one(bucket2).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("2.00")); will(returnValue(cost));
-            one(cart).removeShipping();
+            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             one(cost).getSkuPriceId(); will(returnValue(345L));
             one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
             one(cost).getSalePriceForCalculation(); will(returnValue(null));
-            one(cart).addShippingToCart("CSL001", new BigDecimal("2.00"));
-            one(cart).setShippingPrice("CSL001", new BigDecimal("10.00"), new BigDecimal("10.00"));
+            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("10.00"), new BigDecimal("10.00"));
+            one(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("10.00"), new BigDecimal("10.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -307,18 +352,21 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
+        final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        buckets.put(bucket1, Collections.EMPTY_LIST);
+        buckets.put(bucket2, Collections.EMPTY_LIST);
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -326,16 +374,23 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(buckets));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
+            one(bucket2).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("2.00")); will(returnValue(cost));
-            one(cart).removeShipping();
+            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             one(cost).getSkuPriceId(); will(returnValue(345L));
             one(cost).getRegularPrice(); will(returnValue(new BigDecimal("10.00")));
             one(cost).getSalePriceForCalculation(); will(returnValue(new BigDecimal("8.00")));
-            one(cart).addShippingToCart("CSL001", new BigDecimal("2.00"));
-            one(cart).setShippingPrice("CSL001", new BigDecimal("8.00"), new BigDecimal("8.00"));
+            one(cart).addShippingToCart(bucket1, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).addShippingToCart(bucket2, "CSL001", "CSL001", new BigDecimal("1.00"));
+            one(cart).setShippingPrice("CSL001", bucket1, new BigDecimal("8.00"), new BigDecimal("8.00"));
+            one(cart).setShippingPrice("CSL001", bucket2, new BigDecimal("8.00"), new BigDecimal("8.00"));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
@@ -370,18 +425,21 @@ public class PriceListDeliveryCostCalculationStrategyTest {
 
         final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
-        final MutableOrderInfo orderInfo = context.mock(MutableOrderInfo.class, "orderInfo");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "shoppingContext");
         final CarrierSla carrierSla = context.mock(CarrierSla.class, "carrierSla");
         final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
         final PricingPolicyProvider.PricingPolicy pricingPolicy = context.mock(PricingPolicyProvider.PricingPolicy.class, "pricingPolicy");
         final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
         final SkuPrice cost = context.mock(SkuPrice.class, "cost");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
+        final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        buckets.put(bucket1, Collections.EMPTY_LIST);
+        buckets.put(bucket2, Collections.EMPTY_LIST);
 
         context.checking(new Expectations() {{
-            allowing(cart).getCarrierSlaId(); will(returnValue(123L));
-            one(cart).getOrderInfo(); will(returnValue(orderInfo));
-            one(orderInfo).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
             allowing(cart).getShoppingContext(); will(returnValue(shoppingContext));
             one(shoppingContext).getShopCode(); will(returnValue("SHOP10"));
             one(shoppingContext).getCountryCode(); will(returnValue("GB"));
@@ -389,12 +447,45 @@ public class PriceListDeliveryCostCalculationStrategyTest {
             one(carrierSlaService).getById(123L); will(returnValue(carrierSla));
             one(carrierSla).getGuid(); will(returnValue("CSL001"));
             one(carrierSla).getSlaType(); will(returnValue(CarrierSla.FIXED));
+            one(carrierSla).getDisplayName(); will(returnValue(""));
+            one(carrierSla).getName(); will(returnValue("CSL001"));
+            one(cart).getCurrentLocale(); will(returnValue("en"));
             one(cart).getCurrencyCode(); will(returnValue("USD"));
             one(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            one(cart).getCartItemMap(); will(returnValue(buckets));
+            one(bucket1).getSupplier(); will(returnValue("Main"));
+            one(bucket2).getSupplier(); will(returnValue("Main"));
             one(pricingPolicyProvider).determinePricingPolicy("SHOP10", "USD", "bob@doe.com", "GB", "LON"); will(returnValue(pricingPolicy));
-            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("2.00")); will(returnValue(cost));
-            one(cart).removeShipping();
+            one(deliveryCostRegionalPriceResolver).getSkuPrice(cart, "CSL001", pricingPolicy, new BigDecimal("1.00")); will(returnValue(cost));
             one(cost).getSkuPriceId(); will(returnValue(0L));
+        }});
+
+        final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);
+
+        assertNull(delTotal);
+
+        context.assertIsSatisfied();
+    }
+
+    @Test
+    public void testCalculateMultiNoBucket() throws Exception {
+
+        final CarrierSlaService carrierSlaService = context.mock(CarrierSlaService.class, "carrierSlaService");
+        final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
+        final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
+        final DeliveryCostRegionalPriceResolver deliveryCostRegionalPriceResolver = context.mock(DeliveryCostRegionalPriceResolver.class, "deliveryCostRegionalPriceResolver");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
+        final DeliveryBucket bucket2 = context.mock(DeliveryBucket.class, "bucket2");
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+        buckets.put(bucket1, Collections.EMPTY_LIST);
+        buckets.put(bucket2, Collections.EMPTY_LIST);
+
+        context.checking(new Expectations() {{
+            allowing(cart).getCarrierSlaId(); will(returnValue(Collections.singletonMap("Main", 123L)));
+            one(cart).getCartItemMap(); will(returnValue(buckets));
+            one(bucket1).getSupplier(); will(returnValue(""));
+            one(bucket2).getSupplier(); will(returnValue(""));
         }});
 
         final Total delTotal = new PriceListDeliveryCostCalculationStrategy(carrierSlaService, pricingPolicyProvider, deliveryCostRegionalPriceResolver).calculate(cart);

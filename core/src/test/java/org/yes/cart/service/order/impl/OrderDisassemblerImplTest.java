@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov
@@ -61,7 +60,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneNoDeliveries() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
@@ -170,7 +169,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(reassembledOI.isSeparateBillingAddress());
         assertFalse(reassembledOI.isBillingAddressNotRequired());
         assertFalse(reassembledOI.isDeliveryAddressNotRequired());
-        assertNull(reassembledOI.getCarrierSlaId());
+        assertNotNull(reassembledOI.getCarrierSlaId());
+        assertTrue(reassembledOI.getCarrierSlaId().isEmpty());
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
@@ -182,7 +182,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneNoDeliveriesWithOffers() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
@@ -292,7 +292,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(reassembledOI.isSeparateBillingAddress());
         assertFalse(reassembledOI.isBillingAddressNotRequired());
         assertFalse(reassembledOI.isDeliveryAddressNotRequired());
-        assertNull(reassembledOI.getCarrierSlaId());
+        assertTrue(reassembledOI.getCarrierSlaId().isEmpty());
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
@@ -305,7 +305,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneWithDeliveries() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
 
         CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
@@ -343,21 +343,22 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         assertEquals(customerOrder.getOrderDetail().size(), reassembledCart.getCartItemList().size());
 
-        assertEquals(1, reassembledCart.getShippingList().size());
-        final CartItem shipping = reassembledCart.getShippingList().get(0);
-        assertEquals(new BigDecimal("2.00"), shipping.getQty());
-        assertEquals(new BigDecimal("16.77"), shipping.getPrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getSalePrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getListPrice());
-        assertEquals(new BigDecimal("13.97"), shipping.getNetPrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getGrossPrice());
-        assertEquals(new BigDecimal("20.00"), shipping.getTaxRate());
-        assertEquals("VAT", shipping.getTaxCode());
-        assertFalse(shipping.isTaxExclusiveOfPrice());
-        assertFalse(shipping.isGift());
-        assertFalse(shipping.isPromoApplied());
-        assertNull(shipping.getAppliedPromo());
-        assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
+        assertEquals(5, reassembledCart.getShippingList().size());
+        for (final CartItem shipping : reassembledCart.getShippingList()) {
+            assertEquals(new BigDecimal("1.00"), shipping.getQty());
+            assertEquals(new BigDecimal("16.77"), shipping.getPrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getSalePrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getListPrice());
+            assertEquals(new BigDecimal("13.97"), shipping.getNetPrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getGrossPrice());
+            assertEquals(new BigDecimal("20.00"), shipping.getTaxRate());
+            assertEquals("VAT", shipping.getTaxCode());
+            assertFalse(shipping.isTaxExclusiveOfPrice());
+            assertFalse(shipping.isGift());
+            assertFalse(shipping.isPromoApplied());
+            assertNull(shipping.getAppliedPromo());
+            assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
+        }
 
         assertEquals(0, reassembledCart.getCoupons().size());
 
@@ -396,16 +397,16 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getSubTotal());
         assertEquals(new BigDecimal("912.03"), reassembledTotal.getSubTotalTax());
         assertEquals(new BigDecimal("5463.91"), reassembledTotal.getSubTotalAmount());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryListCost());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryCost());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryListCost());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryCost());
         assertFalse(reassembledTotal.isDeliveryPromoApplied());
         assertNull(reassembledTotal.getAppliedDeliveryPromo());
-        assertEquals(new BigDecimal("5.60"), reassembledTotal.getDeliveryTax());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryCostAmount());
-        assertEquals(new BigDecimal("5497.45"), reassembledTotal.getTotal());
-        assertEquals(new BigDecimal("917.63"), reassembledTotal.getTotalTax());
-        assertEquals(new BigDecimal("5497.45"), reassembledTotal.getListTotalAmount());
-        assertEquals(new BigDecimal("5497.45"), reassembledTotal.getTotalAmount());
+        assertEquals(new BigDecimal("14.00"), reassembledTotal.getDeliveryTax());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryCostAmount());
+        assertEquals(new BigDecimal("5547.76"), reassembledTotal.getTotal());
+        assertEquals(new BigDecimal("926.03"), reassembledTotal.getTotalTax());
+        assertEquals(new BigDecimal("5547.76"), reassembledTotal.getListTotalAmount());
+        assertEquals(new BigDecimal("5547.76"), reassembledTotal.getTotalAmount());
 
         assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
@@ -431,7 +432,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(reassembledOI.isSeparateBillingAddress());
         assertFalse(reassembledOI.isBillingAddressNotRequired());
         assertFalse(reassembledOI.isDeliveryAddressNotRequired());
-        assertEquals(Long.valueOf(1L), reassembledOI.getCarrierSlaId());
+        assertFalse(reassembledOI.getCarrierSlaId().isEmpty());
+        assertEquals(Long.valueOf(1L), reassembledOI.getCarrierSlaId().values().iterator().next());
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 
@@ -444,7 +446,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
     public void testAssembleShoppingCartOsNoneWithDeliveriesWithOffers() throws Exception {
         Customer customer = createCustomer();
 
-        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail());
+        ShoppingCart shoppingCart = getShoppingCart2(customer.getEmail(), true);
         setIPAddress(shoppingCart, "127.0.0.1");
         setOffer(shoppingCart, "CC_TEST1", new BigDecimal("150.00"));
 
@@ -483,21 +485,22 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
 
         assertEquals(customerOrder.getOrderDetail().size(), reassembledCart.getCartItemList().size());
 
-        assertEquals(1, reassembledCart.getShippingList().size());
-        final CartItem shipping = reassembledCart.getShippingList().get(0);
-        assertEquals(new BigDecimal("2.00"), shipping.getQty());
-        assertEquals(new BigDecimal("16.77"), shipping.getPrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getSalePrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getListPrice());
-        assertEquals(new BigDecimal("13.97"), shipping.getNetPrice());
-        assertEquals(new BigDecimal("16.77"), shipping.getGrossPrice());
-        assertEquals(new BigDecimal("20.00"), shipping.getTaxRate());
-        assertEquals("VAT", shipping.getTaxCode());
-        assertFalse(shipping.isTaxExclusiveOfPrice());
-        assertFalse(shipping.isGift());
-        assertFalse(shipping.isPromoApplied());
-        assertNull(shipping.getAppliedPromo());
-        assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
+        assertEquals(5, reassembledCart.getShippingList().size());
+        for (final CartItem shipping : reassembledCart.getShippingList()) {
+            assertEquals(new BigDecimal("1.00"), shipping.getQty());
+            assertEquals(new BigDecimal("16.77"), shipping.getPrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getSalePrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getListPrice());
+            assertEquals(new BigDecimal("13.97"), shipping.getNetPrice());
+            assertEquals(new BigDecimal("16.77"), shipping.getGrossPrice());
+            assertEquals(new BigDecimal("20.00"), shipping.getTaxRate());
+            assertEquals("VAT", shipping.getTaxCode());
+            assertFalse(shipping.isTaxExclusiveOfPrice());
+            assertFalse(shipping.isGift());
+            assertFalse(shipping.isPromoApplied());
+            assertNull(shipping.getAppliedPromo());
+            assertEquals("1_CARRIERSLA", shipping.getProductSkuCode());
+        }
 
         assertEquals(0, reassembledCart.getCoupons().size());
 
@@ -536,16 +539,16 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertEquals(new BigDecimal("5422.92"), reassembledTotal.getSubTotal());
         assertEquals(new BigDecimal("905.19"), reassembledTotal.getSubTotalTax());
         assertEquals(new BigDecimal("5422.92"), reassembledTotal.getSubTotalAmount());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryListCost());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryCost());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryListCost());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryCost());
         assertFalse(reassembledTotal.isDeliveryPromoApplied());
         assertNull(reassembledTotal.getAppliedDeliveryPromo());
-        assertEquals(new BigDecimal("5.60"), reassembledTotal.getDeliveryTax());
-        assertEquals(new BigDecimal("33.54"), reassembledTotal.getDeliveryCostAmount());
-        assertEquals(new BigDecimal("5456.46"), reassembledTotal.getTotal());
-        assertEquals(new BigDecimal("910.79"), reassembledTotal.getTotalTax());
-        assertEquals(new BigDecimal("5497.45"), reassembledTotal.getListTotalAmount());
-        assertEquals(new BigDecimal("5456.46"), reassembledTotal.getTotalAmount());
+        assertEquals(new BigDecimal("14.00"), reassembledTotal.getDeliveryTax());
+        assertEquals(new BigDecimal("83.85"), reassembledTotal.getDeliveryCostAmount());
+        assertEquals(new BigDecimal("5506.77"), reassembledTotal.getTotal());
+        assertEquals(new BigDecimal("919.19"), reassembledTotal.getTotalTax());
+        assertEquals(new BigDecimal("5547.76"), reassembledTotal.getListTotalAmount());
+        assertEquals(new BigDecimal("5506.77"), reassembledTotal.getTotalAmount());
 
         assertEquals(customerOrder.getEmail(), reassembledCart.getCustomerEmail());
         assertEquals(customerOrder.getCurrency(), reassembledCart.getCurrencyCode());
@@ -571,7 +574,8 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertFalse(reassembledOI.isSeparateBillingAddress());
         assertFalse(reassembledOI.isBillingAddressNotRequired());
         assertFalse(reassembledOI.isDeliveryAddressNotRequired());
-        assertEquals(Long.valueOf(1L), reassembledOI.getCarrierSlaId());
+        assertFalse(reassembledOI.getCarrierSlaId().isEmpty());
+        assertEquals(Long.valueOf(1L), reassembledOI.getCarrierSlaId().values().iterator().next());
         assertNotNull(reassembledOI.getBillingAddressId());
         assertNotNull(reassembledOI.getDeliveryAddressId());
 

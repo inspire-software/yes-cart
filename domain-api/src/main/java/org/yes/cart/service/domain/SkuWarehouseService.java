@@ -110,7 +110,7 @@ public interface SkuWarehouseService extends GenericService<SkuWarehouse> {
      * @param warehouse  warehouse
      * @param productSkuCode sku to reserve
      * @param debitQty   quantity to reserve
-     * @return the rest of qty to adjust on other warehouse, that belong to the same shop.
+     * @return remainder of unallocated quantity.
      */
     BigDecimal debit(Warehouse warehouse, String productSkuCode, BigDecimal debitQty);
 

@@ -89,6 +89,18 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setProductName(String productName);
 
     /**
+     * @return supplier code.
+     */
+    String getSupplierCode();
+
+    /**
+     * Set supplier code (fulfilment centre/warehouse code).
+     *
+     * @param supplierCode supplier code
+     */
+    void setSupplierCode(String supplierCode);
+
+    /**
      * Get order delivery.
      *
      * @return delivery

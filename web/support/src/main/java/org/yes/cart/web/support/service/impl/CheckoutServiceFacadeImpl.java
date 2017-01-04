@@ -30,7 +30,6 @@ import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.report.ReportDescriptor;
 import org.yes.cart.report.ReportGenerator;
-import org.yes.cart.report.ReportPair;
 import org.yes.cart.report.ReportParameter;
 import org.yes.cart.service.domain.CarrierSlaService;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -142,14 +141,25 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
-        if (cart.getCarrierSlaId() == null || cart.getShippingList().isEmpty()) {
+        if (!cart.isAllCarrierSlaSelected() || cart.getShippingList().isEmpty()) {
             return Collections.emptyList();
         }
-        final CarrierSla carrierSla = carrierSlaService.getById(cart.getCarrierSlaId());
-        if (carrierSla == null) {
-            return Collections.emptyList();
+
+        Set<String> carrierSlaPGs = null;
+        for (final Long carrierSlaId : cart.getCarrierSlaId().values()) {
+            final CarrierSla carrierSla = carrierSlaService.getById(carrierSlaId);
+            if (carrierSla == null) {
+                return Collections.emptyList();
+            }
+            if (carrierSlaPGs == null) {
+                // initialise first
+                carrierSlaPGs = new HashSet<String>(carrierSla.getSupportedPaymentGatewaysAsList());
+            } else {
+                // every subsequent SLA will limit supported PGs via intersection
+                carrierSlaPGs.retainAll(carrierSla.getSupportedPaymentGatewaysAsList());
+            }
         }
-        final List<String> carrierSlaPGs = carrierSla.getSupportedPaymentGatewaysAsList();
+
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
         final Map<String, Integer> sorting = new HashMap<String, Integer>();
@@ -254,12 +264,12 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     /** {@inheritDoc} */
     @Override
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart) throws OrderAssemblyException {
-        return customerOrderService.createFromCart(shoppingCart, !shoppingCart.getOrderInfo().isMultipleDelivery());
+        return customerOrderService.createFromCart(shoppingCart);
     }
 
     /** {@inheritDoc} */
     @Override
-    public boolean isMultipleDeliveryAllowedForCart(final ShoppingCart shoppingCart) {
+    public Map<String, Boolean> isMultipleDeliveryAllowedForCart(final ShoppingCart shoppingCart) {
         return customerOrderService.isOrderMultipleDeliveriesAllowed(shoppingCart);
     }
 

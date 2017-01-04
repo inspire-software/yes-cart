@@ -16,28 +16,25 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.misc.Result;
-import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.domain.PromotionCouponService;
-import org.yes.cart.service.order.*;
-import org.yes.cart.service.order.impl.OrderEventImpl;
+import org.yes.cart.service.order.DeliveryAssembler;
+import org.yes.cart.service.order.OrderAssembler;
+import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.math.BigDecimal;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -49,6 +46,8 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     private final OrderAssembler orderAssembler;
 
     private final DeliveryAssembler deliveryAssembler;
+
+    private final OrderSplittingStrategy orderSplittingStrategy;
 
     private final GenericDAO<Customer, Long> customerDao;
 
@@ -65,6 +64,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
      * @param customerOrderDeliveryDao to get deliveries, awiting for inventory
      * @param orderAssembler order assembler
      * @param deliveryAssembler delivery assembler
+     * @param orderSplittingStrategy order splitting strategy
      */
     public CustomerOrderServiceImpl(
             final GenericDAO<CustomerOrder, Long> customerOrderDao,
@@ -72,13 +72,15 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             final GenericDAO<Object, Long> genericDao,
             final GenericDAO<CustomerOrderDelivery, Long> customerOrderDeliveryDao,
             final OrderAssembler orderAssembler,
-            final DeliveryAssembler deliveryAssembler) {
+            final DeliveryAssembler deliveryAssembler,
+            final OrderSplittingStrategy orderSplittingStrategy) {
         super(customerOrderDao);
         this.orderAssembler = orderAssembler;
         this.deliveryAssembler = deliveryAssembler;
         this.customerDao = customerDao;
         this.genericDao = genericDao;
         this.customerOrderDeliveryDao = customerOrderDeliveryDao;
+        this.orderSplittingStrategy = orderSplittingStrategy;
     }
 
     /**
@@ -189,20 +191,24 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
-    public boolean isOrderMultipleDeliveriesAllowed(final ShoppingCart shoppingCart) {
-        try {
-            final CustomerOrder order = orderAssembler.assembleCustomerOrder(shoppingCart, true); // Must be temp assembly, we are just checking not persisting
-            return deliveryAssembler.isOrderMultipleDeliveriesAllowed(order);
-        } catch (OrderAssemblyException e) {
-            return false;
-        }
+    public Map<String, Boolean> isOrderMultipleDeliveriesAllowed(final ShoppingCart shoppingCart) {
+
+        return orderSplittingStrategy.isMultipleDeliveriesAllowed(
+                shoppingCart.getShoppingContext().getShopId(),
+                shoppingCart.getCartItemList()
+        );
+
     }
 
     /**
      * {@inheritDoc}
      */
-    public CustomerOrder createFromCart(final ShoppingCart shoppingCart, final boolean onePhysicalDelivery)
+    public CustomerOrder createFromCart(final ShoppingCart shoppingCart)
             throws OrderAssemblyException {
+
+        final boolean onePhysicalDelivery =
+                !shoppingCart.getOrderInfo().isMultipleDelivery() || !shoppingCart.getOrderInfo().isMultipleDeliveryAvailable();
+
         final CustomerOrder customerOrderToDelete = getGenericDao().findSingleByCriteria(
                 Restrictions.eq("cartGuid", shoppingCart.getGuid())
         );

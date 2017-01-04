@@ -16,6 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -27,7 +28,7 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  implements ShoppingCartCommand {
+public class SetMultipleDeliveryCommandImpl extends SplitCartItemsCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20110118L;
 
@@ -35,9 +36,11 @@ public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  im
      * Construct command.
      *
      * @param registry shopping cart command registry
+     * @param orderSplittingStrategy splitting strategy
      */
-    public SetMultipleDeliveryCommandImpl(final ShoppingCartCommandRegistry registry) {
-        super(registry);
+    public SetMultipleDeliveryCommandImpl(final ShoppingCartCommandRegistry registry,
+                                          final OrderSplittingStrategy orderSplittingStrategy) {
+        super(registry, orderSplittingStrategy);
     }
 
     /**
@@ -54,6 +57,12 @@ public class SetMultipleDeliveryCommandImpl  extends AbstractCartCommandImpl  im
             final Boolean value = Boolean.valueOf((String) parameters.get(getCmdKey()));
             if (value != null && !value.equals(shoppingCart.getOrderInfo().isMultipleDelivery())) {
                 shoppingCart.getOrderInfo().setMultipleDelivery(value);
+                performCartItemsSplitting(shoppingCart);
+                recalculate(shoppingCart);
+                markDirty(shoppingCart);
+            } else if (!shoppingCart.isAllCartItemsBucketed()) {
+                performCartItemsSplitting(shoppingCart);
+                recalculate(shoppingCart);
                 markDirty(shoppingCart);
             }
         }

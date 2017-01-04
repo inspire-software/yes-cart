@@ -108,6 +108,24 @@ public interface SkuWarehouse extends Auditable {
     boolean isAvailableToSell();
 
     /**
+     * Returns true if has quantity and quantity is larger than reserved.
+     *
+     * @param required quantity
+     *
+     * @return true if there is quantity available to sell
+     */
+    boolean isAvailableToSell(BigDecimal required);
+
+    /**
+     * Returns true if has enough quantity to allocate.
+     *
+     * @param required quantity
+     *
+     * @return true if there is quantity available to sell
+     */
+    boolean isAvailableToAllocate(BigDecimal required);
+
+    /**
      * Returns quantity available for sale.
      *
      * @return quantity less reservations

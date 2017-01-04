@@ -78,6 +78,8 @@ export interface CustomerOrderLineVO {
   skuCode : string;
   skuName : string;
 
+  supplierCode : string;
+
   qty : number;
   price : number;
 

@@ -68,6 +68,9 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "supportedPaymentGateways")
     private String supportedPaymentGateways;
 
+    @DtoField(value = "supportedFulfilmentCentres")
+    private String supportedFulfilmentCentres;
+
     @DtoField(value = "billingAddressNotRequired")
     private boolean billingAddressNotRequired;
 
@@ -217,6 +220,20 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setSupportedPaymentGateways(final String supportedPaymentGateways) {
         this.supportedPaymentGateways = supportedPaymentGateways;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupportedFulfilmentCentres() {
+        return supportedFulfilmentCentres;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSupportedFulfilmentCentres(final String supportedFulfilmentCentres) {
+        this.supportedFulfilmentCentres = supportedFulfilmentCentres;
     }
 
     /**

@@ -16,9 +16,12 @@
 
 package org.yes.cart.shoppingcart;
 
+import org.yes.cart.service.order.DeliveryBucket;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -51,9 +54,20 @@ public interface ShoppingCart extends Serializable {
 
 
     /**
+     * @return immutable map of shopping cart items.
+     */
+    Map<DeliveryBucket, List<CartItem>> getCartItemMap();
+
+
+    /**
      * @return immutable list of shipping cart items.
      */
     List<CartItem> getShippingList();
+
+    /**
+     * @return immutable map of shipping choices.
+     */
+    Map<DeliveryBucket, List<CartItem>> getShippingListMap();
 
     /**
      * Get quantity of given SKU in cart (excluding gifts).
@@ -68,6 +82,11 @@ public interface ShoppingCart extends Serializable {
      * @return number of cart items currently in the shopping cart.
      */
     int getCartItemsCount();
+
+    /**
+     * @return show cart items suppliers (cartItem.supplierCode)
+     */
+    List<String> getCartItemsSuppliers();
 
     /**
      * @return coupon codes added to this cart
@@ -144,7 +163,23 @@ public interface ShoppingCart extends Serializable {
      *
      * @return carries sla id.
      */
-    Long getCarrierSlaId();
+    Map<String, Long> getCarrierSlaId();
+
+    /**
+     * Flag to determine if SLA had been selected for all buckets.
+     *
+     * @return true if all delivery buckets has SLA selection
+     */
+    boolean isAllCarrierSlaSelected();
+
+    /**
+     * Check if all items in this cart have been assigned a bucket.
+     * If not this indicated that order splitting command must be run
+     * before shipping step.
+     *
+     * @return true if all items and gifts have delivery bucket
+     */
+    boolean isAllCartItemsBucketed();
 
     /**
      * Get order message.
@@ -172,10 +207,11 @@ public interface ShoppingCart extends Serializable {
     /**
      * This method only searches for shipping indexes.
      *
-     * @param carrierSlaId sku code
+     * @param carrierSlaGUID sku code
+     * @param deliveryBucket delivery bucket
      * @return index of cart item for this sku
      */
-    int indexOfShipping(final String carrierSlaId);
+    int indexOfShipping(final String carrierSlaGUID, DeliveryBucket deliveryBucket);
 
     /**
      * This method only searches for non-gift items indexes.

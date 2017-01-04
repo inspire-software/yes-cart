@@ -215,12 +215,35 @@ public interface CarrierSla extends Auditable {
      */
     void setSupportedPaymentGateways(String supportedPaymentGateways);
 
+
     /**
      * Get supported payment gateways list.
      *
      * @return supported payment gateways list.
      */
     List<String> getSupportedPaymentGatewaysAsList();
+
+
+    /**
+     * Get supported warehouse codes CSV
+     *
+     * @return CSV warehouse codes
+     */
+    String getSupportedFulfilmentCentres();
+
+    /**
+     * Set supported warehouse codes CSV
+     *
+     * @param supportedFulfilmentCentres CSV warehouse codes
+     */
+    void setSupportedFulfilmentCentres(String supportedFulfilmentCentres);
+
+    /**
+     * Get supported fulfilment centres list.
+     *
+     * @return supported fulfilment centres list.
+     */
+    List<String> getSupportedFulfilmentCentresAsList();
 
 
     /**

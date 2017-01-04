@@ -17,6 +17,7 @@
 package org.yes.cart.promotion.impl.action;
 
 import org.yes.cart.promotion.PromotionAction;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.util.MoneyUtils;
@@ -53,6 +54,7 @@ public class ShippingDiscountPromotionAction extends AbstractShippingPromotionAc
         if (MoneyUtils.isFirstBiggerThanSecond(discount, BigDecimal.ZERO)) {
             final MutableShoppingCart cart = getShoppingCart(context);
             final CartItem shipping = getShipping(context);
+            final DeliveryBucket bucket = shipping.getDeliveryBucket();
 
             // calculate discount relative to sale price
             final BigDecimal saleDiscount = shipping.getSalePrice().multiply(discount);
@@ -64,7 +66,7 @@ public class ShippingDiscountPromotionAction extends AbstractShippingPromotionAc
                 promoPrice = MoneyUtils.ZERO;
             }
 
-            cart.setShippingPromotion(shipping.getProductSkuCode(), promoPrice, getPromotionCode(context));
+            cart.setShippingPromotion(shipping.getProductSkuCode(), bucket, promoPrice, getPromotionCode(context));
 
         }
     }

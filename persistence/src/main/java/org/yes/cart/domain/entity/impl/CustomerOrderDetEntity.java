@@ -18,6 +18,8 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.service.order.DeliveryBucket;
+import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -50,6 +52,7 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     private String productSkuCode;
     private String productName;
+    private String supplierCode;
     private CustomerOrder customerOrder;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -180,6 +183,23 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     public void setProductName(final String productName) {
         this.productName = productName;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public String getDeliveryGroup() {
+        return "";
+    }
+
+    public DeliveryBucket getDeliveryBucket() {
+        final String supplierCode = this.supplierCode == null ? "" : this.supplierCode;
+        return new DeliveryBucketImpl(getDeliveryGroup(), supplierCode, getCustomerOrder().getOrdernum());
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
     }
 
     public CustomerOrder getCustomerOrder() {

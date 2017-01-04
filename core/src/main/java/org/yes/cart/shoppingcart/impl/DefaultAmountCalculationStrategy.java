@@ -27,6 +27,7 @@ import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 
@@ -425,7 +426,9 @@ public class DefaultAmountCalculationStrategy implements AmountCalculationStrate
                 final BigDecimal netPrice = money.getNet();
                 final BigDecimal grossPrice = money.getGross();
 
-                cart.setShippingTax(item.getProductSkuCode(), netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
+                final DeliveryBucket bucket = item.getDeliveryBucket();
+
+                cart.setShippingTax(item.getProductSkuCode(), bucket, netPrice, grossPrice, tax.getRate(), tax.getCode(), tax.isExcluded());
 
                 prices.add(new CartItemPrices(item));
 

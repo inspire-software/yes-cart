@@ -141,3 +141,23 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11018,  'SYSTEM_PREVIEW_URI_CSS', 'SYSTEM_PREVIEW_URI_CSS',  1,  NULL,  'Admin\\CMS preview CSS URI',
   'This URI points to preview CSS. For example on SFW: "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css"', 1000,  1000, 0, 0, 0, 0);
 
+
+--
+-- YC-749 Perform order splitting by fulfilment centre
+--
+
+alter table TCUSTOMERORDERDELIVERYDET add column SUPPLIER_CODE varchar(255);
+alter table TCUSTOMERORDERDET add column SUPPLIER_CODE varchar(255);
+
+-- Template for updating order details for specific shop to specific supplier code - this has to be warehouse.CODE
+-- assigned to the shop:
+-- update TCUSTOMERORDERDET od set od.SUPPLIER_CODE = 'XXX' where od.CUSTOMERORDER_ID in (select o.CUSTOMERORDER_ID from TCUSTOMERORDER o where o.SHOP_ID = xxx);
+update TCUSTOMERORDERDET od set od.SUPPLIER_CODE = 'Main' where od.CUSTOMERORDER_ID in (select o.CUSTOMERORDER_ID from TCUSTOMERORDER o where o.SHOP_ID = 10);
+-- update TCUSTOMERORDERDELIVERYDET od set od.SUPPLIER_CODE = 'XXX' where od.CUSTOMERORDERDELIVERY_ID in (select d.CUSTOMERORDERDELIVERY_ID from TCUSTOMERORDER o, TCUSTOMERORDERDELIVERY d where o.CUSTOMERORDER_ID = d.CUSTOMERORDER_ID and o.SHOP_ID = xxx);
+update TCUSTOMERORDERDELIVERYDET od set od.SUPPLIER_CODE = 'Main' where od.CUSTOMERORDERDELIVERY_ID in (select d.CUSTOMERORDERDELIVERY_ID from TCUSTOMERORDER o, TCUSTOMERORDERDELIVERY d where o.CUSTOMERORDER_ID = d.CUSTOMERORDER_ID and o.SHOP_ID = 10);
+
+
+alter table TWAREHOUSE add column DISPLAYNAME longtext;
+-- alter table TWAREHOUSE add column DISPLAYNAME varchar(4000);
+
+alter table TCARRIERSLA add column SUPPORTED_FCS varchar(1024);

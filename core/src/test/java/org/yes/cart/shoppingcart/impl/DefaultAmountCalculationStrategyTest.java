@@ -28,6 +28,7 @@ import org.yes.cart.promotion.PromotionContext;
 import org.yes.cart.promotion.PromotionContextFactory;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
@@ -1118,6 +1119,7 @@ public class DefaultAmountCalculationStrategyTest {
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
         final CartItem ship1 = context.mock(CartItem.class, "ship1");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "ctx");
@@ -1201,8 +1203,9 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(ship1).getQty(); will(returnValue(new BigDecimal("1")));
             allowing(ship1).isPromoApplied(); will(returnValue(true));
             allowing(ship1).getAppliedPromo(); will(returnValue("SHIP-50%"));
+            allowing(ship1).getDeliveryBucket(); will(returnValue(bucket1));
             one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
-            one(cart).setShippingTax("B-001", new BigDecimal("8.33"), new BigDecimal("10.00"), new BigDecimal("20.00"), "VAT", false);
+            one(cart).setShippingTax("B-001", bucket1, new BigDecimal("8.33"), new BigDecimal("10.00"), new BigDecimal("20.00"), "VAT", false);
 
         }});
 
@@ -1267,6 +1270,7 @@ public class DefaultAmountCalculationStrategyTest {
         final CartItem item1 = context.mock(CartItem.class, "item1");
         final CartItem item2 = context.mock(CartItem.class, "item2");
         final CartItem ship1 = context.mock(CartItem.class, "ship1");
+        final DeliveryBucket bucket1 = context.mock(DeliveryBucket.class, "bucket1");
 
         final MutableShoppingCart cart = context.mock(MutableShoppingCart.class, "cart");
         final MutableShoppingContext shoppingContext = context.mock(MutableShoppingContext.class, "ctx");
@@ -1350,8 +1354,9 @@ public class DefaultAmountCalculationStrategyTest {
             allowing(ship1).getQty(); will(returnValue(new BigDecimal("1")));
             allowing(ship1).isPromoApplied(); will(returnValue(true));
             allowing(ship1).getAppliedPromo(); will(returnValue("SHIP-50%"));
+            allowing(ship1).getDeliveryBucket(); will(returnValue(bucket1));
             one(taxProvider).determineTax("SHOP10", "EUR", "GB", "GB-CAM", "B-001"); will(returnValue(tax));
-            one(cart).setShippingTax("B-001", new BigDecimal("10.00"), new BigDecimal("12.00"), new BigDecimal("20.00"), "VAT", true);
+            one(cart).setShippingTax("B-001", bucket1, new BigDecimal("10.00"), new BigDecimal("12.00"), new BigDecimal("20.00"), "VAT", true);
         }});
 
         final Total rezTaxExcluded = new DefaultAmountCalculationStrategy(taxProvider, deliveryCostCalculationStrategy, promotionContextFactory, customerService, shopService) {

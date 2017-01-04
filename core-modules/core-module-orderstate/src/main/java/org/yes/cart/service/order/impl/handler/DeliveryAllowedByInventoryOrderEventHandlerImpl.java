@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Product;
-import org.yes.cart.domain.entity.Warehouse;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -28,9 +25,12 @@ import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.util.MoneyUtils;
+import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -62,22 +62,48 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
      */
     public boolean handle(final OrderEvent orderEvent) throws OrderItemAllocationException {
         synchronized (OrderEventHandler.syncMonitor) {
-            final List<Warehouse> warehouses = getWarehouseService().getByShopId(orderEvent.getCustomerOrder().getShop().getShopId(), false);
+
             final CustomerOrderDelivery orderDelivery = orderEvent.getCustomerOrderDelivery();
-            for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
 
-                final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
-                // there may not be this product anymore potentially!
-                if (product != null && !product.getProducttype().isDigital()) {
+            if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
-                    final Pair<BigDecimal, BigDecimal> qtyPair = getSkuWarehouseService().findQuantity(
-                            warehouses,
-                            det.getProductSkuCode()
-                    );
-                    if (MoneyUtils.isFirstBiggerThanSecond(
-                            det.getQty(),
-                            qtyPair.getFirst())) {
-                        return false; //inventory is less than we can give for this order
+                // map warehouses by code
+                final List<Warehouse> warehouses = getWarehouseService().getByShopId(
+                        orderEvent.getCustomerOrder().getShop().getShopId(), false);
+                final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+                for (final Warehouse warehouse : warehouses) {
+                    warehouseByCode.put(warehouse.getCode(), warehouse);
+                }
+
+                // If this delivery is physical then try inventory
+                for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {
+
+                    final Product product = productService.getProductBySkuCode(det.getProductSkuCode());
+                    // there may not be this product anymore potentially, so it can be null
+                    // Null products are treated as AVAILABILITY_STANDARD
+                    if (product == null || Product.AVAILABILITY_ALWAYS != product.getAvailability()) {
+
+                        final Warehouse selected = warehouseByCode.get(det.getSupplierCode());
+
+                        if (selected == null) {
+                            ShopCodeContext.getLog(this).warn(
+                                    "Warehouse is not found for delivery detail {}:{}",
+                                    orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                            );
+                            return false; // warehouse is disabled or not available
+                        }
+
+                        final SkuWarehouse stock = getSkuWarehouseService().findByWarehouseSku(
+                                selected,
+                                det.getProductSkuCode()
+                        );
+                        if (stock == null || !stock.isAvailableToAllocate(det.getQty())) {
+                            ShopCodeContext.getLog(this).debug(
+                                    "Not enough stock for delivery detail {}:{}",
+                                    orderDelivery.getDeliveryNum(), det.getProductSkuCode()
+                            );
+                            return false; //inventory is less than we can give for this order
+                        }
                     }
                 }
             }

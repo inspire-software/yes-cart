@@ -32,6 +32,7 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -41,8 +42,9 @@ import java.util.*;
  */
 public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse> implements SkuWarehouseService {
 
-    private ProductService productService;
+    private static final BigDecimal ZERO = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
+    private ProductService productService;
 
     /**
      * Construct sku warehouse service.
@@ -153,16 +155,16 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
                 warehouseIdList
         );
 
-        BigDecimal quantity = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
-        BigDecimal reserved = BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+        BigDecimal quantity = ZERO;
+        BigDecimal reserved = ZERO;
 
         if (!rez.isEmpty()) {
             final Object obj[] = (Object[]) rez.get(0);
             if (obj.length > 0 && obj[0] != null) {
-                quantity = ((BigDecimal) obj[0]).setScale(Constants.DEFAULT_SCALE);
+                quantity = ((BigDecimal) obj[0]).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             }
             if (obj.length > 1 && obj[1] != null) {
-                reserved = ((BigDecimal) obj[1]).setScale(Constants.DEFAULT_SCALE);
+                reserved = ((BigDecimal) obj[1]).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             }
         }
 
@@ -205,9 +207,9 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
                 newSkuEntry.setQuantity(BigDecimal.ZERO);
                 newSkuEntry.setReserved(reserveQty);
                 create(newSkuEntry);
-                return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                return ZERO;
             }
-            return reserveQty.setScale(Constants.DEFAULT_SCALE);
+            return reserveQty.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
         } else {
 
@@ -221,13 +223,13 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(rest, BigDecimal.ZERO)) {
                 skuWarehouse.setReserved(
-                        MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).add(reserveQty));
+                        MoneyUtils.notNull(skuWarehouse.getReserved(), ZERO).add(reserveQty));
                 update(skuWarehouse);
-                return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                return ZERO;
             } else {
                 skuWarehouse.setReserved(skuWarehouse.getQuantity());
                 update(skuWarehouse);
-                return rest.abs().setScale(Constants.DEFAULT_SCALE);
+                return rest.abs().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             }
         }
 
@@ -244,16 +246,16 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
-            return voidQty.setScale(Constants.DEFAULT_SCALE);
+            return voidQty.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
         } else {
-            BigDecimal canVoid = MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).min(voidQty);
-            BigDecimal rest = MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).subtract(voidQty);
-            skuWarehouse.setReserved(MoneyUtils.notNull(skuWarehouse.getReserved(), BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE)).subtract(canVoid));
+            BigDecimal canVoid = MoneyUtils.notNull(skuWarehouse.getReserved(), ZERO).min(voidQty);
+            BigDecimal rest = MoneyUtils.notNull(skuWarehouse.getReserved(), ZERO).subtract(voidQty);
+            skuWarehouse.setReserved(MoneyUtils.notNull(skuWarehouse.getReserved(), ZERO).subtract(canVoid));
             update(skuWarehouse);
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(rest, BigDecimal.ZERO)) {
-                return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                return ZERO;
             } else {
-                return rest.abs().setScale(Constants.DEFAULT_SCALE);
+                return rest.abs().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             }
 
         }
@@ -318,16 +320,16 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
         if (skuWarehouse == null) {
-            return debitQty.setScale(Constants.DEFAULT_SCALE);
+            return debitQty.setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
         } else {
             BigDecimal canDebit = skuWarehouse.getQuantity().min(debitQty);
             BigDecimal rest = skuWarehouse.getQuantity().subtract(debitQty);
             skuWarehouse.setQuantity(skuWarehouse.getQuantity().subtract(canDebit));
             update(skuWarehouse);
             if (MoneyUtils.isFirstBiggerThanOrEqualToSecond(BigDecimal.ZERO, rest)) {
-                return rest.abs().setScale(Constants.DEFAULT_SCALE);
+                return rest.abs().setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
             } else {
-                return BigDecimal.ZERO.setScale(Constants.DEFAULT_SCALE);
+                return ZERO;
             }
         }
 

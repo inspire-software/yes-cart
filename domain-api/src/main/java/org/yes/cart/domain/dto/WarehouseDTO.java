@@ -18,6 +18,8 @@ package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
 
+import java.util.Map;
+
 /**
  * Warehouse DTO.
  * <p/>
@@ -70,6 +72,23 @@ public interface WarehouseDTO extends Identifiable {
      * @param name name of warehouse
      */
     void setName(String name);
+
+
+
+    /**
+     * Warehouse name.
+     *
+     * @return localised locale => name pairs.
+     */
+    Map<String, String> getDisplayNames();
+
+    /**
+     * Get warehouse name
+     *
+     * @param names localised locale => name pairs
+     */
+    void setDisplayNames(Map<String, String> names);
+
 
     /**
      * @return description.

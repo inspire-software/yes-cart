@@ -113,7 +113,8 @@
         <constructor-arg index="0" ref="carrierService"/>
         <constructor-arg index="1" ref="carrierSlaService"/>
         <constructor-arg index="2" ref="shopService"/>
-        <constructor-arg index="3" ref="deliveryCostCalculationStrategy"/>
+        <constructor-arg index="3" ref="warehouseService"/>
+        <constructor-arg index="4" ref="deliveryCostCalculationStrategy"/>
     </bean>
 
     <bean id="checkoutServiceFacade" class="org.yes.cart.web.support.service.impl.CheckoutServiceFacadeImpl">
