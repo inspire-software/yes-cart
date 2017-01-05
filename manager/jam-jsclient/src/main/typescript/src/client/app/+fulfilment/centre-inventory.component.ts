@@ -66,7 +66,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   private selectCentreModalDialog:ModalComponent;
 
   @ViewChild('inventoryInfoDialog')
-  private inventoryInfoDialog:InventoryInfoComponent
+  private inventoryInfoDialog:InventoryInfoComponent;
 
   private deleteValue:String;
 
