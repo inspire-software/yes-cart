@@ -337,19 +337,19 @@
 
                 <form class="pull-left">
                   <input class="filter-input" type="text" name="attributeFilter" [(ngModel)]="attributeFilter" autocomplete="off"/>
-                  <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
-                  <a class="js-click" (click)="onSearchHelpToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
+                  <a class="js-click" (click)="onClearAttributeFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpAttributeToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
                 </form>
 
-                <button type="button" (click)="onRowAdd()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                <button type="button" (click)="onRowAddAttribute()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
                   <i class="fa fa-plus"></i>
                 </button>
 
-                <button type="button" (click)="onRowEditSelected()" [disabled]="selectedRow == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                <button type="button" (click)="onRowEditSelectedAttribute()" [disabled]="selectedRowAttribute == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
                   <i class="fa fa-edit"></i>
                 </button>
 
-                <button type="button" (click)="onRowDeleteSelected()" [disabled]="selectedRow == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                <button type="button" (click)="onRowDeleteSelectedAttribute()" [disabled]="selectedRowAttribute == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
                   <i class="fa fa-remove"></i>
                 </button>
 
@@ -358,7 +358,7 @@
 
             <div class="row">
 
-              <div *ngIf="searchHelpShow">
+              <div *ngIf="searchHelpShowAttribute">
                 <div class="bg-info text-padding">
                   <p>{{ 'SEARCH_HELP_AV_VALUES' | translate }} <span><button type="button" (click)="onSearchValues()" class="btn btn-circle"><i class="fa fa-circle"></i></button></span></p>
                   <p>{{ 'SEARCH_HELP_AV_VALUES_CHANGES' | translate }} <span><button type="button" (click)="onSearchValuesChanges()" class="btn btn-circle"><i class="fa fa-edit"></i></button></span></p>
@@ -375,7 +375,7 @@
                                    [avPrototype]="avPrototype"
                                    [objectAttributes]="attributes"
                                    [attributeFilter]="attributeFilter"
-                                   (dataSelected)="onSelectRow($event)"
+                                   (dataSelected)="onSelectRowAttribute($event)"
                                    (dataChanged)="onAttributeDataChanged($event)"></yc-attribute-values>
             </div>
           </div>
@@ -387,6 +387,72 @@
         <yc-product-categories [product]="product" [reload]="reloadCatalogue"
                                (dataChanged)="onCategoriesDataChanged($event)"></yc-product-categories>
       </tab>
+
+
+      <tab heading="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"  (select)="tabSelected('Associations')">
+
+        <template [ngIf]="!(product.productId > 0)">
+
+          <div class="row">
+            <div class="col-xs-12 block-padding-spacer">
+              <div class="bg-info text-padding">
+                <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+              </div>
+            </div>
+          </div>
+
+        </template>
+
+        <template [ngIf]="product.productId > 0">
+
+          <div class="panel-body">
+            <div class="row">
+              <div class="text-right data-control">
+
+                <form class="pull-left">
+                  <input class="filter-input" type="text" name="associationFilter" [(ngModel)]="associationFilter" autocomplete="off"/>
+                  <a class="js-click" (click)="onClearAssociationFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>
+                  <a class="js-click" (click)="onSearchHelpAssociationToggle()" title="{{ 'MODAL_BUTTON_HELPFILTER' | translate }}"><i class="fa fa-question-circle"></i></a>
+                </form>
+
+                <button type="button" (click)="onRowAddAssociation()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                  <i class="fa fa-plus"></i>
+                </button>
+
+                <button type="button" (click)="onRowEditSelectedAssociation()" [disabled]="selectedRowAssociation == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_EDIT' | translate }}">
+                  <i class="fa fa-edit"></i>
+                </button>
+
+                <button type="button" (click)="onRowDeleteSelectedAssociation()" [disabled]="selectedRowAssociation == null" class="btn btn-danger btn-circle btn-xl" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                  <i class="fa fa-remove"></i>
+                </button>
+
+              </div>
+            </div>
+
+            <div class="row">
+
+              <div *ngIf="searchHelpShowAssociation">
+                <div class="bg-info text-padding">
+                  <p>{{ 'SEARCH_HELP_ASSOCIATION_TYPE' | translate }} <span><button type="button" (click)="onSearchAssociation()" class="btn btn-circle"><i class="fa fa-tag"></i></button></span></p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <yc-product-associations #associationsComponent
+                                       [masterObject]="product"
+                                       [associationFilter]="associationFilter"
+                                       (dataSelected)="onSelectRowAssociation($event)"
+                                       (dataChanged)="onAssociationDataChanged($event)"></yc-product-associations>
+
+            </div>
+          </div>
+        </template>
+
+      </tab>
+
 
     </tabset>
   </form>

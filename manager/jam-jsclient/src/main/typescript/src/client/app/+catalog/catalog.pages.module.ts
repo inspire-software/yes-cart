@@ -7,7 +7,7 @@ import { ServicesModule } from '../shared/services/services.module';
 import {
   BrandsComponent, BrandComponent,
   CategoriesComponent, CategoryComponent,
-  ProductsComponent, ProductComponent, ProductCategoryComponent, SKUsComponent, SKUComponent,
+  ProductsComponent, ProductComponent, ProductCategoryComponent, ProductAssociationsComponent, SKUsComponent, SKUComponent,
   ProductTypesComponent, ProductTypeComponent, ProductTypeGroupComponent, ProductTypeAttributeComponent
 } from './components/index';
 import { CatalogBrandComponent, CatalogCategoryComponent, CatalogProductsComponent, CatalogTypeComponent } from './index';
@@ -17,14 +17,14 @@ import { CatalogBrandComponent, CatalogCategoryComponent, CatalogProductsCompone
     declarations: [
       BrandsComponent, BrandComponent,
       CategoriesComponent, CategoryComponent,
-      ProductsComponent, ProductComponent, ProductCategoryComponent, SKUsComponent, SKUComponent,
+      ProductsComponent, ProductComponent, ProductCategoryComponent, ProductAssociationsComponent, SKUsComponent, SKUComponent,
       ProductTypesComponent, ProductTypeComponent, ProductTypeGroupComponent, ProductTypeAttributeComponent,
       CatalogBrandComponent, CatalogCategoryComponent, CatalogProductsComponent, CatalogTypeComponent
     ],
     exports: [
       BrandsComponent, BrandComponent,
       CategoriesComponent, CategoryComponent,
-      ProductsComponent, ProductComponent, ProductCategoryComponent, SKUsComponent, SKUComponent,
+      ProductsComponent, ProductComponent, ProductCategoryComponent, ProductAssociationsComponent, SKUsComponent, SKUComponent,
       ProductTypesComponent, ProductTypeComponent, ProductTypeGroupComponent, ProductTypeAttributeComponent,
       CatalogBrandComponent, CatalogCategoryComponent, CatalogProductsComponent, CatalogTypeComponent
     ]

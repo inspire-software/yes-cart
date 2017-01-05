@@ -1,0 +1,127 @@
+<template [ngIf]="masterObject">
+
+  <section class="no-more-tables">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'AV_TYPE' | translate }}</th>
+        <th>{{ 'AV_RANK' | translate }}</th>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredObjectAssociations; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'AV_TYPE' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{getAssociationType(row)}}</a></td>
+          <td title="{{ 'AV_RANK' | translate }}"><a (click)="onSelectRow(row)" class="js-click">{{row.rank}}</a></td>
+          <td title="{{ 'CODE' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedCode}}</a></td>
+          <td title="{{ 'NAME' | translate }}" class="av-td-value"><a (click)="onSelectRow(row)" class="js-click">{{row.associatedName}}</a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+
+
+  <yc-modal #deleteConfirmationModalDialog
+         title="{{ 'MODAL_CONFIRM_TITLE' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_REMOVE' | translate }}"
+         [valid]="true"
+         (closed)="onDeleteConfirmationResult($event)">
+    {{ 'MODAL_CONFIRM_DELETE' | translate:{value: (selectedRow ? (selectedRow.associatedCode + ': ' + selectedRow.associatedName) : '') } }}
+  </yc-modal>
+
+  <yc-modal #editModalDialog
+         title="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+         [valid]="validForSave"
+         (closed)="onEditModalResult($event)">
+
+    <template [ngIf]="associationToEdit != null">
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">{{ getAssociationType(associationToEdit) }} {{ 'CODE' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="associatedCodeEdit" class="form-control" type="text" [ngModel]="associationToEdit.associatedCode" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ 'NAME' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="associatedNameEdit" class="form-control" type="text" [ngModel]="associationToEdit.associatedName" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ 'AV_RANK' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="rankEdit" class="form-control" type="text" [(ngModel)]="associationToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </template>
+
+  </yc-modal>
+
+  <yc-modal #addModalDialog
+         title="{{ 'PRODUCT_TAB_ASSOCIATIONS' | translate }}"
+         cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+         positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+         [valid]="validForSave"
+         (closed)="onEditModalResult($event)">
+
+    <template [ngIf]="associationToEdit != null">
+      <form role="form">
+        <fieldset>
+          <div class="row">
+            <div class="col-xs-12">{{ 'AV_TYPE' | translate }}</div>
+            <div class="col-xs-12">
+              <select name="associationIdAdd" class="form-control" type="text" [(ngModel)]="associationToEdit.associationId" (ngModelChange)="onDataChange($event)">
+                <option *ngFor="let association of associations" [value]="association.associationId">{{association.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ 'CODE' | translate }}</div>
+            <div class="col-xs-12">
+              <div class="input-group">
+                <input name="associatedCodeAdd" class="form-control" type="text" [ngModel]="associationToEdit.associatedCode" [readonly]="true">
+                <span class="input-group-btn">
+                  <button type="button" (click)="onSearchProduct()" class="btn">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ 'NAME' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="associatedNameAdd" class="form-control" type="text" [ngModel]="associationToEdit.associatedName" [readonly]="true">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">{{ 'AV_RANK' | translate }}</div>
+            <div class="col-xs-12">
+              <input name="rankAdd" class="form-control" type="text" [(ngModel)]="associationToEdit.rank" (ngModelChange)="onDataChange($event)" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </template>
+
+  </yc-modal>
+
+  <yc-product-select #productSelectDialog (dataSelected)="onProductSelected($event)"></yc-product-select>
+
+</template>

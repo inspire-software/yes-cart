@@ -16,9 +16,10 @@
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ProductWithLinksVO, AttrValueProductVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
+import { ProductWithLinksVO, AttrValueProductVO, ProductAssociationVO, BrandVO, ProductTypeInfoVO, ProductSkuVO, Pair, ValidationRequestVO } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { ProductAssociationsComponent } from './index';
 import { UiUtil } from './../../shared/ui/index';
 import { BrandSelectComponent, ProductTypeSelectComponent } from './../../shared/catalog/index';
 import { LogUtil } from './../../shared/log/index';
@@ -38,10 +39,12 @@ export class ProductComponent implements OnInit, OnDestroy {
   private avPrototype:AttrValueProductVO;
   private _attributes:AttrValueProductVO[] = [];
   private attributeFilter:string;
+  private associationFilter:string;
 
   private _changes:Array<Pair<AttrValueProductVO, boolean>>;
 
-  private selectedRow:AttrValueProductVO;
+  private selectedRowAttribute:AttrValueProductVO;
+  private selectedRowAssociation:ProductAssociationVO;
 
   private initialising:boolean = false; // tslint:disable-line:no-unused-variable
   private delayedChange:Future;
@@ -52,13 +55,17 @@ export class ProductComponent implements OnInit, OnDestroy {
   @ViewChild('attributeValuesComponent')
   private attributeValuesComponent:AttributeValuesComponent;
 
+  @ViewChild('associationsComponent')
+  private associationsComponent:ProductAssociationsComponent;
+
   @ViewChild('brandsModalDialog')
   private brandsModalDialog:BrandSelectComponent;
 
   @ViewChild('productTypesModalDialog')
   private productTypesModalDialog:ProductTypeSelectComponent;
 
-  private searchHelpShow:boolean = false;
+  private searchHelpShowAttribute:boolean = false;
+  private searchHelpShowAssociation:boolean = false;
 
   private reloadCatalogue:boolean = false;
 
@@ -236,6 +243,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.delayedChange.delay();
   }
 
+  onAssociationDataChanged(event:any) {
+    LogUtil.debug('ProductComponent assoc data changed', this._product);
+    this.delayedChange.delay();
+  }
+
+
 
   ngOnInit() {
     LogUtil.debug('ProductComponent ngOnInit');
@@ -252,31 +265,60 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.reloadCatalogue = tab === 'Catalogue';
   }
 
-  protected onRowAdd() {
+  protected onRowAddAttribute() {
     this.attributeValuesComponent.onRowAdd();
   }
 
 
-  protected onRowDeleteSelected() {
-    if (this.selectedRow != null) {
+  protected onRowDeleteSelectedAttribute() {
+    if (this.selectedRowAttribute != null) {
       this.attributeValuesComponent.onRowDeleteSelected();
     }
   }
 
-  protected onRowEditSelected() {
-    if (this.selectedRow != null) {
+  protected onRowEditSelectedAttribute() {
+    if (this.selectedRowAttribute != null) {
       this.attributeValuesComponent.onRowEditSelected();
     }
   }
 
-  protected onSelectRow(row:AttrValueProductVO) {
-    LogUtil.debug('ProductComponent onSelectRow handler', row);
-    if (row == this.selectedRow) {
-      this.selectedRow = null;
+  protected onSelectRowAttribute(row:AttrValueProductVO) {
+    LogUtil.debug('ProductComponent onSelectRowAttribute handler', row);
+    if (row == this.selectedRowAttribute) {
+      this.selectedRowAttribute = null;
     } else {
-      this.selectedRow = row;
+      this.selectedRowAttribute = row;
     }
   }
+
+
+  protected onRowAddAssociation() {
+    this.associationsComponent.onRowAdd();
+  }
+
+
+  protected onRowDeleteSelectedAssociation() {
+    if (this.selectedRowAssociation != null) {
+      this.associationsComponent.onRowDeleteSelected();
+    }
+  }
+
+  protected onRowEditSelectedAssociation() {
+    if (this.selectedRowAssociation != null) {
+      this.associationsComponent.onRowEditSelected();
+    }
+  }
+
+
+  protected onSelectRowAssociation(row:ProductAssociationVO) {
+    LogUtil.debug('ProductComponent onSelectRowAssociation handler', row);
+    if (row == this.selectedRowAssociation) {
+      this.selectedRowAssociation = null;
+    } else {
+      this.selectedRowAssociation = row;
+    }
+  }
+
 
   protected onEditBrand() {
     this.brandsModalDialog.showDialog();
@@ -303,34 +345,50 @@ export class ProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onClearFilter() {
+  protected onClearAttributeFilter() {
 
     this.attributeFilter = '';
 
   }
 
-  protected onSearchHelpToggle() {
-    this.searchHelpShow = !this.searchHelpShow;
+  protected onSearchHelpAttributeToggle() {
+    this.searchHelpShowAttribute = !this.searchHelpShowAttribute;
   }
 
   protected onSearchValues() {
-    this.searchHelpShow = false;
+    this.searchHelpShowAttribute = false;
     this.attributeFilter = '###';
   }
 
   protected onSearchValuesNew() {
-    this.searchHelpShow = false;
+    this.searchHelpShowAttribute = false;
     this.attributeFilter = '##0';
   }
 
   protected onSearchValuesNewOnly() {
-    this.searchHelpShow = false;
+    this.searchHelpShowAttribute = false;
     this.attributeFilter = '#00';
   }
 
   protected onSearchValuesChanges() {
-    this.searchHelpShow = false;
+    this.searchHelpShowAttribute = false;
     this.attributeFilter = '#0#';
+  }
+
+
+  protected onClearAssociationFilter() {
+
+    this.associationFilter = '';
+
+  }
+
+  protected onSearchHelpAssociationToggle() {
+    this.searchHelpShowAssociation = !this.searchHelpShowAssociation;
+  }
+
+  protected onSearchAssociation() {
+    this.searchHelpShowAssociation = false;
+    this.associationFilter = '#cross';
   }
 
   protected onSkuSelected(data:ProductSkuVO) {

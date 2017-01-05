@@ -409,36 +409,47 @@ export class ProductTypeAttributeComponent implements OnInit, OnChanges {
     let _vis = this._attributeFilter === '+V';
     let _inv = this._attributeFilter === '-V';
     let _delta = this._attributeFilter === '###';
+    let _filteredObjectAttributes:Array<ProductTypeAttrVO> = [];
     if (_vis || _inv) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+      _filteredObjectAttributes = this._objectAttributes.filter(val =>
         (_vis && val.visible) || (_inv && !val.visible)
       );
-      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, _filteredObjectAttributes);
     } else if (_si) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+      _filteredObjectAttributes = this._objectAttributes.filter(val =>
         val.store || val.search || val.primary || val.navigation
       );
-      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' + _filter, this.filteredObjectAttributes);
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' + _filter, _filteredObjectAttributes);
     } else if (_delta) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+      _filteredObjectAttributes = this._objectAttributes.filter(val =>
         this.isEditedAttribute(val) || this.isRemovedAttribute(val) || this.isNewAttribute(val)
       );
-      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, _filteredObjectAttributes);
     } else if (_filter) {
-      this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+      _filteredObjectAttributes = this._objectAttributes.filter(val =>
         val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
         val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
         val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1
       );
-      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes ' +  _filter, _filteredObjectAttributes);
     } else {
-      this.filteredObjectAttributes = this._objectAttributes;
-      LogUtil.debug('ProductTypeAttributeComponent filterAttributes no filter', this.filteredObjectAttributes);
+      _filteredObjectAttributes = this._objectAttributes;
+      LogUtil.debug('ProductTypeAttributeComponent filterAttributes no filter', _filteredObjectAttributes);
     }
 
-    if (this.filteredObjectAttributes === null) {
-      this.filteredObjectAttributes = [];
+    if (_filteredObjectAttributes === null) {
+      _filteredObjectAttributes = [];
     }
+
+    _filteredObjectAttributes.sort(function(a, b) {
+      var rank:number = a.rank - b.rank;
+      if (rank == 0) {
+        return a.attribute.name > b.attribute.name ? 1 : -1;
+      }
+      return rank;
+    });
+
+    this.filteredObjectAttributes = _filteredObjectAttributes;
 
     let _total = this.filteredObjectAttributes.length;
     this.totalItems = _total;

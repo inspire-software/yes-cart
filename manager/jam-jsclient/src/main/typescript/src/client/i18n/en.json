@@ -304,6 +304,7 @@
   "PRODUCT_TAB_AVAILABILITY": "Availability",
   "PRODUCT_TAB_EXTERNAL": "External",
   "PRODUCT_TAB_CATALOG": "Catalog",
+  "PRODUCT_TAB_ASSOCIATIONS": "Associations",
 
   "CACHE_NODE": "Node",
   "CACHE_NAME": "Cache",
@@ -652,6 +653,8 @@
   "SEARCH_HELP_PRODUCT_TYPE_DEFAULT": "Default product type search is by code, name and description",
   "SEARCH_HELP_PRODUCT_TYPE_EXACT": "To search for exact code (code or name): Format: '!keyword'",
   "SEARCH_HELP_PRODUCT_TYPE_CODE": "To search for type by attribute code (exact): Format: '#code'",
+
+  "SEARCH_HELP_ASSOCIATION_TYPE": "To search by association type. Format: '#keyword'",
 
   "SEARCH_HELP_ATTRIBUTE_CODE": "To search attribute by code with exact matching. Format: '#X'",
 

@@ -304,6 +304,7 @@
   "PRODUCT_TAB_AVAILABILITY": "Доступность",
   "PRODUCT_TAB_EXTERNAL": "Внешнее",
   "PRODUCT_TAB_CATALOG": "Каталог",
+  "PRODUCT_TAB_ASSOCIATIONS": "Связи",
 
   "CACHE_NODE": "Узел",
   "CACHE_NAME": "Кэш",
@@ -652,6 +653,8 @@
   "SEARCH_HELP_PRODUCT_TYPE_DEFAULT": "Поиск типа товара по умолчанию по коду, названию и описанию",
   "SEARCH_HELP_PRODUCT_TYPE_EXACT": "Для точного поиска (код или название): Формат: '!фраза'",
   "SEARCH_HELP_PRODUCT_TYPE_CODE": "Для поиска типа по коду атрибута (точный): Формат: '#код'",
+
+  "SEARCH_HELP_ASSOCIATION_TYPE": "Для поиска по типу ассоциации. Формат: '#фраза'",
 
   "SEARCH_HELP_ATTRIBUTE_CODE": "Для поиска атрибута по коду (точный). Формат: '#X'",
 

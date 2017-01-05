@@ -445,40 +445,47 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   private filterAttributes() {
     let _filter = this._attributeFilter ? this._attributeFilter.toLowerCase() : null;
+    let _filteredObjectAttributes:Array<AttrValueVO> = [];
     if (_filter) {
       if (_filter === '###') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.val != null && val.val != '' && val.attrvalueId > 0
         );
       } else if (_filter === '##0') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.val != null && val.val != ''
         );
       } else if (_filter === '#00') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.val != null && val.val != '' && val.attrvalueId == 0
         );
       } else if (_filter === '#0#') {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        _filteredObjectAttributes = this._objectAttributes.filter(val =>
           this.isEditedAttribute(val) || (val.attrvalueId == 0 && val.val != null && val.val != '' && val.val.indexOf('* ') !== 0)
         );
       } else {
-        this.filteredObjectAttributes = this._objectAttributes.filter(val =>
+        _filteredObjectAttributes = this._objectAttributes.filter(val =>
           val.attribute.code.toLowerCase().indexOf(_filter) !== -1 ||
           val.attribute.name.toLowerCase().indexOf(_filter) !== -1 ||
           val.attribute.description && val.attribute.description.toLowerCase().indexOf(_filter) !== -1 ||
           val.val && val.val.toLowerCase().indexOf(_filter) !== -1
         );
       }
-      LogUtil.debug('AttributeValuesComponent filterAttributes ' +  _filter, this.filteredObjectAttributes);
+      LogUtil.debug('AttributeValuesComponent filterAttributes ' +  _filter, _filteredObjectAttributes);
     } else {
-      this.filteredObjectAttributes = this._objectAttributes;
-      LogUtil.debug('AttributeValuesComponent filterAttributes no filter', this.filteredObjectAttributes);
+      _filteredObjectAttributes = this._objectAttributes;
+      LogUtil.debug('AttributeValuesComponent filterAttributes no filter', _filteredObjectAttributes);
     }
 
-    if (this.filteredObjectAttributes === null) {
-      this.filteredObjectAttributes = [];
+    if (_filteredObjectAttributes === null) {
+      _filteredObjectAttributes = [];
     }
+
+    _filteredObjectAttributes.sort(function(a, b) {
+      return a.attribute.name > b.attribute.name ? 1 : -1;
+    });
+
+    this.filteredObjectAttributes = _filteredObjectAttributes;
 
     let _total = this.filteredObjectAttributes.length;
     this.totalItems = _total;

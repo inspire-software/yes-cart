@@ -239,20 +239,25 @@ public class VoProductServiceImpl implements VoProductService {
         }
 
 
-        final Map<Long, VoProductAssociation> keepAssoc = new HashMap<>();
+        final Map<Long, VoProductAssociation> keepAssoc = new HashMap<Long, VoProductAssociation>();
+        final List<VoProductAssociation> addAssoc = new ArrayList<VoProductAssociation>();
         if (CollectionUtils.isNotEmpty(vo.getAssociations())) {
             for (final VoProductAssociation productAssociation : vo.getAssociations()) {
-                keepAssoc.put(productAssociation.getProductassociationId(), productAssociation);
+                if (productAssociation.getProductassociationId() > 0L) {
+                    keepAssoc.put(productAssociation.getProductassociationId(), productAssociation);
+                } else {
+                    addAssoc.add(productAssociation);
+                }
             }
         }
 
         final List<ProductAssociationDTO> existingAssoc = dtoProductAssociationService.getProductAssociations(vo.getProductId());
         if (CollectionUtils.isNotEmpty(existingAssoc)) {
             for (final ProductAssociationDTO existing : existingAssoc) {
-                final VoProductAssociation update = keepAssoc.get(existing.getAssociatedProductId());
+                final VoProductAssociation update = keepAssoc.get(existing.getProductassociationId());
                 keepAssoc.remove(existing.getAssociatedProductId());
                 if (update == null) {
-                    dtoProductAssociationService.remove(existing.getAssociatedProductId());
+                    dtoProductAssociationService.remove(existing.getProductassociationId());
                 } else {
                     dtoProductAssociationService.update(
                             voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, existing, update)
@@ -261,10 +266,10 @@ public class VoProductServiceImpl implements VoProductService {
             }
         }
 
-        for (final Map.Entry<Long, VoProductAssociation> assocToAdd : keepAssoc.entrySet()) {
+        for (final VoProductAssociation assocToAdd : addAssoc) {
             final ProductAssociationDTO assoc = dtoProductAssociationService.getNew();
             dtoProductAssociationService.create(
-                    voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, assoc, assocToAdd.getValue())
+                    voAssemblySupport.assembleDto(ProductAssociationDTO.class, VoProductAssociation.class, assoc, assocToAdd)
             );
         }
 
