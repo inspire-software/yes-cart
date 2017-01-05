@@ -39,7 +39,16 @@ public class SkuPriceSkuCodeToNameConverter implements ValueConverter {
     /** {@inheritDoc}*/
     @Override
     public Object convertToDto(final Object object, final BeanFactory beanFactory) {
-        List<Object> list = genericDAO.findQueryObjectByNamedQuery("SKU.NAME.BY.CODE", ((SkuPrice) object).getSkuCode());
+        final String skuCode = ((SkuPrice) object).getSkuCode();
+        String name = getName(skuCode, "SKU.NAME.BY.CODE");
+        if (name == null) {
+            name = getName(skuCode, "SKU.NAME.BY.SLA.CODE");
+        }
+        return name;
+    }
+
+    protected String getName(final String skuCode, final String query) {
+        List<Object> list = genericDAO.findQueryObjectByNamedQuery(query, skuCode);
         if (list != null && !list.isEmpty()) {
             final Object name = list.get(0);
             if (name instanceof String) {

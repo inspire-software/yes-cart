@@ -29,10 +29,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoProductService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -348,6 +345,29 @@ public class VoProductServiceImpl implements VoProductService {
 
         return vos;
 
+    }
+
+    /** {@inheritDoc} */
+    public List<VoProductSku> getFilteredProductSkus(final String filter, final int max) throws Exception {
+
+        final List<VoProductSku> results = new ArrayList<VoProductSku>();
+
+        int start = 0;
+        do {
+            final List<ProductSkuDTO> batch = dtoProductSkuService.findBy(filter, start, max);
+            if (batch.isEmpty()) {
+                break;
+            }
+            final Iterator<ProductSkuDTO> batchIt = batch.iterator();
+            while (batchIt.hasNext()) {
+                if (!federationFacade.isManageable(batchIt.next().getProductId(), ProductDTO.class)) {
+                    batchIt.remove();
+                }
+            }
+            results.addAll(voAssemblySupport.assembleVos(VoProductSku.class, ProductSkuDTO.class, batch));
+            start += max;
+        } while (results.size() < max && max != Integer.MAX_VALUE);
+        return results.size() > max ? results.subList(0, max) : results;
     }
 
     /** {@inheritDoc} */

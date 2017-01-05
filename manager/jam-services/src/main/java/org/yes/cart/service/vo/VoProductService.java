@@ -103,6 +103,14 @@ public interface VoProductService {
      */
     List<VoProductSku> getProductSkuAll(long productId) throws Exception;
 
+
+    /**
+     * Get all products in the system, filtered by criteria and according to rights, up to max
+     * @return list of products
+     * @throws Exception
+     */
+    List<VoProductSku> getFilteredProductSkus(String filter, int max) throws Exception;
+
     /**
      * Get product by id.
      *

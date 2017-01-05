@@ -141,6 +141,21 @@ export class ShippingService {
       .catch(this.handleError);
   }
 
+  /**
+   * Get list of all carriers SLA, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getFilteredCarrierSlas(filter:string, max:number) {
+
+    let body = filter;
+    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body, options)
+      .map(res => <CarrierSlaVO[]> res.json())
+      .catch(this.handleError);
+  }
+
 
   /**
    * Create carrier SLA.

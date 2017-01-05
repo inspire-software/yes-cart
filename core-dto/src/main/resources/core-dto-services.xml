@@ -142,9 +142,10 @@
                 <constructor-arg index="1" ref="dtoProductSkuService"/>
                 <constructor-arg index="2" ref="priceService"/>
                 <constructor-arg index="3" ref="productSkuDao"/>
-                <constructor-arg index="4" ref="shopDao"/>
-                <constructor-arg index="5" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
-                <constructor-arg index="6" ref="dtoAssemblerAdaptersRepository"/>
+                <constructor-arg index="4" ref="carrierSlaDao"/>
+                <constructor-arg index="5" ref="shopDao"/>
+                <constructor-arg index="6" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="7" ref="dtoAssemblerAdaptersRepository"/>
             </bean>
         </property>
     </bean>

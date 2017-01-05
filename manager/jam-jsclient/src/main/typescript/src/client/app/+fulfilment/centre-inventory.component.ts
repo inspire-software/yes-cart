@@ -18,9 +18,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
 import { FulfilmentService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { ProductSkuSelectComponent } from './../shared/catalog/index';
 import { InventoryInfoComponent } from './../shared/fulfilment/index';
-import { InventoryVO, FulfilmentCentreInfoVO } from './../shared/model/index';
-import { Futures, Future } from './../shared/event/index';
+import { InventoryVO, FulfilmentCentreInfoVO, ProductSkuVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
@@ -67,6 +68,9 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   @ViewChild('inventoryInfoDialog')
   private inventoryInfoDialog:InventoryInfoComponent;
+
+  @ViewChild('productSkuSelectDialog')
+  private productSkuSelectDialog:ProductSkuSelectComponent;
 
   private deleteValue:String;
 
@@ -230,6 +234,22 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
       this.onRowEditInventory(this.selectedInventory);
     }
   }
+
+  protected onSearchSKU() {
+    if (this.inventoryEdit != null && this.inventoryEdit.skuWarehouseId <= 0) {
+      this.productSkuSelectDialog.showDialog();
+    }
+  }
+
+
+  protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
+    LogUtil.debug('CentreInventoryComponent onProductSkuSelected');
+    if (event.valid && this.inventoryEdit != null && this.inventoryEdit.skuWarehouseId <= 0) {
+      this.inventoryEdit.skuCode = event.source.code;
+      this.inventoryEdit.skuName = event.source.name;
+    }
+  }
+
 
   protected onSaveHandler() {
 

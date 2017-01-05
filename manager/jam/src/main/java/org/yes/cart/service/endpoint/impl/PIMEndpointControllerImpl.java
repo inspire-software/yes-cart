@@ -129,6 +129,12 @@ public class PIMEndpointControllerImpl implements PIMEndpointController {
 
     @Override
     public @ResponseBody
+    List<VoProductSku> getFilteredProductSkus(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
+        return voProductService.getFilteredProductSkus(filter, max);
+    }
+
+    @Override
+    public @ResponseBody
     VoProductSku getSkuById(@PathVariable("id") final long id) throws Exception {
         return voProductService.getSkuById(id);
     }

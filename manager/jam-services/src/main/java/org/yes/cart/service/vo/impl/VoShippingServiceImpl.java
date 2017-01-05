@@ -28,6 +28,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShippingService;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -227,6 +228,29 @@ public class VoShippingServiceImpl implements VoShippingService {
             throw new AccessDeniedException("Access is denied");
         }
 
+    }
+
+    /** {@inheritDoc} */
+    public List<VoCarrierSla> getFilteredCarrierSlas(final String filter, final int max) throws Exception {
+
+        final List<VoCarrierSla> results = new ArrayList<VoCarrierSla>();
+
+        int start = 0;
+        do {
+            final List<CarrierSlaDTO> batch = dtoCarrierSlaService.findBy(filter, start, max);
+            if (batch.isEmpty()) {
+                break;
+            }
+            final Iterator<CarrierSlaDTO> batchIt = batch.iterator();
+            while (batchIt.hasNext()) {
+                if (!federationFacade.isManageable(batchIt.next().getCarrierId(), CarrierDTO.class)) {
+                    batchIt.remove();
+                }
+            }
+            results.addAll(voAssemblySupport.assembleVos(VoCarrierSla.class, CarrierSlaDTO.class, batch));
+            start += max;
+        } while (results.size() < max && max != Integer.MAX_VALUE);
+        return results.size() > max ? results.subList(0, max) : results;
     }
 
     @Override

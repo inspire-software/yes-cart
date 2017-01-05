@@ -184,7 +184,7 @@ public class DtoProductServiceImpl
     @SuppressWarnings("unchecked")
     public List<ProductDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<ProductDTO> dtos = new ArrayList<>();
+        final List<ProductDTO> dtos = new ArrayList<ProductDTO>();
 
         final List<Criterion> criteria = new ArrayList<Criterion>();
         CriteriaTuner tuner = null;

@@ -107,6 +107,14 @@ public interface VoShippingService {
      */
     List<VoCarrierSla> getCarrierSlas(long carrierId) throws Exception;
 
+
+    /**
+     * Get all vo in the system, filtered according to rights
+     * @return all carriers for shop
+     * @throws Exception
+     */
+    List<VoCarrierSla> getFilteredCarrierSlas(String filter, int max) throws Exception;
+
     /**
      * Get vo by id.
      *

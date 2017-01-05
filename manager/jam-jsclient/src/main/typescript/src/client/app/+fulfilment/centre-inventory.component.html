@@ -94,7 +94,14 @@
           <div class="row">
             <div class="col-lg-3">{{ 'CODE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventoryEdit.skuCode">
+              <div class="input-group">
+                <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="inventoryEdit.skuCode">
+                <span class="input-group-btn">
+                  <button type="button" (click)="onSearchSKU()" class="btn" [disabled]="inventoryEdit == null || inventoryEdit.skuWarehouseId > 0">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
               <div [hidden]="inventoryEditForm.controls['skuCode'].valid || inventoryEditForm.controls['skuCode'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
@@ -152,5 +159,7 @@
   </yc-modal>
 
   <yc-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></yc-inventory-info>
+
+  <yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
 
 </div>

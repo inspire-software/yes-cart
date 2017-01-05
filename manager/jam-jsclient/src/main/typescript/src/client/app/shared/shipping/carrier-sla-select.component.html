@@ -1,0 +1,31 @@
+<yc-modal #carrierSlaModalDialog
+          title="{{ 'PANEL_SHIPPING_CARRIERS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="validForSelect"
+          (closed)="onSelectConfirmationResult($event)">
+  <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+    <ul class="nav nav-second-level item-list-control">
+      <li>
+        <form>
+          <input class="filter-input" type="text" name="carrierSlaFilter" [(ngModel)]="carrierSlaFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        </form>
+      </li>
+      <li *ngIf="carrierSlaFilterRequired">
+        <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+      </li>
+
+      <li *ngIf="carrierSlaFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
+    </ul>
+
+    <ul class="nav nav-second-level item-list">
+
+      <li *ngFor="let carrierSla of filteredCarrierSlas">
+        <a (click)="onSelectClick(carrierSla)" class="{{ (selectedCarrierSla != null && carrierSla != null && selectedCarrierSla.carrierslaId == carrierSla.carrierslaId) ? 'bg-info js-click' : 'js-click' }}">{{carrierSla.code}}: {{carrierSla.name}}</a>
+      </li>
+
+    </ul>
+  </div>
+</yc-modal>

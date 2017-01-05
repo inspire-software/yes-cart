@@ -37,4 +37,15 @@ public interface DtoCarrierSlaService extends GenericDTOService<CarrierSlaDTO> {
      */
     List<CarrierSlaDTO> findByCarrier(long carrierId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get shipping SLA by carrier Id.
+     *
+     * @param filter filter for partial match.
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of SLA, that belongs to given carrier id
+     */
+    List<CarrierSlaDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 }

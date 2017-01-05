@@ -18,8 +18,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
 import { PricingService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { PriceListVO, ShopVO } from './../shared/model/index';
-import { Futures, Future } from './../shared/event/index';
+import { ProductSkuSelectComponent } from './../shared/catalog/index';
+import { CarrierSlaSelectComponent } from './../shared/shipping/index';
+import { PriceListVO, ShopVO, ProductSkuVO, CarrierSlaVO } from './../shared/model/index';
+import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
 import { LogUtil } from './../shared/log/index';
@@ -67,6 +69,12 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
 
   @ViewChild('selectCurrencyModalDialog')
   private selectCurrencyModalDialog:ModalComponent;
+
+  @ViewChild('productSkuSelectDialog')
+  private productSkuSelectDialog:ProductSkuSelectComponent;
+
+  @ViewChild('carrierSlaSelectDialog')
+  private carrierSlaSelectDialog:CarrierSlaSelectComponent;
 
   private deleteValue:String;
 
@@ -289,6 +297,37 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       this.onRowEditPricelist(copy);
     }
   }
+
+  protected onSearchSKU() {
+    if (this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
+      this.productSkuSelectDialog.showDialog();
+    }
+  }
+
+
+  protected onProductSkuSelected(event:FormValidationEvent<ProductSkuVO>) {
+    LogUtil.debug('ShopPriceListComponent onProductSkuSelected');
+    if (event.valid && this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
+      this.pricelistEdit.skuCode = event.source.code;
+      this.pricelistEdit.skuName = event.source.name;
+    }
+  }
+
+  protected onSearchSLA() {
+    if (this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
+      this.carrierSlaSelectDialog.showDialog();
+    }
+  }
+
+
+  protected onCarrierSlaSelected(event:FormValidationEvent<CarrierSlaVO>) {
+    LogUtil.debug('ShopPriceListComponent onCarrierSlaSelected');
+    if (event.valid && this.pricelistEdit != null && this.pricelistEdit.skuPriceId <= 0) {
+      this.pricelistEdit.skuCode = event.source.code;
+      this.pricelistEdit.skuName = event.source.name;
+    }
+  }
+
 
   protected onSaveHandler() {
 

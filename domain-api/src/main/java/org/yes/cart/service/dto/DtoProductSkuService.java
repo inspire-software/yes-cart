@@ -39,6 +39,19 @@ public interface DtoProductSkuService extends GenericDTOService<ProductSkuDTO>, 
     List<ProductSkuDTO> getAllProductSkus(long productId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+
+    /**
+     * Find products by filter.
+     *
+     * @param filter filter for partial match.
+     * @param page page number starting from 0
+     * @param pageSize size of page
+     *
+     * @return list of products
+     */
+    List<ProductSkuDTO> findBy(String filter, int page, int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+
     /**
      * Create sku price.
      *

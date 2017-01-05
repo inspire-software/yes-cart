@@ -107,7 +107,17 @@
           <div class="row">
             <div class="col-lg-3">{{ 'CODE' | translate }}</div>
             <div class="col-lg-9">
-              <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="pricelistEdit.skuCode">
+              <div class="input-group">
+                <input class="form-control" formControlName="skuCode" name="skuCode" type="text" [(ngModel)]="pricelistEdit.skuCode">
+                <span class="input-group-btn">
+                  <button type="button" (click)="onSearchSKU()" class="btn" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
+                    <i class="fa fa-search"></i>
+                  </button>
+                  <button type="button" (click)="onSearchSLA()" class="btn" [disabled]="pricelistEdit == null || pricelistEdit.skuPriceId > 0">
+                    <i class="fa fa-truck"></i>
+                  </button>
+                </span>
+              </div>
               <div [hidden]="pricelistEditForm.controls['skuCode'].valid || pricelistEditForm.controls['skuCode'].pristine" class="alert alert-danger">
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
@@ -233,5 +243,9 @@
 
   </yc-modal>
 
+
+  <yc-product-sku-select #productSkuSelectDialog (dataSelected)="onProductSkuSelected($event)"></yc-product-sku-select>
+
+  <yc-carrier-sla-select #carrierSlaSelectDialog (dataSelected)="onCarrierSlaSelected($event)"></yc-carrier-sla-select>
 
 </div>

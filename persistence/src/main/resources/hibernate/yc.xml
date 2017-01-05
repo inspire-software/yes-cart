@@ -3228,6 +3228,12 @@
         ]]>
     </query>
 
+    <query name="SKU.NAME.BY.SLA.CODE">
+        <![CDATA[
+                 select ps.name from CarrierSlaEntity ps   where ps.guid = ?1
+        ]]>
+    </query>
+
 
     <query name="BRAND.BY.NAME">
         <![CDATA[

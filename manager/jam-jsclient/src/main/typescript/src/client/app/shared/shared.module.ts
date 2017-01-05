@@ -17,9 +17,7 @@ import { ModalComponent } from './modal/index';
 
 import { I18nComponent } from './i18n/index';
 
-import { BrandSelectComponent } from './catalog/index';
-import { CategorySelectComponent } from './catalog/index';
-import { ProductTypeSelectComponent } from './catalog/index';
+import { BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent } from './catalog/index';
 
 import { ContentSelectComponent } from './content/index';
 
@@ -31,13 +29,15 @@ import { AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttri
 
 import { SidebarComponent, DataControlComponent } from './sidebar/index';
 import { ErrorModalComponent } from './error/index';
-import { LicenseComponent, LicenseModalComponent  } from './license/index';
+import { LicenseComponent, LicenseModalComponent } from './license/index';
 
-import { TreeViewComponent  } from './tree-view/index';
+import { TreeViewComponent } from './tree-view/index';
 
-import { ShopSelectComponent  } from './shop/index';
+import { CarrierSlaSelectComponent } from './shipping/index';
 
-import { CurrencySelectComponent  } from './price/index';
+import { ShopSelectComponent } from './shop/index';
+
+import { CurrencySelectComponent } from './price/index';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -54,7 +54,7 @@ import { CurrencySelectComponent  } from './price/index';
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
     I18nComponent,
-    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent,
+    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
@@ -62,6 +62,7 @@ import { CurrencySelectComponent  } from './price/index';
     SidebarComponent, DataControlComponent,
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
+    CarrierSlaSelectComponent,
     ShopSelectComponent,
     CurrencySelectComponent,
     TreeViewComponent,
@@ -70,7 +71,7 @@ import { CurrencySelectComponent  } from './price/index';
     YcDatePipe, YcDateTimePipe, YcQuantityPipe, YcPricePipe,
     ModalComponent,
     I18nComponent,
-    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent,
+    BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent, ProductSelectComponent, ProductSkuSelectComponent,
     ContentSelectComponent,
     FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
@@ -78,6 +79,7 @@ import { CurrencySelectComponent  } from './price/index';
     SidebarComponent, DataControlComponent,
     ErrorModalComponent,
     LicenseComponent, LicenseModalComponent,
+    CarrierSlaSelectComponent,
     ShopSelectComponent,
     CurrencySelectComponent,
     TreeViewComponent,

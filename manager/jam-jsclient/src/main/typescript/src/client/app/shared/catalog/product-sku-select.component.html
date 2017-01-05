@@ -1,0 +1,31 @@
+<yc-modal #productSkuModalDialog
+          title="{{ 'SKU' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="validForSelect"
+          (closed)="onSelectConfirmationResult($event)">
+  <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+    <ul class="nav nav-second-level item-list-control">
+      <li>
+        <form>
+          <input class="filter-input" type="text" name="productSkuFilter" [(ngModel)]="productSkuFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        </form>
+      </li>
+      <li *ngIf="productSkuFilterRequired">
+        <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+      </li>
+
+      <li *ngIf="productSkuFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
+    </ul>
+
+    <ul class="nav nav-second-level item-list">
+
+      <li *ngFor="let productSku of filteredProductSkus">
+        <a (click)="onSelectClick(productSku)" class="{{ (selectedProductSku != null && productSku != null && selectedProductSku.skuId == productSku.skuId) ? 'bg-info js-click' : 'js-click' }}">{{productSku.code}}: {{productSku.name}}</a>
+      </li>
+
+    </ul>
+  </div>
+</yc-modal>

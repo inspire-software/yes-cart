@@ -22,6 +22,10 @@ import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
@@ -31,6 +35,7 @@ import org.yes.cart.domain.dto.factory.DtoFactory;
 import org.yes.cart.domain.dto.impl.AttrValueProductSkuDTOImpl;
 import org.yes.cart.domain.dto.impl.ProductSkuDTOImpl;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.*;
@@ -130,6 +135,59 @@ public class DtoProductSkuServiceImpl
         return result;
     }
 
+    private final static char[] CODE = new char[] { '!' };
+    static {
+        Arrays.sort(CODE);
+    }
+
+    private final static Order[] PRODUCT_ORDER = new Order[] { Order.asc("code") };
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<ProductSkuDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<ProductSkuDTO> dtos = new ArrayList<ProductSkuDTO>();
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+
+        if (org.springframework.util.StringUtils.hasLength(filter)) {
+
+            final Pair<String, String> code = ComplexSearchUtils.checkSpecialSearch(filter, CODE);
+
+            if (code != null) {
+
+                if ("!".equals(code.getFirst())) {
+
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("guid", code.getSecond(), MatchMode.EXACT),
+                            Restrictions.ilike("code", code.getSecond(), MatchMode.EXACT),
+                            Restrictions.ilike("manufacturerCode", code.getSecond(), MatchMode.EXACT),
+                            Restrictions.ilike("barCode", code.getSecond(), MatchMode.EXACT)
+                    ));
+
+                }
+
+            } else {
+
+                criteria.add(Restrictions.or(
+                        Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("manufacturerCode", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
+                        Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
+                ));
+
+            }
+
+        }
+
+        final List<ProductSku> entities = getService().getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PRODUCT_ORDER);
+
+        fillDTOs(entities, dtos);
+
+        return dtos;
+    }
 
     /**
      * {@inheritDoc}

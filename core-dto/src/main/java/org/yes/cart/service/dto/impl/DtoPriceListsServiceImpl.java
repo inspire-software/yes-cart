@@ -31,6 +31,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.dto.PriceListDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
+import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -60,6 +61,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
 
     private final GenericDAO<SkuPrice, Long> skuPriceDAO;
     private final GenericDAO<ProductSku, Long> productSkuDAO;
+    private final GenericDAO<CarrierSla, Long> carrierSlaDAO;
     private final GenericDAO<Shop, Long> shopDAO;
 
     private final DtoFactory dtoFactory;
@@ -71,12 +73,14 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                                     final DtoProductSkuService dtoProductSkuService,
                                     final PriceService priceService,
                                     final GenericDAO<ProductSku, Long> productSkuDAO,
+                                    final GenericDAO<CarrierSla, Long> carrierSlaDAO,
                                     final GenericDAO<Shop, Long> shopDAO,
                                     final DtoFactory dtoFactory,
                                     final AdaptersRepository adaptersRepository) {
         this.dtoShopService = dtoShopService;
         this.dtoProductSkuService = dtoProductSkuService;
         this.priceService = priceService;
+        this.carrierSlaDAO = carrierSlaDAO;
         this.skuPriceDAO = priceService.getGenericDao();
         this.productSkuDAO = productSkuDAO;
         this.shopDAO = shopDAO;
@@ -339,6 +343,18 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                         for (final ProductSku sku : skus) {
                             skuCodes.add(sku.getCode()); // sku codes from product match
                         }
+
+
+                        final List<CarrierSla> slas = carrierSlaDAO.findByCriteria(
+                                Restrictions.or(
+                                        Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
+                                        Restrictions.ilike("name", filter, MatchMode.ANYWHERE)
+                                )
+                        );
+                        for (final CarrierSla sla : slas) {
+                            skuCodes.add(sla.getGuid()); // codes from SLA match
+                        }
+
 
                         if (skuCodes.isEmpty()) {
                             criteria.add(Restrictions.ilike("skuCode", filter, MatchMode.ANYWHERE));

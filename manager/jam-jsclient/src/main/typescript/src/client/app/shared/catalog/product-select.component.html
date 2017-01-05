@@ -1,0 +1,31 @@
+<yc-modal #productModalDialog
+          title="{{ 'PANEL_PIM_PRODUCTS' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_SELECT' | translate }}"
+          [valid]="validForSelect"
+          (closed)="onSelectConfirmationResult($event)">
+  <div class="item-list-overflow {{ loading ? 'loading-data' : '' }}">
+    <ul class="nav nav-second-level item-list-control">
+      <li>
+        <form>
+          <input class="filter-input" type="text" name="productFilter" [(ngModel)]="productFilter" (ngModelChange)="onFilterChange()" autocomplete="off"/>
+        </form>
+      </li>
+      <li *ngIf="productFilterRequired">
+        <p class="bg-danger text-padding block-margin-spacer">{{ 'FILTER_REQUIRED' | translate }}</p>
+      </li>
+
+      <li *ngIf="productFilterCapped">
+        <p class="bg-warning text-padding block-margin-spacer">{{ 'FILTER_CAPPED' | translate }}</p>
+      </li>
+    </ul>
+
+    <ul class="nav nav-second-level item-list">
+
+      <li *ngFor="let product of filteredProducts">
+        <a (click)="onSelectClick(product)" class="{{ (selectedProduct != null && product != null && selectedProduct.productId == product.productId) ? 'bg-info js-click' : 'js-click' }}">{{product.code}}: {{product.name}}</a>
+      </li>
+
+    </ul>
+  </div>
+</yc-modal>

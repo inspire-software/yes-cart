@@ -81,6 +81,12 @@ public interface ShippingEndpointController {
     @ResponseBody
     List<VoCarrierSla> getCarrierSlas(@PathVariable("id") long carrierId) throws Exception;
 
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/carriersla/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoCarrierSla> getFilteredCarrierSlas(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMSHIPPINGADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/carriersla/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody

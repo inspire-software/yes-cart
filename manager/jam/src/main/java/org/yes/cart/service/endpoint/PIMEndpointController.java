@@ -83,6 +83,12 @@ public interface PIMEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/product/sku/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoProductSku> getFilteredProductSkus(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/sku/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoProductSku getSkuById(@PathVariable("id") long id) throws Exception;
