@@ -4,6 +4,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
@@ -68,7 +69,7 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
         Arrays.sort(ORDER_OR_CUSTOMER_OR_DETAILS);
         Arrays.sort(PAYMENT_STATUS);
     }
-
+    private final static Order[] PAYMENT_ORDER = new Order[] { Order.asc("createdTimestamp"), Order.asc("orderNumber") };
 
     /** {@inheritDoc} */
     @Override
@@ -175,6 +176,6 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
         }
 
 
-        return getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+        return getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PAYMENT_ORDER);
     }
 }

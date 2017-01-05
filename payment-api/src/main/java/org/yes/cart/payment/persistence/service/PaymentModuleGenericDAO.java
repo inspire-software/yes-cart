@@ -17,6 +17,7 @@
 package org.yes.cart.payment.persistence.service;
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 
 import java.io.Serializable;
 import java.util.List;
@@ -89,6 +90,22 @@ public interface PaymentModuleGenericDAO<T, PK extends Serializable> {
     List<T> findByCriteria(int firstResult,
                            int maxResults,
                            Criterion... criterion);
+
+
+    /**
+     * Find entities by criteria.
+     *
+     * @param firstResult first result
+     * @param maxResults max results
+     * @param criterion given criteria
+     * @param order sorting
+     *
+     * @return list of found entities.
+     */
+    List<T> findByCriteria(int firstResult,
+                           int maxResults,
+                           Criterion[] criterion,
+                           Order[] order);
 
 
     /**

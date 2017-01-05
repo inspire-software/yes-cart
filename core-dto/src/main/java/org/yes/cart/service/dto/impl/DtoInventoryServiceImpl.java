@@ -23,6 +23,7 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.StringUtils;
 import org.yes.cart.constants.Constants;
@@ -181,6 +182,8 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
         Arrays.sort(LOW_OR_RESERVED);
     }
 
+    private final static Order[] INVENTORY_ORDER = new Order[] { Order.asc("skuCode") };
+
     /** {@inheritDoc} */
     public List<InventoryDTO> findBy(final long warehouseId, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -287,7 +290,7 @@ public class DtoInventoryServiceImpl implements DtoInventoryService {
                 }
             }
 
-            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+            final List<SkuWarehouse> entities = skuWarehouseDAO.findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), INVENTORY_ORDER);
 
             final Map<String, Object> adapters = adaptersRepository.getAll();
             for (final SkuWarehouse entity : entities) {

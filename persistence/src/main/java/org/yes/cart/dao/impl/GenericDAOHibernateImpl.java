@@ -24,6 +24,7 @@ import org.hibernate.*;
 import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.RowCountProjection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.search.FullTextQuery;
@@ -502,6 +503,23 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         return crit.list();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        for (Order o : order) {
+            crit.addOrder(o);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
     @Override
     public int findCountByCriteria(final Criterion... criterion) {
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
@@ -543,6 +561,26 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
+        }
+        if (criteriaTuner != null) {
+            criteriaTuner.tune(crit);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public List<T> findByCriteria(final CriteriaTuner criteriaTuner, final int firstResult, final int maxResults, final Criterion[] criterion, final Order[] order) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        for (Order o : order) {
+            crit.addOrder(o);
         }
         if (criteriaTuner != null) {
             criteriaTuner.tune(crit);

@@ -21,6 +21,7 @@ import org.hibernate.LockMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO;
 
 import java.io.Serializable;
@@ -206,6 +207,23 @@ public class PaymentModuleGenericDAOImpl<T, PK extends Serializable>
         Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
         for (Criterion c : criterion) {
             crit.add(c);
+        }
+        crit.setFirstResult(firstResult);
+        crit.setMaxResults(maxResults);
+        return crit.list();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings(UNCHECKED)
+    public List<T> findByCriteria(final int firstResult, final int maxResults, final Criterion[] criterion, Order[] order) {
+        Criteria crit = sessionFactory.getCurrentSession().createCriteria(getPersistentClass());
+        for (Criterion c : criterion) {
+            crit.add(c);
+        }
+        for (Order o : order) {
+            crit.addOrder(o);
         }
         crit.setFirstResult(firstResult);
         crit.setMaxResults(maxResults);

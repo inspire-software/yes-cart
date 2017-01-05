@@ -31,10 +31,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -163,7 +160,12 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     }
 
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public List<CustomerOrder> findCustomerOrdersByDeliveryIds(final Collection<Long> deliveryIds) {
+        return getGenericDao().findByNamedQuery("ORDERS.BY.DELIVERY.IDS", deliveryIds);
+    }
 
     /**
      * {@inheritDoc}

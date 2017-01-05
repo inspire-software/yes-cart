@@ -18,6 +18,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../shared/validation/validators';
 import { FulfilmentService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
+import { InventoryInfoComponent } from './../shared/fulfilment/index';
 import { InventoryVO, FulfilmentCentreInfoVO } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
@@ -64,7 +65,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   @ViewChild('selectCentreModalDialog')
   private selectCentreModalDialog:ModalComponent;
 
+  @ViewChild('inventoryInfoDialog')
+  private inventoryInfoDialog:InventoryInfoComponent
+
   private deleteValue:String;
+
+  private selectedSkuCode:String;
 
   private loading:boolean = false;
 
@@ -156,6 +162,7 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
   protected onInventorySelected(data:InventoryVO) {
     LogUtil.debug('CentreInventoryComponent onInventorySelected', data);
     this.selectedInventory = data;
+    this.selectedSkuCode = this.selectedInventory ? this.selectedInventory.skuCode : null;
   }
 
   protected onSearchLow() {
@@ -182,6 +189,12 @@ export class CentreInventoryComponent implements OnInit, OnDestroy {
 
   protected onSearchHelpToggle() {
     this.searchHelpShow = !this.searchHelpShow;
+  }
+
+  protected onRowInfoSelected() {
+    if (this.selectedInventory != null) {
+      this.inventoryInfoDialog.showDialog();
+    }
   }
 
   protected onRowNew() {

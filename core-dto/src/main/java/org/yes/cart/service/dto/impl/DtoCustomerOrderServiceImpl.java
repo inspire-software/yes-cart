@@ -24,6 +24,7 @@ import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDTO;
@@ -577,7 +578,7 @@ public class DtoCustomerOrderServiceImpl
     };
 
 
-    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS = new char[] { '#', '?', '@' };
+    private final static char[] ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU = new char[] { '#', '?', '@', '!' };
     private final static List<String> OPEN_ORDERS = Arrays.asList(
             CustomerOrder.ORDER_STATUS_PENDING,
             CustomerOrder.ORDER_STATUS_WAITING,
@@ -608,9 +609,11 @@ public class DtoCustomerOrderServiceImpl
     }};
     private final static char[] ORDER_STATUS = new char[] { '~', '-', '$', '+', '*' };
     static {
-        Arrays.sort(ORDER_OR_CUSTOMER_OR_ADDRESS);
+        Arrays.sort(ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
         Arrays.sort(ORDER_STATUS);
     }
+
+    private final static Order[] ORDERS_ORDER = new Order[] { Order.asc("orderTimestamp"), Order.asc("ordernum") };
 
     @Override
     public List<CustomerOrderDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -621,33 +624,38 @@ public class DtoCustomerOrderServiceImpl
 
         if (StringUtils.isNotBlank(filter)) {
 
-            final Pair<String, String> orderNumberOrCustomerOrAddressOrStatus = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS);
-            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrAddressOrStatus == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+            final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
+            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
 
-            if (orderNumberOrCustomerOrAddressOrStatus != null) {
+            if (orderNumberOrCustomerOrAddressOrSku != null) {
 
-                if ("#".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // order number search
-                    final String orderNumber = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    final String orderNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("ordernum", orderNumber, MatchMode.ANYWHERE),
                             Restrictions.ilike("cartGuid", orderNumber, MatchMode.ANYWHERE)
                     ));
-                } else if ("?".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                } else if ("?".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // customer search
-                    final String customer = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    final String customer = orderNumberOrCustomerOrAddressOrSku.getSecond();
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("email", customer, MatchMode.ANYWHERE),
                             Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
                             Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
                     ));
-                } else if ("@".equals(orderNumberOrCustomerOrAddressOrStatus.getFirst())) {
+                } else if ("@".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
                     // address search
-                    final String address = orderNumberOrCustomerOrAddressOrStatus.getSecond();
+                    final String address = orderNumberOrCustomerOrAddressOrSku.getSecond();
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("billingAddress", address, MatchMode.ANYWHERE),
                             Restrictions.ilike("shippingAddress", address, MatchMode.ANYWHERE)
                     ));
+                } else if ("!".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    if (page > 0) {
+                        return Collections.emptyList();
+                    }
+                    return findByReservation(orderNumberOrCustomerOrAddressOrSku.getSecond());
                 }
 
             } else if (dateSearch != null) {
@@ -695,11 +703,48 @@ public class DtoCustomerOrderServiceImpl
 
         }
 
-        final List<CustomerOrder> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+        final List<CustomerOrder> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), ORDERS_ORDER);
 
         fillDTOs(entities, orders);
 
         return orders;
+    }
+
+    private List<CustomerOrderDTO> findByReservation(final String sku) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<String> orderStatusThatCouldHaveReservations = Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
+        final List<String> skus = Collections.singletonList(sku);
+        final CustomerOrderService cos = (CustomerOrderService) service;
+        final Set<Long> deliveryIds = new HashSet<Long>();
+
+        deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
+                skus,
+                CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT,
+                orderStatusThatCouldHaveReservations
+        ));
+        deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
+                skus,
+                CustomerOrderDelivery.DELIVERY_STATUS_DATE_WAIT,
+                orderStatusThatCouldHaveReservations
+        ));
+        deliveryIds.addAll(cos.findAwaitingDeliveriesIds(
+                skus,
+                CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                orderStatusThatCouldHaveReservations
+        ));
+
+
+        final List<CustomerOrderDTO> orders = new ArrayList<>();
+
+        if (!deliveryIds.isEmpty()) {
+
+            final List<CustomerOrder> entities = cos.findCustomerOrdersByDeliveryIds(deliveryIds);
+            fillDTOs(entities, orders);
+
+        }
+
+        return orders;
+
     }
 
     @Override

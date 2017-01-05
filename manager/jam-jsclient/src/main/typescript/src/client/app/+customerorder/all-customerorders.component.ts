@@ -221,6 +221,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     this.customerorderFilter = '@address';
   }
 
+  protected onSearchReserved() {
+    this.searchHelpShow = false;
+    this.customerorderFilter = '!SKU';
+  }
+
   protected onSearchDate() {
     this.searchHelpShow = false;
     this.customerorderFilter = UiUtil.exampleDateSearch();

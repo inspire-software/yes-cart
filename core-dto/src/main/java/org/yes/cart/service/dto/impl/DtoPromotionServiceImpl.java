@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.StringUtils;
 import org.yes.cart.domain.dto.PromotionDTO;
@@ -78,6 +79,7 @@ public class DtoPromotionServiceImpl
         Arrays.sort(TAG_OR_CODE_OR_CONDITION_OR_ACTION);
         Arrays.sort(ENABLED);
     }
+    private final static Order[] PROMO_ORDER = new Order[] { Order.asc("enabledFrom"), Order.asc("enabledTo"), Order.asc("name") };
 
     @Override
     public List<PromotionDTO> findBy(final String shopCode, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -182,7 +184,7 @@ public class DtoPromotionServiceImpl
             }
 
             final List<Promotion> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PROMO_ORDER);
 
             fillDTOs(entities, dtos);
         }

@@ -134,6 +134,7 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
   protected onAttributeSelected(data:AttributeVO) {
     LogUtil.debug('AttributeDefinitionsComponent onAttributeSelected', data);
     this.selectedAttribute = data;
+    this.productAttributeCode = this.selectedAttribute ? this.selectedAttribute.code : null;
   }
 
   protected onAttributeChanged(event:FormValidationEvent<AttributeVO>) {
@@ -227,14 +228,9 @@ export class AttributeDefinitionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onRowInfo(row:AttributeVO) {
-    this.productAttributeCode = row.code;
-    this.productAttributeUsages.showDialog();
-  }
-
   protected onRowInfoSelected() {
     if (this.selectedAttribute != null) {
-      this.onRowInfo(this.selectedAttribute);
+      this.productAttributeUsages.showDialog();
     }
   }
 

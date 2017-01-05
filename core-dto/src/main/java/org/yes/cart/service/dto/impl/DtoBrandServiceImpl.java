@@ -20,7 +20,9 @@ import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import com.inspiresoftware.lib.dto.geda.assembler.Assembler;
 import com.inspiresoftware.lib.dto.geda.assembler.DTOAssembler;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.Constants;
@@ -218,24 +220,26 @@ public class DtoBrandServiceImpl
 
     }
 
+    private final static Order[] BRAND_ORDER = new Order[] { Order.asc("name") };
+
     /**
      * {@inheritDoc}
      */
     public List<BrandDTO> findBy(final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
-        final List<Brand> entities;
+        final Criterion[] criterion;
         if (StringUtils.isNotBlank(filter)) {
-            entities = service.getGenericDao().findByCriteria(
-                    page * pageSize, pageSize,
+            criterion = new Criterion[] {
                     Restrictions.or(
                             Restrictions.ilike("guid", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
                     )
-            );
+            };
         } else {
-            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
+            criterion = new Criterion[0];
         }
+        final List<Brand> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criterion, BRAND_ORDER);
         final List<BrandDTO> dtos = new ArrayList<BrandDTO>(entities.size());
         fillDTOs(entities, dtos);
         return dtos;

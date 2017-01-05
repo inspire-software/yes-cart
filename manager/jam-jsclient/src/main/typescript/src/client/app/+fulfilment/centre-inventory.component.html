@@ -20,6 +20,10 @@
       <i class="fa fa-sitemap"></i>
     </button>
 
+    <button type="button" (click)="onRowInfoSelected()" [disabled]="selectedInventory == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_QUICKINFO' | translate }}">
+      <i class="fa fa-info"></i>
+    </button>
+
     <button type="button" (click)="onRowNew()" [disabled]="selectedCentre == null" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
       <i class="fa fa-plus"></i>
     </button>
@@ -147,5 +151,6 @@
 
   </yc-modal>
 
+  <yc-inventory-info #inventoryInfoDialog [skuCode]="selectedSkuCode"></yc-inventory-info>
 
 </div>

@@ -23,6 +23,7 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.StringUtils;
 import org.yes.cart.dao.CriteriaTuner;
@@ -229,6 +230,8 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
     private final static char[] CODE = new char[] { '!' };
     private final static char[] TAG_OR_POLICY = new char[] { '#' };
 
+    private final static Order[] PRICE_ORDER = new Order[] { Order.asc("skuCode"), Order.asc("quantity") };
+
     /** {@inheritDoc} */
     public List<PriceListDTO> findBy(final long shopId, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
@@ -356,7 +359,7 @@ public class DtoPriceListsServiceImpl implements DtoPriceListsService {
                     crit.createAlias("shop", "shop");
                     crit.setFetchMode("shop", FetchMode.JOIN);
                 }
-            }, page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+            }, page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PRICE_ORDER);
 
             final Map<String, Object> adapters = adaptersRepository.getAll();
             for (final SkuPrice entity : entities) {

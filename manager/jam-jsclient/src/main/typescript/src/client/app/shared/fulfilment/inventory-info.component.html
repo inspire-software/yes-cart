@@ -1,0 +1,15 @@
+<yc-modal #infoModalDialog
+       title="{{ 'INVENTORY_ORDER_RESERVED' | translate: { code: skuCode } }}"
+       cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+       positiveLabel="{{ 'MODAL_BUTTON_OK' | translate }}"
+       [valid]="true"
+       (closed)="onConfirmationResult($event)">
+  <div *ngIf="orders.length == 0">
+    <p class="bg-warning text-padding">{{ 'INVENTORY_ORDER_RESERVED_NONE' | translate }}</p>
+  </div>
+  <div class=" {{ loading ? 'loading-data' : '' }}" style="max-height: 400px;overflow-y: auto">
+    <ul>
+      <li *ngFor="let order of orders">{{order.ordernum}} {{order.orderStatus | translate}} {{order.orderTimestamp | ycdatetime}}</li>
+    </ul>
+  </div>
+</yc-modal>

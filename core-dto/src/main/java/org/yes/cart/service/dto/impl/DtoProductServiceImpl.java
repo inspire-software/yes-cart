@@ -26,6 +26,7 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -175,6 +176,8 @@ public class DtoProductServiceImpl
         Arrays.sort(AVAILABILITY);
     }
 
+    private final static Order[] PRODUCT_ORDER = new Order[] { Order.asc("code") };
+
     /**
      * {@inheritDoc}
      */
@@ -266,7 +269,7 @@ public class DtoProductServiceImpl
         }
 
         final List<Product> entities = getService().getGenericDao().findByCriteria(tuner,
-                page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+                page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PRODUCT_ORDER);
 
         fillDTOs(entities, dtos);
 

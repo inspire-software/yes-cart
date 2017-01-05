@@ -25,6 +25,7 @@ import org.yes.cart.service.order.OrderException;
 import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,15 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
             Date toDate,
             String orderNum
     );
+
+    /**
+     * Find customer orders by delivery ids.
+     *
+     * @param deliveryIds delivery ids
+     *
+     * @return list of orders
+     */
+    List<CustomerOrder> findCustomerOrdersByDeliveryIds(Collection<Long> deliveryIds);
 
     /**
      * Find specific delivery.

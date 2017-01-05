@@ -2734,6 +2734,12 @@
     </query>
 
 
+    <query name="ORDERS.BY.DELIVERY.IDS">
+       select distinct d.customerOrder from CustomerOrderDeliveryEntity d
+       where d.customerOrderDeliveryId in ?1
+    </query>
+
+
     <query  name="SKUCODE.FOR.SKUWAREHOUSE.CHANGED.SINCE">
         <![CDATA[
        select distinct sw.skuCode from SkuWarehouseEntity sw

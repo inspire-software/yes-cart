@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
@@ -292,6 +293,7 @@ public class DtoCustomerServiceImpl
         final List<CustomerDTO> customers = new ArrayList<>();
 
         final List<Criterion> criteria = new ArrayList<Criterion>();
+        final List<Order> order = new ArrayList<Order>();
 
         if (StringUtils.isNotBlank(filter)) {
 
@@ -308,6 +310,7 @@ public class DtoCustomerServiceImpl
                             Restrictions.ilike("email", refNumber, MatchMode.ANYWHERE),
                             Restrictions.ilike("tag", refNumber, MatchMode.ANYWHERE)
                     ));
+                    order.add(Order.asc("email"));
                 } else if ("?".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // customer search
                     final String customer = refOrCustomerOrAddressOrPolicy.getSecond();
@@ -316,6 +319,8 @@ public class DtoCustomerServiceImpl
                             Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
                             Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
                     ));
+                    order.add(Order.asc("lastname"));
+                    order.add(Order.asc("email"));
                 } else if ("@".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // address search
                     final String address = refOrCustomerOrAddressOrPolicy.getSecond();
@@ -327,6 +332,8 @@ public class DtoCustomerServiceImpl
                     }
 
                     criteria.add(Restrictions.in("customerId", ids));
+                    order.add(Order.asc("lastname"));
+                    order.add(Order.asc("email"));
 
                 } else if ("$".equals(refOrCustomerOrAddressOrPolicy.getFirst())) {
                     // address search
@@ -335,6 +342,8 @@ public class DtoCustomerServiceImpl
                             Restrictions.ilike("customerType", policy, MatchMode.EXACT),
                             Restrictions.ilike("pricingPolicy", policy, MatchMode.EXACT)
                     ));
+                    order.add(Order.asc("lastname"));
+                    order.add(Order.asc("email"));
                 }
 
             } else if (dateSearch != null) {
@@ -350,6 +359,8 @@ public class DtoCustomerServiceImpl
                     criteria.add(Restrictions.le("createdTimestamp", to));
                 }
 
+                order.add(Order.asc("createdTimestamp"));
+
             } else {
 
                 criteria.add(Restrictions.or(
@@ -359,12 +370,18 @@ public class DtoCustomerServiceImpl
                         Restrictions.ilike("customerType", filter, MatchMode.EXACT),
                         Restrictions.ilike("pricingPolicy", filter, MatchMode.EXACT)
                 ));
+                order.add(Order.asc("lastname"));
+                order.add(Order.asc("email"));
 
             }
 
+        } else {
+            order.add(Order.asc("lastname"));
+            order.add(Order.asc("email"));
         }
 
-        final List<Customer> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+        final List<Customer> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize,
+                criteria.toArray(new Criterion[criteria.size()]), order.toArray(new Order[order.size()]));
 
         fillDTOs(entities, customers);
 

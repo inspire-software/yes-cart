@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.StringUtils;
 import org.yes.cart.domain.dto.TaxDTO;
@@ -77,6 +78,8 @@ public class DtoTaxServiceImpl
         Arrays.sort(RATE);
         Arrays.sort(EXCLUSIVE_INCLUSIVE);
     }
+
+    private final static Order[] TAX_ORDER = new Order[] { Order.asc("code") };
 
     /** {@inheritDoc} */
     public List<TaxDTO> findBy(final String shopCode, final String currency, final String filter, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
@@ -138,7 +141,7 @@ public class DtoTaxServiceImpl
             }
 
             final List<Tax> entities = getService().getGenericDao().findByCriteria(
-                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]));
+                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), TAX_ORDER);
 
             fillDTOs(entities, dtos);
         }

@@ -18,7 +18,9 @@ package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.ProductTypeDTO;
 import org.yes.cart.domain.dto.factory.DtoFactory;
@@ -114,6 +116,8 @@ public class DtoProductTypeServiceImpl
         Arrays.sort(EXACT_OR_CODE);
     }
 
+    private final static Order[] TYPE_ORDER = new Order[] { Order.asc("name") };
+
     /**
      * {@inheritDoc}
      */
@@ -131,10 +135,13 @@ public class DtoProductTypeServiceImpl
 
                     entities = service.getGenericDao().findByCriteria(
                             page * pageSize, pageSize,
-                            Restrictions.or(
-                                    Restrictions.ilike("guid", exactOrCode.getSecond(), MatchMode.EXACT),
-                                    Restrictions.ilike("name", exactOrCode.getSecond(), MatchMode.EXACT)
-                            )
+                            new Criterion[] {
+                                    Restrictions.or(
+                                            Restrictions.ilike("guid", exactOrCode.getSecond(), MatchMode.EXACT),
+                                            Restrictions.ilike("name", exactOrCode.getSecond(), MatchMode.EXACT)
+                                    )
+                            },
+                            TYPE_ORDER
                     );
 
                 } else {
@@ -147,16 +154,19 @@ public class DtoProductTypeServiceImpl
 
                 entities = service.getGenericDao().findByCriteria(
                         page * pageSize, pageSize,
-                        Restrictions.or(
-                                Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
-                                Restrictions.ilike("name", name, MatchMode.ANYWHERE),
-                                Restrictions.ilike("description", name, MatchMode.ANYWHERE)
-                        )
+                        new Criterion[] {
+                                Restrictions.or(
+                                        Restrictions.ilike("guid", name, MatchMode.ANYWHERE),
+                                        Restrictions.ilike("name", name, MatchMode.ANYWHERE),
+                                        Restrictions.ilike("description", name, MatchMode.ANYWHERE)
+                                )
+                        },
+                        TYPE_ORDER
                 );
 
             }
         } else {
-            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize);
+            entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, new Criterion[0], TYPE_ORDER);
         }
         final List<ProductTypeDTO> dtos = new ArrayList<ProductTypeDTO>(entities.size());
         fillDTOs(entities, dtos);

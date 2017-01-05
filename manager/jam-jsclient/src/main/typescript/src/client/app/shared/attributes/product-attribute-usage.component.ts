@@ -48,7 +48,6 @@ export class ProductAttributeUsageComponent implements OnInit {
   @Input()
   set attributeCode(attributeCode:string) {
     this._attributeCode = attributeCode;
-    this.loadData();
   }
 
   get attributeCode():string {
@@ -62,6 +61,7 @@ export class ProductAttributeUsageComponent implements OnInit {
 
   public showDialog() {
     LogUtil.debug('ProductAttributeUsageComponent showDialog');
+    this.loadData();
     this.usageModalDialog.show();
   }
 

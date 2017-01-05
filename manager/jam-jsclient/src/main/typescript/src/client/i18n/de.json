@@ -358,6 +358,8 @@
   "INVENTORY_RESERVED": "Reserved",
   "INVENTORY_CENTRE": "Fulfilment centre",
   "INVENTORY_CENTRE_CODE": "Centre code",
+  "INVENTORY_ORDER_RESERVED": "Orders where SKU {{ code }} is reserved",
+  "INVENTORY_ORDER_RESERVED_NONE": "There are no orders with reserved SKU",
 
   "PRICELIST_QUANTITY": "Tier",
   "PRICELIST_REGULAR": "List",
@@ -589,6 +591,7 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_NUMBER": "To search only by order number. Format: '#ordernumber'",
   "SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER": "To search only by customer details (email, first name and last name). Format: '?keyword'",
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "To search only by address details. Format: '@keyword'",
+  "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "To search orders where SKU is reserved and pending allocation (exact match). Format: '!SKU'",
 
   "SEARCH_HELP_PRODUCTTYPE_ATTR_SI": "To list attributes that have search index flags use '#SI'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE": "To list attributes that are visible use '+V'",

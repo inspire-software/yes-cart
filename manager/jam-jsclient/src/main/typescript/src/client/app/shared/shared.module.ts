@@ -23,7 +23,7 @@ import { ProductTypeSelectComponent } from './catalog/index';
 
 import { ContentSelectComponent } from './content/index';
 
-import { FulfilmentCentreSelectComponent } from './fulfilment/index';
+import { FulfilmentCentreSelectComponent, InventoryInfoComponent } from './fulfilment/index';
 
 import { FileSelectComponent, DataGroupSelectComponent } from './impex/index';
 
@@ -56,7 +56,7 @@ import { CurrencySelectComponent  } from './price/index';
     I18nComponent,
     BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent,
     ContentSelectComponent,
-    FulfilmentCentreSelectComponent,
+    FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
     SidebarComponent, DataControlComponent,
@@ -72,7 +72,7 @@ import { CurrencySelectComponent  } from './price/index';
     I18nComponent,
     BrandSelectComponent, CategorySelectComponent, ProductTypeSelectComponent,
     ContentSelectComponent,
-    FulfilmentCentreSelectComponent,
+    FulfilmentCentreSelectComponent, InventoryInfoComponent,
     FileSelectComponent, DataGroupSelectComponent,
     AttributeValuesComponent, ProductAttributeSelectComponent, ProductAttributeUsageComponent,
     SidebarComponent, DataControlComponent,

@@ -358,6 +358,8 @@
   "INVENTORY_RESERVED": "Резерв",
   "INVENTORY_CENTRE": "Центр виконання замовлення",
   "INVENTORY_CENTRE_CODE": "Код центру",
+  "INVENTORY_ORDER_RESERVED": "Замовлення, в яких SKU {{ code }} зарезервований",
+  "INVENTORY_ORDER_RESERVED_NONE": "Немає замовлень із зарезервованим SKU",
 
   "PRICELIST_QUANTITY": "Рівень",
   "PRICELIST_REGULAR": "Звичайна",
@@ -589,6 +591,7 @@
   "SEARCH_HELP_CUSTOMER_ORDERS_NUMBER": "Пошук замовлення за номером. Формат: '#номер'",
   "SEARCH_HELP_CUSTOMER_ORDERS_CUSTOMER": "Пошук замовлення за атрибутами покупця (адреса електронної пошти, ім'я та прізвище). Формат: '?фраза'",
   "SEARCH_HELP_CUSTOMER_ORDERS_ADDRESS": "Пошук замовлення за адресою покупця. Формат: '@фраза'",
+  "SEARCH_HELP_CUSTOMER_ORDERS_RESERVED": "Для пошуку замовлень, в яких SKU зарезервовано і очікують надходження (точний збіг). Формат: '!SKU'",
 
   "SEARCH_HELP_PRODUCTTYPE_ATTR_SI": "Щоб отримати список атрибутів з прапорцем пошукового індексу використовуйте '#SI'",
   "SEARCH_HELP_PRODUCTTYPE_ATTR_VISIBLE": "Щоб отримати список атрибутів, які видно використовуйте '+V'",
