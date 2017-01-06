@@ -102,10 +102,6 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
     return ProductAssociationsComponent.associations;
   }
 
-  get masterObject():ProductWithLinksVO {
-    return this._masterObject;
-  }
-
   @Input()
   set masterObject(master:ProductWithLinksVO) {
     this._masterObject = master;
@@ -116,6 +112,10 @@ export class ProductAssociationsComponent implements OnInit, OnChanges {
   set associationFilter(associationFilter:string) {
     this._associationFilter = associationFilter;
     this.delayedFiltering.delay();
+  }
+
+  get masterObject():ProductWithLinksVO {
+    return this._masterObject;
   }
 
   ngOnInit() {
