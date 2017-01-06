@@ -149,8 +149,8 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             while (slaIt.hasNext()) {
                 final CarrierSla carrierSla = slaIt.next();
 
-                // Check if this SLA is available for given supplier
-                if (!carrierSla.getSupportedFulfilmentCentresAsList().contains(supplier)) {
+                // Check if this SLA is available for given supplier (empty supplier could be for ALWAYS+Digital, so need to allow all SLA for those TODO: revise for YC-668)
+                if (StringUtils.isNotBlank(supplier) && !carrierSla.getSupportedFulfilmentCentresAsList().contains(supplier)) {
                     slaIt.remove();
                 }
 
