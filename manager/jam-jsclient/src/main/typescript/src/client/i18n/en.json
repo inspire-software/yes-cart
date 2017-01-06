@@ -481,6 +481,7 @@
   "ds.inventory.void.wait": "Reservation void waiting",
   "ds.inventory.allocated": "Allocated",
   "ds.inventory.deallocated": "De-allocated",
+  "ds.inventory.returned": "Returned",
   "ds.packing": "Packing",
   "ds.shipment.ready": "Ready for shipping",
   "ds.shipment.ready.waiting.payment": "Ready for shipping awaiting payment",

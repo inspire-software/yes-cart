@@ -81,7 +81,9 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
     protected void creditQuantity(final CustomerOrder order) throws OrderException  {
         final Collection<CustomerOrderDelivery> deliveries = order.getDelivery();
         for (CustomerOrderDelivery delivery : deliveries) {
-            creditQuantity(delivery);
+            if (!this.isAlreadyCancelled(delivery.getDeliveryStatus())) {
+                creditQuantity(delivery);
+            }
         }
     }
 
@@ -93,11 +95,19 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         final boolean voidCredit = isNeedCredit(delivery.getDeliveryStatus());
 
         if (voidReservation) {
+            // Voiding reservation, so that we do not prevent customers from ordering available stock
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION;
         } else if (voidCredit) {
+            // Allocation already happened so we deallocate back (items not yet left warehouse)
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED;
         } else if (isFulfillment(delivery.getDeliveryStatus())) {
+            // No reservation yet was made so just setting the status
             newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT;
+        } else if (isNeedReturn(delivery.getDeliveryStatus())) {
+            // Returned items from customers. No deallocation here since we cannot blindly put the
+            // quantity back. Item could have been returned due to being faulty and may not be sellable
+            // anymore. Updating stock in this case should be manual after the returned items are checked
+            newStatus = CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RETURNED;
         } else {
             throw new OrderException("Unable to handle cancellation for delivery " + delivery.getDeliveryNum() + " with status " + delivery.getDeliveryStatus());
         }
@@ -158,6 +168,13 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
         delivery.setDeliveryStatus(newStatus);
     }
 
+    protected boolean isAlreadyCancelled(final String deliveryStatus) {
+        return CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED.equals(deliveryStatus)
+                || CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RETURNED.equals(deliveryStatus);
+    }
+
     protected boolean isFulfillment(final String deliveryStatus) {
         return CustomerOrderDelivery.DELIVERY_STATUS_ON_FULLFILMENT.equals(deliveryStatus);
     }
@@ -175,6 +192,10 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
                 || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY.equals(deliveryStatus)
                 || CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(deliveryStatus);
 
+    }
+
+    protected boolean isNeedReturn(final String deliveryStatus) {
+        return false; // This is basic cancel with cannot perform refunds
     }
 
 }

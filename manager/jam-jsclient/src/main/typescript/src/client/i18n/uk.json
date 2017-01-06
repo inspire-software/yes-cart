@@ -481,6 +481,7 @@
   "ds.inventory.void.wait": "Очікування скасування резерву",
   "ds.inventory.allocated": "Товари зібрані",
   "ds.inventory.deallocated": "Скасування збірки",
+  "ds.inventory.returned": "Повернуто",
   "ds.packing": "Пакування",
   "ds.shipment.ready": "Готовий до відвантаження",
   "ds.shipment.ready.waiting.payment": "Готовий до відвантаження, очікує оплати",

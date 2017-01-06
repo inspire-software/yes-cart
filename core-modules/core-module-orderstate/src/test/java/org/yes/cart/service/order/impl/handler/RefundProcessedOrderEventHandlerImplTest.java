@@ -617,10 +617,10 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
-        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
 
-        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED);
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RETURNED);
         assertEquals(CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT, customerOrder.getOrderStatus());
 
         deactivateTestPgParameter(TestPaymentGatewayImpl.REFUND_FAIL);
@@ -712,10 +712,10 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
-        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
 
-        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED);
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RETURNED);
         assertEquals(CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT, customerOrder.getOrderStatus());
 
         // refund fails again
@@ -805,10 +805,10 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
                         Collections.EMPTY_MAP)));
 
         // check reserved quantity
-        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
-        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "7.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "0.00", "0.00");
 
-        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_DEALLOCATED);
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RETURNED);
         assertEquals(CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT, customerOrder.getOrderStatus());
 
         // refund fails again

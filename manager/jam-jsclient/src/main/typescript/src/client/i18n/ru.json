@@ -481,6 +481,7 @@
   "ds.inventory.void.wait": "Ожидание отмены резерва",
   "ds.inventory.allocated": "Товары собран",
   "ds.inventory.deallocated": "Отмена сборки",
+  "ds.inventory.returned": "Возвращен",
   "ds.packing": "Упаковка",
   "ds.shipment.ready": "Готов к отгрузке",
   "ds.shipment.ready.waiting.payment": "Готов к отгрузке, ожидает оплаты",

@@ -132,8 +132,8 @@ public class CancelOrderWithRefundOrderEventHandlerImpl extends CancelOrderEvent
     }
 
     @Override
-    protected boolean isNeedCredit(final String deliveryStatus) {
-        return super.isNeedCredit(deliveryStatus)
-            || CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(deliveryStatus);
+    protected boolean isNeedReturn(final String deliveryStatus) {
+        // Allow to return shipped items
+        return CustomerOrderDelivery.DELIVERY_STATUS_SHIPPED.equals(deliveryStatus);
     }
 }

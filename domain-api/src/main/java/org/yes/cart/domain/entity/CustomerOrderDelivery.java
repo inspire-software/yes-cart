@@ -80,6 +80,11 @@ public interface CustomerOrderDelivery extends Auditable {
     String DELIVERY_STATUS_INVENTORY_DEALLOCATED = "ds.inventory.deallocated";
 
     /**
+     * Inventory returned
+     */
+    String DELIVERY_STATUS_INVENTORY_RETURNED = "ds.inventory.returned";
+
+    /**
      * Order is packing
      */
     String DELIVERY_STATUS_PACKING = "ds.packing";
@@ -131,6 +136,16 @@ public interface CustomerOrderDelivery extends Auditable {
      * Mixed physical delivery group.
      */
     String MIX_DELIVERY_GROUP = "D5";
+
+    /**
+     * Out of stock.
+     */
+    String NOSTOCK_DELIVERY_GROUP = "OOS";
+
+    /**
+     * Product offline.
+     */
+    String OFFLINE_DELIVERY_GROUP = "OFF";
 
     /**
      * Shipment pk.
