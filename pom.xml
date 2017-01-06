@@ -47,6 +47,12 @@
         <payment.authorizenet.module>off</payment.authorizenet.module>
         <payment.paypal.module>off</payment.paypal.module>
         <payment.postfinance.module>off</payment.postfinance.module>
+        <npm.goal>build.prod</npm.goal>
+        <npm.target.home>prod</npm.target.home>
+        <npm.target.modules>node_modules_prod</npm.target.modules>
+        <ts.src.home>typescript</ts.src.home>
+        <ts.target.home>${ts.src.home}/dist/${npm.target.home}</ts.target.home>
+        <ts.target.modules>${ts.src.home}/${npm.target.modules}</ts.target.modules>
 
         <!--
             Webapps config META-INF context.xml path are specified in config-cluster.properties
@@ -430,6 +436,8 @@
                 <configuration>
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
+                    <timestampFormat>{0,date,yyyy}</timestampFormat>
+                    <shortRevisionLength>8</shortRevisionLength>
                 </configuration>
             </plugin>
             <plugin>
@@ -437,7 +445,7 @@
                 <version>1.6</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
@@ -446,23 +454,26 @@
                                 <echo>=========================================================================================================================================================</echo>
                                 <echo>|                                                                                                                                                        </echo>
                                 <echo>| __     _______                           ______                                                                                                        </echo>
-                                <echo>| \ \   / / ____|                         |  ____|                                                                                                       </echo>
+                                <echo>| \ \   / / ____|                         |  ____| v.${project.version} (build: ${buildNumber})                                                          </echo>
                                 <echo>|  \ \_/ | |   ______ _ __  _   _ _ __ ___| |__   ___ ___  _ __ ___  _ __ ___   ___ _ __ ___ ___                                                         </echo>
                                 <echo>|   \   /| |  |______| '_ \| | | | '__/ _ |  __| / __/ _ \| '_ ` _ \| '_ ` _ \ / _ | '__/ __/ _ \                                                        </echo>
                                 <echo>|    | | | |____     | |_) | |_| | | |  __| |___| (_| (_) | | | | | | | | | | |  __| | | (_|  __/                                                        </echo>
                                 <echo>|    |_|  \_____|    | .__/ \__,_|_|  \___|______\___\___/|_| |_| |_|_| |_| |_|\___|_|  \___\___|                                                        </echo>
                                 <echo>|                    | |                                                                                                                                 </echo>
-                                <echo>|                    |_| http://www.yes-cart.org / ${project.version} build no: ${buildNumber}   </echo>
+                                <echo>|                    |_|  Copyright ${timestamp} http://www.yes-cart.org                                                                                 </echo>
                                 <echo>|                                                                                                                                                        </echo>
                                 <echo>=========================================================================================================================================================</echo>
                                 <echo> </echo>
-                                <echo>Preparing to build YC ${project.artifactId}-${project.version}-rev.${buildNumber} with the following configurations:</echo>
+                                <echo>YC module ${project.artifactId}-${project.version}-rev.${buildNumber} configurations:</echo>
                                 <echo> </echo>
-                                <echo>Environment configuration (use -Denv=x to switch)     : ${env} </echo>
-                                <echo>Database provider (use -Pmysql or -Pderby)            : ${env.db} </echo>
-                                <echo>Tomcat SSL configuration (use -Pssl)                  : ${env.ssl} </echo>
+                                <echo>Environment configuration (use -Denv=x to switch)      : ${env} </echo>
+                                <echo>Database provider (use -Pmysql or -Pderby)             : ${env.db} </echo>
+                                <echo>Tomcat SSL configuration (use -Pssl)                   : ${env.ssl} </echo>
+                                <echo>JAM npm goal (use -Dnpm.goal=x to switch)              : ${npm.goal} </echo>
+                                <echo>JAM npm target (use -Dnpm.target.home=x to switch)     : ${npm.target.home} (${ts.target.home}) </echo>
+                                <echo>JAM npm modules (use -Dnpm.target.modules=x to switch) : ${npm.target.modules} (${ts.target.modules}) </echo>
                                 <echo> </echo>
-                                <echo>Additional modules</echo>
+                                <echo>Payment modules</echo>
                                 <echo>LiqPay payments (use -PpaymentLiqPay or -PpaymentAll)           : ${payment.liqpay.module} </echo>
                                 <echo>Cybersource payments (use -PpaymentCybersource or -PpaymentAll) : ${payment.cybersource.module} </echo>
                                 <echo>Authorize.Net payments (use -PpaymentAuthorize or -PpaymentAll) : ${payment.authorizenet.module} </echo>
@@ -501,6 +512,9 @@
             <id>dev</id>
             <properties>
                 <env>dev</env>
+                <npm.goal>build.dev</npm.goal>
+                <npm.target.home>dev</npm.target.home>
+                <npm.target.modules>node_modules</npm.target.modules>
             </properties>
         </profile>
 
@@ -541,6 +555,9 @@
             <id>devIntellijIDEA</id>
             <properties>
                 <env>dev-idea</env>
+                <npm.goal>build.dev</npm.goal>
+                <npm.target.home>dev</npm.target.home>
+                <npm.target.modules>node_modules</npm.target.modules>
             </properties>
         </profile>
 

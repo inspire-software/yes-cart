@@ -30,9 +30,6 @@
     <description>Yes cart manager server</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ts.src.home>typescript</ts.src.home>
-        <ts.target.home>typescript/dist/prod</ts.target.home>
-        <ts.target.modules>typescript/node_modules_prod</ts.target.modules>
     </properties>
     <dependencies>
 
@@ -190,25 +187,6 @@
     </dependencies>
 
     <profiles>
-
-        <profile>
-            <id>dev</id>
-            <properties>
-                <ts.src.home>typescript</ts.src.home>
-                <ts.target.home>typescript/dist/dev</ts.target.home>
-                <ts.target.modules>typescript/node_modules</ts.target.modules>
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- Special config for development via Intellij IDEA -->
-            <id>devIntellijIDEA</id>
-            <properties>
-                <ts.src.home>typescript</ts.src.home>
-                <ts.target.home>typescript/dist/dev</ts.target.home>
-                <ts.target.modules>typescript/node_modules</ts.target.modules>
-            </properties>
-        </profile>
 
         <profile>
             <id>mysql</id>

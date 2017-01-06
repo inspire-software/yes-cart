@@ -30,28 +30,7 @@
     <description>Yes cart manager server JS client</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <npm.goal>build.prod</npm.goal>
     </properties>
-
-    <profiles>
-
-        <profile>
-            <id>dev</id>
-            <properties>
-                <npm.goal>build.dev</npm.goal>
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- Special config for development via Intellij IDEA -->
-            <id>devIntellijIDEA</id>
-            <properties>
-                <npm.goal>build.dev</npm.goal>
-            </properties>
-        </profile>
-
-
-    </profiles>
 
     <build>
 
