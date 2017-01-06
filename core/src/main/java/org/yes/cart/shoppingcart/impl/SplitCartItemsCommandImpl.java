@@ -103,26 +103,21 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
             }
         }
 
-        try {
+        final Map<DeliveryBucket, List<CartItem>> cartBuckets =
+                this.orderSplittingStrategy.determineDeliveryBuckets(shopId, shoppingCart.getCartItemList(), !multiSelected);
 
-            final Map<DeliveryBucket, List<CartItem>> cartBuckets =
-                    this.orderSplittingStrategy.determineDeliveryBuckets(shopId, shoppingCart.getCartItemList(), !multiSelected);
+        for (final Map.Entry<DeliveryBucket, List<CartItem>> cartBucket : cartBuckets.entrySet()) {
 
-            for (final Map.Entry<DeliveryBucket, List<CartItem>> cartBucket : cartBuckets.entrySet()) {
+            for (final CartItem item : cartBucket.getValue()) {
 
-                for (final CartItem item : cartBucket.getValue()) {
-
-                    if (shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), cartBucket.getKey())) {
-                        changed = true;
-                    }
-
+                if (shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), cartBucket.getKey())) {
+                    changed = true;
                 }
 
             }
 
-        } catch (SkuUnavailableException skuUnavailable) {
-            ShopCodeContext.getLog(this).warn(skuUnavailable.getMessage());
         }
+
         return changed;
     }
 

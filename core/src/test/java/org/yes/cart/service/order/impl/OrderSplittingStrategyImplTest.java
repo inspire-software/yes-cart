@@ -27,7 +27,6 @@ import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
-import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
@@ -338,7 +337,6 @@ public class OrderSplittingStrategyImplTest {
                                       final Date now,
                                       final BigDecimal stock,
                                       final BigDecimal required,
-                                      final boolean expectedException,
                                       final String expectedGroup) throws Exception {
 
         final ShopService shopService = context.mock(ShopService.class, "shopService");
@@ -393,12 +391,7 @@ public class OrderSplittingStrategyImplTest {
             }
         }});
 
-        try {
-            assertEquals(new Pair<String, String>(expectedGroup, supplier), strategy.getDeliveryGroup(item, warehouses));
-            assertFalse("Expecting unavailable sku", expectedException);
-        } catch (SkuUnavailableException sue) {
-            assertTrue("Not expecting unavailable sku", expectedException);
-        }
+        assertEquals(new Pair<String, String>(expectedGroup, supplier), strategy.getDeliveryGroup(item, warehouses));
 
         context.assertIsSatisfied();
     }
@@ -413,9 +406,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                false, CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -429,9 +422,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                false, CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -445,9 +438,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -462,9 +455,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, true, /* Digital */
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -479,9 +472,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -495,9 +488,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -512,9 +505,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -528,9 +521,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_ALWAYS, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 null, BigDecimal.TEN, /* No stock, need 10 */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -545,9 +538,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -562,9 +555,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -578,9 +571,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
-                true, CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -595,9 +588,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -612,9 +605,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_PREORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -631,9 +624,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -647,9 +640,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -663,9 +656,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
-                false, CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -679,9 +672,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -696,9 +689,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_BACKORDER, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -713,9 +706,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -730,9 +723,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -746,9 +739,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -762,9 +755,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -778,9 +771,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_STANDARD, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -795,9 +788,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -812,9 +805,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -830,9 +823,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -846,9 +839,9 @@ public class OrderSplittingStrategyImplTest {
 
         testGetDeliveryGroup(
                 Product.AVAILABILITY_SHOWROOM, false,
-                availableFrom, availableTo, now, /* AVailable */
+                availableFrom, availableTo, now, /* Available */
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP /* Expected */
         );
 
     }
@@ -862,7 +855,7 @@ public class OrderSplittingStrategyImplTest {
                 0, false,
                 null, null, null,
                 BigDecimal.TEN, BigDecimal.TEN, /* Enough in stock */
-                false, CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
+                CustomerOrderDelivery.STANDARD_DELIVERY_GROUP /* Expected */
         );
 
 
@@ -875,7 +868,7 @@ public class OrderSplittingStrategyImplTest {
                 0, false,
                 null, null, null,
                 BigDecimal.ONE, BigDecimal.TEN, /* Not enough in stock */
-                true, null /* Expected */
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );
 
 

@@ -247,8 +247,29 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
                                                                   final boolean onePhysicalDelivery)
             throws SkuUnavailableException {
 
-        return (Map) orderSplittingStrategy.determineDeliveryBuckets(order.getShop().getShopId(),
+        final Map<DeliveryBucket, List<CustomerOrderDet>> buckets =
+            (Map) orderSplittingStrategy.determineDeliveryBuckets(order.getShop().getShopId(),
                 new ArrayList<CartItem>(order.getOrderDetail()), onePhysicalDelivery);
+
+        for (final Map.Entry<DeliveryBucket, List<CustomerOrderDet>> bucket : buckets.entrySet()) {
+
+            if (CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(bucket.getKey().getGroup())) {
+
+                final CustomerOrderDet first = bucket.getValue().get(0);
+
+                throw new SkuUnavailableException(first.getProductSkuCode(), first.getProductName(), true);
+
+            } else if (CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucket.getKey().getGroup())) {
+
+                final CustomerOrderDet first = bucket.getValue().get(0);
+
+                throw new SkuUnavailableException(first.getProductSkuCode(), first.getProductName(), false);
+
+            }
+
+        }
+
+        return buckets;
 
     }
 

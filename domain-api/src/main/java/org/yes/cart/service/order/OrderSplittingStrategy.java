@@ -16,10 +16,8 @@
 
 package org.yes.cart.service.order;
 
-import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.shoppingcart.CartItem;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +37,7 @@ public interface OrderSplittingStrategy {
      *
      * @return delivery group marker
      */
-    DeliveryBucket determineDeliveryBucket(long shopId,
-                                           CartItem item) throws SkuUnavailableException;
+    DeliveryBucket determineDeliveryBucket(long shopId, CartItem item);
 
 
     /**
@@ -51,12 +48,10 @@ public interface OrderSplittingStrategy {
      * @param onePhysicalDelivery true if need to create one physical delivery.
      *
      * @return cart items by delivery bucket
-     *
-     * @throws SkuUnavailableException in case a particular sku is not available
      */
     Map<DeliveryBucket, List<CartItem>> determineDeliveryBuckets(long shopId,
                                                                  Collection<CartItem> items,
-                                                                 boolean onePhysicalDelivery) throws SkuUnavailableException;
+                                                                 boolean onePhysicalDelivery);
 
     /**
      * Can order have multiple deliveries by supplier.

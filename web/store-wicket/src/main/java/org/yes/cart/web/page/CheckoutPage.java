@@ -322,38 +322,24 @@ public class CheckoutPage extends AbstractWebPage {
 
             ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
 
-            throw new RestartResponseException(
-                    new PageProvider(
-                            ShoppingCartPage.class,
-                            new PageParameters()
-                                    .set(ERROR, ERROR_COUPON)
-                                    .set(ERROR_COUPON, invalidCoupon.getCoupon())
-                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
-            );
+            setResponsePage(ShoppingCartPage.class, new PageParameters()
+                            .set(ERROR, ERROR_COUPON)
+                            .set(ERROR_COUPON, invalidCoupon.getCoupon()));
 
         } catch (SkuUnavailableException skuUnavailable) {
 
             ShopCodeContext.getLog(this).error(skuUnavailable.getMessage(), skuUnavailable);
 
-            throw new RestartResponseException(
-                    new PageProvider(
-                            ShoppingCartPage.class,
-                            new PageParameters()
-                                    .set(ERROR, ERROR_SKU)
-                                    .set(ERROR_SKU, "(" + skuUnavailable.getSkuCode() + ") " + skuUnavailable.getSkuName())
-                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
-            );
+            setResponsePage(ShoppingCartPage.class, new PageParameters()
+                    .set(ERROR, ERROR_SKU)
+                    .set(ERROR_SKU, "(" + skuUnavailable.getSkuCode() + ") " + skuUnavailable.getSkuName()));
 
         } catch (OrderAssemblyException assembly) {
 
             ShopCodeContext.getLog(this).error(assembly.getMessage(), assembly);
 
-            throw new RestartResponseException(
-                    new PageProvider(
-                            ShoppingCartPage.class,
-                            new PageParameters().set(ERROR, "1")
-                    ), RenderPageRequestHandler.RedirectPolicy.NEVER_REDIRECT
-            );
+            setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
+
         }
     }
 

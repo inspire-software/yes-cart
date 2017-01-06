@@ -198,6 +198,9 @@ public class ShippingDeliveriesView extends BaseComponent {
                                                 final Label qty = new Label(ITEM_QTY, det.getQty().toString());
                                                 if (CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP.equals(det.getDeliveryGroup()) ||
                                                         CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP.equals(det.getDeliveryGroup())) {
+                                                    qty.add(new AttributeModifier("class", "label label-warning"));
+                                                } else if (CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(det.getDeliveryGroup()) ||
+                                                        CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(det.getDeliveryGroup())) {
                                                     qty.add(new AttributeModifier("class", "label label-danger"));
                                                 }
                                                 customerOrderDeliveryDetListItem.add(qty);

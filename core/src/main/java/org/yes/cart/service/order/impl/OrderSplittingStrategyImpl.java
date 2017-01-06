@@ -25,7 +25,6 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
-import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.util.DomainApiUtils;
 
@@ -57,7 +56,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     /** {@inheritDoc} */
     @Override
     public DeliveryBucket determineDeliveryBucket(final long shopId,
-                                                  final CartItem item) throws SkuUnavailableException {
+                                                  final CartItem item) {
 
         final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
 
@@ -70,7 +69,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     @Override
     public Map<DeliveryBucket, List<CartItem>> determineDeliveryBuckets(final long shopId,
                                                                         final Collection<CartItem> items,
-                                                                        final boolean onePhysicalDelivery) throws SkuUnavailableException {
+                                                                        final boolean onePhysicalDelivery) {
 
         // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
         final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new TreeMap<DeliveryBucket, List<CartItem>>();
@@ -144,7 +143,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
      *
      * @return Pair: delivery group label, warehouse.code
      */
-    Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) throws SkuUnavailableException {
+    Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
 
         final Date now = now();
 
@@ -174,7 +173,10 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         // Must not create orders with items that are unavailable
         if (!isAvailableNow && !isAvailableLater) {
-            throw new SkuUnavailableException(sku, name, false);
+            return new Pair<String, String>(
+                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                    StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
+            );
         }
 
         if (availability == Product.AVAILABILITY_ALWAYS) {
@@ -211,6 +213,8 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         // suppliers are either chosen one or we use all to "guess" one
         final Collection<Warehouse> suppliers = supplier == null ? warehouses : Collections.singleton(supplier);
 
+        Warehouse oosWarehouse = null;
+
         for (final Warehouse warehouse : suppliers) {
 
             final SkuWarehouse inventory = skuWarehouseService.findByWarehouseSku(warehouse, sku);
@@ -240,15 +244,25 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
                                 CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP,
                                 warehouse.getCode()
                         );
-                    } // else we go to another warehouse
+                    } else { // else we go to another warehouse but track last one
+                        oosWarehouse = warehouse;
+                    }
                 }
 
             }
 
         }
 
-        // No applicable stock config found
-        throw new SkuUnavailableException(sku, name, true);
+        if (oosWarehouse == null) {
+            return new Pair<String, String>(
+                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
+                    StringUtils.isNotBlank(item.getSupplierCode()) ? item.getSupplierCode() : ""
+            );
+        }
+        return new Pair<String, String>(
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
+                oosWarehouse.getCode()
+        );
 
     }
 
@@ -279,18 +293,15 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
     /** {@inheritDoc} */
     @Override
     public Map<String, Boolean> isMultipleDeliveriesAllowed(final long shopId, final Collection<CartItem> items) {
-        try {
-            final Map<DeliveryBucket, List<CartItem>> deliveryGroups = determineDeliveryBuckets(shopId, items, false);
-            final Map<String, Integer> countBySupplier = getPhysicalDeliveriesQty(deliveryGroups);
-            final Map<String, Boolean> multipleBySupplier = new HashMap<String, Boolean>();
-            for (final Map.Entry<String, Integer> entry : countBySupplier.entrySet()) {
-                multipleBySupplier.put(entry.getKey(), entry.getValue() > 1);
-            }
-            return multipleBySupplier;
-        } catch (SkuUnavailableException e) {
-            // Do nothing
+
+        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = determineDeliveryBuckets(shopId, items, false);
+        final Map<String, Integer> countBySupplier = getPhysicalDeliveriesQty(deliveryGroups);
+        final Map<String, Boolean> multipleBySupplier = new HashMap<String, Boolean>();
+        for (final Map.Entry<String, Integer> entry : countBySupplier.entrySet()) {
+            multipleBySupplier.put(entry.getKey(), entry.getValue() > 1);
         }
-        return Collections.singletonMap(null, false);
+        return multipleBySupplier;
+
     }
 
     Date now() {

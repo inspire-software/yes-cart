@@ -63,22 +63,6 @@ public class ShoppingCartPage extends AbstractWebPage {
 
         executeHttpPostedCommands();
 
-        final PageParameters params = getPageParameters();
-        final StringValue checkoutError = params.get("e");
-        if (!checkoutError.isEmpty()) {
-
-           if ("ec".equals(checkoutError.toString())) {
-                warn(getLocalizer().getString("orderErrorCouponInvalid", this,
-                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", params.get("ec").toString())))));
-           } else if ("es".equals(checkoutError.toString())) {
-               warn(getLocalizer().getString("orderErrorSkuInvalid", this,
-                       new Model<ValueMap>(new ValueMap(Collections.singletonMap("sku", params.get("es").toString())))));
-           } else {
-                error(getLocalizer().getString("orderErrorGeneral", this));
-           }
-
-        }
-
         addOrReplace(
                 new FeedbackPanel(FEEDBACK)
         ).addOrReplace(
@@ -92,6 +76,22 @@ public class ShoppingCartPage extends AbstractWebPage {
         ).addOrReplace(
                 new HeaderMetaInclude("headerInclude")
         );
+
+        final PageParameters params = getPageParameters();
+        final StringValue checkoutError = params.get("e");
+        if (!checkoutError.isEmpty()) {
+
+            if ("ec".equals(checkoutError.toString())) {
+                warn(getLocalizer().getString("orderErrorCouponInvalid", this,
+                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("coupon", params.get("ec").toString())))));
+            } else if ("es".equals(checkoutError.toString())) {
+                warn(getLocalizer().getString("orderErrorSkuInvalid", this,
+                        new Model<ValueMap>(new ValueMap(Collections.singletonMap("sku", params.get("es").toString())))));
+            } else {
+                error(getLocalizer().getString("orderErrorGeneral", this));
+            }
+
+        }
 
         final ShoppingCart cart = ApplicationDirector.getShoppingCart();
         if (cart.getCartItemsCount() == 0) {
