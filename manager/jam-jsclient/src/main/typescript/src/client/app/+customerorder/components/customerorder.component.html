@@ -62,7 +62,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let row of customerorder.lines" class="{{row == selectedLine ? 'active' : ''}}">
+                  <tr *ngFor="let row of customerorder.lines" class="{{row == selectedLine || (selectedDelivery != null && row.deliveryNum == selectedDelivery.deliveryNum) ? 'active' : ''}}">
                     <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}"><a class="{{ isLineDeliveryHasNext(row) ? 'js-click' : 'disabled' }}" (click)="onSelectLineRow(row)">{{row.deliveryNum}}</a><br/>{{row.supplierCode ? (row.supplierCode + ': ') : ''}}{{ row.deliveryStatusLabel | translate }}</td>
                     <td title="{{ 'NAME' | translate }}">{{row.skuCode}}<br/>{{row.skuName}}</td>
                     <td title="{{ 'QUANTITY' | translate }}" class="text-right">{{row.qty | ycquantity}}</td>
