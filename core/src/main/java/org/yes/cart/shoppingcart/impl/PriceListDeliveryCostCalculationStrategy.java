@@ -99,7 +99,7 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
                     if (price != null && price.getSkuPriceId() > 0L) {
 
                         final BigDecimal salePrice = MoneyUtils.minPositive(price.getRegularPrice(), price.getSalePriceForCalculation());
-                        final BigDecimal deliveryCost = salePrice.multiply(qty).multiply(new BigDecimal(cartBuckets.size())).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
+                        final BigDecimal deliveryCost = salePrice.multiply(qty).multiply(new BigDecimal(supplierBuckets.size())).setScale(Constants.DEFAULT_SCALE, RoundingMode.HALF_UP);
 
                         for (final DeliveryBucket bucket : supplierBuckets) {
                             // Add shipping line for every bucket by this supplier (e.g. if we have multi delivery)
@@ -107,7 +107,7 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
                             cart.setShippingPrice(carrierSlaGUID, bucket, salePrice, salePrice);
                         }
 
-                        total = new TotalImpl(
+                        final Total supplierTotal = new TotalImpl(
                                 Total.ZERO,
                                 Total.ZERO,
                                 Total.ZERO,
@@ -128,6 +128,14 @@ public class PriceListDeliveryCostCalculationStrategy implements DeliveryCostCal
                                 deliveryCost,
                                 deliveryCost
                         );
+
+                        // Add supplier total to delivery cost
+                        total = total == null ? supplierTotal : total.add(supplierTotal);
+
+                    } else {
+
+                        // If at least one supplier cannot be delivered, none should
+                        return null;
 
                     }
 
