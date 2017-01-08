@@ -289,6 +289,11 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
+    public boolean setGiftDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
+        return false;
+    }
+
+    @Override
     public boolean removeCartItem(final String productSku) {
         return false;
     }
@@ -376,6 +381,11 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     @Override
     public void setCurrentLocale(final String currentLocale) {
 
+    }
+
+    @Override
+    public boolean hasGifts() {
+        return false;
     }
 
     @Override

@@ -64,6 +64,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                 if (orderDet.isGift()) {
                     shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
                     shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                    shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 } else {
                     shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
                     shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
@@ -71,8 +72,8 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                         // Offers in existing order
                         shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                     }
+                    shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 }
-                shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
             }
         } else {
             // fill from delivery details
@@ -81,6 +82,7 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                     if (orderDet.isGift()) {
                         shoppingCart.addGiftToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty(), orderDet.getAppliedPromo());
                         shoppingCart.setGiftPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
+                        shoppingCart.setGiftDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     } else {
                         shoppingCart.addProductSkuToCart(orderDet.getProductSkuCode(), orderDet.getProductName(), orderDet.getQty());
                         shoppingCart.setProductSkuPrice(orderDet.getProductSkuCode(), orderDet.getSalePrice(), orderDet.getListPrice());
@@ -88,8 +90,8 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                             // Offers in existing order
                             shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                         }
+                        shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                     }
-                    shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
                 }
             }
         }

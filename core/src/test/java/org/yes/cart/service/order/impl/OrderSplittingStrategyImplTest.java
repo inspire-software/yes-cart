@@ -28,6 +28,9 @@ import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.OrderInfo;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingContext;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -871,6 +874,869 @@ public class OrderSplittingStrategyImplTest {
                 CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP /* Expected */
         );
 
+
+    }
+
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyStandard() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s1"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(1), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyPreorder() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+
+        buckets.put(d2, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(1), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyBackorder() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+
+        buckets.put(d3, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d3).getSupplier(); will(returnValue("s1"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(1), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyElectronic() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+
+        buckets.put(d4, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(0), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyNoStock() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+
+        buckets.put(oos, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(oos).getSupplier(); will(returnValue("s1"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(0), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyOffline() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(0), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyMix() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier();
+            will(returnValue("s1"));
+            allowing(d1).getGroup();
+            will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier();
+            will(returnValue("s1"));
+            allowing(d2).getGroup();
+            will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier();
+            will(returnValue("s1"));
+            allowing(d3).getGroup();
+            will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier();
+            will(returnValue("s1"));
+            allowing(d4).getGroup();
+            will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier();
+            will(returnValue("s1"));
+            allowing(oos).getGroup();
+            will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier();
+            will(returnValue("s1"));
+            allowing(off).getGroup();
+            will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(1, counts.size());
+        assertEquals(Integer.valueOf(3), counts.get("s1"));
+
+    }
+
+    @Test
+    public void testGetPhysicalDeliveriesQtyStandardMultipleSuppliers() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier();
+            will(returnValue("s2"));
+            allowing(d1).getGroup();
+            will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier();
+            will(returnValue("s1"));
+            allowing(d2).getGroup();
+            will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier();
+            will(returnValue("s2"));
+            allowing(d3).getGroup();
+            will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier();
+            will(returnValue("s1"));
+            allowing(d4).getGroup();
+            will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier();
+            will(returnValue("s3"));
+            allowing(oos).getGroup();
+            will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier();
+            will(returnValue("s1"));
+            allowing(off).getGroup();
+            will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        final Map<String, Integer> counts = new OrderSplittingStrategyImpl(null, null, null, null).getPhysicalDeliveriesQty(buckets);
+
+        assertNotNull(counts);
+        assertEquals(3, counts.size());
+        assertEquals(Integer.valueOf(1), counts.get("s1"));
+        assertEquals(Integer.valueOf(2), counts.get("s2"));
+        assertEquals(Integer.valueOf(0), counts.get("s3"));
+
+    }
+
+
+
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryStandard() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s1"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryPreorder() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+
+        buckets.put(d2, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryBackorder() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+
+        buckets.put(d3, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d3).getSupplier(); will(returnValue("s1"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryElectronic() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+
+        buckets.put(d4, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryNoStock() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+
+        buckets.put(oos, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(oos).getSupplier(); will(returnValue("s1"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryOffline() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(1, buckets.size());
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryMix() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s1"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier(); will(returnValue("s1"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier(); will(returnValue("s1"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(4, buckets.size());
+
+        final Set<String> expected = new HashSet<String>(Arrays.asList(
+                CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP,
+                CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                CustomerOrderDelivery.MIX_DELIVERY_GROUP
+        ));
+
+        for (final DeliveryBucket key : buckets.keySet()) {
+            assertTrue(expected.contains(key.getGroup()));
+        }
+
+    }
+
+    @Test
+    public void testGroupDeliveriesIntoMixedIfNecessaryStandardMultipleSuppliers() throws Exception {
+
+        final Map<DeliveryBucket, List<CartItem>> buckets = new HashMap<DeliveryBucket, List<CartItem>>();
+
+        final DeliveryBucket d1 = context.mock(DeliveryBucket.class, "d1");
+        final DeliveryBucket d2 = context.mock(DeliveryBucket.class, "d2");
+        final DeliveryBucket d3 = context.mock(DeliveryBucket.class, "d3");
+        final DeliveryBucket d4 = context.mock(DeliveryBucket.class, "d4");
+        final DeliveryBucket oos = context.mock(DeliveryBucket.class, "oos");
+        final DeliveryBucket off = context.mock(DeliveryBucket.class, "off");
+
+        buckets.put(d1, Collections.<CartItem>emptyList());
+        buckets.put(d2, Collections.<CartItem>emptyList());
+        buckets.put(d3, Collections.<CartItem>emptyList());
+        buckets.put(d4, Collections.<CartItem>emptyList());
+        buckets.put(oos, Collections.<CartItem>emptyList());
+        buckets.put(off, Collections.<CartItem>emptyList());
+
+        context.checking(new Expectations() {{
+            allowing(d1).getSupplier(); will(returnValue("s2"));
+            allowing(d1).getGroup(); will(returnValue(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP));
+            allowing(d2).getSupplier(); will(returnValue("s1"));
+            allowing(d2).getGroup(); will(returnValue(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP));
+            allowing(d3).getSupplier(); will(returnValue("s2"));
+            allowing(d3).getGroup(); will(returnValue(CustomerOrderDelivery.INVENTORY_WAIT_DELIVERY_GROUP));
+            allowing(d4).getSupplier(); will(returnValue("s1"));
+            allowing(d4).getGroup(); will(returnValue(CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP));
+            allowing(oos).getSupplier(); will(returnValue("s3"));
+            allowing(oos).getGroup(); will(returnValue(CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP));
+            allowing(off).getSupplier(); will(returnValue("s1"));
+            allowing(off).getGroup(); will(returnValue(CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP));
+        }});
+
+        new OrderSplittingStrategyImpl(null, null, null, null).groupDeliveriesIntoMixedIfNecessary(buckets);
+
+        assertNotNull(buckets);
+        assertEquals(5, buckets.size());
+
+        final Map<String, Set<String>> expected = new HashMap<String, Set<String>>() {{
+            put("s1", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP,
+                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP,
+                    CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP
+            )));
+            put("s2", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.MIX_DELIVERY_GROUP
+            )));
+            put("s3", new HashSet<String>(Arrays.asList(
+                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP
+            )));
+        }};
+
+        for (final DeliveryBucket key : buckets.keySet()) {
+            assertTrue("Bucket not expected " + key, expected.get(key.getSupplier()).contains(key.getGroup()));
+        }
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryBucketExistingNoChangeNoGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "itemBucket");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket();
+            will(returnValue(itemBucket));
+            allowing(item).getProductSkuCode();
+            will(returnValue("ABC"));
+            allowing(item).isGift();
+            will(returnValue(false));
+            allowing(other).getDeliveryBucket();
+            will(returnValue(null));
+            allowing(other).getProductSkuCode();
+            will(returnValue("CED"));
+            allowing(other).isGift();
+            will(returnValue(false));
+
+            allowing(cart).getOrderInfo();
+            will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable();
+            will(returnValue(true));
+            allowing(info).isMultipleDelivery();
+            will(returnValue(true));
+            allowing(cart).getCartItemList();
+            will(returnValue(Arrays.asList(item, other)));
+
+        }});
+
+        assertEquals(itemBucket, strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryBucketExistingNoChangeSingleGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "itemBucket");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+        }});
+
+        assertEquals(itemBucket, strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryBucketExistingNoChangeMultiGroup() throws Exception {
+
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+        final DeliveryBucket otherBucket = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "s1");
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(otherBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+        }});
+
+        assertEquals(itemBucket, strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testDetermineDeliveryBucketExistingChangeMultiGroup() throws Exception {
+
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService);
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+        final DeliveryBucket otherBucket = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "s1");
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(otherBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(false));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+        }});
+
+        assertEquals(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "s1"), strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testDetermineDeliveryBucketNewNoChangeNoGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+            @Override
+            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+            }
+        };
+
+        final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final ShoppingContext ctx = context.mock(ShoppingContext.class, "ctx");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(null));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(null));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getShoppingContext(); will(returnValue(ctx));
+            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+
+        }});
+
+        assertEquals(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1"), strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testDetermineDeliveryBucketNewNoChangeSingleGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+            @Override
+            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+            }
+        };
+
+        final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final ShoppingContext ctx = context.mock(ShoppingContext.class, "ctx");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(null));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getShoppingContext(); will(returnValue(ctx));
+            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+
+        }});
+
+        assertEquals(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1"), strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+
+
+
+    @Test
+    public void testDetermineDeliveryBucketNewNoChangeMultiGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+            @Override
+            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+            }
+        };
+
+        final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final ShoppingContext ctx = context.mock(ShoppingContext.class, "ctx");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "s1");
+
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(null));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(true));
+            allowing(cart).getShoppingContext(); will(returnValue(ctx));
+            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+
+        }});
+
+        assertEquals(new DeliveryBucketImpl(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1"), strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
+
+    }
+
+
+
+
+
+    @Test
+    public void testDetermineDeliveryBucketNewChangeMultiGroup() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final WarehouseService warehouseService = context.mock(WarehouseService.class, "warehouseService");
+        final SkuWarehouseService skuWarehouseService = context.mock(SkuWarehouseService.class, "skuWarehouseService");
+
+        final OrderSplittingStrategyImpl strategy = new OrderSplittingStrategyImpl(shopService, productService, warehouseService, skuWarehouseService) {
+            @Override
+            Pair<String, String> getDeliveryGroup(final CartItem item, final List<Warehouse> warehouses) {
+                return new Pair<String, String>(CustomerOrderDelivery.STANDARD_DELIVERY_GROUP, "s1");
+            }
+        };
+
+        final Warehouse warehouse = context.mock(Warehouse.class, "warehouse");
+
+        final CartItem item = context.mock(CartItem.class, "item");
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final OrderInfo info = context.mock(OrderInfo.class, "info");
+        final ShoppingContext ctx = context.mock(ShoppingContext.class, "ctx");
+
+        final CartItem other = context.mock(CartItem.class, "other");
+        final DeliveryBucket itemBucket = new DeliveryBucketImpl(CustomerOrderDelivery.DATE_WAIT_DELIVERY_GROUP, "s1");
+
+
+        context.checking(new Expectations() {{
+            allowing(item).getDeliveryBucket(); will(returnValue(null));
+            allowing(item).getProductSkuCode(); will(returnValue("ABC"));
+            allowing(item).isGift(); will(returnValue(false));
+            allowing(other).getDeliveryBucket(); will(returnValue(itemBucket));
+            allowing(other).getProductSkuCode(); will(returnValue("CED"));
+            allowing(other).isGift(); will(returnValue(false));
+
+            allowing(cart).getOrderInfo(); will(returnValue(info));
+            allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
+            allowing(info).isMultipleDelivery(); will(returnValue(false));
+            allowing(cart).getShoppingContext(); will(returnValue(ctx));
+            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
+
+            allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
+
+        }});
+
+        assertEquals(new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, "s1"), strategy.determineDeliveryBucket(item, cart));
+
+        context.assertIsSatisfied();
 
     }
 

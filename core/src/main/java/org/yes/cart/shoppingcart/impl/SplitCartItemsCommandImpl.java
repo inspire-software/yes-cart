@@ -98,7 +98,11 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
         // Set default supplier code to all items that are missing one
         for (final CartItem item : shoppingCart.getCartItemList()) {
             if (item.getDeliveryBucket() == null) {
-                shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), ShoppingCartUtils.DEFAULT_DELIVERY_BUCKET);
+                if (item.isGift()) {
+                    shoppingCart.setGiftDeliveryBucket(item.getProductSkuCode(), ShoppingCartUtils.DEFAULT_DELIVERY_BUCKET);
+                } else {
+                    shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), ShoppingCartUtils.DEFAULT_DELIVERY_BUCKET);
+                }
                 changed = true;
             }
         }
@@ -110,8 +114,14 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
 
             for (final CartItem item : cartBucket.getValue()) {
 
-                if (shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), cartBucket.getKey())) {
-                    changed = true;
+                if (item.isGift()) {
+                    if (shoppingCart.setGiftDeliveryBucket(item.getProductSkuCode(), cartBucket.getKey())) {
+                        changed = true;
+                    }
+                } else {
+                    if (shoppingCart.setProductSkuDeliveryBucket(item.getProductSkuCode(), cartBucket.getKey())) {
+                        changed = true;
+                    }
                 }
 
             }

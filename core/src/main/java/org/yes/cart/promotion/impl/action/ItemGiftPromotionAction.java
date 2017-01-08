@@ -23,6 +23,8 @@ import org.yes.cart.promotion.PromotionAction;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
+import org.yes.cart.service.order.DeliveryBucket;
+import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
@@ -49,13 +51,16 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
     private final PriceService priceService;
     private final ShopService shopService;
     private final ProductService productService;
+    private final OrderSplittingStrategy orderSplittingStrategy;
 
     public ItemGiftPromotionAction(final PriceService priceService,
                                    final ShopService shopService,
-                                   final ProductService productService) {
+                                   final ProductService productService,
+                                   final OrderSplittingStrategy orderSplittingStrategy) {
         this.priceService = priceService;
         this.shopService = shopService;
         this.productService = productService;
+        this.orderSplittingStrategy = orderSplittingStrategy;
     }
 
     /** {@inheritDoc} */
@@ -135,6 +140,13 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
             // update current cart item with promotion details but do not alter its price as we
             // can have cumulative promotions
             cart.setProductSkuPromotion(cartItem.getProductSkuCode(), cartItem.getPrice(), getPromotionCode(context));
+
+            for (final CartItem item : cart.getCartItemList()) {
+                if (item.isGift() && ctx.getSubject().equals(item.getProductSkuCode())) {
+                    final DeliveryBucket bucket = this.orderSplittingStrategy.determineDeliveryBucket(item, cart);
+                    cart.setGiftDeliveryBucket(ctx.getSubject(), bucket);
+                }
+            }
         }
     }
 

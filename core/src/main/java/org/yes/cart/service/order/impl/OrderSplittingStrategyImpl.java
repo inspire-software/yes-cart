@@ -26,6 +26,7 @@ import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.OrderSplittingStrategy;
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.DomainApiUtils;
 
 import java.util.*;
@@ -55,14 +56,54 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
     /** {@inheritDoc} */
     @Override
-    public DeliveryBucket determineDeliveryBucket(final long shopId,
-                                                  final CartItem item) {
+    public DeliveryBucket determineDeliveryBucket(final CartItem item,
+                                                  final ShoppingCart cart) {
 
-        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
+        final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new HashMap<DeliveryBucket, List<CartItem>>();
 
-        final Pair<String, String> deliveryGroup = getDeliveryGroup(item, warehouses);
+        DeliveryBucket itemBucket = item.getDeliveryBucket();
+        if (item.getDeliveryBucket() == null) {
+            final List<Warehouse> warehouses = warehouseService.getByShopId(cart.getShoppingContext().getShopId(), false);
+            final Pair<String, String> deliveryGroup = getDeliveryGroup(item, warehouses);
+            itemBucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
+        }
 
-        return new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
+        for (CartItem cartItem : cart.getCartItemList()) {
+            final boolean itemToCheck = item.isGift() == cartItem.isGift() && item.getProductSkuCode().equals(cartItem.getProductSkuCode());
+            final DeliveryBucket cartItemBucket = itemToCheck ? itemBucket : cartItem.getDeliveryBucket();
+            if (cartItemBucket != null) {
+                List<CartItem> items = deliveryGroups.get(cartItemBucket);
+                if (items == null) {
+                    items = new ArrayList<CartItem>();
+                    deliveryGroups.put(cartItemBucket, items);
+                }
+                items.add(cartItem);
+            }
+        }
+
+        final boolean onePhysicalDelivery = !cart.getOrderInfo().isMultipleDeliveryAvailable() || !cart.getOrderInfo().isMultipleDelivery();
+
+        if (onePhysicalDelivery) {
+
+            groupDeliveriesIntoMixedIfNecessary(deliveryGroups);
+
+        }
+
+
+        for (final Map.Entry<DeliveryBucket, List<CartItem>> group : deliveryGroups.entrySet()) {
+
+            for (final CartItem groupItem : group.getValue()) {
+
+                final boolean itemToCheck = item.isGift() == groupItem.isGift() && item.getProductSkuCode().equals(groupItem.getProductSkuCode());
+                if (itemToCheck) {
+                    return group.getKey();
+                }
+
+            }
+
+        }
+
+        return itemBucket;
     }
 
     /** {@inheritDoc} */
@@ -74,9 +115,13 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         // use tree map to preserve natural order by delivery group i.e. D1, D2, D3 etc.
         final Map<DeliveryBucket, List<CartItem>> deliveryGroups = new TreeMap<DeliveryBucket, List<CartItem>>();
 
+        final List<Warehouse> warehouses = warehouseService.getByShopId(shopId, false);
+
         for (final CartItem cartItem : items) {
 
-            DeliveryBucket bucket = determineDeliveryBucket(shopId, cartItem);
+            final Pair<String, String> deliveryGroup = getDeliveryGroup(cartItem, warehouses);
+
+            final DeliveryBucket bucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
 
             if (!deliveryGroups.containsKey(bucket)) {
                 deliveryGroups.put(bucket, new ArrayList<CartItem>());
@@ -110,7 +155,9 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
             if (deliveryQty.get(supplier) > 1) {
 
-                if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(group)) {
+                if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(group) &&
+                        !CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(group) &&
+                        !CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(group)) {
 
                     final DeliveryBucket mix = new DeliveryBucketImpl(CustomerOrderDelivery.MIX_DELIVERY_GROUP, supplier);
 
@@ -278,7 +325,9 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
         final Map<String, Integer> counts = new HashMap<String, Integer>();
         for (final DeliveryBucket bucket : deliveryMap.keySet()) {
 
-            int delta = CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(bucket.getGroup()) ? 0 : 1;
+            int delta = CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(bucket.getGroup()) ||
+                    CustomerOrderDelivery.NOSTOCK_DELIVERY_GROUP.equals(bucket.getGroup()) ||
+                    CustomerOrderDelivery.OFFLINE_DELIVERY_GROUP.equals(bucket.getGroup()) ? 0 : 1;
 
             Integer count = counts.get(bucket.getSupplier());
             if (count == null) {

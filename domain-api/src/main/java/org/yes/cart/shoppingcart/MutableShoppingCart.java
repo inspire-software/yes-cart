@@ -106,6 +106,15 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
     boolean setProductSkuDeliveryBucket(String sku, DeliveryBucket deliveryBucket);
 
     /**
+     * Set sku supplier to be used.
+     *
+     * @param sku            product sku
+     * @param deliveryBucket delivery bucket to add this sku to
+     * @return true if bucket had been set, false otherwise.
+     */
+    boolean setGiftDeliveryBucket(String sku, DeliveryBucket deliveryBucket);
+
+    /**
      * Removes the cart item from shopping cart.
      *
      * @param productSku product sku
@@ -291,6 +300,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * @return order information.
      */
     MutableOrderInfo getOrderInfo();
+
+    /**
+     * True if has gifts.
+     *
+     * @return true if has gifts
+     */
+    boolean hasGifts();
 
     /**
      * Get promotion disabled flag.

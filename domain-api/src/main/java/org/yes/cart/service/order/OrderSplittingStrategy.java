@@ -17,6 +17,7 @@
 package org.yes.cart.service.order;
 
 import org.yes.cart.shoppingcart.CartItem;
+import org.yes.cart.shoppingcart.ShoppingCart;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,12 +33,13 @@ public interface OrderSplittingStrategy {
     /**
      * Determine delivery buckets for given item at current point in time.
      *
-     * @param shopId shop PK
      * @param item   item to determine buckets for
+     * @param cart   cart with items for which buckets are calculated (item has to be one of the cart items)
      *
      * @return delivery group marker
      */
-    DeliveryBucket determineDeliveryBucket(long shopId, CartItem item);
+    DeliveryBucket determineDeliveryBucket(CartItem item,
+                                           ShoppingCart cart);
 
 
     /**

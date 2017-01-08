@@ -329,6 +329,26 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
+    public boolean setGiftDeliveryBucket(final String sku, final DeliveryBucket deliveryBucket) {
+
+        final int skuIndex = indexOfGift(sku);
+        if (skuIndex == -1) { //not found
+            return false;
+        }
+
+        final CartItemImpl item = getGifts().get(skuIndex);
+        final DeliveryBucket bucket = item.getDeliveryBucket();
+
+        if ((bucket == null && deliveryBucket != null) ||
+                (bucket != null && !bucket.equals(deliveryBucket))) {
+            item.setSupplierCode(deliveryBucket.getSupplier());
+            item.setDeliveryGroup(deliveryBucket.getGroup());
+            return true;
+        }
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean removeCartItem(final String productSku) {
         final int skuIndex = indexOfProductSku(productSku);
         if (skuIndex != -1) {
@@ -354,7 +374,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
 
     /** {@inheritDoc} */
     public boolean removeItemPromotions() {
-        boolean removed = getGifts().isEmpty();
+        boolean removed = !getGifts().isEmpty();
         getGifts().clear();
 
         for (final CartItemImpl item : getItems()) {
@@ -699,6 +719,12 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     @JsonIgnore
     public boolean isModified() {
         return processingStartTimestamp < modifiedTimestamp;
+    }
+
+    /** {@inheritDoc} */
+    @JsonIgnore
+    public boolean hasGifts() {
+        return !getGifts().isEmpty();
     }
 
     /** {@inheritDoc} */

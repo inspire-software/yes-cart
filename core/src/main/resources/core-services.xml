@@ -708,6 +708,7 @@
         <constructor-arg index="0" ref="priceService"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="orderSplittingStrategy"/>
     </bean>
 
     <bean id="promoActionOrderDiscount" class="org.yes.cart.promotion.impl.action.OrderDiscountPromotionAction"/>
@@ -717,6 +718,7 @@
         <constructor-arg index="0" ref="priceService"/>
         <constructor-arg index="1" ref="shopService"/>
         <constructor-arg index="2" ref="productService"/>
+        <constructor-arg index="3" ref="orderSplittingStrategy"/>
     </bean>
 
     <bean id="promoActionShippingDiscount" class="org.yes.cart.promotion.impl.action.ShippingDiscountPromotionAction"/>
