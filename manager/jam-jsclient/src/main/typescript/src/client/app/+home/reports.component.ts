@@ -189,8 +189,8 @@ export class ReportsComponent implements OnInit {
     if (ModalAction.POSITIVE === modalresult.action) {
       if (this.selectedFile != null) {
 
-        window.open('/yes-manager/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first), 'DOWNLOAD', 'width=300,height=100');
-
+        let nocache = '&nocache=' + Math.random();
+        window.open('/yes-manager/service/filemanager/download?fileName=' + encodeURI(this.selectedFile.first) + nocache, '_blank', 'width=300,height=100');
 
       }
     }
