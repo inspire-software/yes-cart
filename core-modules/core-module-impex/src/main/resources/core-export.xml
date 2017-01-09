@@ -84,7 +84,7 @@
     <bean id="csvBulkExportService" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.bulkexport.csv.impl.CsvBulkExportServiceImpl" scope="prototype">
-                <constructor-arg index="0" ref="impexFederationFacade"/>
+                <constructor-arg index="0" ref="exportFederationFacade"/>
                 <property name="genericDAO" ref="genericDao"/>
                 <property name="columnLookUpQueryParameterStrategy" ref="exportCsvColumnLookUpQueryStrategy"/>
                 <property name="valueDataAdapter" ref="exportCsvExportValueAdapter"/>
@@ -94,7 +94,7 @@
     </bean>
 
     <bean id="productImageExportDomainObjectStrategy" class="org.yes.cart.bulkexport.image.impl.ProductImageExportDomainObjectStrategyImpl">
-        <constructor-arg index="0" ref="impexFederationFacade"/>
+        <constructor-arg index="0" ref="exportFederationFacade"/>
         <constructor-arg index="1" ref="productDao"/>
         <constructor-arg index="2" ref="imageService"/>
         <constructor-arg index="3" ref="systemService"/>
@@ -103,7 +103,7 @@
     <bean id="imagesBulkExportService" parent="txProxyTemplate">
         <property name="target">
             <bean  class="org.yes.cart.bulkexport.image.impl.ImagesBulkExportServiceImpl" scope="prototype">
-                <constructor-arg index="0" ref="impexFederationFacade"/>
+                <constructor-arg index="0" ref="exportFederationFacade"/>
                 <constructor-arg index="1">
                     <array>
                         <ref bean="productImageExportDomainObjectStrategy"/>

@@ -184,35 +184,35 @@
         <constructor-arg index="3">
             <array>
                 <bean id="imageVaultProcessorCategoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="impexFederationFacade"/>
+                    <constructor-arg index="0" ref="importFederationFacade"/>
                     <constructor-arg index="1" ref="categoryService"/>
                     <constructor-arg index="2" ref="attributeService"/>
                     <property name="insertOnly" value="true"/>
                 </bean>
 
                 <bean id="imageVaultProcessorBrandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="impexFederationFacade"/>
+                    <constructor-arg index="0" ref="importFederationFacade"/>
                     <constructor-arg index="1" ref="brandService"/>
                     <constructor-arg index="2" ref="attributeService"/>
                     <property name="insertOnly" value="true"/>
                 </bean>
 
                 <bean id="imageVaultProcessorShopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="impexFederationFacade"/>
+                    <constructor-arg index="0" ref="importFederationFacade"/>
                     <constructor-arg index="1" ref="shopService"/>
                     <constructor-arg index="2" ref="attributeService"/>
                     <property name="insertOnly" value="true"/>
                 </bean>
 
                 <bean id="imageVaultProcessorProductImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="impexFederationFacade"/>
+                    <constructor-arg index="0" ref="importFederationFacade"/>
                     <constructor-arg index="1" ref="productService"/>
                     <constructor-arg index="2" ref="attributeService"/>
                     <property name="insertOnly" value="true"/>
                 </bean>
 
                 <bean id="imageVaultProcessorProductSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="impexFederationFacade"/>
+                    <constructor-arg index="0" ref="importFederationFacade"/>
                     <constructor-arg index="1" ref="productSkuService"/>
                     <constructor-arg index="2" ref="attributeService"/>
                     <property name="insertOnly" value="true"/>

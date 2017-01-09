@@ -16,12 +16,8 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.hibernate.criterion.Restrictions;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
-import org.yes.cart.domain.dto.ShopDTO;
-import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.service.dto.DtoCustomerOrderService;
-import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 

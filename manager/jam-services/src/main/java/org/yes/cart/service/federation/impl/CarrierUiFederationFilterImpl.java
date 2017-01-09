@@ -22,7 +22,10 @@ import org.yes.cart.service.dto.DtoCarrierService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov

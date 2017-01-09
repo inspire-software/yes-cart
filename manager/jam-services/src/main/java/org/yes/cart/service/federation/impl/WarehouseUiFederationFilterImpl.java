@@ -16,16 +16,15 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
-import org.yes.cart.domain.entity.Warehouse;
-import org.yes.cart.exception.UnableToCreateInstanceException;
-import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.dto.DtoWarehouseService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * User: denispavlov

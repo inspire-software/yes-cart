@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.federation.impl;
 
-import org.yes.cart.domain.dto.PromotionDTO;
 import org.yes.cart.domain.dto.TaxDTO;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;

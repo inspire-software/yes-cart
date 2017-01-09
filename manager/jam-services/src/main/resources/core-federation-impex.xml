@@ -21,7 +21,7 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <!-- ############################# Federation For Import ######################### -->
+    <!-- ############################# Federation For ImpEx ######################### -->
 
     <import resource="core-federation.xml"/>
 
@@ -190,7 +190,45 @@
         </constructor-arg>
     </bean>
 
-    <bean id="impexFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+    <!-- ############################# Federation Import Only ######################### -->
+
+
+    <!-- ############################# Federation Export Only ######################### -->
+
+    <bean id="attributeExportFederationFilter" class="org.yes.cart.service.federation.impl.SimpleRoleBasedImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="brandExportFederationFilter" class="org.yes.cart.service.federation.impl.SimpleRoleBasedImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+                <value>ROLE_SMMARKETINGADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="productTypeExportFederationFilter" class="org.yes.cart.service.federation.impl.SimpleRoleBasedImpexFederationFilterImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <list>
+                <value>ROLE_SMADMIN</value>
+                <value>ROLE_SMSHOPADMIN</value>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- ############################# Federation Facades ######################### -->
+
+    <bean id="importFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
         <constructor-arg index="0" ref="shopFederationStrategy"/>
         <constructor-arg index="1">
             <map>
@@ -212,5 +250,31 @@
         </constructor-arg>
     </bean>
 
+
+    <bean id="exportFederationFacade" class="org.yes.cart.service.federation.impl.ImpexFederationFacadeImpl">
+        <constructor-arg index="0" ref="shopFederationStrategy"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="org.yes.cart.domain.entity.Category"            value-ref="categoryImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Promotion"           value-ref="promotionImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.PromotionCoupon"     value-ref="promotionCouponImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Tax"                 value-ref="taxImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.TaxConfig"           value-ref="taxConfigImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.SkuWarehouse"        value-ref="skuWarehouseFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.SkuPrice"            value-ref="skuPriceImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Product"             value-ref="productImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueProduct"    value-ref="attrValueProductImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.ProductSku"          value-ref="productSkuImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.AttrValueProductSku" value-ref="attrValueProductSkuImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Customer"            value-ref="customerImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Address"             value-ref="addressImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.CustomerOrder"       value-ref="customerOrderImpexFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Attribute"           value-ref="attributeExportFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.Brand"               value-ref="brandExportFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.ProductType"         value-ref="productTypeExportFederationFilter"/>
+                <entry key="org.yes.cart.domain.entity.ProductTypeAttr"     value-ref="productTypeExportFederationFilter"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
 </beans>

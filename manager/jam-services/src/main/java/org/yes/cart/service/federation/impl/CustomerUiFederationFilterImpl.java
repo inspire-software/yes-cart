@@ -17,16 +17,13 @@
 package org.yes.cart.service.federation.impl;
 
 import org.yes.cart.domain.dto.CustomerDTO;
-import org.yes.cart.domain.dto.ManagerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.dto.DtoCustomerService;
-import org.yes.cart.service.dto.ManagementService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 /**

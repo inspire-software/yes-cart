@@ -17,7 +17,6 @@
 package org.yes.cart.service.federation.impl;
 
 import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;

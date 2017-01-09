@@ -1,0 +1,120 @@
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<export-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:noNamespaceSchemaLocation="http://www.yes-cart.org/schema/export-descriptor.xsd">
+
+    <entity-type>org.yes.cart.domain.entity.Attribute</entity-type>
+
+    <export-file-descriptor>
+        <file-encoding>UTF-8</file-encoding>
+        <file-name>attributes-{timestamp}.csv</file-name>
+        <print-header>true</print-header>
+        <column-delimiter>;</column-delimiter>
+        <text-qualifier>&quot;</text-qualifier>
+    </export-file-descriptor>
+
+    <select-sql>select a from AttributeEntity a</select-sql>
+
+    <export-columns>
+
+        <column-descriptor>
+            <column-header>Group</column-header>
+            <field-type>FIELD</field-type>
+            <name>attributeGroup.code</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>GUID</column-header>
+            <field-type>FIELD</field-type>
+            <name>guid</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Code</column-header>
+            <field-type>FIELD</field-type>
+            <name>code</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Name</column-header>
+            <field-type>FIELD</field-type>
+            <name>name</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Description</column-header>
+            <field-type>FIELD</field-type>
+            <name>description</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Type</column-header>
+            <field-type>FIELD</field-type>
+            <name>etype.businesstype</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Mandatory</column-header>
+            <field-type>FIELD</field-type>
+            <name>mandatory</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Store</column-header>
+            <field-type>FIELD</field-type>
+            <name>store</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Search</column-header>
+            <field-type>FIELD</field-type>
+            <name>search</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Primary</column-header>
+            <field-type>FIELD</field-type>
+            <name>primary</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Navigation</column-header>
+            <field-type>FIELD</field-type>
+            <name>navigation</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Value</column-header>
+            <field-type>FIELD</field-type>
+            <name>val</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>RegEx</column-header>
+            <field-type>FIELD</field-type>
+            <name>regexp</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Rank</column-header>
+            <field-type>FIELD</field-type>
+            <name>rank</name>
+        </column-descriptor>
+
+    </export-columns>
+
+</export-descriptor>
