@@ -19,7 +19,6 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
@@ -486,14 +485,11 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                          final BigDecimal listPrice,
                                          final BigDecimal salePrice) {
 
-        final long shopId = cart.getShoppingContext().getShopId();
         final String currency = cart.getCurrencyCode();
 
-        final Shop shop = shopService.getById(shopId);
-
-        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
+        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         final BigDecimal sale = salePrice;
         final BigDecimal list = listPrice;
@@ -563,19 +559,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
-        return getSkuPrice(cart.getShoppingContext().getShopId(), cart.getCurrencyCode(), item, total);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public ProductPriceModel getSkuPrice(long shopId, String currency, final CartItem item, boolean total) {
+        final String currency = cart.getCurrencyCode();
 
-        final Shop shop = shopService.getById(shopId);
-
-        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
+        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         // For total we use only list price since we already show discount in unit prices
         final BigDecimal sale = total ? null : item.getSalePrice();
@@ -705,17 +694,14 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      */
     public ProductPriceModel getCartItemsTotal(final ShoppingCart cart) {
 
-        final long shopId = cart.getShoppingContext().getShopId();
         final String currency = cart.getCurrencyCode();
 
         final BigDecimal list = cart.getTotal().getListSubTotal();
         final BigDecimal sale = cart.getTotal().getSubTotal();
 
-        final Shop shop = shopService.getById(shopId);
-
-        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
+        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         if (showTax) {
 

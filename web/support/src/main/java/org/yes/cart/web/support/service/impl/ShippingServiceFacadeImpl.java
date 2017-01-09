@@ -18,7 +18,6 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.commons.lang.StringUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
@@ -208,19 +207,15 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
      */
     public ProductPriceModel getCartShippingTotal(final ShoppingCart cart) {
 
-
-        final long shopId = cart.getShoppingContext().getShopId();
         final String currency = cart.getCurrencyCode();
 
         final BigDecimal deliveriesCount = new BigDecimal(cart.getShippingList().size());
         final BigDecimal list = cart.getTotal().getDeliveryListCost();
         final BigDecimal sale = cart.getTotal().getDeliveryCost();
 
-        final Shop shop = shopService.getById(shopId);
-
-        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
+        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         if (showTax) {
 
@@ -320,11 +315,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
      */
     public ProductPriceModel getCartShippingSupplierTotal(final ShoppingCart cart, final String supplier) {
 
-
-        final long shopId = cart.getShoppingContext().getShopId();
         final String currency = cart.getCurrencyCode();
-
-
 
         BigDecimal deliveriesCount = BigDecimal.ZERO; new BigDecimal(cart.getShippingList().size());
         BigDecimal list = BigDecimal.ZERO;
@@ -347,11 +338,10 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
             }
         }
 
-        final Shop shop = shopService.getById(shopId);
 
-        final boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
+        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
+        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
 
         if (showTax) {
 

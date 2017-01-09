@@ -236,7 +236,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, false);
 
-        final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView(PRICE_VIEW, model, cartItem.getAppliedPromo(), false, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
         priceView.setVisible(available);
 
@@ -250,7 +250,7 @@ public class ShoppingCartItemsList extends ListView<CartItem> {
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, cartItem, true);
 
-        final PriceView priceView = new PriceView(LINE_TOTAL_VIEW, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView(LINE_TOTAL_VIEW, model, null, false, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
         priceView.setVisible(available);
 

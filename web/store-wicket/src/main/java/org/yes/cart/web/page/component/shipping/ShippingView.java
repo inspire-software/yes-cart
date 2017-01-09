@@ -280,7 +280,7 @@ public class ShippingView extends BaseComponent {
                             PRICE_VIEW,
                             model,
                             total.getAppliedDeliveryPromo(), true, true,
-                            model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount()
+                            model.isTaxInfoEnabled(), model.isTaxInfoShowAmount()
                     ) {
                         @Override
                         public boolean isVisible() {

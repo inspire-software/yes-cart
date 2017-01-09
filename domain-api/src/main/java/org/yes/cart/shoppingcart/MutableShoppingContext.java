@@ -76,6 +76,35 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
     void setStateCode(String stateCode);
 
     /**
+     * Set flag to indicate if tax info view change is enabled.
+     *
+     * @param taxInfoChangeViewEnabled true if enabled
+     */
+    void setTaxInfoChangeViewEnabled(final boolean taxInfoChangeViewEnabled);
+
+    /**
+     * Set flag to indicate if tax info is enabled.
+     *
+     * @param taxInfoEnabled true if enabled
+     */
+    void setTaxInfoEnabled(final boolean taxInfoEnabled);
+
+    /**
+     * Set flag to indicate to use net prices to display.
+     *
+     * @param taxInfoUseNet true for net, false for gross
+     */
+    void setTaxInfoUseNet(final boolean taxInfoUseNet);
+
+    /**
+     * Set flag to indicate to display amount of tax.
+     *
+     * @param taxInfoShowAmount true to display amount, false to display rate
+     */
+    void setTaxInfoShowAmount(final boolean taxInfoShowAmount);
+
+
+    /**
      * Set shopper ip address.
      *
      * @param resolvedIp resolved ip address.

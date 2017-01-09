@@ -50,6 +50,15 @@ public class CartShoppingContextRO implements Serializable {
     private List<String> customerShops;
 
     @DtoField(readOnly = true)
+    private boolean taxInfoChangeViewEnabled;
+    @DtoField(readOnly = true)
+    private boolean taxInfoEnabled;
+    @DtoField(readOnly = true)
+    private boolean taxInfoUseNet;
+    @DtoField(readOnly = true)
+    private boolean taxInfoShowAmount;
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -150,4 +159,39 @@ public class CartShoppingContextRO implements Serializable {
         this.stateCode = stateCode;
     }
 
+    @XmlAttribute(name = "tax-info-change-view-enabled")
+    public boolean isTaxInfoChangeViewEnabled() {
+        return taxInfoChangeViewEnabled;
+    }
+
+    public void setTaxInfoChangeViewEnabled(final boolean taxInfoChangeViewEnabled) {
+        this.taxInfoChangeViewEnabled = taxInfoChangeViewEnabled;
+    }
+
+    @XmlAttribute(name = "tax-info-enabled")
+    public boolean isTaxInfoEnabled() {
+        return taxInfoEnabled;
+    }
+
+    public void setTaxInfoEnabled(final boolean taxInfoEnabled) {
+        this.taxInfoEnabled = taxInfoEnabled;
+    }
+
+    @XmlAttribute(name = "tax-info-use-net")
+    public boolean isTaxInfoUseNet() {
+        return taxInfoUseNet;
+    }
+
+    public void setTaxInfoUseNet(final boolean taxInfoUseNet) {
+        this.taxInfoUseNet = taxInfoUseNet;
+    }
+
+    @XmlAttribute(name = "tax-info-show-amount")
+    public boolean isTaxInfoShowAmount() {
+        return taxInfoShowAmount;
+    }
+
+    public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
+        this.taxInfoShowAmount = taxInfoShowAmount;
+    }
 }

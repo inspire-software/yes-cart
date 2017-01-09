@@ -77,6 +77,33 @@ public interface ShoppingContext extends Serializable {
      */
     String getStateCode();
 
+    /**
+     * Get flag to indicate if tax info view change is enabled.
+     *
+     * @return true if tax info view change is enabled
+     */
+    boolean isTaxInfoChangeViewEnabled();
+
+    /**
+     * Get flag to indicate if tax info is enabled.
+     *
+     * @return true if tax info is enabled
+     */
+    boolean isTaxInfoEnabled();
+
+    /**
+     * Get flag to indicate to use net prices to display.
+     *
+     * @return true if net prices to be displayed
+     */
+    boolean isTaxInfoUseNet();
+
+    /**
+     * Get flag to indicate to display amount of tax.
+     *
+     * @return true if tax amount to be displayed
+     */
+    boolean isTaxInfoShowAmount();
 
     /**
      * Get shopper ip address

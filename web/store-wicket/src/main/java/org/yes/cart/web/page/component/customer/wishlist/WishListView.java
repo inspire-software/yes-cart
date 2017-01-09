@@ -260,7 +260,7 @@ public class WishListView extends AbstractProductSearchResultList {
                 break;
         }
 
-        final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+        final PriceView priceView = new PriceView("priceView", model, priceInfo, true, false, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
 
         final boolean isPriceNowAvailable = model.getRegularPrice() != null && MoneyUtils.isFirstBiggerThanSecond(model.getRegularPrice(), BigDecimal.ZERO);
         priceView.setVisible(isPriceNowAvailable);

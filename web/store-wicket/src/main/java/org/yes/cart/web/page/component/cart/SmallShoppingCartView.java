@@ -90,7 +90,7 @@ public class SmallShoppingCartView extends BaseComponent {
                                         model,
                                         null,
                                         true, false,
-                                        model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount()
+                                        model.isTaxInfoEnabled(), model.isTaxInfoShowAmount()
                                 ) {
                                     @Override
                                     public boolean isVisible() {

@@ -92,7 +92,6 @@ public class PriceView extends BaseComponent {
      * @param showCurrencySymbol currency symbol.
      * @param showSavings show user friendly percentage savings
      * @param showTax show tax information
-     * @param showTaxNet prices are net (without tax)
      * @param showTaxAmount show amount of tax (rather than percent)
      */
     public PriceView(final String id,
@@ -101,7 +100,6 @@ public class PriceView extends BaseComponent {
                      final boolean showCurrencySymbol,
                      final boolean showSavings,
                      final boolean showTax,
-                     final boolean showTaxNet,
                      final boolean showTaxAmount
     ) {
         super(id);
@@ -110,7 +108,7 @@ public class PriceView extends BaseComponent {
         this.showSavings = showSavings;
         this.promos = appliedPromos;
         this.showTax = showTax && productPriceModel != null && productPriceModel.getPriceTax() != null;
-        this.showTaxNet = showTaxNet;
+        this.showTaxNet = this.showTax && productPriceModel.isTaxInfoUseNet();
         this.showTaxAmount = showTaxAmount;
 
     }
@@ -136,7 +134,7 @@ public class PriceView extends BaseComponent {
                 new ProductPriceModelImpl("", currencySymbol, BigDecimal.ONE,
                         pricePair != null ? pricePair.getFirst() : null,
                         pricePair != null ? pricePair.getSecond() : null
-                ), appliedPromos, showCurrencySymbol, showSavings, false, false, false);
+                ), appliedPromos, showCurrencySymbol, showSavings, false, false);
     }
 
 

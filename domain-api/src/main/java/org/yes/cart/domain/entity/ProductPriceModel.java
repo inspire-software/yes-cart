@@ -90,7 +90,7 @@ public interface ProductPriceModel extends Serializable {
     /**
      * Flag to indicate if tax is exclusive of price.
      *
-     * @return tax exlcusive of price
+     * @return tax exclusive of price
      */
     boolean isPriceTaxExclusive();
 

@@ -20,6 +20,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.yes.cart.domain.entity.ProductPriceModel;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.ArrayList;
@@ -69,7 +72,7 @@ public class PriceTierView extends BaseComponent {
 
                     final ProductPriceModel price = listItem.getModel().getObject();
                     listItem.add(
-                            new PriceView(PRICE_VIEW, price, null, true, false, price.isTaxInfoEnabled(), price.isTaxInfoUseNet(), price.isTaxInfoShowAmount())
+                            new PriceView(PRICE_VIEW, price, null, true, false, price.isTaxInfoEnabled(), price.isTaxInfoShowAmount())
                     );
                 }
             }

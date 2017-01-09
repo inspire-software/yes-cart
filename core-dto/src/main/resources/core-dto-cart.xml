@@ -110,6 +110,7 @@
                 <value>setAddressesCmd</value>
                 <value>setMultipleDeliveryCmd</value>
                 <value>setShopIdCmd</value>
+                <value>setTaxOptionsCmd</value>
                 <value>setQuantityToCartCmd</value>
                 <value>setPriceCmd</value>
                 <value>recalculatePriceCmd</value>

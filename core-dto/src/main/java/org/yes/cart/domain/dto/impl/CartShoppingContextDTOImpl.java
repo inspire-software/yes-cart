@@ -45,6 +45,15 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     private List<String> customerShops;
 
     @DtoField(readOnly = true)
+    private boolean taxInfoChangeViewEnabled;
+    @DtoField(readOnly = true)
+    private boolean taxInfoEnabled;
+    @DtoField(readOnly = true)
+    private boolean taxInfoUseNet;
+    @DtoField(readOnly = true)
+    private boolean taxInfoShowAmount;
+
+    @DtoField(readOnly = true)
     private List<String> latestViewedSkus;
     @DtoField(readOnly = true)
     private List<String> latestViewedCategories;
@@ -132,4 +141,35 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
         this.stateCode = stateCode;
     }
 
+    public boolean isTaxInfoChangeViewEnabled() {
+        return taxInfoChangeViewEnabled;
+    }
+
+    public void setTaxInfoChangeViewEnabled(final boolean taxInfoChangeViewEnabled) {
+        this.taxInfoChangeViewEnabled = taxInfoChangeViewEnabled;
+    }
+
+    public boolean isTaxInfoEnabled() {
+        return taxInfoEnabled;
+    }
+
+    public void setTaxInfoEnabled(final boolean taxInfoEnabled) {
+        this.taxInfoEnabled = taxInfoEnabled;
+    }
+
+    public boolean isTaxInfoUseNet() {
+        return taxInfoUseNet;
+    }
+
+    public void setTaxInfoUseNet(final boolean taxInfoUseNet) {
+        this.taxInfoUseNet = taxInfoUseNet;
+    }
+
+    public boolean isTaxInfoShowAmount() {
+        return taxInfoShowAmount;
+    }
+
+    public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
+        this.taxInfoShowAmount = taxInfoShowAmount;
+    }
 }

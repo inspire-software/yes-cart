@@ -1,3 +1,19 @@
+/*
+ * Copyright 2009 Denys Pavlov, Igor Azarnyi
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
@@ -5,7 +21,6 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.PromotionService;
@@ -15,7 +30,10 @@ import org.yes.cart.shoppingcart.*;
 import org.yes.cart.web.support.service.ProductServiceFacade;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -113,7 +131,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -175,9 +193,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -239,9 +257,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -304,7 +322,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -366,7 +384,7 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -432,9 +450,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("120.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
@@ -504,9 +522,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
@@ -579,9 +597,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
@@ -653,9 +671,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("100.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("83.33")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
@@ -728,9 +746,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("96.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
@@ -800,9 +818,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("GROSS"));
@@ -875,9 +893,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getGrossPrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
@@ -949,9 +967,9 @@ public class ProductServiceFacadeImplTest {
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(skuPrice).getSalePriceForCalculation(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(calculator).calculatePrice(cart, "ABC", new BigDecimal("80.00")); will(returnValue(priceModel));
             allowing(priceModel).getNetPrice(); will(returnValue(new BigDecimal("66.67")));
             allowing(priceModel).getTaxCode(); will(returnValue("NET"));
@@ -1012,7 +1030,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1087,9 +1105,9 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(null));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1164,7 +1182,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getSalePrice(); will(returnValue(null));
             allowing(item).getPrice(); will(returnValue(new BigDecimal("100.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1240,7 +1258,7 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getSalePrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(item).getPrice(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1321,9 +1339,10 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(true));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1402,9 +1421,9 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(true));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1484,9 +1503,9 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1566,9 +1585,9 @@ public class ProductServiceFacadeImplTest {
             allowing(item).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
             allowing(item).isTaxExclusiveOfPrice(); will(returnValue(false));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1641,7 +1660,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getListSubTotal(); will(returnValue(new BigDecimal("0.00")));
             allowing(cartTotal).getSubTotal(); will(returnValue(new BigDecimal("0.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1692,9 +1711,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("0.00")));
             allowing(cartTotal).getSubTotal(); will(returnValue(new BigDecimal("0.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1745,7 +1764,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getListSubTotal(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotal(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1795,7 +1814,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getListSubTotal(); will(returnValue(new BigDecimal("100.00")));
             allowing(cartTotal).getSubTotal(); will(returnValue(new BigDecimal("80.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("false"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, null, null, null, null, null, shopService, null);
@@ -1852,9 +1871,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -1920,9 +1939,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -1986,9 +2005,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2048,9 +2067,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2112,9 +2131,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2180,9 +2199,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2246,9 +2265,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2308,9 +2327,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("96.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("16.00")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("GROSS"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2373,9 +2392,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2442,9 +2461,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2508,9 +2527,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2570,9 +2589,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("false"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(false));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2636,9 +2655,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2704,9 +2723,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2, item3, item4)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2771,9 +2790,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));
@@ -2833,9 +2852,9 @@ public class ProductServiceFacadeImplTest {
             allowing(cartTotal).getSubTotalAmount(); will(returnValue(new BigDecimal("80.00")));
             allowing(cartTotal).getSubTotalTax(); will(returnValue(new BigDecimal("13.33")));
             allowing(shopService).getById(234L); will(returnValue(shop));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET); will(returnValue("true"));
-            allowing(shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT); will(returnValue("true"));
+            allowing(cartCtx).isTaxInfoEnabled(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoUseNet(); will(returnValue(true));
+            allowing(cartCtx).isTaxInfoShowAmount(); will(returnValue(true));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item1, item2)));
             allowing(item1).getTaxCode(); will(returnValue("NET"));
             allowing(item1).getTaxRate(); will(returnValue(new BigDecimal("20.00")));

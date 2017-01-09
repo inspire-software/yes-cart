@@ -449,7 +449,7 @@ public class SkuCentralView extends AbstractCentralView {
                 BigDecimal.ONE
         );
 
-        return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount());
+        return new PriceView(PRICE_VIEW, model, null, true, true, model.isTaxInfoEnabled(), model.isTaxInfoShowAmount());
     }
 
     @Override

@@ -41,6 +41,11 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     private String customerEmail;
     private List<String> customerShops;
 
+    private boolean taxInfoChangeViewEnabled;
+    private boolean taxInfoEnabled;
+    private boolean taxInfoUseNet;
+    private boolean taxInfoShowAmount;
+
     private List<String> latestViewedSkus;
     private List<String> latestViewedCategories;
     private String resolvedIp;
@@ -73,6 +78,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         //latestViewedSkus = null;
         //latestViewedCategories = null;
         resolvedIp = null;
+        taxInfoChangeViewEnabled = false;
+        taxInfoEnabled = false;
+        taxInfoUseNet = false;
+        taxInfoShowAmount = false;
     }
 
     /** {@inheritDoc} */
@@ -95,10 +104,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set latest viewed sku codes.
-         *
-         * @param latestViewedSkus latest viewed skus.
-         */
+     * Set latest viewed sku codes.
+     *
+     * @param latestViewedSkus latest viewed skus.
+     */
     public void setLatestViewedSkus(final List<String> latestViewedSkus) {
         this.latestViewedSkus = latestViewedSkus;
     }
@@ -109,12 +118,12 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set last viewed categories.
-         *
-         * TODO: YC-360
-         *
-         * @param latestViewedCategories comma separated list of category ids.
-         */
+     * Set last viewed categories.
+     *
+     * TODO: YC-360
+     *
+     * @param latestViewedCategories comma separated list of category ids.
+     */
     public void setLatestViewedCategories(final List<String> latestViewedCategories) {
         this.latestViewedCategories = latestViewedCategories;
     }
@@ -125,10 +134,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set customer name.
-         *
-         * @param customerName customer name.
-         */
+     * Set customer name.
+     *
+     * @param customerName customer name.
+     */
     public void setCustomerName(final String customerName) {
         this.customerName = customerName;
     }
@@ -139,10 +148,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set customer active shops.
-         *
-         * @param shops customer active shops
-         */
+     * Set customer active shops.
+     *
+     * @param shops customer active shops
+     */
     public void setCustomerShops(final List<String> shops) {
         this.customerShops = shops;
     }
@@ -153,10 +162,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set current shop id.
-         *
-         * @param shopId current shop id.
-         */
+     * Set current shop id.
+     *
+     * @param shopId current shop id.
+     */
     public void setShopId(final long shopId) {
         if (this.shopId != shopId) {
             clearShopRelatedParameters();
@@ -170,10 +179,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set current shop code.
-         *
-         * @param shopCode current shop code.
-         */
+     * Set current shop code.
+     *
+     * @param shopCode current shop code.
+     */
     public void setShopCode(final String shopCode) {
         if (!shopCode.equals(this.shopCode)) {
             clearShopRelatedParameters();
@@ -187,10 +196,10 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set current country code.
-         *
-         * @param countryCode current country code.
-         */
+     * Set current country code.
+     *
+     * @param countryCode current country code.
+     */
     public void setCountryCode(final String countryCode) {
         this.countryCode = countryCode;
     }
@@ -201,12 +210,67 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     }
 
     /**
-         * Set current state code.
-         *
-         * @param stateCode current state code.
-         */
+     * Set current state code.
+     *
+     * @param stateCode current state code.
+     */
     public void setStateCode(final String stateCode) {
         this.stateCode = stateCode;
     }
 
+    /** {@inheritDoc} */
+    public boolean isTaxInfoChangeViewEnabled() {
+        return taxInfoChangeViewEnabled;
+    }
+
+    /**
+     * Set flag to indicate if tax info view change is enabled.
+     *
+     * @param taxInfoChangeViewEnabled true if enabled
+     */
+    public void setTaxInfoChangeViewEnabled(final boolean taxInfoChangeViewEnabled) {
+        this.taxInfoChangeViewEnabled = taxInfoChangeViewEnabled;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxInfoEnabled() {
+        return taxInfoEnabled;
+    }
+
+    /**
+     * Set flag to indicate if tax info is enabled.
+     *
+     * @param taxInfoEnabled true if enabled
+     */
+    public void setTaxInfoEnabled(final boolean taxInfoEnabled) {
+        this.taxInfoEnabled = taxInfoEnabled;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxInfoUseNet() {
+        return taxInfoUseNet;
+    }
+
+    /**
+     * Set flag to indicate to use net prices to display.
+     *
+     * @param taxInfoUseNet true for net, false for gross
+     */
+    public void setTaxInfoUseNet(final boolean taxInfoUseNet) {
+        this.taxInfoUseNet = taxInfoUseNet;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isTaxInfoShowAmount() {
+        return taxInfoShowAmount;
+    }
+
+    /**
+     * Set flag to indicate to display amount of tax.
+     *
+     * @param taxInfoShowAmount true to display amount, false to display rate
+     */
+    public void setTaxInfoShowAmount(final boolean taxInfoShowAmount) {
+        this.taxInfoShowAmount = taxInfoShowAmount;
+    }
 }

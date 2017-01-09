@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Address;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -23,12 +25,10 @@ import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.PricingPolicyProvider;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -83,21 +83,27 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             final String shopCode = shoppingCart.getShoppingContext().getShopCode();
             final Shop current = shopService.getShopByCode(shopCode);
 
+            final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
             if (current != null && authenticate(email, current, passw)) {
                 final Customer customer = customerService.getCustomerByEmail(email, current);
                 final List<String> customerShops = new ArrayList<String>();
                 for (final Shop shop : customerService.getCustomerShops(customer)) {
                     customerShops.add(shop.getCode());
                 }
-                shoppingCart.getShoppingContext().setCustomerEmail(customer.getEmail());
-                shoppingCart.getShoppingContext().setCustomerName(customerService.formatNameFor(customer, current));
-                shoppingCart.getShoppingContext().setCustomerShops(customerShops);
+
+                ctx.setCustomerEmail(customer.getEmail());
+                ctx.setCustomerName(customerService.formatNameFor(customer, current));
+                ctx.setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(shoppingCart, customer);
+                setDefaultTaxOptions(current, customer, ctx);
+
                 recalculatePricesInCart(shoppingCart);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {
                 shoppingCart.getShoppingContext().clearContext();
+                setDefaultTaxOptions(current, null, ctx);
+                markDirty(shoppingCart);
             }
         }
     }
@@ -128,6 +134,37 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             }
         }
     }
+
+
+    protected void setDefaultTaxOptions(final Shop shop, final Customer customer, final MutableShoppingContext ctx) {
+
+        // If types limit is set then only enable showTax option for given types. Anonymous type is B2G, blank is B2C
+        final String customerType = customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
+
+        boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
+        if (showTax) {
+            final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
+            showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains(customerType);
+        }
+        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
+        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+
+        ctx.setTaxInfoChangeViewEnabled(false);
+        final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
+        // Ensure change view is allowed for anonymous
+        if (StringUtils.isNotBlank(typesThatCanChangeView)) {
+            final String[] customerTypesThatCanChangeView = StringUtils.split(typesThatCanChangeView, ',');
+            if (Arrays.asList(customerTypesThatCanChangeView).contains(customerType)) {
+                ctx.setTaxInfoChangeViewEnabled(true);
+            }
+        }
+
+        ctx.setTaxInfoEnabled(showTax);
+        ctx.setTaxInfoUseNet(showTaxNet);
+        ctx.setTaxInfoShowAmount(showTaxAmount);
+
+    }
+
 
     private boolean authenticate(final String username, final Shop shop, final String password) {
         return customerService.isCustomerExists(username, shop) &&

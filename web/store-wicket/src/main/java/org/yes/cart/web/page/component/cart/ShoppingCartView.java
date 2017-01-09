@@ -117,7 +117,7 @@ public class ShoppingCartView extends BaseComponent {
                         SUB_TOTAL_VIEW,
                         model,
                         total.getAppliedOrderPromo(), true, true,
-                        model.isTaxInfoEnabled(), model.isTaxInfoUseNet(), model.isTaxInfoShowAmount())
+                        model.isTaxInfoEnabled(), model.isTaxInfoShowAmount())
         );
 
         final ShoppingCartCouponsList couponsList = new ShoppingCartCouponsList(COUPON_LIST, cart.getCoupons(), cart.getAppliedCoupons());
