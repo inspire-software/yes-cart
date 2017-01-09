@@ -2,7 +2,7 @@ REF: YC-749 Perform order splitting by fulfilment centre
 
 Stock management is now organised by fulfilment centre. I.e. each warehouse assigned to shop is now seen as
 the fulfilment centre and therefore items in the cart delivered by different fulfilment centres will be
-splid into several deliveries. Additionally carrier SLA have been improved to have fulfilment centres assignments
+split into several deliveries. Additionally carrier SLA have been improved to have fulfilment centres assignments
 allowing business user to configure shipping methods per fulfilment centre.
 
 MAJOR CHANGES
@@ -11,7 +11,7 @@ carrier SLA is deemed unavailable for fulfilment centre.
 
 CHANGES TO PROD SYSTEMS
 1. All active carrier SLA now must have fulfilment centres assignments
-2. Note that if you have had more than one warehouse assigned to shop the cart items will be focefully split into
+2. Note that if you have had more than one warehouse assigned to shop the cart items will be forcefully split into
    separate deliveries.
 3. Each item in the order will now have supplier code (fulfilment centre code). Note that for legacy orders this
    values needs to be updated manually in the DB (see examples SQL in schema-changes.sql)
@@ -30,6 +30,6 @@ Each fulfilment centre can have its own carrier SLA which allows for better mana
 fulfilment centres. However it is still possible to allow one SLA to be available for several fulfilment centres as
 before.
 
-Because each fulfilment centre has its own delivery in each order it is also easier to integrate with thrid party
+Because each fulfilment centre has its own delivery in each order it is also easier to integrate with third party
 order management systems as each delivery can be integrated with specific fulfilment centre OMS. Additionally the
-intergartion for back order notifications should be also simplified.
+integration for back order notifications should be also simplified.
