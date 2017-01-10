@@ -559,12 +559,18 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+        return getSkuPrice(
+                cart.getCurrencyCode(),
+                cart.getShoppingContext().isTaxInfoEnabled(),
+                cart.getShoppingContext().isTaxInfoUseNet(),
+                cart.getShoppingContext().isTaxInfoShowAmount(),
+                item, total);
+    }
 
-        final String currency = cart.getCurrencyCode();
-
-        final boolean showTax = cart.getShoppingContext().isTaxInfoEnabled();
-        final boolean showTaxNet = showTax && cart.getShoppingContext().isTaxInfoUseNet();
-        final boolean showTaxAmount = showTax && cart.getShoppingContext().isTaxInfoShowAmount();
+    /**
+     * {@inheritDoc}
+     */
+    public ProductPriceModel getSkuPrice(final String currency, final boolean showTax, final boolean showTaxNet, final boolean showTaxAmount, final CartItem item, final boolean total) {
 
         // For total we use only list price since we already show discount in unit prices
         final BigDecimal sale = total ? null : item.getSalePrice();
