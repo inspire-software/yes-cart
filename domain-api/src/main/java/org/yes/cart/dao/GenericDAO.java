@@ -18,13 +18,9 @@ package org.yes.cart.dao;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
-import org.yes.cart.domain.entityindexer.IndexFilter;
-import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.queryobject.FilteredNavigationRecordRequest;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -463,114 +459,6 @@ public interface GenericDAO<T, PK extends Serializable> {
      * @param entity to evict
      */
     void evict(Object entity);
-
-    /**
-     * Force reindex the all entities.
-     *
-     * @param async true if async required
-     *
-     * @return document quantity in index
-     */
-    int fullTextSearchReindex(boolean async);
-
-    /**
-     * Force reindex the all entities.
-     *
-     * @param async true if async required
-     * @param filter indexing filter
-     *
-     * @return document quantity in index
-     */
-    int fullTextSearchReindex(boolean async, IndexFilter<T> filter);
-
-    /**
-     * Force reindex given entity.
-     *
-     * @param primaryKey to reindex.
-     *
-     * @return document quantity in index
-     */
-    int fullTextSearchReindex(PK primaryKey);
-
-    /**
-     * Force reindex given entity.
-     *
-     * @param primaryKey to reindex.
-     * @param purgeOnly true in case if need purge without reindexing from search index
-     *
-     * @return document quantity in index
-     */
-    int fullTextSearchReindex(PK primaryKey, boolean purgeOnly);
-
-
-    /**
-     * Get the full text search result.
-     *
-     * @param query lucene search query
-     *
-     * @return list of found entities
-     */
-    List<T> fullTextSearch(org.apache.lucene.search.Query query);
-
-    /**
-     * Get the full text search result.
-     *
-     * @param query         lucene search query
-     * @param firstResult   first row of result
-     * @param maxResults    size of result set
-     * @param sortFieldName optional  sort field name
-     * @param reverse       reverse the search result
-     *
-     * @return list of found entities
-     */
-    List<T> fullTextSearch(final org.apache.lucene.search.Query query,
-                           int firstResult,
-                           int maxResults,
-                           String sortFieldName,
-                           boolean reverse);
-
-    /**
-     * Get the full text search result.
-     *
-     * @param query         lucene search query
-     * @param firstResult   first row of result
-     * @param maxResults    size of result set
-     * @param sortFieldName optional  sort field name
-     * @param reverse       reverse the search result
-     * @param fields        list of fields for projections
-     *
-     * @return list of found entities
-     */
-    Pair<List<Object[]>, Integer> fullTextSearch(org.apache.lucene.search.Query query,
-                                                 int firstResult,
-                                                 int maxResults,
-                                                 String sortFieldName,
-                                                 boolean reverse,
-                                                 String ... fields);
-
-    /**
-     * Get the full text search result. The map returned by this method should be a single use only.
-     * i.e. DO NOT CACHE this method. There are no benefits to this as final FilterNavigationRecord's are already
-     * cached and it will make it harder to work with this map as some entries must be thrown away (e.g. zero counts
-     * for multi value), sorted (e.g. multivalue).
-     *
-     * @param query lucene search query
-     * @param facetingRequest faceting request context
-     *
-     * @return list of facets with values and their counts
-     */
-    Map<String, List<Pair<String, Integer>>> fullTextSearchNavigation(org.apache.lucene.search.Query query,
-                                                                      List<FilteredNavigationRecordRequest> facetingRequest);
-
-
-    /**
-     * Get the full text search result.
-     *
-     * @param query lucene search query
-     *
-     * @return count items in result
-     */
-    int fullTextSearchCount(org.apache.lucene.search.Query query);
 
     /**
      * Execute native delete / update sql.

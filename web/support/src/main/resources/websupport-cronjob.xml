@@ -47,7 +47,8 @@
     <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
         <constructor-arg index="0" ref="productService"/>
         <constructor-arg index="1" ref="nodeService"/>
-        <constructor-arg index="2" ref="sfProductCacheHelper"/>
+        <constructor-arg index="2" ref="systemService"/>
+        <constructor-arg index="3" ref="sfProductCacheHelper"/>
     </bean>
 
     <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -73,8 +74,8 @@
             <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailabilityDateIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
                 <constructor-arg index="1" ref="nodeService"/>
-                <constructor-arg index="2" ref="sfProductCacheHelper"/>
-                <property name="batchSize" value="100"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <constructor-arg index="3" ref="sfProductCacheHelper"/>
                 <property name="numberOfDays" value="2"/>
                 <lookup-method name="getSelf" bean="productsPassedAvailabilityDateIndexProcessor"/>
             </bean>
@@ -116,7 +117,6 @@
                 <constructor-arg index="3" ref="systemService"/>
                 <constructor-arg index="4" ref="runtimeAttributeService"/>
                 <constructor-arg index="5" ref="sfProductCacheHelper"/>
-                <property name="batchSize" value="100"/>
                 <lookup-method name="getSelf" bean="productInventoryChangedProcessor"/>
             </bean>
         </property>
@@ -176,9 +176,7 @@
           depends-on="quartzSysProps1,quartzSysProps2">
         <property name="triggers">
             <list>
-                <!-- CPOINT: Uncomment this if you need global reindex instead of
-                             only discontinued products.
-
+                <!--
                       reindexDiscontinuedProductsTrigger and productsGlobalIndexProcessorTrigger are two alternatives
                       that perform full reindex.
 

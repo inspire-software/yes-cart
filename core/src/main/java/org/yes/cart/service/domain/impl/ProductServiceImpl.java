@@ -30,6 +30,7 @@ import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.CriteriaTuner;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.dto.impl.ProductSearchResultDTOImpl;
@@ -65,8 +66,8 @@ import java.util.*;
  */
 public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implements ProductService {
 
-    private final GenericDAO<Product, Long> productDao;
-    private final GenericDAO<ProductSku, Long> productSkuDao;
+    private final GenericFullTextSearchCapableDAO<Product, Long> productDao;
+    private final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao;
     private final ProductSkuService productSkuService;
     private final ProductTypeAttrService productTypeAttrService;
     private final AttributeService attributeService;
@@ -87,8 +88,8 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
      * @param productTypeAttrDao product type attributes need to work with range navigation
      * @param shopCategoryRelationshipSupport shop product category relationship support
      */
-    public ProductServiceImpl(final GenericDAO<Product, Long> productDao,
-                              final GenericDAO<ProductSku, Long> productSkuDao,
+    public ProductServiceImpl(final GenericFullTextSearchCapableDAO<Product, Long> productDao,
+                              final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao,
                               final ProductSkuService productSkuService,
                               final ProductTypeAttrService productTypeAttrService,
                               final AttributeService attributeService,
@@ -1009,25 +1010,53 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts() {
-        return productDao.fullTextSearchReindex(true);
+    public GenericFullTextSearchCapableDAO.FTIndexState getProductsFullTextIndexState() {
+        return productDao.getFullTextIndexState();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public GenericFullTextSearchCapableDAO.FTIndexState getProductsSkuFullTextIndexState() {
+        return productSkuDao.getFullTextIndexState();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProducts(final int batchSize) {
+        productDao.fullTextSearchReindex(true, batchSize);
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductsSku() {
-        return productSkuDao.fullTextSearchReindex(true);
+    public void reindexProducts(final int batchSize, final boolean async) {
+        productDao.fullTextSearchReindex(async, batchSize);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProductsSku(final int batchSize) {
+        productSkuDao.fullTextSearchReindex(true, batchSize);
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts(final Long shopId) {
+    public void reindexProductsSku(final int batchSize, final boolean async) {
+        productSkuDao.fullTextSearchReindex(async, batchSize);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProducts(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
-        return productDao.fullTextSearchReindex(true, new IndexFilter<Product>() {
+        productDao.fullTextSearchReindex(true, batchSize, new IndexFilter<Product>() {
             @Override
             public boolean skipIndexing(final Product entity) {
                 for (final ProductCategory pcat : entity.getProductCategory()) {
@@ -1044,9 +1073,9 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public int reindexProductsSku(final Long shopId) {
+    public void reindexProductsSku(final Long shopId, final int batchSize) {
         final Set<Long> categories = shopCategoryRelationshipSupport.getShopCategoriesIds(shopId);
-        return productSkuDao.fullTextSearchReindex(true, new IndexFilter<ProductSku>() {
+        productSkuDao.fullTextSearchReindex(true, batchSize, new IndexFilter<ProductSku>() {
             @Override
             public boolean skipIndexing(final ProductSku entity) {
                 for (final ProductCategory pcat : entity.getProduct().getProductCategory()) {
@@ -1062,39 +1091,36 @@ public class ProductServiceImpl extends BaseGenericServiceImpl<Product> implemen
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(final Long pk) {
+    public void reindexProduct(final Long pk) {
         final Product product = findById(pk);
         if (product != null) {
             for (final ProductSku sku : product.getSku()) {
                 productSkuDao.fullTextSearchReindex(sku.getSkuId());
             }
-            return productDao.fullTextSearchReindex(pk);
+            productDao.fullTextSearchReindex(pk);
         }
-        return 0;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSku(final Long pk) {
+    public void reindexProductSku(final Long pk) {
         final ProductSku productSku = productSkuService.findById(pk);
         if (productSku != null) {
             productSkuDao.fullTextSearchReindex(productSku.getSkuId());
-            return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
+            productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
-        return 0;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSku(final String code) {
+    public void reindexProductSku(final String code) {
         final ProductSku productSku = productSkuService.findProductSkuBySkuCode(code);
         if (productSku != null) {
             productSkuDao.fullTextSearchReindex(productSku.getSkuId());
-            return productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
+            productDao.fullTextSearchReindex(productSku.getProduct().getProductId());
         }
-        return 0;
     }
 
 

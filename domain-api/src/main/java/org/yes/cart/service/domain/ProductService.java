@@ -18,6 +18,7 @@ package org.yes.cart.service.domain;
 
 import org.apache.lucene.search.Query;
 import org.yes.cart.dao.CriteriaTuner;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Product;
@@ -279,61 +280,83 @@ public interface ProductService extends GenericService<Product> {
      */
     Pair<Integer, Integer> getProductQtyAll();
 
+
     /**
-     * Reindex the products.
-     *
-     * @return document quantity in index
+     * @return state of full text index.
      */
-    int reindexProducts();
+    GenericFullTextSearchCapableDAO.FTIndexState getProductsFullTextIndexState();
+
+    /**
+     * @return state of full text index.
+     */
+    GenericFullTextSearchCapableDAO.FTIndexState getProductsSkuFullTextIndexState();
 
     /**
      * Reindex the products.
      *
-     * @return document quantity in index
+     * @param batchSize batch size for re-indexing
      */
-    int reindexProductsSku();
+    void reindexProducts(int batchSize);
+
+    /**
+     * Reindex the products.
+     *
+     * @param batchSize batch size for re-indexing
+     * @param async asynchronous
+     */
+    void reindexProducts(int batchSize, boolean async);
+
+    /**
+     * Reindex the products.
+     *
+     * @param batchSize batch size for re-indexing
+     */
+    void reindexProductsSku(int batchSize);
+
+    /**
+     * Reindex the products.
+     *
+     * @param batchSize batch size for re-indexing
+     * @param async asynchronous
+     */
+    void reindexProductsSku(int batchSize, boolean async);
 
     /**
      * Reindex the products.
      *
      * @param shopId shop for which to reindex products.
-     *
-     * @return document quantity in index
+     * @param batchSize batch size for re-indexing
      */
-    int reindexProducts(Long shopId);
+    void reindexProducts(Long shopId, int batchSize);
 
     /**
      * Reindex the products.
      *
      * @param shopId shop for which to reindex products.
-     *
-     * @return document quantity in index
+     * @param batchSize batch size for re-indexing
      */
-    int reindexProductsSku(Long shopId);
+    void reindexProductsSku(Long shopId, int batchSize);
 
     /**
      * Reindex the products.
      *
      * @param pk the product primary key
-     * @return document quantity in index
      */
-    int reindexProduct(Long pk);
+    void reindexProduct(Long pk);
 
     /**
      * Reindex the products.
      *
      * @param pk the product primary key
-     * @return document quantity in index
      */
-    int reindexProductSku(Long pk);
+    void reindexProductSku(Long pk);
 
     /**
      * Reindex the products.
      *
      * @param code the product SKU code
-     * @return document quantity in index
      */
-    int reindexProductSku(String code);
+    void reindexProductSku(String code);
 
 
     /**

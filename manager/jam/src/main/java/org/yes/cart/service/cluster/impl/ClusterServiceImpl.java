@@ -23,6 +23,7 @@ import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.node.RspMessage;
 import org.yes.cart.cluster.node.impl.ContextRspMessageImpl;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -88,7 +89,47 @@ public class ClusterServiceImpl implements ClusterService {
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexAllProducts(final AsyncContext context) {
+    public Map<String, Pair<Integer, Boolean>> getProductReindexingState(final AsyncContext context) {
+
+        final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
+        if (indexFinished == null) {
+            throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
+        }
+
+        final List<Node> cluster = nodeService.getSfNodes();
+        final List<String> targets = new ArrayList<String>();
+        for (final Node node : cluster) {
+            final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
+            if (!finished) {
+                targets.add(node.getId());
+            }
+        }
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
+                targets,
+                "BackdoorService.getProductReindexingState",
+                null,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Pair<Integer, Boolean>> indexStatus = new HashMap<String, Pair<Integer, Boolean>>();
+        for (final Message response : message.getResponses()) {
+
+            final Object[] rsp = (Object[]) response.getPayload();
+            indexStatus.put(response.getSource(), new Pair<Integer, Boolean>((Integer) rsp[1], "DONE".equals(rsp[0])));
+
+        }
+        return indexStatus;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Pair<Integer, Boolean>> getProductSkuReindexingState(final AsyncContext context) {
 
         final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
@@ -108,6 +149,33 @@ public class ClusterServiceImpl implements ClusterService {
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
                 targets,
+                "BackdoorService.getProductSkuReindexingState",
+                shopId,
+                context
+        );
+
+        nodeService.broadcast(message);
+
+        final Map<String, Pair<Integer, Boolean>> indexStatus = new HashMap<String, Pair<Integer, Boolean>>();
+        for (final Message response : message.getResponses()) {
+
+            final Object[] rsp = (Object[]) response.getPayload();
+            indexStatus.put(response.getSource(), new Pair<Integer, Boolean>((Integer) rsp[1], "DONE".equals(rsp[0])));
+
+        }
+        return indexStatus;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexAllProducts(final AsyncContext context) {
+
+        final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
+
+        final RspMessage message = new ContextRspMessageImpl(
+                nodeService.getCurrentNodeId(),
                 (shopId != null && shopId > 0L) ?
                         "BackdoorService.reindexShopProducts" : "BackdoorService.reindexAllProducts",
                 shopId,
@@ -116,39 +184,17 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexAllProductsSku(final AsyncContext context) {
+    public void reindexAllProductsSku(final AsyncContext context) {
 
-        final Map<String, Boolean> indexFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
         final Long shopId = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_SHOP);
-        if (indexFinished == null) {
-            throw new IllegalArgumentException("Must have [" + JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE + "] attribute [Map<String, Boolean>] in async context");
-        }
-
-        final List<Node> cluster = nodeService.getSfNodes();
-        final List<String> targets = new ArrayList<String>();
-        for (final Node node : cluster) {
-            final Boolean finished = indexFinished.get(node.getId()) != null && indexFinished.get(node.getId());
-            if (!finished) {
-                targets.add(node.getId());
-            }
-        }
 
         final RspMessage message = new ContextRspMessageImpl(
                 nodeService.getCurrentNodeId(),
-                targets,
                 (shopId != null && shopId > 0L) ?
                         "BackdoorService.reindexShopProductsSku" : "BackdoorService.reindexAllProductsSku",
                 shopId,
@@ -157,20 +203,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexProduct(final AsyncContext context, final long productPk) {
+    public void reindexProduct(final AsyncContext context, final long productPk) {
 
         final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
@@ -188,20 +226,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexProductSku(final AsyncContext context, final long productPk) {
+    public void reindexProductSku(final AsyncContext context, final long productPk) {
 
         final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
@@ -219,20 +249,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
+    public void reindexProductSkuCode(final AsyncContext context, final String productSkuCode) {
 
         final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
@@ -250,20 +272,12 @@ public class ClusterServiceImpl implements ClusterService {
 
         nodeService.broadcast(message);
 
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public Map<String, Integer> reindexProducts(final AsyncContext context, final long[] productPks) {
+    public void reindexProducts(final AsyncContext context, final long[] productPks) {
 
         final List<Node> cluster = nodeService.getSfNodes();
         final List<String> targets = new ArrayList<String>();
@@ -280,14 +294,6 @@ public class ClusterServiceImpl implements ClusterService {
         );
 
         nodeService.broadcast(message);
-
-        final Map<String, Integer> indexStatus = new HashMap<String, Integer>();
-        for (final Message response : message.getResponses()) {
-
-            indexStatus.put(response.getSource(), (Integer) response.getPayload());
-
-        }
-        return indexStatus;
 
     }
 

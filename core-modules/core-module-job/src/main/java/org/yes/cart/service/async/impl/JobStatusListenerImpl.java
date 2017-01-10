@@ -20,7 +20,7 @@ import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobStatus;
 import org.yes.cart.service.async.model.impl.JobStatusImpl;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.util.misc.ExceptionUtil;
+import org.yes.cart.util.ExceptionUtil;
 
 import java.util.UUID;
 

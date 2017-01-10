@@ -17,6 +17,7 @@
 package org.yes.cart.web.service.ws.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
@@ -26,10 +27,12 @@ import org.yes.cart.cluster.node.Message;
 import org.yes.cart.cluster.node.MessageListener;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.cluster.service.WarmUpService;
-import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.impl.AsIsAnalyzer;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.utils.impl.ObjectUtil;
 import org.yes.cart.web.service.ws.BackdoorService;
@@ -48,7 +51,13 @@ public class BackdoorServiceImpl implements BackdoorService {
 
     private static final long serialVersionUID = 20130820L;
 
+    private static final String INDEX_DONE_STATUS = "DONE";
+    private static final String INDEX_RUNNING_STATUS = "RUNNING";
+    private static final Object[] INDEX_DISABLED_STATUS = new Object[] { INDEX_DONE_STATUS, 0 };
+
     private ProductService productService;
+
+    private SystemService systemService;
 
     private CacheBundleHelper productIndexCaches;
 
@@ -63,14 +72,6 @@ public class BackdoorServiceImpl implements BackdoorService {
     private void flushCache() {
 
         productIndexCaches.flushBundleCaches();
-
-    }
-
-    private void safeFlushCache(final Cache cache) {
-
-        if(cache != null) {
-            cache.clear();
-        }
 
     }
 
@@ -94,128 +95,110 @@ public class BackdoorServiceImpl implements BackdoorService {
         return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
+
     /**
      * {@inheritDoc}
      */
-    public int reindexAllProducts() {
-        final int count;
+    public Object[] getProductReindexingState() {
         if (isLuceneIndexDisabled()) {
-            count = -1; // signifies job's done
-        } else {
-            count = productService.reindexProducts();
+            return INDEX_DISABLED_STATUS;
         }
-        if (count == -1) {
+        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsFullTextIndexState();
+        if (state.isFullTextSearchReindexCompleted()) {
             flushCache();
+            return new Object[] { INDEX_DONE_STATUS, state.getLastIndexCount() };
         }
-        return count;
+        return new Object[] { INDEX_RUNNING_STATUS, state.getLastIndexCount() };
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexAllProductsSku() {
-        final int count;
+    public Object[] getProductSkuReindexingState() {
         if (isLuceneIndexDisabled()) {
-            count = -1; // signifies job's done
-        } else {
-            count = productService.reindexProductsSku();
+            return INDEX_DISABLED_STATUS;
         }
-        if (count == -1) {
+        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsSkuFullTextIndexState();
+        if (state.isFullTextSearchReindexCompleted()) {
             flushCache();
+            return new Object[] { INDEX_DONE_STATUS, state.getLastIndexCount() };
         }
-        return count;
+        return new Object[] { INDEX_RUNNING_STATUS, state.getLastIndexCount() };
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexAllProducts() {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProducts(getProductIndexBatchSize());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexShopProducts(final long shopPk) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = -1; // signifies job's done
-        } else {
-            count = productService.reindexProducts(shopPk);
+    public void reindexAllProductsSku() {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProductsSku(getProductIndexBatchSize());
         }
-        if (count == -1) {
-            flushCache();
-        }
-        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexShopProductsSku(final long shopPk) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = -1; // signifies job's done
-        } else {
-            count = productService.reindexProductsSku(shopPk);
+    public void reindexShopProducts(final long shopPk) {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProducts(shopPk, getProductIndexBatchSize());
         }
-        if (count == -1) {
-            flushCache();
-        }
-        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(final long productPk) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = 0;
-        } else {
-            count = productService.reindexProduct(productPk);
+    public void reindexShopProductsSku(final long shopPk) {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProductsSku(shopPk, getProductIndexBatchSize());
         }
-        flushCache();
-        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSku(final long productPk) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = 0;
-        } else {
-            count = productService.reindexProductSku(productPk);
+    public void reindexProduct(final long productPk) {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProduct(productPk);
         }
-        flushCache();
-        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSkuCode(final String productCode) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = 0;
-        } else {
-            count = productService.reindexProductSku(productCode);
+    public void reindexProductSku(final long productPk) {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProductSku(productPk);
         }
-        flushCache();
-        return count;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts(final long[] productPks) {
-        final int count;
-        if (isLuceneIndexDisabled()) {
-            count = 0;
-        } else {
-            int rez = 0;
+    public void reindexProductSkuCode(final String productCode) {
+        if (!isLuceneIndexDisabled()) {
+            productService.reindexProductSku(productCode);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProducts(final long[] productPks) {
+        if (!isLuceneIndexDisabled()) {
             for (long pk : productPks) {
-                rez += productService.reindexProduct(pk);
+                productService.reindexProduct(pk);
             }
-            count = rez;
         }
-        flushCache();
-        return count;
     }
 
     /**
@@ -322,52 +305,72 @@ public class BackdoorServiceImpl implements BackdoorService {
                 return "OK";
             }
         });
+        this.nodeService.subscribe("BackdoorService.getProductReindexingState", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.getProductReindexingState();
+            }
+        });
+        this.nodeService.subscribe("BackdoorService.getProductSkuReindexingState", new MessageListener() {
+            @Override
+            public Serializable onMessageReceived(final Message message) {
+                return BackdoorServiceImpl.this.getProductSkuReindexingState();
+            }
+        });
         this.nodeService.subscribe("BackdoorService.reindexAllProducts", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexAllProducts();
+                BackdoorServiceImpl.this.reindexAllProducts();
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexAllProductsSku", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexAllProductsSku();
+                BackdoorServiceImpl.this.reindexAllProductsSku();
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexShopProducts", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexShopProducts((Long) message.getPayload());
+                BackdoorServiceImpl.this.reindexShopProducts((Long) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexShopProductsSku", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexShopProductsSku((Long) message.getPayload());
+                BackdoorServiceImpl.this.reindexShopProductsSku((Long) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexProduct", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexProduct((Long) message.getPayload());
+                BackdoorServiceImpl.this.reindexProduct((Long) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexProductSku", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexProductSku((Long) message.getPayload());
+                BackdoorServiceImpl.this.reindexProductSku((Long) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexProductSkuCode", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexProductSkuCode((String) message.getPayload());
+                BackdoorServiceImpl.this.reindexProductSkuCode((String) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.reindexProducts", new MessageListener() {
             @Override
             public Serializable onMessageReceived(final Message message) {
-                return BackdoorServiceImpl.this.reindexProducts((long[]) message.getPayload());
+                BackdoorServiceImpl.this.reindexProducts((long[]) message.getPayload());
+                return "OK";
             }
         });
         this.nodeService.subscribe("BackdoorService.sqlQuery", new MessageListener() {
@@ -409,6 +412,15 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     /**
+     * IoC. Set product service.
+     *
+     * @param systemService service to use.
+     */
+    public void setSystemService(final SystemService systemService) {
+        this.systemService = systemService;
+    }
+
+    /**
      * IoC. Product index bundle helper
      *
      * @param productIndexCaches product index bundle helper
@@ -418,8 +430,12 @@ public class BackdoorServiceImpl implements BackdoorService {
     }
 
     @SuppressWarnings("unchecked")
-    private GenericDAO<Product, Long> getGenericDao() {
-        return productService.getGenericDao();
+    private GenericFullTextSearchCapableDAO<Product, Long> getGenericDao() {
+        return (GenericFullTextSearchCapableDAO) productService.getGenericDao();
+    }
+
+    private int getProductIndexBatchSize() {
+        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_REINDEX_PRODUCT_BATCH_SIZE), 100);
     }
 
     private BackdoorService self;

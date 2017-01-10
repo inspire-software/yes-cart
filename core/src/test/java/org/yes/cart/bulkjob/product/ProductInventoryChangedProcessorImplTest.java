@@ -114,6 +114,26 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                     }
 
                     @Override
+                    protected int getBatchSize() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected long getDeltaCheckDelay() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected int getDeltaCheckSize() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected int getChangeMaxSize() {
+                        return 1000;
+                    }
+
+                    @Override
                     public ProductInventoryChangedProcessorInternal getSelf() {
                         return this;
                     }
@@ -169,6 +189,26 @@ public class ProductInventoryChangedProcessorImplTest extends BaseCoreDBTestCase
                     @Override
                     protected Boolean isLuceneIndexDisabled() {
                         return false;
+                    }
+
+                    @Override
+                    protected int getBatchSize() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected long getDeltaCheckDelay() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected int getDeltaCheckSize() {
+                        return 100;
+                    }
+
+                    @Override
+                    protected int getChangeMaxSize() {
+                        return 1000;
                     }
 
                     @Override

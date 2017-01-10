@@ -44,10 +44,7 @@ import org.hibernate.search.util.impl.HibernateHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.yes.cart.dao.CriteriaTuner;
-import org.yes.cart.dao.EntityFactory;
-import org.yes.cart.dao.GenericDAO;
-import org.yes.cart.dao.ResultsIterator;
+import org.yes.cart.dao.*;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.IndexFilter;
@@ -67,7 +64,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 11:12:54
  */
 public class GenericDAOHibernateImpl<T, PK extends Serializable>
-        implements GenericDAO<T, PK> {
+        implements GenericFullTextSearchCapableDAO<T, PK> {
 
     private final Logger LOG = LoggerFactory.getLogger(GenericDAOHibernateImpl.class);
 
@@ -80,7 +77,6 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     protected SessionFactory sessionFactory;
 
     private TaskExecutor indexExecutor;
-
 
     /**
      * Set the Hibernate SessionFactory to be used by this DAO.
@@ -644,8 +640,7 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     }
 
 
-    public int fullTextSearchReindex(PK primaryKey, boolean purgeOnly) {
-        int result = 0;
+    public void fullTextSearchReindex(PK primaryKey, boolean purgeOnly) {
         if (persistentClassIndexble) {
             sessionFactory.getCache().evictEntity(getPersistentClass(), primaryKey);
 
@@ -669,20 +664,18 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
 
 
             }
-            result++;
             fullTextSession.flushToIndexes(); //apply changes to indexes
             fullTextSession.clear(); //clear since the queue is processed
 
         }
-        return result;
     }
 
 
     /**
      * {@inheritDoc}
      */
-    public int fullTextSearchReindex(final PK primaryKey) {
-        return  fullTextSearchReindex(primaryKey, false);
+    public void fullTextSearchReindex(final PK primaryKey) {
+        fullTextSearchReindex(primaryKey, false);
     }
 
     private final int IDLE = -3;
@@ -693,62 +686,71 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
     private final AtomicInteger asyncRunningState = new AtomicInteger(IDLE);
     private final AtomicInteger currentIndexingCount = new AtomicInteger(0);
 
+
+
     /**
      * {@inheritDoc}
      */
-    public int fullTextSearchReindex(final boolean async) {
-        return fullTextSearchReindex(async, null);
+    public FTIndexState getFullTextIndexState() {
+
+        return new FTIndexStateImpl(
+                asyncRunningState.get() == RUNNING,
+                asyncRunningState.get() == COMPLETED,
+                currentIndexingCount.get()
+        );
     }
 
     /**
      * {@inheritDoc}
      */
-    public int fullTextSearchReindex(final boolean async, final IndexFilter<T> indexFilter) {
+    public void fullTextSearchReindex(final boolean async, final int batchSize) {
+        fullTextSearchReindex(async, batchSize, null);
+    }
 
-        final int[] count = new int[] { 0 };
+    /**
+     * {@inheritDoc}
+     */
+    public void fullTextSearchReindex(final boolean async, final int batchSize, final IndexFilter<T> indexFilter) {
+
         final boolean runAsync = async && this.indexExecutor != null;
-        if (!runAsync) {
-            createIndexingRunnable(false, count, indexFilter).run(); // sync
-            return count[0];
+
+        asyncRunningState.compareAndSet(COMPLETED, IDLE); // Completed tasks must restart
+
+        if (asyncRunningState.compareAndSet(IDLE, RUNNING)) {  // If we are idle we can start
+
+            if (runAsync) {
+                this.indexExecutor.execute(createIndexingRunnable(true, batchSize, indexFilter)); // async
+            } else {
+                createIndexingRunnable(false, batchSize, indexFilter).run(); // sync
+            }
+
+        } else if (!runAsync) {
+            // If we are not async but we have a running task, need to wait for it to imitate sync
+            while (asyncRunningState.get() == RUNNING) {
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) { }
+            }
+
         }
 
-        if (asyncRunningState.get() == RUNNING) {
-            // indexing already in progress
-            return currentIndexingCount.get();
-        }
-
-        if (asyncRunningState.compareAndSet(COMPLETED, LASTUPDATE)) {
-            // last update of the count from the indexing with final count
-            return currentIndexingCount.get();
-        }
-
-        if (asyncRunningState.compareAndSet(LASTUPDATE, IDLE)) {
-            // thread had finished, so need to set this to idle
-            // if this is not set then this may turn into endless recursion
-            // from pinging Admin
-            currentIndexingCount.set(0);
-            return -1; // must be negative as the signal to job to stop
-        }
-
-        if (!asyncRunningState.compareAndSet(IDLE, RUNNING)) {
-            // indexing started just now on another thread
-            return currentIndexingCount.get();
-        }
-
-        this.indexExecutor.execute(createIndexingRunnable(true, new int[1], indexFilter)); // async
-
-        return currentIndexingCount.get();
     }
 
-    private Runnable createIndexingRunnable(final boolean async, final int[] count, final IndexFilter<T> filter) {
-        final int BATCH_SIZE = 100;
+    private Runnable createIndexingRunnable(final boolean async, final int batchSize, final IndexFilter<T> filter) {
         return new Runnable() {
             @Override
             public void run() {
                 int index = 0;
+                final Logger log = LOGFTQ;
                 try {
 
                     if (persistentClassIndexble) {
+
+                        currentIndexingCount.set(0);
+
+                        if (log.isInfoEnabled()) {
+                            log.info("Full reindex for {} class", persistentClass);
+                        }
                         FullTextSession fullTextSession = Search.getFullTextSession(async ? sessionFactory.openSession() : sessionFactory.getCurrentSession());
                         fullTextSession.setFlushMode(FlushMode.MANUAL);
                         fullTextSession.setCacheMode(CacheMode.IGNORE);
@@ -756,10 +758,9 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                             fullTextSession.purgeAll(getPersistentClass());
                         }
                         ScrollableResults results = fullTextSession.createCriteria(persistentClass)
-                                .setFetchSize(BATCH_SIZE)
+                                .setFetchSize(batchSize)
                                 .scroll(ScrollMode.FORWARD_ONLY);
 
-                        final Logger log = LOGFTQ;
                         while (results.next()) {
 
                             final T entity = (T) HibernateHelper.unproxy(results.get(0));
@@ -777,21 +778,19 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                             }
                             index++;
 
-                            if (index % BATCH_SIZE == 0) {
+                            if (index % batchSize == 0) {
                                 fullTextSession.flushToIndexes(); //apply changes to indexes
                                 fullTextSession.clear(); //clear since the queue is processed
                                 if (log.isInfoEnabled()) {
-                                    log.info("Indexed " + index + " items of " + persistentClass + " class");
+                                    log.info("Indexed {} items of {} class", index, persistentClass);
                                 }
                             }
-                            if (async) {
-                                currentIndexingCount.compareAndSet(index - 1, index);
-                            }
+                            currentIndexingCount.compareAndSet(index - 1, index);
                         }
                         fullTextSession.flushToIndexes(); //apply changes to indexes
                         fullTextSession.clear(); //clear since the queue is processed
                         if (log.isInfoEnabled()) {
-                            log.info("Indexed " + index + " items of " + persistentClass + " class");
+                            log.info("Indexed {} items of {} class", index, persistentClass);
                         }
                         fullTextSession.getSearchFactory().optimize(getPersistentClass());
                     }
@@ -799,14 +798,16 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
                     LOG.error("Error during indexing", exp);
                     LOGFTQ.error("Error during indexing", exp);
                 } finally {
-                    count[0] = index;
+                    asyncRunningState.set(COMPLETED);
                     if (async) {
-                        asyncRunningState.set(COMPLETED);
                         try {
                             if (persistentClassIndexble) {
                                 sessionFactory.getCurrentSession().close();
                             }
                         } catch (Exception exp) { }
+                    }
+                    if (log.isInfoEnabled()) {
+                        log.info("Full reindex for {} class ... COMPLETED", persistentClass);
                     }
                 }
             }
@@ -1150,6 +1151,35 @@ public class GenericDAOHibernateImpl<T, PK extends Serializable>
      */
     public void clear() {
         sessionFactory.getCurrentSession().clear();
+    }
+
+
+    static class FTIndexStateImpl implements FTIndexState {
+
+        private boolean fullTextSearchReindexInProgress = false;
+        private boolean fullTextSearchReindexCompleted = false;
+        private int lastIndexCount = 0;
+
+        public FTIndexStateImpl(final boolean fullTextSearchReindexInProgress, final boolean fullTextSearchReindexCompleted, final int lastIndexCount) {
+            this.fullTextSearchReindexInProgress = fullTextSearchReindexInProgress;
+            this.fullTextSearchReindexCompleted = fullTextSearchReindexCompleted;
+            this.lastIndexCount = lastIndexCount;
+        }
+
+        @Override
+        public boolean isFullTextSearchReindexInProgress() {
+            return fullTextSearchReindexInProgress;
+        }
+
+        @Override
+        public boolean isFullTextSearchReindexCompleted() {
+            return fullTextSearchReindexCompleted;
+        }
+
+        @Override
+        public int getLastIndexCount() {
+            return lastIndexCount;
+        }
     }
 
 }

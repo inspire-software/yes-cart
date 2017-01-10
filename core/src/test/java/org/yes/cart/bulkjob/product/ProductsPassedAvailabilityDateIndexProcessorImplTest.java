@@ -24,8 +24,8 @@ import org.yes.cart.BaseCoreDBTestCase;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.query.LuceneQueryFactory;
-import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.ProductService;
 
 import java.text.SimpleDateFormat;
@@ -81,7 +81,7 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
         assertTrue(product.getAvailableto().before(new Date()));
 
 
-        final ProductsPassedAvailabilityDateIndexProcessorImpl processor = new ProductsPassedAvailabilityDateIndexProcessorImpl(productService, null, null) {
+        final ProductsPassedAvailabilityDateIndexProcessorImpl processor = new ProductsPassedAvailabilityDateIndexProcessorImpl(productService, null, null, null) {
             @Override
             protected String getNodeId() {
                 return "TEST";
@@ -95,6 +95,11 @@ public class ProductsPassedAvailabilityDateIndexProcessorImplTest extends BaseCo
             @Override
             public ProductsPassedAvailabilityDateIndexProcessorInternal getSelf() {
                 return this;
+            }
+
+            @Override
+            protected int getBatchSize() {
+                return 100;
             }
 
             @Override

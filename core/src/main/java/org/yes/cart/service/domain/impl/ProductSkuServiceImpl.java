@@ -22,6 +22,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
 import org.yes.cart.domain.dto.impl.ProductSkuSearchResultDTOImpl;
 import org.yes.cart.domain.entity.Product;
@@ -46,7 +47,7 @@ import java.util.List;
 public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> implements ProductSkuService {
 
 
-    private final GenericDAO<Product, Long> productDao;
+    private final GenericFullTextSearchCapableDAO<Product, Long> productDao;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
 
 
@@ -55,8 +56,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
      * @param productSkuDao sku dao
      * @param productDao    product dao
      */
-    public ProductSkuServiceImpl(final GenericDAO<ProductSku, Long> productSkuDao,
-                                 final GenericDAO<Product, Long> productDao,
+    public ProductSkuServiceImpl(final GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao,
+                                 final GenericFullTextSearchCapableDAO<Product, Long> productDao,
                                  final GenericDAO<SkuPrice, Long> skuPriceDao) {
         super(productSkuDao);
         this.productDao = productDao;
@@ -94,7 +95,7 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     @Cacheable(value = "productSkuService-productSkuSearchResultDTOByQuery")
     public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final Query query) {
 
-        final Pair<List<Object[]>, Integer> searchRez = getGenericDao().fullTextSearch(
+        final Pair<List<Object[]>, Integer> searchRez = ((GenericFullTextSearchCapableDAO) getGenericDao()).fullTextSearch(
                 query,
                 0,
                 -1, /* no limit */

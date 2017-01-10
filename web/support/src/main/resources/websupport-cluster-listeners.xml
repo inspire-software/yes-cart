@@ -59,6 +59,7 @@
             <bean class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
                 <property name="productService" ref="productService"/>
                 <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
+                <property name="systemService" ref="systemService"/>
                 <property name="warmUpService" ref="warmUpService"/>
                 <property name="nodeService" ref="nodeService"/>
                 <lookup-method name="getSelf" bean="backDoor"/>

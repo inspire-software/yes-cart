@@ -18,6 +18,7 @@ package org.yes.cart.service.cluster;
 
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.domain.dto.impl.CacheInfoDTOImpl;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.async.model.AsyncContext;
@@ -50,12 +51,12 @@ public interface ClusterService {
     void warmUp(AsyncContext context);
 
     /**
-     * Reindex all products.
+     * Reindex all products status.
      *
      * @param context web service context
      * @return quantity product in index.
      */
-    Map<String, Integer> reindexAllProducts(AsyncContext context);
+    Map<String, Pair<Integer, Boolean>> getProductReindexingState(AsyncContext context);
 
     /**
      * Reindex all products.
@@ -63,34 +64,46 @@ public interface ClusterService {
      * @param context web service context
      * @return quantity product in index.
      */
-    Map<String, Integer> reindexAllProductsSku(AsyncContext context);
+    Map<String, Pair<Integer, Boolean>> getProductSkuReindexingState(AsyncContext context);
+
+    /**
+     * Reindex all products status.
+     *
+     * @param context web service context
+     */
+    void reindexAllProducts(AsyncContext context);
+
+    /**
+     * Reindex all products.
+     *
+     * @param context web service context
+     * @return quantity product in index.
+     */
+    void reindexAllProductsSku(AsyncContext context);
 
     /**
      * Reindex single product.
      *
      * @param context web service context
      * @param productPk product pk.
-     * @return quantity of objects in index
      */
-    Map<String, Integer> reindexProduct(AsyncContext context, long productPk);
+    void reindexProduct(AsyncContext context, long productPk);
 
     /**
      * Reindex single product by sku.
      *
      * @param context web service context
      * @param productSkuPk product SKU pk.
-     * @return quantity of objects in index
      */
-    Map<String, Integer> reindexProductSku(AsyncContext context, long productSkuPk);
+    void reindexProductSku(AsyncContext context, long productSkuPk);
 
     /**
      * Reindex single product by sku.
      *
      * @param context web service context
      * @param productSkuCode product SKU code.
-     * @return quantity of objects in index
      */
-    Map<String, Integer> reindexProductSkuCode(AsyncContext context, String productSkuCode);
+    void reindexProductSkuCode(AsyncContext context, String productSkuCode);
 
 
     /**
@@ -98,9 +111,8 @@ public interface ClusterService {
      *
      * @param context web service context
      * @param productPks product PKs to reindex
-     * @return quantity of objects in index
      */
-    Map<String, Integer> reindexProducts(AsyncContext context, long[] productPks);
+    void reindexProducts(AsyncContext context, long[] productPks);
 
 
     /**

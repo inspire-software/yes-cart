@@ -16,10 +16,13 @@
 
 package org.yes.cart.bulkjob.product;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -43,14 +46,13 @@ import java.util.List;
 public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDependentProcessorImpl
         implements ProductInventoryChangedProcessorInternal {
 
+    private static final String PRODUCTINDEX = "PRODUCTINDEX";
     private static final String LAST_RUN_PREF = "JOB_PRODINVUP_LR_";
 
     private final SkuWarehouseService skuWarehouseService;
     private final ProductService productService;
     private final NodeService nodeService;
     private final CacheBundleHelper productCacheHelper;
-
-    private int batchSize = 100;
 
     public ProductInventoryChangedProcessorImpl(final SkuWarehouseService skuWarehouseService,
                                                 final ProductService productService,
@@ -73,7 +75,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
     /** {@inheritDoc} */
     @Override
-    protected void doRun(final Date lastRun) {
+    protected boolean doRun(final Date lastRun) {
 
         final Logger log = ShopCodeContext.getLog(this);
 
@@ -81,38 +83,78 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
         if (isLuceneIndexDisabled()) {
             log.info("Reindexing products inventory updates on {} ... disabled", nodeId);
-            return;
+            return false;
+        }
+
+        if (isFullIndexInProgress()) {
+            log.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+            return true;
         }
 
         final long start = System.currentTimeMillis();
 
+        int batchSize = getBatchSize();
+
         log.info("Check changed orders products to be reindexed on {}, batch {}", nodeId, batchSize);
 
-        final List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
 
         if (productSkus != null && !productSkus.isEmpty()) {
 
-            log.info("Inventory changed for {} since {}", productSkus.size(), lastRun);
+            // Check again to see if we do not have bulk updates
+            int count = productSkus.size();
+            try {
+                Thread.sleep(getDeltaCheckDelay());
+            } catch (InterruptedException e) {
+            }
+            productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+            int delta = productSkus.size() - count;
+            int maxDelta = getDeltaCheckSize();
+            if (delta > maxDelta) {
+                log.info("Detected bulking operation ... {} inventory records changed in past {} seconds (max: {}). Postponing check until next run.",
+                        new Object[]{delta, getDeltaCheckDelay() / 1000, maxDelta});
+                return false;
+            }
 
-            int fromIndex = 0;
-            int toIndex = 0;
-            while (fromIndex < productSkus.size()) {
+            // Check whether we need batch or full
+            count = productSkus.size();
+            int full = getChangeMaxSize();
 
-                toIndex = fromIndex + batchSize > productSkus.size() ? productSkus.size() : fromIndex + batchSize;
-                final List<String> skuBatch = productSkus.subList(fromIndex, toIndex);
-                log.info("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
+            log.info("Inventory changed for {} since {}", new Object[]{productSkus.size(), lastRun});
 
-                self().reindexBatch(skuBatch);
+            if (count < full) {
+                int fromIndex = 0;
+                int toIndex = 0;
+                while (fromIndex < productSkus.size()) {
 
-                fromIndex = toIndex;
+                    if (isFullIndexInProgress()) {
+                        log.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+                        return true;
+                    }
 
+                    toIndex = fromIndex + batchSize > productSkus.size() ? productSkus.size() : fromIndex + batchSize;
+                    final List<String> skuBatch = productSkus.subList(fromIndex, toIndex);
+                    log.info("Reindexing SKU {}  ... so far reindexed {}", skuBatch, fromIndex);
+
+                    self().reindexBatch(skuBatch);
+
+                    fromIndex = toIndex;
+
+                }
+                log.info("Reindexing inventory updates on {}, reindexed {}", nodeId, count);
+            } else {
+
+                if (isFullIndexInProgress()) {
+                    log.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
+                    return true;
+                }
+
+                self().reindexBatch(null);
+                log.info("Reindexing inventory updates on {}, reindexed ALL", nodeId);
             }
 
             flushCaches();
-
         }
-
-        log.info("Reindexing inventory updates on {}, reindexed {}", nodeId, productSkus.size());
 
         final long finish = System.currentTimeMillis();
 
@@ -120,6 +162,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
         log.info("Reindexing inventory updates on {} ... completed in {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
+        return true;
     }
 
     protected void flushCaches() {
@@ -128,16 +171,27 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
 
     }
 
+    protected boolean isFullIndexInProgress() {
+        return productService.getProductsFullTextIndexState().isFullTextSearchReindexInProgress() ||
+                productService.getProductsSkuFullTextIndexState().isFullTextSearchReindexInProgress();
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void reindexBatch(final List<String> skuCodes) {
 
-        for (final String sku : skuCodes) {
+        if (skuCodes == null) {
+            // do full reindex
+            productService.reindexProducts(getBatchSize(), false);
+            productService.reindexProductsSku(getBatchSize(), false);
 
-            productService.reindexProductSku(sku);
-
+        } else {
+            for (final String sku : skuCodes) {
+                // batch only
+                productService.reindexProductSku(sku);
+            }
         }
 
     }
@@ -150,14 +204,23 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
         return nodeService.getCurrentNode().isFtIndexDisabled();
     }
 
-    /**
-     * Batch size for remote index update.
-     *
-     * @param batchSize batch size
-     */
-    public void setBatchSize(final int batchSize) {
-        this.batchSize = batchSize;
+    protected int getBatchSize() {
+        return NumberUtils.toInt(getSystemService().getAttributeValue(AttributeNamesKeys.System.JOB_REINDEX_PRODUCT_BATCH_SIZE), 100);
     }
+
+    protected int getDeltaCheckSize() {
+        return NumberUtils.toInt(getSystemService().getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_INVENTORY_UPDATE_DELTA), 100);
+    }
+
+    protected int getChangeMaxSize() {
+        return NumberUtils.toInt(getSystemService().getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_INVENTORY_FULL_THRESHOLD), 1000);
+    }
+
+    protected long getDeltaCheckDelay() {
+        return NumberUtils.toLong(getSystemService().getAttributeValue(AttributeNamesKeys.System.JOB_PRODUCT_INVENTORY_UPDATE_DELTA_DELAY_SECONDS), 15) * 1000L;
+    }
+
+
 
     private ProductInventoryChangedProcessorInternal self;
 

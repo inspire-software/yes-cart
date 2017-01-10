@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.*;
@@ -43,8 +44,8 @@ import static org.junit.Assert.*;
  */
 public class ProductDAOTest extends AbstractTestDAO {
 
-    private GenericDAO<Product, Long> productDao;
-    private GenericDAO<ProductSku, Long> productSkuDao;
+    private GenericFullTextSearchCapableDAO<Product, Long> productDao;
+    private GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao;
     private GenericDAO<Brand, Long> brandDao;
     private GenericDAO<ProductType, Long> productTypeDao;
     private GenericDAO<ProductCategory, Long> productCategoryDao;
@@ -55,8 +56,8 @@ public class ProductDAOTest extends AbstractTestDAO {
 
     @Before
     public void setUp()  {
-        productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-        productSkuDao = (GenericDAO<ProductSku, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
+        productDao = (GenericFullTextSearchCapableDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        productSkuDao = (GenericFullTextSearchCapableDAO<ProductSku, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
         productTypeDao = (GenericDAO<ProductType, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
         productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);
@@ -74,7 +75,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -140,7 +141,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -209,7 +210,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_STANDARD);
@@ -291,7 +292,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_PREORDER);
@@ -342,7 +343,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_BACKORDER);
@@ -393,7 +394,7 @@ public class ProductDAOTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 Product product = new ProductEntity();
                 product.setAvailability(Product.AVAILABILITY_ALWAYS);

@@ -16,10 +16,14 @@
 
 package org.yes.cart.bulkjob.product;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
 /**
@@ -35,15 +39,20 @@ import org.yes.cart.util.ShopCodeContext;
  */
 public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
+    public static final long INDEX_PING_INTERVAL = 15000L;
+
     private final ProductService productService;
     private final NodeService nodeService;
+    private final SystemService systemService;
     private final CacheBundleHelper productCacheHelper;
 
     public ProductsGlobalIndexProcessorImpl(final ProductService productService,
                                             final NodeService nodeService,
+                                            final SystemService systemService,
                                             final CacheBundleHelper productCacheHelper) {
         this.productService = productService;
         this.nodeService = nodeService;
+        this.systemService = systemService;
         this.productCacheHelper = productCacheHelper;
     }
 
@@ -63,17 +72,28 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
         final long start = System.currentTimeMillis();
 
-        log.info("Reindexing all products on {}", nodeId);
+        final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsFullTextIndexState();
+        if (!state.isFullTextSearchReindexInProgress()) {
 
-        productService.reindexProducts();
+            final int batchSize = getBatchSize();
 
-        log.info("Reindexing all SKU on {}", nodeId);
+            log.info("Reindexing all products on {}", nodeId);
 
-        productService.reindexProductsSku();
+            productService.reindexProducts(batchSize, false);
 
-        log.info("Flushing product caches {}", nodeId);
+            log.info("Reindexing all SKU on {}", nodeId);
 
-        productCacheHelper.flushBundleCaches();
+            productService.reindexProductsSku(batchSize);
+
+            log.info("Flushing product caches {}", nodeId);
+
+            productCacheHelper.flushBundleCaches();
+
+        } else {
+
+            log.info("Reindexing all products on {} is already in progress ... skipping", nodeId);
+
+        }
 
         final long finish = System.currentTimeMillis();
 
@@ -91,5 +111,10 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
     protected Boolean isLuceneIndexDisabled() {
         return nodeService.getCurrentNode().isFtIndexDisabled();
     }
+
+    protected int getBatchSize() {
+        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_REINDEX_PRODUCT_BATCH_SIZE), 100);
+    }
+
 
 }

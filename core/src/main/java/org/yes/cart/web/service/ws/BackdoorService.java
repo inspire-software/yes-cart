@@ -41,73 +41,67 @@ public interface BackdoorService {
     void warmUp();
 
     /**
-     * Reindex all products.
-     *
-     * @return quantity of objects in index
+     * @return re-indexing state (0th - [RUNNIG|DONE], 1st - count)
      */
-    int reindexAllProducts();
+    Object[] getProductReindexingState();
+
+    /**
+     * @return re-indexing state (0th - [RUNNIG|DONE], 1st - count)
+     */
+    Object[] getProductSkuReindexingState();
 
     /**
      * Reindex all products.
-     *
-     * @return quantity of objects in index
      */
-    int reindexAllProductsSku();
+    void reindexAllProducts();
 
     /**
      * Reindex all products.
-     *
-     * @param shopPk shop pk.
-     *
-     * @return quantity of objects in index
      */
-    int reindexShopProducts(long shopPk);
+    void reindexAllProductsSku();
 
     /**
      * Reindex all products.
      *
      * @param shopPk shop pk.
-     *
-     * @return quantity of objects in index
      */
-    int reindexShopProductsSku(long shopPk);
+    void reindexShopProducts(long shopPk);
+
+    /**
+     * Reindex all products.
+     *
+     * @param shopPk shop pk.
+     */
+    void reindexShopProductsSku(long shopPk);
 
     /**
      * Reindex single products.
      *
      * @param productPk product pk.
-     *
-     * @return quantity of objects in index
      */
-    int reindexProduct(long productPk);
+    void reindexProduct(long productPk);
 
     /**
      * Reindex single products.
      *
      * @param productPk product pk.
-     *
-     * @return quantity of objects in index
      */
-    int reindexProductSku(long productPk);
+    void reindexProductSku(long productPk);
 
     /**
      * Reindex single products.
      *
      * @param productCode product SKU code.
-     *
-     * @return quantity of objects in index
      */
-    int reindexProductSkuCode(String productCode);
+    void reindexProductSkuCode(String productCode);
 
 
     /**
      * Reindex given set of products.
      *
      * @param productPks product PKs to reindex
-     *
-     * @return quantity of objects in index
      */
-    int reindexProducts(long[] productPks);
+    void reindexProducts(long[] productPks);
 
 
     /**

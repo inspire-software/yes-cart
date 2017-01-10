@@ -18,6 +18,7 @@ package org.yes.cart.domain.entityindexer.impl;
 
 import org.slf4j.Logger;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entityindexer.ProductIndexer;
 import org.yes.cart.util.ShopCodeContext;
@@ -37,7 +38,7 @@ public class ProductIndexerImpl implements ProductIndexer {
 
     private final ArrayBlockingQueue<Long> reindexQueue;
 
-    private final GenericDAO<Product, Long> productDao;
+    private final GenericFullTextSearchCapableDAO<Product, Long> productDao;
 
     /**
      * Construct indexer.
@@ -46,7 +47,7 @@ public class ProductIndexerImpl implements ProductIndexer {
      * @param queueLength    queue length to reindex product
      * @param threadPoolSize quantity of executors.
      */
-    public ProductIndexerImpl(final GenericDAO<Product, Long> productDao, final int queueLength, final int threadPoolSize) {
+    public ProductIndexerImpl(final GenericFullTextSearchCapableDAO<Product, Long> productDao, final int queueLength, final int threadPoolSize) {
 
         this.productDao = productDao;
 

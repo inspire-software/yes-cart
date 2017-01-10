@@ -56,56 +56,70 @@ public class LocalBackdoorServiceImpl implements BackdoorService {
     /**
      * {@inheritDoc}
      */
-    public int reindexAllProducts() {
+    public Object[] getProductReindexingState() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexAllProductsSku() {
+    public Object[] getProductSkuReindexingState() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexShopProducts(final long shopPk) {
+    public void reindexAllProducts() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexShopProductsSku(final long shopPk) {
+    public void reindexAllProductsSku() {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProduct(final long productPk) {
+    public void reindexShopProducts(final long shopPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSku(final long productPk) {
+    public void reindexShopProductsSku(final long shopPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProductSkuCode(final String productCode) {
+    public void reindexProduct(final long productPk) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 
     /**
      * {@inheritDoc}
      */
-    public int reindexProducts(final long[] productPks) {
+    public void reindexProductSku(final long productPk) {
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProductSkuCode(final String productCode) {
+        throw new UnsupportedOperationException("ADMIN does nto support product index");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void reindexProducts(final long[] productPks) {
         throw new UnsupportedOperationException("ADMIN does nto support product index");
     }
 

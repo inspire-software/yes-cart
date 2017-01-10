@@ -29,7 +29,9 @@ import org.yes.cart.service.order.OrderStateManager;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Processor that scrolls though all order deliveries that are waiting for
@@ -72,7 +74,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
     /** {@inheritDoc} */
     @Override
-    protected void doRun(final Date lastRun) {
+    protected boolean doRun(final Date lastRun) {
 
         final Logger log = ShopCodeContext.getLog(this);
 
@@ -95,35 +97,18 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         log.info("Transitioned {} deliveries awaiting preorder start date", dateWaiting);
 
-        final List<String> productSkus = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        log.info("Check orders awaiting inventory");
 
-        if (productSkus != null && !productSkus.isEmpty()) {
-
-            log.info("Inventory changed for {} SKU", productSkus.size());
-
-            final int batch = 100;
-            int skustart = 0;
-
-            while (true) {
-
-                final List<String> waitingSkus = buildSkuBatch(productSkus, skustart, batch);
-                if (waitingSkus.isEmpty()) {
-                    break;
-                }
-
-                log.info("Inventory changed for {} preorder/backorder SKUs: {}", waitingSkus.size(), waitingSkus);
-
-                final int inventoryWaiting = processAwaitingOrders(log, waitingSkus,
-                        CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
-                        OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
-
-                log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
-
-                skustart += batch; // next batch
-
-            }
-
+        final int inventoryWaiting;
+        final List<String> skuChanged = skuWarehouseService.findProductSkuForWhichInventoryChangedAfter(lastRun);
+        if (skuChanged.isEmpty()) {
+            inventoryWaiting = 0;
+        } else {
+            inventoryWaiting = processAwaitingOrders(log, null,
+                    CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_WAIT,
+                    OrderStateManager.EVT_DELIVERY_ALLOWED_QUANTITY);
         }
+        log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
         final long finish = System.currentTimeMillis();
 
@@ -131,25 +116,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         log.info("Check orders awaiting preorder start date ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
 
-    }
-
-    /*
-        Need to batch the SKU inventory updates so that we do not create query with 000's of sku in SQL 'in' clause
-        This could happen if the inventory update will have huge amount of updates, so the recommendation is to do
-        inventory import incrementally
-     */
-    List<String> buildSkuBatch(final List<String> original, final int start, final int batch) {
-
-        if (start >= original.size()) {
-            return Collections.emptyList();
-        }
-
-        if (start + batch >= original.size()) {
-            return original.subList(start, original.size());
-        }
-
-        return original.subList(start, start + batch);
-
+        return true;
     }
 
     /**

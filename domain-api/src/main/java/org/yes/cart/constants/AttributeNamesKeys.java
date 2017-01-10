@@ -62,6 +62,22 @@ public interface AttributeNamesKeys {
          */
         String IMPORT_JOB_TIMEOUT_MS = "IMPORT_JOB_TIMEOUT_MS";
         /**
+         * Batch size for indexing.
+         */
+        String JOB_REINDEX_PRODUCT_BATCH_SIZE = "JOB_REINDEX_PRODUCT_BATCH_SIZE";
+        /**
+         * Delta check size for inventory changed processor.
+         */
+        String JOB_PRODUCT_INVENTORY_UPDATE_DELTA = "JOB_PRODINVUP_DELTA";
+        /**
+         * Delta check delay for inventory changed processor.
+         */
+        String JOB_PRODUCT_INVENTORY_UPDATE_DELTA_DELAY_SECONDS = "JOB_PRODINVUP_DELTA_S";
+        /**
+         * Full reindex size for inventory changed processor.
+         */
+        String JOB_PRODUCT_INVENTORY_FULL_THRESHOLD = "JOB_PRODINVUP_FULL";
+        /**
          * Timeout for backdoor WS call.
          */
         String SYSTEM_BACKDOOR_TIMEOUT_MS = "SYSTEM_BACKDOOR_TIMEOUT_MS";

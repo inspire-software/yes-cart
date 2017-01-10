@@ -22,6 +22,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.dao.GenericDAO;
+import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
@@ -50,8 +51,8 @@ import static org.junit.Assert.*;
  */
 public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
-    private GenericDAO<Product, Long> productDao;
-    private GenericDAO<ProductSku, Long> productSkuDao;
+    private GenericFullTextSearchCapableDAO<Product, Long> productDao;
+    private GenericFullTextSearchCapableDAO<ProductSku, Long> productSkuDao;
     private GenericDAO<Brand, Long> brandDao;
     private GenericDAO<ProductType, Long> productTypeDao;
     private GenericDAO<ProductCategory, Long> productCategoryDao;
@@ -67,8 +68,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
 
     @Before
     public void setUp()  {
-        productDao = (GenericDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
-        productSkuDao = (GenericDAO<ProductSku, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
+        productDao = (GenericFullTextSearchCapableDAO<Product, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_DAO);
+        productSkuDao = (GenericFullTextSearchCapableDAO<ProductSku, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_SKU_DAO);
         brandDao = (GenericDAO<Brand, Long>) ctx().getBean(DaoServiceBeanKeys.BRAND_DAO);
         productTypeDao = (GenericDAO<ProductType, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_TYPE_DAO);
         productCategoryDao = (GenericDAO<ProductCategory, Long>) ctx().getBean(DaoServiceBeanKeys.PRODUCT_CATEGORY_DAO);
@@ -93,7 +94,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -205,7 +206,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -319,7 +320,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -366,8 +367,8 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
-                productSkuDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
+                productSkuDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext pContext;
                 NavigationContext sContext;
@@ -447,7 +448,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
                 Map<String, List<Pair<String, Integer>>> facets;
@@ -511,7 +512,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
                 Map<String, List<Pair<String, Integer>>> facets;
@@ -714,7 +715,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
                 Map<String, List<Pair<String, Integer>>> facets;
@@ -806,7 +807,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -836,7 +837,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -867,7 +868,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -918,7 +919,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -992,7 +993,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -1062,7 +1063,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 createProduct(102L, "LG_MP3_PLAYER", "product lg mp3 player", 2L, 135L, 10L);
                 createProduct(103L, "SONY_MP3_PLAYER", "product sony mp3 player", 2L, 135L, 10L);
                 createProduct(104L, "SAM_MP3_PLAYER", "product sam mp3 player", 2L, 136L, 10L);
-                // productDao.fullTextSearchReindex(false);
+                // productDao.fullTextSearchReindex(false, 1000);
                 List<Product> foundProducts;
                 NavigationContext context;
                 List<Long> categories = new ArrayList<Long>();
@@ -1126,7 +1127,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         getTx().execute(new TransactionCallbackWithoutResult() {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 NavigationContext context;
 
@@ -1251,7 +1252,7 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
             public void doInTransactionWithoutResult(TransactionStatus status) {
 
 
-                productDao.fullTextSearchReindex(false);
+                productDao.fullTextSearchReindex(false, 1000);
 
                 List<Product> products = productDao.fullTextSearch(luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(212L), false, null).getProductQuery());
                 assertEquals("Only 5 product available in 212 category", 5, products.size());

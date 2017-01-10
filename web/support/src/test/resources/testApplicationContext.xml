@@ -77,6 +77,7 @@
     <bean id="backDoor" class="org.yes.cart.web.service.ws.impl.BackdoorServiceImpl">
         <property name="productService" ref="productService"/>
         <property name="productIndexCaches" ref="backDoorProductCacheHelper"/>
+        <property name="systemService" ref="systemService"/>
     </bean>
 
 

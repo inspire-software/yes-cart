@@ -78,14 +78,19 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
             lastRunInitialised = true;
         }
 
-        doRun(lastRun);
+        if (doRun(lastRun)) {
 
-        lastRun = now;
+            lastRun = now;
 
-        synchronized (SystemService.class) {
-            systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
+            synchronized (SystemService.class) {
+                systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
+            }
         }
 
+    }
+
+    protected SystemService getSystemService() {
+        return systemService;
     }
 
     /**
@@ -99,8 +104,10 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
      * Extension hook for implementor jobs.
      *
      * @param lastRun last run date
+     *
+     * @return true if run was done
      */
-    protected abstract void doRun(final Date lastRun);
+    protected abstract boolean doRun(final Date lastRun);
 
 
 }

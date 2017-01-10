@@ -16,10 +16,13 @@
 
 package org.yes.cart.bulkjob.product;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.slf4j.Logger;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.service.domain.ProductService;
+import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Calendar;
@@ -40,16 +43,18 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
     private final ProductService productService;
     private final NodeService nodeService;
+    private final SystemService systemService;
     private final CacheBundleHelper productCacheHelper;
 
-    private int batchSize = 100;
     private int numberOfDays = 1;
 
     public ProductsPassedAvailabilityDateIndexProcessorImpl(final ProductService productService,
                                                             final NodeService nodeService,
+                                                            final SystemService systemService,
                                                             final CacheBundleHelper productCacheHelper) {
         this.productService = productService;
         this.nodeService = nodeService;
+        this.systemService = systemService;
         this.productCacheHelper = productCacheHelper;
     }
 
@@ -74,6 +79,8 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
         final List<Long> discontinued = self().findDiscontinuedProductsIds();
 
         if (discontinued != null && discontinued.size() > 0) {
+
+            final int batchSize = getBatchSize();
 
             int fromIndex = 0;
             int toIndex = 0;
@@ -101,6 +108,10 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
         log.info("Reindexing discontinued on {} ... completeed {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
 
+    }
+
+    protected int getBatchSize() {
+        return NumberUtils.toInt(systemService.getAttributeValue(AttributeNamesKeys.System.JOB_REINDEX_PRODUCT_BATCH_SIZE), 100);
     }
 
     protected void flushCaches() {
@@ -147,15 +158,6 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
             now.add(Calendar.DAY_OF_YEAR, -minusDays);
         }
         return now.getTime();
-    }
-
-    /**
-     * Batch size for remote index update.
-     *
-     * @param batchSize batch size
-     */
-    public void setBatchSize(final int batchSize) {
-        this.batchSize = batchSize;
     }
 
     /**

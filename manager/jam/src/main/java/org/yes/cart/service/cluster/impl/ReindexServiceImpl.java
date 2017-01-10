@@ -21,6 +21,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.cluster.node.Node;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.SingletonJobRunner;
 import org.yes.cart.service.async.impl.JobStatusListenerImpl;
@@ -88,30 +89,35 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                     final Map<String, Boolean> indexingFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
                     final Map<String, Integer> lastPositive = new HashMap<String, Integer>();
-                    Map<String, Integer> cnt = new HashMap<String, Integer>();
+                    Map<String, Pair<Integer, Boolean>> cnt = new HashMap<String, Pair<Integer, Boolean>>();
 
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
-                        lastPositive.put(yesNode.getId(), 0);
-                        cnt.put(yesNode.getId(), 0);
+                        cnt.put(yesNode.getId(), new Pair<Integer, Boolean>(0, Boolean.FALSE));
                     }
 
+                    // Trigger reindex
+                    clusterService.reindexAllProducts(context);
+
+                    // Check status
                     while (isIndexingInProgress(cnt)) {
 
                         // This should call
-                        cnt = clusterService.reindexAllProducts(context);
+                        cnt = clusterService.getProductReindexingState(context);
                         if (isIndexingInProgress(cnt)) {
 
                             final StringBuilder state = new StringBuilder("Indexing products:\n");
-                            for (final Map.Entry<String, Integer> cntNode : cnt.entrySet()) {
+                            for (final Map.Entry<String, Pair<Integer, Boolean>> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
-                                final Integer nodeCnt = cntNode.getValue();
-                                if (nodeCnt == null || nodeCnt < 0 || (lastPositive.containsKey(nodeUri) && lastPositive.get(nodeUri) > nodeCnt)) {
-                                    // this node finished
-                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... finished\n");
-                                } else {
-                                    lastPositive.put(nodeUri, nodeCnt);
-                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... in progress\n");
+                                final Pair<Integer, Boolean> nodeCnt = cntNode.getValue();
+                                if (nodeCnt != null) {
+                                    lastPositive.put(nodeUri, nodeCnt.getFirst());
+                                    if (nodeCnt.getSecond()) {
+                                        // this node finished
+                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
+                                    } else {
+                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
+                                    }
                                 }
                             }
                             listener.notifyPing(state.toString());
@@ -131,25 +137,30 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
                     for (final Node yesNode : nodeService.getSfNodes()) {
                         indexingFinished.put(yesNode.getId(), Boolean.FALSE);
                         lastPositive.put(yesNode.getId(), 0);
-                        cnt.put(yesNode.getId(), 0);
+                        cnt.put(yesNode.getId(), new Pair<Integer, Boolean>(0, Boolean.FALSE));
                     }
+
+                    // Trigger reindex
+                    clusterService.reindexAllProductsSku(context);
 
                     while (isIndexingInProgress(cnt)) {
 
                         // This should call
-                        cnt = clusterService.reindexAllProductsSku(context);
+                        cnt = clusterService.getProductSkuReindexingState(context);
                         if (isIndexingInProgress(cnt)) {
 
                             final StringBuilder state = new StringBuilder("Indexing SKU:\n");
-                            for (final Map.Entry<String, Integer> cntNode : cnt.entrySet()) {
+                            for (final Map.Entry<String, Pair<Integer, Boolean>> cntNode : cnt.entrySet()) {
                                 final String nodeUri = cntNode.getKey();
-                                final Integer nodeCnt = cntNode.getValue();
-                                if (nodeCnt == null || nodeCnt < 0 || (lastPositive.containsKey(nodeUri) && lastPositive.get(nodeUri) > nodeCnt)) {
-                                    // this node finished
-                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... finished\n");
-                                } else {
-                                    lastPositive.put(nodeUri, nodeCnt);
-                                    state.append(nodeUri).append(": ").append(lastPositive.get(nodeUri)).append(" ... in progress\n");
+                                final Pair<Integer, Boolean> nodeCnt = cntNode.getValue();
+                                if (nodeCnt != null) {
+                                    lastPositive.put(nodeUri, nodeCnt.getFirst());
+                                    if (nodeCnt.getSecond()) {
+                                        // this node finished
+                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... finished\n");
+                                    } else {
+                                        state.append(nodeUri).append(": ").append(nodeCnt.getFirst()).append(" ... in progress\n");
+                                    }
                                 }
                             }
                             listener.notifyPing(state.toString());
@@ -181,9 +192,9 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
         };
     }
 
-    boolean isIndexingInProgress(Map<String, Integer> cnt) {
-        for (final Integer cntNode : cnt.values()) {
-            if (cntNode != null && cntNode >= 0) {
+    boolean isIndexingInProgress(Map<String, Pair<Integer, Boolean>> cnt) {
+        for (final Pair<Integer, Boolean> cntNode : cnt.values()) {
+            if (cntNode != null && cntNode.getSecond() != null && !cntNode.getSecond()) {
                 return true;
             }
         }
