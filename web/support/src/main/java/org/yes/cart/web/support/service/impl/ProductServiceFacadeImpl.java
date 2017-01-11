@@ -559,11 +559,12 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
      * {@inheritDoc}
      */
     public ProductPriceModel getSkuPrice(final ShoppingCart cart, final CartItem item, boolean total) {
+        final boolean enabled = cart.getShoppingContext().isTaxInfoEnabled();
         return getSkuPrice(
                 cart.getCurrencyCode(),
-                cart.getShoppingContext().isTaxInfoEnabled(),
-                cart.getShoppingContext().isTaxInfoUseNet(),
-                cart.getShoppingContext().isTaxInfoShowAmount(),
+                enabled,
+                enabled && cart.getShoppingContext().isTaxInfoUseNet(),
+                enabled && cart.getShoppingContext().isTaxInfoShowAmount(),
                 item, total);
     }
 
