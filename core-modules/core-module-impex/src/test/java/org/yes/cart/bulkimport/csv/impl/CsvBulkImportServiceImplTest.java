@@ -938,5 +938,87 @@ public class CsvBulkImportServiceImplTest extends BaseCoreDBTestCase {
     }
 
 
+    @Test
+    public void testDoImportWithInsertOnly() throws Exception {
+
+        final JobStatusListener listener = mockery.mock(JobStatusListener.class, "listener");
+
+        mockery.checking(new Expectations() {{
+            allowing(listener).notifyPing();
+            allowing(listener).notifyPing(with(any(String.class)));
+            allowing(listener).notifyMessage(with(any(String.class)));
+        }});
+
+
+        Set<String> importedFilesSet = new HashSet<String>();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001a.xml", listener, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO-INSERT'");
+            rs.next();
+            assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
+            assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
+            assertEquals("ASIMO-INSERT", rs.getString(3));
+            assertEquals(100L, rs.getLong(4)); // Unknown
+            assertEquals(1L, rs.getLong(5)); // Robots
+            assertEquals("Robot ASIMO", rs.getString(6));
+            final I18NModel model = new StringI18NModel(rs.getString(7));
+            assertEquals(2, model.getAllValues().size());
+            assertEquals("Robot ASIMO", model.getValue("en"));
+            assertEquals("Робот ASIMO", model.getValue("ru"));
+            assertEquals(1, rs.getInt(8));
+            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
+            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        importedFilesSet.clear();
+
+        bulkImportService.doImport(createContext("src/test/resources/import/insertonlytest001b.xml", listener, importedFilesSet));
+
+        try {
+            ResultSet rs;
+
+            rs = getConnection().getConnection().createStatement().executeQuery(
+                    "select GUID, CODE, MANUFACTURER_CODE, BRAND_ID, PRODUCTTYPE_ID, " +
+                            "NAME, DISPLAYNAME, AVAILABILITY, FEATURED, AVAILABLEFROM from TPRODUCT where code='SKU-ASIMO-INSERT'");
+            rs.next();
+            assertEquals("GUID-ASIMO-INSERT", rs.getString(1));
+            assertEquals("SKU-ASIMO-INSERT", rs.getString(2));
+            assertEquals("ASIMO-INSERT", rs.getString(3));
+            assertEquals(100L, rs.getLong(4)); // Unknown
+            assertEquals(1L, rs.getLong(5)); // Robots was not modified
+            assertEquals("Robot ASIMO", rs.getString(6)); // Name was not modified
+            final I18NModel model = new StringI18NModel(rs.getString(7));
+            assertEquals(2, model.getAllValues().size());
+            assertEquals("Different Robot ASIMO", model.getValue("en")); // Display name modified to prove something has changed
+            assertEquals("Другой Робот ASIMO", model.getValue("ru"));
+            assertEquals(1, rs.getInt(8));
+            assertEquals(1, rs.getInt(9)); // Derby dialect creates smallint instead of Boolean
+            assertEquals("2015-06-12", new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate(10)));
+            rs.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+
+        }
+
+        mockery.assertIsSatisfied();
+
+    }
+
 
 }

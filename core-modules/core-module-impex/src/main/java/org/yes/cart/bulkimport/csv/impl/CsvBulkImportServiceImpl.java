@@ -595,7 +595,8 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 if (importColumn.isUseMasterObject()) {
                     singleObjectValue = masterObject;
                 } else {
-                    singleObjectValue = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
+                    final Pair<Object, Boolean> singleObjectValueAndState = getEntity(tuple, importColumn, masterObject, importDescriptor, entityCache);
+                    singleObjectValue = singleObjectValueAndState != null ? singleObjectValueAndState.getFirst() : null;
                 }
                 propertyDescriptor = new PropertyDescriptor(importColumn.getName(), clz);
                 final Object oldValue = propertyDescriptor.getReadMethod().invoke(object);
