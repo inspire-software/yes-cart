@@ -119,6 +119,7 @@
             <data-type>INT</data-type>
             <name>rank</name>
             <value-constant>500</value-constant>
+            <insert-only>true</insert-only>
         </column-descriptor>
 
         <column-descriptor>

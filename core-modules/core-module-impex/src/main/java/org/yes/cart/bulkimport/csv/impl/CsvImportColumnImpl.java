@@ -56,6 +56,8 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
     private String lookupQuery; //for locate fk and pk
 
     private boolean useMasterObject;
+    private boolean insertOnly;
+    private boolean updateOnly;
 
     private String language;
 
@@ -353,6 +355,30 @@ public class CsvImportColumnImpl implements CsvImportColumn, Serializable {
         this.useMasterObject = useMasterObject;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isInsertOnly() {
+        return insertOnly;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setInsertOnly(final boolean insertOnly) {
+        this.insertOnly = insertOnly;
+    }
+
+    @Override
+    public boolean isUpdateOnly() {
+        return updateOnly;
+    }
+
+    @Override
+    public void setUpdateOnly(final boolean updateOnly) {
+        this.updateOnly = updateOnly;
+    }
 
     /**
      * {@inheritDoc}

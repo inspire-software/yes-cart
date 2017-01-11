@@ -58,6 +58,37 @@ public interface ImportColumn extends ImpExColumn {
 
 
     /**
+     * Boolean flag to only mutate data for inserts (updates ignore this data).
+     *
+     * @return true if inserts only.
+     */
+    boolean isInsertOnly();
+
+    /**
+     * Set insert only flag.
+     *
+     * @param insertOnly inserts only flag.
+     */
+    void setInsertOnly(boolean insertOnly);
+
+
+    /**
+     * Boolean flag to only mutate data for update (inserts ignore this data).
+     *
+     * @return true if update only.
+     */
+    boolean isUpdateOnly();
+
+    /**
+     * Set update only flag.
+     *
+     * @param updateOnly update only flag.
+     */
+    void setUpdateOnly(boolean updateOnly);
+
+
+
+    /**
      * Get included import descriptor for complex fields.
      *
      * @return {@link ImportDescriptor}

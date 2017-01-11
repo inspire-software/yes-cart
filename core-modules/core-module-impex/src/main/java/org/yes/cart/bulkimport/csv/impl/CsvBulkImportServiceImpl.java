@@ -40,6 +40,7 @@ import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.StringI18NModel;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.async.JobStatusListener;
 import org.yes.cart.service.async.model.JobContext;
 import org.yes.cart.service.async.model.JobContextKeys;
@@ -179,7 +180,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         try {
 
 
-            final Map<String, Object> entityCache = new HashMap<String, Object>();
+            final Map<String, Pair<Object, Boolean>> entityCache = new HashMap<String, Pair<Object, Boolean>>();
 
             final ImportDescriptor.ImportMode mode = csvImportDescriptor.getMode();
             final String msgInfoImp = MessageFormat.format("import file : {0} in {1} mode", fileToImport.getAbsolutePath(), mode);
@@ -341,7 +342,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                        final String csvImportDescriptorName,
                        final CsvImportDescriptor descriptor,
                        final Object masterObject,
-                       final Map<String, Object> entityCache) throws Exception {
+                       final Map<String, Pair<Object, Boolean>> entityCache) throws Exception {
         Object object = null;
         try {
 
@@ -357,11 +358,12 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
             } else {
 
-                object = getEntity(tuple, null, masterObject, descriptor, entityCache);
+                final Pair<Object, Boolean> objectAndState = getEntity(tuple, null, masterObject, descriptor, entityCache);
+                object = objectAndState != null ? objectAndState.getFirst() : null;
+                final boolean insert = objectAndState != null ? objectAndState.getSecond() : false;
 
-
-                fillEntityFields(tuple, object, descriptor.getColumns(ImpExColumn.FIELD));
-                fillEntityForeignKeys(tuple, object, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
+                fillEntityFields(tuple, object, insert, descriptor.getColumns(ImpExColumn.FIELD));
+                fillEntityForeignKeys(tuple, object, insert, descriptor.getColumns(ImpExColumn.FK_FIELD), masterObject, descriptor, entityCache);
 
                 /*
                     Note: for correct data federation processing we need ALL-OR-NOTHING update for all import.
@@ -453,7 +455,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                                   final ImportDescriptor importDescriptor,
                                   final Object object,
                                   final Collection<ImportColumn> slaves,
-                                  final Map<String, Object> entityCache) throws Exception {
+                                  final Map<String, Pair<Object, Boolean>> entityCache) throws Exception {
         for (ImportColumn slaveTable : slaves) {
             final List<ImportTuple> subTuples = tuple.getSubTuples(importDescriptor, slaveTable, valueDataAdapter);
             CsvImportDescriptor innerCsvImportDescriptor = (CsvImportDescriptor) slaveTable.getDescriptor();
@@ -474,6 +476,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      *
      * @param tuple         given csv line
      * @param object        entity object
+     * @param insert        entity insert (true), update (false)
      * @param importColumns particular type column collection
      * @throws Exception in case if something wrong with reflection (IntrospectionException,
      *                   InvocationTargetException,
@@ -481,6 +484,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      */
     private void fillEntityFields(final ImportTuple tuple,
                                   final Object object,
+                                  final boolean insert,
                                   final Collection<ImportColumn> importColumns) throws Exception {
 
         final Class clz = object.getClass();
@@ -490,6 +494,13 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
         for (ImportColumn importColumn : importColumns) {
             try {
                 if (StringUtils.isNotBlank(importColumn.getName())) { //can be just lookup query
+
+                    if (importColumn.isInsertOnly() && !insert) {
+                        continue; // skip update since this is insert only
+                    }
+                    if (importColumn.isUpdateOnly() && insert) {
+                        continue; // skip insert since this is update only
+                    }
 
                     Object writeObject = object;
 
@@ -546,6 +557,7 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      *
      * @param tuple            given csv line
      * @param object           entity object
+     * @param insert           entity insert (true), update (false)
      * @param importColumns    particular type column collection
      * @param masterObject     master object , that set from main import in case of sub import
      * @param importDescriptor import descriptor
@@ -557,10 +569,11 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      */
     private void fillEntityForeignKeys(final ImportTuple tuple,
                                        final Object object,
+                                       final boolean insert,
                                        final Collection<ImportColumn> importColumns,
                                        final Object masterObject,
                                        final ImportDescriptor importDescriptor,
-                                       final Map<String, Object> entityCache) throws Exception {
+                                       final Map<String, Pair<Object, Boolean>> entityCache) throws Exception {
 
         ImportColumn currentColumn = null;
         final Class clz = object.getClass();
@@ -569,6 +582,14 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
 
         try {
             for (ImportColumn importColumn : importColumns) {
+
+                if (importColumn.isInsertOnly() && !insert) {
+                    continue; // skip update since this is insert only
+                }
+                if (importColumn.isUpdateOnly() && insert) {
+                    continue; // skip insert since this is update only
+                }
+
                 currentColumn = importColumn;
 
                 if (importColumn.isUseMasterObject()) {
@@ -622,24 +643,24 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
      * @return new or existing entity
      * @throws ClassNotFoundException in case if entity interface is wrong.
      */
-    private Object getEntity(final ImportTuple tuple,
-                             final ImportColumn column,
-                             final Object masterObject,
-                             final ImportDescriptor importDescriptor,
-                             final Map<String, Object> entityCache) throws ClassNotFoundException {
+    private Pair<Object, Boolean> getEntity(final ImportTuple tuple,
+                                            final ImportColumn column,
+                                            final Object masterObject,
+                                            final ImportDescriptor importDescriptor,
+                                            final Map<String, Pair<Object, Boolean>> entityCache) throws ClassNotFoundException {
 
         if (column == null) {
             // no caching for prime select
             final Object prime = getExistingEntity(importDescriptor, importDescriptor.getSelectSql(), masterObject, tuple);
             if (prime == null) {
-                return genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType());
+                return new Pair<Object, Boolean>(genericDAO.getEntityFactory().getByKey(importDescriptor.getEntityType()), Boolean.TRUE);
             }
-            return prime;
+            return new Pair<Object, Boolean>(prime, Boolean.FALSE);
         }
 
         final String key = cacheKey.keyFor(importDescriptor, column, masterObject, tuple, valueStringAdapter);
 
-        Object object = null;
+        Pair<Object, Boolean> object = null;
 
         if (key != null) {
             object = entityCache.get(key);
@@ -651,15 +672,18 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
                 throw new IllegalArgumentException("Missing look up query for field: " + column.getName()
                         + " at index: " + column.getColumnIndex() + " in tuple: " + tuple);
             }
-            object = getExistingEntity(importDescriptor, column.getLookupQuery(), masterObject, tuple);
-            if (object == null) {
+            final Object existing = getExistingEntity(importDescriptor, column.getLookupQuery(), masterObject, tuple);
+            if (existing == null) {
                 if (column.getEntityType() != null) {
-                    object = genericDAO.getEntityFactory().getByIface(
-                            Class.forName(column.getEntityType())
+                    object = new Pair<Object, Boolean>(genericDAO.getEntityFactory().getByIface(
+                            Class.forName(column.getEntityType())),
+                            Boolean.TRUE
                     );
                 } else {
                     return null; // no cache for nulls
                 }
+            } else {
+                object = new Pair<Object, Boolean>(existing, Boolean.FALSE);
             }
             if (object != null) {
                 entityCache.put(key, object);
