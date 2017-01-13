@@ -339,7 +339,9 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
    */
   onDiscardEventHandler() {
     LogUtil.debug('ShopCatalogComponent Discard handler for shop', this.shop);
-    if (this.shop.shopId > 0) {
+    this.existingShop = this.shop.shopId > 0;
+    if (this.existingShop) {
+      this.loading = true;
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogComponent assigned categories', cats);
@@ -352,6 +354,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
             this.newCategory = this.newCategoryInstance();
             this.changed = false;
             this._reload = false;
+            this.loading = false;
         }
       );
     }
