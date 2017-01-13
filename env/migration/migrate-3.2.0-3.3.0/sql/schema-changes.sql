@@ -223,3 +223,18 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8006,  'SHOP_SF_REQUIRE_REG_NT', 'SHOP_SF_REQUIRE_REG_NOTIFY_TYPES',  0,  NULL,  'Customer: registration types that require notification email (CSV)',  'CSV of customer types for which shop admin is notified
   E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-000 Organise Shop Preferences naming
+--
+
+update TATTRIBUTE set name = 'Tax: Enable price tax information' where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO';
+update TATTRIBUTE set name = 'Tax: Enable price tax information to show net prices' where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET';
+update TATTRIBUTE set name = 'Tax: Enable price tax information to show tax amount' where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT';
+update TATTRIBUTE set name = 'Tax: Display price tax information for customer types only' where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_TYPES';
+update TATTRIBUTE set name = 'Customer: Allow changing price tax information view for customer types' where CODE = 'SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE';
+update TATTRIBUTE set name = 'Shop: primary shop admin email' where CODE = 'SHOP_ADMIN_EMAIL';
+update TATTRIBUTE set name = 'Checkout: enable guest checkout' where CODE = 'SHOP_CHECKOUT_ENABLE_GUEST';
+update TATTRIBUTE set name = 'Customer: supported customer types' where CODE = 'SHOP_CUSTOMER_TYPES';
+update TATTRIBUTE set name = 'Customer: session expiry in seconds' where CODE = 'CART_SESSION_EXPIRY_SECONDS';
+update TATTRIBUTE set name = 'Checkout: enable quantity picker for products' where CODE = 'CART_ADD_ENABLE_QTY_PICKER';
