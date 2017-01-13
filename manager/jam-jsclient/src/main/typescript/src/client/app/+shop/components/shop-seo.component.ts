@@ -43,6 +43,8 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   private shopSEOForm:any;
   private shopSEOFormSub:any; // tslint:disable-line:no-unused-variable
 
+  private loading:boolean = false;
+
   constructor(private _shopService:ShopService,
               fb: FormBuilder) {
     LogUtil.debug('ShopSEOComponent constructed');
@@ -138,6 +140,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
   onDiscardEvent() {
     LogUtil.debug('ShopSEOComponent Discard handler for shop', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shopService.getShopLocalization(this.shop.shopId).subscribe(shopLocalization => {
         LogUtil.debug('ShopSEOComponent Refreshed i18n', shopLocalization);
         this.initialising = true;
@@ -148,6 +151,7 @@ export class ShopSEOComponent implements OnInit, OnDestroy {
         this.validForSave = false;
         this.initialising = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.shopLocalization = null;

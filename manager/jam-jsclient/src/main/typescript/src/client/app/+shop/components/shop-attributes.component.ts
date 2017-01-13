@@ -45,6 +45,8 @@ export class ShopAttributesComponent implements OnInit {
 
   private searchHelpShow:boolean = false;
 
+  private loading:boolean = false;
+
   /**
    * Construct shop attribute panel
    *
@@ -176,6 +178,7 @@ export class ShopAttributesComponent implements OnInit {
     LogUtil.debug('ShopAttributeComponent get attributes', this.shop);
     if (this.shop.shopId > 0) {
 
+      this.loading = true;
       var _sub:any = this._shopService.getShopAttributes(this.shop.shopId).subscribe(shopAttributes => {
 
         LogUtil.debug('ShopAttributeComponent attributes', shopAttributes);
@@ -184,6 +187,7 @@ export class ShopAttributesComponent implements OnInit {
         this._reload = false;
         this.selectedRow = null;
         _sub.unsubscribe();
+        this.loading = false;
 
       });
     } else {

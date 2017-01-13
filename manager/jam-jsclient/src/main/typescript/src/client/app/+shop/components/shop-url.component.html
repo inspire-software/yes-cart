@@ -1,8 +1,8 @@
 <template [ngIf]="shopUrl == null">
 
-  <div class="row">
+  <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
-      <div class="bg-info text-padding">
+      <div class="bg-info text-padding" [hidden]="loading">
         <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
       </div>
     </div>
@@ -43,7 +43,7 @@
 
   </div>
 
-  <section class="no-more-tables">
+  <section class="no-more-tables {{ loading ? 'loading-data' : '' }}">
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>

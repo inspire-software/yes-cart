@@ -47,6 +47,8 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   private newCentreFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
 
+  private loading:boolean = false;
+
   constructor(private _fulfilmentService:FulfilmentService,
               fb: FormBuilder) {
     LogUtil.debug('ShopFulfilmentCentreComponent constructor');
@@ -189,6 +191,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   onRefreshHandler() {
     LogUtil.debug('ShopFulfilmentCentreComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._fulfilmentService.getShopFulfilmentCentres(this.shop.shopId).subscribe(shopCentresVo => {
         LogUtil.debug('ShopFulfilmentCentreComponent getShopCentres', shopCentresVo);
         this.shopCentresVO  = Util.clone(shopCentresVo);
@@ -196,6 +199,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.shopCentresVO = null;

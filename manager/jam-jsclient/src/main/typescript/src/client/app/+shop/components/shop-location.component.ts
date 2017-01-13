@@ -38,6 +38,8 @@ export class ShopLocationComponent implements OnInit {
 
   private changed:boolean = false;
 
+  private loading:boolean = false;
+
   constructor(private _shopService:ShopService) {
     LogUtil.debug('ShopLocationComponent constructor');
   }
@@ -136,6 +138,7 @@ export class ShopLocationComponent implements OnInit {
   onRefreshHandler() {
     LogUtil.debug('ShopLocationComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shopService.getShopLocations(this.shop.shopId).subscribe(shopLocationsVo => {
         this.shopLocationsVO  = Util.clone(shopLocationsVo);
         this.locs  = Util.clone(shopLocationsVo);
@@ -143,6 +146,7 @@ export class ShopLocationComponent implements OnInit {
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.locs = null;

@@ -47,6 +47,8 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   private newCarrierFormSub:any; // tslint:disable-line:no-unused-variable
   private validForSave:boolean = false;
 
+  private loading:boolean = false;
+
   constructor(private _shippingService:ShippingService,
               fb: FormBuilder) {
     LogUtil.debug('ShopCarrierComponent constructor');
@@ -160,6 +162,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
   onRefreshHandler() {
     LogUtil.debug('ShopCarrierComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shippingService.getShopCarriers(this.shop.shopId).subscribe(shopCarriersVo => {
         LogUtil.debug('ShopCarrierComponent getShopCarriers', shopCarriersVo);
         this.shopCarriersVO  = Util.clone(shopCarriersVo);
@@ -167,6 +170,7 @@ export class ShopCarrierComponent implements OnInit, OnDestroy {
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.shopCarriersVO = null;

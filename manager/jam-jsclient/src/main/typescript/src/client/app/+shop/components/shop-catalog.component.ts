@@ -56,6 +56,8 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
 
   private assigned:Array<CategoryVO> = null;
 
+  private loading:boolean = false;
+
   /**
    * Construct shop catalogues panel.
    * @param _categoryService
@@ -156,6 +158,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopCatalogComponent loading categories', this.shop);
     this.existingShop = this.shop.shopId > 0;
     if (this.existingShop) {
+      this.loading = true;
       var _subs:any = this._shopService.getShopCategories(this.shop.shopId).subscribe(
           cats => {
             LogUtil.debug('ShopCatalogComponent assigned categories', cats);
@@ -173,6 +176,7 @@ export class ShopCatalogComponent implements OnInit, OnDestroy {
                   this.changed = false;
                   this._reload = false;
                   _subc.unsubscribe();
+                  this.loading = false;
               }
             );
         }

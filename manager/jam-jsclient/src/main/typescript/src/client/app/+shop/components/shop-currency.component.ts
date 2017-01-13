@@ -34,6 +34,8 @@ export class ShopCurrencyComponent implements OnInit {
 
   private changed:boolean = false;
 
+  private loading:boolean = false;
+
   constructor(private _shopService:ShopService) {
     LogUtil.debug('ShopCurrencyComponent constructed');
   }
@@ -95,6 +97,7 @@ export class ShopCurrencyComponent implements OnInit {
   onRefreshHandler() {
     LogUtil.debug('ShopCurrencyComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shopService.getShopCurrencies(this.shop.shopId).subscribe(shopSupportedCurrenciesVO => {
         this.shopSupportedCurrenciesVO = Util.clone(shopSupportedCurrenciesVO);
         this.curr = Util.clone(shopSupportedCurrenciesVO);
@@ -102,6 +105,7 @@ export class ShopCurrencyComponent implements OnInit {
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.curr = null;

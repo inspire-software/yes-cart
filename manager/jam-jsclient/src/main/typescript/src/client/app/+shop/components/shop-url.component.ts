@@ -68,6 +68,8 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   private shopUrlForm:any;
   private shopUrlFormSub:any; // tslint:disable-line:no-unused-variable
 
+  private loading:boolean = false;
+
   /**
    * Construct shop url panel
    *
@@ -309,7 +311,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
   private getShopUrls() {
     LogUtil.debug('ShopUrlComponent get urls', this.shop);
     if (this.shop.shopId > 0) {
-
+      this.loading = true;
       this._shopService.getShopUrls(this.shop.shopId).subscribe(shopUrl => {
 
         LogUtil.debug('ShopUrlComponent urls', this.shopUrl);
@@ -320,7 +322,7 @@ export class ShopUrlComponent implements OnInit, OnDestroy {
 
         this.filterUrls();
         LogUtil.debug('ShopUrlComponent totalItems:' + this.totalItems + ', itemsPerPage:' + this.itemsPerPage);
-
+        this.loading = false;
       });
     } else {
       this.shopUrl = null;

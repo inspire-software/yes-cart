@@ -1,8 +1,8 @@
 <template [ngIf]="shopLocalization == null">
 
-  <div class="row">
+  <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
-      <div class="bg-info text-padding">
+      <div class="bg-info text-padding" [hidden]="loading">
         <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
       </div>
     </div>
@@ -23,7 +23,7 @@
 
   <form role="form" [formGroup]="shopSEOForm">
 
-    <div class="panel-body">
+    <div class="panel-body {{ loading ? 'loading-data' : '' }}">
       <div class="row">
         <div class="col-lg-9">
           <yc-i18n-table title="{{ 'SEO_TITLE' | translate }}"

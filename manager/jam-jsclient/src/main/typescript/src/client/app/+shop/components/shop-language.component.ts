@@ -34,6 +34,8 @@ export class ShopLanguageComponent implements OnInit {
 
   private changed:boolean = false;
 
+  private loading:boolean = false;
+
   constructor(private _shopService:ShopService) {
     LogUtil.debug('ShopLanguageComponent constructor');
   }
@@ -98,6 +100,7 @@ export class ShopLanguageComponent implements OnInit {
   onRefreshHandler() {
     LogUtil.debug('ShopLanguageComponent refresh handler', this.shop);
     if (this.shop.shopId > 0) {
+      this.loading = true;
       var _sub:any = this._shopService.getShopLanguages(this.shop.shopId).subscribe(shopLanguagesVo => {
         this.shopLanguagesVO  = Util.clone(shopLanguagesVo);
         this.lang  = Util.clone(shopLanguagesVo);
@@ -107,6 +110,7 @@ export class ShopLanguageComponent implements OnInit {
         this.changed = false;
         this._reload = false;
         _sub.unsubscribe();
+        this.loading = false;
       });
     } else {
       this.lang = null;

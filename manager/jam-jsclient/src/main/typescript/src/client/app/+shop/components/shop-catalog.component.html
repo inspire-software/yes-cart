@@ -1,8 +1,8 @@
 <template [ngIf]="!existingShop">
 
-  <div class="row">
+  <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
-      <div class="bg-info text-padding">
+      <div class="bg-info text-padding" [hidden]="loading">
         <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
       </div>
     </div>
@@ -65,7 +65,7 @@
     </form>
   </yc-modal>
 
-  <div class="row">
+  <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-md-6 col-lg-5">
       <h3>{{ 'ASSIGNED' | translate }}</h3>
       <ul class="treenodes lvl-1">
