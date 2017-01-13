@@ -260,6 +260,7 @@
     <entry key="phone">Телефон</entry>
     <entry key="customerExists">Користувач з таким e-mail вже зареєстрований</entry>
     <entry key="canNotRegister">Неможливо зареєструвати</entry>
+    <entry key="accountActivationPending">Реєстрація завершена, але даний обліковий запис потребує активації. Оповіщення відправлено в службу підтримки клієнтів, щоб розглянути і затвердити Ваш обліковий запис.</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Вийти</entry>

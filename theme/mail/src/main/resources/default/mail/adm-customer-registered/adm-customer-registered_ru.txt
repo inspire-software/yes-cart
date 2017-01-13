@@ -1,0 +1,5 @@
+Регистрация на сайте: $email $firstName $lastName
+
+<% if (shopUrl != null && !shopUrl.isEmpty()) { %> "<%out.print(shopUrl.iterator().next())%>" $shopName <% } else { %>  $shopName <% }%>
+
+<% if (additionalData.requireApproval) { %>Пожалуйста, АКТИВИРУЙТЕ учетную запись путем присвоения магазина к учетной записи $email в "Обслуживание клиентов > Клиенты"<% } %>

@@ -154,6 +154,32 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isB2BProfileActive();
 
     /**
+     * Flag to indicate that this shop requires customer to be always authenticated to see any information.
+     * If this returns true, this means that only login/registration pages should be available for anonymous access on SF.
+     *
+     * @return true if customers must be authenticated to browse store
+     */
+    boolean isSfRequireCustomerLogin();
+
+    /**
+     * Flag to indicate that this shop requires new customer registration to be approved by shop admin.
+     *
+     * @param customerType type of this registration
+     *
+     * @return true if this type of registration requires approval
+     */
+    boolean isSfRequireCustomerRegistrationApproval(String customerType);
+
+    /**
+     * Flag to indicate that this shop requires new customer registration notification to shop admin.
+     *
+     * @param customerType type of this registration
+     *
+     * @return true if this type of registration requires notification
+     */
+    boolean isSfRequireCustomerRegistrationNotification(String customerType);
+
+    /**
      * Flag to denote if shop is disabled on not.
      *
      * @return true if shop is disabled
@@ -168,10 +194,16 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     void setDisabled(boolean disabled);
 
     /**
-     * Get default shop url. localhost will never be return.
+     * Get default shop HTTP url. localhost will never be return.
      * @return  default shop url
      */
     String getDefaultShopUrl();
+
+    /**
+     * Get default shop HTTPS url. localhost will never be return.
+     * @return  default shop url
+     */
+    String getDefaultShopSecureUrl();
 
 
     /**

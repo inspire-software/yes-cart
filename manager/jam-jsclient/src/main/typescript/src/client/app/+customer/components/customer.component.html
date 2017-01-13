@@ -89,7 +89,7 @@
             <div class="col-md-6 col-lg-5">
               <h3>{{ 'AVAILABLE' | translate }}</h3>
                 <span *ngFor="let available of availableShops">
-                  <a class="btn js-click" (click)=onAvailableShopClick(available)><span [ngClass]="available.second.disabled ? 'text-strikethrough text-muted' : '' ">{{available.first.name}} ( {{available.first.code}} ) </span> <i class="fa fa-plus"></i></a>
+                  <a class="btn js-click" (click)=onAvailableShopClick(available)><span [ngClass]="available.second.disabled ? 'text-danger' : '' ">{{available.first.name}} ( {{available.first.code}} ) </span> <i class="fa {{available.second.disabled ? 'text-danger fa-check' : 'fa-plus'}}"></i></a>
                 </span>
             </div>
           </div>

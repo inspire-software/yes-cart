@@ -209,6 +209,7 @@ public class ContentController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, null);
@@ -297,6 +298,7 @@ public class ContentController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, params);
@@ -388,6 +390,7 @@ public class ContentController {
                                                   final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return viewContentInternal(content, (Map) params.getParameters());
@@ -494,6 +497,7 @@ public class ContentController {
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return listContentInternal(content);
@@ -579,6 +583,7 @@ public class ContentController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return new ContentListRO(listContentInternal(content));

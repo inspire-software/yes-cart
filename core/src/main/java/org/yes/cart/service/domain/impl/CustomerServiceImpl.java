@@ -36,10 +36,7 @@ import org.yes.cart.service.domain.HashHelper;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.utils.impl.AttrValueRankComparator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -316,12 +313,72 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
+            final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : "B2C";
+            final boolean requiredApproval = shop.isSfRequireCustomerRegistrationApproval(customerType);
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
             customerShop.setCustomer(customer);
             customerShop.setShop(shop);
+            customerShop.setDisabled(requiredApproval);
             customer.getShops().add(customerShop);
         }
         return super.create(customer);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+    public Customer updateActivate(final Customer customer, final Shop shop, final boolean soft) {
+
+        if (shop != null) {
+            final Collection<CustomerShop> assigned = customer.getShops();
+            for (final CustomerShop customerShop : assigned) {
+                if (customerShop.getShop().getShopId() == shop.getShopId()) {
+                    if (customerShop.isDisabled() && !soft) {
+                        customerShop.setDisabled(false);
+                        update(customer);
+                    }
+                    return customer;
+                }
+            }
+            final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
+            customerShop.setCustomer(customer);
+            customerShop.setShop(shop);
+            customerShop.setDisabled(soft);
+            assigned.add(customerShop);
+            update(customer);
+        }
+        return customer;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @CacheEvict(value = {
+            "customerService-customerByEmail"
+    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+    public Customer updateDeactivate(final Customer customer, final Shop shop, final boolean soft) {
+
+        if (shop != null) {
+            final Iterator<CustomerShop> assigned = customer.getShops().iterator();
+            while (assigned.hasNext()) {
+                final CustomerShop customerShop = assigned.next();
+                if (customerShop.getShop().getShopId() == shop.getShopId()) {
+                    if (soft) {
+                        customerShop.setDisabled(true);
+                    } else {
+                        assigned.remove();
+                    }
+                    return update(customer);
+                }
+            }
+        }
+        return customer;
+
     }
 
     /**

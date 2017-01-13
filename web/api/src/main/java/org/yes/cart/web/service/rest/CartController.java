@@ -296,6 +296,7 @@ public class CartController {
     public @ResponseBody CartRO viewCart(final HttpServletRequest request,
                                          final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
         if (Boolean.valueOf(request.getParameter("updatePrices"))) {
@@ -614,6 +615,7 @@ public class CartController {
                                         final HttpServletRequest request,
                                         final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         commandInternalRun(params);
         return viewCart(request, response);
 
@@ -832,6 +834,7 @@ public class CartController {
                                            final HttpServletRequest request,
                                            final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         commandInternalRun((Map) params.getParameters());
         return viewCart(request, response);
 
@@ -940,6 +943,7 @@ public class CartController {
     public @ResponseBody List<CartCarrierRO> cartCarrierOptions(final HttpServletRequest request,
                                                             final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         performOrderSplittingBeforeShipping();
         cartMixin.persistShoppingCart(request, response);
         return cartCarrierOptionsInternal();
@@ -998,6 +1002,7 @@ public class CartController {
     public @ResponseBody CartCarrierListRO cartCarrierOptionsXML(final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         performOrderSplittingBeforeShipping();
         cartMixin.persistShoppingCart(request, response);
         return new CartCarrierListRO(cartCarrierOptionsInternal());
@@ -1224,7 +1229,7 @@ public class CartController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
-
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final String carriersla = shippingOption.getCarriersla();
 
         if (StringUtils.isNotBlank(carriersla)) {
@@ -1420,6 +1425,7 @@ public class CartController {
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return cartAddressOptionsInternal(type);
 
@@ -1484,6 +1490,7 @@ public class CartController {
                                                              final HttpServletRequest request,
                                                              final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new AddressListRO(cartAddressOptionsInternal(type));
 
@@ -1710,7 +1717,7 @@ public class CartController {
                                                    final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
-
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final long addressId = NumberUtils.toLong(option.getAddressId());
 
         if (addressId > 0L) {
@@ -1823,6 +1830,7 @@ public class CartController {
     public @ResponseBody List<PaymentGatewayRO> cartPaymentOptions(final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return cartPaymentOptionsInternal();
 
@@ -1875,6 +1883,7 @@ public class CartController {
     public @ResponseBody PaymentGatewayListRO cartPaymentOptionsXML(final HttpServletRequest request,
                                                                     final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new PaymentGatewayListRO(cartPaymentOptionsInternal());
 
@@ -2097,6 +2106,7 @@ public class CartController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final List<PaymentGatewayRO> available = cartPaymentOptionsInternal();
         for (final PaymentGatewayRO pg : available) {
             if (pg.getPgLabel().equals(option.getPgLabel())) {
@@ -2353,6 +2363,7 @@ public class CartController {
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
 
@@ -2749,6 +2760,7 @@ public class CartController {
     public @ResponseBody OrderPlacedRO orderPlace(final HttpServletRequest request,
                                                   final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
 

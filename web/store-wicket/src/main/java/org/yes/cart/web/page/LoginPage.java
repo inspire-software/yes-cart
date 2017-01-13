@@ -75,6 +75,10 @@ public class LoginPage extends AbstractWebPage {
 
         executeHttpPostedCommands();
 
+        if ("1".equals(getPageParameters().get("pending").toString("0"))) {
+            info(getLocalizer().getString("accountActivationPending", this));
+        }
+
         super.onBeforeRender();
 
         persistCartIfNecessary();

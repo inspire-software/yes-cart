@@ -112,6 +112,42 @@ public class CustomerRegistrationMessageListener implements Runnable {
 
         mailService.create(mail);
 
+        if (registrationMessage.getAdditionalData() != null && registrationMessage.getAdditionalData().containsKey("requireNotification")) {
+
+            final Boolean notifyAdmin = (Boolean) registrationMessage.getAdditionalData().get("requireNotification");
+
+            if (notifyAdmin != null && notifyAdmin) {
+
+                final Map<String, Object> adminModel = new HashMap<String, Object>();
+                adminModel.put("email", registrationMessage.getEmail());
+                adminModel.put("salutation", registrationMessage.getSalutation());
+                adminModel.put("firstName", registrationMessage.getFirstname());
+                adminModel.put("lastName", registrationMessage.getLastname());
+                adminModel.put("middleName", registrationMessage.getMiddlename());
+                adminModel.put("shopUrl", registrationMessage.getShopUrl());
+                adminModel.put("shopName", registrationMessage.getShopName());
+                adminModel.put("additionalData", registrationMessage.getAdditionalData());
+
+                final Mail adminMail = mailService.getGenericDao().getEntityFactory().getByIface(Mail.class);
+                mailComposer.composeMessage(
+                        adminMail,
+                        registrationMessage.getShopCode(),
+                        registrationMessage.getLocale(),
+                        registrationMessage.getMailTemplatePathChain(),
+                        "adm-customer-registered",
+                        registrationMessage.getShopMailFrom(),
+                        registrationMessage.getShopMailFrom(),
+                        null,
+                        null,
+                        model);
+
+                mailService.create(adminMail);
+
+            }
+
+        }
+
+
     }
 
 

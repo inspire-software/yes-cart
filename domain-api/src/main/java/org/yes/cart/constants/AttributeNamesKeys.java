@@ -258,9 +258,24 @@ public interface AttributeNamesKeys {
         String SHOP_ADMIN_EMAIL = "SHOP_ADMIN_EMAIL";
 
         /**
-         * The absolute path to import folder.
+         * B2B profile.
          */
         String SHOP_B2B = "SHOP_B2B";
+
+        /**
+         * Storefront requires authentication.
+         */
+        String SHOP_SF_REQUIRE_LOGIN = "SHOP_SF_REQUIRE_LOGIN";
+
+        /**
+         * Storefront requires approval for new customer registrations of given types.
+         */
+        String SHOP_SF_REQUIRE_REG_APPROVE = "SHOP_SF_REQUIRE_REG_APPROVE_TYPES";
+
+        /**
+         * Registration for given types required notification to admin.
+         */
+        String SHOP_SF_REQUIRE_REG_NOFIICATION = "SHOP_SF_REQUIRE_REG_NOTIFY_TYPES";
 
         /**
          * Supported by shop currencies.

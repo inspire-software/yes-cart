@@ -260,6 +260,7 @@
     <entry key="phone">Phone</entry>
     <entry key="customerExists">Customer already registered.</entry>
     <entry key="canNotRegister">Unable to register.</entry>
+    <entry key="accountActivationPending">Registration completed but this account requires activation. Email is sent to customer support team to review and approve your account.</entry>
 
     <!-- LogoutPanel -->
     <entry key="logoffLabel">Logoff</entry>

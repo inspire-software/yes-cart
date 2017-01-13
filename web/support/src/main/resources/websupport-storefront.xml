@@ -43,6 +43,8 @@
         <constructor-arg index="2" ref="shoppingCartCommandFactory"/>
     </bean>
 
+    <bean id="shopRequireLoginFilter" class="org.yes.cart.web.filter.ShopRequireLoginFilter"/>
+
     <!-- ################################### filter delegates end ################################### -->
 
     <!-- ################################### cart persistence start ################################# -->

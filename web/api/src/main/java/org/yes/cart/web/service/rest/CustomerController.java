@@ -663,6 +663,7 @@ public class CustomerController {
     public @ResponseBody List<CountryRO> viewAddressbookCountries(@PathVariable(value = "type") final String type,
                                                                   final HttpServletRequest request,
                                                                   final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewAddressbookCountriesInternal(type);
 
@@ -721,6 +722,7 @@ public class CustomerController {
     public @ResponseBody CountryListRO viewAddressbookCountriesXML(@PathVariable(value = "type") final String type,
                                                                    final HttpServletRequest request,
                                                                    final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new CountryListRO(viewAddressbookCountriesInternal(type));
 
@@ -792,6 +794,7 @@ public class CustomerController {
                                                                 @PathVariable(value = "code") final String code,
                                                                 final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewAddressbookCountryStatesInternal(code);
 
@@ -849,6 +852,7 @@ public class CustomerController {
                                                                  @PathVariable(value = "code") final String code,
                                                                  final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new StateListRO(viewAddressbookCountryStatesInternal(code));
 
@@ -1006,6 +1010,7 @@ public class CustomerController {
                                                            @RequestBody final AddressRO address,
                                                            final HttpServletRequest request,
                                                            final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return updateAddressbookInternal(type, address);
 
@@ -1114,6 +1119,7 @@ public class CustomerController {
                                                             @RequestBody final AddressRO address,
                                                             final HttpServletRequest request,
                                                             final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new AddressListRO(updateAddressbookInternal(type, address));
 
@@ -1752,6 +1758,7 @@ public class CustomerController {
     )
     public @ResponseBody List<ProductSearchResultRO> viewRecent(final HttpServletRequest request,
                                                                 final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewRecentlyViewedInternal();
 
@@ -1839,6 +1846,7 @@ public class CustomerController {
     )
     public @ResponseBody ProductSearchResultListRO viewRecentXML(final HttpServletRequest request,
                                                                  final HttpServletResponse response) {
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new ProductSearchResultListRO(viewRecentlyViewedInternal());
 

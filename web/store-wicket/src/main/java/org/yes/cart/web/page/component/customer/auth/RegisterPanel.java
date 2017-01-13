@@ -29,6 +29,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
@@ -335,6 +336,13 @@ public class RegisterPanel extends BaseComponent {
                                     ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                                     ((AbstractWebPage) getPage()).persistCartIfNecessary();
                                     setResponsePage(successfulPage, parameters);
+
+                                } else if (isCustomerExists(getEmail())) {
+
+                                    final Class<IRequestablePage> pendingPage = wicketPagesMounter.getPageProviderByUri("/login").get();
+                                    final PageParameters parameters = new PageParameters();
+                                    parameters.set("pending", "1");
+                                    setResponsePage(pendingPage, parameters);
 
                                 } else {
 

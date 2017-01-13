@@ -133,6 +133,27 @@ public interface CustomerService extends GenericService<Customer> {
 
 
     /**
+     * Activate account for a particular shop
+     *
+     * @param customer customer to create
+     * @param shop     shop to assign
+     * @param soft     keep assignment disabled
+     * @return customer instance
+     */
+    Customer updateActivate(Customer customer, Shop shop, boolean soft);
+
+    /**
+     * De-activate account for a particular shop
+     *
+     * @param customer customer to create
+     * @param shop     shop to assign
+     * @param soft     keep assignment disabled
+     * @return customer instance
+     */
+    Customer updateDeactivate(Customer customer, Shop shop, boolean soft);
+
+
+    /**
      * Update customer and assign to particular shop
      *
      * @param email customer to update

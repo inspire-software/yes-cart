@@ -48,6 +48,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String updatedBy;
     private String guid;
 
+    // Below are internal caches as Shop object is long lived.
+
+    private Map<String, AttrValueShop> attributesMap = null;
+    private Map<String, List<AttrValueShop>> attributesMapMulti = null;
+
     private List<String> supportedCurrenciesAsList;
     private List<String> supportedShippingCountriesAsList;
     private List<String> supportedBillingCountriesAsList;
@@ -58,6 +63,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Map<String, List<String>> supportedProfileFormReadOnlyAttributesByType = new HashMap<String, List<String>>();
 
     private Map<String, String> addressFormattingByTypeByLanguageByCountryCodeByCustomerType = new HashMap<String, String>();
+
+    private Set<String> sfRequireCustomerRegistrationApprovalTypes;
+    private Set<String> sfRequireCustomerRegistrationNotificationTypes;
 
     public ShopEntity() {
     }
@@ -129,17 +137,46 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public Collection<AttrValue> getAllAttributes() {
-        return new ArrayList<AttrValue>(attributes);
+        return new ArrayList<AttrValue>(attributes != null ? attributes : Collections.<AttrValue>emptyList());
+    }
+
+    private void resetAttributesMapsInternal() {
+        final Map<String, AttrValueShop> rez = new HashMap<String, AttrValueShop>(this.attributes != null ? this.attributes.size() * 2 : 50);
+        final Map<String, List<AttrValueShop>> rezMulti = new HashMap<String, List<AttrValueShop>>(this.attributes != null ? this.attributes.size() * 2 : 50);
+        if (this.attributes != null) {
+            for (AttrValueShop attrValue : this.attributes) {
+                if (attrValue != null && attrValue.getAttribute() != null) {
+                    final String code = attrValue.getAttribute().getCode();
+                    rez.put(code, attrValue);
+                    List<AttrValueShop> attrs = rezMulti.get(code);
+                    if (attrs == null) {
+                        attrs = new ArrayList<AttrValueShop>(1); // Most values are single, preserve memory
+                        rezMulti.put(code, attrs);
+                    }
+                    attrs.add(attrValue);
+                }
+            }
+        }
+        this.attributesMap = rez;
+        this.attributesMapMulti = rezMulti;
+    }
+
+    private Map<String, AttrValueShop> getAttributesMapInternal(final boolean reset) {
+        if (this.attributesMap == null || reset) {
+            this.resetAttributesMapsInternal();
+        }
+        return this.attributesMap;
+    }
+
+    private Map<String, List<AttrValueShop>> getAttributesMapMultiInternal(final boolean reset) {
+        if (this.attributesMapMulti == null || reset) {
+            this.resetAttributesMapsInternal();
+        }
+        return this.attributesMapMulti;
     }
 
     public Map<String, AttrValue> getAllAttributesAsMap() {
-        final Map<String, AttrValue> rez = new HashMap<String, AttrValue>();
-        for (AttrValue attrValue : getAllAttributes()) {
-            if (attrValue != null && attrValue.getAttribute() != null) {
-                rez.put(attrValue.getAttribute().getCode(), attrValue);
-            }
-        }
-        return rez;
+        return (Map) this.getAttributesMapInternal(false);
     }
 
     public SeoEntity getSeoInternal() {
@@ -421,11 +458,10 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {
         final Collection<AttrValueShop> result = new ArrayList<AttrValueShop>();
-        if (attributeCode != null && this.attributes != null) {
-            for (AttrValueShop attrValue : this.attributes) {
-                if (attrValue.getAttribute().getCode().equals(attributeCode)) {
-                    result.add(attrValue);
-                }
+        if (attributeCode != null) {
+            final List<AttrValueShop> list = this.getAttributesMapMultiInternal(false).get(attributeCode); // build maps
+            if (list != null) {
+                result.addAll(list);
             }
         }
         return result;
@@ -435,14 +471,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         if (attributeCode == null) {
             return null;
         }
-        if (this.attributes != null) {
-            for (AttrValueShop attrValue : this.attributes) {
-                if (attrValue.getAttribute() != null && attributeCode.equals(attrValue.getAttribute().getCode())) {
-                    return attrValue;
-                }
-            }
-        }
-        return null;
+        return this.getAttributesMapInternal(false).get(attributeCode);
     }
 
     public String getAttributeValueByCode(final String attributeCode) {
@@ -455,30 +484,67 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return val != null && Boolean.valueOf(val.getVal());
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getName() + this.getShopId();
+    public boolean isB2BProfileActive() {
+        return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B);
     }
 
-    public boolean isB2BProfileActive() {
-        final String avs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_B2B);
-        if (avs != null) {
-            return Boolean.valueOf(avs);
-        }
-        return false;
+    public boolean isSfRequireCustomerLogin() {
+        return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN);
     }
+
+    private Set<String> getSfRequireCustomerRegistrationApprovalTypes() {
+        if (this.sfRequireCustomerRegistrationApprovalTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE);
+            if (attrs != null) {
+                this.sfRequireCustomerRegistrationApprovalTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfRequireCustomerRegistrationApprovalTypes = Collections.emptySet();
+            }
+        }
+        return this.sfRequireCustomerRegistrationApprovalTypes;
+    }
+
+    public boolean isSfRequireCustomerRegistrationApproval(final String customerType) {
+        return getSfRequireCustomerRegistrationApprovalTypes().contains(customerType);
+    }
+
+
+    private Set<String> getSfRequireCustomerRegistrationNotificationTypes() {
+        if (this.sfRequireCustomerRegistrationNotificationTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION);
+            if (attrs != null) {
+                this.sfRequireCustomerRegistrationNotificationTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfRequireCustomerRegistrationNotificationTypes = Collections.emptySet();
+            }
+        }
+        return this.sfRequireCustomerRegistrationNotificationTypes;
+    }
+
+    public boolean isSfRequireCustomerRegistrationNotification(final String customerType) {
+        return getSfRequireCustomerRegistrationNotificationTypes().contains(customerType);
+    }
+
 
     public String getDefaultShopUrl() {
+        return getDefaultShopUrlWithProtocol("http://");
+    }
+
+    public String getDefaultShopSecureUrl() {
+        return getDefaultShopUrlWithProtocol("https://");
+    }
+
+    protected String getDefaultShopUrlWithProtocol(final String protocol) {
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.isPrimary()) {
-                return "http://" + shopUrl.getUrl();
+                return protocol + shopUrl.getUrl();
             }
         }
         for (ShopUrl shopUrl : getShopUrl()) {
             if (shopUrl.getUrl().endsWith("localhost") || shopUrl.getUrl().contains("127.0.0.1")) {
                 continue;
             }
-            return "http://" + shopUrl.getUrl();
+            return protocol + shopUrl.getUrl();
         }
         return "";
     }
@@ -501,6 +567,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     /** {@inheritDoc} */
     public int hashCode() {
         return (int) (shopId ^ (shopId >>> 32));
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getName() + this.getShopId();
     }
 
 }

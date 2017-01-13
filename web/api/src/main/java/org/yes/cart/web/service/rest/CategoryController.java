@@ -166,6 +166,7 @@ public class CategoryController {
     public @ResponseBody List<CategoryRO> listRoot(final HttpServletRequest request,
                                                    final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return listRootInternal();
@@ -261,6 +262,7 @@ public class CategoryController {
     public @ResponseBody CategoryListRO listRootXML(final HttpServletRequest request,
                                                     final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listRootInternal());
@@ -401,6 +403,7 @@ public class CategoryController {
                                                  final HttpServletRequest request,
                                                  final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         final long categoryId = bookmarkMixin.resolveCategoryId(category);
@@ -544,6 +547,7 @@ public class CategoryController {
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return listCategoryInternal(category);
@@ -640,6 +644,7 @@ public class CategoryController {
                                                         final HttpServletRequest request,
                                                         final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return new CategoryListRO(listCategoryInternal(category));

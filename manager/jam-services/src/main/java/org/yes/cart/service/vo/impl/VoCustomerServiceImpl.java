@@ -160,15 +160,35 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             );
 
             final Map<ShopDTO, Boolean> links = dtoCustomerService.getAssignedShop(vo.getCustomerId());
-            for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
-                if (federationFacade.isShopAccessibleByCurrentManager(assign.getKey().getShopId())) {
-                    dtoCustomerService.revokeShop(vo.getCustomerId(), assign.getKey().getShopId(), true);
-                }
-            }
-
             for (final VoCustomerShopLink link : vo.getCustomerShops()) {
                 if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
-                    dtoCustomerService.grantShop(vo.getCustomerId(), link.getShopId(), false);
+                    if (link.isDisabled()) {
+                        // revoke only ones that were there previously active
+                        for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
+                            if (link.getShopId() == assign.getKey().getShopId()) {
+                                if (!assign.getValue()) {
+                                    dtoCustomerService.revokeShop(vo.getCustomerId(), link.getShopId(), true);
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        // activate existing only if they were revoked
+                        boolean found = false;
+                        for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
+                            if (link.getShopId() == assign.getKey().getShopId()) {
+                                found = true;
+                                if (assign.getValue()) {
+                                    dtoCustomerService.grantShop(vo.getCustomerId(), link.getShopId(), false);
+                                }
+                                break;
+                            }
+                        }
+                        // or this is new assignment
+                        if (!found) {
+                            dtoCustomerService.grantShop(vo.getCustomerId(), link.getShopId(), false);
+                        }
+                    }
                 }
             }
 

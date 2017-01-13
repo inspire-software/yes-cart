@@ -27,6 +27,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Customer;
+import org.yes.cart.domain.entity.CustomerShop;
 import org.yes.cart.domain.entity.RegisteredPerson;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.RegistrationMessage;
@@ -94,18 +95,20 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
      * Perform notification about person registration.
      *
      * @param pjp join point
-     * @param newPerson in case if new person was created.
+     * @param generatePassword in case if new person was created.
+     * @param resetPassword in case if this is password reset.
+     * @param template template for email.
      * @return inherited return
      * @throws Throwable in case it was in underlying method
      */
-    protected Object notifyInternal(final ProceedingJoinPoint pjp, final boolean newPerson) throws Throwable {
+    protected Object notifyInternal(final ProceedingJoinPoint pjp, final boolean generatePassword, final boolean resetPassword, final String template) throws Throwable {
         final Object[] args = pjp.getArgs();
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
         final Shop shop = (Shop) args[1];
-        final String token = !newPerson ? (String) args[2] : null;
+        final String token = resetPassword ? (String) args[2] : null;
 
-        if (registeredPerson instanceof Customer && ((Customer) registeredPerson).isGuest()) {
+        if (isRegisteredPersonGuest(registeredPerson)) {
             // Do not send registration notification to guests
             return pjp.proceed();
         }
@@ -114,7 +117,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         final String generatedPasswordHash;
         final String generatedToken;
         final Date generatedTokenExpiry;
-        if (newPerson) {
+        if (generatePassword) {
 
             if (StringUtils.isNotBlank(registeredPerson.getPassword())) {
                 // We need to use password from RegisteredPerson because we auto-login using it during registration
@@ -128,7 +131,7 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
             generatedToken = null;
             generatedTokenExpiry = null;
 
-        } else {
+        } else if (resetPassword) {
             if (StringUtils.isNotBlank(token)) {
                 // Token is present so need to actually reset
                 if (!isCallcenterToken(shop, token)) {
@@ -152,18 +155,23 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
                 generatedToken = phrazeGenerator.getNextPassPhrase();
                 generatedTokenExpiry = determineExpiryTime(shop);
             }
+        } else {
+            generatedPassword = null;
+            generatedPasswordHash = registeredPerson.getPassword(); // same as before;
+            generatedToken = null;
+            generatedTokenExpiry = null;
         }
 
 
         final RegistrationMessage registrationMessage = createRegistrationMessage(
-                newPerson,
+                generatePassword,
                 registeredPerson,
                 shop,
                 generatedPassword,
                 generatedPasswordHash,
                 generatedToken,
                 generatedTokenExpiry,
-                newPerson ? "customer-registered" : "customer-change-password"
+                template
         );
 
         sendNotification(registrationMessage);
@@ -171,6 +179,32 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
         ShopCodeContext.getLog(this).info("Person message was send to queue {}", registrationMessage);
 
         return pjp.proceed();
+    }
+
+    private boolean isRegisteredPersonGuest(final RegisteredPerson registeredPerson) {
+        return registeredPerson instanceof Customer && ((Customer) registeredPerson).isGuest();
+    }
+
+    private boolean isRegisteredPersonRequireApproval(final RegisteredPerson registeredPerson, final Shop shop) {
+        if (registeredPerson instanceof Customer) {
+            final Customer customer = (Customer) registeredPerson;
+            for (final CustomerShop accessShop : customer.getShops()) {
+                if (accessShop.getShop().getShopId() == shop.getShopId()) {
+                    return accessShop.isDisabled();
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isRegisteredPersonRequireNotification(final RegisteredPerson registeredPerson, final Shop shop) {
+        if (registeredPerson instanceof Customer) {
+            final Customer customer = (Customer) registeredPerson;
+            if (StringUtils.isNotBlank(customer.getCustomerType())) {
+                shop.isSfRequireCustomerRegistrationNotification(customer.getCustomerType());
+            }
+        }
+        return false;
     }
 
     private RegistrationMessage createRegistrationMessage(final boolean newPerson,
@@ -217,6 +251,9 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
             registrationData.put("pricingPolicy", customer.getPricingPolicy());
             registrationData.put("tag", customer.getTag());
             registrationData.put("newPerson", newPerson);
+            final boolean requireApproval = newPerson && isRegisteredPersonRequireApproval(registeredPerson, shop);
+            registrationData.put("requireApproval", requireApproval);
+            registrationData.put("requireNotification", requireApproval || (newPerson && isRegisteredPersonRequireNotification(registeredPerson, shop)));
             registrationMessage.setAdditionalData(registrationData);
         }
         return registrationMessage;
@@ -271,13 +308,13 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
     /**
      * Handle customer creation.
      *
-     * @param pjp {@link ProceedingJoinPoint}
+     * @param pjp {@link org.aspectj.lang.ProceedingJoinPoint}
      * @return Object
      * @throws Throwable in case of target method errors
      */
     @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.create(..))")
     public Object doCreateCustomer(final ProceedingJoinPoint pjp) throws Throwable {
-        return notifyInternal(pjp, true);
+        return notifyInternal(pjp, true, false, "customer-registered");
     }
 
     /**
@@ -289,8 +326,37 @@ public class CustomerRegistrationAspect extends BaseNotificationAspect {
      */
     @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.resetPassword(..))")
     public Object doResetPassword(final ProceedingJoinPoint pjp) throws Throwable {
-        return notifyInternal(pjp, false);
+        return notifyInternal(pjp, false, true, "customer-change-password");
     }
 
+
+    /**
+     * Handle shop activation operation.
+     *
+     * @param pjp {@link ProceedingJoinPoint}
+     * @return Object
+     * @throws Throwable in case of target method errors
+     */
+    @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.updateActivate(..))")
+    public Object doActivate(final ProceedingJoinPoint pjp) throws Throwable {
+        final Boolean disabled = (Boolean) pjp.getArgs()[2];
+        if (disabled) {
+            return pjp.proceed(); // Soft activation, no need to send info
+        }
+        return notifyInternal(pjp, false, false, "customer-activation");
+    }
+
+
+    /**
+     * Handle shop de-activation operation.
+     *
+     * @param pjp {@link ProceedingJoinPoint}
+     * @return Object
+     * @throws Throwable in case of target method errors
+     */
+    @Around("execution(* org.yes.cart.service.domain.impl.CustomerServiceImpl.updateDeactivate(..))")
+    public Object doDeactivate(final ProceedingJoinPoint pjp) throws Throwable {
+        return notifyInternal(pjp, false, false, "customer-deactivation");
+    }
 
 }

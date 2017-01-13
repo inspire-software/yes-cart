@@ -181,7 +181,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
       link.shopId == supported.first.shopId
     );
     if (idx != -1) {
-      this._customer.customerShops.splice(idx, 1);
+      this._customer.customerShops[idx].disabled = true;
       this.recalculateShops();
       this.formChange();
     }
@@ -189,8 +189,15 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   onAvailableShopClick(available:Pair<ShopVO, CustomerShopLinkVO>) {
     LogUtil.debug('CustomerComponent add supported', available);
+    let idx = this._customer.customerShops.findIndex(link =>
+      link.shopId == available.first.shopId
+    );
     available.second.disabled = false;
-    this._customer.customerShops.push(available.second);
+    if (idx != -1) {
+      this._customer.customerShops[idx].disabled = false;
+    } else {
+      this._customer.customerShops.push(available.second);
+    }
     this.recalculateShops();
     this.formChange();
   }

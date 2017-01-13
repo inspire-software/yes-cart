@@ -499,25 +499,10 @@ public class DtoCustomerServiceImpl
     public void grantShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
-        final Collection<CustomerShop> assigned = customer.getShops();
-        for (final CustomerShop shop : assigned) {
-            if (shop.getShop().getShopId() == shopId) {
-                if (shop.isDisabled() && !soft) {
-                    shop.setDisabled(false);
-                    getService().update(customer);
-                }
-                return;
-            }
-        }
         final Shop shop = shopDao.findById(shopId);
-        if (shop != null) {
-            final CustomerShop customerShop = shopDao.getEntityFactory().getByIface(CustomerShop.class);
-            customerShop.setCustomer(customer);
-            customerShop.setShop(shop);
-            customerShop.setDisabled(soft);
-            assigned.add(customerShop);
+        if (customer != null && shop != null) {
+            ((CustomerService) getService()).updateActivate(customer, shop, soft);
         }
-        getService().update(customer);
 
     }
 
@@ -527,18 +512,9 @@ public class DtoCustomerServiceImpl
     public void revokeShop(final long customerId, final long shopId, final boolean soft) {
 
         final Customer customer = getService().findById(customerId);
-        final Iterator<CustomerShop> assigned = customer.getShops().iterator();
-        while (assigned.hasNext()) {
-            final CustomerShop shop = assigned.next();
-            if (shop.getShop().getShopId() == shopId) {
-                if (soft) {
-                    shop.setDisabled(true);
-                } else {
-                    assigned.remove();
-                }
-                getService().update(customer);
-                break;
-            }
+        final Shop shop = shopDao.findById(shopId);
+        if (customer != null && shop != null) {
+            ((CustomerService) getService()).updateDeactivate(customer, shop, soft);
         }
 
     }

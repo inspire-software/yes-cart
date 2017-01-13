@@ -100,6 +100,7 @@ public class PromotionController {
                                    final HttpServletRequest request,
                                    final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewPromotionsInternal(promotions);
 
@@ -165,6 +166,7 @@ public class PromotionController {
                                     final HttpServletRequest request,
                                     final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new PromotionListRO(viewPromotionsInternal(promotions));
 

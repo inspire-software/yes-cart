@@ -479,6 +479,7 @@ public class ProductController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ProductRO ro = viewProductInternal(product, true);
         cartMixin.persistShoppingCart(request, response);
         return ro;
@@ -701,6 +702,7 @@ public class ProductController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewProductsInternal(products);
 
@@ -874,6 +876,7 @@ public class ProductController {
                                                        final HttpServletRequest request,
                                                        final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new ProductListRO(viewProductsInternal(products));
 
@@ -1027,6 +1030,7 @@ public class ProductController {
                                                                              final HttpServletRequest request,
                                                                              final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return viewProductAssociationsInternal(product, type);
@@ -1121,6 +1125,7 @@ public class ProductController {
                                                                               final HttpServletRequest request,
                                                                               final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         return new ProductSearchResultListRO(viewProductAssociationsInternal(product, type));
@@ -1354,6 +1359,7 @@ public class ProductController {
                                               final HttpServletRequest request,
                                               final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         final ProductSkuRO ro = viewSkuInternal(sku, true);
         cartMixin.persistShoppingCart(request, response);
         return ro;
@@ -1486,6 +1492,7 @@ public class ProductController {
                                                      final HttpServletRequest request,
                                                      final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return viewProductSkusInternal(skus);
 
@@ -1585,6 +1592,7 @@ public class ProductController {
                                                       final HttpServletRequest request,
                                                       final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
         return new ProductSkuListRO(viewProductSkusInternal(skus));
 

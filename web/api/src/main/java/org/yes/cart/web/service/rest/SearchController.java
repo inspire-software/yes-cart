@@ -477,6 +477,7 @@ public class SearchController {
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
 
+        cartMixin.throwSecurityExceptionIfRequireLoggedIn();
         cartMixin.persistShoppingCart(request, response);
 
         final long categoryId = bookmarkMixin.resolveCategoryId(search.getCategory());

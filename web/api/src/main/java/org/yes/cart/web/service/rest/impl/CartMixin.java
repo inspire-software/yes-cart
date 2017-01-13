@@ -114,4 +114,18 @@ public class CartMixin {
 
     }
 
+    /**
+     * Check if shop has login required setting and then perform simple login check on cart object.
+     * If login is not required by shop then no check is made
+     *
+     * @throws org.springframework.security.core.AuthenticationException thrown if user is not logged in or login expired
+     */
+    public void throwSecurityExceptionIfRequireLoggedIn() throws AuthenticationException {
+
+        if (getCurrentShop().isSfRequireCustomerLogin()) {
+            throwSecurityExceptionIfNotLoggedIn();
+        }
+
+    }
+
 }

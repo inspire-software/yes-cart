@@ -109,6 +109,23 @@
         </init-param>
     </filter>
 
+    <filter>
+        <filter-name>shopRequireLoginFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>excludePattern</param-name>
+            <param-value>(services/backdoor)|(imgvault/)|(wicket/resource/)|(login)|(registration)</param-value>
+        </init-param>
+        <init-param>
+            <param-name>loginOrRegistrationUri</param-name>
+            <param-value>/login</param-value>
+        </init-param>
+    </filter>
+
     <!-- Payment modules filters -->
 
     ${payment.liqpay.filter}
@@ -177,6 +194,11 @@
 
     <filter-mapping>
         <filter-name>shoppingCartFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>shopRequireLoginFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
