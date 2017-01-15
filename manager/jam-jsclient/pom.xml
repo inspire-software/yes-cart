@@ -30,7 +30,21 @@
     <description>Yes cart manager server JS client</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <npm.executable>npm</npm.executable>
     </properties>
+
+    <profiles>
+        <profile>
+            <!--
+                NPM executable on Win is named npm.cmd, on *nix just npm.
+              -->
+            <id>npm-windows</id>
+            <activation><os><family>windows</family></os></activation>
+            <properties>
+                <npm.executable>npm.cmd</npm.executable>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
 
@@ -90,7 +104,7 @@
                         <id>exec-npm-install</id>
                         <phase>clean</phase>
                         <configuration>
-                            <executable>npm</executable>
+                            <executable>${npm.executable}</executable>
                             <arguments>
                                 <argument>install</argument>
                             </arguments>
@@ -104,7 +118,7 @@
                         <id>exec-npm-build</id>
                         <phase>process-sources</phase>
                         <configuration>
-                            <executable>npm</executable>
+                            <executable>${npm.executable}</executable>
                             <arguments>
                                 <argument>run</argument>
                                 <argument>${npm.goal}</argument>
