@@ -110,7 +110,6 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
 
   isTypeEnabled(customerType:string, types:string[]):boolean {
     let enabled = types.includes(customerType);
-    LogUtil.debug('ShopSummaryComponent isTypeEnabled', customerType, types, enabled);
     return enabled;
   }
 
