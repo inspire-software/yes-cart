@@ -121,6 +121,8 @@
                 <value>wla</value>
                 <value>cip</value>
                 <value>aup</value>
+                <value>txn</value>
+                <value>txa</value>
                 <value>viewSkuInternalCmd</value>
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
