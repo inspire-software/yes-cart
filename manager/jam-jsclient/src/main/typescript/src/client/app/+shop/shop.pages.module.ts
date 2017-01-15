@@ -8,7 +8,7 @@ import { SystemPagesModule } from '../+system/system.pages.module';
 
 import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
   ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-  ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent } from './components/index';
+  ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent } from './components/index';
 import { ShopComponent } from './index';
 
 @NgModule({
@@ -16,13 +16,13 @@ import { ShopComponent } from './index';
     declarations: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent,
+      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent,
       ShopComponent
     ],
     exports: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent,
+      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent,
       ShopComponent
     ]
 })

@@ -55,6 +55,7 @@
         <constructor-arg index="7" ref="voAssemblySupport"/>
         <constructor-arg index="8" ref="voIOSupport"/>
         <constructor-arg index="9" ref="systemService"/>
+        <constructor-arg index="10" ref="themeService"/>
         <property name="skipAttributesInView">
             <list>
                 <value>CURRENCY</value>

@@ -227,6 +227,9 @@
   "SHOP_TAB_CARRIERS": "Carriers",
   "SHOP_TAB_WAREHOUSES": "Fulfilment centres",
   "SHOP_TAB_PGS": "Payment Gateways",
+  "SHOP_TAB_OVERVIEW": "Overview",
+  "SHOP_MISCONFIGURED": "This shop has not been fully setup yet. Red labels denote mandatory settings that are missing.",
+  "SAVEDSHOP_REQUIRED": "To create new shop please fill in the details on the 'Main' tab. There are several important configurations required before your shop can be operational. Once main details are saved this overview will help you identify what active settings are and what settings are missing.",
 
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",

@@ -50,6 +50,17 @@ public interface VoPaymentGatewayService {
     List<VoPaymentGatewayInfo> getPaymentGatewaysForShop(String lang, String shopCode) throws Exception;
 
     /**
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopCode given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryMainDetails(VoShopSummary summary, String shopCode, String lang) throws Exception;
+
+    /**
      * Get allowed payment gateways in all modules which are system enabled.
      *
      * @param lang ui lang

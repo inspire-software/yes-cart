@@ -19,7 +19,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
-import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair } from '../model/index';
+import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair, ShopSummaryVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -108,6 +108,20 @@ export class ShopService {
 
     return this.http.post(this._serviceBaseUrl + '/offline/' + shop.shopId + '/' + state, null, options)
       .map(res => <ShopVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+  /**
+   * Get summary information for given shop id.
+   * @param id given shop id
+   * @param lang language
+   * @return {Promise<ShopSummaryVO>}
+   */
+  getShopSummary(shopId:number, lang:string) {
+    LogUtil.debug('ShopService get shop summary info ' + shopId);
+    return this.http.get(this._serviceBaseUrl + '/summary/' + shopId + '/' + lang)
+      .map(res => <ShopSummaryVO> res.json())
       .catch(this.handleError);
   }
 

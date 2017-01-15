@@ -20,10 +20,7 @@ import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoPaymentGateway;
-import org.yes.cart.domain.vo.VoPaymentGatewayFeature;
-import org.yes.cart.domain.vo.VoPaymentGatewayInfo;
-import org.yes.cart.domain.vo.VoPaymentGatewayParameter;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.PaymentGatewayFeature;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
@@ -119,6 +116,18 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
         sortPgInfo(rez);
 
         return rez;
+    }
+
+    /** {@inheritDoc} */
+    public void fillShopSummaryMainDetails(final VoShopSummary summary, final String shopCode, final String lang) throws Exception {
+
+        final List<VoPaymentGatewayInfo> pgs = getPaymentGatewaysForShop(lang, shopCode);
+        for (final VoPaymentGatewayInfo pg : pgs) {
+
+            summary.getPaymentGateways().add(MutablePair.of(pg.getName(), !pg.isActive()));
+
+        }
+
     }
 
     private void sortPgInfo(final List<VoPaymentGatewayInfo> rez) {

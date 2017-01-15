@@ -42,6 +42,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   private reloadLanguage:boolean = false;
   private reloadLocations:boolean = false;
   private reloadPGs:boolean = false;
+  private reloadSummary:boolean = true;
 
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
@@ -69,7 +70,6 @@ export class ShopComponent implements OnInit, OnDestroy {
         });
       }
     });
-
   }
 
   ngOnDestroy() {
@@ -93,6 +93,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.reloadLanguage = tab === 'Language';
     this.reloadLocations = tab === 'Locations';
     this.reloadPGs = tab === 'PGs';
+    this.reloadSummary = tab === 'Summary';
 
   }
 

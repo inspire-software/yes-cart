@@ -23,8 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.ShopEndpointController;
-import org.yes.cart.service.vo.VoShopCategoryService;
-import org.yes.cart.service.vo.VoShopService;
+import org.yes.cart.service.vo.*;
 
 import java.util.List;
 
@@ -37,12 +36,21 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
 
     private final VoShopService voShopService;
     private final VoShopCategoryService voShopCategoryService;
+    private final VoShippingService voShippingService;
+    private final VoFulfilmentService voFulfilmentService;
+    private final VoPaymentGatewayService voPaymentGatewayService;
 
     @Autowired
     public ShopEndpointControllerImpl(final VoShopService voShopService,
-                                      final VoShopCategoryService voShopCategoryService) {
+                                      final VoShopCategoryService voShopCategoryService,
+                                      final VoShippingService voShippingService,
+                                      final VoFulfilmentService voFulfilmentService,
+                                      final VoPaymentGatewayService voPaymentGatewayService) {
         this.voShopCategoryService = voShopCategoryService;
         this.voShopService = voShopService;
+        this.voShippingService = voShippingService;
+        this.voFulfilmentService = voFulfilmentService;
+        this.voPaymentGatewayService = voPaymentGatewayService;
     }
 
     public @ResponseBody
@@ -68,6 +76,18 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     public @ResponseBody
     void remove(@PathVariable("id") final long id) throws Exception {
         voShopService.remove(id);
+    }
+
+    public @ResponseBody
+    VoShopSummary getSummary(@PathVariable("id") final long id, @PathVariable("lang") final String lang) throws Exception {
+
+        final VoShopSummary summary = new VoShopSummary();
+        voShopService.fillShopSummaryMainDetails(summary, id, lang);
+        voShippingService.fillShopSummaryMainDetails(summary, summary.getShopId(), lang);
+        voFulfilmentService.fillShopSummaryMainDetails(summary, summary.getShopId(), lang);
+        voPaymentGatewayService.fillShopSummaryMainDetails(summary, summary.getCode(), lang);
+        return summary;
+
     }
 
     public @ResponseBody

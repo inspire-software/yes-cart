@@ -16,8 +16,11 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
 import org.yes.cart.domain.dto.ShopDTO;
@@ -35,11 +38,13 @@ import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.misc.CurrencyService;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.service.theme.ThemeService;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoIOSupport;
 import org.yes.cart.service.vo.VoShopService;
 import org.yes.cart.util.ShopCodeContext;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -59,6 +64,7 @@ public class VoShopServiceImpl implements VoShopService {
     private final CurrencyService currencyService;
     private final CountryService countryService;
     private final SystemService systemService;
+    private final ThemeService themeService;
 
     private final VoAttributesCRUDTemplate<VoAttrValueShop, AttrValueShopDTO> voAttributesCRUDTemplate;
 
@@ -76,6 +82,7 @@ public class VoShopServiceImpl implements VoShopService {
      * @param voAssemblySupport vo support
      * @param voIOSupport vo support
      * @param systemService system service
+     * @param themeService
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
@@ -86,7 +93,8 @@ public class VoShopServiceImpl implements VoShopService {
                              final FederationFacade federationFacade,
                              final VoAssemblySupport voAssemblySupport,
                              final VoIOSupport voIOSupport,
-                             final SystemService systemService) {
+                             final SystemService systemService,
+                             final ThemeService themeService) {
         this.currencyService = currencyService;
         this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
@@ -97,6 +105,7 @@ public class VoShopServiceImpl implements VoShopService {
         this.voAssemblySupport = voAssemblySupport;
         this.voIOSupport = voIOSupport;
         this.systemService = systemService;
+        this.themeService = themeService;
 
         this.voAttributesCRUDTemplate =
                 new VoAttributesCRUDTemplate<VoAttrValueShop, AttrValueShopDTO>(
@@ -192,6 +201,210 @@ public class VoShopServiceImpl implements VoShopService {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void fillShopSummaryMainDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+
+            // Main info
+            summary.setShopId(shopId);
+            summary.setDisabled(shopDTO.isDisabled());
+            summary.setCode(shopDTO.getCode());
+            summary.setName(shopDTO.getName());
+            summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
+
+            // Locales
+            final VoShopLanguages langs = getShopLanguages(shopId);
+            for (final String code : langs.getSupported()) {
+                for (final MutablePair langAndName : langs.getAll()) {
+                    if (langAndName.getFirst().equals(code)) {
+                        summary.getLocales().add(langAndName);
+                    }
+                }
+            }
+
+            // Currencies
+            final VoShopSupportedCurrencies curr = getShopCurrencies(shopId);
+            for (final String code : curr.getSupported()) {
+                summary.getCurrencies().add(MutablePair.of(code, code));
+            }
+
+            // Locales
+            final VoShopLocations loc = getShopLocations(shopId);
+            for (final MutablePair<String, String> codeAndName : loc.getAll()) {
+                if (loc.getSupportedBilling().contains(codeAndName.getFirst())) {
+                    summary.getBillingLocations().add(codeAndName);
+                }
+                if (loc.getSupportedShipping().contains(codeAndName.getFirst())) {
+                    summary.getShippingLocations().add(codeAndName);
+                }
+            }
+
+            // URLS
+            final VoShopUrl urls = getShopUrls(shopId);
+            summary.setPreviewUrl(urls.getPreviewUrl());
+            summary.setPreviewCss(urls.getPreviewCss());
+            for (final VoShopUrlDetail url : urls.getUrls()) {
+                if (url.isPrimary()) {
+                    summary.setPrimaryUrlAndThemeChain(
+                            MutablePair.of(
+                                    url.getUrl(),
+                                    StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
+                            )
+                    );
+                } else {
+                    summary.getAliasUrlAndThemeChain().add(
+                            MutablePair.of(
+                                    url.getUrl(),
+                                    StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
+                            )
+                    );
+                }
+            }
+
+            final List<VoAttrValueShop> attrs = getShopAttributes(shopId);
+            final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
+            for (final VoAttrValueShop attr : attrs) {
+                attrsMap.put(attr.getAttribute().getCode(), attr);
+            }
+
+            // Checkout config
+            summary.setCheckoutEnableGuest(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_CHECKOUT_ENABLE_GUEST, lang, false));
+            summary.setCheckoutEnableCoupons(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS, lang, false));
+            summary.setCheckoutEnableMessage(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG, lang, false));
+            summary.setCheckoutEnableQuanityPicker(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER, lang, false));
+
+            // Tax config
+            summary.setTaxEnableShow(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO, lang, false));
+            summary.setTaxEnableShowNet(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET, lang, false));
+            summary.setTaxEnableShowAmount(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT, lang, false));
+
+            // Customer config
+            summary.setCookiePolicy(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
+            summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+
+            final MutablePair<String, String> sessionExpiry = getShopAttributeConfig(
+                    attrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
+            int sessionExpirySeconds = NumberUtils.toInt(sessionExpiry.getFirst());
+            String time = "6h";
+            if (sessionExpirySeconds > 3600) { // more than hour
+                time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60 * 60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "h";
+            } else if (sessionExpirySeconds > 60) {  // more than minute
+                time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "m";
+            }
+            summary.setCustomerSession(MutablePair.of(sessionExpiry.getFirst(), time));
+
+            final Set<String> knownCustomerTypes = new HashSet<String>();
+            final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+            if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
+
+                final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
+                final String[] registrationTypesNames = StringUtils.split(
+                        getDisplayName(registrationTypesCsv.getDisplayVals(), registrationTypesCsv.getVal(), lang), ',');
+
+                for (int i = 0; i < registrationTypes.length; i++) {
+                    final MutablePair<String, String> typeAndName = MutablePair.of(
+                            registrationTypes[i],
+                            registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
+                    );
+                    knownCustomerTypes.add(typeAndName.getFirst());
+                    summary.getCustomerTypes().add(typeAndName);
+                }
+                if (!knownCustomerTypes.contains("B2G")) {
+                    knownCustomerTypes.add("B2G");
+                    summary.getCustomerTypes().add(MutablePair.of("B2G", "-"));
+                }
+
+            }
+
+            final MutablePair<String, List<String>> ableToRegister =
+                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
+            final MutablePair<String, List<String>> approveRegister =
+                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
+            final MutablePair<String, List<String>> notifyRegister =
+                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION, lang);
+            final MutablePair<String, List<String>> seeTax =
+                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
+            final MutablePair<String, List<String>> changeTax =
+                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
+
+            final Set<String> additionalTypes = new HashSet<String>();
+            additionalTypes.addAll(ableToRegister.getSecond());
+            additionalTypes.addAll(approveRegister.getSecond());
+            additionalTypes.addAll(notifyRegister.getSecond());
+            additionalTypes.addAll(seeTax.getSecond());
+            additionalTypes.addAll(changeTax.getSecond());
+            if (CollectionUtils.isNotEmpty(additionalTypes)) {
+                additionalTypes.removeAll(knownCustomerTypes);
+                if (!additionalTypes.isEmpty()) {
+                    for (final String newType : additionalTypes) {
+                        knownCustomerTypes.add(newType);
+                        summary.getCustomerTypes().add(MutablePair.of(newType, newType));
+                    }
+                }
+            }
+
+            summary.setCustomerTypesAbleToRegister(ableToRegister);
+            summary.setCustomerTypesRequireRegistrationApproval(approveRegister);
+            summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
+            summary.setCustomerTypesSeeTax(seeTax);
+            summary.setCustomerTypesChangeTaxView(changeTax);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    private String getDisplayName(final List<MutablePair<String, String>> names, final String defName, final String lang) {
+        if (CollectionUtils.isNotEmpty(names)) {
+            for (final MutablePair<String, String> name : names) {
+                if (lang.equals(name.getFirst())) {
+                    return name.getSecond();
+                }
+            }
+        }
+        return defName;
+    }
+
+    private MutablePair<String, Boolean> getBooleanShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final boolean inverse) {
+        final VoAttrValueShop attr = attrsMap.get(key);
+        if (attr == null) {
+            return MutablePair.of(attr, !inverse);
+        }
+        final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
+        return MutablePair.of(name, Boolean.valueOf(attr.getVal()) ? !inverse : inverse);
+    }
+
+    private MutablePair<String, String> getShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang, final String def) {
+        final VoAttrValueShop attr = attrsMap.get(key);
+        if (attr == null) {
+            return MutablePair.of(attr, def);
+        }
+        final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
+        return MutablePair.of(name, StringUtils.isNotBlank(attr.getVal()) ? attr.getVal() : def);
+    }
+
+    private MutablePair<String, List<String>> getCsvShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang) {
+        final VoAttrValueShop attr = attrsMap.get(key);
+        if (attr == null) {
+            return MutablePair.of(attr, Collections.emptyList());
+        }
+        final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
+        return MutablePair.of(name, StringUtils.isNotBlank(attr.getVal()) ? Arrays.asList(StringUtils.split(attr.getVal(), ',')) : Collections.emptyList());
+    }
+
 
     /**
      * {@inheritDoc}

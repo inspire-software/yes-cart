@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoCarrier;
-import org.yes.cart.domain.vo.VoCarrierLocale;
-import org.yes.cart.domain.vo.VoCarrierSla;
-import org.yes.cart.domain.vo.VoShopCarrier;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -45,6 +42,19 @@ public interface VoShippingService {
      * @throws Exception
      */
     List<VoShopCarrier> getShopCarriers(long shopId) throws Exception;
+
+
+    /**
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopId given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryMainDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
+
 
     /**
      * Get vo by id.

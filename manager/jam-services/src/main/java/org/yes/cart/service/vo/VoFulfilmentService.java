@@ -16,10 +16,7 @@
 
 package org.yes.cart.service.vo;
 
-import org.yes.cart.domain.vo.VoFulfilmentCentre;
-import org.yes.cart.domain.vo.VoFulfilmentCentreInfo;
-import org.yes.cart.domain.vo.VoInventory;
-import org.yes.cart.domain.vo.VoShopFulfilmentCentre;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -46,6 +43,18 @@ public interface VoFulfilmentService {
      * @throws Exception
      */
     List<VoShopFulfilmentCentre> getShopFulfilmentCentres(long shopId) throws Exception;
+
+    /**
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopId given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryMainDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
+
 
     /**
      * Get vo by id.

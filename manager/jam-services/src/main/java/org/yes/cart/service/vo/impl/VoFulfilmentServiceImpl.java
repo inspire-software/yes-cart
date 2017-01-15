@@ -16,11 +16,13 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.InventoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.WarehouseDTO;
 import org.yes.cart.domain.dto.impl.InventoryDTOImpl;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoInventoryService;
 import org.yes.cart.service.dto.DtoWarehouseService;
@@ -96,6 +98,28 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
                 vos.add(vo);
             }
             return vos;
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
+    }
+
+    @Override
+    public void fillShopSummaryMainDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+            final Map<WarehouseDTO, Boolean> all = dtoWarehouseService.findAllByShopId(shopId);
+
+            for (final Map.Entry<WarehouseDTO, Boolean> dto : all.entrySet()) {
+
+                String name = dto.getKey().getName();
+                if (MapUtils.isNotEmpty(dto.getKey().getDisplayNames()) && dto.getKey().getDisplayNames().get(lang) != null) {
+                    name = dto.getKey().getDisplayNames().get(lang);
+                }
+                summary.getFulfilmentCentres().add(MutablePair.of(name, dto.getValue()));
+
+            }
 
         } else {
             throw new AccessDeniedException("Access is denied");

@@ -65,13 +65,23 @@ public interface VoShopService {
      * Get shop by id.
      *
      * @param id
-     * @return shop vo
      * @throws Exception
      */
     void remove(long id) throws Exception;
 
     /**
-     * Fet localization information for given shop.
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopId given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryMainDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
+
+    /**
+     * Get localization information for given shop.
      *
      * @param shopId given shop
      * @return localization information

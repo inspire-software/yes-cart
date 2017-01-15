@@ -108,4 +108,54 @@ export interface AttrValueShopVO extends AttrValueVO {
 
 }
 
+/**
+ * Represent simple data about shop
+ */
+export interface ShopSummaryVO {
+
+  shopId : number;
+  disabled : boolean;
+  code : string;
+  name :string;
+  themeChain : string;
+
+  carriers: Pair<string, boolean>[];
+
+  fulfilmentCentres: Pair<string, boolean>[];
+
+  paymentGateways: Pair<string, boolean>[];
+  paymentGatewaysIPsRegEx:string;
+
+  locales: Pair<string, string>[];
+  currencies: Pair<string, string>[];
+
+  billingLocations: Pair<string, string>[];
+  shippingLocations: Pair<string, string>[];
+
+  previewUrl: string;
+  previewCss: string;
+  primaryUrlAndThemeChain: Pair<string, string>;
+  aliasUrlAndThemeChain: Pair<string, string>[];
+
+  checkoutEnableGuest: Pair<string, boolean>;
+  checkoutEnableCoupons: Pair<string, boolean>;
+  checkoutEnableMessage: Pair<string, boolean>;
+  checkoutEnableQuanityPicker: Pair<string, boolean>;
+
+  taxEnableShow: Pair<string, boolean>;
+  taxEnableShowNet: Pair<string, boolean>;
+  taxEnableShowAmount: Pair<string, boolean>;
+
+  cookiePolicy: Pair<string, boolean>;
+  anonymousBrowsing: Pair<string, boolean>;
+  customerSession: Pair<string, string>;
+  customerTypes: Pair<string, string>[];
+  customerTypesAbleToRegister: Pair<string, string[]>;
+  customerTypesRequireRegistrationApproval: Pair<string, string[]>;
+  customerTypesRequireRegistrationNotification: Pair<string, string[]>;
+  customerTypesSeeTax: Pair<string, string[]>;
+  customerTypesChangeTaxView: Pair<string, string[]>;
+}
+
+
 
