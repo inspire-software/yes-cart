@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.aspect;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -190,10 +191,14 @@ public class RegistrationAspect extends BaseNotificationAspect {
     private boolean isRegisteredPersonRequireApproval(final RegisteredPerson registeredPerson, final Shop shop) {
         if (registeredPerson instanceof Customer) {
             final Customer customer = (Customer) registeredPerson;
-            for (final CustomerShop accessShop : customer.getShops()) {
-                if (accessShop.getShop().getShopId() == shop.getShopId()) {
-                    return accessShop.isDisabled();
+            if (CollectionUtils.isNotEmpty(customer.getShops())) {
+                for (final CustomerShop accessShop : customer.getShops()) {
+                    if (accessShop.getShop().getShopId() == shop.getShopId()) {
+                        return accessShop.isDisabled();
+                    }
                 }
+            } else if (StringUtils.isNotBlank(customer.getCustomerType())) {
+                return shop.isSfRequireCustomerRegistrationApproval(customer.getCustomerType());
             }
         }
         return false;
@@ -203,7 +208,7 @@ public class RegistrationAspect extends BaseNotificationAspect {
         if (registeredPerson instanceof Customer) {
             final Customer customer = (Customer) registeredPerson;
             if (StringUtils.isNotBlank(customer.getCustomerType())) {
-                shop.isSfRequireCustomerRegistrationNotification(customer.getCustomerType());
+                return shop.isSfRequireCustomerRegistrationNotification(customer.getCustomerType());
             }
         }
         return false;
@@ -256,7 +261,9 @@ public class RegistrationAspect extends BaseNotificationAspect {
             registrationData.put("newPerson", newPerson);
             final boolean requireApproval = newPerson && isRegisteredPersonRequireApproval(registeredPerson, shop);
             registrationData.put("requireApproval", requireApproval);
-            registrationData.put("requireNotification", requireApproval || (newPerson && isRegisteredPersonRequireNotification(registeredPerson, shop)));
+            final boolean requireNotification = requireApproval || (newPerson && isRegisteredPersonRequireNotification(registeredPerson, shop));
+            registrationData.put("requireNotification", requireNotification);
+            registrationData.put("requireNotificationEmails", getAllRecipients(shop, determineFromEmail(shop), template));
             registrationMessage.setAdditionalData(registrationData);
         }
         return registrationMessage;
@@ -287,6 +294,22 @@ public class RegistrationAspect extends BaseNotificationAspect {
 
         final String attrVal = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
         return StringUtils.isNotBlank(attrVal) && attrVal.equals(token);
+
+    }
+
+    String[] getAllRecipients(final Shop shop, final String adminEmail, final String templateKey) {
+
+        final List<String> recipients = new ArrayList<String>();
+
+        if (StringUtils.isNotBlank(adminEmail) && recipients.isEmpty()) {
+            // this is default shop admin email
+            recipients.add(adminEmail);
+        }
+
+        if (recipients.isEmpty()) {
+            return null;
+        }
+        return recipients.toArray(new String[recipients.size()]);
 
     }
 
