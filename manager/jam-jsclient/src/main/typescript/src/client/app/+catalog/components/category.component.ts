@@ -77,7 +77,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
       if (uri == null || uri == '' || that._category == null || !that.categoryForm || (!that.categoryForm.dirty && that._category.categoryId > 0)) {
         return null;
       }
-      LogUtil.debug('zzzz', YcValidators.validSeoUri, YcValidators.validSeoUri(control));
+
       let basic = YcValidators.validSeoUri(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'category', subjectId: that._category.categoryId, field: 'uri', value: uri };
