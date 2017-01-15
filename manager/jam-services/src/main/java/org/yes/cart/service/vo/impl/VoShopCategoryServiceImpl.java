@@ -16,16 +16,21 @@
 
 package org.yes.cart.service.vo.impl;
 
+import org.apache.commons.collections.MapUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.domain.dto.CategoryDTO;
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.domain.vo.VoShopSummary;
 import org.yes.cart.service.dto.DtoCategoryService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.federation.FederationFacade;
 import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoShopCategoryService;
+import org.yes.cart.util.DomainApiUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +63,26 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
             final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAllByShopId(shopId);
             return voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, categoryDTOs);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(shopId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+            final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAllByShopId(shopId);
+            for (final CategoryDTO dto : categoryDTOs) {
+
+                String name = dto.getName();
+                if (MapUtils.isNotEmpty(dto.getDisplayNames()) && dto.getDisplayNames().get(lang) != null) {
+                    name = dto.getDisplayNames().get(lang);
+                }
+
+                summary.getCategories().add(MutablePair.of(name, !DomainApiUtils.isObjectAvailableNow(true, dto.getAvailablefrom(), dto.getAvailableto(), new Date())));
+            }
         } else {
             throw new AccessDeniedException("Access is denied");
         }

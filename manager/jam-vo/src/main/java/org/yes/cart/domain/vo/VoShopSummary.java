@@ -35,6 +35,8 @@ public class VoShopSummary {
     private String name;
     private String themeChain;
 
+    private List<MutablePair<String, Boolean>> categories = new ArrayList<MutablePair<String, Boolean>>();
+
     private List<MutablePair<String, Boolean>> carriers = new ArrayList<MutablePair<String, Boolean>>();
 
     private List<MutablePair<String, Boolean>> fulfilmentCentres = new ArrayList<MutablePair<String, Boolean>>();
@@ -74,6 +76,11 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesSeeTax;
     private MutablePair<String, List<String>> customerTypesChangeTaxView;
 
+    private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, String>> emailTemplatesFrom = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<MutablePair<String, Boolean>>();
+
     public long getShopId() {
         return shopId;
     }
@@ -112,6 +119,14 @@ public class VoShopSummary {
 
     public void setThemeChain(final String themeChain) {
         this.themeChain = themeChain;
+    }
+
+    public List<MutablePair<String, Boolean>> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(final List<MutablePair<String, Boolean>> categories) {
+        this.categories = categories;
     }
 
     public List<MutablePair<String, Boolean>> getCarriers() {
@@ -336,5 +351,37 @@ public class VoShopSummary {
 
     public void setCustomerTypesChangeTaxView(final MutablePair<String, List<String>> customerTypesChangeTaxView) {
         this.customerTypesChangeTaxView = customerTypesChangeTaxView;
+    }
+
+    public List<MutablePair<String, Boolean>> getEmailTemplates() {
+        return emailTemplates;
+    }
+
+    public void setEmailTemplates(final List<MutablePair<String, Boolean>> emailTemplates) {
+        this.emailTemplates = emailTemplates;
+    }
+
+    public List<MutablePair<String, String>> getEmailTemplatesFrom() {
+        return emailTemplatesFrom;
+    }
+
+    public void setEmailTemplatesFrom(final List<MutablePair<String, String>> emailTemplatesFrom) {
+        this.emailTemplatesFrom = emailTemplatesFrom;
+    }
+
+    public List<MutablePair<String, String>> getEmailTemplatesTo() {
+        return emailTemplatesTo;
+    }
+
+    public void setEmailTemplatesTo(final List<MutablePair<String, String>> emailTemplatesTo) {
+        this.emailTemplatesTo = emailTemplatesTo;
+    }
+
+    public List<MutablePair<String, Boolean>> getEmailTemplatesShop() {
+        return emailTemplatesShop;
+    }
+
+    public void setEmailTemplatesShop(final List<MutablePair<String, Boolean>> emailTemplatesShop) {
+        this.emailTemplatesShop = emailTemplatesShop;
     }
 }

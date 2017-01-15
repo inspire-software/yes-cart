@@ -205,166 +205,248 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
-    public void fillShopSummaryMainDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+    public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
 
-            // Main info
-            summary.setShopId(shopId);
-            summary.setDisabled(shopDTO.isDisabled());
-            summary.setCode(shopDTO.getCode());
-            summary.setName(shopDTO.getName());
-            summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
+            addMainInfo(summary, shopId, shopDTO);
 
-            // Locales
-            final VoShopLanguages langs = getShopLanguages(shopId);
-            for (final String code : langs.getSupported()) {
-                for (final MutablePair langAndName : langs.getAll()) {
-                    if (langAndName.getFirst().equals(code)) {
-                        summary.getLocales().add(langAndName);
-                    }
-                }
-            }
+            addShopLocales(summary, shopId);
 
-            // Currencies
-            final VoShopSupportedCurrencies curr = getShopCurrencies(shopId);
-            for (final String code : curr.getSupported()) {
-                summary.getCurrencies().add(MutablePair.of(code, code));
-            }
+            addShopCurrencies(summary, shopId);
 
-            // Locales
-            final VoShopLocations loc = getShopLocations(shopId);
-            for (final MutablePair<String, String> codeAndName : loc.getAll()) {
-                if (loc.getSupportedBilling().contains(codeAndName.getFirst())) {
-                    summary.getBillingLocations().add(codeAndName);
-                }
-                if (loc.getSupportedShipping().contains(codeAndName.getFirst())) {
-                    summary.getShippingLocations().add(codeAndName);
-                }
-            }
+            addShopLocations(summary, shopId);
 
-            // URLS
-            final VoShopUrl urls = getShopUrls(shopId);
-            summary.setPreviewUrl(urls.getPreviewUrl());
-            summary.setPreviewCss(urls.getPreviewCss());
-            for (final VoShopUrlDetail url : urls.getUrls()) {
-                if (url.isPrimary()) {
-                    summary.setPrimaryUrlAndThemeChain(
-                            MutablePair.of(
-                                    url.getUrl(),
-                                    StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
-                            )
-                    );
-                } else {
-                    summary.getAliasUrlAndThemeChain().add(
-                            MutablePair.of(
-                                    url.getUrl(),
-                                    StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
-                            )
-                    );
-                }
-            }
+            addShopUrls(summary, shopId);
 
-            final List<VoAttrValueShop> attrs = getShopAttributes(shopId);
-            final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
-            for (final VoAttrValueShop attr : attrs) {
-                attrsMap.put(attr.getAttribute().getCode(), attr);
-            }
+            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(shopId);
 
-            // Checkout config
-            summary.setCheckoutEnableGuest(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_CHECKOUT_ENABLE_GUEST, lang, false));
-            summary.setCheckoutEnableCoupons(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS, lang, false));
-            summary.setCheckoutEnableMessage(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG, lang, false));
-            summary.setCheckoutEnableQuanityPicker(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER, lang, false));
+            addCheckoutConfig(summary, lang, attrsMap);
 
-            // Tax config
-            summary.setTaxEnableShow(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO, lang, false));
-            summary.setTaxEnableShowNet(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET, lang, false));
-            summary.setTaxEnableShowAmount(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT, lang, false));
+            addTaxConfig(summary, lang, attrsMap);
 
-            // Customer config
-            summary.setCookiePolicy(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
-            summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+            addCustomerConfig(summary, lang, attrsMap);
 
-            final MutablePair<String, String> sessionExpiry = getShopAttributeConfig(
-                    attrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
-            int sessionExpirySeconds = NumberUtils.toInt(sessionExpiry.getFirst());
-            String time = "6h";
-            if (sessionExpirySeconds > 3600) { // more than hour
-                time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60 * 60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "h";
-            } else if (sessionExpirySeconds > 60) {  // more than minute
-                time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "m";
-            }
-            summary.setCustomerSession(MutablePair.of(sessionExpiry.getFirst(), time));
-
-            final Set<String> knownCustomerTypes = new HashSet<String>();
-            final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
-            if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
-
-                final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
-                final String[] registrationTypesNames = StringUtils.split(
-                        getDisplayName(registrationTypesCsv.getDisplayVals(), registrationTypesCsv.getVal(), lang), ',');
-
-                for (int i = 0; i < registrationTypes.length; i++) {
-                    final MutablePair<String, String> typeAndName = MutablePair.of(
-                            registrationTypes[i],
-                            registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
-                    );
-                    knownCustomerTypes.add(typeAndName.getFirst());
-                    summary.getCustomerTypes().add(typeAndName);
-                }
-                if (!knownCustomerTypes.contains("B2G")) {
-                    knownCustomerTypes.add("B2G");
-                    summary.getCustomerTypes().add(MutablePair.of("B2G", "-"));
-                }
-
-            }
-
-            final MutablePair<String, List<String>> ableToRegister =
-                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
-            final MutablePair<String, List<String>> approveRegister =
-                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
-            final MutablePair<String, List<String>> notifyRegister =
-                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION, lang);
-            final MutablePair<String, List<String>> seeTax =
-                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
-            final MutablePair<String, List<String>> changeTax =
-                    getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
-
-            final Set<String> additionalTypes = new HashSet<String>();
-            additionalTypes.addAll(ableToRegister.getSecond());
-            additionalTypes.addAll(approveRegister.getSecond());
-            additionalTypes.addAll(notifyRegister.getSecond());
-            additionalTypes.addAll(seeTax.getSecond());
-            additionalTypes.addAll(changeTax.getSecond());
-            if (CollectionUtils.isNotEmpty(additionalTypes)) {
-                additionalTypes.removeAll(knownCustomerTypes);
-                if (!additionalTypes.isEmpty()) {
-                    for (final String newType : additionalTypes) {
-                        knownCustomerTypes.add(newType);
-                        summary.getCustomerTypes().add(MutablePair.of(newType, newType));
-                    }
-                }
-            }
-
-            summary.setCustomerTypesAbleToRegister(ableToRegister);
-            summary.setCustomerTypesRequireRegistrationApproval(approveRegister);
-            summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
-            summary.setCustomerTypesSeeTax(seeTax);
-            summary.setCustomerTypesChangeTaxView(changeTax);
+            addEmailTemplatesBasicSettings(summary, lang, attrsMap);
 
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    protected void addMainInfo(final VoShopSummary summary, final long shopId, final ShopDTO shopDTO) {
+        summary.setShopId(shopId);
+        summary.setDisabled(shopDTO.isDisabled());
+        summary.setCode(shopDTO.getCode());
+        summary.setName(shopDTO.getName());
+        summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
+    }
+
+    protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setCookiePolicy(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
+        summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+
+        final MutablePair<String, String> sessionExpiry = getShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
+        int sessionExpirySeconds = NumberUtils.toInt(sessionExpiry.getFirst());
+        String time = "6h";
+        if (sessionExpirySeconds > 3600) { // more than hour
+            time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60 * 60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "h";
+        } else if (sessionExpirySeconds > 60) {  // more than minute
+            time = new BigDecimal(sessionExpirySeconds).divide(new BigDecimal(60), 1, BigDecimal.ROUND_HALF_EVEN).toPlainString() + "m";
+        }
+        summary.setCustomerSession(MutablePair.of(sessionExpiry.getFirst(), time));
+
+        final Set<String> knownCustomerTypes = new HashSet<String>();
+        final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+        if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
+
+            final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
+            final String[] registrationTypesNames = StringUtils.split(
+                    getDisplayName(registrationTypesCsv.getDisplayVals(), registrationTypesCsv.getVal(), lang), ',');
+
+            for (int i = 0; i < registrationTypes.length; i++) {
+                final MutablePair<String, String> typeAndName = MutablePair.of(
+                        registrationTypes[i],
+                        registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
+                );
+                knownCustomerTypes.add(typeAndName.getFirst());
+                summary.getCustomerTypes().add(typeAndName);
+            }
+            if (!knownCustomerTypes.contains("B2G")) {
+                knownCustomerTypes.add("B2G");
+                summary.getCustomerTypes().add(MutablePair.of("B2G", "-"));
+            }
+
+        }
+
+        final MutablePair<String, List<String>> ableToRegister =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
+        final MutablePair<String, List<String>> approveRegister =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
+        final MutablePair<String, List<String>> notifyRegister =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION, lang);
+        final MutablePair<String, List<String>> seeTax =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
+        final MutablePair<String, List<String>> changeTax =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
+
+        final Set<String> additionalTypes = new HashSet<String>();
+        additionalTypes.addAll(ableToRegister.getSecond());
+        additionalTypes.addAll(approveRegister.getSecond());
+        additionalTypes.addAll(notifyRegister.getSecond());
+        additionalTypes.addAll(seeTax.getSecond());
+        additionalTypes.addAll(changeTax.getSecond());
+        if (CollectionUtils.isNotEmpty(additionalTypes)) {
+            additionalTypes.removeAll(knownCustomerTypes);
+            if (!additionalTypes.isEmpty()) {
+                for (final String newType : additionalTypes) {
+                    knownCustomerTypes.add(newType);
+                    summary.getCustomerTypes().add(MutablePair.of(newType, newType));
+                }
+            }
+        }
+
+        summary.setCustomerTypesAbleToRegister(ableToRegister);
+        summary.setCustomerTypesRequireRegistrationApproval(approveRegister);
+        summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
+        summary.setCustomerTypesSeeTax(seeTax);
+        summary.setCustomerTypesChangeTaxView(changeTax);
+    }
+
+    protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setTaxEnableShow(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO, lang, false));
+        summary.setTaxEnableShowNet(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET, lang, false));
+        summary.setTaxEnableShowAmount(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT, lang, false));
+    }
+
+    protected void addCheckoutConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setCheckoutEnableGuest(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_CHECKOUT_ENABLE_GUEST, lang, false));
+        summary.setCheckoutEnableCoupons(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS, lang, false));
+        summary.setCheckoutEnableMessage(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG, lang, false));
+        summary.setCheckoutEnableQuanityPicker(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER, lang, false));
+    }
+
+    protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId) throws Exception {
+        final List<VoAttrValueShop> attrs = getShopAttributes(shopId);
+        final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
+        for (final VoAttrValueShop attr : attrs) {
+            attrsMap.put(attr.getAttribute().getCode(), attr);
+        }
+        return attrsMap;
+    }
+
+    protected void addShopUrls(final VoShopSummary summary, final long shopId) throws Exception {
+        final VoShopUrl urls = getShopUrls(shopId);
+        summary.setPreviewUrl(urls.getPreviewUrl());
+        summary.setPreviewCss(urls.getPreviewCss());
+        for (final VoShopUrlDetail url : urls.getUrls()) {
+            if (url.isPrimary()) {
+                summary.setPrimaryUrlAndThemeChain(
+                        MutablePair.of(
+                                url.getUrl(),
+                                StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
+                        )
+                );
+            } else {
+                summary.getAliasUrlAndThemeChain().add(
+                        MutablePair.of(
+                                url.getUrl(),
+                                StringUtils.join(themeService.getThemeChainByShopId(shopId, url.getUrl()), " > ")
+                        )
+                );
+            }
+        }
+    }
+
+    protected void addShopLocations(final VoShopSummary summary, final long shopId) throws Exception {
+        final VoShopLocations loc = getShopLocations(shopId);
+        for (final MutablePair<String, String> codeAndName : loc.getAll()) {
+            if (loc.getSupportedBilling().contains(codeAndName.getFirst())) {
+                summary.getBillingLocations().add(codeAndName);
+            }
+            if (loc.getSupportedShipping().contains(codeAndName.getFirst())) {
+                summary.getShippingLocations().add(codeAndName);
+            }
+        }
+    }
+
+    protected void addShopCurrencies(final VoShopSummary summary, final long shopId) throws Exception {
+        final VoShopSupportedCurrencies curr = getShopCurrencies(shopId);
+        for (final String code : curr.getSupported()) {
+            summary.getCurrencies().add(MutablePair.of(code, code));
+        }
+    }
+
+    protected void addShopLocales(final VoShopSummary summary, final long shopId) throws Exception {
+        final VoShopLanguages langs = getShopLanguages(shopId);
+        for (final String code : langs.getSupported()) {
+            for (final MutablePair langAndName : langs.getAll()) {
+                if (langAndName.getFirst().equals(code)) {
+                    summary.getLocales().add(langAndName);
+                }
+            }
+        }
+    }
+
+    protected void addEmailTemplatesBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-cant-allocate-product-qty");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-contactform-request");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-customer-registered");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-newsletter-request");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-canceled");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-confirmed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-allocated");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-wait");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-packing");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-wait");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-new");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-payment-confirmed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-returned");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-shipping-completed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-wait-confirmation");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-failed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-failed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-readytoshipping");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-shipped");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-new");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-returned");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-shipping-completed");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete");
+
+    }
+
+    protected void addEmailTemplateBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap, final String template) {
+
+        summary.getEmailTemplates().add(MutablePair.of(template, Boolean.FALSE));
+        final MutablePair<String, String> shopAdmin = getShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "");
+        summary.getEmailTemplatesFrom().add(MutablePair.of(template, shopAdmin.getSecond()));
+        summary.getEmailTemplatesTo().add(MutablePair.of(template, template.startsWith("adm-") ? shopAdmin.getSecond() : "-"));
+        summary.getEmailTemplatesShop().add(MutablePair.of(template, Boolean.FALSE));
+
     }
 
     private String getDisplayName(final List<MutablePair<String, String>> names, final String defName, final String lang) {

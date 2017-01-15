@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.regex.Pattern;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -29,6 +31,7 @@ public class VoValidationServiceCategoryURIImpl extends AbstractVoValidationServ
     private final CategoryService categoryService;
 
     public VoValidationServiceCategoryURIImpl(final CategoryService categoryService) {
+        super(Pattern.compile("^[A-Za-z0-9\\-_.]+$"));
         this.categoryService = categoryService;
     }
 

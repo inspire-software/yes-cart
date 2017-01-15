@@ -39,18 +39,21 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     private final VoShippingService voShippingService;
     private final VoFulfilmentService voFulfilmentService;
     private final VoPaymentGatewayService voPaymentGatewayService;
+    private final VoContentService voContentService;
 
     @Autowired
     public ShopEndpointControllerImpl(final VoShopService voShopService,
                                       final VoShopCategoryService voShopCategoryService,
                                       final VoShippingService voShippingService,
                                       final VoFulfilmentService voFulfilmentService,
-                                      final VoPaymentGatewayService voPaymentGatewayService) {
+                                      final VoPaymentGatewayService voPaymentGatewayService,
+                                      final VoContentService voContentService) {
         this.voShopCategoryService = voShopCategoryService;
         this.voShopService = voShopService;
         this.voShippingService = voShippingService;
         this.voFulfilmentService = voFulfilmentService;
         this.voPaymentGatewayService = voPaymentGatewayService;
+        this.voContentService = voContentService;
     }
 
     public @ResponseBody
@@ -82,10 +85,12 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     VoShopSummary getSummary(@PathVariable("id") final long id, @PathVariable("lang") final String lang) throws Exception {
 
         final VoShopSummary summary = new VoShopSummary();
-        voShopService.fillShopSummaryMainDetails(summary, id, lang);
-        voShippingService.fillShopSummaryMainDetails(summary, summary.getShopId(), lang);
-        voFulfilmentService.fillShopSummaryMainDetails(summary, summary.getShopId(), lang);
-        voPaymentGatewayService.fillShopSummaryMainDetails(summary, summary.getCode(), lang);
+        voShopService.fillShopSummaryDetails(summary, id, lang);
+        voShippingService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
+        voShopCategoryService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
+        voFulfilmentService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
+        voPaymentGatewayService.fillShopSummaryDetails(summary, summary.getCode(), lang);
+        voContentService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
         return summary;
 
     }

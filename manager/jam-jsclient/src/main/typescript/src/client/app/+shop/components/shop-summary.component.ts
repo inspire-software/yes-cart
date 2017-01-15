@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { ShopVO, ShopSummaryVO } from './../../shared/model/index';
+import { ShopVO, ShopSummaryVO, Pair } from './../../shared/model/index';
 import { ShopService, I18nEventBus } from './../../shared/services/index';
 import { LogUtil } from './../../shared/log/index';
 
@@ -112,6 +112,26 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
     let enabled = types.includes(customerType);
     LogUtil.debug('ShopSummaryComponent isTypeEnabled', customerType, types, enabled);
     return enabled;
+  }
+
+  getEmailConfigString(emailTemplate:string, strConfig:Pair<string, string>[]):string {
+    let _out:string = null;
+    strConfig.forEach(_str => {
+       if (_str.first == emailTemplate) {
+         _out = _str.second;
+       }
+    });
+    return _out;
+  }
+
+  isEmailConfigOn(emailTemplate:string, boolConfig:Pair<string, boolean>[]):boolean {
+    let _out:boolean = false;
+    boolConfig.forEach(_bool => {
+      if (_bool.first == emailTemplate) {
+        _out = _bool.second;
+      }
+    });
+    return _out;
   }
 
 }

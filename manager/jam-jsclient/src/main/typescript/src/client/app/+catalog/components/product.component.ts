@@ -82,7 +82,7 @@ export class ProductComponent implements OnInit, OnDestroy {
         return null;
       }
 
-      let basic = YcValidators.validCode(control);
+      let basic = YcValidators.validSeoUri(control);
       if (basic == null) {
         var req:ValidationRequestVO = { subject: 'product', subjectId: that._product.productId, field: 'uri', value: uri };
         return YcValidators.validRemoteCheck(control, req);

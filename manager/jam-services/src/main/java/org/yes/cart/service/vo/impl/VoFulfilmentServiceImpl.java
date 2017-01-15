@@ -106,7 +106,7 @@ public class VoFulfilmentServiceImpl implements VoFulfilmentService {
     }
 
     @Override
-    public void fillShopSummaryMainDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+    public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
 
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final Map<WarehouseDTO, Boolean> all = dtoWarehouseService.findAllByShopId(shopId);

@@ -22,10 +22,7 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.*;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.vo.VoAttrValueContent;
-import org.yes.cart.domain.vo.VoContent;
-import org.yes.cart.domain.vo.VoContentBody;
-import org.yes.cart.domain.vo.VoContentWithBody;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoContentService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -133,6 +130,27 @@ public class VoContentServiceImpl implements VoContentService {
 
         }
         return Collections.emptyList();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+        if (federationFacade.isManageable(shopId, ShopDTO.class)){
+
+            for (final MutablePair<String, Boolean> shopEmail : summary.getEmailTemplatesShop()) {
+
+                final String uri = summary.getCode().concat("_mail_").concat(shopEmail.getFirst()).concat(".html");
+
+                final boolean noOverride = dtoContentService.isUriAvailableForContent(uri, 0L);
+                shopEmail.setSecond(!noOverride);
+
+
+            }
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+
     }
 
     /** {@inheritDoc} */

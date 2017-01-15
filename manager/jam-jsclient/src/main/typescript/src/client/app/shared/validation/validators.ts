@@ -26,9 +26,11 @@ export class YcValidators {
 
   static requiredValidDomainName = Validators.compose([Validators.required, YcValidators.validDomainName]);
 
-  static validCode = Validators.pattern('[A-Za-z0-9\-_]+');
+  static validCode = Validators.pattern('[A-Za-z0-9\\-_]+');
 
   static requiredValidCode = Validators.compose([Validators.required, YcValidators.validCode]);
+
+  static validSeoUri = Validators.pattern('[A-Za-z0-9.\\-_]+');
 
   static nonBlankTrimmed = Validators.pattern('\\S+(.*\\S)*');
 
@@ -54,15 +56,15 @@ export class YcValidators {
 
   static requiredPositiveWholeNumber = Validators.compose([Validators.required, YcValidators.positiveWholeNumber]);
 
-  static positiveNumber = Validators.pattern('[0-9]+(\.[0-9]+)?');
+  static positiveNumber = Validators.pattern('[0-9]+(\\.[0-9]+)?');
 
   static requiredPositiveNumber = Validators.compose([Validators.required, YcValidators.positiveNumber]);
 
-  static nonZeroPositiveNumber = Validators.pattern('[1-9][0-9]*(\.[0-9]+)?');
+  static nonZeroPositiveNumber = Validators.pattern('[1-9][0-9]*(\\.[0-9]+)?');
 
   static requiredNonZeroPositiveNumber = Validators.compose([Validators.required, YcValidators.nonZeroPositiveNumber]);
 
-  static rank = Validators.pattern('\-?[0-9]+');
+  static rank = Validators.pattern('\\-?[0-9]+');
 
   static requiredRank = Validators.compose([Validators.required, YcValidators.rank]);
 
@@ -70,13 +72,13 @@ export class YcValidators {
 
   static requiredPk = Validators.compose([Validators.required, YcValidators.pk]);
 
-  static validPhone = Validators.pattern('[\+]?[\(\)0-9\- ]');
+  static validPhone = Validators.pattern('[\\+]?[\\(\\)0-9\- ]');
 
-  static validEmail = Validators.pattern('[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})');
+  static validEmail = Validators.pattern('[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})');
 
   static requiredValidEmail = Validators.compose([Validators.required, YcValidators.validEmail]);
 
-  static validDate = Validators.pattern('[0-9]{4}\-([0][1-9]|[1][0-2])\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
+  static validDate = Validators.pattern('[0-9]{4}\\-([0][1-9]|[1][0-2])\\-([0][1-9]|[1-2][0-9]|[3][0-1])( ([0][0-9]|[1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])?');
 
   private static _cache:LRUCache = new LRUCache();
 

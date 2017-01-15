@@ -104,7 +104,7 @@ public class VoShippingServiceImpl implements VoShippingService {
     }
 
     @Override
-    public void fillShopSummaryMainDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
+    public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
 
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
             final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);

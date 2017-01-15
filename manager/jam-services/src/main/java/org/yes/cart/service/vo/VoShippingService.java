@@ -53,7 +53,7 @@ public interface VoShippingService {
      *
      * @throws Exception
      */
-    void fillShopSummaryMainDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
+    void fillShopSummaryDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
 
 
     /**

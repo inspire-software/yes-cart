@@ -91,7 +91,7 @@ export class ShopPriceListComponent implements OnInit, OnDestroy {
       'currency': ['', Validators.required],
       'pricingPolicy': ['', YcValidators.validCode],
       'quantity': ['', YcValidators.requiredPositiveNumber],
-      'regularPrice': ['', YcValidators.requiredNonZeroPositiveNumber],
+      'regularPrice': ['', YcValidators.requiredPositiveNumber],
       'salePrice': ['', YcValidators.positiveNumber],
       'minimalPrice': ['', YcValidators.positiveNumber],
       'salefrom': ['', YcValidators.validDate],

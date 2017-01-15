@@ -119,7 +119,7 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     }
 
     /** {@inheritDoc} */
-    public void fillShopSummaryMainDetails(final VoShopSummary summary, final String shopCode, final String lang) throws Exception {
+    public void fillShopSummaryDetails(final VoShopSummary summary, final String shopCode, final String lang) throws Exception {
 
         final List<VoPaymentGatewayInfo> pgs = getPaymentGatewaysForShop(lang, shopCode);
         for (final VoPaymentGatewayInfo pg : pgs) {

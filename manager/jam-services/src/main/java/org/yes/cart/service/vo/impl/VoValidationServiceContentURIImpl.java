@@ -20,6 +20,8 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.regex.Pattern;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -30,6 +32,7 @@ public class VoValidationServiceContentURIImpl extends AbstractVoValidationServi
     private final ContentService contentService;
 
     public VoValidationServiceContentURIImpl(final ContentService contentService) {
+        super(Pattern.compile("^[A-Za-z0-9\\-_.]+$"));
         this.contentService = contentService;
     }
 

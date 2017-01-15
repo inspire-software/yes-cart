@@ -119,6 +119,8 @@ export interface ShopSummaryVO {
   name :string;
   themeChain : string;
 
+  categories: Pair<string, boolean>[];
+
   carriers: Pair<string, boolean>[];
 
   fulfilmentCentres: Pair<string, boolean>[];
@@ -155,6 +157,11 @@ export interface ShopSummaryVO {
   customerTypesRequireRegistrationNotification: Pair<string, string[]>;
   customerTypesSeeTax: Pair<string, string[]>;
   customerTypesChangeTaxView: Pair<string, string[]>;
+
+  emailTemplates: Pair<string, boolean[]>;
+  emailTemplatesFrom: Pair<string, string[]>;
+  emailTemplatesTo: Pair<string, string[]>;
+  emailTemplatesShop: Pair<string, boolean[]>;
 }
 
 

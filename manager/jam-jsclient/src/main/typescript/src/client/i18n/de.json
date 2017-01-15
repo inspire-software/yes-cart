@@ -1,5 +1,6 @@
 {
   "ALPHANUM_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _ or -)",
+  "SEOURI_REQUIRED": "Correct alphanumeric value is required (A-Z, a-z, 0-9, _, - or .)",
   "ROLE_REQUIRED": "Correct role code is required (ROLE_ followed by A-Z or _)",
   "NUM_REQUIRED": "Correct numeric value is required (e.g. -1, 0, 33 ... etc)",
   "POS_DECIMAL_REQUIRED": "Correct positive numeric value is required (e.g. 1, 1.5, 5, 33.0 ... etc)",

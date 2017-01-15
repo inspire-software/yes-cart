@@ -40,6 +40,19 @@ public interface VoContentService {
      */
     List<VoContent> getFiltered(long shopId, String filter, int max) throws Exception;
 
+
+    /**
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopId given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
+
+
     /**
      * Get content by id.
      *

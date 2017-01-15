@@ -17,6 +17,7 @@
 package org.yes.cart.service.vo;
 
 import org.yes.cart.domain.vo.VoCategory;
+import org.yes.cart.domain.vo.VoShopSummary;
 
 import java.util.List;
 
@@ -32,6 +33,17 @@ public interface VoShopCategoryService {
      * @return list of assigned categories
      */
     List<VoCategory> getAllByShopId(final long shopId) throws Exception;
+
+    /**
+     * Get summary information for given shop.
+     *
+     * @param summary summary object to fill data for
+     * @param shopId given shop
+     * @param lang locale for localised names
+     *
+     * @throws Exception
+     */
+    void fillShopSummaryDetails(VoShopSummary summary, long shopId, String lang) throws Exception;
 
     /**
      * Update categories assigned to shop.

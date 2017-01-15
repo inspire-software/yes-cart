@@ -58,7 +58,7 @@ public interface VoPaymentGatewayService {
      *
      * @throws Exception
      */
-    void fillShopSummaryMainDetails(VoShopSummary summary, String shopCode, String lang) throws Exception;
+    void fillShopSummaryDetails(VoShopSummary summary, String shopCode, String lang) throws Exception;
 
     /**
      * Get allowed payment gateways in all modules which are system enabled.

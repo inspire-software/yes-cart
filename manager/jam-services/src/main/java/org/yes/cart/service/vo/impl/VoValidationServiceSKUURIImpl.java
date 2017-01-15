@@ -19,6 +19,8 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.regex.Pattern;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -29,6 +31,7 @@ public class VoValidationServiceSKUURIImpl extends AbstractVoValidationServiceSu
     private final ProductService productService;
 
     public VoValidationServiceSKUURIImpl(final ProductService productService) {
+        super(Pattern.compile("^[A-Za-z0-9\\-_.]+$"));
         this.productService = productService;
     }
 
