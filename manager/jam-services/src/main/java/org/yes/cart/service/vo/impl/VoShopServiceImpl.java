@@ -209,9 +209,11 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
 
+            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(shopId);
+
             addMainInfo(summary, shopId, shopDTO);
 
-            addShopLocales(summary, shopId);
+            addShopLocales(summary, shopId, lang, attrsMap);
 
             addShopCurrencies(summary, shopId);
 
@@ -219,7 +221,7 @@ public class VoShopServiceImpl implements VoShopService {
 
             addShopUrls(summary, shopId);
 
-            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(shopId);
+            addSearchConfig(summary, lang, attrsMap);
 
             addCheckoutConfig(summary, lang, attrsMap);
 
@@ -292,6 +294,8 @@ public class VoShopServiceImpl implements VoShopService {
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
         final MutablePair<String, List<String>> changeTax =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
+        final MutablePair<String, List<String>> rfq =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES, lang);
 
         final Set<String> additionalTypes = new HashSet<String>();
         additionalTypes.addAll(ableToRegister.getSecond());
@@ -299,6 +303,7 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(notifyRegister.getSecond());
         additionalTypes.addAll(seeTax.getSecond());
         additionalTypes.addAll(changeTax.getSecond());
+        additionalTypes.addAll(rfq.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
             additionalTypes.removeAll(knownCustomerTypes);
             if (!additionalTypes.isEmpty()) {
@@ -314,6 +319,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesRequireRegistrationNotification(notifyRegister);
         summary.setCustomerTypesSeeTax(seeTax);
         summary.setCustomerTypesChangeTaxView(changeTax);
+        summary.setCustomerTypesRfq(rfq);
     }
 
     protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
@@ -334,6 +340,19 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG, lang, false));
         summary.setCheckoutEnableQuanityPicker(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER, lang, false));
+    }
+
+    protected void addSearchConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setSearchInSubCatsEnable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH, lang, false));
+        summary.setSearchCompoundEnable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_ENABLE_COMPOUND, lang, false));
+        summary.setSearchSuggestEnable(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_ENABLE_SUGGEST, lang, false));
+        summary.setSearchSuggestMaxResults(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MAX_ITEMS, lang, 10));
+        summary.setSearchSuggestMinChars(getIntegerShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MIN_CHARS, lang, 3));
     }
 
     protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId) throws Exception {
@@ -387,12 +406,14 @@ public class VoShopServiceImpl implements VoShopService {
         }
     }
 
-    protected void addShopLocales(final VoShopSummary summary, final long shopId) throws Exception {
+    protected void addShopLocales(final VoShopSummary summary, final long shopId, final String lang, final Map<String, VoAttrValueShop> attrsMap) throws Exception {
         final VoShopLanguages langs = getShopLanguages(shopId);
         for (final String code : langs.getSupported()) {
             for (final MutablePair langAndName : langs.getAll()) {
                 if (langAndName.getFirst().equals(code)) {
                     summary.getLocales().add(langAndName);
+                    final MutablePair<String, String> override = getShopAttributeConfig(attrsMap, "shop_" + langAndName.getFirst() + ".properties.xml", lang, null);
+                    summary.getI18nOverrides().add(MutablePair.of(langAndName.getFirst(), StringUtils.isNotBlank(override.getSecond())));
                 }
             }
         }
@@ -400,48 +421,51 @@ public class VoShopServiceImpl implements VoShopService {
 
     protected void addEmailTemplatesBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
 
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-cant-allocate-product-qty");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-contactform-request");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-customer-registered");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-newsletter-request");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-canceled");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-confirmed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-allocated");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-wait");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-packing");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-wait");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-new");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-payment-confirmed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-returned");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-shipping-completed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-wait-confirmation");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-failed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-failed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-readytoshipping");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-shipped");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-new");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-returned");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-shipping-completed");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment");
-        addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete");
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-cant-allocate-product-qty", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-contactform-request", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-customer-registered", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-newsletter-request", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-canceled", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-confirmed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-allocated", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-inprogress-wait", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-packing", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-delivery-ready-wait", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-new", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-payment-confirmed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-returned", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-shipping-completed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-order-wait-confirmation", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-failed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-payment-shipped-failed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-refund-failed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "adm-rfq-new", true);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-activation", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-change-password", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-deactivation", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "customer-registered", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-canceled", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-confirmed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-readytoshipping", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-delivery-shipped", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-new", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-returned", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "order-shipping-completed", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "payment", false);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "rfq-new", true);
+        addEmailTemplateBasicSettings(summary, lang, attrsMap, "shipment-complete", false);
 
     }
 
-    protected void addEmailTemplateBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap, final String template) {
+    protected void addEmailTemplateBasicSettings(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap, final String template, final boolean yce) {
 
         summary.getEmailTemplates().add(MutablePair.of(template, Boolean.FALSE));
+        summary.getEmailTemplatesYCE().add(MutablePair.of(template, yce));
         final MutablePair<String, String> shopAdmin = getShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "");
         summary.getEmailTemplatesFrom().add(MutablePair.of(template, shopAdmin.getSecond()));
         summary.getEmailTemplatesTo().add(MutablePair.of(template, template.startsWith("adm-") ? shopAdmin.getSecond() : "-"));
@@ -467,6 +491,15 @@ public class VoShopServiceImpl implements VoShopService {
         }
         final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
         return MutablePair.of(name, Boolean.valueOf(attr.getVal()) ? !inverse : inverse);
+    }
+
+    private MutablePair<String, Integer> getIntegerShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang,  final int def) {
+        final VoAttrValueShop attr = attrsMap.get(key);
+        if (attr == null) {
+            return MutablePair.of(attr, def);
+        }
+        final String name = getDisplayName(attr.getAttribute().getDisplayNames(), attr.getAttribute().getName(), lang);
+        return MutablePair.of(name, NumberUtils.toInt(attr.getVal(), def));
     }
 
     private MutablePair<String, String> getShopAttributeConfig(final Map<String, VoAttrValueShop> attrsMap, final String key, final String lang, final String def) {

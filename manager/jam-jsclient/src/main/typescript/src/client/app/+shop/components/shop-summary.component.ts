@@ -133,4 +133,14 @@ export class ShopSummaryComponent implements OnInit, OnDestroy {
     return _out;
   }
 
+  isI18nConfigOn(lang:string, overrides:Pair<string, boolean>[]):boolean {
+    let _out:boolean = false;
+    overrides.forEach(_bool => {
+      if (_bool.first == lang) {
+        _out = _bool.second;
+      }
+    });
+    return _out;
+  }
+
 }

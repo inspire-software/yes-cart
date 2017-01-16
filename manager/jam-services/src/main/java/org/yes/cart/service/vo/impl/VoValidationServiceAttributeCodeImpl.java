@@ -20,6 +20,8 @@ import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.regex.Pattern;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
@@ -27,15 +29,16 @@ import org.yes.cart.service.vo.VoValidationService;
  */
 public class VoValidationServiceAttributeCodeImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final AttributeService categoryService;
+    private final AttributeService attributeService;
 
-    public VoValidationServiceAttributeCodeImpl(final AttributeService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceAttributeCodeImpl(final AttributeService attributeService) {
+        super(Pattern.compile("^[A-Za-z0-9\\-_.]+$"));
+        this.attributeService = attributeService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Attribute attr = this.categoryService.findByAttributeCode(valueToCheck);
+        final Attribute attr = this.attributeService.findByAttributeCode(valueToCheck);
         return attr != null && attr.getAttributeId() != currentId ? attr.getAttributeId() : null;
     }
 }

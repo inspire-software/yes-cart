@@ -56,7 +56,7 @@ export class AttributeComponent implements OnInit, OnDestroy {
           return null;
         }
 
-        basic = YcValidators.validCode(control);
+        basic = YcValidators.validSeoUri(control);
         if (basic == null) {
           var req:ValidationRequestVO = {
             subject: 'attribute',

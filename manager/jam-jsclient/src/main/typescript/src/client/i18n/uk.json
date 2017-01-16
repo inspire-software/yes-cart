@@ -168,6 +168,10 @@
   "PANEL_SYSTEM_QUERY": "Запит БД",
   "PANEL_SYSTEM_CACHE": "Кеш",
   "PANEL_SYSTEM_CLUSTER": "Кластер",
+  "PANEL_SYSTEM_PERFORMANCE_SENSORS": "Сенсори продуктивності",
+  "PANEL_SYSTEM_PERFORMANCE_SAMPLES": "Проба продуктивності",
+  "PANEL_SYSTEM_JOBS": "Завдання",
+  "PANEL_SYSTEM_SHOP_CLONE": "Клонувати Магазин",
 
   "PANEL_UI_SETTINGS": "Налаштування",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Сторінка: {{value}} ",
@@ -235,6 +239,11 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Основний",
   "SHOP_THEME_CHAIN": "Теми",
+  "SHOP_EMAIL_TEMPLATES": "Шаблони ел. пошти",
+  "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
+  "SHOP_EMAIL_TEMPLATES_FROM": "Від",
+  "SHOP_EMAIL_TEMPLATES_TO": "Кому",
+  "SHOP_EMAIL_TEMPLATES_ENABLED": "Дозволено",
 
   "BILLING": "Рахунок-фактура",
   "SHIPPING": "Доставка",

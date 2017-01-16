@@ -145,6 +145,10 @@
       </li>
       <li><hr/></li>
       <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_SHOP_CLONE' | translate }}</span>
+      </li>
+      <li><hr/></li>
+      <li>
         <a [routerLink]="['/system/preferences']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_PREFS' | translate }}</a>
       </li>
       <li><hr/></li>
@@ -153,6 +157,15 @@
       </li>
       <li>
         <a [routerLink]="['/system/cache']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CACHE' | translate }}</a>
+      </li>
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_PERFORMANCE_SENSORS' | translate }}</span>
+      </li>
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_PERFORMANCE_SAMPLES' | translate }}</span>
+      </li>
+      <li>
+        <span class="label label-info">YCE</span> <span class="text-muted">{{ 'PANEL_SYSTEM_JOBS' | translate }}</span>
       </li>
       <li>
         <a [routerLink]="['/system/cluster']" routerLinkActive="bg-info">{{ 'PANEL_SYSTEM_CLUSTER' | translate }}</a>
@@ -175,23 +188,23 @@
     </ul>
   </accordion-group>
 
-<!--
-  <accordion-group heading="Dynamic Body Content">
-    <p>The body of the accordion group grows to fit the contents</p>
-    <button type="button" class="btn btn-primary btn-sm" (click)="addItem()">Add Item</button>
-    <div *ngFor="#item of items">{{item}}</div>
-  </accordion-group>
--->
-<!--
-  <accordion-group #group [isOpen]="status.open">
-    <div accordion-heading>
-      I can have markup, too!
-      <i class="pull-right glyphicon"
-         [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
-    </div>
-    This is just some content to illustrate fancy headings.
-  </accordion-group>
--->
+  <!--
+    <accordion-group heading="Dynamic Body Content">
+      <p>The body of the accordion group grows to fit the contents</p>
+      <button type="button" class="btn btn-primary btn-sm" (click)="addItem()">Add Item</button>
+      <div *ngFor="#item of items">{{item}}</div>
+    </accordion-group>
+  -->
+  <!--
+    <accordion-group #group [isOpen]="status.open">
+      <div accordion-heading>
+        I can have markup, too!
+        <i class="pull-right glyphicon"
+           [ngClass]="{'glyphicon-chevron-down': group?.isOpen, 'glyphicon-chevron-right': !group?.isOpen}"></i>
+      </div>
+      This is just some content to illustrate fancy headings.
+    </accordion-group>
+  -->
 </accordion>
 
 

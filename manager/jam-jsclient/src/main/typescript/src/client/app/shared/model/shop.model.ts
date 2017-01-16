@@ -129,6 +129,7 @@ export interface ShopSummaryVO {
   paymentGatewaysIPsRegEx:string;
 
   locales: Pair<string, string>[];
+  i18nOverrides: Pair<string, boolean>[];
   currencies: Pair<string, string>[];
 
   billingLocations: Pair<string, string>[];
@@ -157,8 +158,10 @@ export interface ShopSummaryVO {
   customerTypesRequireRegistrationNotification: Pair<string, string[]>;
   customerTypesSeeTax: Pair<string, string[]>;
   customerTypesChangeTaxView: Pair<string, string[]>;
+  customerTypesRfq: Pair<string, string[]>;
 
   emailTemplates: Pair<string, boolean[]>;
+  emailTemplatesYCE: Pair<string, boolean[]>;
   emailTemplatesFrom: Pair<string, string[]>;
   emailTemplatesTo: Pair<string, string[]>;
   emailTemplatesShop: Pair<string, boolean[]>;

@@ -168,6 +168,10 @@
   "PANEL_SYSTEM_QUERY": "Query API",
   "PANEL_SYSTEM_CACHE": "Cache Monitoring",
   "PANEL_SYSTEM_CLUSTER": "Cluster",
+  "PANEL_SYSTEM_PERFORMANCE_SENSORS": "Performance Sensors",
+  "PANEL_SYSTEM_PERFORMANCE_SAMPLES": "Performance Samples",
+  "PANEL_SYSTEM_JOBS": "Tasks",
+  "PANEL_SYSTEM_SHOP_CLONE": "Clone Shop",
 
   "PANEL_UI_SETTINGS": "UI settings",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Page size: {{value}} ",
@@ -235,6 +239,11 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",
   "SHOP_THEME_CHAIN": "Theme chain",
+  "SHOP_EMAIL_TEMPLATES": "Email templates",
+  "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
+  "SHOP_EMAIL_TEMPLATES_FROM": "From",
+  "SHOP_EMAIL_TEMPLATES_TO": "To",
+  "SHOP_EMAIL_TEMPLATES_ENABLED": "Enabled",
 
   "BILLING": "Billing",
   "SHIPPING": "Shipping",

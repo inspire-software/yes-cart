@@ -313,6 +313,11 @@ public interface AttributeNamesKeys {
         String SHOP_CHECKOUT_ENABLE_GUEST = "SHOP_CHECKOUT_ENABLE_GUEST";
 
         /**
+         * Supported by shop customer types for request for quote.
+         */
+        String SHOP_RFQ_CUSTOMER_TYPES = "SHOP_RFQ_CUSTOMER_TYPES";
+
+        /**
          * Supported by shop storefront languages.
          */
         String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";
@@ -387,6 +392,26 @@ public interface AttributeNamesKeys {
          * Comma separated list of page size options
          */
         String SHOP_CATEGORY_ITEMS_PER_PAGE = "SHOP_CATEGORY_ITEMS_PER_PAGE";
+
+        /**
+         * Enable compound searching for this shop
+         */
+        String SHOP_SEARCH_ENABLE_COMPOUND = "SHOP_SEARCH_ENABLE_COMPOUND";
+
+        /**
+         * Enable search suggest for this shop
+         */
+        String SHOP_SEARCH_ENABLE_SUGGEST = "SHOP_SEARCH_ENABLE_SUGGEST";
+
+        /**
+         * Max number of items to return for this shop
+         */
+        String SHOP_SEARCH_SUGGEST_MAX_ITEMS = "SHOP_SEARCH_SUGGEST_MAX_ITEMS";
+
+        /**
+         * Min number of char for search suggest for this shop
+         */
+        String SHOP_SEARCH_SUGGEST_MIN_CHARS = "SHOP_SEARCH_SUGGEST_MIN_CHARS";
 
         /**
          * Comma separated list of product sorting options

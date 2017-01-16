@@ -168,6 +168,10 @@
   "PANEL_SYSTEM_QUERY": "Запрос БД",
   "PANEL_SYSTEM_CACHE": "Кэш",
   "PANEL_SYSTEM_CLUSTER": "Кластер",
+  "PANEL_SYSTEM_PERFORMANCE_SENSORS": "Сенсоры производительности",
+  "PANEL_SYSTEM_PERFORMANCE_SAMPLES": "Проба производительности",
+  "PANEL_SYSTEM_JOBS": "Задачи",
+  "PANEL_SYSTEM_SHOP_CLONE": "Клонировать Магазин",
 
   "PANEL_UI_SETTINGS": "Настройки",
   "PANEL_UI_SETTINGS_PAGE_SIZE": "Страница: {{value}} ",
@@ -235,6 +239,11 @@
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Основной",
   "SHOP_THEME_CHAIN": "Темы",
+  "SHOP_EMAIL_TEMPLATES": "Шаблоны эл. почты",
+  "SHOP_EMAIL_TEMPLATES_CMS": "CMS",
+  "SHOP_EMAIL_TEMPLATES_FROM": "От",
+  "SHOP_EMAIL_TEMPLATES_TO": "Кому",
+  "SHOP_EMAIL_TEMPLATES_ENABLED": "Разрешен",
 
   "BILLING": "Счет-фактура",
   "SHIPPING": "Доставка",

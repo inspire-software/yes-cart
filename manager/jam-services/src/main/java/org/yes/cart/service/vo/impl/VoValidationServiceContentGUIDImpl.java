@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.vo.impl;
 
-import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ContentService;
 import org.yes.cart.service.vo.VoValidationService;
 
@@ -27,15 +26,15 @@ import org.yes.cart.service.vo.VoValidationService;
  */
 public class VoValidationServiceContentGUIDImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
-    private final ContentService categoryService;
+    private final ContentService contentService;
 
-    public VoValidationServiceContentGUIDImpl(final ContentService categoryService) {
-        this.categoryService = categoryService;
+    public VoValidationServiceContentGUIDImpl(final ContentService contentService) {
+        this.contentService = contentService;
     }
 
     @Override
     protected Long getDuplicateId(final long currentId, final String valueToCheck) {
-        final Long catId = this.categoryService.findContentIdByGUID(valueToCheck);
+        final Long catId = this.contentService.findContentIdByGUID(valueToCheck);
         return catId != null && !catId.equals(currentId) ? catId : null;
     }
 }

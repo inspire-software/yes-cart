@@ -45,6 +45,7 @@ public class VoShopSummary {
     private String paymentGatewaysIPsRegEx;
 
     private List<MutablePair<String, String>> locales = new ArrayList<MutablePair<String, String>>();
+    private List<MutablePair<String, Boolean>> i18nOverrides = new ArrayList<MutablePair<String, Boolean>>();
 
     private List<MutablePair<String, String>> currencies = new ArrayList<MutablePair<String, String>>();
 
@@ -66,6 +67,13 @@ public class VoShopSummary {
     private MutablePair<String, Boolean> taxEnableShowNet;
     private MutablePair<String, Boolean> taxEnableShowAmount;
 
+    private MutablePair<String, Boolean> searchInSubCatsEnable;
+    private MutablePair<String, Boolean> searchCompoundEnable;
+    private MutablePair<String, Boolean> searchSuggestEnable;
+    private MutablePair<String, Integer> searchSuggestMaxResults;
+    private MutablePair<String, Integer> searchSuggestMinChars;
+
+
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
@@ -75,8 +83,10 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesRequireRegistrationNotification;
     private MutablePair<String, List<String>> customerTypesSeeTax;
     private MutablePair<String, List<String>> customerTypesChangeTaxView;
+    private MutablePair<String, List<String>> customerTypesRfq;
 
     private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<MutablePair<String, Boolean>>();
+    private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<MutablePair<String, Boolean>>();
     private List<MutablePair<String, String>> emailTemplatesFrom = new ArrayList<MutablePair<String, String>>();
     private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<MutablePair<String, String>>();
     private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<MutablePair<String, Boolean>>();
@@ -167,6 +177,14 @@ public class VoShopSummary {
 
     public void setLocales(final List<MutablePair<String, String>> locales) {
         this.locales = locales;
+    }
+
+    public List<MutablePair<String, Boolean>> getI18nOverrides() {
+        return i18nOverrides;
+    }
+
+    public void setI18nOverrides(final List<MutablePair<String, Boolean>> i18nOverrides) {
+        this.i18nOverrides = i18nOverrides;
     }
 
     public List<MutablePair<String, String>> getCurrencies() {
@@ -281,6 +299,46 @@ public class VoShopSummary {
         this.taxEnableShowAmount = taxEnableShowAmount;
     }
 
+    public MutablePair<String, Boolean> getSearchInSubCatsEnable() {
+        return searchInSubCatsEnable;
+    }
+
+    public void setSearchInSubCatsEnable(final MutablePair<String, Boolean> searchInSubCatsEnable) {
+        this.searchInSubCatsEnable = searchInSubCatsEnable;
+    }
+
+    public MutablePair<String, Boolean> getSearchCompoundEnable() {
+        return searchCompoundEnable;
+    }
+
+    public void setSearchCompoundEnable(final MutablePair<String, Boolean> searchCompoundEnable) {
+        this.searchCompoundEnable = searchCompoundEnable;
+    }
+
+    public MutablePair<String, Boolean> getSearchSuggestEnable() {
+        return searchSuggestEnable;
+    }
+
+    public void setSearchSuggestEnable(final MutablePair<String, Boolean> searchSuggestEnable) {
+        this.searchSuggestEnable = searchSuggestEnable;
+    }
+
+    public MutablePair<String, Integer> getSearchSuggestMaxResults() {
+        return searchSuggestMaxResults;
+    }
+
+    public void setSearchSuggestMaxResults(final MutablePair<String, Integer> searchSuggestMaxResults) {
+        this.searchSuggestMaxResults = searchSuggestMaxResults;
+    }
+
+    public MutablePair<String, Integer> getSearchSuggestMinChars() {
+        return searchSuggestMinChars;
+    }
+
+    public void setSearchSuggestMinChars(final MutablePair<String, Integer> searchSuggestMinChars) {
+        this.searchSuggestMinChars = searchSuggestMinChars;
+    }
+
     public MutablePair<String, Boolean> getCookiePolicy() {
         return cookiePolicy;
     }
@@ -353,6 +411,14 @@ public class VoShopSummary {
         this.customerTypesChangeTaxView = customerTypesChangeTaxView;
     }
 
+    public MutablePair<String, List<String>> getCustomerTypesRfq() {
+        return customerTypesRfq;
+    }
+
+    public void setCustomerTypesRfq(final MutablePair<String, List<String>> customerTypesRfq) {
+        this.customerTypesRfq = customerTypesRfq;
+    }
+
     public List<MutablePair<String, Boolean>> getEmailTemplates() {
         return emailTemplates;
     }
@@ -383,5 +449,13 @@ public class VoShopSummary {
 
     public void setEmailTemplatesShop(final List<MutablePair<String, Boolean>> emailTemplatesShop) {
         this.emailTemplatesShop = emailTemplatesShop;
+    }
+
+    public List<MutablePair<String, Boolean>> getEmailTemplatesYCE() {
+        return emailTemplatesYCE;
+    }
+
+    public void setEmailTemplatesYCE(final List<MutablePair<String, Boolean>> emailTemplatesYCE) {
+        this.emailTemplatesYCE = emailTemplatesYCE;
     }
 }

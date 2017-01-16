@@ -130,6 +130,7 @@ public class VoAttributeServiceImpl implements VoAttributeService {
     public VoAttribute updateAttribute(final VoAttribute vo) throws Exception {
         final AttributeDTO attr = dtoAttributeService.getById(vo.getAttributeId());
         if (attr != null && federationFacade.isCurrentUserSystemAdmin()) {
+            attr.setEtypeId(vo.getEtypeId());
             dtoAttributeService.update(
                     voAssemblySupport.assembleDto(AttributeDTO.class, VoAttribute.class, attr, vo)
             );
