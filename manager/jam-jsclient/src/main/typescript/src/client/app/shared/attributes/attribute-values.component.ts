@@ -362,17 +362,26 @@ export class AttributeValuesComponent implements OnInit, OnChanges {
 
   protected isTextAreaEditor():boolean {
     return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList' || this.attributeToEdit.attribute.etypeName === 'HTML' || this.attributeToEdit.attribute.etypeName === 'Any');
+      (this.attributeToEdit.attribute.etypeName === 'CommaSeparatedList'
+      || this.attributeToEdit.attribute.etypeName === 'HTML'
+      || this.attributeToEdit.attribute.etypeName === 'Any'
+      || this.attributeToEdit.attribute.etypeName === 'Properties');
   }
 
   protected isMiniTextEditor():boolean {
     return this.attributeToEdit &&
-      (this.attributeToEdit.attribute.etypeName === 'Float' || this.attributeToEdit.attribute.etypeName === 'Integer'
+      (this.attributeToEdit.attribute.etypeName === 'Float'
+      || this.attributeToEdit.attribute.etypeName === 'Integer'
       || this.attributeToEdit.attribute.etypeName === 'Date');
   }
 
   protected isTextEditor():boolean {
-    return this.attributeToEdit && !this.isBooleanEditor() && !this.isImageEditor() && !this.isLocalisableEditor() && !this.isTextAreaEditor() && !this.isMiniTextEditor();
+    return this.attributeToEdit &&
+      !this.isBooleanEditor()
+      && !this.isImageEditor()
+      && !this.isLocalisableEditor()
+      && !this.isTextAreaEditor()
+      && !this.isMiniTextEditor();
   }
 
   processImageView(av:AttrValueVO) {

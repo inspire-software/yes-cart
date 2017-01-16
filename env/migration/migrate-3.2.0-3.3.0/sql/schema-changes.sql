@@ -238,3 +238,9 @@ update TATTRIBUTE set name = 'Checkout: enable guest checkout' where CODE = 'SHO
 update TATTRIBUTE set name = 'Customer: supported customer types' where CODE = 'SHOP_CUSTOMER_TYPES';
 update TATTRIBUTE set name = 'Customer: session expiry in seconds' where CODE = 'CART_SESSION_EXPIRY_SECONDS';
 update TATTRIBUTE set name = 'Checkout: enable quantity picker for products' where CODE = 'CART_ADD_ENABLE_QTY_PICKER';
+
+--
+-- YC-755 Add new Property av type
+--
+
+INSERT INTO TETYPE (ETYPE_ID, JAVATYPE, BUSINESSTYPE, GUID) VALUES (1012, 'java.util.String', 'Properties', 'Properties');
