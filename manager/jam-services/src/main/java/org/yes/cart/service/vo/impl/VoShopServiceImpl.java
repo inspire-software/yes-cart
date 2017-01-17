@@ -231,6 +231,8 @@ public class VoShopServiceImpl implements VoShopService {
 
             addEmailTemplatesBasicSettings(summary, lang, attrsMap);
 
+            addSettingsConfig(summary, lang, attrsMap);
+
         } else {
             throw new AccessDeniedException("Access is denied");
         }
@@ -242,6 +244,11 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCode(shopDTO.getCode());
         summary.setName(shopDTO.getName());
         summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
+    }
+
+    protected void addSettingsConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setSfPageTraceEnabled(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_SF_PAGE_TRACE, lang, false));
     }
 
     protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

@@ -541,6 +541,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_REGIONAL_PRICING_PREFIX = "SHOP_REGIONAL_PRICING_";
 
+        /**
+         * Tracing of page rendering on storefront
+         */
+        String SHOP_SF_PAGE_TRACE = "SHOP_SF_PAGE_TRACE";
+
     }
 
     interface Brand {

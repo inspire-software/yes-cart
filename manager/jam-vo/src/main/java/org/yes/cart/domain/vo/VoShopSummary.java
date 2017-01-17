@@ -91,6 +91,8 @@ public class VoShopSummary {
     private List<MutablePair<String, String>> emailTemplatesTo = new ArrayList<MutablePair<String, String>>();
     private List<MutablePair<String, Boolean>> emailTemplatesShop = new ArrayList<MutablePair<String, Boolean>>();
 
+    private MutablePair<String, Boolean> sfPageTraceEnabled;
+
     public long getShopId() {
         return shopId;
     }
@@ -457,5 +459,13 @@ public class VoShopSummary {
 
     public void setEmailTemplatesYCE(final List<MutablePair<String, Boolean>> emailTemplatesYCE) {
         this.emailTemplatesYCE = emailTemplatesYCE;
+    }
+
+    public MutablePair<String, Boolean> getSfPageTraceEnabled() {
+        return sfPageTraceEnabled;
+    }
+
+    public void setSfPageTraceEnabled(final MutablePair<String, Boolean> sfPageTraceEnabled) {
+        this.sfPageTraceEnabled = sfPageTraceEnabled;
     }
 }

@@ -154,6 +154,13 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isB2BProfileActive();
 
     /**
+     * Is page caching on.
+     *
+     * @return true if tracing is enabled set.
+     */
+    boolean isSfPageTraceOn();
+
+    /**
      * Flag to indicate that this shop requires customer to be always authenticated to see any information.
      * If this returns true, this means that only login/registration pages should be available for anonymous access on SF.
      *

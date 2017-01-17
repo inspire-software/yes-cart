@@ -165,6 +165,8 @@ export interface ShopSummaryVO {
   emailTemplatesFrom: Pair<string, string[]>;
   emailTemplatesTo: Pair<string, string[]>;
   emailTemplatesShop: Pair<string, boolean[]>;
+
+  sfPageTraceEnabled: Pair<string, boolean>;
 }
 
 

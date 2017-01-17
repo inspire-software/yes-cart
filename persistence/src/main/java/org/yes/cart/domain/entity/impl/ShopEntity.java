@@ -67,6 +67,9 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfRequireCustomerRegistrationApprovalTypes;
     private Set<String> sfRequireCustomerRegistrationNotificationTypes;
 
+    private Boolean B2BProfileActive = null;
+    private Boolean sfPageTraceOn = null;
+
     public ShopEntity() {
     }
 
@@ -485,7 +488,17 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     }
 
     public boolean isB2BProfileActive() {
-        return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B);
+        if (this.B2BProfileActive == null) {
+            this.B2BProfileActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B);
+        }
+        return this.B2BProfileActive;
+    }
+
+    public boolean isSfPageTraceOn() {
+        if (this.sfPageTraceOn == null) {
+            this.sfPageTraceOn = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_SF_PAGE_TRACE);
+        }
+        return this.sfPageTraceOn;
     }
 
     public boolean isSfRequireCustomerLogin() {
