@@ -70,7 +70,7 @@ export class ReportsService {
   updateReportRequestValues(req:ReportRequestVO) {
 
     let body = JSON.stringify(req);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/report/configure', body, options)
@@ -87,7 +87,7 @@ export class ReportsService {
   generateReport(req:ReportRequestVO) {
 
     let body = JSON.stringify(req);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/report/generate', body, options)

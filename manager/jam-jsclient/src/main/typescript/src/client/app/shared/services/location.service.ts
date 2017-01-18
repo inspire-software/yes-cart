@@ -70,7 +70,7 @@ export class LocationService {
   saveCountry(country:CountryVO) {
 
     let body = JSON.stringify(country);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (country.countryId > 0) {
@@ -91,7 +91,7 @@ export class LocationService {
    * @returns {Observable<R>}
    */
   removeCountry(country:CountryVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/country/' + country.countryId, options)
@@ -128,7 +128,7 @@ export class LocationService {
    */
   saveState(state:StateVO) {
     let body = JSON.stringify(state);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (state.stateId > 0) {
@@ -148,7 +148,7 @@ export class LocationService {
    * @returns {Observable<R>}
    */
   removeState(state:StateVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/state/' + state.stateId, options)

@@ -69,7 +69,7 @@ export class FulfilmentService {
   saveFulfilmentCentre(centre:FulfilmentCentreVO) {
 
     let body = JSON.stringify(centre);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (centre.warehouseId > 0) {
@@ -91,7 +91,7 @@ export class FulfilmentService {
      */
   createFulfilmentCentre(centre:FulfilmentCentreInfoVO, shopId : number) {
     let body = JSON.stringify(centre);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/centre/shop/' + shopId, body, options)
@@ -108,7 +108,7 @@ export class FulfilmentService {
   saveShopFulfilmentCentres(carriers:Array<ShopFulfilmentCentreVO>) {
 
     let body = JSON.stringify(carriers);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/centre/shop', body, options)
@@ -123,7 +123,7 @@ export class FulfilmentService {
    * @returns {Observable<R>}
    */
   removeFulfilmentCentre(centre:FulfilmentCentreVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/centre/' + centre.warehouseId, options)
@@ -138,7 +138,7 @@ export class FulfilmentService {
   getFilteredInventory(centre:FulfilmentCentreInfoVO, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/inventory/centre/' + centre.warehouseId + '/filtered/' + max, body, options)
@@ -166,7 +166,7 @@ export class FulfilmentService {
   saveInventory(inventory:InventoryVO) {
 
     let body = JSON.stringify(inventory);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (inventory.skuWarehouseId > 0) {
@@ -187,7 +187,7 @@ export class FulfilmentService {
    * @returns {Observable<R>}
    */
   removeInventory(inventory:InventoryVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/inventory/' + inventory.skuWarehouseId, options)

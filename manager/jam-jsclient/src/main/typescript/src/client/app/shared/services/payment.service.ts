@@ -101,7 +101,7 @@ export class PaymentService {
   updateDisabledFlag(shopCode: string, pgLabel:string, state:boolean) {
     LogUtil.debug('PaymentService change state PG ' + pgLabel + ' for ' + shopCode + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     let _path = shopCode != null ? '/gateways/offline/' + shopCode : '/gateways/offline';
@@ -118,7 +118,7 @@ export class PaymentService {
    */
   savePaymentGatewayParameters(shopCode: string, pgLabel:string, attrs:Array<Pair<PaymentGatewayParameterVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     let _path = shopCode != null ? ('/gateways/configure/' + pgLabel + '/' + shopCode) : ('/gateways/configure/'  + pgLabel);

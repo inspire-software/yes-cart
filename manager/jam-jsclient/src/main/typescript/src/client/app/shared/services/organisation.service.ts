@@ -69,7 +69,7 @@ export class OrganisationService {
   saveManager(manager:ManagerVO) {
 
     let body = JSON.stringify(manager);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (manager.managerId > 0) {
@@ -89,7 +89,7 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   removeManager(email:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/manager/' + email + '/', options)
@@ -102,7 +102,7 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   resetPassword(email:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/manager/reset/' + email + '/', options)
@@ -118,7 +118,7 @@ export class OrganisationService {
   updateDisabledFlag(manager:string, state:boolean) {
     LogUtil.debug('ManagementService change manager state for ' + manager + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl +  '/manager/offline/' + manager + '/' + state, null, options)
@@ -143,7 +143,7 @@ export class OrganisationService {
   saveRole(role:RoleVO) {
 
     let body = JSON.stringify(role);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (role.roleId > 0) {
@@ -163,7 +163,7 @@ export class OrganisationService {
    * @returns {Observable<R>}
    */
   removeRole(role:RoleVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/role/' + role.code, options)

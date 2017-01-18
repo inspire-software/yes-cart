@@ -58,7 +58,7 @@ export class SystemService {
    */
   saveShopAttributes(attrs:Array<Pair<AttrValueSystemVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/preferences', body, options)
       .map(res => <AttrValueSystemVO[]> res.json())
@@ -83,7 +83,7 @@ export class SystemService {
    * @returns {Observable<R>}
    */
   evictAllCache() {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/cache', options)
@@ -98,7 +98,7 @@ export class SystemService {
    * @returns {Observable<R>}
    */
   evictSingleCache(name:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/cache/' + name, options)
@@ -114,7 +114,7 @@ export class SystemService {
    */
   saveCacheStatsFlag(name:string, stats:boolean) {
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     let path = stats ? 'statson/' : 'statsoff/';
@@ -155,7 +155,7 @@ export class SystemService {
    */
   reindexAllProducts() {
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/index/all', null, options)
@@ -171,7 +171,7 @@ export class SystemService {
    */
   reindexShopProducts(id:number) {
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/index/shop/' + id, null, options)
@@ -190,7 +190,7 @@ export class SystemService {
    */
   runQuery(node:string, typ:string, query:string) {
 
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     let path = (typ == 'HQL') ? '/hquery/' : ((typ == 'FT') ? '/ftquery/' : '/dbquery/');

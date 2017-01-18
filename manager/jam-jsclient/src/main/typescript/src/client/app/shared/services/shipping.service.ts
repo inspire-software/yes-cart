@@ -69,7 +69,7 @@ export class ShippingService {
   saveCarrier(carrier:CarrierVO) {
 
     let body = JSON.stringify(carrier);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (carrier.carrierId > 0) {
@@ -91,7 +91,7 @@ export class ShippingService {
      */
   createCarrier(carrier:CarrierLocaleVO, shopId : number) {
     let body = JSON.stringify(carrier);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/carrier/shop/' + shopId, body, options)
@@ -108,7 +108,7 @@ export class ShippingService {
   saveShopCarriers(carriers:Array<ShopCarrierVO>) {
 
     let body = JSON.stringify(carriers);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/carrier/shop', body, options)
@@ -123,7 +123,7 @@ export class ShippingService {
    * @returns {Observable<R>}
    */
   removeCarrier(carrier:CarrierVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/carrier/' + carrier.carrierId, options)
@@ -148,7 +148,7 @@ export class ShippingService {
   getFilteredCarrierSlas(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/carriersla/filtered/' + max, body, options)
@@ -165,7 +165,7 @@ export class ShippingService {
   saveCarrierSla(sla:CarrierSlaVO) {
 
     let body = JSON.stringify(sla);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (sla.carrierslaId > 0) {
@@ -187,7 +187,7 @@ export class ShippingService {
    * @returns {Observable<R>}
    */
   removeCarrierSla(sla:CarrierSlaVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/carriersla/' + sla.carrierslaId, options)

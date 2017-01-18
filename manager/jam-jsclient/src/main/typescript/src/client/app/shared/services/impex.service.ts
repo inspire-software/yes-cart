@@ -57,7 +57,7 @@ export class ImpexService {
    */
   importFromFile(group:string, fileName:string) {
     let body = fileName;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/impex/import/' + group, body, options)
       .map(res => <string> res.text())
@@ -80,7 +80,7 @@ export class ImpexService {
    */
   exportToFile(group:string, fileName:string) {
     let body = fileName;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/impex/export/' + group, body, options)
       .map(res => <string> res.text())
@@ -117,7 +117,7 @@ export class ImpexService {
    * @returns {Observable<R>}
    */
   removeFile(fileName:string) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/filemanager/delete?fileName=' + encodeURI(fileName), options)

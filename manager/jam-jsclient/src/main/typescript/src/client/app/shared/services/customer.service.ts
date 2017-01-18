@@ -48,7 +48,7 @@ export class CustomerService {
   getFilteredCustomer(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/filtered/' + max, body, options)
@@ -76,7 +76,7 @@ export class CustomerService {
   saveCustomer(customer:CustomerVO) {
 
     let body = JSON.stringify(customer);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (customer.customerId > 0) {
@@ -97,7 +97,7 @@ export class CustomerService {
    * @returns {Observable<R>}
    */
   removeCustomer(customer:CustomerInfoVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/' + customer.customerId, options)
@@ -124,7 +124,7 @@ export class CustomerService {
    */
   saveCustomerAttributes(attrs:Array<Pair<AttrValueCustomerVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
       .map(res => <AttrValueCustomerVO[]> res.json())
@@ -139,7 +139,7 @@ export class CustomerService {
    */
   resetPassword(customer:CustomerInfoVO, shopId:number) {
 
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/reset/' + customer.customerId + '/' + shopId, null, options)

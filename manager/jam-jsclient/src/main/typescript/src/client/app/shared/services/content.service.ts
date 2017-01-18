@@ -58,7 +58,7 @@ export class ContentService {
   getFilteredContent(shopId:number, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/shop/' + shopId + '/filtered/' + max, body, options)
@@ -85,7 +85,7 @@ export class ContentService {
   saveContent(content:ContentVO) {
 
     let body = JSON.stringify(content);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (content.contentId > 0) {
@@ -107,7 +107,7 @@ export class ContentService {
    * @returns {Observable<R>}
    */
   removeContent(content:ContentVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/' + content.contentId, options)
@@ -134,7 +134,7 @@ export class ContentService {
    */
   saveContentAttributes(attrs:Array<Pair<AttrValueContentVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
       .map(res => <AttrValueContentVO[]> res.json())

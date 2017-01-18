@@ -68,7 +68,7 @@ export class ManagementService {
    */
   acceptMyAgreement() {
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/license', null, options)

@@ -81,7 +81,7 @@ export class AttributeService {
   getFilteredAttributes(groupCode:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/attribute/filtered/' + groupCode + '/' + max, body, options)
@@ -122,7 +122,7 @@ export class AttributeService {
    */
   saveAttribute(attribute:AttributeVO) {
     let body = JSON.stringify(attribute);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (attribute.attributeId > 0) {
@@ -143,7 +143,7 @@ export class AttributeService {
    * @returns {Observable<R>}
    */
   removeAttribute(attribute:AttributeVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/attribute/' + attribute.attributeId, options)

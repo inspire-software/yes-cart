@@ -47,7 +47,7 @@ export class ValidationService {
    */
   validate(request:ValidationRequestVO) {
     let body = JSON.stringify(request);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl, body, options)
       .map(res => <ValidationResultVO> res.json())

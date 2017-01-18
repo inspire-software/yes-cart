@@ -81,7 +81,7 @@ export class ShopService {
     LogUtil.debug('ShopService save shop ' + shop.shopId);
 
     let body = JSON.stringify(shop);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (shop.shopId === 0) {
@@ -103,7 +103,7 @@ export class ShopService {
   updateDisabledFlag(shop:ShopVO, state:boolean) {
     LogUtil.debug('ShopService change state shop ' + shop.shopId + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/offline/' + shop.shopId + '/' + state, null, options)
@@ -147,7 +147,7 @@ export class ShopService {
     LogUtil.debug('ShopService save localization info', shopSeoVO);
 
     let body = JSON.stringify(shopSeoVO);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/localization', body, options)
       .map(res => <ShopSeoVO> res.json())
@@ -173,7 +173,7 @@ export class ShopService {
   saveShopUrls(shopUrl:ShopUrlVO) {
 
     let body = JSON.stringify(shopUrl);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/urls', body, options)
@@ -200,7 +200,7 @@ export class ShopService {
      */
   saveShopCurrencies(curr:ShopSupportedCurrenciesVO) {
     let body = JSON.stringify(curr);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/currencies', body, options)
       .map(res => <ShopSupportedCurrenciesVO> res.json())
@@ -263,7 +263,7 @@ export class ShopService {
   saveShopCategories(shopId:number, cats : CategoryVO[]) {
     let body = JSON.stringify(cats);
     LogUtil.debug('Save assigned categories ', cats);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/categories/' + shopId, body, options)
       .map(res => <CategoryVO[]> res.json())
@@ -277,7 +277,7 @@ export class ShopService {
      */
   saveShopLanguages(langs:ShopLanguagesVO) {
     let body = JSON.stringify(langs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/languages', body, options)
       .map(res => <ShopLanguagesVO> res.json())
@@ -292,7 +292,7 @@ export class ShopService {
    */
   saveShopLocations(locs:ShopLocationsVO) {
     let body = JSON.stringify(locs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/locations', body, options)
       .map(res => <ShopLocationsVO> res.json())
@@ -307,7 +307,7 @@ export class ShopService {
    */
   saveShopAttributes(attrs:Array<Pair<AttrValueShopVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/attributes', body, options)
       .map(res => <ShopLocationsVO[]> res.json())

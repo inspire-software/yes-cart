@@ -48,7 +48,7 @@ export class CatalogService {
   getFilteredBrands(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/brand/filtered/' + max, body, options)
@@ -74,7 +74,7 @@ export class CatalogService {
   saveBrand(brand:BrandVO) {
 
     let body = JSON.stringify(brand);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (brand.brandId > 0) {
@@ -95,7 +95,7 @@ export class CatalogService {
    * @returns {Observable<R>}
    */
   removeBrand(brand:BrandVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/brand/' + brand.brandId, options)
@@ -122,7 +122,7 @@ export class CatalogService {
    */
   saveBrandAttributes(attrs:Array<Pair<AttrValueBrandVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/brand/attributes', body, options)
       .map(res => <AttrValueBrandVO[]> res.json())
@@ -139,7 +139,7 @@ export class CatalogService {
   getFilteredProductTypes(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/producttypes/filtered/' + max, body, options)
@@ -165,7 +165,7 @@ export class CatalogService {
   saveProductType(productType:ProductTypeVO) {
 
     let body = JSON.stringify(productType);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (productType.producttypeId > 0) {
@@ -186,7 +186,7 @@ export class CatalogService {
    * @returns {Observable<R>}
    */
   removeProductType(productType:ProductTypeInfoVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/producttype/' + productType.producttypeId, options)
@@ -213,7 +213,7 @@ export class CatalogService {
    */
   saveProductTypeAttributes(attrs:Array<Pair<ProductTypeAttrVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/producttype/attributes', body, options)
       .map(res => <ProductTypeAttrVO[]> res.json())
@@ -238,7 +238,7 @@ export class CatalogService {
   getFilteredCategories(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/category/filtered/' + max, body, options)
@@ -266,7 +266,7 @@ export class CatalogService {
   createCategory(newCat:BasicCategoryVO, parentId : number) {
     var cat = newCat.guid ? {'guid' : newCat.guid, 'name' : newCat.name, 'parentId' : parentId } : {'name' : newCat.name, 'parentId' : parentId };
     let body = JSON.stringify(cat);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/category', body, options)
@@ -283,7 +283,7 @@ export class CatalogService {
   saveCategory(category:CategoryVO) {
 
     let body = JSON.stringify(category);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (category.categoryId > 0) {
@@ -305,7 +305,7 @@ export class CatalogService {
    * @returns {Observable<R>}
    */
   removeCategory(category:CategoryVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/category/' + category.categoryId, options)
@@ -332,7 +332,7 @@ export class CatalogService {
    */
   saveCategoryAttributes(attrs:Array<Pair<AttrValueCategoryVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/category/attributes', body, options)
       .map(res => <AttrValueCategoryVO[]> res.json())

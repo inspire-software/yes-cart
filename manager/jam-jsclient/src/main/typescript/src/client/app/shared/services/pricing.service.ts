@@ -48,7 +48,7 @@ export class PricingService {
   getFilteredPriceLists(shop:ShopVO, currency:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/price/shop/' + shop.shopId + '/currency/' + currency + '/filtered/' + max, body, options)
@@ -74,7 +74,7 @@ export class PricingService {
   savePriceList(price:PriceListVO) {
 
     let body = JSON.stringify(price);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (price.skuPriceId > 0) {
@@ -95,7 +95,7 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePriceList(price:PriceListVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/price/' + price.skuPriceId, options)
@@ -111,7 +111,7 @@ export class PricingService {
   getFilteredTax(shop:ShopVO, currency:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/tax/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
@@ -137,7 +137,7 @@ export class PricingService {
   saveTax(tax:TaxVO) {
 
     let body = JSON.stringify(tax);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (tax.taxId > 0) {
@@ -158,7 +158,7 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removeTax(tax:TaxVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/tax/' + tax.taxId, options)
@@ -174,7 +174,7 @@ export class PricingService {
   getFilteredTaxConfig(tax:TaxVO, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/taxconfig/tax/' + tax.taxId + '/filtered/' + max, body, options)
@@ -200,7 +200,7 @@ export class PricingService {
   createTaxConfig(taxConfig:TaxConfigVO) {
 
     let body = JSON.stringify(taxConfig);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/taxconfig', body, options)
@@ -215,7 +215,7 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removeTaxConfig(taxConfig:TaxConfigVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/taxconfig/' + taxConfig.taxConfigId, options)
@@ -232,7 +232,7 @@ export class PricingService {
   getFilteredPromotions(shop:ShopVO, currency:string, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)
@@ -258,7 +258,7 @@ export class PricingService {
   savePromotion(promotion:PromotionVO) {
 
     let body = JSON.stringify(promotion);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (promotion.promotionId > 0) {
@@ -279,7 +279,7 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePromotion(promotion:PromotionVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/promotion/' + promotion.promotionId, options)
@@ -295,7 +295,7 @@ export class PricingService {
   updatePromotionDisabledFlag(promotion:PromotionVO, state:boolean) {
     LogUtil.debug('PricingService change state promotion ' + promotion.promotionId + ' to ' + state ? 'online' : 'offline');
 
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotion/offline/' + promotion.promotionId + '/' + state, null, options)
@@ -310,7 +310,7 @@ export class PricingService {
   getFilteredPromotionCoupons(promotion:PromotionVO, filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotioncoupon/' + promotion.promotionId + '/filtered/' + max, body, options)
@@ -327,7 +327,7 @@ export class PricingService {
   createPromotionCoupons(coupons:PromotionCouponVO) {
 
     let body = JSON.stringify(coupons);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.put(this._serviceBaseUrl + '/promotioncoupon', body, options)
@@ -342,7 +342,7 @@ export class PricingService {
    * @returns {Observable<R>}
    */
   removePromotionCoupon(coupon:PromotionCouponVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/promotioncoupon/' + coupon.promotioncouponId, options)

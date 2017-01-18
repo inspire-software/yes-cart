@@ -62,7 +62,7 @@ export class PIMService {
   getFilteredProducts(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/product/filtered/' + max, body, options)
@@ -88,7 +88,7 @@ export class PIMService {
   saveProduct(product:ProductWithLinksVO) {
 
     let body = JSON.stringify(product);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (product.productId > 0) {
@@ -109,7 +109,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   removeProduct(product:ProductVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/product/' + product.productId, options)
@@ -136,7 +136,7 @@ export class PIMService {
    */
   saveProductAttributes(attrs:Array<Pair<AttrValueProductVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/product/attributes', body, options)
       .map(res => <AttrValueProductVO[]> res.json())
@@ -166,7 +166,7 @@ export class PIMService {
   getFilteredProductSkus(filter:string, max:number) {
 
     let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain' });
+    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/product/sku/filtered/' + max, body, options)
@@ -193,7 +193,7 @@ export class PIMService {
   saveSKU(sku:ProductSkuVO) {
 
     let body = JSON.stringify(sku);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     if (sku.skuId > 0) {
@@ -214,7 +214,7 @@ export class PIMService {
    * @returns {Observable<R>}
    */
   removeSKU(sku:ProductSkuVO) {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.delete(this._serviceBaseUrl + '/sku/' + sku.skuId, options)
@@ -241,7 +241,7 @@ export class PIMService {
    */
   saveSKUAttributes(attrs:Array<Pair<AttrValueProductSkuVO, boolean>>) {
     let body = JSON.stringify(attrs);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this._serviceBaseUrl + '/sku/attributes', body, options)
       .map(res => <AttrValueProductSkuVO[]> res.json())
