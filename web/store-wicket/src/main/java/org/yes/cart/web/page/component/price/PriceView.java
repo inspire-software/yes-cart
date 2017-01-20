@@ -23,7 +23,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.domain.entity.ProductPromotionModel;
-import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.MoneyUtils;
@@ -111,30 +110,6 @@ public class PriceView extends BaseComponent {
         this.showTaxNet = this.showTax && productPriceModel.isTaxInfoUseNet();
         this.showTaxAmount = showTaxAmount;
 
-    }
-
-
-    /**
-     * Create price view.
-     * @param id component id.
-     * @param pricePair regular / sale price pair.
-     * @param currencySymbol currency symbol
-     * @param appliedPromos applied promotions
-     * @param showCurrencySymbol currency symbol.
-     * @param showSavings show user friendly percentage savings
-     */
-    public PriceView(final String id,
-                     final Pair<BigDecimal, BigDecimal> pricePair,
-                     final String currencySymbol,
-                     final String appliedPromos,
-                     final boolean showCurrencySymbol,
-                     final boolean showSavings) {
-        this(
-                id,
-                new ProductPriceModelImpl("", currencySymbol, BigDecimal.ONE,
-                        pricePair != null ? pricePair.getFirst() : null,
-                        pricePair != null ? pricePair.getSecond() : null
-                ), appliedPromos, showCurrencySymbol, showSavings, false, false);
     }
 
 

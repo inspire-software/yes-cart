@@ -16,10 +16,7 @@
 
 package org.yes.cart.web.support.service;
 
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
@@ -72,6 +69,16 @@ public interface CheckoutServiceFacade {
      * @return total for this order
      */
     Total getOrderTotal(CustomerOrder customerOrder);
+
+    /**
+     * Represent order total information as price model.
+     *
+     * @param customerOrder customer order
+     * @param cart current cart to extract tax view settings
+     *
+     * @return model
+     */
+    ProductPriceModel getOrderTotalAmount(CustomerOrder customerOrder, ShoppingCart cart);
 
     /**
      * Calculate order total using appropriate calculation strategy.

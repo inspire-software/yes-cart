@@ -18,10 +18,9 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.domain.entity.CarrierSla;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.constants.Constants;
+import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
@@ -41,6 +40,7 @@ import org.yes.cart.shoppingcart.AmountCalculationStrategy;
 import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
 import java.io.OutputStream;
@@ -94,6 +94,44 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public Total getOrderTotal(final CustomerOrder customerOrder) {
         return amountCalculationStrategy.calculate(customerOrder);
+    }
+
+    static final String ORDER_TOTAL_REF = "yc-order-total";
+
+    /** {@inheritDoc} */
+    @Override
+    public ProductPriceModel getOrderTotalAmount(final CustomerOrder customerOrder, final ShoppingCart cart) {
+
+        final Total grandTotal = getOrderTotal(customerOrder);
+
+        // TODO: fix this later (YC-760)
+        String firstTaxCode = "";
+        for (final CartItem item : customerOrder.getOrderDetail()) {
+            if (StringUtils.isNotBlank(item.getTaxCode())) {
+                firstTaxCode = item.getTaxCode();
+                break;
+            }
+        }
+
+        BigDecimal taxRate = BigDecimal.ZERO;
+        if (MoneyUtils.isFirstBiggerThanSecond(grandTotal.getTotalTax(), BigDecimal.ZERO)) {
+
+            final BigDecimal netAmount = grandTotal.getTotalAmount().subtract(grandTotal.getTotalTax());
+            final BigDecimal taxPercent = grandTotal.getTotalTax().divide(netAmount, Constants.DEFAULT_SCALE, BigDecimal.ROUND_FLOOR);
+            taxRate = taxPercent.movePointRight(2);
+
+        }
+
+        return new ProductPriceModelImpl(ORDER_TOTAL_REF, customerOrder.getCurrency(), BigDecimal.ONE,
+                grandTotal.getListTotalAmount(),
+                grandTotal.getTotalAmount(),
+                false, false, false,
+                firstTaxCode,
+                taxRate,
+                false, // TotalAmount includes taxes
+                grandTotal.getTotalTax()
+        );
+
     }
 
     /** {@inheritDoc} */

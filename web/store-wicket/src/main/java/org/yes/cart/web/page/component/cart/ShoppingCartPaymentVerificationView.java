@@ -28,6 +28,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -36,7 +37,6 @@ import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -110,6 +110,7 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
         final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
+        final ProductPriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, ApplicationDirector.getShoppingCart());
 
         final String selectedLocale = getLocale().getLanguage();
         final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
@@ -240,9 +241,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         add(
             new PriceView(
                     DELIVERY_GRAND_AMOUNT,
-                    new Pair<BigDecimal, BigDecimal>(grandTotal.getListTotalAmount(), grandTotal.getTotalAmount()),
-                    customerOrder.getCurrency(),
-                    StringUtils.join(allPromos, ','), true, true)
+                    grandTotalPrice,
+                    StringUtils.join(allPromos, ','),
+                    true, true,
+                    false, false)
             );
 
     }
