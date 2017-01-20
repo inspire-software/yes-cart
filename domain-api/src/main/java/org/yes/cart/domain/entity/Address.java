@@ -331,6 +331,21 @@ public interface Address extends Auditable {
      *
      * @return custom.
      */
+    String getCustom0();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom0 custom.
+     */
+    void setCustom0(String custom0);
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
     String getCustom1();
 
 
@@ -386,6 +401,86 @@ public interface Address extends Auditable {
      * @param custom4 custom.
      */
     void setCustom4(String custom4);
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom5();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom5 custom.
+     */
+    void setCustom5(String custom5);
+
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom6();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom6 custom.
+     */
+    void setCustom6(String custom6);
+
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom7();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom7 custom.
+     */
+    void setCustom7(String custom7);
+
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom8();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom8 custom.
+     */
+    void setCustom8(String custom8);
+
+
+
+    /**
+     * Get custom.
+     *
+     * @return custom.
+     */
+    String getCustom9();
+
+
+    /**
+     * set custom.
+     *
+     * @param custom9 custom.
+     */
+    void setCustom9(String custom9);
 
 }
 

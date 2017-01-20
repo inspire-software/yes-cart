@@ -575,10 +575,16 @@
         <property name="mobile2" type="string" column="MOBILE2" length="255" not-null="false"/>
         <property name="email1" type="string" column="EMAIL1" length="255" not-null="false"/>
         <property name="email2" type="string" column="EMAIL2" length="255" not-null="false"/>
+        <property name="custom0" type="string" column="CUSTOM0" length="255" not-null="false"/>
         <property name="custom1" type="string" column="CUSTOM1" length="255" not-null="false"/>
         <property name="custom2" type="string" column="CUSTOM2" length="255" not-null="false"/>
         <property name="custom3" type="string" column="CUSTOM3" length="255" not-null="false"/>
         <property name="custom4" type="string" column="CUSTOM4" length="255" not-null="false"/>
+        <property name="custom5" type="string" column="CUSTOM5" length="255" not-null="false"/>
+        <property name="custom6" type="string" column="CUSTOM6" length="255" not-null="false"/>
+        <property name="custom7" type="string" column="CUSTOM7" length="255" not-null="false"/>
+        <property name="custom8" type="string" column="CUSTOM8" length="255" not-null="false"/>
+        <property name="custom9" type="string" column="CUSTOM9" length="255" not-null="false"/>
 
         <property name="salutation" type="string" column="SALUTATION" length="128" not-null="false"/>
         <property name="firstname" type="string" column="FIRSTNAME" length="128" not-null="true"/>

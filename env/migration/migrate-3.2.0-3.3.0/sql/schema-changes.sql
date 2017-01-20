@@ -280,3 +280,32 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 
 INSERT INTO TDATAGROUP (DATAGROUP_ID, NAME, TYPE, DESCRIPTORS) VALUES (2010, 'Export Tax Configurations', 'EXPORT', 'taxconfigs.xml');
 INSERT INTO TDATADESCRIPTOR (DATADESCRIPTOR_ID, NAME, TYPE, VALUE) VALUES (2010, 'taxconfigs.xml', 'WEBINF_XML', 'taxconfigs.xml');
+
+
+--
+-- YC-761 Increase number of custom fields on Address to 10
+--
+
+update TATTRIBUTE set DESCRIPTION = 'Placeholders:
+{{salutation}} {{firstname}} {{middlename}} {{lastname}}
+{{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
+{{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
+{{custom0}} {{custom1}} {{custom2}} {{custom3}} {{custom4}}
+{{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}
+For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]' where GUID = 'SHOP_ADDRESS_FORMATTER';
+
+update  TATTRIBUTE set DESCRIPTION = 'List of address form attributes separated by comma.
+Available fields:
+salutation, firstname, middlename, lastname
+addrline1, addrline2, postcode, city, countrycode, statecode
+phone1, phone2, mobile1, mobile2
+email1, email2
+custom0, custom1, custom2, custom3, custom4
+custom5, custom6, custom7, custom8, custom9' where GUID = 'default_addressform';
+
+alter table TADDRESS add column CUSTOM0 varchar(255);
+alter table TADDRESS add column CUSTOM5 varchar(255);
+alter table TADDRESS add column CUSTOM6 varchar(255);
+alter table TADDRESS add column CUSTOM7 varchar(255);
+alter table TADDRESS add column CUSTOM8 varchar(255);
+alter table TADDRESS add column CUSTOM9 varchar(255);

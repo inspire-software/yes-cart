@@ -128,6 +128,12 @@
         </column-descriptor>
 
         <column-descriptor>
+            <column-header>Custom 0</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom0</name>
+        </column-descriptor>
+
+        <column-descriptor>
             <column-header>Custom 1</column-header>
             <field-type>FIELD</field-type>
             <name>custom1</name>
@@ -149,6 +155,36 @@
             <column-header>Custom 4</column-header>
             <field-type>FIELD</field-type>
             <name>custom4</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 5</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom5</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 6</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom6</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 7</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom7</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 8</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom8</name>
+        </column-descriptor>
+
+        <column-descriptor>
+            <column-header>Custom 9</column-header>
+            <field-type>FIELD</field-type>
+            <name>custom9</name>
         </column-descriptor>
 
         <column-descriptor>

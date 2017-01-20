@@ -88,6 +88,9 @@ public class AddressDTOImpl implements AddressDTO {
     @DtoField(value = "email2")
     private String email2;
 
+    @DtoField(value = "custom0")
+    private String custom0;
+
     @DtoField(value = "custom1")
     private String custom1;
 
@@ -99,6 +102,21 @@ public class AddressDTOImpl implements AddressDTO {
 
     @DtoField(value = "custom4")
     private String custom4;
+
+    @DtoField(value = "custom5")
+    private String custom5;
+
+    @DtoField(value = "custom6")
+    private String custom6;
+
+    @DtoField(value = "custom7")
+    private String custom7;
+
+    @DtoField(value = "custom8")
+    private String custom8;
+
+    @DtoField(value = "custom9")
+    private String custom9;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
@@ -163,6 +181,16 @@ public class AddressDTOImpl implements AddressDTO {
     }
 
     /** {@inheritDoc} */
+    public String getCustom0() {
+        return custom0;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom0(final String custom0) {
+        this.custom0 = custom0;
+    }
+
+    /** {@inheritDoc} */
     public String getCustom1() {
         return custom1;
     }
@@ -200,6 +228,56 @@ public class AddressDTOImpl implements AddressDTO {
     /** {@inheritDoc} */
     public void setCustom4(final String custom4) {
         this.custom4 = custom4;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom5() {
+        return custom5;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom5(final String custom5) {
+        this.custom5 = custom5;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom6() {
+        return custom6;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom6(final String custom6) {
+        this.custom6 = custom6;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom7() {
+        return custom7;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom7(final String custom7) {
+        this.custom7 = custom7;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom8() {
+        return custom8;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom8(final String custom8) {
+        this.custom8 = custom8;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustom9() {
+        return custom9;
+    }
+
+    /** {@inheritDoc} */
+    public void setCustom9(final String custom9) {
+        this.custom9 = custom9;
     }
 
     /** {@inheritDoc} */

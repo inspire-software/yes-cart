@@ -48,10 +48,16 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
     private String middlename;
     private String email1;
     private String email2;
+    private String custom0;
     private String custom1;
     private String custom2;
     private String custom3;
     private String custom4;
+    private String custom5;
+    private String custom6;
+    private String custom7;
+    private String custom8;
+    private String custom9;
     private boolean defaultAddress;
     private Customer customer;
     private Date createdTimestamp;
@@ -199,6 +205,14 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
         this.email2 = email2;
     }
 
+    public String getCustom0() {
+        return custom0;
+    }
+
+    public void setCustom0(final String custom0) {
+        this.custom0 = custom0;
+    }
+
     public String getCustom1() {
         return custom1;
     }
@@ -229,6 +243,46 @@ public class AddressEntity implements org.yes.cart.domain.entity.Address, java.i
 
     public void setCustom4(final String custom4) {
         this.custom4 = custom4;
+    }
+
+    public String getCustom5() {
+        return custom5;
+    }
+
+    public void setCustom5(final String custom5) {
+        this.custom5 = custom5;
+    }
+
+    public String getCustom6() {
+        return custom6;
+    }
+
+    public void setCustom6(final String custom6) {
+        this.custom6 = custom6;
+    }
+
+    public String getCustom7() {
+        return custom7;
+    }
+
+    public void setCustom7(final String custom7) {
+        this.custom7 = custom7;
+    }
+
+    public String getCustom8() {
+        return custom8;
+    }
+
+    public void setCustom8(final String custom8) {
+        this.custom8 = custom8;
+    }
+
+    public String getCustom9() {
+        return custom9;
+    }
+
+    public void setCustom9(final String custom9) {
+        this.custom9 = custom9;
     }
 
     public boolean isDefaultAddress() {

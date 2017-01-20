@@ -174,7 +174,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             "stateCode",
             "phone2", "mobile1", "mobile2",
             "email1", "email2",
-            "custom1", "custom2", "custom3", "custom4"
+            "custom0", "custom1", "custom2", "custom3", "custom4",
+            "custom5", "custom6", "custom7", "custom8", "custom9"
     );
 
     /** {@inheritDoc} */

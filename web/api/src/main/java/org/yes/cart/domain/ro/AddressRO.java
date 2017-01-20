@@ -96,6 +96,9 @@ public class AddressRO implements Serializable {
     @DtoField(value = "email2", readOnly = true)
     private String email2;
 
+    @DtoField(value = "custom0", readOnly = true)
+    private String custom0;
+
     @DtoField(value = "custom1", readOnly = true)
     private String custom1;
 
@@ -107,6 +110,21 @@ public class AddressRO implements Serializable {
 
     @DtoField(value = "custom4", readOnly = true)
     private String custom4;
+
+    @DtoField(value = "custom5", readOnly = true)
+    private String custom5;
+
+    @DtoField(value = "custom6", readOnly = true)
+    private String custom6;
+
+    @DtoField(value = "custom7", readOnly = true)
+    private String custom7;
+
+    @DtoField(value = "custom8", readOnly = true)
+    private String custom8;
+
+    @DtoField(value = "custom9", readOnly = true)
+    private String custom9;
 
     @DtoField(value = "customer.customerId", readOnly = true)
     private long customerId;
@@ -311,6 +329,15 @@ public class AddressRO implements Serializable {
         this.email2 = email2;
     }
 
+    @XmlElement(name = "custom-0")
+    public String getCustom0() {
+        return custom0;
+    }
+
+    public void setCustom0(final String custom0) {
+        this.custom0 = custom0;
+    }
+
     @XmlElement(name = "custom-1")
     public String getCustom1() {
         return custom1;
@@ -345,6 +372,51 @@ public class AddressRO implements Serializable {
 
     public void setCustom4(final String custom4) {
         this.custom4 = custom4;
+    }
+
+    @XmlElement(name = "custom-5")
+    public String getCustom5() {
+        return custom5;
+    }
+
+    public void setCustom5(final String custom5) {
+        this.custom5 = custom5;
+    }
+
+    @XmlElement(name = "custom-6")
+    public String getCustom6() {
+        return custom6;
+    }
+
+    public void setCustom6(final String custom6) {
+        this.custom6 = custom6;
+    }
+
+    @XmlElement(name = "custom-7")
+    public String getCustom7() {
+        return custom7;
+    }
+
+    public void setCustom7(final String custom7) {
+        this.custom7 = custom7;
+    }
+
+    @XmlElement(name = "custom-8")
+    public String getCustom8() {
+        return custom8;
+    }
+
+    public void setCustom8(final String custom8) {
+        this.custom8 = custom8;
+    }
+
+    @XmlElement(name = "custom-9")
+    public String getCustom9() {
+        return custom9;
+    }
+
+    public void setCustom9(final String custom9) {
+        this.custom9 = custom9;
     }
 
     @XmlAttribute(name = "customer-id")

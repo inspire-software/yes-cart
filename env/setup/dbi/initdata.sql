@@ -82,7 +82,8 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 {{salutation}} {{firstname}} {{middlename}} {{lastname}}
 {{addrline1}} {{addrline2}} {{postcode}} {{city}} {{countrycode}} {{statecode}}
 {{phone1}} {{phone2}} {{mobile1}} {{mobile2}} {{email1}} {{email2}}
-{{custom1}} {{custom2}} {{custom3}} {{custom4}}
+{{custom0}} {{custom1}} {{custom2}} {{custom3}} {{custom4}}
+{{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}
 For country/type/language specific formatting add attributes with suffixes _[code], _[type] or _[lang]',  1011, 1001, 0, 0, 0, 0);
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
@@ -634,7 +635,8 @@ salutation, firstname, middlename, lastname
 addrline1, addrline2, postcode, city, countrycode, statecode
 phone1, phone2, mobile1, mobile2
 email1, email2
-custom1, custom2, custom3, custom4',  1004, 1007, 0, 0, 0, 0);
+custom0, custom1, custom2, custom3, custom4
+custom5, custom6, custom7, custom8, custom9',  1004, 1007, 0, 0, 0, 0);
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, CHOICES, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  11201,  'default_salutation', 'default_salutation',  0,  'salutation',  'Salutation',  'Salutation CSV options
 e.g. "en|Mr-Mr,Mrs-Mrs,Dr-Dr"', 'en#~#Mrs-Mrs,Miss-Miss,Mr-Mr#~#uk#~#Пані-Пані,Пан-Пан#~#ru#~#-#~#de#~#Frau-Frau,Herr-Herr', 1004,  1007, 0, 0, 0, 0);

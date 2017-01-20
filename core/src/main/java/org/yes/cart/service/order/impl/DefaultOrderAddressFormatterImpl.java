@@ -77,10 +77,16 @@ public class DefaultOrderAddressFormatterImpl implements OrderAddressFormatter {
             values.put("email1", StringUtils.defaultString(address.getEmail1()));
             values.put("email2", StringUtils.defaultString(address.getEmail2()));
 
+            values.put("custom0", StringUtils.defaultString(address.getCustom0()));
             values.put("custom1", StringUtils.defaultString(address.getCustom1()));
             values.put("custom2", StringUtils.defaultString(address.getCustom2()));
             values.put("custom3", StringUtils.defaultString(address.getCustom3()));
             values.put("custom4", StringUtils.defaultString(address.getCustom4()));
+            values.put("custom5", StringUtils.defaultString(address.getCustom5()));
+            values.put("custom6", StringUtils.defaultString(address.getCustom6()));
+            values.put("custom7", StringUtils.defaultString(address.getCustom7()));
+            values.put("custom8", StringUtils.defaultString(address.getCustom8()));
+            values.put("custom9", StringUtils.defaultString(address.getCustom9()));
 
             return new StrSubstitutor(values, "{{", "}}").replace(format);
 

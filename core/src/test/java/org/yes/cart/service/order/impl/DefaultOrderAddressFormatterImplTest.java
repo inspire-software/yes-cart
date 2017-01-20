@@ -55,10 +55,16 @@ public class DefaultOrderAddressFormatterImplTest {
             allowing(address).getMobile2(); will(returnValue("M2"));
             allowing(address).getEmail1(); will(returnValue("E1"));
             allowing(address).getEmail2(); will(returnValue("E2"));
+            allowing(address).getCustom0(); will(returnValue("C0"));
             allowing(address).getCustom1(); will(returnValue("C1"));
             allowing(address).getCustom2(); will(returnValue("C2"));
             allowing(address).getCustom3(); will(returnValue("C3"));
             allowing(address).getCustom4(); will(returnValue("C4"));
+            allowing(address).getCustom5(); will(returnValue("C5"));
+            allowing(address).getCustom6(); will(returnValue("C6"));
+            allowing(address).getCustom7(); will(returnValue("C7"));
+            allowing(address).getCustom8(); will(returnValue("C8"));
+            allowing(address).getCustom9(); will(returnValue("C9"));
         }});
 
         final DefaultOrderAddressFormatterImpl formatter = new DefaultOrderAddressFormatterImpl(
@@ -71,6 +77,7 @@ public class DefaultOrderAddressFormatterImplTest {
         assertEquals("S N1 N2 N3 L1 L2 PC C CC SC P1 P2 M1 M2 E1 E2 C1 C2 C3 C4", formatter.formatAddress(address));
         assertEquals("N1 N3", formatter.formatAddress(address, "{{firstname}} {{lastname}}"));
         assertEquals("N1 N3 N2", formatter.formatAddress(address, "{{firstname}} {{lastname}} {{middlename}}"));
+        assertEquals("C0 C5 C6 C7 C8 C9", formatter.formatAddress(address, "{{custom0}} {{custom5}} {{custom6}} {{custom7}} {{custom8}} {{custom9}}"));
 
     }
 
