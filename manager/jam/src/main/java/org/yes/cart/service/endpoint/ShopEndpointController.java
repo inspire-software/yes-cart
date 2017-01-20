@@ -47,7 +47,7 @@ public interface ShopEndpointController {
     VoShop getById(@PathVariable("id") long id) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @Secured({"ROLE_SMADMIN"})
     @RequestMapping(method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop create(@RequestBody VoShop voShop) throws Exception;

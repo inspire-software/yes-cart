@@ -73,7 +73,7 @@ public interface CustomerEndpointController {
     List<VoAttrValueCustomer> updateCustomer(@RequestBody List<MutablePair<VoAttrValueCustomer, Boolean>> vo) throws Exception;
 
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/reset/{customerId}/{shopId}", method = RequestMethod.POST)
     @ResponseBody
     void resetPassword(@PathVariable("customerId") long customerId, @PathVariable("shopId") long shopId) throws Exception;
