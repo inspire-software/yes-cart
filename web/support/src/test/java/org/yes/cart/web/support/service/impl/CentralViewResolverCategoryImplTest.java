@@ -125,6 +125,80 @@ public class CentralViewResolverCategoryImplTest {
     }
 
     @Test
+    public void testResolveMainPanelRendererLabelProductsTemplate() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+
+        context.checking(new Expectations() {{
+            one(shopService).getShopCategoryTemplate(2L, 10L);
+            will(returnValue("products"));
+        }});
+
+        try {
+            ShopCodeContext.setShopId(2L);
+
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put(WebParametersKeys.CATEGORY_ID, "10");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals("products", resolved.getFirst());
+            assertEquals(CentralViewLabel.PRODUCTS_LIST, resolved.getSecond());
+
+        } finally {
+
+            ShopCodeContext.clear();
+
+        }
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
+    public void testResolveMainPanelRendererLabelSubCategoriesTemplate() throws Exception {
+
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+        final CategoryService categoryService = context.mock(CategoryService.class, "categoryService");
+        final ShopSearchSupportService shopSearchSupportService = context.mock(ShopSearchSupportService.class, "shopSearchSupportService");
+        final ProductService productService = context.mock(ProductService.class, "productService");
+        final LuceneQueryFactory luceneQueryFactory = context.mock(LuceneQueryFactory.class, "luceneQueryFactory");
+
+        CentralViewResolverCategoryImpl resolver = new CentralViewResolverCategoryImpl(shopService, categoryService, shopSearchSupportService, productService, luceneQueryFactory);
+
+        context.checking(new Expectations() {{
+            one(shopService).getShopCategoryTemplate(2L, 10L);
+            will(returnValue("subcats"));
+        }});
+
+        try {
+            ShopCodeContext.setShopId(2L);
+
+            final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
+                put(WebParametersKeys.CATEGORY_ID, "10");
+            }});
+
+            assertNotNull(resolved);
+            assertEquals("subcats", resolved.getFirst());
+            assertEquals(CentralViewLabel.SUBCATEGORIES_LIST, resolved.getSecond());
+
+        } finally {
+
+            ShopCodeContext.clear();
+
+        }
+
+        context.assertIsSatisfied();
+
+    }
+
+    @Test
     public void testResolveMainPanelRendererLabelCategoryNoTemplateNoProductsNoSubCats() throws Exception {
 
         final ShopService shopService = context.mock(ShopService.class, "shopService");

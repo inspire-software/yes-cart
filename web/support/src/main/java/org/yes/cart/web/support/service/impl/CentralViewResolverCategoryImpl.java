@@ -92,6 +92,11 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
                 final String template = shopService.getShopCategoryTemplate(shopId, categoryId);
                 if (StringUtils.isNotBlank(template)) {
+                    if (CentralViewLabel.PRODUCTS_LIST.equals(template)) {
+                        return DEFAULT_PL;
+                    } else if (CentralViewLabel.SUBCATEGORIES_LIST.equals(template)) {
+                        return DEFAULT_SC;
+                    }
                     return new Pair<String, String>(template, CentralViewLabel.CATEGORY);
                 }
 
