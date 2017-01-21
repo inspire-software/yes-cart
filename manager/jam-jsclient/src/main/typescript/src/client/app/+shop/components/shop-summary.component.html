@@ -204,6 +204,14 @@
                   <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted">{{ shopSummary.customerTypesRfq.first }} <span class="label label-info">YCE</span></td>
                   <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesRfq.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
                 </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted">{{ shopSummary.customerTypesOrderApproval.first }} <span class="label label-info">YCE</span></td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesOrderApproval.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
+                </tr>
+                <tr>
+                  <td title="{{ 'PANEL_CUSTOMER_SERVICE_CUSTOMERS' | translate }}" class="text-muted">{{ shopSummary.customerTypesBlockCheckout.first }} <span class="label label-info">YCE</span></td>
+                  <td *ngFor="let type of shopSummary.customerTypes" title="{{type.first}}: {{type.second}}"><i class="fa  {{ isTypeEnabled(type.first, shopSummary.customerTypesBlockCheckout.second) ? 'fa-check text-success' : 'fa-remove text-danger' }}"></i></td>
+                </tr>
                 </tbody>
               </table>
             </section>

@@ -84,6 +84,8 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesSeeTax;
     private MutablePair<String, List<String>> customerTypesChangeTaxView;
     private MutablePair<String, List<String>> customerTypesRfq;
+    private MutablePair<String, List<String>> customerTypesOrderApproval;
+    private MutablePair<String, List<String>> customerTypesBlockCheckout;
 
     private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<MutablePair<String, Boolean>>();
     private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<MutablePair<String, Boolean>>();
@@ -419,6 +421,22 @@ public class VoShopSummary {
 
     public void setCustomerTypesRfq(final MutablePair<String, List<String>> customerTypesRfq) {
         this.customerTypesRfq = customerTypesRfq;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesOrderApproval() {
+        return customerTypesOrderApproval;
+    }
+
+    public void setCustomerTypesOrderApproval(final MutablePair<String, List<String>> customerTypesOrderApproval) {
+        this.customerTypesOrderApproval = customerTypesOrderApproval;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesBlockCheckout() {
+        return customerTypesBlockCheckout;
+    }
+
+    public void setCustomerTypesBlockCheckout(final MutablePair<String, List<String>> customerTypesBlockCheckout) {
+        this.customerTypesBlockCheckout = customerTypesBlockCheckout;
     }
 
     public List<MutablePair<String, Boolean>> getEmailTemplates() {

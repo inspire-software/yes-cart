@@ -66,6 +66,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> sfRequireCustomerRegistrationApprovalTypes;
     private Set<String> sfRequireCustomerRegistrationNotificationTypes;
+    private Set<String> sfRequireCustomerOrderApprovalTypes;
+    private Set<String> sfBlockCustomerCheckoutTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean sfPageTraceOn = null;
@@ -528,7 +530,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     private Set<String> getSfRequireCustomerRegistrationNotificationTypes() {
         if (this.sfRequireCustomerRegistrationNotificationTypes == null) {
-            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION);
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION);
             if (attrs != null) {
                 this.sfRequireCustomerRegistrationNotificationTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
             } else {
@@ -542,6 +544,37 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
         return getSfRequireCustomerRegistrationNotificationTypes().contains(customerType);
     }
 
+    private Set<String> getSfRequireCustomerOrderApprovalTypes() {
+        if (this.sfRequireCustomerOrderApprovalTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE);
+            if (attrs != null) {
+                this.sfRequireCustomerOrderApprovalTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfRequireCustomerOrderApprovalTypes = Collections.emptySet();
+            }
+        }
+        return this.sfRequireCustomerOrderApprovalTypes;
+    }
+
+    public boolean isSfRequireCustomerOrderApproval(final String customerType) {
+        return getSfRequireCustomerOrderApprovalTypes().contains(customerType);
+    }
+
+    private Set<String> getSfBlockCustomerCheckoutTypes() {
+        if (this.sfBlockCustomerCheckoutTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER);
+            if (attrs != null) {
+                this.sfBlockCustomerCheckoutTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfBlockCustomerCheckoutTypes = Collections.emptySet();
+            }
+        }
+        return this.sfBlockCustomerCheckoutTypes;
+    }
+
+    public boolean isSfBlockCustomerCheckout(final String customerType) {
+        return getSfBlockCustomerCheckoutTypes().contains(customerType);
+    }
 
     public String getDefaultShopUrl() {
         return getDefaultShopUrlWithProtocol("http://");

@@ -56,7 +56,21 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     private String locale;
     private String orderMessage;
+
     private String orderStatus;
+
+    private boolean blockExport;
+    private Date lastExportDate;
+    private String lastExportStatus;
+    private String lastExportOrderStatus;
+
+    private String b2bRef;
+    private String b2bEmployeeId;
+    private String b2bChargeId;
+    private boolean b2bRequireApprove;
+    private String b2bApprovedBy;
+    private Date b2bApprovedDate;
+
     private Customer customer;
     private Shop shop;
     private Collection<CustomerOrderDet> orderDetail = new ArrayList<CustomerOrderDet>(0);
@@ -173,6 +187,86 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    public String getLastExportOrderStatus() {
+        return lastExportOrderStatus;
+    }
+
+    public void setLastExportOrderStatus(final String lastExportOrderStatus) {
+        this.lastExportOrderStatus = lastExportOrderStatus;
+    }
+
+    public String getB2bRef() {
+        return b2bRef;
+    }
+
+    public void setB2bRef(final String b2bRef) {
+        this.b2bRef = b2bRef;
+    }
+
+    public String getB2bEmployeeId() {
+        return b2bEmployeeId;
+    }
+
+    public void setB2bEmployeeId(final String b2bEmployeeId) {
+        this.b2bEmployeeId = b2bEmployeeId;
+    }
+
+    public String getB2bChargeId() {
+        return b2bChargeId;
+    }
+
+    public void setB2bChargeId(final String b2bChargeId) {
+        this.b2bChargeId = b2bChargeId;
+    }
+
+    public boolean isB2bRequireApprove() {
+        return b2bRequireApprove;
+    }
+
+    public void setB2bRequireApprove(final boolean b2bRequireApprove) {
+        this.b2bRequireApprove = b2bRequireApprove;
+    }
+
+    public String getB2bApprovedBy() {
+        return b2bApprovedBy;
+    }
+
+    public void setB2bApprovedBy(final String b2bApprovedBy) {
+        this.b2bApprovedBy = b2bApprovedBy;
+    }
+
+    public Date getB2bApprovedDate() {
+        return b2bApprovedDate;
+    }
+
+    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+        this.b2bApprovedDate = b2bApprovedDate;
     }
 
     public Customer getCustomer() {

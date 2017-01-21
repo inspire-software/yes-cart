@@ -100,4 +100,20 @@ public interface OrderInfo extends Serializable {
      */
     boolean isMultipleDeliveryAvailable();
 
+    /**
+     * Get additional details stored on this cart.
+     *
+     * @return additional details
+     */
+    Map<String, String> getDetails();
+
+    /**
+     * Get additional details stored on this cart by key.
+     *
+     * @param key key
+     *
+     * @return additional detail
+     */
+    String getDetailByKey(String key);
+
 }

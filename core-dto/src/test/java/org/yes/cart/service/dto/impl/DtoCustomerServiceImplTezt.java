@@ -19,6 +19,7 @@ package org.yes.cart.service.dto.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.DtoServiceSpringKeys;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.AttrValueDTO;
@@ -122,7 +123,11 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.createEntityAttributeValue(attrValueDTO);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getCustomerId());
         assertFalse(list.isEmpty());
-        assertEquals("+380978159999", list.get(0).getVal());
+        for (AttrValueDTO av : list) {
+            if (AttributeNamesKeys.Customer.CUSTOMER_PHONE.equals(av.getAttributeDTO().getCode())) {
+                assertEquals("+380978159999", av.getVal());
+            }
+        }
     }
 
     @Test
@@ -138,12 +143,20 @@ public class DtoCustomerServiceImplTezt extends BaseCoreDBTestCase {
         dtoService.createEntityAttributeValue(attrValueDTO);
         List<? extends AttrValueDTO> list = dtoService.getEntityAttributes(dto.getCustomerId());
         assertFalse(list.isEmpty());
-        assertEquals("+380978159999", list.get(0).getVal());
-        AttrValueCustomerDTO aDto = (AttrValueCustomerDTO) list.get(0);
+        AttrValueCustomerDTO aDto = null;
+        for (AttrValueDTO av : list) {
+            if (AttributeNamesKeys.Customer.CUSTOMER_PHONE.equals(av.getAttributeDTO().getCode())) {
+                assertEquals("+380978159999", av.getVal());
+                aDto = (AttrValueCustomerDTO) av;
+            }
+        }
+        assertNotNull(aDto);
         aDto.setVal("+44555123456");
         aDto = (AttrValueCustomerDTO) dtoService.updateEntityAttributeValue(aDto);
         assertEquals("+44555123456", aDto.getVal());
     }
+
+
 
     @Test
     public void testDeleteAttributeValue() throws Exception {

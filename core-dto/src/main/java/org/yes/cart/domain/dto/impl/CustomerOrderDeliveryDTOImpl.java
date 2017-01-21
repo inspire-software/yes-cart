@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  *
@@ -114,6 +115,15 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
             readOnly = true
     )
     private Collection<CustomerOrderDeliveryDetailDTO> detail;
+
+    @DtoField(value = "blockExport", readOnly = true)
+    private boolean blockExport;
+    @DtoField(value = "lastExportDate", readOnly = true)
+    private Date lastExportDate;
+    @DtoField(value = "lastExportStatus", readOnly = true)
+    private String lastExportStatus;
+    @DtoField(value = "lastExportDeliveryStatus", readOnly = true)
+    private String lastExportDeliveryStatus;
 
 
     /** {@inheritDoc} */
@@ -294,6 +304,46 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setDeliveryStatus(final String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    /** {@inheritDoc} */
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    /** {@inheritDoc} */
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    /** {@inheritDoc} */
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    /** {@inheritDoc} */
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    /** {@inheritDoc} */
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    /** {@inheritDoc} */
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    /** {@inheritDoc} */
+    public String getLastExportDeliveryStatus() {
+        return lastExportDeliveryStatus;
+    }
+
+    /** {@inheritDoc} */
+    public void setLastExportDeliveryStatus(final String lastExportDeliveryStatus) {
+        this.lastExportDeliveryStatus = lastExportDeliveryStatus;
     }
 
     /** {@inheritDoc} */

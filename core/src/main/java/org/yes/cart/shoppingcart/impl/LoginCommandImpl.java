@@ -19,6 +19,7 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Address;
+import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.CustomerService;
@@ -84,6 +85,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             final Shop current = shopService.getShopByCode(shopCode);
 
             final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
+            final MutableOrderInfo info = shoppingCart.getOrderInfo();
             if (current != null && authenticate(email, current, passw)) {
                 final Customer customer = customerService.getCustomerByEmail(email, current);
                 final List<String> customerShops = new ArrayList<String>();
@@ -96,6 +98,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 ctx.setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(shoppingCart, customer);
                 setDefaultTaxOptions(current, customer, ctx);
+                setDefaultB2BOptions(current, customer, info);
 
                 recalculatePricesInCart(shoppingCart);
                 recalculate(shoppingCart);
@@ -103,6 +106,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             } else {
                 shoppingCart.getShoppingContext().clearContext();
                 setDefaultTaxOptions(current, null, ctx);
+                setDefaultB2BOptions(current, null, info);
                 markDirty(shoppingCart);
             }
         }
@@ -139,15 +143,15 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
     protected void setDefaultTaxOptions(final Shop shop, final Customer customer, final MutableShoppingContext ctx) {
 
         // If types limit is set then only enable showTax option for given types. Anonymous type is B2G, blank is B2C
-        final String customerType = customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
+        final String customerType = getCurrentCustomerType(customer);
 
-        boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
+        boolean showTax = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
         if (showTax) {
             final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
             showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains(customerType);
         }
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
+        final boolean showTaxNet = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
+        final boolean showTaxAmount = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
 
         ctx.setTaxInfoChangeViewEnabled(false);
         final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
@@ -165,6 +169,68 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
 
     }
 
+    private void setDefaultB2BOptions(final Shop shop, final Customer customer, final MutableOrderInfo info) {
+
+        final String customerType = getCurrentCustomerType(customer);
+
+        boolean blockCheckout = shop.isSfBlockCustomerCheckout(customerType);
+        boolean orderRequiresApproval = shop.isSfRequireCustomerOrderApproval(customerType);
+
+        info.putDetail("b2bRequireApprove", String.valueOf(orderRequiresApproval));
+        info.putDetail("blockCheckout", String.valueOf(blockCheckout));
+
+        if (customer != null) {
+
+            // default reference
+            final AttrValue b2bRef = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REF);
+            info.putDetail("b2bRef", b2bRef != null && StringUtils.isNotBlank(b2bRef.getVal()) ? b2bRef.getVal() : null);
+
+            // Employee ID preset
+            final AttrValue employeeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID);
+            info.putDetail("b2bEmployeeId", employeeId != null && StringUtils.isNotBlank(employeeId.getVal()) ? employeeId.getVal() : null);
+
+            // Charge ID preset
+            final AttrValue b2bChargeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_CHARGE_ID);
+            info.putDetail("b2bChargeId", b2bChargeId != null && StringUtils.isNotBlank(b2bChargeId.getVal()) ? b2bChargeId.getVal() : null);
+
+            // Customer level approve flag
+            if (!orderRequiresApproval) {
+                final AttrValue orderRequiresApprovalCustomer =
+                        customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE);
+                info.putDetail("b2bRequireApprove", Boolean.valueOf(orderRequiresApprovalCustomer != null ? orderRequiresApprovalCustomer.getVal() : Boolean.FALSE.toString()).toString());
+            }
+
+            // Customer level block checkout
+            if (!blockCheckout) {
+                final AttrValue blockCheckoutCustomer =
+                        customer.getAttributeByCode(AttributeNamesKeys.Customer.BLOCK_CHECKOUT);
+                info.putDetail("blockCheckout", Boolean.valueOf(blockCheckoutCustomer != null ? blockCheckoutCustomer.getVal() : Boolean.FALSE.toString()).toString());
+            }
+
+        } else {
+
+            info.putDetail("b2bRef", null);
+            info.putDetail("b2bEmployeeId", null);
+            info.putDetail("b2bChargeId", null);
+
+        }
+
+        // Ensure approved information is removed
+        info.putDetail("b2bApprovedBy", null);
+        info.putDetail("b2bApprovedDate", null);
+
+    }
+
+    /**
+     * Default customer type determination.
+     *
+     * @param customer customer or null for anonymous
+     *
+     * @return type (not null)
+     */
+    protected String getCurrentCustomerType(final Customer customer) {
+        return customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
+    }
 
     private boolean authenticate(final String username, final Shop shop, final String password) {
         return customerService.isCustomerExists(username, shop) &&

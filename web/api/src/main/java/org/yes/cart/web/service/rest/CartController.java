@@ -2519,9 +2519,20 @@ public class CartController {
 
             return review;
 
+        } catch (PlaceOrderDisabledException checkoutDisabled) {
+
+            ShopCodeContext.getLog(this).warn(checkoutDisabled.getMessage());
+
+            final OrderPreviewRO review = new OrderPreviewRO();
+            review.setSuccess(false);
+            final Map<String, String> problems = new HashMap<String, String>();
+            problems.put("ERROR_CHECKOUT", "DISABLED");
+            review.setProblems(problems);
+            return review;
+
         } catch (CouponCodeInvalidException invalidCoupon) {
 
-            ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
+            ShopCodeContext.getLog(this).warn(invalidCoupon.getMessage());
 
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

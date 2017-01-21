@@ -1349,7 +1349,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setShippingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" multiple-delivery-available=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-details/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
         final AddressOptionRO billAddressOptionRO = new AddressOptionRO();
@@ -1364,7 +1364,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setBillingCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" multiple-delivery-available=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-details/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1381,7 +1381,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setBillingSameCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" multiple-delivery-available=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-details/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1410,7 +1410,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(setCarrierCart))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" multiple-delivery-available=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-details/></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
 
@@ -1454,7 +1454,7 @@ public class CheckoutSuiteTest extends AbstractSuiteTest {
                 .content(pgOptionBody))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-message>My Message</order-message></order-info>")))
+                .andExpect(content().string(StringContains.containsString("<order-info billing-address-not-required=\"false\" delivery-address-not-required=\"false\" multiple-delivery=\"false\" multiple-delivery-available=\"false\" separate-billing-address=\"false\"><carrier-sla-ids/><order-details><entry key=\"orderMessage\">My Message</entry></order-details><order-message>My Message</order-message></order-info>")))
                 .andExpect(header().string("yc", uuid));
 
         final OrderDeliveryOptionRO delOption = new OrderDeliveryOptionRO();

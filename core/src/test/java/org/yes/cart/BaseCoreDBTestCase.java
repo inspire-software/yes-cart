@@ -270,6 +270,24 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         return createCustomer("2");
     }
 
+    protected Customer createCustomerB2B() {
+        return createCustomerB2B(true, false);
+    }
+
+    protected Customer createCustomerB2B(boolean requireApproveOrder, boolean blockCheckout) {
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        CustomerService customerService = (CustomerService) ctx().getBean(ServiceSpringKeys.CUSTOMER_SERVICE);
+        Customer customer = createCustomer("B2B");
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REF, "REF-001");
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_CHARGE_ID, "CHARGE-001");
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID, "EMP-001");
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE, String.valueOf(requireApproveOrder));
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.BLOCK_CHECKOUT, String.valueOf(blockCheckout));
+        customerService.update(customer);
+        customer = customerService.getCustomerByEmail(customer.getEmail(), shopService.getById(10L));
+        return customer;
+    }
+
     protected Customer createCustomer(String number) {
         String prefix = getTestName() + number;
         ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
@@ -280,7 +298,7 @@ public abstract class BaseCoreDBTestCase extends AbstractTestDAO {
         customer.setFirstname(prefix + "John");
         customer.setLastname(prefix + "Doe");
         customer.setPassword("rawpassword");
-        customerService.addAttribute(customer, AttributeNamesKeys.CUSTOMER_PHONE, "555-55-51");
+        customerService.addAttribute(customer, AttributeNamesKeys.Customer.CUSTOMER_PHONE, "555-55-51");
         final Shop shop = shopService.getById(10L);
         customer = customerService.create(customer, shop);
         Address address = addressService.getGenericDao().getEntityFactory().getByIface(Address.class);

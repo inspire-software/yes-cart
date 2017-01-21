@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -66,6 +67,51 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove"));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
 
     }
+
+
+    @Test
+    public void testExecuteB2B() {
+
+        ShopService shopService = (ShopService) ctx().getBean(ServiceSpringKeys.SHOP_SERVICE);
+        Shop shop10 = shopService.getById(10L);
+        Shop shop20 = shopService.getById(20L);
+
+        final Customer customer = createCustomerB2B();
+
+        MutableShoppingCart shoppingCart = new ShoppingCartImpl();
+        shoppingCart.initialise(ctx().getBean("amountCalculationStrategy", AmountCalculationStrategy.class));
+        final ShoppingCartCommandFactory commands = ctx().getBean("shoppingCartCommandFactory", ShoppingCartCommandFactory.class);
+
+        Map<String, String> params = new HashMap<String, String>();
+        shoppingCart.getShoppingContext().setShopCode(shop20.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop20.getShopId());
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
+
+        assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_EMAIL, customer.getEmail());
+        params.put(ShoppingCartCommand.CMD_LOGIN_P_PASS, "rawpassword");
+        params.put(ShoppingCartCommand.CMD_LOGIN, "1");
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.NOT_LOGGED, shoppingCart.getLogonState());
+
+        shoppingCart.getShoppingContext().setShopCode(shop10.getCode());
+        shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
+        commands.execute(shoppingCart, (Map) params);
+        assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
+        assertEquals("REF-001", shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
+        assertEquals("CHARGE-001", shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
+        assertEquals("EMP-001", shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
+        assertEquals("true", shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove"));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
+
+    }
+
 }

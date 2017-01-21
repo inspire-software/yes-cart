@@ -174,14 +174,14 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         attrData.remove("lastname");
         attrData.remove("middlename");
         attrData.remove("customerType");
-        if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.CUSTOMER_PHONE)) {
-            attrData.put(AttributeNamesKeys.CUSTOMER_PHONE, attrData.remove("phone"));
+        if (attrData.containsKey("phone") && !attrData.containsKey(AttributeNamesKeys.Customer.CUSTOMER_PHONE)) {
+            attrData.put(AttributeNamesKeys.Customer.CUSTOMER_PHONE, attrData.remove("phone"));
         }
 
         final List<String> allowed = registrationShop.getSupportedRegistrationFormAttributesAsList(customerType);
         final List<String> allowedFull = new ArrayList<String>();
         allowedFull.addAll(allowed);
-        allowedFull.add(AttributeNamesKeys.CUSTOMER_PHONE);
+        allowedFull.add(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
 
         for (final Map.Entry<String, Object> attrVal : attrData.entrySet()) {
 

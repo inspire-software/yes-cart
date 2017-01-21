@@ -275,7 +275,17 @@ public interface AttributeNamesKeys {
         /**
          * Registration for given types required notification to admin.
          */
-        String SHOP_SF_REQUIRE_REG_NOFIICATION = "SHOP_SF_REQUIRE_REG_NOTIFY_TYPES";
+        String SHOP_SF_REQUIRE_REG_NOTIFICATION = "SHOP_SF_REQUIRE_REG_NOTIFY_TYPES";
+
+        /**
+         * Customer types whose orders require approval.
+         */
+        String SHOP_SF_REQUIRE_ORDER_APPROVE = "SHOP_SF_REQUIRE_ORDER_APPROVE_TYPES";
+
+        /**
+         * Customer types who are not allowed to place orders.
+         */
+        String SHOP_SF_CANNOT_PLACE_ORDER = "SHOP_SF_CANNOT_PLACE_ORDER_TYPES";
 
         /**
          * Supported by shop currencies.
@@ -562,25 +572,43 @@ public interface AttributeNamesKeys {
 
     }
 
+    interface Customer {
 
-    /**
-     * Default (failover) directory for resources.
-     */
-    String SEARCH_ITEMS_PER_PAGE = "SEARCH_ITEMS_PER_PAGE";
+        /**
+         * Employee ID.
+         */
+        String B2B_REF = "CUSTOMER_B2B_REF";
 
-    /**
-     * Customer phone.
-     */
-    String CUSTOMER_PHONE = "CUSTOMER_PHONE";
+        /**
+         * Employee ID.
+         */
+        String B2B_EMPLOYEE_ID = "CUSTOMER_B2B_EMPLOYEE_ID";
 
-    /**
-     * Customer has opted in for marketing contact.
-     */
-    String MARKETING_OPT_IN = "MARKETING_OPT_IN";
+        /**
+         * Charge authority for placed orders
+         */
+        String B2B_CHARGE_ID = "CUSTOMER_B2B_CHARGE_ID";
 
-    /**
-     * Customer salutation attribute (only used for options)
-     */
-    String CUSTOMER_SALUTATIONS = "CUSTOMER_SALUTATIONS";
+        /**
+         * Customer specific orders require approval flag
+         */
+        String B2B_REQUIRE_APPROVE = "CUSTOMER_B2B_REQUIRE_APPROVE";
+
+        /**
+         * Block checkout for this customer
+         */
+        String BLOCK_CHECKOUT = "CUSTOMER_BLOCK_CHECKOUT";
+
+        /**
+         * Customer phone.
+         */
+        String CUSTOMER_PHONE = "CUSTOMER_PHONE";
+
+        /**
+         * Customer has opted in for marketing contact.
+         */
+        String MARKETING_OPT_IN = "MARKETING_OPT_IN";
+
+    }
 
 }

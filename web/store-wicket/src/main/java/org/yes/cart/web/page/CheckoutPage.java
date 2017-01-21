@@ -49,6 +49,7 @@ import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayDescriptor;
 import org.yes.cart.service.order.CouponCodeInvalidException;
 import org.yes.cart.service.order.OrderAssemblyException;
+import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
@@ -317,10 +318,19 @@ public class CheckoutPage extends AbstractWebPage {
         persistCartIfNecessary();
 
         try {
+
             checkoutServiceFacade.createFromCart(cart);
+
+        } catch (PlaceOrderDisabledException checkoutDisabled) {
+
+            ShopCodeContext.getLog(this).warn(checkoutDisabled.getMessage());
+
+            setResponsePage(ShoppingCartPage.class, new PageParameters().set(ERROR, "1"));
+
+
         } catch (CouponCodeInvalidException invalidCoupon) {
 
-            ShopCodeContext.getLog(this).error(invalidCoupon.getMessage(), invalidCoupon);
+            ShopCodeContext.getLog(this).warn(invalidCoupon.getMessage());
 
             setResponsePage(ShoppingCartPage.class, new PageParameters()
                             .set(ERROR, ERROR_COUPON)
@@ -328,7 +338,7 @@ public class CheckoutPage extends AbstractWebPage {
 
         } catch (SkuUnavailableException skuUnavailable) {
 
-            ShopCodeContext.getLog(this).error(skuUnavailable.getMessage(), skuUnavailable);
+            ShopCodeContext.getLog(this).warn(skuUnavailable.getMessage());
 
             setResponsePage(ShoppingCartPage.class, new PageParameters()
                     .set(ERROR, ERROR_SKU)

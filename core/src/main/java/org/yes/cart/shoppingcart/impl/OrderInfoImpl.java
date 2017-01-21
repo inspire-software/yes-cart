@@ -29,6 +29,8 @@ import java.util.Map;
  */
 public class OrderInfoImpl implements MutableOrderInfo {
 
+    private static final String ORDER_MSG_KEY = "orderMessage";
+
     private String paymentGatewayLabel;
     private boolean multipleDelivery;
     private boolean multipleDeliveryAvailable;
@@ -38,6 +40,7 @@ public class OrderInfoImpl implements MutableOrderInfo {
     private Map<String, Long> carrierSlaId;
     private Long billingAddressId;
     private Long deliveryAddressId;
+    private Map<String, String> details;
     private String orderMessage;
 
     /** {@inheritDoc} */
@@ -47,24 +50,67 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     /** {@inheritDoc} */
     public void setOrderMessage(final String orderMessage) {
-        this.orderMessage = orderMessage;
+        putDetail(ORDER_MSG_KEY, orderMessage);
     }
 
+    /** {@inheritDoc} */
+    public void setDetails(final Map<String, String> details) {
+        getDetailsInternal().clear();
+        if (details != null) {
+            this.details.putAll(details);
+            if (details.containsKey(ORDER_MSG_KEY)) {
+                this.orderMessage = details.get(ORDER_MSG_KEY);
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void putDetail(final String key, final String detail) {
+        if (detail == null) {
+            getDetailsInternal().remove(key);
+            if (ORDER_MSG_KEY.equals(key)) {
+                this.orderMessage = null;
+            }
+        } else {
+            getDetailsInternal().put(key == null ? "" : key, detail);
+            if (ORDER_MSG_KEY.equals(key)) {
+                this.orderMessage = detail;
+            }
+        }
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, String> getDetails() {
+        return Collections.unmodifiableMap(getDetailsInternal());
+    }
+
+    protected Map<String, String> getDetailsInternal() {
+        if (this.details == null) {
+            this.details = new HashMap<String, String>();
+        }
+        return this.details;
+    }
+
+    /** {@inheritDoc} */
+    public String getDetailByKey(final String key) {
+        return getDetailsInternal().get(key);
+    }
 
     /** {@inheritDoc} */
     public Map<String, Long> getCarrierSlaId() {
+        return Collections.unmodifiableMap(getCarrierSlaIdInternal());
+    }
+
+    protected Map<String, Long> getCarrierSlaIdInternal() {
         if (this.carrierSlaId == null) {
             this.carrierSlaId = new HashMap<String, Long>();
         }
-        return Collections.unmodifiableMap(carrierSlaId);
+        return this.carrierSlaId;
     }
 
     /** {@inheritDoc} */
     public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
-        if (this.carrierSlaId == null) {
-            this.carrierSlaId = new HashMap<String, Long>();
-        }
-        this.carrierSlaId.clear();
+        getCarrierSlaIdInternal().clear();
         if (carrierSlaId != null) {
             this.carrierSlaId.putAll(carrierSlaId);
         }
@@ -72,13 +118,10 @@ public class OrderInfoImpl implements MutableOrderInfo {
 
     /** {@inheritDoc} */
     public void putCarrierSlaId(final String supplier, final Long carrierSlaId) {
-        if (this.carrierSlaId == null) {
-            this.carrierSlaId = new HashMap<String, Long>();
-        }
         if (carrierSlaId == null) {
-            this.carrierSlaId.remove(supplier);
+            getCarrierSlaIdInternal().remove(supplier);
         } else {
-            this.carrierSlaId.put(supplier == null ? "" : supplier, carrierSlaId);
+            getCarrierSlaIdInternal().put(supplier == null ? "" : supplier, carrierSlaId);
         }
     }
 

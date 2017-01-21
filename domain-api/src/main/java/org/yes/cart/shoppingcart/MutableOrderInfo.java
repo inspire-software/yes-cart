@@ -106,4 +106,21 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
      */
     void setMultipleDeliveryAvailable(boolean multipleDeliveryAvailable);
 
+
+    /**
+     * Set additional details stored on this cart.
+     *
+     * @param details additional details
+     */
+    void setDetails(Map<String, String> details);
+
+
+    /**
+     * Set additional details stored on this cart.
+     *
+     * @param key key
+     * @param detail additional detail
+     */
+    void putDetail(String key, String detail);
+
 }

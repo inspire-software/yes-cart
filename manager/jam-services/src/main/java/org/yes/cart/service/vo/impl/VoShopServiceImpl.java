@@ -296,13 +296,17 @@ public class VoShopServiceImpl implements VoShopService {
         final MutablePair<String, List<String>> approveRegister =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
         final MutablePair<String, List<String>> notifyRegister =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOFIICATION, lang);
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION, lang);
         final MutablePair<String, List<String>> seeTax =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
         final MutablePair<String, List<String>> changeTax =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
         final MutablePair<String, List<String>> rfq =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES, lang);
+        final MutablePair<String, List<String>> approve =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE, lang);
+        final MutablePair<String, List<String>> blockCheckout =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER, lang);
 
         final Set<String> additionalTypes = new HashSet<String>();
         additionalTypes.addAll(ableToRegister.getSecond());
@@ -311,6 +315,8 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(seeTax.getSecond());
         additionalTypes.addAll(changeTax.getSecond());
         additionalTypes.addAll(rfq.getSecond());
+        additionalTypes.addAll(approve.getSecond());
+        additionalTypes.addAll(blockCheckout.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
             additionalTypes.removeAll(knownCustomerTypes);
             if (!additionalTypes.isEmpty()) {
@@ -327,6 +333,8 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesSeeTax(seeTax);
         summary.setCustomerTypesChangeTaxView(changeTax);
         summary.setCustomerTypesRfq(rfq);
+        summary.setCustomerTypesOrderApproval(approve);
+        summary.setCustomerTypesBlockCheckout(blockCheckout);
     }
 
     protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

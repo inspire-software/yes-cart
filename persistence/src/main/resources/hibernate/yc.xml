@@ -1959,7 +1959,21 @@
                 <comment>Free text information per each order. Can be whatever</comment>
             </column>
         </property>
+
         <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
+
+        <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
+        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
+        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
+        <property name="lastExportOrderStatus" column="EXPORT_LAST_ORDERSTATUS" type="string" length="64"/>
+
+        <property name="b2bRef" column="B2B_REF" type="string" length="64"/>
+        <property name="b2bEmployeeId" column="B2B_EMPLOYEEID" type="string" length="64"/>
+        <property name="b2bChargeId" column="B2B_CHARGEID" type="string" length="64"/>
+        <property name="b2bRequireApprove" column="B2B_APPROVE_REQUIRE" type="boolean" length="1" not-null="true"/>
+        <property name="b2bApprovedBy" column="B2B_APPROVEDBY" type="string" length="64"/>
+        <property name="b2bApprovedDate" column="B2B_APPROVED_DATE" type="timestamp"/>
+
         <many-to-one name="customer" class="org.yes.cart.domain.entity.impl.CustomerEntity" foreign-key="FK_ORDER_CUSTOMER" lazy="false">
             <column name="CUSTOMER_ID" not-null="false"/>
         </many-to-one>
@@ -2106,6 +2120,11 @@
         <property name="taxRate" column="TAX_RATE" type="java.math.BigDecimal" not-null="true"/>
         <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
+
+        <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
+        <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
+        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
+        <property name="lastExportDeliveryStatus" column="EXPORT_LAST_DELIVERYSTATUS" type="string" length="64"/>
 
         <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
         <bag name="detail" cascade="all" inverse="true" lazy="false">

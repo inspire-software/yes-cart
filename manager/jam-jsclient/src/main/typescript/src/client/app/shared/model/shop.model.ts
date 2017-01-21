@@ -159,6 +159,8 @@ export interface ShopSummaryVO {
   customerTypesSeeTax: Pair<string, string[]>;
   customerTypesChangeTaxView: Pair<string, string[]>;
   customerTypesRfq: Pair<string, string[]>;
+  customerTypesOrderApproval: Pair<string, string[]>;
+  customerTypesBlockCheckout: Pair<string, string[]>;
 
   emailTemplates: Pair<string, boolean[]>;
   emailTemplatesYCE: Pair<string, boolean[]>;

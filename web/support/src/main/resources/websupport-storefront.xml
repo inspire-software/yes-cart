@@ -199,6 +199,7 @@
                 <value>setIpInternalCmd</value>
                 <value>setPgLabelCmd</value>
                 <value>setOrderMsgCmd</value>
+                <value>setOrderDetailsCmd</value>
                 <value>resetPasswordCmd</value>
             </list>
         </property>
@@ -218,6 +219,7 @@
                 <value>setPgLabelCmd</value>
                 <value>setPriceCmd</value>
                 <value>recalculatePriceCmd</value>
+                <value>setOrderDetailsCmd</value>
             </list>
         </property>
     </bean>

@@ -78,6 +78,9 @@ public class OrderRO implements Serializable {
     @DtoField(value = "orderTimestamp", readOnly = true)
     private Date orderTimestamp;
 
+    @DtoField(value = "orderIp", readOnly = true)
+    private String orderIp;
+
     @DtoField(value = "email", readOnly = true)
     private String email;
 
@@ -117,6 +120,18 @@ public class OrderRO implements Serializable {
     )
     private List<OrderItemRO> orderItems = new ArrayList<OrderItemRO>();
 
+    @DtoField(value = "b2bRef", readOnly = true)
+    private String b2bRef;
+    @DtoField(value = "b2bEmployeeId", readOnly = true)
+    private String b2bEmployeeId;
+    @DtoField(value = "b2bChargeId", readOnly = true)
+    private String b2bChargeId;
+    @DtoField(value = "b2bRequireApprove", readOnly = true)
+    private boolean b2bRequireApprove;
+    @DtoField(value = "b2bApprovedBy", readOnly = true)
+    private String b2bApprovedBy;
+    @DtoField(value = "b2bApprovedDate", readOnly = true)
+    private Date b2bApprovedDate;
 
     @XmlAttribute(name = "customer-order-id")
     public long getCustomerorderId() {
@@ -235,6 +250,15 @@ public class OrderRO implements Serializable {
         this.orderTimestamp = orderTimestamp;
     }
 
+    @XmlAttribute(name = "order-ip")
+    public String getOrderIp() {
+        return orderIp;
+    }
+
+    public void setOrderIp(final String orderIp) {
+        this.orderIp = orderIp;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -300,6 +324,60 @@ public class OrderRO implements Serializable {
 
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    @XmlElement(name = "b2b-ref")
+    public String getB2bRef() {
+        return b2bRef;
+    }
+
+    public void setB2bRef(final String b2bRef) {
+        this.b2bRef = b2bRef;
+    }
+
+    @XmlElement(name = "b2b-employee-id")
+    public String getB2bEmployeeId() {
+        return b2bEmployeeId;
+    }
+
+    public void setB2bEmployeeId(final String b2bEmployeeId) {
+        this.b2bEmployeeId = b2bEmployeeId;
+    }
+
+    @XmlElement(name = "b2b-charge-id")
+    public String getB2bChargeId() {
+        return b2bChargeId;
+    }
+
+    public void setB2bChargeId(final String b2bChargeId) {
+        this.b2bChargeId = b2bChargeId;
+    }
+
+    @XmlElement(name = "b2b-require-approve")
+    public boolean isB2bRequireApprove() {
+        return b2bRequireApprove;
+    }
+
+    public void setB2bRequireApprove(final boolean b2bRequireApprove) {
+        this.b2bRequireApprove = b2bRequireApprove;
+    }
+
+    @XmlElement(name = "b2b-approved-by")
+    public String getB2bApprovedBy() {
+        return b2bApprovedBy;
+    }
+
+    public void setB2bApprovedBy(final String b2bApprovedBy) {
+        this.b2bApprovedBy = b2bApprovedBy;
+    }
+
+    @XmlElement(name = "b2b-approved-date")
+    public Date getB2bApprovedDate() {
+        return b2bApprovedDate;
+    }
+
+    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+        this.b2bApprovedDate = b2bApprovedDate;
     }
 
     public CartTotalRO getTotal() {

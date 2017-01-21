@@ -19,6 +19,7 @@ import org.yes.cart.domain.entity.Identifiable;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  *
@@ -213,6 +214,65 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
      * @param deliveryStatus order delivery status
      */
     void setDeliveryStatus(String deliveryStatus);
+
+
+    /**
+     * Flag for better export management control (e.g. hold off export until fraud check is performed).
+     *
+     * @return true if export is blocked
+     */
+    boolean isBlockExport();
+
+    /**
+     * Flag for better export management control (e.g. hold off export until fraud check is performed).
+     *
+     * @param blockExport true if export is blocked
+     */
+    void setBlockExport(boolean blockExport);
+
+    /**
+     * Timestamp of last attempted export.
+     *
+     * @return timestamp
+     */
+    Date getLastExportDate();
+
+    /**
+     * Timestamp of last attempted export.
+     *
+     * @param lastExportDate timestamp
+     */
+    void setLastExportDate(Date lastExportDate);
+
+    /**
+     * Last export status. Could be any update from third party system (e.g. validation error).
+     * Empty denotes success.
+     *
+     * @return status
+     */
+    String getLastExportStatus();
+
+    /**
+     * Last export status. Could be any update from third party system (e.g. validation error).
+     * Empty denotes success.
+     *
+     * @param lastExportStatus status
+     */
+    void setLastExportStatus(String lastExportStatus);
+
+    /**
+     * Delivery status that was sent with last export.
+     *
+     * @return status
+     */
+    String getLastExportDeliveryStatus();
+
+    /**
+     * Delivery status that was sent with last export.
+     *
+     * @param lastExportDeliveryStatus status
+     */
+    void setLastExportDeliveryStatus(String lastExportDeliveryStatus);
 
 
     /**

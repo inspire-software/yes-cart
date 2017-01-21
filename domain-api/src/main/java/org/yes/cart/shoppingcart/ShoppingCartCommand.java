@@ -79,6 +79,8 @@ public interface ShoppingCartCommand extends Serializable {
 
     String CMD_SETORDERMSG = "setOrderMsgCmd";
 
+    String CMD_SETORDERDETAILS = "setOrderDetailsCmd";
+
     String CMD_CHANGECURRENCY = "changeCurrencyCmd";
     String CMD_CHANGELOCALE = "changeLocaleCmd";
 

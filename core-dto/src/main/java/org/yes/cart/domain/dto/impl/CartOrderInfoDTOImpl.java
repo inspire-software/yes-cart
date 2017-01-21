@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.shoppingcart.OrderInfo;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,8 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
     @DtoField(readOnly = true)
     private Long deliveryAddressId;
     @DtoField(readOnly = true)
+    private Map<String, String> details;
+    @DtoField(readOnly = true)
     private String orderMessage;
 
     public String getOrderMessage() {
@@ -58,16 +61,41 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         this.orderMessage = orderMessage;
     }
 
+    public void setDetails(final Map<String, String> details) {
+        getDetailsInternal().clear();
+        if (details != null) {
+            this.details.putAll(details);
+        }
+    }
+
+    public Map<String, String> getDetails() {
+        return Collections.unmodifiableMap(getDetailsInternal());
+    }
+
+    protected Map<String, String> getDetailsInternal() {
+        if (this.details == null) {
+            this.details = new HashMap<String, String>();
+        }
+        return this.details;
+    }
+
+    public String getDetailByKey(final String key) {
+        return getDetailsInternal().get(key);
+    }
 
     public Map<String, Long> getCarrierSlaId() {
+        return Collections.unmodifiableMap(getCarrierSlaIdInternal());
+    }
+
+    protected Map<String, Long> getCarrierSlaIdInternal() {
         if (this.carrierSlaId == null) {
             this.carrierSlaId = new HashMap<String, Long>();
         }
-        return carrierSlaId;
+        return this.carrierSlaId;
     }
 
     public void setCarrierSlaId(final Map<String, Long> carrierSlaId) {
-        this.getCarrierSlaId().clear();
+        getCarrierSlaIdInternal().clear();
         if (carrierSlaId != null) {
             this.carrierSlaId.putAll(carrierSlaId);
         }

@@ -115,6 +115,28 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "appliedPromo", converter = "CSVToList", readOnly = true)
     private List<String> appliedPromo;
 
+    @DtoField(value = "blockExport", readOnly = true)
+    private boolean blockExport;
+    @DtoField(value = "lastExportDate", readOnly = true)
+    private Date lastExportDate;
+    @DtoField(value = "lastExportStatus", readOnly = true)
+    private String lastExportStatus;
+    @DtoField(value = "lastExportOrderStatus", readOnly = true)
+    private String lastExportOrderStatus;
+
+    @DtoField(value = "b2bRef", readOnly = true)
+    private String b2bRef;
+    @DtoField(value = "b2bEmployeeId", readOnly = true)
+    private String b2bEmployeeId;
+    @DtoField(value = "b2bChargeId", readOnly = true)
+    private String b2bChargeId;
+    @DtoField(value = "b2bRequireApprove", readOnly = true)
+    private boolean b2bRequireApprove;
+    @DtoField(value = "b2bApprovedBy", readOnly = true)
+    private String b2bApprovedBy;
+    @DtoField(value = "b2bApprovedDate", readOnly = true)
+    private Date b2bApprovedDate;
+
     public long getCustomerorderId() {
         return customerorderId;
     }
@@ -361,5 +383,85 @@ public class VoCustomerOrderInfo {
 
     public void setAppliedPromo(final List<String> appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    public String getLastExportOrderStatus() {
+        return lastExportOrderStatus;
+    }
+
+    public void setLastExportOrderStatus(final String lastExportOrderStatus) {
+        this.lastExportOrderStatus = lastExportOrderStatus;
+    }
+
+    public String getB2bRef() {
+        return b2bRef;
+    }
+
+    public void setB2bRef(final String b2bRef) {
+        this.b2bRef = b2bRef;
+    }
+
+    public String getB2bEmployeeId() {
+        return b2bEmployeeId;
+    }
+
+    public void setB2bEmployeeId(final String b2bEmployeeId) {
+        this.b2bEmployeeId = b2bEmployeeId;
+    }
+
+    public String getB2bChargeId() {
+        return b2bChargeId;
+    }
+
+    public void setB2bChargeId(final String b2bChargeId) {
+        this.b2bChargeId = b2bChargeId;
+    }
+
+    public boolean isB2bRequireApprove() {
+        return b2bRequireApprove;
+    }
+
+    public void setB2bRequireApprove(final boolean b2bRequireApprove) {
+        this.b2bRequireApprove = b2bRequireApprove;
+    }
+
+    public String getB2bApprovedBy() {
+        return b2bApprovedBy;
+    }
+
+    public void setB2bApprovedBy(final String b2bApprovedBy) {
+        this.b2bApprovedBy = b2bApprovedBy;
+    }
+
+    public Date getB2bApprovedDate() {
+        return b2bApprovedDate;
+    }
+
+    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+        this.b2bApprovedDate = b2bApprovedDate;
     }
 }

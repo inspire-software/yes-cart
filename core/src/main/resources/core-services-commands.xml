@@ -213,6 +213,11 @@
         <property name="priority" value="112"/>
     </bean>
 
+    <bean id="setOrderDetailsCmd" class="org.yes.cart.shoppingcart.impl.SetOrderInfoDetailsCommandImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
+        <property name="priority" value="113"/>
+    </bean>
+
     <bean id="resetPasswordCmd" class="org.yes.cart.shoppingcart.impl.PasswordResetCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
         <constructor-arg index="1" ref="customerService"/>

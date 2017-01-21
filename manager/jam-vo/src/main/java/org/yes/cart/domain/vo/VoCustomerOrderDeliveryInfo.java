@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,6 +96,16 @@ public class VoCustomerOrderDeliveryInfo {
     private String taxCode;
     @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
     private boolean taxExclusiveOfPrice;
+
+    @DtoField(value = "blockExport", readOnly = true)
+    private boolean blockExport;
+    @DtoField(value = "lastExportDate", readOnly = true)
+    private Date lastExportDate;
+    @DtoField(value = "lastExportStatus", readOnly = true)
+    private String lastExportStatus;
+    @DtoField(value = "lastExportDeliveryStatus", readOnly = true)
+    private String lastExportDeliveryStatus;
+
 
     public long getCustomerOrderDeliveryId() {
         return customerOrderDeliveryId;
@@ -296,4 +307,35 @@ public class VoCustomerOrderDeliveryInfo {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
     }
 
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    public String getLastExportDeliveryStatus() {
+        return lastExportDeliveryStatus;
+    }
+
+    public void setLastExportDeliveryStatus(final String lastExportDeliveryStatus) {
+        this.lastExportDeliveryStatus = lastExportDeliveryStatus;
+    }
 }

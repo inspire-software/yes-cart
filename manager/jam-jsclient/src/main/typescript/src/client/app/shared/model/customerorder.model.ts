@@ -58,6 +58,18 @@ export interface CustomerOrderInfoVO {
 
   orderIp : string;
 
+  blockExport : boolean;
+  lastExportDate : Date;
+  lastExportStatus : string;
+  lastExportOrderStatus : string;
+
+  b2bRef : string;
+  b2bEmployeeId : string;
+  b2bChargeId : string;
+  b2bRequireApprove : boolean;
+  b2bApprovedBy : string;
+  b2bApprovedDate : Date;
+
 }
 
 export interface CustomerOrderTransitionResultVO {
@@ -114,6 +126,11 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryGroup : string;
   deliveryStatus : string;
   deliveryStatusNextOptions : string[];
+
+  blockExport : boolean;
+  lastExportDate : Date;
+  lastExportStatus : string;
+  lastExportDeliveryStatus : string;
 
   carrierSlaName : string;
   carrierName : string;

@@ -166,6 +166,150 @@ public interface CustomerOrderDTO extends Identifiable {
 
 
     /**
+     * Flag for better export management control (e.g. hold off export until fraud check is performed).
+     *
+     * @return true if export is blocked
+     */
+    boolean isBlockExport();
+
+    /**
+     * Flag for better export management control (e.g. hold off export until fraud check is performed).
+     *
+     * @param blockExport true if export is blocked
+     */
+    void setBlockExport(boolean blockExport);
+
+    /**
+     * Timestamp of last attempted export.
+     *
+     * @return timestamp
+     */
+    Date getLastExportDate();
+
+    /**
+     * Timestamp of last attempted export.
+     *
+     * @param lastExportDate timestamp
+     */
+    void setLastExportDate(Date lastExportDate);
+
+    /**
+     * Last export status. Could be any update from third party system (e.g. validation error).
+     * Empty denotes success.
+     *
+     * @return status
+     */
+    String getLastExportStatus();
+
+    /**
+     * Last export status. Could be any update from third party system (e.g. validation error).
+     * Empty denotes success.
+     *
+     * @param lastExportStatus status
+     */
+    void setLastExportStatus(String lastExportStatus);
+
+    /**
+     * Order status that was sent with last export.
+     *
+     * @return status
+     */
+    String getLastExportOrderStatus();
+
+    /**
+     * Order status that was sent with last export.
+     *
+     * @param lastExportOrderStatus status
+     */
+    void setLastExportOrderStatus(String lastExportOrderStatus);
+
+    /**
+     * B2B customer reference. Used by customer for their purposes.
+     *
+     * @return ref
+     */
+    String getB2bRef();
+
+    /**
+     * B2B customer reference. Used by customer for their purposes.
+     *
+     * @param b2bRef ref
+     */
+    void setB2bRef(String b2bRef);
+
+    /**
+     * B2B internal employee ID (the one who places the order).
+     *
+     * @return internal employee ID
+     */
+    String getB2bEmployeeId();
+
+    /**
+     * B2B internal employee ID (the one who places the order).
+     *
+     * @param b2bEmployeeId internal employee ID
+     */
+    void setB2bEmployeeId(String b2bEmployeeId);
+
+    /**
+     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     *
+     * @return internal charge ID
+     */
+    String getB2bChargeId();
+
+    /**
+     * B2B refernce for the chargeable department/ manager in charge of paying for this etc
+     *
+     * @param b2bChargeId internal charge ID
+     */
+    void setB2bChargeId(String b2bChargeId);
+
+    /**
+     * Flag to denote that this order requires approval to be placed.
+     *
+     * @return approval required flag
+     */
+    boolean isB2bRequireApprove();
+
+
+    /**
+     * Flag to denote that this order requires approval to be placed.
+     *
+     * @param b2bRequireApprove approval required flag
+     */
+    void setB2bRequireApprove(boolean b2bRequireApprove);
+
+    /**
+     * If this order has been approved then this is the reference of the manager who authorised this.
+     *
+     * @return internal approve authority reference
+     */
+    String getB2bApprovedBy();
+
+    /**
+     * If this order has been approved then this is the reference of the manager who authorised this.
+     *
+     * @param b2bApprovedBy internal approve authority reference
+     */
+    void setB2bApprovedBy(String b2bApprovedBy);
+
+    /**
+     * Date of approval.
+     *
+     * @return date/time
+     */
+    Date getB2bApprovedDate();
+
+    /**
+     * Date of approval.
+     *
+     * @param b2bApprovedDate date/time
+     */
+    void setB2bApprovedDate(Date b2bApprovedDate);
+
+
+    /**
      * Is order will be delivered in several shipments.
      *
      * @return true in case multiple deliveries, false in case of single delivery.

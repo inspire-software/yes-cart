@@ -187,6 +187,24 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isSfRequireCustomerRegistrationNotification(String customerType);
 
     /**
+     * Flag to indicate that this shop requires approval for new customer orders.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer requires approval
+     */
+    boolean isSfRequireCustomerOrderApproval(String customerType);
+
+    /**
+     * Flag to indicate that this shop prevents new customer orders for given types.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer cannot place
+     */
+    boolean isSfBlockCustomerCheckout(String customerType);
+
+    /**
      * Flag to denote if shop is disabled on not.
      *
      * @return true if shop is disabled

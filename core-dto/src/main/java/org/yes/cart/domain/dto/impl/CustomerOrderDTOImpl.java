@@ -113,6 +113,29 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "appliedPromo", readOnly = true)
     private String appliedPromo;
 
+    @DtoField(value = "blockExport", readOnly = true)
+    private boolean blockExport;
+    @DtoField(value = "lastExportDate", readOnly = true)
+    private Date lastExportDate;
+    @DtoField(value = "lastExportStatus", readOnly = true)
+    private String lastExportStatus;
+    @DtoField(value = "lastExportOrderStatus", readOnly = true)
+    private String lastExportOrderStatus;
+
+    @DtoField(value = "b2bRef", readOnly = true)
+    private String b2bRef;
+    @DtoField(value = "b2bEmployeeId", readOnly = true)
+    private String b2bEmployeeId;
+    @DtoField(value = "b2bChargeId", readOnly = true)
+    private String b2bChargeId;
+    @DtoField(value = "b2bRequireApprove", readOnly = true)
+    private boolean b2bRequireApprove;
+    @DtoField(value = "b2bApprovedBy", readOnly = true)
+    private String b2bApprovedBy;
+    @DtoField(value = "b2bApprovedDate", readOnly = true)
+    private Date b2bApprovedDate;
+
+
     /**
      * {@inheritDoc}
      */
@@ -468,6 +491,146 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getLastExportOrderStatus() {
+        return lastExportOrderStatus;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setLastExportOrderStatus(final String lastExportOrderStatus) {
+        this.lastExportOrderStatus = lastExportOrderStatus;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getB2bRef() {
+        return b2bRef;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bRef(final String b2bRef) {
+        this.b2bRef = b2bRef;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getB2bEmployeeId() {
+        return b2bEmployeeId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bEmployeeId(final String b2bEmployeeId) {
+        this.b2bEmployeeId = b2bEmployeeId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getB2bChargeId() {
+        return b2bChargeId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bChargeId(final String b2bChargeId) {
+        this.b2bChargeId = b2bChargeId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isB2bRequireApprove() {
+        return b2bRequireApprove;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bRequireApprove(final boolean b2bRequireApprove) {
+        this.b2bRequireApprove = b2bRequireApprove;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getB2bApprovedBy() {
+        return b2bApprovedBy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bApprovedBy(final String b2bApprovedBy) {
+        this.b2bApprovedBy = b2bApprovedBy;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Date getB2bApprovedDate() {
+        return b2bApprovedDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bApprovedDate(final Date b2bApprovedDate) {
+        this.b2bApprovedDate = b2bApprovedDate;
     }
 
     /**

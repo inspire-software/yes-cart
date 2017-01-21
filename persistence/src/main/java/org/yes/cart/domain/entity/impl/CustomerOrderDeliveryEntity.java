@@ -51,6 +51,12 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private String appliedPromo;
 
     private String deliveryStatus;
+
+    private boolean blockExport;
+    private Date lastExportDate;
+    private String lastExportStatus;
+    private String lastExportDeliveryStatus;
+
     private Collection<CustomerOrderDeliveryDet> detail = new ArrayList<CustomerOrderDeliveryDet>(0);
     private CarrierSla carrierSla;
     private CustomerOrder customerOrder;
@@ -160,6 +166,38 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public boolean isBlockExport() {
+        return blockExport;
+    }
+
+    public void setBlockExport(final boolean blockExport) {
+        this.blockExport = blockExport;
+    }
+
+    public Date getLastExportDate() {
+        return lastExportDate;
+    }
+
+    public void setLastExportDate(final Date lastExportDate) {
+        this.lastExportDate = lastExportDate;
+    }
+
+    public String getLastExportStatus() {
+        return lastExportStatus;
+    }
+
+    public void setLastExportStatus(final String lastExportStatus) {
+        this.lastExportStatus = lastExportStatus;
+    }
+
+    public String getLastExportDeliveryStatus() {
+        return lastExportDeliveryStatus;
+    }
+
+    public void setLastExportDeliveryStatus(final String lastExportDeliveryStatus) {
+        this.lastExportDeliveryStatus = lastExportDeliveryStatus;
     }
 
     public Collection<CustomerOrderDeliveryDet> getDetail() {

@@ -16,6 +16,9 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.BeanUtils;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
@@ -26,6 +29,7 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -113,6 +117,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         fillCustomerData(customerOrder, shoppingCart, temp);
 
+        fillB2BData(customerOrder, shoppingCart, temp);
+
         fillOrderDetails(customerOrder, shoppingCart, temp);
 
         customerOrder.setLocale(shoppingCart.getCurrentLocale());
@@ -136,6 +142,31 @@ public class OrderAssemblerImpl implements OrderAssembler {
         }
 
         return customerOrder;
+    }
+
+    /**
+     * Add B2B data from custom attributes.
+     *
+     * @param customerOrder order to fill
+     * @param shoppingCart  cart
+     * @param temp temporary flag
+     */
+    private void fillB2BData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
+
+        customerOrder.setB2bRef(shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
+        customerOrder.setB2bEmployeeId(shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
+        customerOrder.setB2bChargeId(shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
+        customerOrder.setB2bRequireApprove(Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove")));
+        customerOrder.setB2bApprovedBy(shoppingCart.getOrderInfo().getDetailByKey("b2bApprovedBy"));
+        final String approvedDate = shoppingCart.getOrderInfo().getDetailByKey("b2bApprovedDate");
+        if (approvedDate != null) {
+            try {
+                customerOrder.setB2bApprovedDate(new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).parse(approvedDate));
+            } catch (Exception exp) {
+                throw new OrderAssemblyException("Order b2bApprovedDate has invalid format: " + approvedDate + ", has to be " + Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT);
+            }
+        }
+
     }
 
     /**
@@ -348,10 +379,16 @@ public class OrderAssemblerImpl implements OrderAssembler {
             copy.setPhone2(address.getPhone2());
             copy.setEmail1(address.getEmail1());
             copy.setEmail2(address.getEmail2());
+            copy.setCustom0(address.getCustom0());
             copy.setCustom1(address.getCustom1());
             copy.setCustom2(address.getCustom2());
             copy.setCustom3(address.getCustom3());
             copy.setCustom4(address.getCustom4());
+            copy.setCustom5(address.getCustom5());
+            copy.setCustom6(address.getCustom6());
+            copy.setCustom7(address.getCustom7());
+            copy.setCustom8(address.getCustom8());
+            copy.setCustom9(address.getCustom9());
 
             return copy;
         }

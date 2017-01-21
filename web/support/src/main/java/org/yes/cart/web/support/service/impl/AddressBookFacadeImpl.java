@@ -111,7 +111,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setAddressType(addressType);
             // customer.getAddress().add(rez); Must do this when we create address only!
 
-            final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.CUSTOMER_PHONE);
+            final AttrValueCustomer attrValue = customer.getAttributeByCode(AttributeNamesKeys.Customer.CUSTOMER_PHONE);
             rez.setSalutation(customer.getSalutation());
             rez.setFirstname(customer.getFirstname());
             rez.setMiddlename(customer.getMiddlename());

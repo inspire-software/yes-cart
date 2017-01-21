@@ -40,6 +40,8 @@ public class CartOrderInfoRO implements Serializable {
     @DtoField(readOnly = true)
     private boolean multipleDelivery;
     @DtoField(readOnly = true)
+    private boolean multipleDeliveryAvailable;
+    @DtoField(readOnly = true)
     private boolean separateBillingAddress;
     @DtoField(readOnly = true)
     private boolean billingAddressNotRequired;
@@ -52,6 +54,8 @@ public class CartOrderInfoRO implements Serializable {
     @DtoField(readOnly = true)
     private Long deliveryAddressId;
     @DtoField(readOnly = true)
+    private Map<String, String> details;
+    @DtoField(readOnly = true)
     private String orderMessage;
 
     @XmlElement(name = "order-message")
@@ -61,6 +65,22 @@ public class CartOrderInfoRO implements Serializable {
 
     public void setOrderMessage(final String orderMessage) {
         this.orderMessage = orderMessage;
+    }
+
+    @XmlJavaTypeAdapter(StringMapAdapter.class)
+    @XmlElement(name = "order-details")
+    public Map<String, String> getDetails() {
+        if (this.details == null) {
+            this.details = new HashMap<String, String>();
+        }
+        return this.details;
+    }
+
+    public void setDetails(final Map<String, String> details) {
+        this.getDetails().clear();
+        if (details != null) {
+            this.details.putAll(details);
+        }
     }
 
 
@@ -144,4 +164,12 @@ public class CartOrderInfoRO implements Serializable {
         this.multipleDelivery = multipleDelivery;
     }
 
+    @XmlAttribute(name = "multiple-delivery-available")
+    public boolean isMultipleDeliveryAvailable() {
+        return multipleDeliveryAvailable;
+    }
+
+    public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
+        this.multipleDeliveryAvailable = multipleDeliveryAvailable;
+    }
 }

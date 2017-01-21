@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.order.OrderAssemblyException;
@@ -24,6 +25,7 @@ import org.yes.cart.service.order.OrderDisassembler;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -106,6 +108,16 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
 
         MutableOrderInfo mutableOrderInfo = shoppingCart.getOrderInfo();
         MutableShoppingContext mutableShoppingContext = shoppingCart.getShoppingContext();
+
+        mutableOrderInfo.putDetail("b2bRef", customerOrder.getB2bRef());
+        mutableOrderInfo.putDetail("b2bEmployeeId", customerOrder.getB2bEmployeeId());
+        mutableOrderInfo.putDetail("b2bChargeId", customerOrder.getB2bChargeId());
+        mutableOrderInfo.putDetail("b2bRequireApprove", String.valueOf(customerOrder.isB2bRequireApprove()));
+        mutableOrderInfo.putDetail("b2bApprovedBy", customerOrder.getB2bApprovedBy());
+        if (customerOrder.getB2bApprovedBy() != null) {
+            mutableOrderInfo.putDetail("b2bApprovedDate",
+                    new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).format(customerOrder.getB2bApprovedBy()));
+        }
 
         mutableOrderInfo.setOrderMessage(customerOrder.getOrderMessage());
 

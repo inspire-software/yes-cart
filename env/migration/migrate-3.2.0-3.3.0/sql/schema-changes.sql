@@ -309,3 +309,59 @@ alter table TADDRESS add column CUSTOM6 varchar(255);
 alter table TADDRESS add column CUSTOM7 varchar(255);
 alter table TADDRESS add column CUSTOM8 varchar(255);
 alter table TADDRESS add column CUSTOM9 varchar(255);
+
+--
+-- YC-716 B2B customer accounts
+--
+
+alter table TCUSTOMERORDERDELIVERY add column EXPORT_BLOCK bit not null default 0;
+-- alter table TCUSTOMERORDERDELIVERY add column EXPORT_BLOCK smallint not null default 0;
+alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DATE datetime;
+-- alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DATE timestamp;
+alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_STATUS varchar(255);
+alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DELIVERYSTATUS varchar(64);
+
+
+
+alter table TCUSTOMERORDER add column EXPORT_BLOCK bit not null default 0;
+-- alter table TCUSTOMERORDER add column EXPORT_BLOCK smallint not null default 0;
+alter table TCUSTOMERORDER add column EXPORT_LAST_DATE datetime;
+-- alter table TCUSTOMERORDER add column EXPORT_LAST_DATE timestamp;
+alter table TCUSTOMERORDER add column EXPORT_LAST_STATUS varchar(255);
+alter table TCUSTOMERORDER add column EXPORT_LAST_ORDERSTATUS varchar(64);
+
+alter table TCUSTOMERORDER add column B2B_REF varchar(64);
+alter table TCUSTOMERORDER add column B2B_EMPLOYEEID varchar(64);
+alter table TCUSTOMERORDER add column B2B_CHARGEID varchar(64);
+alter table TCUSTOMERORDER add column B2B_APPROVE_REQUIRE bit not null default 0;
+-- alter table TCUSTOMERORDER add column B2B_APPROVE_REQUIRE smallint not null default 0;
+alter table TCUSTOMERORDER add column B2B_APPROVEDBY varchar(64);
+alter table TCUSTOMERORDER add column B2B_APPROVED_DATE datetime;
+-- alter table TCUSTOMERORDER add column B2B_APPROVED_DATE timestamp;
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  5014,  'SHOP_SF_REQORDERAPPROVE_TYPES', 'SHOP_SF_REQUIRE_ORDER_APPROVE_TYPES',  0,  NULL,  'Customer: types that require order approval',
+  'CSV of customer types that require order approval (e.g. B2B setup with supervisor approval)
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  5015,  'SHOP_SF_CANNOTCHECKOUT_TYPES', 'SHOP_SF_CANNOT_PLACE_ORDER_TYPES',  0,  NULL,  'Customer: types that cannot place orders',
+  'CSV of customer types that cannot place orders (e.g. B2B setup with browse catalog only)
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11064,  'CUSTOMER_B2B_REF', 'CUSTOMER_B2B_REF',  1,  NULL,  'B2B Ref',  'Default customer reference on placed orders', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11065,  'CUSTOMER_B2B_EMPID', 'CUSTOMER_B2B_EMPLOYEE_ID',  1,  NULL,  'B2B Employee ID',  'B2B Employee ID, used when placing order', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11066,  'CUSTOMER_B2B_CHRGID', 'CUSTOMER_B2B_CHARGE_ID',  1,  NULL,  'B2B Charge to ID',  'B2B Charge to ID, used when placing order', 1000,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11067,  'CUSTOMER_B2B_REQAPPR', 'CUSTOMER_B2B_REQUIRE_APPROVE',  1,  NULL,  'B2B Require order approval',  'If set to true orders of this customer will need to be approved by supervisor', 1008,  1006, 0, 0, 0, 0);
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11068,  'CUSTOMER_BLOCK_CHKOUT', 'CUSTOMER_BLOCK_CHECKOUT',  1,  NULL,  'Block checkout',  'If set to true customer cannot proceed with checkout', 1008,  1006, 0, 0, 0, 0);
+
+
+
+

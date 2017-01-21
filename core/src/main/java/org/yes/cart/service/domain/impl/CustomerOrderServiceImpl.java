@@ -23,10 +23,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.service.domain.CustomerOrderService;
-import org.yes.cart.service.order.DeliveryAssembler;
-import org.yes.cart.service.order.OrderAssembler;
-import org.yes.cart.service.order.OrderAssemblyException;
-import org.yes.cart.service.order.OrderSplittingStrategy;
+import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
 
@@ -208,6 +205,12 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart)
             throws OrderAssemblyException {
 
+
+        final boolean checkoutBlocked = Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
+        if (checkoutBlocked) {
+            throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
+        }
+
         final boolean onePhysicalDelivery =
                 !shoppingCart.getOrderInfo().isMultipleDelivery() || !shoppingCart.getOrderInfo().isMultipleDeliveryAvailable();
 
@@ -253,6 +256,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             }
 
         }
+
         final CustomerOrder customerOrder = orderAssembler.assembleCustomerOrder(shoppingCart);
         deliveryAssembler.assembleCustomerOrder(customerOrder, shoppingCart, onePhysicalDelivery);
         return create(customerOrder);
