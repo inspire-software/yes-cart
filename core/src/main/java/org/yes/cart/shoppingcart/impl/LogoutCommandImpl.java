@@ -16,18 +16,16 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
-
-import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class LogoutCommandImpl extends AbstractCartCommandImpl implements ShoppingCartCommand {
+public class LogoutCommandImpl extends ExpireCartCommandImpl implements ShoppingCartCommand {
 
     private static final long serialVersionUID = 20101025L;
 
@@ -36,8 +34,9 @@ public class LogoutCommandImpl extends AbstractCartCommandImpl implements Shoppi
      *
      * @param registry shopping cart command registry
      */
-    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
-        super(registry);
+    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry,
+                             final ShopService shopService) {
+        super(registry, shopService);
     }
 
     /**
@@ -47,13 +46,4 @@ public class LogoutCommandImpl extends AbstractCartCommandImpl implements Shoppi
         return CMD_LOGOUT;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
-        if (parameters.containsKey(getCmdKey())) {
-            shoppingCart.getShoppingContext().clearContext();
-            recalculate(shoppingCart);
-            markDirty(shoppingCart);
-        }
-    }
 }

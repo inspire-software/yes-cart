@@ -107,7 +107,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
         items.clear();
         gifts.clear();
         coupons.clear();
-        orderInfo = null;
+        orderInfo.clearInfo();
         total = new TotalImpl();
         modifiedTimestamp = System.currentTimeMillis();
     }

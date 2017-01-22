@@ -16,6 +16,8 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -31,13 +33,17 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
 
     private static final long serialVersionUID = 20101026L;
 
+    private final ShopService shopService;
+
     /**
      * Construct command.
      *
      * @param registry shopping cart command registry
      */
-    public ExpireCartCommandImpl(final ShoppingCartCommandRegistry registry) {
+    public ExpireCartCommandImpl(final ShoppingCartCommandRegistry registry,
+                                 final ShopService shopService) {
         super(registry);
+        this.shopService = shopService;
     }
 
     /** {@inheritDoc} */
@@ -49,7 +55,16 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
     @Override
     public void execute(final MutableShoppingCart shoppingCart, final Map<String, Object> parameters) {
         if (parameters.containsKey(getCmdKey())) {
+
+            final String shopCode = shoppingCart.getShoppingContext().getShopCode();
+            final Shop current = shopService.getShopByCode(shopCode);
+
             shoppingCart.getShoppingContext().clearContext();
+            setTaxOptions(current, null, null, null, null, shoppingCart.getShoppingContext());
+
+            shoppingCart.getOrderInfo().clearInfo();
+            setCustomerOptions(current, null, shoppingCart.getOrderInfo());
+
             if (shoppingCart.removeItemOffers()) {
                 // Offers have to be removed from cart, since we may get stale prices
                 // Offers assumed to be valid only for duration of cart validity

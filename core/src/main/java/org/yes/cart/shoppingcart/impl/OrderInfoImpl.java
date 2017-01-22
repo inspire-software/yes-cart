@@ -204,4 +204,18 @@ public class OrderInfoImpl implements MutableOrderInfo {
     public void setMultipleDeliveryAvailable(final boolean multipleDeliveryAvailable) {
         this.multipleDeliveryAvailable = multipleDeliveryAvailable;
     }
+
+    /** {@inheritDoc} */
+    public void clearInfo() {
+        this.paymentGatewayLabel = null;
+        this.multipleDelivery = false;
+        this.multipleDeliveryAvailable = false;
+        this.separateBillingAddress = false;
+        this.billingAddressNotRequired = false;
+        this.deliveryAddressNotRequired = false;
+        getCarrierSlaIdInternal().clear();
+        this.billingAddressId = null;
+        this.deliveryAddressId = null;
+        this.setOrderMessage(null);
+    }
 }

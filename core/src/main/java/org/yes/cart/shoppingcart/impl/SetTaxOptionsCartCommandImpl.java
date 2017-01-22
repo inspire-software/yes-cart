@@ -86,46 +86,4 @@ public class SetTaxOptionsCartCommandImpl extends AbstractCartCommandImpl implem
         }
     }
 
-
-    protected void setTaxOptions(final Shop shop,
-                                 final Customer customer,
-                                 final boolean showTaxOption,
-                                 final Boolean showNetOption,
-                                 final Boolean showAmountOption,
-                                 final MutableShoppingContext ctx) {
-
-        // Resolve type. Anonymous type is B2G, blank is B2C
-        final String customerType = customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
-        boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        if (showTax) {
-            // If types limit is set then only enable showTax option for given types. Anonymous type is B2G, blank is B2C
-            final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
-            showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains(customerType);
-        }
-        boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
-
-        ctx.setTaxInfoChangeViewEnabled(false);
-        final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
-        // Ensure change view is allowed for anonymous
-        if (StringUtils.isNotBlank(typesThatCanChangeView)) {
-            final String[] customerTypesThatCanChangeView = StringUtils.split(typesThatCanChangeView, ',');
-            if (Arrays.asList(customerTypesThatCanChangeView).contains(customerType)) {
-                ctx.setTaxInfoChangeViewEnabled(true);
-            }
-        }
-
-        if (ctx.isTaxInfoChangeViewEnabled()) {
-            showTax = showTaxOption;
-            showTaxNet = showNetOption == null ? showTax && showTaxNet : showTax && showNetOption;
-            showTaxAmount = showAmountOption == null ? showTax && showTaxAmount : showTax && showAmountOption;
-        }
-
-        ctx.setTaxInfoEnabled(showTax);
-        ctx.setTaxInfoUseNet(showTaxNet);
-        ctx.setTaxInfoShowAmount(showTaxAmount);
-
-    }
-
-
 }

@@ -16,17 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.MutableShoppingCart;
-import org.yes.cart.shoppingcart.MutableShoppingContext;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -66,6 +60,8 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
             final Long value = NumberUtils.createLong(String.valueOf(parameters.get(getCmdKey())));
             if (value != null && !value.equals(shoppingCart.getShoppingContext().getShopId())) {
 
+                shoppingCart.getShoppingContext().clearContext(); // If we are setting new shop we must re-authenticate
+
                 final Shop shop = shopService.getById(value);
 
                 final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
@@ -74,35 +70,22 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
 
                 setDefaultTaxOptions(shop, ctx);
 
+                setDefaultOrderInfoOptions(shop, shoppingCart.getOrderInfo());
+
                 markDirty(shoppingCart);
             }
         }
     }
 
+    protected void setDefaultOrderInfoOptions(final Shop shop, final MutableOrderInfo info) {
+
+        setCustomerOptions(shop, null, info);
+
+    }
+
     protected void setDefaultTaxOptions(final Shop shop, final MutableShoppingContext ctx) {
 
-        boolean showTax = Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO));
-        if (showTax) {
-            // If types limit is set then only enable showTax option for given types. Anonymous type is B2G
-            final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
-            showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains("B2G");
-        }
-        final boolean showTaxNet = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET));
-        final boolean showTaxAmount = showTax && Boolean.valueOf(shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT));
-
-        ctx.setTaxInfoChangeViewEnabled(false);
-        final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
-        // Ensure change view is allowed for anonymous
-        if (StringUtils.isNotBlank(typesThatCanChangeView)) {
-            final String[] customerTypesThatCanChangeView = StringUtils.split(typesThatCanChangeView, ',');
-            if (Arrays.asList(customerTypesThatCanChangeView).contains("B2G")) {
-                ctx.setTaxInfoChangeViewEnabled(true);
-            }
-        }
-
-        ctx.setTaxInfoEnabled(showTax);
-        ctx.setTaxInfoUseNet(showTaxNet);
-        ctx.setTaxInfoShowAmount(showTaxAmount);
+        setTaxOptions(shop, null, null, null, null, ctx);
 
     }
 

@@ -19,7 +19,6 @@ package org.yes.cart.web.page;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -33,8 +32,6 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.protocol.https.RequireHttps;
-import org.apache.wicket.request.handler.PageProvider;
-import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
@@ -504,7 +501,7 @@ public class CheckoutPage extends AbstractWebPage {
                         pgListItem.add(new Label("pgListName", pgListItem.getModelObject().getSecond()));
                         final boolean infoVisible = pgListItem.getModelObject().getFirst().getLabel().equals(orderInfo.getPaymentGatewayLabel());
                         pgListItem.add(new Label("pgInfo", contentServiceFacade.getContentBody("checkout_payment_" + pgListItem.getModelObject().getFirst().getLabel(),
-                                ShopCodeContext.getShopId(), getLocale().getLanguage())).setVisible(infoVisible));
+                                ShopCodeContext.getShopId(), getLocale().getLanguage())).setEscapeModelStrings(false).setVisible(infoVisible));
                     }
                 });
 

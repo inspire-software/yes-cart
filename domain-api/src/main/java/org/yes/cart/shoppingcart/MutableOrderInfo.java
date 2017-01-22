@@ -123,4 +123,9 @@ public interface MutableOrderInfo extends OrderInfo, Serializable {
      */
     void putDetail(String key, String detail);
 
+    /**
+     * Clean order information.
+     */
+    void clearInfo();
+
 }
