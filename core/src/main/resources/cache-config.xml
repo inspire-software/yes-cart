@@ -853,23 +853,32 @@
     <!-- ###################### Config  ################################################################################################################## -->
 
     <util:map id="evictionConfig">
-        <entry key="AttributeEntity"        value-ref="AttributeCUD"/>
-        <entry key="CategoryEntity"         value-ref="CategoryCUD"/>
-        <entry key="SeoImageEntity"         value-ref="SeoImageCUD"/>
-        <entry key="SkuPriceEntity"         value-ref="SkuPriceCUD"/>
-        <entry key="SkuWarehouseEntity"     value-ref="SkuWarehouseCUD"/>
-        <entry key="ProductEntity"          value-ref="ProductCUD"/>
-        <entry key="ProductTypeEntity"      value-ref="ProductTypeCUD"/>
-        <entry key="ShopEntity"             value-ref="ShopCUD"/>
-        <entry key="PromotionEntity"        value-ref="PromotionCUD"/>
-        <entry key="AttrValueEntitySystem"  value-ref="SystemCUD"/>
-        <entry key="TaxEntity"              value-ref="TaxCUD"/>
-        <entry key="CarrierEntity"          value-ref="CarrierCUD"/>
-        <entry key="CarrierSlaEntity"       value-ref="CarrierSlaCUD"/>
-        <entry key="CustomerEntity"         value-ref="CustomerCUD"/>
-        <entry key="ManagerEntity"          value-ref="ManagerCUD"/>
-        <entry key="ManagerRoleEntity"      value-ref="ManagerCUD"/>
-        <entry key="ManagerShopEntity"      value-ref="ManagerCUD"/>
+        <entry key="AttributeEntity"           value-ref="AttributeCUD"/>
+        <entry key="CategoryEntity"            value-ref="CategoryCUD"/>
+        <entry key="AttrValueEntityCategory"   value-ref="CategoryCUD"/>
+        <entry key="SeoImageEntity"            value-ref="SeoImageCUD"/>
+        <entry key="SkuPriceEntity"            value-ref="SkuPriceCUD"/>
+        <entry key="SkuWarehouseEntity"        value-ref="SkuWarehouseCUD"/>
+        <entry key="ProductEntity"             value-ref="ProductCUD"/>
+        <entry key="ProductSkuEntity"          value-ref="ProductCUD"/>
+        <entry key="AttrValueEntityProduct"    value-ref="ProductCUD"/>
+        <entry key="AttrValueEntityProductSku" value-ref="ProductCUD"/>
+        <entry key="ProductTypeEntity"         value-ref="ProductTypeCUD"/>
+        <entry key="ShopEntity"                value-ref="ShopCUD"/>
+        <entry key="AttrValueEntityShop"       value-ref="ShopCUD"/>
+        <entry key="PromotionEntity"           value-ref="PromotionCUD"/>
+        <entry key="AttrValueEntitySystem"     value-ref="SystemCUD"/>
+        <entry key="TaxEntity"                 value-ref="TaxCUD"/>
+        <entry key="TaxConfigEntity"           value-ref="TaxCUD"/>
+        <entry key="CarrierEntity"             value-ref="CarrierCUD"/>
+        <entry key="CarrierShopEntity"         value-ref="CarrierCUD"/>
+        <entry key="CarrierSlaEntity"          value-ref="CarrierSlaCUD"/>
+        <entry key="CustomerEntity"            value-ref="CustomerCUD"/>
+        <entry key="CustomerShopEntity"        value-ref="CustomerCUD"/>
+        <entry key="AttrValueEntityCustomer"   value-ref="CustomerCUD"/>
+        <entry key="ManagerEntity"             value-ref="ManagerCUD"/>
+        <entry key="ManagerRoleEntity"         value-ref="ManagerCUD"/>
+        <entry key="ManagerShopEntity"         value-ref="ManagerCUD"/>
     </util:map>
 
 
