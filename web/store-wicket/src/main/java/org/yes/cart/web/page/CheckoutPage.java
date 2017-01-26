@@ -50,7 +50,6 @@ import org.yes.cart.service.order.PlaceOrderDisabledException;
 import org.yes.cart.service.order.SkuUnavailableException;
 import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartPaymentVerificationView;
 import org.yes.cart.web.page.component.customer.address.ManageAddressesView;
 import org.yes.cart.web.page.component.customer.auth.GuestPanel;
@@ -171,8 +170,8 @@ public class CheckoutPage extends AbstractWebPage {
 
         super(params);
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
+        final Shop shop = getCurrentShop();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
@@ -269,7 +268,7 @@ public class CheckoutPage extends AbstractWebPage {
             executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), ApplicationDirector.getCurrentShop())) {
+                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentShop())) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);
@@ -294,7 +293,7 @@ public class CheckoutPage extends AbstractWebPage {
 
     private void performOrderSplittingBeforeShipping() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SPLITCARTITEMS,
                 cart,
@@ -306,7 +305,7 @@ public class CheckoutPage extends AbstractWebPage {
 
     private void recreateOrderBeforePayment() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_RECALCULATEPRICE,
                 cart,
@@ -398,13 +397,13 @@ public class CheckoutPage extends AbstractWebPage {
     private MarkupContainer createPaymentFragment() {
 
         final MarkupContainer rez = new Fragment(CONTENT_VIEW, PAYMENT_FRAGMENT, this);
-        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart shoppingCart = getCurrentCart();
         final OrderInfo orderInfo = shoppingCart.getOrderInfo();
         final boolean showMultipleDelivery = orderInfo.isMultipleDeliveryAvailable();
         final boolean multipleDelivery = orderInfo.isMultipleDelivery();
 
         shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETPGLABEL,
-                ApplicationDirector.getShoppingCart(),
+                shoppingCart,
                 (Map) Collections.singletonMap(ShoppingCartCommand.CMD_SETPGLABEL, null));
         persistCartIfNecessary();
 
@@ -422,7 +421,7 @@ public class CheckoutPage extends AbstractWebPage {
             public void onSelectionChanged() {
                 setModelObject(!getModelObject());
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
-                        ApplicationDirector.getShoppingCart(),
+                        getCurrentCart(),
                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
                 super.onSelectionChanged();
                 persistCartIfNecessary();
@@ -441,7 +440,7 @@ public class CheckoutPage extends AbstractWebPage {
         }.setVisible(showMultipleDelivery);
 
         final List<Pair<PaymentGatewayDescriptor, String>> available =
-                checkoutServiceFacade.getPaymentGatewaysDescriptors(ApplicationDirector.getCurrentShop(), ApplicationDirector.getShoppingCart());
+                checkoutServiceFacade.getPaymentGatewaysDescriptors(getCurrentShop(), getCurrentCart());
 
         final Component pgSelector = new RadioGroup<String>(
                 PAYMENT_FRAGMENT_GATEWAY_CHECKBOX,
@@ -450,8 +449,8 @@ public class CheckoutPage extends AbstractWebPage {
             /** {@inheritDoc} */
             protected void onSelectionChanged(final Object descriptor) {
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-                final Shop shop = ApplicationDirector.getCurrentShop();
+                final ShoppingCart cart = getCurrentCart();
+                final Shop shop = getCurrentShop();
 
                 final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
@@ -500,8 +499,9 @@ public class CheckoutPage extends AbstractWebPage {
                         pgListItem.add(new Radio<String>("pgListLabel", new Model<String>(pgListItem.getModelObject().getFirst().getLabel())));
                         pgListItem.add(new Label("pgListName", pgListItem.getModelObject().getSecond()));
                         final boolean infoVisible = pgListItem.getModelObject().getFirst().getLabel().equals(orderInfo.getPaymentGatewayLabel());
+                        final long contentShopId = getCurrentShopId();
                         pgListItem.add(new Label("pgInfo", contentServiceFacade.getContentBody("checkout_payment_" + pgListItem.getModelObject().getFirst().getLabel(),
-                                ShopCodeContext.getShopId(), getLocale().getLanguage())).setEscapeModelStrings(false).setVisible(infoVisible));
+                                contentShopId, getLocale().getLanguage())).setEscapeModelStrings(false).setVisible(infoVisible));
                     }
                 });
 
@@ -532,7 +532,7 @@ public class CheckoutPage extends AbstractWebPage {
     protected String getPaymentForm(final CustomerOrder order,
                                     final BigDecimal grandTotal) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         String fullName = (order.getFirstname()
                         + " "
@@ -626,8 +626,8 @@ public class CheckoutPage extends AbstractWebPage {
 
         MarkupContainer rez;
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
 
         boolean billingAddressHidden = !cart.getOrderInfo().isSeparateBillingAddress();
 
@@ -663,7 +663,7 @@ public class CheckoutPage extends AbstractWebPage {
                                 final boolean billingHidden = !getModelObject();
                                 setModelObject(billingHidden);
                                 billingAddress.setVisible(!billingHidden);
-                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, ApplicationDirector.getShoppingCart(),
+                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SEPARATEBILLING, getCurrentCart(),
                                         (Map) new HashMap() {{
                                             put(ShoppingCartCommand.CMD_SEPARATEBILLING, String.valueOf(!billingHidden));
                                         }}
@@ -684,8 +684,8 @@ public class CheckoutPage extends AbstractWebPage {
 
     private void addFeedbackForAddressSelection() {
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(
                 shop,

@@ -64,6 +64,20 @@ public interface ShoppingContext extends Serializable {
     String getShopCode();
 
     /**
+     * Get current customer shop id
+     *
+     * @return current customer shop id.
+     */
+    long getCustomerShopId();
+
+    /**
+     * Get current customer shop code
+     *
+     * @return current customer shop id.
+     */
+    String getCustomerShopCode();
+
+    /**
      * Get current country code
      *
      * @return current country id.

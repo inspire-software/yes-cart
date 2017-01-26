@@ -233,8 +233,10 @@
   "SHOP_TAB_WAREHOUSES": "Fulfilment centres",
   "SHOP_TAB_PGS": "Payment Gateways",
   "SHOP_TAB_OVERVIEW": "Overview",
+  "SHOP_TAB_B2B": "B2B",
   "SHOP_MISCONFIGURED": "This shop has not been fully setup yet. Red labels denote mandatory settings that are missing.",
   "SAVEDSHOP_REQUIRED": "To create new shop please fill in the details on the 'Main' tab. There are several important configurations required before your shop can be operational. Once main details are saved this overview will help you identify what active settings are and what settings are missing.",
+  "SUBSHOP_TIP": "Creating sub shops will enable B2B profile for this shop. Each sub shop can have its own catalog, shipping and fulfilment options. Prices for all sub shops are defined in master shop.",
 
   "SHOP_URL": "URL",
   "SHOP_URL_PRIMARY": "Primary",
@@ -555,6 +557,9 @@
   "CUSTOMER_POLICY": "Policy",
   "CUSTOMER_TAG": "Tags",
   "CUSTOMER_RESET_MSG": "Do you wish to reset customer password and send email notification on behalf of {{ shop }}?",
+  "CUSTOMER_B2B_BLOCK_CHECKOUT": "Block checkout",
+  "CUSTOMER_B2B_APPROVE_ORDER": "Require orders approval",
+  "CUSTOMER_TAB_B2B": "B2B",
 
   "MANAGER_ENABLED": "Active",
 

@@ -63,7 +63,7 @@ public class OrderSplittingStrategyImpl implements OrderSplittingStrategy {
 
         DeliveryBucket itemBucket = item.getDeliveryBucket();
         if (item.getDeliveryBucket() == null) {
-            final List<Warehouse> warehouses = warehouseService.getByShopId(cart.getShoppingContext().getShopId(), false);
+            final List<Warehouse> warehouses = warehouseService.getByShopId(cart.getShoppingContext().getCustomerShopId(), false);
             final Pair<String, String> deliveryGroup = getDeliveryGroup(item, warehouses);
             itemBucket = new DeliveryBucketImpl(deliveryGroup.getFirst(), deliveryGroup.getSecond());
         }

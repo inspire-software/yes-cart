@@ -17,8 +17,6 @@
 package org.yes.cart.web.page.component.product;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -49,10 +47,10 @@ public class FeaturedProducts extends AbstractProductSearchResultList {
     public List<ProductSearchResultDTO> getProductListToShow() {
         if (products == null) {
 
-            final long shopId = ShopCodeContext.getShopId();
+            final long browsingShopId = getCurrentCustomerShopId();
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
 
-            products = productServiceFacade.getFeaturedProducts(categoryId, shopId);
+            products = productServiceFacade.getFeaturedProducts(categoryId, browsingShopId);
 
         }
         return products;

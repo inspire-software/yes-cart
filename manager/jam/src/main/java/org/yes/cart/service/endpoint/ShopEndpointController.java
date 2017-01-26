@@ -42,6 +42,11 @@ public interface ShopEndpointController {
     List<VoShop> getAll() throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/sub/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<VoShop> getAllSubs(@PathVariable("id") long id) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop getById(@PathVariable("id") long id) throws Exception;
@@ -51,6 +56,11 @@ public interface ShopEndpointController {
     @RequestMapping(method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoShop create(@RequestBody VoShop voShop) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/sub", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShop createSub(@RequestBody VoSubShop voShop) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
     @RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })

@@ -35,8 +35,6 @@ import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -91,7 +89,7 @@ public class GuestPanel extends BaseComponent {
 
         final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget();
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
 
         final boolean guestSupported = customerServiceFacade.isShopGuestCheckoutSupported(shop);
 
@@ -104,12 +102,10 @@ public class GuestPanel extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-
-        final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
         // Refresh content
-        String regformInfo = getContentInclude(shopId, "registration_guestform_content_include", lang);
+        String regformInfo = getContentInclude(getCurrentShopId(), "registration_guestform_content_include", lang);
         get(GUEST_FORM).get(CONTENT).replaceWith(new Label(CONTENT, regformInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -215,7 +211,7 @@ public class GuestPanel extends BaseComponent {
 
             final String lang = getLocale().getLanguage();
             final List<AttrValueCustomer> reg = getCustomerServiceFacade()
-                    .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop(), customerType);
+                    .getShopRegistrationAttributes(getCurrentShop(), customerType);
 
             for (final AttrValue attrValue : reg) {
 
@@ -245,7 +241,7 @@ public class GuestPanel extends BaseComponent {
                             // data.put("firstname", getFirstname());
                             // data.put("lastname", getLastname());
                             // data.put("phone", getPhone());
-                            data.put("cartGuid", ApplicationDirector.getShoppingCart().getGuid()); // Cart is required for registration
+                            data.put("cartGuid", getCurrentCart().getGuid()); // Cart is required for registration
                             data.put("customerType", customerType); // Type is required for registration
 
                             for (final AttrValue av : reg) {
@@ -256,7 +252,7 @@ public class GuestPanel extends BaseComponent {
 
 
                             final String guest = getCustomerServiceFacade().registerGuest(
-                                    ApplicationDirector.getCurrentShop(), email, data);
+                                    getCurrentShop(), email, data);
 
                             if (StringUtils.isNotBlank(guest)) {
 

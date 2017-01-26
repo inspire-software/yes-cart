@@ -23,7 +23,6 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.ProductPriceModel;
 import org.yes.cart.service.misc.PluralFormService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.ShoppingCartPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -72,7 +71,7 @@ public class SmallShoppingCartView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
 
@@ -131,7 +130,7 @@ public class SmallShoppingCartView extends BaseComponent {
      * @return true in case of empty cart
      */
     public boolean isCartEmpty() {
-        return ApplicationDirector.getShoppingCart().getCartItemsCount() == 0;
+        return getCurrentCart().getCartItemsCount() == 0;
     }
 
 }

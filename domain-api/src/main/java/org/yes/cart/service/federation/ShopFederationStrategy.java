@@ -67,4 +67,11 @@ public interface ShopFederationStrategy {
      */
     List<ShopDTO> getAccessibleShopsByCurrentManager();
 
+    /**
+     * @param employeeId employee ID (email)
+     *
+     * @return true if current manager has access to this shop
+     */
+    boolean isEmployeeManageableByCurrentManager(final String employeeId);
+
 }

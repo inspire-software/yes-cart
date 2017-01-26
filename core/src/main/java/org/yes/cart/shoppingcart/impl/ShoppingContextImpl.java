@@ -36,6 +36,8 @@ public class ShoppingContextImpl implements MutableShoppingContext {
     private String customerName;
     private long shopId;
     private String shopCode;
+    private long customerShopId;
+    private String customerShopCode;
     private String countryCode;
     private String stateCode;
     private String customerEmail;
@@ -71,6 +73,8 @@ public class ShoppingContextImpl implements MutableShoppingContext {
         customerEmail = null;
         customerName = null;
         customerShops = new ArrayList<String>(0);
+        customerShopId = shopId;
+        customerShopCode = shopCode;
     }
 
     private void clearShopRelatedParameters() {
@@ -171,6 +175,7 @@ public class ShoppingContextImpl implements MutableShoppingContext {
             clearShopRelatedParameters();
         }
         this.shopId = shopId;
+        this.customerShopId = shopId;
     }
 
     /** {@inheritDoc} */
@@ -188,6 +193,35 @@ public class ShoppingContextImpl implements MutableShoppingContext {
             clearShopRelatedParameters();
         }
         this.shopCode = shopCode;
+        this.customerShopCode = shopCode;
+    }
+
+    /** {@inheritDoc} */
+    public long getCustomerShopId() {
+        return customerShopId;
+    }
+
+    /**
+     * Set current customer shop id.
+     *
+     * @param customerShopId current customer shop id.
+     */
+    public void setCustomerShopId(final long customerShopId) {
+        this.customerShopId = customerShopId;
+    }
+
+    /** {@inheritDoc} */
+    public String getCustomerShopCode() {
+        return customerShopCode;
+    }
+
+    /**
+     * Set current customer shop code.
+     *
+     * @param customerShopCode current customer shop code.
+     */
+    public void setCustomerShopCode(final String customerShopCode) {
+        this.customerShopCode = customerShopCode;
     }
 
     /** {@inheritDoc} */

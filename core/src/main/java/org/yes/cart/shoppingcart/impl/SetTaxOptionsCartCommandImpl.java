@@ -16,16 +16,10 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.Customer;
-import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.service.domain.CustomerService;
-import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.shoppingcart.*;
+import org.yes.cart.shoppingcart.MutableShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -35,22 +29,13 @@ public class SetTaxOptionsCartCommandImpl extends AbstractCartCommandImpl implem
 
     private static final long serialVersionUID = 20170109L;
 
-    private final CustomerService customerService;
-    private final ShopService shopService;
-
     /**
      * Construct command.
      *
      * @param registry shopping cart command registry
-     * @param customerService customer service
-     * @param shopService shop service
      */
-    public SetTaxOptionsCartCommandImpl(final ShoppingCartCommandRegistry registry,
-                                        final CustomerService customerService,
-                                        final ShopService shopService) {
+    public SetTaxOptionsCartCommandImpl(final ShoppingCartCommandRegistry registry) {
         super(registry);
-        this.shopService = shopService;
-        this.customerService = customerService;
     }
 
     /**
@@ -73,14 +58,7 @@ public class SetTaxOptionsCartCommandImpl extends AbstractCartCommandImpl implem
                     (net != null && !net.equals(shoppingCart.getShoppingContext().isTaxInfoUseNet())) ||
                     (amount != null && !amount.equals(shoppingCart.getShoppingContext().isTaxInfoShowAmount()))) {
 
-                final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
-
-                Customer customer = null;
-                if (shoppingCart.getLogonState() == ShoppingCart.LOGGED_IN) {
-                    customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop);
-                }
-
-                setTaxOptions(shop, customer, show, net, amount, shoppingCart.getShoppingContext());
+                setTaxOptions(shoppingCart, show, net, amount);
                 markDirty(shoppingCart);
             }
         }

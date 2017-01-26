@@ -1131,7 +1131,7 @@ public class CustomerController {
 
         final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
-        final long shopId = cartMixin.getCurrentShopId();
+        final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
         final List<CustomerWishList> wishList = customerServiceFacade.getCustomerWishListByEmail(
                 shop,
@@ -1149,7 +1149,7 @@ public class CustomerController {
             }
 
             final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                    productIds, -1L, ShopCodeContext.getShopId());
+                    productIds, -1L, browsingShopId);
 
             final List<ProductWishlistRO> wlRo = new ArrayList<ProductWishlistRO>();
 
@@ -1164,7 +1164,7 @@ public class CustomerController {
                         wl.setDefaultSkuCode(item.getSkus().getCode());
                         wl.setQuantity(item.getQuantity());
 
-                        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(uniqueProduct, shopId);
+                        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(uniqueProduct, browsingShopId);
                         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
                         wl.setProductAvailabilityModel(amRo);
 
@@ -1625,12 +1625,12 @@ public class CustomerController {
 
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
-        final long shopId = cartMixin.getCurrentShopId();
+        final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
         final List<String> productIds = cart.getShoppingContext().getLatestViewedSkus();
 
         final List<ProductSearchResultDTO> viewedProducts = productServiceFacade.getListProducts(
-                productIds, -1L, ShopCodeContext.getShopId());
+                productIds, -1L, browsingShopId);
 
         final List<ProductSearchResultRO> rvRo = new ArrayList<ProductSearchResultRO>();
 
@@ -1640,7 +1640,7 @@ public class CustomerController {
 
             final ProductSearchResultRO rv = mappingMixin.map(viewedProduct, ProductSearchResultRO.class, ProductSearchResultDTO.class);
 
-            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(viewedProduct, shopId);
+            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(viewedProduct, browsingShopId);
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             rv.setProductAvailabilityModel(amRo);
 
@@ -2274,7 +2274,8 @@ public class CustomerController {
             final Iterator<CustomerOrder> ordersIt = orders.iterator();
             while (ordersIt.hasNext()) {
                 final CustomerOrder order = ordersIt.next();
-                if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())) {
+                if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
+                        || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId()) {
                     ordersIt.remove();
                 }
             }

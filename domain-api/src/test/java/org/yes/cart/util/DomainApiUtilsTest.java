@@ -48,4 +48,22 @@ public class DomainApiUtilsTest {
 
     }
 
+    @Test
+    public void testIsObjectAvailableNow2() throws Exception {
+
+        final Date now = new Date();
+
+        assertFalse(DomainApiUtils.isObjectAvailableNow(false, null, null, now.getTime()));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, null, null, now.getTime()));
+
+        assertFalse(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() + 1L), null, now.getTime()));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() - 1L), null, now.getTime()));
+
+        assertFalse(DomainApiUtils.isObjectAvailableNow(true, null, new Date(now.getTime() - 1L), now.getTime()));
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, null, new Date(now.getTime() + 1L), now.getTime()));
+
+        assertTrue(DomainApiUtils.isObjectAvailableNow(true, new Date(now.getTime() - 1L), new Date(now.getTime() + 1L), now.getTime()));
+
+    }
+
 }

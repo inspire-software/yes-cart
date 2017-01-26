@@ -25,12 +25,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.LuceneQueryFactory;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.breadcrumbs.BreadCrumbsView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -47,7 +45,6 @@ import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CentralViewResolver;
 import org.yes.cart.web.support.util.HttpUtil;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -105,18 +102,18 @@ public class HomePage extends AbstractWebPage {
             categoryId = 0l;
         }
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final long browsingShopId = getCurrentCustomerShopId();
 
-        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, shop.getShopId());
+        final Pair<List<Long>, Boolean> currentCategoriesIds = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId);
 
         final NavigationContext context = luceneQueryFactory.getFilteredNavigationQueryChain(
-                shop.getShopId(),
+                browsingShopId,
                 currentCategoriesIds.getFirst(),
                 currentCategoriesIds.getSecond(),
                 (Map) mapParams
         );
 
-        addOrReplace(new BreadCrumbsView("breadCrumbs", shop.getShopId(), categoryId));
+        addOrReplace(new BreadCrumbsView("breadCrumbs", browsingShopId, categoryId));
 
 
         addOrReplace(new RecentlyViewedProducts("recentlyViewed"));

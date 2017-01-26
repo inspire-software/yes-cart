@@ -18,10 +18,11 @@ package org.yes.cart.service.endpoint;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.yes.cart.domain.vo.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.yes.cart.domain.vo.VoLicenseAgreement;
+import org.yes.cart.domain.vo.VoManager;
 
 /**
  * User: denispavlov
@@ -35,7 +36,7 @@ public interface ManagementEndpointController {
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/myself", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    VoManagerInfo getMyself() throws Exception;
+    VoManager getMyself() throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN","ROLE_SMSHIPPINGADMIN"})
     @RequestMapping(value = "/license", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

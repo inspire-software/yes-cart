@@ -33,8 +33,6 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -94,9 +92,8 @@ public class LoginPanel extends BaseComponent {
     protected void onBeforeRender() {
 
         final String lang = getLocale().getLanguage();
-        final long shopId = ShopCodeContext.getShopId();
 
-        String loginformInfo = getContentInclude(shopId, "login_loginform_content_include", lang);
+        String loginformInfo = getContentInclude(getCurrentShopId(), "login_loginform_content_include", lang);
         get(LOGIN_FORM).get(CONTENT).replaceWith(new Label(CONTENT, loginformInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -201,9 +198,9 @@ public class LoginPanel extends BaseComponent {
                 @Override
                 public void onSubmit() {
                     final String email = getEmail();
-                    final Customer customer = getCustomerServiceFacade().getCustomerByEmail(ApplicationDirector.getCurrentShop(), email);
+                    final Customer customer = getCustomerServiceFacade().getCustomerByEmail(getCurrentShop(), email);
                     if (customer != null) {
-                        getCustomerServiceFacade().resetPassword(ApplicationDirector.getCurrentShop(), customer);
+                        getCustomerServiceFacade().resetPassword(getCurrentShop(), customer);
                         ((AbstractWebPage) getPage()).executeHttpPostedCommands();
                         ((AbstractWebPage) getPage()).persistCartIfNecessary();
 
@@ -252,7 +249,7 @@ public class LoginPanel extends BaseComponent {
                                     setResponsePage(successfulPage, parameters);
                                 }
                             } else {
-                                if (ApplicationDirector.getShoppingCart().getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP) {
+                                if (getCurrentCart().getLogonState() == ShoppingCart.INACTIVE_FOR_SHOP) {
                                     setRestorePassword(null);
                                     error(getLocalizer().getString("customerNotActiveInShop", this));
                                 } else {
@@ -289,7 +286,7 @@ public class LoginPanel extends BaseComponent {
             get(LOGIN_BUTTON).setVisible(!showResend);
 
             final boolean showRegistration = !isCheckout &&
-                    !getCustomerServiceFacade().getShopSupportedCustomerTypes(ApplicationDirector.getCurrentShop()).isEmpty();
+                    !getCustomerServiceFacade().getShopSupportedCustomerTypes(getCurrentShop()).isEmpty();
 
             get(REGISTRATION_LINK).setVisible(showRegistration && !showResend);
 

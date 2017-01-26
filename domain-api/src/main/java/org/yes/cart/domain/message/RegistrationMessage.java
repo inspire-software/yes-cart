@@ -142,7 +142,7 @@ public interface RegistrationMessage extends Serializable {
      *
      * @param mailTemplatePathChain  path to template folder.
      */
-    public void setMailTemplatePathChain(List<String> mailTemplatePathChain);
+    void setMailTemplatePathChain(List<String> mailTemplatePathChain);
 
 
     /**

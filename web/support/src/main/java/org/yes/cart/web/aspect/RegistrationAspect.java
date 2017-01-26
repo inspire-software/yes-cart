@@ -108,7 +108,8 @@ public class RegistrationAspect extends BaseNotificationAspect {
         final Object[] args = pjp.getArgs();
 
         final RegisteredPerson registeredPerson = (RegisteredPerson) args[0];
-        final Shop shop = (Shop) args[1];
+        final Shop shopArg = (Shop) args[1];
+        final Shop shop = shopArg.getMaster() != null ? shopArg.getMaster() : shopArg;
         final String token = resetPassword ? (String) args[2] : null;
 
         if (isRegisteredPersonGuest(registeredPerson)) {

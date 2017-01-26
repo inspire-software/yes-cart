@@ -25,8 +25,6 @@ import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.Currency;
 import org.yes.cart.web.page.component.Language;
@@ -36,7 +34,6 @@ import org.yes.cart.web.page.component.search.SearchView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.ContentServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -73,7 +70,7 @@ public class StandardHeader  extends BaseComponent {
 
     private Component getProfileFragment() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         if (cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
@@ -89,7 +86,7 @@ public class StandardHeader  extends BaseComponent {
     private Component getHeaderNav() {
 
         String content = contentServiceFacade.getContentBody(
-                "header_nav_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+                "header_nav_include", getCurrentShopId(), getLocale().getLanguage());
 
         return new Label("headerNav", content).setEscapeModelStrings(false);
 
@@ -97,7 +94,7 @@ public class StandardHeader  extends BaseComponent {
 
     private Component getLogoFragment() {
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
         final String lang = getLocale().getLanguage();
 
         final List<Pair<String, String>> filenames = shopImageService.getImageAttributeFileNames(shop, lang);

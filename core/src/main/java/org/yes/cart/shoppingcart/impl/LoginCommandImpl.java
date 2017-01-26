@@ -76,8 +76,8 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             final String email = (String) parameters.get(CMD_LOGIN_P_EMAIL);
             final String passw = (String) parameters.get(CMD_LOGIN_P_PASS);
 
-            final String shopCode = shoppingCart.getShoppingContext().getShopCode();
-            final Shop current = shopService.getShopByCode(shopCode);
+            final long shopId = shoppingCart.getShoppingContext().getShopId();
+            final Shop current = shopService.getById(shopId);
 
             final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
             final MutableOrderInfo info = shoppingCart.getOrderInfo();
@@ -86,23 +86,27 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 final List<String> customerShops = new ArrayList<String>();
                 for (final Shop shop : customerService.getCustomerShops(customer)) {
                     customerShops.add(shop.getCode());
+                    if (shop.getMaster() != null && shop.getMaster().getShopId() == shopId) {
+                        shoppingCart.getShoppingContext().setCustomerShopId(shop.getShopId());
+                        shoppingCart.getShoppingContext().setCustomerShopCode(shop.getCode());
+                    }
                 }
 
                 ctx.setCustomerEmail(customer.getEmail());
                 ctx.setCustomerName(customerService.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(current, customer, shoppingCart);
-                setDefaultTaxOptions(current, customer, ctx);
-                setDefaultB2BOptions(current, customer, info);
+                setDefaultTaxOptions(shoppingCart);
+                setDefaultCustomerOptions(shoppingCart);
 
                 recalculatePricesInCart(shoppingCart);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {
                 ctx.clearContext();
-                setDefaultTaxOptions(current, null, ctx);
+                setDefaultTaxOptions(shoppingCart);
                 info.clearInfo();
-                setDefaultB2BOptions(current, null, info);
+                setDefaultCustomerOptions(shoppingCart);
                 markDirty(shoppingCart);
             }
         }
@@ -118,15 +122,15 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
     }
 
 
-    protected void setDefaultTaxOptions(final Shop shop, final Customer customer, final MutableShoppingContext ctx) {
+    protected void setDefaultTaxOptions(final MutableShoppingCart shoppingCart) {
 
-        setTaxOptions(shop, customer, null, null, null, ctx);
+        setTaxOptions(shoppingCart, null, null, null);
 
     }
 
-    private void setDefaultB2BOptions(final Shop shop, final Customer customer, final MutableOrderInfo info) {
+    private void setDefaultCustomerOptions(final MutableShoppingCart shoppingCart) {
 
-        setCustomerOptions(shop, customer, info);
+        setCustomerOptions(shoppingCart);
 
     }
 

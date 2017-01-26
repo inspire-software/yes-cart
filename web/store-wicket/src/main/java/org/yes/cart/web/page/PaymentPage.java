@@ -39,8 +39,6 @@ import org.yes.cart.service.payment.PaymentProcessFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
 import org.yes.cart.web.page.component.header.StandardHeader;
@@ -127,9 +125,9 @@ public class PaymentPage extends AbstractWebPage {
             final Map param =  getWicketUtil().getHttpServletRequest().getParameterMap();
             final Map mparam = new HashMap();
             mparam.putAll(param);
-            mparam.put(PaymentMiscParam.CLIENT_IP, ApplicationDirector.getShopperIPAddress());
+            mparam.put(PaymentMiscParam.CLIENT_IP, getShopperIPAddress());
 
-            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+            final ShoppingCart cart = getCurrentCart();
 
             if (cart.getCartItemsCount() > 0) {
 
@@ -161,12 +159,13 @@ public class PaymentPage extends AbstractWebPage {
             result = false;
         }
 
+        final long contentShopId = getCurrentShopId();
         addOrReplace(new Label("paymentMessage", contentServiceFacade.getDynamicContentBody("paymentpage_message",
-                ShopCodeContext.getShopId(), getLocale().getLanguage(), resultParam)).setEscapeModelStrings(false));
+                contentShopId, getLocale().getLanguage(), resultParam)).setEscapeModelStrings(false));
 
         if (result) {
             shoppingCartCommandFactory.execute(
-                    ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
+                    ShoppingCartCommand.CMD_CLEAN, getCurrentCart(),
                                         Collections.singletonMap(
                                                 ShoppingCartCommand.CMD_CLEAN,
                                                 null)
@@ -285,7 +284,7 @@ public class PaymentPage extends AbstractWebPage {
      * @return order number.
      */
     private String getOrderNumber() {
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(cart.getGuid());
         return customerOrder.getOrdernum();
     }

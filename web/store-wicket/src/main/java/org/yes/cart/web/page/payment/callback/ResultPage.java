@@ -27,7 +27,6 @@ import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -95,7 +94,7 @@ public class ResultPage extends AbstractWebPage {
         // Status gives preliminary result from return URL, which can be sent as "status" or "hint"
         final String status = params.get("status").toString(params.get("hint").toString());
         // Order number can be sent as "orderNum" or "orderGuid" or we use current cart to recover
-        final String orderNum = params.get("orderNum").toString(params.get("orderGuid").toString(ApplicationDirector.getShoppingCart().getGuid()));
+        final String orderNum = params.get("orderNum").toString(params.get("orderGuid").toString(getCurrentCart().getGuid()));
 
         final boolean doCleanCart;
 
@@ -138,7 +137,7 @@ public class ResultPage extends AbstractWebPage {
             cleanCart();
         }
         add(new Label("resultMessage", contentServiceFacade.getDynamicContentBody("resultpage_message",
-                ShopCodeContext.getShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false));
+                getCurrentShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false));
 
         super.onBeforeRender();
 
@@ -150,7 +149,7 @@ public class ResultPage extends AbstractWebPage {
      */
     private void cleanCart() {
         shoppingCartCommandFactory.execute(
-                ShoppingCartCommand.CMD_CLEAN, ApplicationDirector.getShoppingCart(),
+                ShoppingCartCommand.CMD_CLEAN, getCurrentCart(),
                 Collections.singletonMap(
                         ShoppingCartCommand.CMD_CLEAN,
                         null)

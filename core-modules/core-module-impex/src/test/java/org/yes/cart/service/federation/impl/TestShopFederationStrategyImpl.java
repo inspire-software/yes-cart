@@ -77,5 +77,10 @@ public class TestShopFederationStrategyImpl implements ShopFederationStrategy {
         return Collections.emptyList();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isEmployeeManageableByCurrentManager(final String employeeId) {
+        return true;
+    }
 }

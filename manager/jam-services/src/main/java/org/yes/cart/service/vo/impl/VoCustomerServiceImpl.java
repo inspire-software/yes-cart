@@ -17,18 +17,18 @@
 package org.yes.cart.service.vo.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.AccessDeniedException;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueCustomerDTO;
 import org.yes.cart.domain.dto.CustomerDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
-import org.yes.cart.domain.vo.VoCustomerShopLink;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.dto.DtoAttributeService;
 import org.yes.cart.service.dto.DtoCustomerService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -36,6 +36,7 @@ import org.yes.cart.service.vo.VoAssemblySupport;
 import org.yes.cart.service.vo.VoCustomerService;
 import org.yes.cart.service.vo.VoIOSupport;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -117,11 +118,12 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             federationFacade.applyFederationFilter(batch, CustomerDTO.class);
             results.addAll(voAssemblySupport.assembleVos(VoCustomerInfo.class, CustomerDTO.class, batch));
 
-            start += max;
+            start++;
         } while (results.size() < max && max != Integer.MAX_VALUE);
         return results.size() > max ? results.subList(0, max) : results;
 
     }
+
 
     /**
      * {@inheritDoc}
@@ -132,6 +134,16 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             final VoCustomer vo = voAssemblySupport.assembleVo(VoCustomer.class, CustomerDTO.class, new VoCustomer(), customerDTO);
 
             vo.setAttributes(getCustomerAttributes(customerDTO.getCustomerId()));
+
+            final Map<String, VoAttrValueCustomer> attrsMap = getStringVoAttrValueCustomerMap(vo.getAttributes());
+
+            vo.setCheckoutBocked(Boolean.valueOf(getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.BLOCK_CHECKOUT)));
+            final String blockLimit = vo.isCheckoutBocked() ? "0" : getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.BLOCK_CHECKOUT_X);
+            vo.setCheckoutBockedForOrdersOver(StringUtils.isNotBlank(blockLimit) ? new BigDecimal(NumberUtils.toInt(blockLimit)) : null);
+
+            vo.setOrdersRequireApproval(Boolean.valueOf(getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE)));
+            final String approveLimit = vo.isOrdersRequireApproval() ? "0" : getStringVoAttrValueCustomer(attrsMap, AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE_X);
+            vo.setOrdersRequireApprovalForOrdersOver(StringUtils.isNotBlank(approveLimit) ? new BigDecimal(NumberUtils.toInt(approveLimit)) : null);
 
             final Map<ShopDTO, Boolean> links = dtoCustomerService.getAssignedShop(id);
             for (final Map.Entry<ShopDTO, Boolean> assign : links.entrySet()) {
@@ -147,6 +159,21 @@ public class VoCustomerServiceImpl implements VoCustomerService {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+
+    protected Map<String, VoAttrValueCustomer> getStringVoAttrValueCustomerMap(final List<VoAttrValueCustomer> attrs) throws Exception {
+        final Map<String, VoAttrValueCustomer> attrsMap = new HashMap<String, VoAttrValueCustomer>(attrs.size() * 2);
+        for (final VoAttrValueCustomer attr : attrs) {
+            attrsMap.put(attr.getAttribute().getCode(), attr);
+        }
+        return attrsMap;
+    }
+
+    protected String getStringVoAttrValueCustomer(final Map<String, VoAttrValueCustomer> map, String key) {
+        final VoAttrValueCustomer val = map.get(key);
+        return val != null ? val.getVal() : null;
+    }
+
 
     /**
      * {@inheritDoc}

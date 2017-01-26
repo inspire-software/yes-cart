@@ -21,6 +21,7 @@ import org.yes.cart.domain.entity.Shop;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,6 +47,22 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
     List<Shop> getAll();
 
     /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    List<Shop> getNonSubShops();
+
+
+    /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    Map<Long, Set<Long>> getAllShopsAndSubs();
+
+
+    /**
      * Find shop by id
      * @param shopId  given id
      * @return     shop if found, otherwise null
@@ -67,6 +84,21 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      * @return instance of Shop if it has given server name, otherwise null
      */
     Shop getShopByCode(String shopCode);
+
+    /**
+     * Get shops by given shop master.
+     * @param masterId master shop
+     * @return instance of Shop if it has given server name, otherwise null
+     */
+    List<Shop> getSubShopsByMaster(long masterId);
+
+    /**
+     * Get shop by given shop code.
+     * @param shopName  given shop code.
+     * @param masterId master shop
+     * @return instance of Shop if it has given server name, otherwise null
+     */
+    Shop getSubShopByNameAndMaster(String shopName, long masterId);
 
     /**
      * Get the {@link Shop} by given order number.

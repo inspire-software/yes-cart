@@ -24,6 +24,7 @@ import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.AbstractCentralView;
 import org.yes.cart.web.page.component.EmptyCentralView;
 import org.yes.cart.web.theme.WicketCentralViewProvider;
@@ -166,7 +167,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
      */
     private boolean isCategoryVisibleInShop(final Long categoryId) {
 
-        final Set<Long> catIds = shopService.getShopCategoriesIds(ShopCodeContext.getShopId());
+        final Set<Long> catIds = shopService.getShopCategoriesIds(ApplicationDirector.getShoppingCart().getShoppingContext().getCustomerShopId());
         Category category = categoryService.getById(categoryId);
         final Date now = new Date();
 
@@ -201,7 +202,7 @@ public class WicketCentralViewProviderImpl implements WicketCentralViewProvider 
      */
     private boolean isContentVisibleInShop(final Long contentId) {
 
-        final Set<Long> catIds = shopService.getShopContentIds(ShopCodeContext.getShopId());
+        final Set<Long> catIds = shopService.getShopContentIds(ApplicationDirector.getShoppingCart().getShoppingContext().getShopId());
         Category content = categoryService.getById(contentId);
         final Date now = new Date();
 

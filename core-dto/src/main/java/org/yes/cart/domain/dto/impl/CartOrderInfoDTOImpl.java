@@ -83,6 +83,12 @@ public class CartOrderInfoDTOImpl implements OrderInfo, Serializable {
         return getDetailsInternal().get(key);
     }
 
+    /** {@inheritDoc} */
+    public boolean isDetailByKeyTrue(final String key) {
+        final String detail = getDetailByKey(key);
+        return detail != null && Boolean.valueOf(detail);
+    }
+
     public Map<String, Long> getCarrierSlaId() {
         return Collections.unmodifiableMap(getCarrierSlaIdInternal());
     }

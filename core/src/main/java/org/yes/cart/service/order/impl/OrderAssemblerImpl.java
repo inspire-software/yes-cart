@@ -103,7 +103,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
         final CustomerOrder customerOrder = entityFactory.getByIface(CustomerOrder.class);
 
         // sets shop from cache
-        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getShopId()));
+        customerOrder.setShop(shopService.getById(shoppingCart.getShoppingContext().getCustomerShopId()));
 
         final Total cartTotal = shoppingCart.getTotal();
 
@@ -251,7 +251,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
 
             if (!shippingNotRequired) {
-                customerOrder.setShippingAddress(formatAddress(shippingAddress, customerOrder.getShop(), customer, customerOrder.getLocale()));
+                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+                customerOrder.setShippingAddress(formatAddress(shippingAddress, configShop, customer, customerOrder.getLocale()));
             } else {
                 customerOrder.setShippingAddress("");
             }
@@ -261,7 +262,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
             }
 
             if (!billingNotRequired) {
-                customerOrder.setBillingAddress(formatAddress(billingAddress, customerOrder.getShop(), customer, customerOrder.getLocale()));
+                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+                customerOrder.setBillingAddress(formatAddress(billingAddress, configShop, customer, customerOrder.getLocale()));
             } else {
                 customerOrder.setBillingAddress("");
             }

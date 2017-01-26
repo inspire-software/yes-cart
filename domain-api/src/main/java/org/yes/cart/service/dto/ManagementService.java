@@ -100,13 +100,14 @@ public interface ManagementService {
      * Get the assigned to manager shops
      *
      * @param userId user email
+     * @param includeSubs
      * @return list of assigned shops
      * @throws org.yes.cart.exception.UnmappedInterfaceException
      *          in case of configuration error
      * @throws org.yes.cart.exception.UnableToCreateInstanceException
      *          in case if some problems with reflection
      */
-    List<ShopDTO> getAssignedManagerShops(String userId)
+    List<ShopDTO> getAssignedManagerShops(String userId, final boolean includeSubs)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
     /**

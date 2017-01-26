@@ -131,9 +131,11 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
             Customer cust = getGenericDao().findById(customer.getCustomerId());
             if (cust != null) {
                 for (CustomerShop customerShop : cust.getShops()) {
-                    final Shop shop = shopService.getById(customerShop.getShop().getShopId());
-                    if (shop != null) {
-                        shops.add(shop);
+                    if (!customerShop.isDisabled()) {
+                        final Shop shop = shopService.getById(customerShop.getShop().getShopId());
+                        if (shop != null && !shop.isDisabled()) {
+                            shops.add(shop);
+                        }
                     }
                 }
             }

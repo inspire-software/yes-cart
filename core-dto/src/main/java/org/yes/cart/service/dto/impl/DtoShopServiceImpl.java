@@ -89,6 +89,22 @@ public class DtoShopServiceImpl
     }
 
     /** {@inheritDoc} */
+    public List<ShopDTO> getAllTopLevel() throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Shop> shops = ((ShopService) service).getNonSubShops();
+        final List<ShopDTO> dtos = new ArrayList<ShopDTO>();
+        fillDTOs(shops, dtos);
+        return dtos;
+    }
+
+    /** {@inheritDoc} */
+    public List<ShopDTO> getAllSubs(final long masterId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<Shop> shops = ((ShopService) service).getSubShopsByMaster(masterId);
+        final List<ShopDTO> dtos = new ArrayList<ShopDTO>();
+        fillDTOs(shops, dtos);
+        return dtos;
+    }
+
+    /** {@inheritDoc} */
     public String getSupportedCurrencies(final long shopId) {
         return service.findById(shopId).getSupportedCurrencies();
     }

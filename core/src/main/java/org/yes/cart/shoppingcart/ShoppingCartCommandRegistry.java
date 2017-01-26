@@ -28,6 +28,6 @@ public interface ShoppingCartCommandRegistry {
      *
      * @param shoppingCartCommand command to register
      */
-    void registerCommand(final ShoppingCartCommand shoppingCartCommand);
+    void registerCommand(final ConfigurableShoppingCartCommand shoppingCartCommand);
 
 }

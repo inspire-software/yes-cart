@@ -35,6 +35,14 @@ public interface VoShopService {
     List<VoShop> getAll() throws Exception;
 
     /**
+     * Get all manageable shops.
+     *
+     * @return list of all manageble shops.
+     * @throws Exception
+     */
+    List<VoShop> getAllSubs(long masterId) throws Exception;
+
+    /**
      * Get shop by id.
      *
      * @param id
@@ -60,6 +68,15 @@ public interface VoShopService {
      * @throws Exception
      */
     VoShop create(VoShop vo) throws Exception;
+
+    /**
+     * Create new shop
+     *
+     * @param vo given instance to persist
+     * @return persisted instance
+     * @throws Exception
+     */
+    VoShop createSub(VoSubShop vo) throws Exception;
 
     /**
      * Get shop by id.

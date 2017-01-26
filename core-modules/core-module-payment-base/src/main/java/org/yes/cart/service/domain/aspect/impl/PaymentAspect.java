@@ -189,7 +189,8 @@ public class PaymentAspect extends BaseNotificationAspect {
                             final Map<String, String> adminTemplates) {
 
         final CustomerOrder order = (CustomerOrder) pjp.getArgs()[0];
-        final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(order.getPgLabel(), order.getShop().getCode());
+        final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
+        final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(order.getPgLabel(), pgShop.getCode());
         if (gateway == null) {
             ShopCodeContext.getLog(this).error("Cannot send payment email because gateway {} is not resolved for {}, could it be disabled?", order.getPgLabel(), order.getShop().getCode());
             return;
@@ -215,7 +216,7 @@ public class PaymentAspect extends BaseNotificationAspect {
 
         // We notify admin with all PG results for audit purposes
         if (StringUtils.isNotBlank(adminTemplate)) {
-            final String adminEmail = order.getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+            final String adminEmail = pgShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
             if (StringUtils.isNotBlank(adminEmail)) {
                 final HashMap<String, Object> adminMap = new HashMap<String, Object>(map);
                 adminMap.put(StandardMessageListener.TEMPLATE_NAME, adminTemplate);
@@ -240,7 +241,9 @@ public class PaymentAspect extends BaseNotificationAspect {
      */
     protected void fillPaymentParameters(final ProceedingJoinPoint pjp, final CustomerOrder customerOrder, final PaymentGateway paymentGateway, final String rez, final HashMap<String, Object> map) {
 
-        final Shop shop = shopService.getById(customerOrder.getShop().getShopId());
+        final Shop orderShop = shopService.getById(customerOrder.getShop().getShopId());
+        final Shop shop = orderShop.getMaster() != null ? orderShop.getMaster() : orderShop;
+
         map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
         map.put(StandardMessageListener.CUSTOMER_EMAIL, customerOrder.getEmail());
         map.put(StandardMessageListener.RESULT, rez);

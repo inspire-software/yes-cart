@@ -30,6 +30,8 @@ import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.vo.*;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
@@ -152,6 +154,21 @@ public class VoShopServiceImpl implements VoShopService {
     /**
      * {@inheritDoc}
      */
+    public List<VoShop> getAllSubs(final long masterId) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(masterId);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+
+            final List<ShopDTO> subs = dtoShopService.getAllSubs(masterId);
+            return voAssemblySupport.assembleVos(VoShop.class, ShopDTO.class, subs);
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public VoShop getById(long id) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(id);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
@@ -185,10 +202,61 @@ public class VoShopServiceImpl implements VoShopService {
             shopDTO = dtoShopService.create(
                     voAssemblySupport.assembleDto(ShopDTO.class, VoShop.class, shopDTO, vo)
             );
+
+            createShopDefaults(shopDTO);
+
             return getById(shopDTO.getShopId());
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoShop createSub(final VoSubShop vo) throws Exception {
+        final ShopDTO shopDTO = dtoShopService.getById(vo != null ? vo.getMasterId() : 0L);
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+            throw new RuntimeException("This feature is only available on YCE");
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    protected void createShopDefaults(final ShopDTO shopDTO) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        // Setup basic properties
+        final List<AttrValueShopDTO> avs = (List) dtoShopService.getEntityAttributes(shopDTO.getShopId());
+        final Map<String, AttrValueShopDTO> avsMap = new HashMap<String, AttrValueShopDTO>();
+        for (final AttrValueShopDTO av : avs) {
+            avsMap.put(av.getAttributeDTO().getCode(), av);
+        }
+
+        final AttrValueShopDTO supportedTypes = avsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+        if (supportedTypes != null) {
+            supportedTypes.setVal("B2C");
+            dtoShopService.createEntityAttributeValue(supportedTypes);
+        }
+
+        final AttrValueShopDTO searchIncludeCats = avsMap.get(AttributeNamesKeys.Shop.SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH);
+        if (searchIncludeCats != null) {
+            searchIncludeCats.setVal(Boolean.TRUE.toString());
+            dtoShopService.createEntityAttributeValue(searchIncludeCats);
+        }
+
+        final AttrValueShopDTO passwReset = avsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+        if (passwReset != null) {
+            passwReset.setVal(UUID.randomUUID().toString());
+            dtoShopService.createEntityAttributeValue(passwReset);
+        }
+
+        final AttrValueShopDTO langs = avsMap.get(AttributeNamesKeys.Shop.SUPPORTED_LANGUAGES);
+        if (langs != null) {
+            langs.setVal(org.apache.commons.lang.StringUtils.join(languageService.getSupportedLanguages(), ','));
+            dtoShopService.createEntityAttributeValue(langs);
+        }
+
+
     }
 
     /**
@@ -209,17 +277,20 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
 
-            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(shopId);
+            final long configShopId = shopDTO.getMasterId() != null ? shopDTO.getMasterId() : shopDTO.getShopId();
+            final String configShopCode = shopDTO.getMasterId() != null ? shopDTO.getMasterCode() : shopDTO.getCode();
 
-            addMainInfo(summary, shopId, shopDTO);
+            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(configShopId, configShopCode);
 
-            addShopLocales(summary, shopId, lang, attrsMap);
+            addMainInfo(summary, configShopId, shopDTO);
 
-            addShopCurrencies(summary, shopId);
+            addShopLocales(summary, configShopId, lang, attrsMap);
 
-            addShopLocations(summary, shopId);
+            addShopCurrencies(summary, configShopId);
 
-            addShopUrls(summary, shopId);
+            addShopLocations(summary, configShopId);
+
+            addShopUrls(summary, configShopId);
 
             addSearchConfig(summary, lang, attrsMap);
 
@@ -239,9 +310,11 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected void addMainInfo(final VoShopSummary summary, final long shopId, final ShopDTO shopDTO) {
-        summary.setShopId(shopId);
+        summary.setShopId(shopDTO.getShopId());
         summary.setDisabled(shopDTO.isDisabled());
         summary.setCode(shopDTO.getCode());
+        summary.setMasterId(shopDTO.getMasterId());
+        summary.setMasterCode(shopDTO.getMasterCode());
         summary.setName(shopDTO.getName());
         summary.setThemeChain(StringUtils.join(themeService.getThemeChainByShopId(shopId, null), " > "));
     }
@@ -252,6 +325,8 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setB2bProfileActive(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
         summary.setCookiePolicy(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
@@ -370,8 +445,8 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SEARCH_SUGGEST_MIN_CHARS, lang, 3));
     }
 
-    protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId) throws Exception {
-        final List<VoAttrValueShop> attrs = getShopAttributes(shopId);
+    protected Map<String, VoAttrValueShop> getStringVoAttrValueShopMap(final long shopId, final String code) throws Exception {
+        final List<VoAttrValueShop> attrs = voAttributesCRUDTemplate.getAttributes(shopId, code);
         final Map<String, VoAttrValueShop> attrsMap = new HashMap<String, VoAttrValueShop>(attrs.size() * 2);
         for (final VoAttrValueShop attr : attrs) {
             attrsMap.put(attr.getAttribute().getCode(), attr);
@@ -380,7 +455,7 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected void addShopUrls(final VoShopSummary summary, final long shopId) throws Exception {
-        final VoShopUrl urls = getShopUrls(shopId);
+        final VoShopUrl urls = getShopUrlsInternal(shopId);
         summary.setPreviewUrl(urls.getPreviewUrl());
         summary.setPreviewCss(urls.getPreviewCss());
         for (final VoShopUrlDetail url : urls.getUrls()) {
@@ -403,7 +478,7 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected void addShopLocations(final VoShopSummary summary, final long shopId) throws Exception {
-        final VoShopLocations loc = getShopLocations(shopId);
+        final VoShopLocations loc = getShopLocationsInternal(shopId);
         for (final MutablePair<String, String> codeAndName : loc.getAll()) {
             if (loc.getSupportedBilling().contains(codeAndName.getFirst())) {
                 summary.getBillingLocations().add(codeAndName);
@@ -415,14 +490,14 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     protected void addShopCurrencies(final VoShopSummary summary, final long shopId) throws Exception {
-        final VoShopSupportedCurrencies curr = getShopCurrencies(shopId);
+        final VoShopSupportedCurrencies curr = getShopCurrenciesInternal(shopId);
         for (final String code : curr.getSupported()) {
             summary.getCurrencies().add(MutablePair.of(code, code));
         }
     }
 
     protected void addShopLocales(final VoShopSummary summary, final long shopId, final String lang, final Map<String, VoAttrValueShop> attrsMap) throws Exception {
-        final VoShopLanguages langs = getShopLanguages(shopId);
+        final VoShopLanguages langs = getShopLanguagesInternal(shopId);
         for (final String code : langs.getSupported()) {
             for (final MutablePair langAndName : langs.getAll()) {
                 if (langAndName.getFirst().equals(code)) {
@@ -568,43 +643,48 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopUrl getShopUrls(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
-            final List<ShopUrlDTO> shopUrlDTO = dtoShopUrlService.getAllByShopId(shopId);
-            final VoShopUrl voShopUrl = new VoShopUrl();
-            voShopUrl.setUrls(voAssemblySupport.assembleVos(VoShopUrlDetail.class, ShopUrlDTO.class, shopUrlDTO));
-            voShopUrl.setShopId(shopId);
-
-            String previewURLTemplate = systemService.getPreviewShopURLTemplate();
-            if (previewURLTemplate == null) {
-                previewURLTemplate = "http://{primaryShopURL}:8080/";
-                ShopCodeContext.getLog(this).error("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
-            }
-
-            String primary = null;
-            if (voShopUrl.getUrls() == null || voShopUrl.getUrls().isEmpty()) {
-                primary = "localhost";
-            } else {
-                for (final VoShopUrlDetail url : voShopUrl.getUrls()) {
-                    if (primary == null || url.isPrimary()) {
-                        primary = url.getUrl();
-                    }
-                }
-            }
-
-            voShopUrl.setPreviewUrl(previewURLTemplate.replace("{primaryShopURL}", primary));
-
-            String previewURICss = systemService.getPreviewShopURICss();
-            if (previewURICss == null) {
-                previewURICss = "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
-                ShopCodeContext.getLog(this).error("Preview shop URI CSS is not configured, using '{}'", previewURICss);
-            }
-            voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);
-
-
-            return voShopUrl;
+            return getShopUrlsInternal(shopId);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    private VoShopUrl getShopUrlsInternal(long shopId) throws Exception {
+        final List<ShopUrlDTO> shopUrlDTO = dtoShopUrlService.getAllByShopId(shopId);
+        final VoShopUrl voShopUrl = new VoShopUrl();
+        voShopUrl.setUrls(voAssemblySupport.assembleVos(VoShopUrlDetail.class, ShopUrlDTO.class, shopUrlDTO));
+        voShopUrl.setShopId(shopId);
+
+        String previewURLTemplate = systemService.getPreviewShopURLTemplate();
+        if (previewURLTemplate == null) {
+            previewURLTemplate = "http://{primaryShopURL}:8080/";
+            ShopCodeContext.getLog(this).error("Preview shop URL template is not configured, using '{}'", previewURLTemplate);
+        }
+
+        String primary = null;
+        if (voShopUrl.getUrls() == null || voShopUrl.getUrls().isEmpty()) {
+            primary = "localhost";
+        } else {
+            for (final VoShopUrlDetail url : voShopUrl.getUrls()) {
+                if (primary == null || url.isPrimary()) {
+                    primary = url.getUrl();
+                }
+            }
+        }
+
+        voShopUrl.setPreviewUrl(previewURLTemplate.replace("{primaryShopURL}", primary));
+
+        String previewURICss = systemService.getPreviewShopURICss();
+        if (previewURICss == null) {
+            previewURICss = "yes-shop/wicket/resource/org.yes.cart.web.page.HomePage/::/::/::/::/::/style/yc-preview.css";
+            ShopCodeContext.getLog(this).error("Preview shop URI CSS is not configured, using '{}'", previewURICss);
+        }
+        voShopUrl.setPreviewCss(voShopUrl.getPreviewUrl() + previewURICss);
+
+
+        return voShopUrl;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -640,18 +720,23 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopSupportedCurrencies getShopCurrencies(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
-            VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
-            ssc.setShopId(shopId);
-            ssc.setAll(currencyService.getSupportedCurrencies());
-            String curr = dtoShopService.getSupportedCurrencies(shopId);
-            ssc.setSupported(
-                    curr == null ? Collections.<String>emptyList() : Arrays.asList(curr.split(","))
-            );
-            return ssc;
+            return getShopCurrenciesInternal(shopId);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    private VoShopSupportedCurrencies getShopCurrenciesInternal(long shopId) throws Exception {
+        VoShopSupportedCurrencies ssc = new VoShopSupportedCurrencies();
+        ssc.setShopId(shopId);
+        ssc.setAll(currencyService.getSupportedCurrencies());
+        String curr = dtoShopService.getSupportedCurrencies(shopId);
+        ssc.setSupported(
+                curr == null ? Collections.<String>emptyList() : Arrays.asList(curr.split(","))
+        );
+        return ssc;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -673,16 +758,21 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopLanguages getShopLanguages(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
-            final VoShopLanguages voShopLanguages = new VoShopLanguages();
-            String lng = dtoShopService.getSupportedLanguages(shopId);
-            voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() : Arrays.asList(lng.split(",")));
-            voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
-            voShopLanguages.setShopId(shopId);
-            return voShopLanguages;
+            return getShopLanguagesInternal(shopId);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+    private VoShopLanguages getShopLanguagesInternal(long shopId) throws Exception {
+        final VoShopLanguages voShopLanguages = new VoShopLanguages();
+        String lng = dtoShopService.getSupportedLanguages(shopId);
+        voShopLanguages.setSupported(lng == null ? Collections.<String>emptyList() : Arrays.asList(lng.split(",")));
+        voShopLanguages.setAll(VoUtils.adaptMapToPairs(languageService.getLanguageName()));
+        voShopLanguages.setShopId(shopId);
+        return voShopLanguages;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -702,27 +792,31 @@ public class VoShopServiceImpl implements VoShopService {
      */
     public VoShopLocations getShopLocations(long shopId) throws Exception {
         if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
-            final VoShopLocations shopLocations = new VoShopLocations();
-
-            String billing = dtoShopService.getSupportedBillingCountries(shopId);
-            String shipping = dtoShopService.getSupportedShippingCountries(shopId);
-            shopLocations.setSupportedBilling(billing == null ? Collections.<String>emptyList() : Arrays.asList(billing.split(",")));
-            shopLocations.setSupportedShipping(shipping == null ? Collections.<String>emptyList() : Arrays.asList(shipping.split(",")));
-
-            final List<Country> countries = countryService.findAll();
-            final List<MutablePair<String, String>> all = new ArrayList<>();
-            for (final Country country : countries) {
-                all.add(MutablePair.of(
-                        country.getCountryCode(),
-                        country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : "")));
-            }
-
-            shopLocations.setAll(all);
-            shopLocations.setShopId(shopId);
-            return shopLocations;
+            return getShopLocationsInternal(shopId);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
+    }
+
+    private VoShopLocations getShopLocationsInternal(long shopId) throws Exception {
+        final VoShopLocations shopLocations = new VoShopLocations();
+
+        String billing = dtoShopService.getSupportedBillingCountries(shopId);
+        String shipping = dtoShopService.getSupportedShippingCountries(shopId);
+        shopLocations.setSupportedBilling(billing == null ? Collections.<String>emptyList() : Arrays.asList(billing.split(",")));
+        shopLocations.setSupportedShipping(shipping == null ? Collections.<String>emptyList() : Arrays.asList(shipping.split(",")));
+
+        final List<Country> countries = countryService.findAll();
+        final List<MutablePair<String, String>> all = new ArrayList<>();
+        for (final Country country : countries) {
+            all.add(MutablePair.of(
+                    country.getCountryCode(),
+                    country.getName() + (StringUtils.isNotBlank(country.getDisplayName()) ? " (" + country.getDisplayName() + ")" : "")));
+        }
+
+        shopLocations.setAll(all);
+        shopLocations.setShopId(shopId);
+        return shopLocations;
     }
 
     /**

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import {
-  ErrorEventBus, ShopEventBus, I18nEventBus, WindowMessageEventBus,
+  ErrorEventBus, ShopEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus,
   ValidationService,
   ShopService,
   ShippingService, LocationService,
@@ -38,7 +38,7 @@ export class ServicesModule {
     return {
       ngModule: ServicesModule,
       providers: [
-        ErrorEventBus, ShopEventBus, I18nEventBus, WindowMessageEventBus,
+        ErrorEventBus, ShopEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus,
         ValidationService,
         ShopService,
         ShippingService, LocationService,

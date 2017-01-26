@@ -19,11 +19,9 @@ package org.yes.cart.web.page.component.product;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.markup.html.basic.Label;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 
 /**
@@ -65,7 +63,7 @@ public class SkuInListView extends BaseComponent {
 
         add(
                 getWicketSupportFacade().links().newProductSkuLink(SKU_LINK, sku.getId(), getPage().getPageParameters())
-                        .add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(ApplicationDirector.getCurrentShop(), sku)))
+                        .add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(getCurrentShop(), sku)))
                         .add(new Label(SKU_NAME_LABEL, nameModel.getValue(selectedLocale)))
         );
 

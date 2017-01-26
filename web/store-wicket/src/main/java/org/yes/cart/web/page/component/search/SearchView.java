@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component.search;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -46,7 +45,7 @@ public class SearchView extends BaseComponent {
     protected void onBeforeRender() {
 
         String content = contentServiceFacade.getContentBody(
-                "header_search_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+                "header_search_include", getCurrentShopId(), getLocale().getLanguage());
         if (content == null) {
             content = "";
         }

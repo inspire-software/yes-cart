@@ -166,14 +166,14 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                   "84.77",                            "444.95",
-                              "689.74",                     "259.74",                                                       "444.95"),
-                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,                PaymentGateway.AUTH,
-                              PaymentGateway.REVERSE_AUTH,  PaymentGateway.REVERSE_AUTH,                                    PaymentGateway.REVERSE_AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_OK,
-                              Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,                                      Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,                      Boolean.FALSE,
-                              Boolean.FALSE,                Boolean.FALSE,                                                  Boolean.FALSE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95",
+                        "689.74", "259.74", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH,
+                        PaymentGateway.REVERSE_AUTH, PaymentGateway.REVERSE_AUTH, PaymentGateway.REVERSE_AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_OK,
+                        Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+                        Boolean.FALSE, Boolean.FALSE, Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -565,12 +565,12 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
                 Arrays.asList("689.74", "259.74", "84.77",
                         "689.74", "259.74", "84.77"),
-                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,
-                              PaymentGateway.REVERSE_AUTH,  PaymentGateway.REVERSE_AUTH,PaymentGateway.REVERSE_AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK,
-                              Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,
-                              Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE));
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH,
+                        PaymentGateway.REVERSE_AUTH, PaymentGateway.REVERSE_AUTH, PaymentGateway.REVERSE_AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK,
+                        Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE,
+                        Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -1544,7 +1544,7 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
 
         // Authorisation
-        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH_CAPTURE,  Payment.PAYMENT_STATUS_OK, true);
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH_CAPTURE, Payment.PAYMENT_STATUS_OK, true);
         assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
         assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -1630,10 +1630,10 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
 
         // Authorisation
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "689.74"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE));
+                Arrays.asList("689.74", "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE, Boolean.FALSE));
         assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -1727,6 +1727,51 @@ public class CancelOrderWithRefundOrderEventHandlerImplTest extends AbstractEven
         assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
         assertEquals(CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT, customerOrder.getOrderStatus());
+    }
+
+
+
+
+    @Test
+    public void testHandleStandardPaymentProcessingOnlineCaptureSub() throws Exception {
+
+        configureTestPG(false, true, TestPaymentGatewayImpl.PROCESSING);
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, false, true);
+
+        CustomerOrder customerOrder = createTestSubOrder(TestOrderType.STANDARD, label, false);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        deactivateTestPgParameter(TestPaymentGatewayImpl.PROCESSING);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.order.cancel.refund
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION);
+
+        // Authorisation
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74",                         "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,      PaymentGateway.VOID_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING,Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE,                    Boolean.FALSE));
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        // Really strange case but this is acceptable for now as we only want to count paid captures
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
     }
 
 

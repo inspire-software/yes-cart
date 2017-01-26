@@ -22,7 +22,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -59,7 +58,7 @@ public class ContentCentralView extends AbstractCentralView {
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {
-            contentBody = contentServiceFacade.getContentBody(getCategoryId(), ShopCodeContext.getShopId(), lang);
+            contentBody = contentServiceFacade.getContentBody(getCategoryId(), getCurrentShopId(), lang);
         } else {
             contentBody = "";
         }
@@ -70,7 +69,7 @@ public class ContentCentralView extends AbstractCentralView {
     @Override
     public Category getCategory() {
         if (category == null) {
-            category = contentServiceFacade.getContent(getCategoryId(), ShopCodeContext.getShopId());
+            category = contentServiceFacade.getContent(getCategoryId(), getCurrentShopId());
         }
         return category;
     }

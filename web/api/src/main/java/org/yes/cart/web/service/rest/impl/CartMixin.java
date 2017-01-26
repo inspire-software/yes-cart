@@ -69,7 +69,7 @@ public class CartMixin {
      * @return shop PK
      */
     public long getCurrentShopId() {
-        return ShopCodeContext.getShopId();
+        return getCurrentCart().getShoppingContext().getShopId();
     }
 
     /**
@@ -78,8 +78,28 @@ public class CartMixin {
      * @return shop code
      */
     public String getCurrentShopCode() {
-        return ShopCodeContext.getShopCode();
+        return getCurrentCart().getShoppingContext().getShopCode();
     }
+
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop PK
+     */
+    public long getCurrentCustomerShopId() {
+        return getCurrentCart().getShoppingContext().getCustomerShopId();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop code
+     */
+    public String getCurrentCustomerShopCode() {
+        return getCurrentCart().getShoppingContext().getCustomerShopCode();
+    }
+
 
     /**
      * Generate token ro for current state of the cart.

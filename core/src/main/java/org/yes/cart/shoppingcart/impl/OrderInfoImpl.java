@@ -97,6 +97,12 @@ public class OrderInfoImpl implements MutableOrderInfo {
     }
 
     /** {@inheritDoc} */
+    public boolean isDetailByKeyTrue(final String key) {
+        final String detail = getDetailByKey(key);
+        return detail != null && Boolean.valueOf(detail);
+    }
+
+    /** {@inheritDoc} */
     public Map<String, Long> getCarrierSlaId() {
         return Collections.unmodifiableMap(getCarrierSlaIdInternal());
     }

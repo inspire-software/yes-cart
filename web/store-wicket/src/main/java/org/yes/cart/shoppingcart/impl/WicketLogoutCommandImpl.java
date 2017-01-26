@@ -19,7 +19,6 @@ package org.yes.cart.shoppingcart.impl;
 import org.apache.wicket.Application;
 import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
@@ -37,9 +36,8 @@ public class WicketLogoutCommandImpl extends LogoutCommandImpl {
 
     private static final long serialVersionUID = 20101026L;
 
-    public WicketLogoutCommandImpl(final ShoppingCartCommandRegistry registry,
-                                   final ShopService shopService) {
-        super(registry, shopService);
+    public WicketLogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
     }
 
     @Override

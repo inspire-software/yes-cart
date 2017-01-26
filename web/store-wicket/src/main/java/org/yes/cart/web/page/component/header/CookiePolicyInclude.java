@@ -20,8 +20,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -52,16 +50,17 @@ public class CookiePolicyInclude extends BaseComponent {
         String content = "";
         if (!alreadyAccepted) {
 
-            final Shop shop = ApplicationDirector.getCurrentShop();
+            final Shop shop = getCurrentShop();
 
             final boolean cookiePolicyEnabled = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE);
 
             if (cookiePolicyEnabled) {
 
+                final long contentShopId = getCurrentShopId();
                 content = contentServiceFacade.getDynamicContentBody(
-                        "cookie_policy_include", ShopCodeContext.getShopId(), getLocale().getLanguage(), Collections.EMPTY_MAP);
+                        "cookie_policy_include", contentShopId, getLocale().getLanguage(), Collections.EMPTY_MAP);
                 if (content == null) {
-                    content = ShopCodeContext.getShopId() + "_cookie_policy_include";
+                    content = contentShopId + "_cookie_policy_include";
                 }
                 setVisible(true);
 

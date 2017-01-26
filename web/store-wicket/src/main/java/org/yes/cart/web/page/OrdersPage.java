@@ -29,7 +29,6 @@ import org.springframework.util.StringUtils;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.order.CustomerOrderPanel;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -66,10 +65,10 @@ public class OrdersPage extends AbstractWebPage {
     public OrdersPage(final PageParameters params) {
         super(params);
 
-        final String email = ApplicationDirector.getShoppingCart().getCustomerEmail();
+        final String email = getCurrentCart().getCustomerEmail();
         final Customer customer;
         if (StringUtils.hasLength(email)) {
-            customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), email);
+            customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
         } else {
             customer = null;
             // Redirect away from profile!
@@ -95,7 +94,7 @@ public class OrdersPage extends AbstractWebPage {
     @Override
     protected void onBeforeRender() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         if ((!((AuthenticatedWebSession) getSession()).isSignedIn()
                 || cart.getLogonState() != ShoppingCart.LOGGED_IN)) {

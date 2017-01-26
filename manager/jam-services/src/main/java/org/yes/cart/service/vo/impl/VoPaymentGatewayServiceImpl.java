@@ -121,11 +121,37 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
     /** {@inheritDoc} */
     public void fillShopSummaryDetails(final VoShopSummary summary, final String shopCode, final String lang) throws Exception {
 
-        final List<VoPaymentGatewayInfo> pgs = getPaymentGatewaysForShop(lang, shopCode);
-        for (final VoPaymentGatewayInfo pg : pgs) {
+        if (federationFacade.isManageable(summary.getCode(), ShopDTO.class)) {
 
-            summary.getPaymentGateways().add(MutablePair.of(pg.getName(), !pg.isActive()));
+            List<VoPaymentGatewayInfo> rez = new ArrayList<VoPaymentGatewayInfo> ();
+            List<MutablePair<String, String>> active = getAllowedPaymentGatewaysForShopInternal(lang, shopCode);
+            List<MutablePair<String, String>> available = getAvailablePaymentGatewaysForShopInternal(lang, shopCode);
+            Set<String> activeLabels = new HashSet<>();
+            for (MutablePair<String, String> pair : active) {
+                rez.add(
+                        new VoPaymentGatewayInfo(pair.getFirst(), pair.getSecond(), true)
+                );
+                activeLabels.add(pair.getFirst());
+            }
 
+            for (MutablePair<String, String> pair : available) {
+                if (!activeLabels.contains(pair.getFirst())) {
+                    rez.add(
+                            new VoPaymentGatewayInfo(pair.getFirst(), pair.getSecond(), false)
+                    );
+                }
+            }
+
+            sortPgInfo(rez);
+
+            for (final VoPaymentGatewayInfo pg : rez) {
+
+                summary.getPaymentGateways().add(MutablePair.of(pg.getName(), !pg.isActive()));
+
+            }
+
+        } else {
+            throw new AccessDeniedException("Access is denied");
         }
 
     }
@@ -167,14 +193,19 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
     /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAllowedPaymentGatewaysForShop(final String lang,
-                                                                       final String shopCode) throws Exception {
+                                                                              final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
-            final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, shopCode);
-            return fillPaymentDescriptors(descriptors, lang);
+            return getAllowedPaymentGatewaysForShopInternal(lang, shopCode);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
 
+    }
+
+    private List<MutablePair<String, String>> getAllowedPaymentGatewaysForShopInternal(final String lang,
+                                                                                       final String shopCode) throws Exception {
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, shopCode);
+        return fillPaymentDescriptors(descriptors, lang);
     }
 
     /** {@inheritDoc} */
@@ -187,17 +218,23 @@ public class VoPaymentGatewayServiceImpl implements VoPaymentGatewayService {
 
     /** {@inheritDoc} */
     public List<MutablePair<String, String>> getAvailablePaymentGatewaysForShop(final String lang,
-                                                                         final String shopCode) throws Exception {
+                                                                                final String shopCode) throws Exception {
         if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
-            final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true, shopCode);
-            final List<MutablePair<String, String>> rez = fillPaymentDescriptors(descriptors, lang);
-            rez.removeAll(getAllowedPaymentGatewaysForShop(lang, shopCode));
-            return rez;
+            return getAvailablePaymentGatewaysForShopInternal(lang, shopCode);
         } else {
             throw new AccessDeniedException("Access is denied");
         }
 
     }
+
+    private List<MutablePair<String, String>> getAvailablePaymentGatewaysForShopInternal(final String lang,
+                                                                                         final String shopCode) throws Exception {
+        final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(true, shopCode);
+        final List<MutablePair<String, String>> rez = fillPaymentDescriptors(descriptors, lang);
+        rez.removeAll(getAllowedPaymentGatewaysForShopInternal(lang, shopCode));
+        return rez;
+    }
+
 
     private List<MutablePair<String, String>> fillPaymentDescriptors(final List<PaymentGatewayDescriptor> descriptors,
                                                               final String lang) {

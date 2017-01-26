@@ -26,7 +26,7 @@ import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -87,7 +87,7 @@ public class CentralViewResolverCategoryImpl implements CentralViewResolver {
             final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
             if (categoryId > 0L) {
 
-                final long shopId = ShopCodeContext.getShopId();
+                final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
 
                 // If we have template just use it without any checks (saves us 1 FT query for each request)
                 final String template = shopService.getShopCategoryTemplate(shopId, categoryId);

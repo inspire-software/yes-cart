@@ -818,8 +818,44 @@
 
     <!-- ############################# Shopping Cart Commands and Events ######################### -->
 
+    <bean id="shoppingCartCommandConfigurationCheckoutVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCheckoutVisitorImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="visitorId" value="CHECKOUT"/>
+    </bean>
 
-    <bean id="shoppingCartCommandFactory" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandFactoryImpl"/>
+    <bean id="shoppingCartCommandConfigurationCustomerTypeVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCustomerTypeVisitorImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="visitorId" value="CUSTOMERTYPE"/>
+    </bean>
+
+    <bean id="shoppingCartCommandConfigurationCustomerVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationCustomerVisitorImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="visitorId" value="CUSTOMER"/>
+    </bean>
+
+    <bean id="shoppingCartCommandConfigurationTaxOptionsVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationTaxOptionsVisitorImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="visitorId" value="TAX"/>
+    </bean>
+
+    <bean id="shoppingCartCommandConfigurationProvider" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationProviderImpl">
+        <constructor-arg index="0">
+            <set>
+                <ref bean="shoppingCartCommandConfigurationCheckoutVisitor"/>
+                <ref bean="shoppingCartCommandConfigurationCustomerTypeVisitor"/>
+                <ref bean="shoppingCartCommandConfigurationCustomerVisitor"/>
+                <ref bean="shoppingCartCommandConfigurationTaxOptionsVisitor"/>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <bean id="shoppingCartCommandFactory" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandFactoryImpl">
+        <constructor-arg index="0" ref="shoppingCartCommandConfigurationProvider"/>
+    </bean>
 
     <bean id="amountCalculationStrategy"
           class="org.yes.cart.shoppingcart.impl.DefaultAmountCalculationStrategy">  <!-- CPOINT cart calculation algorithm -->

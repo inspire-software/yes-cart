@@ -50,6 +50,11 @@ export interface CustomerShopLinkVO {
 
 export interface CustomerVO extends CustomerInfoVO {
 
+  checkoutBocked: boolean;
+  checkoutBockedForOrdersOver: number;
+  ordersRequireApproval: boolean;
+  ordersRequireApprovalForOrdersOver: number;
+
   attributes: AttrValueCustomerVO[];
   customerShops: CustomerShopLinkVO[];
 

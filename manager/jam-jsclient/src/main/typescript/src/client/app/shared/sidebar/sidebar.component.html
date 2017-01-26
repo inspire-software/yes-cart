@@ -31,7 +31,7 @@
   </accordion-group>
 
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_PIM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -49,12 +49,12 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_CMS' | translate }}</div>
     <yc-shop-select [showNewLink]="false" (dataSelected)="selectCurrentShopContent($event)"></yc-shop-select>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_MARKETING' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -72,7 +72,7 @@
   <accordion-group>
     <div accordion-heading>{{ 'PANEL_INVENTORY' | translate }}</div>
     <ul class="nav nav-second-level">
-      <li>
+      <li *ngIf="menuType != 'CC'">
         <a [routerLink]="['/fulfilment/inventory']" routerLinkActive="bg-info">{{ 'PANEL_INVENTORY_STOCK' | translate }}</a>
       </li>
       <li>
@@ -99,7 +99,7 @@
       <li>
         <a [routerLink]="['/shipping']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_CARRIERS' | translate }}</a>
       </li>
-      <li>
+      <li *ngIf="menuType != 'CC'">
         <a [routerLink]="['/locations']" routerLinkActive="bg-info">{{ 'PANEL_SHIPPING_LOCATIONS' | translate }}</a>
       </li>
     </ul>
@@ -110,7 +110,7 @@
     <yc-shop-select [showNewLink]="true" (dataNew)="selectNewShop()" (dataSelected)="selectCurrentShop($event)"></yc-shop-select>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_EMPLOYEES' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>
@@ -122,7 +122,7 @@
     </ul>
   </accordion-group>
 
-  <accordion-group>
+  <accordion-group *ngIf="menuType != 'CC'">
     <div accordion-heading>{{ 'PANEL_SYSTEM' | translate }}</div>
     <ul class="nav nav-second-level">
       <li>

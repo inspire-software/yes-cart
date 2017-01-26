@@ -68,24 +68,24 @@ public class SetShopCartCommandImpl  extends AbstractCartCommandImpl implements 
                 ctx.setShopId(shop.getShopId());
                 ctx.setShopCode(shop.getCode());
 
-                setDefaultTaxOptions(shop, ctx);
+                setDefaultTaxOptions(shoppingCart);
 
-                setDefaultOrderInfoOptions(shop, shoppingCart.getOrderInfo());
+                setDefaultOrderInfoOptions(shoppingCart);
 
                 markDirty(shoppingCart);
             }
         }
     }
 
-    protected void setDefaultOrderInfoOptions(final Shop shop, final MutableOrderInfo info) {
+    protected void setDefaultOrderInfoOptions(final MutableShoppingCart shoppingCart) {
 
-        setCustomerOptions(shop, null, info);
+        setCustomerOptions(shoppingCart);
 
     }
 
-    protected void setDefaultTaxOptions(final Shop shop, final MutableShoppingContext ctx) {
+    protected void setDefaultTaxOptions(final MutableShoppingCart shoppingCart) {
 
-        setTaxOptions(shop, null, null, null, null, ctx);
+        setTaxOptions(shoppingCart, null, null, null);
 
     }
 

@@ -34,6 +34,7 @@ import org.yes.cart.domain.entity.CustomerOrderDet;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.utils.impl.CustomerOrderComparator;
 import org.yes.cart.web.page.OrderPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -218,6 +219,8 @@ public class CustomerOrderPanel extends BaseComponent {
 
     private List<CustomerOrder> getValidCustomerOrderInChronologicalOrder(final Customer customer, final Date date) {
 
+        final ShoppingCart cart = getCurrentCart();
+
         // all in DB
         final List<CustomerOrder> orders = customerOrderService.findCustomerOrders(customer, date);
 
@@ -225,7 +228,8 @@ public class CustomerOrderPanel extends BaseComponent {
         final Iterator<CustomerOrder> ordersIt = orders.iterator();
         while (ordersIt.hasNext()) {
             final CustomerOrder order = ordersIt.next();
-            if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())) {
+            if (CustomerOrder.ORDER_STATUS_NONE.equals(order.getOrderStatus())
+                    || order.getShop().getShopId() != cart.getShoppingContext().getCustomerShopId()) {
                 ordersIt.remove();
             }
         }

@@ -35,7 +35,7 @@ public interface VoManagementService {
      * @return manager vo
      * @throws Exception
      */
-    VoManagerInfo getMyself() throws Exception;
+    VoManager getMyself() throws Exception;
 
     /**
      * Get license for current user

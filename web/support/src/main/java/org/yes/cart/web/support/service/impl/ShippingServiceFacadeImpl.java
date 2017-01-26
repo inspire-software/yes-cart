@@ -117,7 +117,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     /** {@inheritDoc} */
     @Override
     public List<Carrier> findCarriers(final ShoppingCart shoppingCart, final String supplier) {
-        final List<Carrier> cached = carrierService.getCarriersByShopId(shoppingCart.getShoppingContext().getShopId());
+        final List<Carrier> cached = carrierService.getCarriersByShopId(shoppingCart.getShoppingContext().getCustomerShopId());
         final List<Carrier> all = deepCopyCarriers(cached);
         filterCarriersForShoppingCart(all, shoppingCart, supplier);
         return all;
@@ -432,7 +432,7 @@ public class ShippingServiceFacadeImpl implements ShippingServiceFacade {
     public Map<String, String> getCartItemsSuppliers(final ShoppingCart cart) {
 
         final String lang = cart.getCurrentLocale();
-        final List<Warehouse> suppliers = warehouseService.getByShopId(cart.getShoppingContext().getShopId(), false);
+        final List<Warehouse> suppliers = warehouseService.getByShopId(cart.getShoppingContext().getCustomerShopId(), false);
 
         final Map<String, String> namesByCode = new HashMap<String, String>();
         for (final Warehouse supplier : suppliers) {

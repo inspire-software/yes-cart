@@ -33,7 +33,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -96,14 +95,14 @@ public class ShoppingCartView extends BaseComponent {
     public ShoppingCartView(final String id) {
         super(id);
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
 
         final boolean allowCoupons = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
 
         final boolean allowMessages = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
 
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         final ProductPriceModel model = productServiceFacade.getCartItemsTotal(cart);
         final Total total = cart.getTotal();
 
@@ -196,8 +195,8 @@ public class ShoppingCartView extends BaseComponent {
     protected void onBeforeRender() {
 
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final Shop shop = getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
         final long shopId = shop.getShopId();
         final String lang = getLocale().getLanguage();
 

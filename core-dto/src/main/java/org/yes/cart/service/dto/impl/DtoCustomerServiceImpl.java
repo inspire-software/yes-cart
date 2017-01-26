@@ -396,7 +396,7 @@ public class DtoCustomerServiceImpl
         final Customer cust = service.findById(customer.getCustomerId());
         if (cust != null) {
             final Shop shop = shopDao.findById(shopId);
-            final String av = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
+            final String av = (shop.getMaster() != null ? shop.getMaster() : shop).getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_PASSWORD_RESET_CC);
             String authToken = "invalid";
             if (StringUtils.isNotBlank(av)) {
                 authToken = av;

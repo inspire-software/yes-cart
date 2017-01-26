@@ -135,7 +135,7 @@ public class VoContentServiceImpl implements VoContentService {
     /** {@inheritDoc} */
     @Override
     public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
-        if (federationFacade.isManageable(shopId, ShopDTO.class)){
+        if (federationFacade.isManageable(summary.getShopId(), ShopDTO.class)){
 
             for (final MutablePair<String, Boolean> shopEmail : summary.getEmailTemplatesShop()) {
 

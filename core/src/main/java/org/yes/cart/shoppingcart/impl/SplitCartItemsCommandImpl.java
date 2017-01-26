@@ -81,7 +81,7 @@ public class SplitCartItemsCommandImpl extends AbstractCartCommandImpl implement
     protected boolean performCartItemsSplitting(final MutableShoppingCart shoppingCart) {
 
         boolean changed = false;
-        final long shopId = shoppingCart.getShoppingContext().getShopId();
+        final long shopId = shoppingCart.getShoppingContext().getCustomerShopId();
 
         final Map<String, Boolean> isMultiAllowed =
                 this.orderSplittingStrategy.isMultipleDeliveriesAllowed(shopId, shoppingCart.getCartItemList());

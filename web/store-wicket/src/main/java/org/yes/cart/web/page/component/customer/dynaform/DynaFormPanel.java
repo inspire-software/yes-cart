@@ -20,7 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -33,7 +34,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -94,7 +94,7 @@ public class DynaFormPanel extends BaseComponent {
 
         super(id, customerModel);
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
         final Customer customer = (Customer) getDefaultModelObject();
 
         final List<Pair<AttrValueCustomer, Boolean>> attrValueCollection = customerService.getCustomerProfileAttributes(shop, customer);
@@ -133,7 +133,7 @@ public class DynaFormPanel extends BaseComponent {
                     }
                 }
 
-                customerService.updateCustomerAttributes(ApplicationDirector.getCurrentShop(), customer, values);
+                customerService.updateCustomerAttributes(getCurrentShop(), customer, values);
                 info(getLocalizer().getString("profileUpdated", this));
             }
         };
@@ -167,10 +167,9 @@ public class DynaFormPanel extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
-        String dynaformInfo = getContentInclude(shopId, "profile_dynaform_content_include", lang);
+        String dynaformInfo = getContentInclude(getCurrentShopId(), "profile_dynaform_content_include", lang);
         get(FORM).get(CONTENT).replaceWith(new Label(CONTENT, dynaformInfo).setEscapeModelStrings(false));
 
 

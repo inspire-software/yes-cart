@@ -25,7 +25,6 @@ import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.ShoppingCartView;
 import org.yes.cart.web.page.component.customer.wishlist.WishListNotification;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -93,7 +92,7 @@ public class ShoppingCartPage extends AbstractWebPage {
 
         }
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         if (cart.getCartItemsCount() == 0) {
             info(getLocalizer().getString("emptyCart", this));
         }

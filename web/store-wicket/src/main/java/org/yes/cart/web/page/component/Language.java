@@ -26,11 +26,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.service.misc.LanguageService;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -81,14 +80,15 @@ public class Language extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        if (StringUtils.isBlank(ApplicationDirector.getShoppingCart().getCurrentLocale())) {
-            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_CHANGELOCALE, ApplicationDirector.getShoppingCart(),
+        final ShoppingCart cart = getCurrentCart();
+        if (StringUtils.isBlank(cart.getCurrentLocale())) {
+            shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_CHANGELOCALE, cart,
                     (Map) Collections.singletonMap(ShoppingCartCommand.CMD_CHANGELOCALE, getSession().getLocale().getLanguage()));
         }
 
         final PageParameters basePageParameters = getWicketUtil().getFilteredRequestParameters(getPage().getPageParameters());
 
-        final String activeLocal = ApplicationDirector.getShoppingCart().getCurrentLocale();
+        final String activeLocal = cart.getCurrentLocale();
         final String activeLanguageName = languageService.resolveLanguageName(activeLocal);
         final List<String> supportedLanguages = languageService.getSupportedLanguages(ShopCodeContext.getShopCode());
 

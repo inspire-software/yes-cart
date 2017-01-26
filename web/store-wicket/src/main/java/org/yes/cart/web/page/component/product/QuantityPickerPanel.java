@@ -25,7 +25,6 @@ import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.domain.entity.Product;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
@@ -56,7 +55,7 @@ public class QuantityPickerPanel extends BaseComponent {
 
     protected void onBeforeRender() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         final Product product = productServiceFacade.getProductById(productId);
         final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
         final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, product);

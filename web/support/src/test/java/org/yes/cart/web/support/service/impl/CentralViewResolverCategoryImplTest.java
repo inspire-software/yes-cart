@@ -27,7 +27,8 @@ import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -46,6 +47,13 @@ public class CentralViewResolverCategoryImplTest {
 
 
     private final Mockery context = new JUnit4Mockery();
+
+    private static final ShoppingCartImpl CART_2 = new ShoppingCartImpl();
+    private static final ShoppingCartImpl CART_11 = new ShoppingCartImpl();
+    static {
+        CART_2.getShoppingContext().setShopId(2L);
+        CART_11.getShoppingContext().setShopId(11L);
+    }
 
     @Test
     public void testResolveMainPanelRendererLabelCategoryNA() throws Exception {
@@ -104,7 +112,7 @@ public class CentralViewResolverCategoryImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART_2);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -116,7 +124,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -141,7 +149,7 @@ public class CentralViewResolverCategoryImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART_2);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -153,7 +161,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -178,7 +186,7 @@ public class CentralViewResolverCategoryImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART_2);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -190,7 +198,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -221,7 +229,7 @@ public class CentralViewResolverCategoryImplTest {
 
         try {
 
-            ShopCodeContext.setShopId(11L);
+            ApplicationDirector.setShoppingCart(CART_11);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -233,7 +241,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
         context.assertIsSatisfied();
@@ -263,7 +271,7 @@ public class CentralViewResolverCategoryImplTest {
 
         try {
 
-            ShopCodeContext.setShopId(11L);
+            ApplicationDirector.setShoppingCart(CART_11);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -275,7 +283,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -306,7 +314,7 @@ public class CentralViewResolverCategoryImplTest {
 
         try {
 
-            ShopCodeContext.setShopId(11L);
+            ApplicationDirector.setShoppingCart(CART_11);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -318,7 +326,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -354,7 +362,7 @@ public class CentralViewResolverCategoryImplTest {
 
         try {
 
-            ShopCodeContext.setShopId(11L);
+            ApplicationDirector.setShoppingCart(CART_11);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -366,7 +374,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 
@@ -402,7 +410,7 @@ public class CentralViewResolverCategoryImplTest {
 
         try {
 
-            ShopCodeContext.setShopId(11L);
+            ApplicationDirector.setShoppingCart(CART_11);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.CATEGORY_ID, "10");
@@ -414,7 +422,7 @@ public class CentralViewResolverCategoryImplTest {
 
         } finally {
 
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
 
         }
 

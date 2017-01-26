@@ -62,6 +62,20 @@ public interface MutableShoppingContext extends ShoppingContext, Serializable {
     void setShopCode(String shopCode);
 
     /**
+     * Set current customer shop id.
+     *
+     * @param shopId current customer shop id.
+     */
+    void setCustomerShopId(long shopId);
+
+    /**
+     * Set current customer shop code.
+     *
+     * @param shopCode current customer shop code.
+     */
+    void setCustomerShopCode(String shopCode);
+
+    /**
      * Set current country code.
      *
      * @param countryCode current country code.

@@ -41,6 +41,10 @@ public class CartShoppingContextRO implements Serializable {
     @DtoField(readOnly = true)
     private String shopCode;
     @DtoField(readOnly = true)
+    private long customerShopId;
+    @DtoField(readOnly = true)
+    private String customerShopCode;
+    @DtoField(readOnly = true)
     private String countryCode;
     @DtoField(readOnly = true)
     private String stateCode;
@@ -139,6 +143,24 @@ public class CartShoppingContextRO implements Serializable {
 
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    @XmlAttribute(name = "customer-shop-id")
+    public long getCustomerShopId() {
+        return customerShopId;
+    }
+
+    public void setCustomerShopId(final long customerShopId) {
+        this.customerShopId = customerShopId;
+    }
+
+    @XmlAttribute(name = "customer-shop-code")
+    public String getCustomerShopCode() {
+        return customerShopCode;
+    }
+
+    public void setCustomerShopCode(final String customerShopCode) {
+        this.customerShopCode = customerShopCode;
     }
 
     @XmlAttribute(name = "country-code")

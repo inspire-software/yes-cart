@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.ShopDTO;
+import org.yes.cart.exception.UnableToCreateInstanceException;
+import org.yes.cart.exception.UnmappedInterfaceException;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +29,31 @@ import java.util.List;
  * Time: 11:13:01
  */
 public interface DtoShopService extends GenericDTOService<ShopDTO>, GenericAttrValueService {
+
+
+    /**
+     * Get all top level shops.
+     *
+     * @return list of all <T>.
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<ShopDTO> getAllTopLevel() throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
+    /**
+     * Get all sub shops.
+     *
+     * @param masterId master PK
+     * @return list of all <T>.
+     * @throws org.yes.cart.exception.UnableToCreateInstanceException
+     *          in case of reflection problem
+     * @throws org.yes.cart.exception.UnmappedInterfaceException
+     *          in case of configuration problem
+     */
+    List<ShopDTO> getAllSubs(long masterId) throws UnmappedInterfaceException, UnableToCreateInstanceException;
+
 
     /**
      * Get supported currencies by given shop.

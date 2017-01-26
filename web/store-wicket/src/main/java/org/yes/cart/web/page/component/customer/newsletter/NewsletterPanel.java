@@ -9,8 +9,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.customer.auth.BaseAuthForm;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -55,9 +53,8 @@ public class NewsletterPanel extends BaseComponent {
         }
 
         final String lang = getLocale().getLanguage();
-        final long shopId = ShopCodeContext.getShopId();
 
-        String loginformInfo = getContentInclude(shopId, "newsletter_newsletterform_content_include", lang);
+        String loginformInfo = getContentInclude(getCurrentShopId(), "newsletter_newsletterform_content_include", lang);
         get(SIGNUP_FORM).get(CONTENT).replaceWith(new Label(CONTENT, loginformInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -101,7 +98,7 @@ public class NewsletterPanel extends BaseComponent {
                         public void onSubmit() {
 
                             if (!SingUpForm.this.hasError()) {
-                                customerServiceFacade.registerNewsletter(ApplicationDirector.getCurrentShop(), getEmail(), new HashMap<String, Object>());
+                                customerServiceFacade.registerNewsletter(getCurrentShop(), getEmail(), new HashMap<String, Object>());
 
                                 final PageParameters params = new PageParameters(getPage().getPageParameters());
                                 params.add("signupok", Boolean.TRUE);

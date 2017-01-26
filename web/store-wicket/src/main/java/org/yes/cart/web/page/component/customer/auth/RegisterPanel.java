@@ -39,8 +39,6 @@ import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.CheckoutPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -50,7 +48,6 @@ import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +103,7 @@ public class RegisterPanel extends BaseComponent {
 
         final Pair<Class<? extends Page>, PageParameters> target = determineRedirectTarget(this.isCheckout);
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
 
         final List<Pair<String, I18NModel>> availableTypes = customerServiceFacade.getShopSupportedCustomerTypes(shop);
 
@@ -154,12 +151,10 @@ public class RegisterPanel extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-
-        final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
         // Refresh content
-        String regformInfo = getContentInclude(shopId, "registration_regform_content_include_" + customerType, lang);
+        String regformInfo = getContentInclude(getCurrentShopId(), "registration_regform_content_include_" + customerType, lang);
         get(REGISTER_FORM).get(CONTENT).replaceWith(new Label(CONTENT, regformInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -271,7 +266,7 @@ public class RegisterPanel extends BaseComponent {
 
             final String lang = getLocale().getLanguage();
             final List<AttrValueCustomer> reg = getCustomerServiceFacade()
-                    .getShopRegistrationAttributes(ApplicationDirector.getCurrentShop(), customerType);
+                    .getShopRegistrationAttributes(getCurrentShop(), customerType);
 
             for (final AttrValue attrValue : reg) {
 
@@ -309,7 +304,7 @@ public class RegisterPanel extends BaseComponent {
                                 //this commented out, because of YC-168
                                 //but it may be valid behavior for some clients.
                                 //Customer customer = getCustomerService().getCustomerByEmail(getEmail());
-                                //getCustomerService().resetPassword(customer, ApplicationDirector.getCurrentShop());
+                                //getCustomerService().resetPassword(customer, getCurrentShop());
 
                             } else {
 
@@ -329,7 +324,7 @@ public class RegisterPanel extends BaseComponent {
 
 
                                 final String password = getCustomerServiceFacade().registerCustomer(
-                                        ApplicationDirector.getCurrentShop(), email, data);
+                                        getCurrentShop(), email, data);
 
                                 if (signIn(getEmail(), password)) {
 

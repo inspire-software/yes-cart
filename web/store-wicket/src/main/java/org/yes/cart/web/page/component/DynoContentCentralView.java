@@ -22,8 +22,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -58,9 +56,9 @@ public class DynoContentCentralView extends AbstractCentralView {
         final String lang = getLocale().getLanguage();
         final String contentBody;
         if (getCategoryId() > 0l) {
-            contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), ShopCodeContext.getShopId(), lang, new HashMap<String, Object>() {{
-                put("shoppingCart", ApplicationDirector.getShoppingCart());
-                put("shop", ApplicationDirector.getCurrentShop());
+            contentBody = contentServiceFacade.getDynamicContentBody(getCategoryId(), getCurrentShopId(), lang, new HashMap<String, Object>() {{
+                put("shoppingCart", getCurrentCart());
+                put("shop", getCurrentShop());
                 put("datetime", new Date());
             }});
         } else {
@@ -74,7 +72,7 @@ public class DynoContentCentralView extends AbstractCentralView {
     @Override
     public Category getCategory() {
         if (category == null) {
-            category = contentServiceFacade.getContent(getCategoryId(), ShopCodeContext.getShopId());
+            category = contentServiceFacade.getContent(getCategoryId(), getCurrentShopId());
         }
         return category;
     }

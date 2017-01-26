@@ -42,6 +42,8 @@ export interface ManagerRoleLinkVO {
 
   roleId : number;
 
+  code : string;
+
 }
 
 export interface ManagerVO extends ManagerInfoVO {
@@ -57,5 +59,13 @@ export interface LicenseAgreementVO {
   agreed : boolean;
 
   text : string;
+
+}
+
+export interface UserVO {
+
+  manager: ManagerVO;
+  name: string;
+  ui: string;
 
 }

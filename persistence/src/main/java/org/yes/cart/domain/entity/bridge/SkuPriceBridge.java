@@ -29,6 +29,7 @@ import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
+import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
@@ -66,8 +67,7 @@ public class SkuPriceBridge implements FieldBridge {
             for (Object obj : (Collection)allPrices) {
                 SkuPrice skuPrice = (SkuPrice) obj;
 
-                if ((skuPrice.getSalefrom() != null && skuPrice.getSalefrom().getTime() > time) ||
-                        (skuPrice.getSaleto() != null && skuPrice.getSaleto().getTime() < time)) {
+                if (!DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSalefrom(), skuPrice.getSaleto(), time)) {
                     continue; // This price is not active
                 }
 
@@ -112,6 +112,27 @@ public class SkuPriceBridge implements FieldBridge {
                                 luceneOptions.getTermVector()
                         );
                         document.add(facetField);
+
+                        final Set<Long> subs = support.getAllShopsAndSubs().get(shop.getKey());
+
+                        if (CollectionUtils.isNotEmpty(subs)) {
+
+                            for (final Long subShopId : subs) {
+
+                                rez = objectToString(subShopId, currency.getKey(), price);
+
+                                Field subFacetField = new Field(
+                                        rez.getFirst(),
+                                        rez.getSecond(),
+                                        Field.Store.NO,
+                                        Field.Index.NOT_ANALYZED,
+                                        luceneOptions.getTermVector()
+                                );
+                                document.add(subFacetField);
+                            }
+
+                        }
+
                     }
 
                     // Note that price is set for this shop
@@ -146,6 +167,25 @@ public class SkuPriceBridge implements FieldBridge {
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()
                 ));
+
+
+                final Set<Long> subs = support.getAllShopsAndSubs().get(shopId);
+
+                if (CollectionUtils.isNotEmpty(subs)) {
+
+                    for (final Long subShopId : subs) {
+                        // Fill in PK's for all sub shops as well.
+                        document.add(new Field(
+                                ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD,
+                                String.valueOf(subShopId),
+                                Field.Store.NO,
+                                Field.Index.NOT_ANALYZED,
+                                luceneOptions.getTermVector()
+                        ));
+                    }
+
+                }
+
             }
 
         }

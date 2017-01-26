@@ -24,7 +24,8 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.shoppingcart.impl.ShoppingCartImpl;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 
@@ -46,6 +47,11 @@ public class CentralViewResolverSearchImplTest {
     private final Mockery context = new JUnit4Mockery();
 
     private static final Set<String> NAV = new HashSet<String>(Arrays.asList("nav1", "nav2"));
+
+    private static final ShoppingCartImpl CART = new ShoppingCartImpl();
+    static {
+        CART.getShoppingContext().setShopId(2L);
+    }
 
     @Test
     public void testResolveMainPanelRendererLabelNA() throws Exception {
@@ -175,7 +181,7 @@ public class CentralViewResolverSearchImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.QUERY, "1");
@@ -187,7 +193,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
         context.assertIsSatisfied();
 
@@ -209,7 +215,7 @@ public class CentralViewResolverSearchImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put("nav1", "1");
@@ -221,7 +227,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
 
         context.assertIsSatisfied();
@@ -245,7 +251,7 @@ public class CentralViewResolverSearchImplTest {
 
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.QUERY, "1");
@@ -257,7 +263,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
 
         context.assertIsSatisfied();
@@ -279,7 +285,7 @@ public class CentralViewResolverSearchImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put("nav1", "1");
@@ -291,7 +297,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
 
         context.assertIsSatisfied();
@@ -313,7 +319,7 @@ public class CentralViewResolverSearchImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put(WebParametersKeys.QUERY, "1");
@@ -325,7 +331,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
 
         context.assertIsSatisfied();
@@ -349,7 +355,7 @@ public class CentralViewResolverSearchImplTest {
         }});
 
         try {
-            ShopCodeContext.setShopId(2L);
+            ApplicationDirector.setShoppingCart(CART);
 
             final Pair<String, String> resolved = resolver.resolveMainPanelRendererLabel(new HashMap<String, String>() {{
                 put("nav1", "1");
@@ -361,7 +367,7 @@ public class CentralViewResolverSearchImplTest {
             assertEquals(CentralViewLabel.SEARCH_LIST, resolved.getSecond());
 
         } finally {
-            ShopCodeContext.clear();
+            ApplicationDirector.clear();
         }
 
         context.assertIsSatisfied();

@@ -56,6 +56,12 @@ public class ShopDTOImpl implements ShopDTO {
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
+    @DtoField(value = "master.shopId", readOnly = true)
+    private Long masterId;
+
+    @DtoField(value = "master.code", readOnly = true)
+    private String masterCode;
+
     @DtoField(value = "seo.uri", entityBeanKeys = "org.yes.cart.domain.entity.Seo")
     private String uri;
 
@@ -174,6 +180,33 @@ public class ShopDTOImpl implements ShopDTO {
         this.shopId = shopId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Long getMasterId() {
+        return masterId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMasterId(final Long masterId) {
+        this.masterId = masterId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMasterCode() {
+        return masterCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMasterCode(final String masterCode) {
+        this.masterCode = masterCode;
+    }
 
     /**
      * {@inheritDoc}

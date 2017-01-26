@@ -481,8 +481,8 @@ public class SearchController {
         cartMixin.persistShoppingCart(request, response);
 
         final long categoryId = bookmarkMixin.resolveCategoryId(search.getCategory());
-        final Shop shop = cartMixin.getCurrentShop();
         final ShoppingCart cart = cartMixin.getCurrentCart();
+        final long browsingShopId = cart.getShoppingContext().getCustomerShopId();
 
         final SearchResultRO result = new SearchResultRO();
         result.setSearch(search);
@@ -494,9 +494,9 @@ public class SearchController {
         }
 
 
-        final NavigationContext context = createNavigationContext(categoryId, shop.getShopId(), result);
+        final NavigationContext context = createNavigationContext(categoryId, browsingShopId, result);
 
-        configureResultViewOptions(categoryId, shop.getShopId(), cart.getCurrentLocale(), cart.getCurrencyCode(), result);
+        configureResultViewOptions(categoryId, browsingShopId, cart.getCurrentLocale(), cart.getCurrencyCode(), result);
 
         populateSearchResults(context, result, cart);
 
@@ -504,7 +504,7 @@ public class SearchController {
 
             populateFilteredNavigation(
                     categoryId,
-                    shop.getShopId(),
+                    browsingShopId,
                     cart.getCurrentLocale(),
                     cart.getCurrencyCode(),
                     context,

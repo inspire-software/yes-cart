@@ -22,7 +22,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.domain.entity.bridge.support.SkuPriceRelationshipSupport;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * User: denispavlov
@@ -41,13 +41,63 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
     }
 
     /** {@inheritDoc} */
+    @Cacheable(value = "shopService-allShopsMap")
+    public Map<Long, Set<Long>> getAllShopsAndSubs() {
+        final List<Shop> all = this.self().getAll();
+        final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
+        for (final Shop shop : all) {
+            if (shop.getMaster() == null) {
+                final Set<Long> subs = shopsMap.get(shop.getShopId());
+                if (subs == null) {
+                    shopsMap.put(shop.getShopId(), new HashSet<Long>());
+                }
+            } else {
+                Set<Long> subs = shopsMap.get(shop.getMaster().getShopId());
+                if (subs == null) {
+                    subs = new HashSet<Long>();
+                    shopsMap.put(shop.getMaster().getShopId(), subs);
+                }
+                subs.add(shop.getShopId());
+            }
+        }
+        return shopsMap;
+    }
+
+
+    /** {@inheritDoc} */
     @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
 
     /** {@inheritDoc} */
+    @Cacheable(value = "shopService-allNonSubShops")
+    public List<Shop> getAllNonSub() {
+        return this.shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
+    }
+
+    /** {@inheritDoc} */
+    @Cacheable(value = "shopService-subShopsByMaster")
+    public List<Shop> getAllMastered(final long masterId) {
+        return this.shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
+    }
+
+    /** {@inheritDoc} */
     public List<SkuPrice> getSkuPrices(final String sku) {
         return skuPriceDao.findByNamedQuery("SKUPRICE.BY.SKUCODE.ALL", sku);
+    }
+
+
+    private SkuPriceRelationshipSupport self;
+
+    private SkuPriceRelationshipSupport self() {
+        if (self == null) {
+            self = getSelf();
+        }
+        return self;
+    }
+
+    public SkuPriceRelationshipSupport getSelf() {
+        return null;
     }
 }

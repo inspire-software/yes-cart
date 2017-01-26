@@ -26,7 +26,6 @@ import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.dto.ProductSearchResultPageDTO;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableProductDataProvider;
 import org.yes.cart.web.page.component.filterednavigation.AttributeProductFilter;
 import org.yes.cart.web.page.component.filterednavigation.BrandProductFilter;
@@ -98,7 +97,7 @@ public class ProductsCentralView extends AbstractCentralView {
     protected void onBeforeRender() {
 
 
-        final long shopId = ShopCodeContext.getShopId();
+        final long configShopId = getCurrentShopId();
         final long categoryId = getCategoryId();
         final NavigationContext context = getNavigationContext();
 
@@ -107,10 +106,10 @@ public class ProductsCentralView extends AbstractCentralView {
         add(new AttributeProductFilter("attributeFilter", categoryId, context));
         add(new PriceProductFilter("priceFilter", categoryId, context));
 
-        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, shopId);
-        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, shopId);
-        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
-        final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, shopId);
+        final List<String> itemsPerPageValues = categoryServiceFacade.getItemsPerPageOptionsConfig(categoryId, configShopId);
+        final List<String> pageSortingValues = categoryServiceFacade.getPageSortingOptionsConfig(categoryId, configShopId);
+        final Pair<String, String> widthHeight = categoryServiceFacade.getProductListImageSizeConfig(categoryId, configShopId);
+        final int columns = categoryServiceFacade.getProductListColumnOptionsConfig(categoryId, configShopId);
 
         final PageParameters pageParameters = getPage().getPageParameters();
         final PaginationSupport pagination = getWicketSupportFacade().pagination();

@@ -17,15 +17,12 @@
 package org.yes.cart.service.federation.impl;
 
 import org.yes.cart.domain.dto.ManagerDTO;
-import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.service.dto.ManagementService;
 import org.yes.cart.service.federation.FederationFilter;
 import org.yes.cart.service.federation.ShopFederationStrategy;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 /**
  * User: denispavlov
@@ -47,21 +44,12 @@ public class ManagerUiFederationFilterImpl implements FederationFilter {
      * {@inheritDoc}
      */
     public void applyFederationFilter(final Collection list, final Class objectType) {
-        final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         final Iterator<ManagerDTO> managersIt = list.iterator();
         while (managersIt.hasNext()) {
             final ManagerDTO manager = managersIt.next();
 
             try {
-                final List<ShopDTO> shops = managementService.getAssignedManagerShops(manager.getEmail());
-                boolean manageable = false;
-                for (final ShopDTO shop : shops) {
-                    if (manageableShopIds.contains(shop.getShopId())) {
-                        manageable = true;
-                        break;
-                    }
-                }
-
+                boolean manageable = shopFederationStrategy.isEmployeeManageableByCurrentManager(manager.getEmail());
                 if (!manageable) {
                     managersIt.remove();
                 }
@@ -76,14 +64,8 @@ public class ManagerUiFederationFilterImpl implements FederationFilter {
      * {@inheritDoc}
      */
     public boolean isManageable(final Object object, final Class objectType) {
-        final Set<Long> manageableShopIds = shopFederationStrategy.getAccessibleShopIdsByCurrentManager();
         try {
-            final List<ShopDTO> shops = managementService.getAssignedManagerShops((String) object);
-            for (final ShopDTO shop : shops) {
-                if (manageableShopIds.contains(shop.getShopId())) {
-                    return true;
-                }
-            }
+            return shopFederationStrategy.isEmployeeManageableByCurrentManager((String) object);
         } catch (Exception exp) {
             // nothing
         }

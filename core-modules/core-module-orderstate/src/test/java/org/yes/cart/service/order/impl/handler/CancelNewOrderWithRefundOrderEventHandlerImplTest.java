@@ -27,6 +27,7 @@ import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
@@ -75,10 +76,25 @@ public class CancelNewOrderWithRefundOrderEventHandlerImplTest extends AbstractE
         paymentService = (CustomerOrderPaymentService) ctx().getBean("customerOrderPaymentService");
     }
 
+
+
     @Override
     protected CustomerOrder createTestOrder(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
 
         final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
+        return prepareTestOrder(customerOrder);
+
+    }
+
+    @Override
+    protected CustomerOrder createTestSubOrder(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestSubOrder(orderType, pgLabel, onePhysicalDelivery);
+        return prepareTestOrder(customerOrder);
+
+    }
+
+    private CustomerOrder prepareTestOrder(final CustomerOrder customerOrder) throws OrderException {
 
         // deliberately remove all stock
         debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00", "0.00");
@@ -256,10 +272,10 @@ public class CancelNewOrderWithRefundOrderEventHandlerImplTest extends AbstractE
 
         // payment OK, but refund is not supported
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "689.74"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED),
-                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE)
+                Arrays.asList("689.74", "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED),
+                Arrays.asList(Boolean.TRUE, Boolean.FALSE)
         );
         assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
         assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -1007,6 +1023,75 @@ public class CancelNewOrderWithRefundOrderEventHandlerImplTest extends AbstractE
         assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
 
     }
+
+
+    @Test
+    public void testHandleStandardReserveFailedOnlineSub() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestSubOrder(TestOrderType.STANDARD, label, false);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.new.order.cancel.refund
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT);
+
+        // no payment because it is made when CC manager approves the order
+        assertNoPaymentEntries(customerOrder.getOrdernum());
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+
+    }
+
+
+
+    @Test
+    public void testHandleStandardReserveFailedPaymentOkRefundOkExternalSub() throws Exception {
+
+        configureTestExtPG("1");
+
+        String label = assertPgFeatures("testExtFormPaymentGateway", true, true, false, false);
+
+        CustomerOrder customerOrder = createTestSubOrder(TestOrderType.STANDARD, label, false);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.new.order.cancel.refund
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1");
+                        }})));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT);
+
+        // payment OK, but refund is not supported
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74",                     "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE)
+        );
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+
+    }
+
 
 
 }

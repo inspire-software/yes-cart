@@ -43,6 +43,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   private reloadLocations:boolean = false;
   private reloadPGs:boolean = false;
   private reloadSummary:boolean = true;
+  private reloadB2b:boolean = false;
 
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
@@ -94,6 +95,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.reloadLocations = tab === 'Locations';
     this.reloadPGs = tab === 'PGs';
     this.reloadSummary = tab === 'Summary';
+    this.reloadB2b = tab === 'B2B';
 
   }
 

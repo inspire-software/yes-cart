@@ -151,7 +151,12 @@ public class CsvBulkImportServiceImpl extends AbstractImportService implements I
             importedFiles.add(fileToImport.getAbsolutePath());
         }
 
+        final int total = filesToImport.length;
+        int count = 1;
         for (File fileToImport : filesToImport) {
+            final String msgInfo = MessageFormat.format("Importing file {0} of {1}: {2}", count++, total, fileToImport.getAbsolutePath());
+            statusListener.notifyMessage(msgInfo);
+
             final BulkImportResult status = doImport(statusListener, fileToImport, csvImportDescriptorName, csvImportDescriptor);
             if (status != BulkImportResult.OK) {
                 return status;

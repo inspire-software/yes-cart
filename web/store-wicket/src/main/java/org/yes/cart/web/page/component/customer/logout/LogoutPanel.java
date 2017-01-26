@@ -20,7 +20,6 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.util.WicketUtil;
 
@@ -56,7 +55,7 @@ public class LogoutPanel  extends BaseComponent {
 
         logOff.add(new AttributeModifier(
                 HTML_TITLE,
-                getSalutation(LOGOFF_TITLE, ApplicationDirector.getShoppingCart().getCustomerName())));
+                getSalutation(LOGOFF_TITLE, getCurrentCart().getCustomerName())));
         logOff.add(new Label(
                 LOGOFF_LABEL,
                 getLocalizer().getString(LOGOFF_LABEL, this)));
@@ -81,7 +80,7 @@ public class LogoutPanel  extends BaseComponent {
 
     /** {@inheritDoc} */
     public boolean isVisible() {
-        return ShoppingCart.LOGGED_IN == ApplicationDirector.getShoppingCart().getLogonState()
+        return ShoppingCart.LOGGED_IN == getCurrentCart().getLogonState()
                 && AuthenticatedWebSession.get().isSignedIn();
     }
 }

@@ -667,6 +667,18 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-allShopsMap"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-allNonSubShops"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-subShopsByMaster"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopService-shopByDomainName"/>
             <constructor-arg index="1" value="all"/>
         </bean>

@@ -155,6 +155,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getFirstname()));
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getLastname()));
         assertEquals(10L, reassembledSC.getShopId());
+        assertEquals(10L, reassembledSC.getCustomerShopId());
         assertEquals("SHOIP1", reassembledSC.getShopCode());
         assertEquals("CA", reassembledSC.getCountryCode());
         assertNull(reassembledSC.getStateCode());
@@ -278,6 +279,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getFirstname()));
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getLastname()));
         assertEquals(10L, reassembledSC.getShopId());
+        assertEquals(10L, reassembledSC.getCustomerShopId());
         assertEquals("SHOIP1", reassembledSC.getShopCode());
         assertEquals("CA", reassembledSC.getCountryCode());
         assertNull(reassembledSC.getStateCode());
@@ -418,6 +420,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getFirstname()));
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getLastname()));
         assertEquals(10L, reassembledSC.getShopId());
+        assertEquals(10L, reassembledSC.getCustomerShopId());
         assertEquals("SHOIP1", reassembledSC.getShopCode());
         assertEquals("CA", reassembledSC.getCountryCode());
         assertNull(reassembledSC.getStateCode());
@@ -560,6 +563,7 @@ public class OrderDisassemblerImplTest extends BaseCoreDBTestCase {
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getFirstname()));
         assertTrue(reassembledSC.getCustomerName().contains(customerOrder.getLastname()));
         assertEquals(10L, reassembledSC.getShopId());
+        assertEquals(10L, reassembledSC.getCustomerShopId());
         assertEquals("SHOIP1", reassembledSC.getShopCode());
         assertEquals("CA", reassembledSC.getCountryCode());
         assertNull(reassembledSC.getStateCode());

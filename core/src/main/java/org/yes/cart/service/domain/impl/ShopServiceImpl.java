@@ -80,6 +80,54 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
+    @Cacheable(value = "shopService-allNonSubShops")
+    public List<Shop> getNonSubShops() {
+        return shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
+    }
+
+
+    /** {@inheritDoc} */
+    @Cacheable(value = "shopService-allShopsMap")
+    public Map<Long, Set<Long>> getAllShopsAndSubs() {
+        final List<Shop> all = this.proxy().getAll();
+        final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
+        for (final Shop shop : all) {
+            if (shop.getMaster() == null) {
+                final Set<Long> subs = shopsMap.get(shop.getShopId());
+                if (subs == null) {
+                    shopsMap.put(shop.getShopId(), new HashSet<Long>());
+                }
+            } else {
+                Set<Long> subs = shopsMap.get(shop.getMaster().getShopId());
+                if (subs == null) {
+                    subs = new HashSet<Long>();
+                    shopsMap.put(shop.getMaster().getShopId(), subs);
+                }
+                subs.add(shop.getShopId());
+            }
+        }
+        return shopsMap;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Cacheable(value = "shopService-subShopsByMaster")
+    public List<Shop> getSubShopsByMaster(final long masterId) {
+        return shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Shop getSubShopByNameAndMaster(final String shopName, final long masterId) {
+        return shopDao.findSingleByNamedQuery("SHOP.BY.NAME.AND.MASTER.ID", shopName, masterId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Shop getShopByOrderNum(final String orderNum) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.ORDER.NUM", orderNum);
     }
@@ -328,6 +376,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
             "web.addressBookFacade-allCountries",
@@ -372,6 +423,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
             "themeService-themeChainByShopId",
@@ -390,6 +444,9 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             "shopService-shopById",
             "shopService-shopByDomainName",
             "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster",
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",

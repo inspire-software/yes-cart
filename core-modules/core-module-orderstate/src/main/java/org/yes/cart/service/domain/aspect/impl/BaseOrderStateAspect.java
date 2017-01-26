@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
@@ -50,6 +51,7 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
         if (StringUtils.isNotBlank(emailTemplateName)) {
 
             final CustomerOrder customerOrder = orderEvent.getCustomerOrder();
+            final Shop shop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
 
             for (String emailAddr : emailsAddresses) {
 
@@ -60,12 +62,12 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
                     map.putAll(params);
                 }
 
-                map.put(StandardMessageListener.SHOP_CODE, customerOrder.getShop().getCode());
+                map.put(StandardMessageListener.SHOP_CODE, shop.getCode());
                 map.put(StandardMessageListener.CUSTOMER_EMAIL, emailAddr);
                 map.put(StandardMessageListener.RESULT, true);
                 map.put(StandardMessageListener.ROOT, customerOrder);
-                map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(customerOrder.getShop().getShopId()));
-                map.put(StandardMessageListener.SHOP, customerOrder.getShop());
+                map.put(StandardMessageListener.TEMPLATE_FOLDER, themeService.getMailTemplateChainByShopId(shop.getShopId()));
+                map.put(StandardMessageListener.SHOP, shop);
                 map.put(StandardMessageListener.CUSTOMER, customerOrder.getCustomer());
                 map.put(StandardMessageListener.SHIPPING_ADDRESS, customerOrder.getShippingAddressDetails());
                 map.put(StandardMessageListener.BILLING_ADDRESS, customerOrder.getBillingAddressDetails());

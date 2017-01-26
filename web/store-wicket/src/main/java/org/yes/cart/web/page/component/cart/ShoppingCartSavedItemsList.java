@@ -22,7 +22,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -54,7 +53,7 @@ public class ShoppingCartSavedItemsList extends WishListView {
     @Override
     protected void onBeforeRenderSetVisibility() {
         // do not show anything if we do not have items
-        setVisible(ApplicationDirector.getShoppingCart().getLogonState() == ShoppingCart.LOGGED_IN
+        setVisible(getCurrentCart().getLogonState() == ShoppingCart.LOGGED_IN
                 && !getProductListToShow().isEmpty());
     }
 

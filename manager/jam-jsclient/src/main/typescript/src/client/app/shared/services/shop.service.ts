@@ -19,7 +19,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
-import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair, ShopSummaryVO } from '../model/index';
+import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair, ShopSummaryVO, SubShopVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -63,14 +63,43 @@ export class ShopService {
   }
 
   /**
+   * Get list of all shop, which are accesable to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getSubShops(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/sub/' + id)
+      .map(res => <ShopVO[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
    * Create empty shop detail.
    * @returns {Promise<ShopVO>}
    */
   createShop() {
-    var shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'name': '', 'description' : '', 'fspointer' : ''};
+    var shopVOTemplate : ShopVO = {'shopId': 0, 'disabled': false, 'code' : '', 'masterId': undefined, 'masterCode': null, 'name': '', 'description' : '', 'fspointer' : ''};
     var newShop : ShopVO = Util.clone(shopVOTemplate);
     return Promise.resolve(newShop);
   }
+
+
+  /**
+   * Save or create given shop detal - the root of shop related information.
+   * @param shop
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  saveSubShop(shop:SubShopVO) {
+    LogUtil.debug('ShopService save sub shop ' + shop.masterId);
+
+    let body = JSON.stringify(shop);
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this._serviceBaseUrl + '/sub', body, options)
+      .map(res => <ShopVO> res.json())
+      .catch(this.handleError);
+  }
+
 
   /**
    * Save or create given shop detal - the root of shop related information.

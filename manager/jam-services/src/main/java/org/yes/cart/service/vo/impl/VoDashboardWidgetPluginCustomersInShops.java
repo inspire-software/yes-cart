@@ -24,6 +24,7 @@ import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.service.domain.CustomerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 
 import java.util.*;
@@ -36,9 +37,12 @@ import java.util.*;
 public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidgetPlugin {
 
     private final CustomerService customerService;
+    private final ShopService shopService;
 
-    public VoDashboardWidgetPluginCustomersInShops(final CustomerService customerService) {
+    public VoDashboardWidgetPluginCustomersInShops(final CustomerService customerService,
+                                                   final ShopService shopService) {
         this.customerService = customerService;
+        this.shopService = shopService;
     }
 
     @Override
@@ -52,6 +56,10 @@ public class VoDashboardWidgetPluginCustomersInShops implements VoDashboardWidge
         final Set<Long> shops = new HashSet<>();
         for (final VoManagerShop shop : manager.getManagerShops()) {
             shops.add(shop.getShopId());
+            final Set<Long> subs = this.shopService.getAllShopsAndSubs().get(shop.getShopId());
+            if (subs != null) {
+                shops.addAll(subs);
+            }
         }
 
         final Calendar today = Calendar.getInstance();

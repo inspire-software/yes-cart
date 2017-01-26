@@ -6,6 +6,7 @@ export * from './error-event-bus.service';
 export * from './shop-event-bus.service';
 export * from './i18n-event-bus.service';
 export * from './window-message-event-bus.service';
+export * from './user-event-bus.service';
 export * from './attribute.service';
 export * from './shop.service';
 export * from './catalog.service';

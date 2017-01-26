@@ -139,9 +139,11 @@
             <list>
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginOrdersInShops">
                     <constructor-arg index="0" ref="customerOrderService"/>
+                    <constructor-arg index="1" ref="shopService"/>
                 </bean>
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginCustomersInShops">
                     <constructor-arg index="0" ref="customerService"/>
+                    <constructor-arg index="1" ref="shopService"/>
                 </bean>
             </list>
         </property>

@@ -32,7 +32,6 @@ import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.wishlist.WishListView;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -81,11 +80,11 @@ public class WishListPage extends AbstractWebPage {
 
         if (StringUtils.isBlank(key)) {
             // Trying to view own wish list
-            final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+            final ShoppingCart cart = getCurrentCart();
 
             if (cart.getLogonState() == ShoppingCart.LOGGED_IN && ((AuthenticatedWebSession) getSession()).isSignedIn()) {
                 email = cart.getCustomerEmail();
-                customer = customerServiceFacade.getCustomerByEmail(ApplicationDirector.getCurrentShop(), email);
+                customer = customerServiceFacade.getCustomerByEmail(getCurrentShop(), email);
                 publicKey = customerServiceFacade.getCustomerPublicKey(customer);
             } else {
                 email = "";
@@ -129,10 +128,11 @@ public class WishListPage extends AbstractWebPage {
         add(new ServerSideJs("serverSideJs"));
         add(new HeaderMetaInclude("headerInclude"));
 
+        final long contentShopId = getCurrentShopId();
         if (StringUtils.isNotBlank(publicKey)) {
 
             String content = contentServiceFacade.getContentBody(
-                    "profile_wishlist_owner_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+                    "profile_wishlist_owner_include", contentShopId, getLocale().getLanguage());
 
             add(new Label("wishListOwnerInfo", content).setEscapeModelStrings(false));
             add(new Label("wishListViewerInfo", ""));
@@ -140,7 +140,7 @@ public class WishListPage extends AbstractWebPage {
         } else {
 
             String content = contentServiceFacade.getContentBody(
-                    "profile_wishlist_viewer_include", ShopCodeContext.getShopId(), getLocale().getLanguage());
+                    "profile_wishlist_viewer_include", contentShopId, getLocale().getLanguage());
 
             add(new Label("wishListOwnerInfo", ""));
             add(new Label("wishListViewerInfo", content).setEscapeModelStrings(false));

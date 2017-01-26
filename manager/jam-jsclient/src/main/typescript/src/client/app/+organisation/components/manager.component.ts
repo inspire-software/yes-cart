@@ -273,7 +273,7 @@ export class ManagerComponent implements OnInit, OnDestroy {
         let role = this._roles[key];
         labels.push({
           first: role,
-          second: { managerId: this._manager != null ? this._manager.managerId : 0, roleId: role.roleId }
+          second: { managerId: this._manager != null ? this._manager.managerId : 0, roleId: role.roleId, code: '-' }
         });
       }
     }

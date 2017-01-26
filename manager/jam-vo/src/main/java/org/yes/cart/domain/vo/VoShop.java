@@ -28,11 +28,18 @@ public class VoShop {
     @DtoField(value = "shopId", readOnly = true)
     private long shopId;
 
+
     @DtoField(value = "disabled", readOnly = true)
     private boolean disabled;
 
     @DtoField(value = "code")
     private String code;
+
+    @DtoField(value = "masterId")
+    private Long masterId;
+
+    @DtoField(value = "masterCode")
+    private String masterCode;
 
     @DtoField(value = "name")
     private String name;
@@ -73,6 +80,22 @@ public class VoShop {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Long getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(final Long masterId) {
+        this.masterId = masterId;
+    }
+
+    public String getMasterCode() {
+        return masterCode;
+    }
+
+    public void setMasterCode(final String masterCode) {
+        this.masterCode = masterCode;
     }
 
     public String getName() {

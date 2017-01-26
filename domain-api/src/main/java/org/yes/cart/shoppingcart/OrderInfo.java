@@ -116,4 +116,13 @@ public interface OrderInfo extends Serializable {
      */
     String getDetailByKey(String key);
 
+    /**
+     * Get additional details stored on this cart by key.
+     *
+     * @param key key for boolean detail
+     *
+     * @return true if additional detail is true
+     */
+    boolean isDetailByKeyTrue(String key);
+
 }

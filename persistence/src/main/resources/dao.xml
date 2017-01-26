@@ -561,6 +561,7 @@
             <bean class="org.yes.cart.domain.entity.bridge.support.impl.SkuPriceRelationshipSupportImpl">
                 <constructor-arg index="0" type="org.yes.cart.dao.GenericDAO" ref="shopDao"/>
                 <constructor-arg index="1" type="org.yes.cart.dao.GenericDAO" ref="skuPriceDao"/>
+                <lookup-method name="getSelf" bean="skuPriceRelationshipSupport"/>
             </bean>
         </property>
     </bean>

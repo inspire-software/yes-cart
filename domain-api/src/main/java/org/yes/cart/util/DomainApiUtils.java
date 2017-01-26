@@ -93,6 +93,37 @@ public class DomainApiUtils {
 
     }
 
+    /**
+     * Check availability of an object.
+     *
+     * @param enabled flag for on/off switch
+     * @param availableFrom availability start (or null)
+     * @param availableTo availability finish (or null)
+     * @param now time now
+     *
+     * @return true if object is available given provided settings
+     */
+    public static boolean isObjectAvailableNow(final boolean enabled,
+                                               final Date availableFrom,
+                                               final Date availableTo,
+                                               final long now) {
+
+        if (!enabled) {
+            return false;
+        }
+
+        if (availableFrom != null && now < availableFrom.getTime()) {
+            return false;
+        }
+
+        if (availableTo != null && now > availableTo.getTime()) {
+            return false;
+        }
+
+        return true;
+
+    }
+
     private DomainApiUtils() {
         
     }

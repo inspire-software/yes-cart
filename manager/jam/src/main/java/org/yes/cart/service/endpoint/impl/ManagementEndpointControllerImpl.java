@@ -17,14 +17,11 @@ package org.yes.cart.service.endpoint.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.yes.cart.domain.vo.*;
+import org.yes.cart.domain.vo.VoLicenseAgreement;
+import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.service.endpoint.ManagementEndpointController;
 import org.yes.cart.service.vo.VoManagementService;
-
-import java.util.List;
 
 /**
  * User: denispavlov
@@ -43,7 +40,7 @@ public class ManagementEndpointControllerImpl implements ManagementEndpointContr
 
     @Override
     public @ResponseBody
-    VoManagerInfo getMyself() throws Exception {
+    VoManager getMyself() throws Exception {
         return this.voManagementService.getMyself();
     }
 

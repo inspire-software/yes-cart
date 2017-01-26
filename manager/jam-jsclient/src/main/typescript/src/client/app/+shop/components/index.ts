@@ -13,4 +13,5 @@ export * from './shop-fulfilment-centre.component';
 export * from './shop-attributes.component';
 export * from './shop-payment-gateways.component';
 export * from './shop-summary.component';
+export * from './shop-subs.component';
 

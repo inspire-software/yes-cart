@@ -29,6 +29,8 @@ export interface ShopVO {
   shopId : number;
   disabled : boolean;
   code : string;
+  masterId : string;
+  masterCode : string;
   name :string;
   description : string;
   fspointer : string;
@@ -116,6 +118,7 @@ export interface ShopSummaryVO {
   shopId : number;
   disabled : boolean;
   code : string;
+  masterCode : string;
   name :string;
   themeChain : string;
 
@@ -149,6 +152,7 @@ export interface ShopSummaryVO {
   taxEnableShowNet: Pair<string, boolean>;
   taxEnableShowAmount: Pair<string, boolean>;
 
+  b2bProfileActive: Pair<string, boolean>;
   cookiePolicy: Pair<string, boolean>;
   anonymousBrowsing: Pair<string, boolean>;
   customerSession: Pair<string, string>;
@@ -171,5 +175,16 @@ export interface ShopSummaryVO {
   sfPageTraceEnabled: Pair<string, boolean>;
 }
 
+export interface SubShopVO {
 
+  code : string;
+
+  masterId : number;
+  masterCode : string;
+
+  name : string;
+  admin : string;
+
+
+}
 

@@ -857,10 +857,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                   "84.77"),
-                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE));
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -1072,10 +1072,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                   "84.77",                    "444.95",                   "444.95"),
-                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.AUTH,        PaymentGateway.AUTH,        PaymentGateway.AUTH,        PaymentGateway.CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK,  Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,              Boolean.FALSE,              Boolean.FALSE,              Boolean.TRUE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.TRUE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("444.95", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -1365,10 +1365,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Capture per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                       "84.77"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,      Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.TRUE,                 Boolean.TRUE,                   Boolean.TRUE));
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("1034.25", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -1498,10 +1498,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                       "84.77",                        "444.95"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,      Payment.PAYMENT_STATUS_OK,      Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.TRUE,                 Boolean.TRUE,                   Boolean.TRUE,                   Boolean.TRUE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("1479.20", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -1711,10 +1711,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Unsettled Capture per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                     "259.74",                       "84.77"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_OK,      Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,                  Boolean.FALSE));
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("1034.25", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -2027,10 +2027,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                             "259.74",                           "84.77"),
-                Arrays.asList(PaymentGateway.AUTH,                  PaymentGateway.AUTH,                PaymentGateway.AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING),
-                Arrays.asList(Boolean.FALSE,                        Boolean.FALSE,                      Boolean.FALSE));
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -2188,10 +2188,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                             "259.74",                           "84.77",                            "444.95"),
-                Arrays.asList(PaymentGateway.AUTH,                  PaymentGateway.AUTH,                PaymentGateway.AUTH,                PaymentGateway.AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING),
-                Arrays.asList(Boolean.FALSE,                        Boolean.FALSE,                      Boolean.FALSE,                      Boolean.FALSE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -2467,10 +2467,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                             "259.74",                           "84.77"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,          PaymentGateway.AUTH_CAPTURE,        PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING),
-                Arrays.asList(Boolean.FALSE,                        Boolean.FALSE,                      Boolean.FALSE));
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -2623,10 +2623,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Electronic delivery causes Capture, other deliveries are only authorised
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                             "259.74",                           "84.77",                            "444.95"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,          PaymentGateway.AUTH_CAPTURE,        PaymentGateway.AUTH_CAPTURE,        PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_PROCESSING),
-                Arrays.asList(Boolean.FALSE,                        Boolean.FALSE,                      Boolean.FALSE,                      Boolean.FALSE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING, Payment.PAYMENT_STATUS_PROCESSING),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -2898,10 +2898,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                      "259.74",                      "84.77"),
-                Arrays.asList(PaymentGateway.AUTH,           PaymentGateway.AUTH,           PaymentGateway.AUTH),
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
                 Arrays.asList(Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED),
-                Arrays.asList(Boolean.FALSE,                 Boolean.FALSE,                 Boolean.FALSE));
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -3056,10 +3056,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation failed
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                         "259.74",                       "84.77",                        "444.95"),
-                Arrays.asList(PaymentGateway.AUTH,              PaymentGateway.AUTH,            PaymentGateway.AUTH,            PaymentGateway.AUTH),
-                Arrays.asList(Payment.PAYMENT_STATUS_FAILED,    Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_FAILED),
-                Arrays.asList(Boolean.FALSE,                    Boolean.FALSE,                  Boolean.FALSE,                  Boolean.FALSE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH, PaymentGateway.AUTH),
+                Arrays.asList(Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -3334,10 +3334,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Authorisation per delivery
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                      "259.74",                      "84.77"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,   PaymentGateway.AUTH_CAPTURE,   PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList("689.74", "259.74", "84.77"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
                 Arrays.asList(Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED),
-                Arrays.asList(Boolean.FALSE,                 Boolean.FALSE,                 Boolean.FALSE));
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE));
         assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -3494,10 +3494,10 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
 
         // Capture failed
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                         "259.74",                       "84.77",                        "444.95"),
-                Arrays.asList(PaymentGateway.AUTH_CAPTURE,      PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE,    PaymentGateway.AUTH_CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_FAILED,    Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_FAILED),
-                Arrays.asList(Boolean.FALSE,                    Boolean.FALSE,                  Boolean.FALSE,                  Boolean.FALSE)
+                Arrays.asList("689.74", "259.74", "84.77", "444.95"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE, PaymentGateway.AUTH_CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED, Payment.PAYMENT_STATUS_FAILED),
+                Arrays.asList(Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE)
         );
         assertEquals("1479.20", customerOrder.getOrderTotal().toPlainString());
         assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
@@ -3550,6 +3550,65 @@ public class PendingOrderEventHandlerImplTest extends AbstractEventHandlerImplTe
     }
 
 
+
+
+    @Test
+    public void testHandleStandardPaymentOkOfflineAuthSub() throws Exception {
+
+        String label = assertPgFeatures("courierPaymentGateway", false, false, true, true);
+
+        CustomerOrder customerOrder = createTestSubOrder(TestOrderType.STANDARD, label, false);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_RESERVED);
+
+        // no payment because it is made when CC manager approves the order
+        assertNoPaymentEntries(customerOrder.getOrdernum());
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_WAITING, customerOrder.getOrderStatus());
+    }
+
+
+
+
+    @Test
+    public void testHandleStandardPaymentOkOnlineAuthSub() throws Exception {
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestSubOrder(TestOrderType.STANDARD, label, false);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "2.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "1.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_ALLOCATION_WAIT);
+
+        // Authorisation
+        assertSinglePaymentEntry(customerOrder.getOrdernum(), "689.74", PaymentGateway.AUTH, Payment.PAYMENT_STATUS_OK, false);
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
 
 
 }

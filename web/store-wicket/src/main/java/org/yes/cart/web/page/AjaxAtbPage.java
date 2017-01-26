@@ -10,7 +10,6 @@ import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.cart.SmallShoppingCartView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ProductServiceFacade;
@@ -53,7 +52,7 @@ public class AjaxAtbPage extends AbstractWebPage {
                         Collections.<String, Object>singletonMap("sku", skuValue))));
 
         final ProductSku productSku = productServiceFacade.getProductSkuBySkuCode(sku);
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         final BigDecimal cartQty = cart.getProductSkuQuantity(sku);
         final ProductQuantityModel pqm = productServiceFacade.getProductQuantity(cartQty, productSku.getProduct());
 

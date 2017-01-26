@@ -31,8 +31,6 @@ import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.wishlist.WishListNotification;
 import org.yes.cart.web.page.component.price.PriceTierView;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -229,7 +227,8 @@ public class SkuCentralView extends AbstractCentralView {
     }
 
     private void configureContext() {
-        long shopId = ShopCodeContext.getShopId();
+        final ShoppingCart cart = getCurrentCart();
+        long browsingShopId = cart.getShoppingContext().getCustomerShopId();
         String productId = getPage().getPageParameters().get(WebParametersKeys.PRODUCT_ID).toString();
         String skuId = getPage().getPageParameters().get(WebParametersKeys.SKU_ID).toString();
         if (skuId != null) {
@@ -246,8 +245,8 @@ public class SkuCentralView extends AbstractCentralView {
             try {
                 final Long prodPK = Long.valueOf(productId);
                 product = productServiceFacade.getProductById(prodPK);
-                final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, shopId);
-                sku = getDefault(product, pam, shopId);
+                final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(product, browsingShopId);
+                sku = getDefault(product, pam, browsingShopId);
             } catch (Exception exp) {
                 throw new RestartResponseException(Application.get().getHomePage());
             }
@@ -255,7 +254,7 @@ public class SkuCentralView extends AbstractCentralView {
             throw new RuntimeException("Product or Sku id expected");
         }
 
-        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, ApplicationDirector.getShoppingCart(), new HashMap<String, Object>() {{
+        shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, cart, new HashMap<String, Object>() {{
             put(ShoppingCartCommand.CMD_INTERNAL_VIEWSKU, product);
         }});
 
@@ -272,7 +271,8 @@ public class SkuCentralView extends AbstractCentralView {
 
         add(new TopCategories("topCategories"));
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
+        final long browsingStoreId = getCurrentCustomerShopId();
 
         final String selectedLocale = getLocale().getLanguage();
 
@@ -285,7 +285,7 @@ public class SkuCentralView extends AbstractCentralView {
         add(new Label(PRODUCT_DESCRIPTION_LABEL, decorator.getDescription(selectedLocale)).setEscapeModelStrings(false));
         add(new AddAnyButton(SOCIAL_ADD_TO_ANY_BUTTON, product));
 
-        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, shop.getShopId());
+        final ProductAvailabilityModel pam = productServiceFacade.getProductAvailability(sku, browsingStoreId);
 
         final boolean qtyPickVisible = pam.isAvailable() && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_ADD_ENABLE_QTY_PICKER);
 
@@ -314,7 +314,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsAccessories = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                shop.getShopId(), Association.ACCESSORIES
+                browsingStoreId, Association.ACCESSORIES
         );
 
         final boolean accessoriesVisible = CollectionUtils.isNotEmpty(productsAccessories);
@@ -327,7 +327,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsExpendables = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                shop.getShopId(), Association.EXPENDABLE
+                browsingStoreId, Association.EXPENDABLE
         );
 
         final boolean expendablesVisible = CollectionUtils.isNotEmpty(productsExpendables);
@@ -340,11 +340,11 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsUp = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                shop.getShopId(), Association.UP_SELL
+                browsingStoreId, Association.UP_SELL
         );
         final List<ProductSearchResultDTO> productsCross = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                shop.getShopId(), Association.CROSS_SELL
+                browsingStoreId, Association.CROSS_SELL
         );
 
         final List<ProductSearchResultDTO> productsSell = new ArrayList<ProductSearchResultDTO>();
@@ -366,7 +366,7 @@ public class SkuCentralView extends AbstractCentralView {
 
         final List<ProductSearchResultDTO> productsBuy = productServiceFacade.getProductAssociations(
                 isProduct ? product.getProductId() : sku.getProduct().getProductId(),
-                shop.getShopId(), Association.BUY_WITH_THIS
+                browsingStoreId, Association.BUY_WITH_THIS
         );
 
         final boolean buyVisible = CollectionUtils.isNotEmpty(productsBuy);
@@ -414,7 +414,7 @@ public class SkuCentralView extends AbstractCentralView {
     private List<ProductPriceModel> getSkuPrices() {
         /* We always preselect a SKU */
         return productServiceFacade.getSkuPrices(
-                ApplicationDirector.getShoppingCart(),
+                getCurrentCart(),
                 product.getProductId(),
                 sku.getCode());
     }
@@ -440,10 +440,8 @@ public class SkuCentralView extends AbstractCentralView {
 
     private PriceView getPriceView() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-
         final ProductPriceModel model = productServiceFacade.getSkuPrice(
-                cart,
+                getCurrentCart(),
                 null,
                 sku.getCode(), /* We always preselect a SKU */
                 BigDecimal.ONE

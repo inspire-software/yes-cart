@@ -27,7 +27,6 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.footer.CheckoutFooter;
 import org.yes.cart.web.page.component.footer.StandardFooter;
@@ -75,8 +74,8 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         super(params);
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final ShoppingCart cart = getCurrentCart();
+        final Shop shop = getCurrentShop();
 
         final boolean isCheckout = !RETURN_TO_SELFCARE.equals(params.get(WebParametersKeys.ADDRESS_FORM_RETURN_LABEL).toString());
 

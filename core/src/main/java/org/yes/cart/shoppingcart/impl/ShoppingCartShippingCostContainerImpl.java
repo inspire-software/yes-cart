@@ -49,8 +49,11 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
         this.carrierSlaId = Collections.singletonMap(supplier, carrierSlaId);
 
         this.shoppingContext.setCountryCode(original.getShoppingContext().getCountryCode());
+        this.shoppingContext.setStateCode(original.getShoppingContext().getStateCode());
+
         this.shoppingContext.setCustomerEmail(original.getShoppingContext().getCustomerEmail());
         this.shoppingContext.setCustomerName(original.getShoppingContext().getCustomerName());
+
         if (original.getShoppingContext().getCustomerShops() != null) {
             this.shoppingContext.setCustomerShops(Collections.unmodifiableList(original.getShoppingContext().getCustomerShops()));
         }
@@ -60,10 +63,13 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
         if (original.getShoppingContext().getLatestViewedSkus() != null) {
             this.shoppingContext.setLatestViewedSkus(Collections.unmodifiableList(original.getShoppingContext().getLatestViewedSkus()));
         }
+
         this.shoppingContext.setResolvedIp(original.getShoppingContext().getResolvedIp());
+
         this.shoppingContext.setShopCode(original.getShoppingContext().getShopCode());
         this.shoppingContext.setShopId(original.getShoppingContext().getShopId());
-        this.shoppingContext.setStateCode(original.getShoppingContext().getStateCode());
+        this.shoppingContext.setCustomerShopCode(original.getShoppingContext().getCustomerShopCode());
+        this.shoppingContext.setCustomerShopId(original.getShoppingContext().getCustomerShopId());
 
         this.orderInfo.setBillingAddressId(original.getOrderInfo().getBillingAddressId());
         this.orderInfo.setBillingAddressNotRequired(original.getOrderInfo().isBillingAddressNotRequired());

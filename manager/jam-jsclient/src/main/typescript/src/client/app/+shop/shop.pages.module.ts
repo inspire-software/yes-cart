@@ -8,22 +8,22 @@ import { SystemPagesModule } from '../+system/system.pages.module';
 
 import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
   ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-  ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent } from './components/index';
-import { ShopComponent } from './index';
+  ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent, ShopSubsComponent } from './components/index';
+import { ShopComponent, SubShopComponent } from './index';
 
 @NgModule({
     imports: [CommonModule, SharedModule, ServicesModule, SystemPagesModule],
     declarations: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent,
-      ShopComponent
+      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent, ShopSubsComponent,
+      ShopComponent, SubShopComponent
     ],
     exports: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,
-      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent,
-      ShopComponent
+      ShopPaymentGatewaysComponent, ShopSEOComponent, ShopUrlComponent, ShopSummaryComponent, ShopSubsComponent,
+      ShopComponent, SubShopComponent
     ]
 })
 

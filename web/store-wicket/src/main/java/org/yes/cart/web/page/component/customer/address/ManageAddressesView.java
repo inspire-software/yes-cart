@@ -16,7 +16,6 @@
 
 package org.yes.cart.web.page.component.customer.address;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -37,7 +36,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -45,7 +43,9 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.theme.WicketPagesMounter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Igor Azarny iazarny@yahoo.com
@@ -110,7 +110,7 @@ public class ManageAddressesView extends BaseComponent {
                                 addressBookFacade.useAsDefault(address);
                                 final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                         ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
-                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, ApplicationDirector.getShoppingCart(),
+                                shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, getCurrentCart(),
                                         (Map) new HashMap() {{
                                             put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);
                                             put(key, address);
@@ -154,7 +154,7 @@ public class ManageAddressesView extends BaseComponent {
 
     private List<Address> determineAllowedAddresses(final IModel<Customer> customerModel, final String addressType) {
 
-        final Shop shop = ApplicationDirector.getCurrentShop();
+        final Shop shop = getCurrentShop();
 
         return addressBookFacade.getAddresses(customerModel.getObject(), shop, addressType);
 
@@ -170,7 +170,7 @@ public class ManageAddressesView extends BaseComponent {
 
         final String addressString = addressBookFacade.formatAddressFor(
                 address,
-                ApplicationDirector.getCurrentShop(),
+                getCurrentShop(),
                 (Customer) getDefaultModelObject(),
                 getLocale().getLanguage()
         );

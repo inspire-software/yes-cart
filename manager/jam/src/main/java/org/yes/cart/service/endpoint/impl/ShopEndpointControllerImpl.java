@@ -62,6 +62,11 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     }
 
     public @ResponseBody
+    List<VoShop> getAllSubs(@PathVariable("id") final long id) throws Exception {
+        return voShopService.getAllSubs(id);
+    }
+
+    public @ResponseBody
     VoShop getById(@PathVariable("id") final long id) throws Exception {
         return voShopService.getById(id);
     }
@@ -69,6 +74,11 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     public @ResponseBody
     VoShop create(@RequestBody final VoShop voShop) throws Exception {
         return voShopService.create(voShop);
+    }
+
+    public @ResponseBody
+    VoShop createSub(@RequestBody final VoSubShop voShop) throws Exception {
+        return voShopService.createSub(voShop);
     }
 
     public @ResponseBody
@@ -89,8 +99,8 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
         voShippingService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
         voShopCategoryService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
         voFulfilmentService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
-        voPaymentGatewayService.fillShopSummaryDetails(summary, summary.getCode(), lang);
-        voContentService.fillShopSummaryDetails(summary, summary.getShopId(), lang);
+        voPaymentGatewayService.fillShopSummaryDetails(summary, summary.getMasterCode() != null ? summary.getMasterCode() : summary.getCode(), lang);
+        voContentService.fillShopSummaryDetails(summary, summary.getMasterId() != null ? summary.getMasterId() : summary.getShopId(), lang);
         return summary;
 
     }

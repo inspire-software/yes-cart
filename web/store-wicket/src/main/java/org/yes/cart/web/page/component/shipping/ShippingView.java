@@ -18,7 +18,10 @@ package org.yes.cart.web.page.component.shipping;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -28,9 +31,10 @@ import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.shoppingcart.*;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.shoppingcart.ShoppingCartCommand;
+import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
+import org.yes.cart.shoppingcart.Total;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
@@ -85,11 +89,11 @@ public class ShippingView extends BaseComponent {
         super(id);
 
         this.supplier = supplier;
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
-        final Customer customer = customerServiceFacade.getCheckoutCustomer(ApplicationDirector.getCurrentShop(), cart);
+        final ShoppingCart cart = getCurrentCart();
+        final Customer customer = customerServiceFacade.getCheckoutCustomer(getCurrentShop(), cart);
 
         final Map<String, Object> contentParams = new HashMap<>();
-        final List<Carrier> carriers = shippingServiceFacade.findCarriers(ApplicationDirector.getShoppingCart(), this.supplier);
+        final List<Carrier> carriers = shippingServiceFacade.findCarriers(cart, this.supplier);
         final List<CarrierSla> carrierSlas = new ArrayList<CarrierSla>();
         for (Carrier carrier : carriers) {
             carrierSlas.addAll(carrier.getCarrierSla());
@@ -97,7 +101,7 @@ public class ShippingView extends BaseComponent {
 
         // Restore carrier by sla from shopping cart into current model.
         final Pair<Carrier, CarrierSla> selection =
-                shippingServiceFacade.getCarrierSla(ApplicationDirector.getShoppingCart(), this.supplier, carriers);
+                shippingServiceFacade.getCarrierSla(cart, this.supplier, carriers);
 
         setCarrier(selection.getFirst());
         setCarrierSla(selection.getSecond());
@@ -113,7 +117,7 @@ public class ShippingView extends BaseComponent {
                 super.onSelectionChanged(carrierSla);
 
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final ShoppingCart cart = getCurrentCart();
 
                 final Set<Long> slaSelection = new HashSet<Long>(cart.getCarrierSlaId().values());
                 slaSelection.add(carrierSla.getCarrierslaId());
@@ -197,9 +201,10 @@ public class ShippingView extends BaseComponent {
                         contentParams.put("cart", cart);
                         contentParams.put("carrierSla", carrierSla);
 
+                        final long contentShopId = getCurrentShopId();
                         shippingItem.add(new Label("shippingInfo", contentServiceFacade.getDynamicContentBody("checkout_shipping_"
                                         + shippingItem.getModelObject().getGuid(),
-                                ShopCodeContext.getShopId(), getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false).setVisible(infoVisible));
+                                contentShopId, getLocale().getLanguage(), contentParams)).setEscapeModelStrings(false).setVisible(infoVisible));
 
                     }
                 });
@@ -220,7 +225,7 @@ public class ShippingView extends BaseComponent {
 
     private void addNoShippingOptionFeedback() {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
         String supplierName = supplierNames.get(this.supplier);
@@ -236,7 +241,7 @@ public class ShippingView extends BaseComponent {
     }
 
     private void addShippingOptionFeedback() {
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         if (cart.getCarrierSlaId().get(this.supplier) == null || cart.getCarrierSlaId().get(this.supplier) <= 0L) {
 
             final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(cart);
@@ -264,7 +269,7 @@ public class ShippingView extends BaseComponent {
      */
     private void addPriceView(final Form form) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
         final Total total = cart.getTotal();
         final Long slaId = cart.getCarrierSlaId().get(this.supplier);
 

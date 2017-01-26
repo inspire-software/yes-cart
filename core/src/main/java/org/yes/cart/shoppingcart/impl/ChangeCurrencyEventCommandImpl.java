@@ -68,7 +68,7 @@ public class ChangeCurrencyEventCommandImpl extends AbstractRecalculatePriceCart
         if (parameters.containsKey(getCmdKey())) {
             final String currencyCode = (String) parameters.get(getCmdKey());
             if (currencyCode != null && !currencyCode.equals(shoppingCart.getCurrencyCode())) {
-                final Shop shop = getShopService().getShopByCode(shoppingCart.getShoppingContext().getShopCode());
+                final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
                 if (shop.getSupportedCurrenciesAsList().contains(currencyCode)) {
                     shoppingCart.setCurrencyCode(currencyCode);
                     shoppingCart.getOrderInfo().setCarrierSlaId(null); // If we change currency then SLA is no longer eligible

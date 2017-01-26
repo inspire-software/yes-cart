@@ -61,6 +61,20 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     void setShopId(long shopId);
 
     /**
+     * Master for this shop.
+     *
+     * @return master shop
+     */
+    Shop getMaster();
+
+    /**
+     * Master for this shop.
+     *
+     * @param master master shop
+     */
+    void setMaster(Shop master);
+
+    /**
      * Get shop name.
      *
      * @return shop name.

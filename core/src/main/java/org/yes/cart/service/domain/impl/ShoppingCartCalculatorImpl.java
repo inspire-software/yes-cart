@@ -38,6 +38,8 @@ public class ShoppingCartCalculatorImpl implements ShoppingCartCalculator {
             cart.getShoppingContext().setCustomerName(currentCart.getShoppingContext().getCustomerName());
             cart.getShoppingContext().setShopId(currentCart.getShoppingContext().getShopId());
             cart.getShoppingContext().setShopCode(currentCart.getShoppingContext().getShopCode());
+            cart.getShoppingContext().setCustomerShopId(currentCart.getShoppingContext().getCustomerShopId());
+            cart.getShoppingContext().setCustomerShopCode(currentCart.getShoppingContext().getCustomerShopCode());
             cart.getShoppingContext().setCountryCode(currentCart.getShoppingContext().getCountryCode());
             cart.getShoppingContext().setStateCode(currentCart.getShoppingContext().getStateCode());
             cart.getShoppingContext().setCustomerEmail(currentCart.getShoppingContext().getCustomerEmail());

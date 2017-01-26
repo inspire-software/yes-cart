@@ -22,7 +22,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.query.PriceNavigation;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.CurrencySymbolService;
 
@@ -100,7 +99,7 @@ public class PriceProductFilter extends AbstractProductFilter {
 
             if(visibilityRezult == null) {
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final ShoppingCart cart = getCurrentCart();
 
                 setNavigationRecords(
                         priceFilteredNavigationSupport.getFilteredNavigationRecords(

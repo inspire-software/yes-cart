@@ -193,7 +193,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     public Map<String, Boolean> isOrderMultipleDeliveriesAllowed(final ShoppingCart shoppingCart) {
 
         return orderSplittingStrategy.isMultipleDeliveriesAllowed(
-                shoppingCart.getShoppingContext().getShopId(),
+                shoppingCart.getShoppingContext().getCustomerShopId(),
                 shoppingCart.getCartItemList()
         );
 

@@ -151,7 +151,9 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public Payment createPaymentToAuthorize(final CustomerOrder order) {
 
         final String pgLabel = order.getPgLabel();
-        final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel, order.getShop().getCode());
+
+        final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
+        final PaymentProcessor processor = paymentProcessorFactory.create(pgLabel, pgShop.getCode());
 
         if (processor.isPaymentGatewayEnabled() && processor.getPaymentGateway().getPaymentGatewayFeatures().isRequireDetails()) {
             return processor.createPaymentsToAuthorize(
@@ -170,7 +172,8 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     public PaymentGateway getOrderPaymentGateway(final CustomerOrder order) {
 
         final String pgLabel = order.getPgLabel();
-        return paymentModulesManager.getPaymentGateway(pgLabel, order.getShop().getCode());
+        final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
+        return paymentModulesManager.getPaymentGateway(pgLabel, pgShop.getCode());
 
     }
 

@@ -236,6 +236,72 @@ public class AbstractWebPage extends WebPage {
         }
     }
 
+
+    /**
+     * Retrieve current cart.
+     *
+     * @return cart object
+     */
+    public ShoppingCart getCurrentCart() {
+        return ApplicationDirector.getShoppingCart();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop object
+     */
+    public Shop getCurrentShop() {
+        return ApplicationDirector.getCurrentShop();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop PK
+     */
+    public long getCurrentShopId() {
+        return getCurrentCart().getShoppingContext().getShopId();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop code
+     */
+    public String getCurrentShopCode() {
+        return getCurrentCart().getShoppingContext().getShopCode();
+    }
+
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop PK
+     */
+    public long getCurrentCustomerShopId() {
+        return getCurrentCart().getShoppingContext().getCustomerShopId();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop code
+     */
+    public String getCurrentCustomerShopCode() {
+        return getCurrentCart().getShoppingContext().getCustomerShopCode();
+    }
+
+    /**
+     * Current shoppers IP address.
+     *
+     * @return IP address
+     */
+    public String getShopperIPAddress() {
+        return ApplicationDirector.getShopperIPAddress();
+    }
+
+
     /**
      * @return shopping cart command factory
      */

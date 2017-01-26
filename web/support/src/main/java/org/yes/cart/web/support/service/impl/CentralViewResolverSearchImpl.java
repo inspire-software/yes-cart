@@ -23,6 +23,7 @@ import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.service.domain.CategoryService;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.CentralViewLabel;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.CentralViewResolver;
@@ -74,7 +75,7 @@ public class CentralViewResolverSearchImpl implements CentralViewResolver {
                 final long categoryId = NumberUtils.toLong(HttpUtil.getSingleValue(parameters.get(WebParametersKeys.CATEGORY_ID)));
                 if (categoryId > 0L) {
 
-                    final long shopId = ShopCodeContext.getShopId();
+                    final long shopId = ApplicationDirector.getShoppingCart().getShoppingContext().getShopId();
 
                     final String searchTemplate = shopService.getShopCategorySearchTemplate(shopId, categoryId);
                     if (StringUtils.isNotBlank(searchTemplate)) {

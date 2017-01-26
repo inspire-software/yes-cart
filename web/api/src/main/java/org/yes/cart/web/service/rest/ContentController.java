@@ -32,7 +32,6 @@ import org.yes.cart.domain.ro.ContentRO;
 import org.yes.cart.domain.ro.xml.XMLParamsRO;
 import org.yes.cart.service.domain.AttributeService;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
@@ -76,16 +75,16 @@ public class ContentController {
                                           final Map<String, Object> contentParams) {
 
         final long contentId = bookmarkMixin.resolveContentId(content);
-        final long shopId = ShopCodeContext.getShopId();
+        final long contentShopId = cartMixin.getCurrentShopId();
 
-        final Category contentEntity = contentServiceFacade.getContent(contentId, shopId);
+        final Category contentEntity = contentServiceFacade.getContent(contentId, contentShopId);
 
         if (contentEntity != null && !CentralViewLabel.INCLUDE.equals(contentEntity.getUitemplate())) {
 
             final ContentRO cntRO = mappingMixin.map(contentEntity, ContentRO.class, Category.class);
-            cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), shopId));
+            cntRO.setBreadcrumbs(generateBreadcrumbs(cntRO.getCategoryId(), contentShopId));
             removeContentBodyAttributes(cntRO);
-            cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), shopId, contentParams));
+            cntRO.setContentBody(generateContentBody(cntRO.getCategoryId(), contentShopId, contentParams));
             final Pair<String, String> templates = resolveTemplate(cntRO);
             if (templates != null) {
                 cntRO.setUitemplate(templates.getFirst());
@@ -399,10 +398,11 @@ public class ContentController {
     private List<ContentRO> listContentInternal(final String content) {
 
         final long contentId = bookmarkMixin.resolveContentId(content);
-        final long shopId = ShopCodeContext.getShopId();
+        final long contentShopId = cartMixin.getCurrentShopId();
+
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
 
-        final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, shopId, lang);
+        final List<Category> menu = contentServiceFacade.getCurrentContentMenu(contentId, contentShopId, lang);
 
         if (!menu.isEmpty()) {
 
@@ -410,7 +410,7 @@ public class ContentController {
             if (cnts.size() > 0) {
 
                 for (final ContentRO cnt : cnts) {
-                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cnt.getCategoryId(), shopId);
+                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cnt.getCategoryId(), contentShopId);
                     cnt.setBreadcrumbs(crumbs);
                     removeContentBodyAttributes(cnt);
                 }

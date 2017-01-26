@@ -18,6 +18,7 @@ package org.yes.cart.web.filter.payment;
 
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.PaymentGatewayPayPalExpressCheckout;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.domain.CustomerOrderService;
@@ -206,7 +207,8 @@ public class PayPalExpressCheckoutFilter extends BasePaymentGatewayCallBackFilte
     private PaymentProcessor getPaymentProcessor(final CustomerOrder customerOrder) {
         final String paymentGatewayLabel = getPaymentGatewayLabel();
 
-        return paymentProcessorFactory.create(paymentGatewayLabel, customerOrder.getShop().getCode());
+        final Shop pgShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+        return paymentProcessorFactory.create(paymentGatewayLabel, pgShop.getCode());
     }
 
     @Override

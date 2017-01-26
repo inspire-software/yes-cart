@@ -48,6 +48,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String updatedBy;
     private String guid;
 
+    private Shop master;
+
     // Below are internal caches as Shop object is long lived.
 
     private Map<String, AttrValueShop> attributesMap = null;
@@ -116,6 +118,15 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setDisabled(final boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public Shop getMaster() {
+        return master;
+    }
+
+    @Override
+    public void setMaster(final Shop master) {
+        this.master = master;
     }
 
     public Set<ShopUrl> getShopUrl() {

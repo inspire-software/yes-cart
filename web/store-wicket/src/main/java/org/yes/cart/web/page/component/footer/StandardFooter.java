@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component.footer;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.customer.newsletter.NewsletterPanel;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
@@ -45,14 +44,14 @@ public class StandardFooter extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final long shopId = ShopCodeContext.getShopId();
+        final long contentShopId = getCurrentShopId();
         final String lang = getLocale().getLanguage();
 
-        String footerInclude = getContentInclude(shopId, "footer_include", lang);
+        String footerInclude = getContentInclude(contentShopId, "footer_include", lang);
         addOrReplace(new Label("footerInclude", footerInclude).setEscapeModelStrings(false));
-        String footerNav = getContentInclude(shopId, "footer_nav_include", lang);
+        String footerNav = getContentInclude(contentShopId, "footer_nav_include", lang);
         addOrReplace(new Label("footerNav", footerNav).setEscapeModelStrings(false));
-        String footerCopyright = getContentInclude(shopId, "footer_copy_include", lang);
+        String footerCopyright = getContentInclude(contentShopId, "footer_copy_include", lang);
         addOrReplace(new Label("footerCopyright", footerCopyright).setEscapeModelStrings(false));
 
         addOrReplace(new NewsletterPanel("newsletterForm"));

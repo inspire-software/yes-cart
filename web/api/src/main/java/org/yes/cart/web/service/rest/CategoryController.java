@@ -29,7 +29,6 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.BreadcrumbRO;
 import org.yes.cart.domain.ro.CategoryListRO;
 import org.yes.cart.domain.ro.CategoryRO;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.service.rest.impl.BookmarkMixin;
 import org.yes.cart.web.service.rest.impl.CartMixin;
 import org.yes.cart.web.service.rest.impl.RoMappingMixin;
@@ -66,17 +65,17 @@ public class CategoryController {
 
     private List<CategoryRO> listRootInternal() {
 
-        final long shopId = cartMixin.getCurrentShopId();
+        final long browsingShopId = cartMixin.getCurrentCustomerShopId();
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
-        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, shopId, lang);
+        final List<Category> categories = categoryServiceFacade.getCurrentCategoryMenu(0l, browsingShopId, lang);
 
         final List<CategoryRO> cats = mappingMixin.map(categories, CategoryRO.class, Category.class);
         if (cats.size() > 0) {
 
             for (final CategoryRO cat : cats) {
-                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), shopId);
+                final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), browsingShopId);
                 cat.setBreadcrumbs(crumbs);
-                final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+                final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), browsingShopId);
                 if (parentId != null) {
                     cat.setParentId(parentId); // This may be parent from linkTo
                 }
@@ -407,20 +406,20 @@ public class CategoryController {
         cartMixin.persistShoppingCart(request, response);
 
         final long categoryId = bookmarkMixin.resolveCategoryId(category);
-        final long shopId = ShopCodeContext.getShopId();
+        final long browsingShopId = cartMixin.getCurrentCustomerShopId();
 
-        final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, shopId);
+        final Category categoryEntity = categoryServiceFacade.getCategory(categoryId, browsingShopId);
 
         if (categoryEntity != null && !CentralViewLabel.INCLUDE.equals(categoryEntity.getUitemplate())) {
 
             final CategoryRO catRO = mappingMixin.map(categoryEntity, CategoryRO.class, Category.class);
-            catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), shopId));
+            catRO.setBreadcrumbs(generateBreadcrumbs(catRO.getCategoryId(), browsingShopId));
             final Pair<String, String> templates = resolveTemplate(catRO);
             if (templates != null) {
                 catRO.setUitemplate(templates.getFirst());
                 catRO.setUitemplateFallback(templates.getSecond());
             }
-            final Long parentId = categoryServiceFacade.getCategoryParentId(categoryId, shopId);
+            final Long parentId = categoryServiceFacade.getCategoryParentId(categoryId, browsingShopId);
             if (parentId != null) {
                 catRO.setParentId(parentId); // This may be parent from linkTo
             }
@@ -436,10 +435,10 @@ public class CategoryController {
     private List<CategoryRO> listCategoryInternal(final String category) {
 
         final long categoryId = bookmarkMixin.resolveCategoryId(category);
-        final long shopId = ShopCodeContext.getShopId();
+        final long browsingShopId = cartMixin.getCurrentCustomerShopId();
         final String lang = cartMixin.getCurrentCart().getCurrentLocale();
 
-        final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId, lang);
+        final List<Category> menu = categoryServiceFacade.getCurrentCategoryMenu(categoryId, browsingShopId, lang);
 
         if (!menu.isEmpty()) {
 
@@ -447,9 +446,9 @@ public class CategoryController {
             if (cats.size() > 0) {
 
                 for (final CategoryRO cat : cats) {
-                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), shopId);
+                    final List<BreadcrumbRO> crumbs = generateBreadcrumbs(cat.getCategoryId(), browsingShopId);
                     cat.setBreadcrumbs(crumbs);
-                    final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), shopId);
+                    final Long parentId = categoryServiceFacade.getCategoryParentId(cat.getCategoryId(), browsingShopId);
                     if (parentId != null) {
                         cat.setParentId(parentId); // This may be parent from linkTo
                     }

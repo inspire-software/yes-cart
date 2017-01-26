@@ -161,18 +161,48 @@ public class ShopFederationStrategyImpl implements ShopFederationStrategy {
     public List<ShopDTO> getAccessibleShopsByCurrentManager() {
 
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<ShopDTO> shops = getValueWrapper(USER_ACCESS_CACHE_SHOP.get(currentManager));
+        return getAccessibleShopsByManager(currentManager);
+
+    }
+
+
+    private List<ShopDTO> getAccessibleShopsByManager(final String manager) {
+
+        List<ShopDTO> shops = getValueWrapper(USER_ACCESS_CACHE_SHOP.get(manager));
         if (shops == null) {
             try {
-                shops = Collections.unmodifiableList(managementService.getAssignedManagerShops(currentManager));
+                shops = Collections.unmodifiableList(managementService.getAssignedManagerShops(manager, true));
             } catch (Exception exp) {
                 shops = Collections.emptyList();
             }
-            USER_ACCESS_CACHE_SHOP.put(currentManager, shops);
+            USER_ACCESS_CACHE_SHOP.put(manager, shops);
         }
         return shops;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isEmployeeManageableByCurrentManager(final String employeeId) {
+
+        final List<ShopDTO> employeeShops = getAccessibleShopsByManager(employeeId);
+        final Set<Long> currentManager = getAccessibleShopIdsByCurrentManager();
+        for (final ShopDTO employeeShop : employeeShops) {
+            if (currentManager.contains(employeeShop.getShopId())) {
+                /*
+                    If this manager has access to top level shop to which employee has access to
+                    OR this manager also has access to master shop of this employees sub.
+                    This means: master shop managers can manage sub manager but sub manager cannot
+                    manage master shop managers (or other sub managers).
+                 */
+                if (employeeShop.getMasterId() == null || currentManager.contains(employeeShop.getMasterId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     private <T> T getValueWrapper(final Cache.ValueWrapper wrapper) {
         if (wrapper != null) {

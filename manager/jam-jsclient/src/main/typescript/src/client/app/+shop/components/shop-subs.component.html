@@ -1,0 +1,101 @@
+<template [ngIf]="shopSubs == null">
+
+  <div class="row {{ loading ? 'loading-data' : '' }}">
+    <div class="col-xs-12 block-padding-spacer">
+      <div class="bg-info text-padding" [hidden]="loading">
+        <p>{{ 'SAVEDOBJECT_REQUIRED' | translate }}</p>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<template [ngIf]="shopSubs">
+
+  <div class="text-right data-control">
+
+    <form class="pull-left">
+      <input class="filter-input" type="text" name="subFilter" [(ngModel)]="subFilter" (ngModelChange)="onFilterChange($event)" autocomplete="off"/>
+      <a class="js-click" (click)="onClearFilter()" title="{{ 'MODAL_BUTTON_CLEARFILTER' | translate }}"><i class="fa fa-remove"></i></a>    </form>
+
+    <button type="button" (click)="onRowNew()" class="btn btn-circle btn-xl" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+      <i class="fa fa-plus"></i>
+    </button>
+
+  </div>
+
+  <div class="block-padding-spacer">
+    <div class="bg-info text-padding">
+      <p>{{ 'SUBSHOP_TIP' | translate }}</p>
+    </div>
+  </div>
+
+  <section class="no-more-tables {{ loading ? 'loading-data' : '' }}">
+    <table class="table-bordered table-striped table-condensed cf">
+      <thead class="cf">
+      <tr>
+        <th>{{ 'CODE' | translate }}</th>
+        <th>{{ 'NAME' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let row of filteredShopSub; let i = index" class="{{row == selectedRow ? 'active' : ''}}">
+        <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
+          <td title="{{ 'CODE' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]">{{row.code}}</a></td>
+          <td title="{{ 'NAME' | translate }}"><a class="js-click" [routerLink]="['/subshop', row.shopId ]">{{row.name}}</a></td>
+        </template>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div>
+    <pagination [boundaryLinks]="true" [totalItems]="totalItems" [itemsPerPage]="itemsPerPage" [maxSize]="maxSize" [ngModel]="currentPage" (pageChanged)="onPageChanged($event)" class="pagination-sm"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"></pagination>
+  </div>
+
+  <yc-modal #editModalDialog
+            title="{{ 'SHOP_TAB_B2B' | translate }}"
+            cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+            positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
+            [valid]="validForSave"
+            (closed)="onEditModalResult($event)">
+
+    <form role="form" [formGroup]="shopSubForm">
+      <fieldset>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="code" type="text" [(ngModel)]="subShopToEdit.code">
+            <div [hidden]="shopSubForm.controls['code'].valid || shopSubForm.controls['code'].pristine" class="alert alert-danger">
+              {{ 'ALPHANUM_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'NAME' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="name" type="text" [(ngModel)]="subShopToEdit.name">
+            <div [hidden]="shopSubForm.controls['name'].valid || shopSubForm.controls['name'].pristine" class="alert alert-danger">
+              {{ 'SIMPLE_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">{{ 'CUSTOMER_EMAIL' | translate }}</div>
+          <div class="col-lg-9">
+            <input class="form-control" formControlName="admin" type="text" [(ngModel)]="subShopToEdit.admin">
+            <div [hidden]="shopSubForm.controls['admin'].valid || shopSubForm.controls['admin'].pristine" class="alert alert-danger">
+              {{ 'EMAIL_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="text-right block-margin-spacer"><span class="label label-info">YCE</span></div>
+
+    </form>
+
+  </yc-modal>
+
+</template>

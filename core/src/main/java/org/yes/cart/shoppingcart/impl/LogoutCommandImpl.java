@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
 
@@ -34,9 +33,8 @@ public class LogoutCommandImpl extends ExpireCartCommandImpl implements Shopping
      *
      * @param registry shopping cart command registry
      */
-    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry,
-                             final ShopService shopService) {
-        super(registry, shopService);
+    public LogoutCommandImpl(final ShoppingCartCommandRegistry registry) {
+        super(registry);
     }
 
     /**

@@ -94,7 +94,9 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
             handleInternal(orderEvent);
 
             final CustomerOrder order = orderEvent.getCustomerOrder();
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+
+            final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), pgShop.getCode());
             if (!paymentProcessor.isPaymentGatewayEnabled()) {
                 throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
             }

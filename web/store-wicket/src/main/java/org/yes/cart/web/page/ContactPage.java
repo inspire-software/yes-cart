@@ -28,8 +28,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.customer.auth.BaseAuthForm;
 import org.yes.cart.web.page.component.footer.StandardFooter;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -73,9 +71,9 @@ public class ContactPage  extends AbstractWebPage {
 
         executeHttpPostedCommands();
 
-        final long shopId = ShopCodeContext.getShopId();
+        final long contentShopId = getCurrentShopId();
         final String lang = getLocale().getLanguage();
-        String contactInfo = getContentInclude(shopId, "contacts_content_include", lang);
+        String contactInfo = getContentInclude(contentShopId, "contacts_content_include", lang);
         addOrReplace(new Label("contactInfo", contactInfo).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -260,7 +258,7 @@ public class ContactPage  extends AbstractWebPage {
                             data.put("body", getMessage());
 
                             getCustomerServiceFacade().registerEmailRequest(
-                                    ApplicationDirector.getCurrentShop(), email, data);
+                                    getCurrentShop(), email, data);
 
                             info(
                                     getLocalizer().getString("emailSend", this)

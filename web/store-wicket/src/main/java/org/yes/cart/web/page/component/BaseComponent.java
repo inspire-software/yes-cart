@@ -20,6 +20,9 @@ package org.yes.cart.web.page.component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.shoppingcart.ShoppingCart;
+import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.service.wicketsupport.WicketSupportFacade;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
@@ -100,4 +103,70 @@ public class BaseComponent extends Panel {
     public WicketUtil getWicketUtil() {
         return wicketUtil;
     }
+
+
+    /**
+     * Retrieve current cart.
+     *
+     * @return cart object
+     */
+    public ShoppingCart getCurrentCart() {
+        return ApplicationDirector.getShoppingCart();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop object
+     */
+    public Shop getCurrentShop() {
+        return ApplicationDirector.getCurrentShop();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop PK
+     */
+    public long getCurrentShopId() {
+        return getCurrentCart().getShoppingContext().getShopId();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop code
+     */
+    public String getCurrentShopCode() {
+        return getCurrentCart().getShoppingContext().getShopCode();
+    }
+
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop PK
+     */
+    public long getCurrentCustomerShopId() {
+        return getCurrentCart().getShoppingContext().getCustomerShopId();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
+     * @return shop code
+     */
+    public String getCurrentCustomerShopCode() {
+        return getCurrentCart().getShoppingContext().getCustomerShopCode();
+    }
+
+    /**
+     * Current shoppers IP address.
+     *
+     * @return IP address
+     */
+    public String getShopperIPAddress() {
+        return ApplicationDirector.getShopperIPAddress();
+    }
+
 }

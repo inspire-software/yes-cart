@@ -35,7 +35,6 @@ import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.service.AttributableImageService;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -109,7 +108,8 @@ public abstract class AbstractProductSearchResultList extends BaseComponent {
         final String selectedLocale = getLocale().getLanguage();
 
         final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
-        final Pair<String, String> thumbWidthHeight = categoryServiceFacade.getThumbnailSizeConfig(categoryId, ShopCodeContext.getShopId());
+        final long configShopId = getCurrentShopId();
+        final Pair<String, String> thumbWidthHeight = categoryServiceFacade.getThumbnailSizeConfig(categoryId, configShopId);
 
         addOrReplace(
                 new ListView<ProductSearchResultDTO>(PRODUCT_LIST, getProductListToShow())

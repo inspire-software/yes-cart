@@ -18,7 +18,6 @@ package org.yes.cart.web.page.component.footer;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
@@ -44,12 +43,12 @@ public class CheckoutFooter extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final long shopId = ShopCodeContext.getShopId();
+        final long contentShopId = getCurrentShopId();
         final String lang = getLocale().getLanguage();
 
-        String footerInclude = getContentInclude(shopId, "footer_include", lang);
+        String footerInclude = getContentInclude(contentShopId, "footer_include", lang);
         addOrReplace(new Label("footerInclude", footerInclude).setEscapeModelStrings(false));
-        String footerNav = getContentInclude(shopId, "footer_co_nav_include", lang);
+        String footerNav = getContentInclude(contentShopId, "footer_co_nav_include", lang);
         addOrReplace(new Label("footerNav", footerNav).setEscapeModelStrings(false));
 
         super.onBeforeRender();

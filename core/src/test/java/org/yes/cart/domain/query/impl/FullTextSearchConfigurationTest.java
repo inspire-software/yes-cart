@@ -194,6 +194,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(1, products.size());
                 assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
 
+                // basic search in a sub shop
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(101L, 104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+
+
                 status.setRollbackOnly();
             }
         });
@@ -308,6 +315,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
 
 
+                // basic search in a sub shop
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, null, false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertFalse("Product must be found in 10 shop. Failed [" + context.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+
+
                 status.setRollbackOnly();
             }
         });
@@ -353,6 +368,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse(products.isEmpty());
                 assertEquals("CC_TEST9 is best match", "CC_TEST9", products.get(0).getCode());
+
+                // Fuzzy in sub shops
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, null, false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertFalse("Failed [" + context.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+
 
                 status.setRollbackOnly();
             }
@@ -497,6 +520,28 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
                     assertTrue("Unexpected pair: " + brandFacetResultItem, expectedInShop.contains(brandFacetResultItem));
                 }
+
+
+                // Brand faceting in a sub shop
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(101L), false, null);
+                facets = productDao.fullTextSearchNavigation(context.getProductQuery(), Collections.singletonList(brands));
+                assertEquals("Failed [" + context.getProductQuery().toString() +"]", 1, facets.size());
+
+                brandFacetResults = facets.get("brandFacet");
+                assertNotNull(brandFacetResults);
+                assertEquals(2, brandFacetResults.size());
+
+                final List<Pair<String, Integer>> subExpectedInCategory = Arrays.asList(
+                        new Pair<String, Integer>("futurerobots", 1),
+                        new Pair<String, Integer>("unknown", 1)
+                );
+
+                for (final Pair<String, Integer> brandFacetResultItem : brandFacetResults) {
+                    assertTrue("Unexpected pair: " + brandFacetResultItem, subExpectedInCategory.contains(brandFacetResultItem));
+                }
+
+
 
                 status.setRollbackOnly();
 
@@ -702,6 +747,54 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertEquals(Integer.valueOf(5), priceFacetResults.get(6).getSecond());
 
 
+
+                // Sub shop price facting
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(129L, 130L, 131L, 132L), false, null);
+
+                // There should be the following products:
+                // PRODUCT1  15.00 EUR
+                // PRODUCT2  30.00 EUR
+                // PRODUCT3 250.00 EUR
+                // PRODUCT4 400.00 EUR
+                // PRODUCT5 420.00 EUR
+
+                final FilteredNavigationRecordRequest subPriceInCategories =
+                        new FilteredNavigationRecordRequestImpl(
+                                "priceFacet",
+                                "facet_price_1010_EUR",
+                                new ArrayList<Pair<String, String>>() {{
+                                    add(new Pair<String, String>("00000000", "00001500")); // test exclusive hi PRODUCT1
+                                    add(new Pair<String, String>("00001500", "00001600")); // test inclusive lo PRODUCT1
+                                    add(new Pair<String, String>("00001600", "00030000")); // 2 in range, overlapping PRODUCT3
+                                    add(new Pair<String, String>("00025000", "00030000")); // overlapping PRODUCT3
+                                    add(new Pair<String, String>("00030000", "00040000")); // blank bucket
+                                    add(new Pair<String, String>("00030000", "01000000")); // 2 in range
+                                }}
+                        );
+
+                facets = productDao.fullTextSearchNavigation(context.getProductQuery(), Collections.singletonList(subPriceInCategories));
+                assertEquals("Failed [" + context.getProductQuery().toString() +"]", 1, facets.size());
+
+                priceFacetResults = facets.get("priceFacet");
+                assertNotNull(priceFacetResults);
+                assertEquals(6, priceFacetResults.size());
+                assertEquals("[00000000, 00001500)", priceFacetResults.get(0).getFirst());
+                assertEquals(Integer.valueOf(0), priceFacetResults.get(0).getSecond());
+                assertEquals("[00001500, 00001600)", priceFacetResults.get(1).getFirst());
+                assertEquals(Integer.valueOf(1), priceFacetResults.get(1).getSecond());
+                assertEquals("[00001600, 00030000)", priceFacetResults.get(2).getFirst());
+                assertEquals(Integer.valueOf(2), priceFacetResults.get(2).getSecond());
+                assertEquals("[00025000, 00030000)", priceFacetResults.get(3).getFirst());
+                assertEquals(Integer.valueOf(1), priceFacetResults.get(3).getSecond());
+                assertEquals("[00030000, 00040000)", priceFacetResults.get(4).getFirst());
+                assertEquals(Integer.valueOf(0), priceFacetResults.get(4).getSecond());
+                assertEquals("[00030000, 01000000]", priceFacetResults.get(5).getFirst());
+                assertEquals(Integer.valueOf(2), priceFacetResults.get(5).getSecond());
+
+
+
+
                 status.setRollbackOnly();
 
             }
@@ -792,6 +885,43 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 for (final Pair<String, Integer> sizeFacetResultItem : sizeFacetResults) {
                     assertTrue("Unexpected pair: " + sizeFacetResultItem, expectedSizeInShop.contains(sizeFacetResultItem));
                 }
+
+
+                // Sub shop attribute faceting
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(101L), false, null);
+                facets = productDao.fullTextSearchNavigation(context.getProductQuery(), Arrays.asList(material, size));
+                assertEquals("Failed [" + context.getProductQuery().toString() +"]", 2, facets.size());
+
+                materialFacetResults = facets.get("MATERIAL");
+                assertNotNull(materialFacetResults);
+                assertEquals(2, materialFacetResults.size());
+
+                final List<Pair<String, Integer>> subExpectedMaterialInCategory = Arrays.asList(
+                        new Pair<String, Integer>("Plastik", 1),
+                        new Pair<String, Integer>("metal", 1)
+                );
+
+                for (final Pair<String, Integer> materialFacetResultItem : materialFacetResults) {
+                    assertTrue("Unexpected pair: " + materialFacetResultItem, subExpectedMaterialInCategory.contains(materialFacetResultItem));
+                }
+
+                sizeFacetResults = facets.get("SIZE");
+                assertNotNull(sizeFacetResults);
+                assertEquals(4, sizeFacetResults.size());
+
+                final List<Pair<String, Integer>> subExpectedSizeInCategory = Arrays.asList(
+                        new Pair<String, Integer>("small", 1),
+                        new Pair<String, Integer>("medium", 1),
+                        new Pair<String, Integer>("large", 1),
+                        new Pair<String, Integer>("xxl", 1)
+                );
+
+                for (final Pair<String, Integer> sizeFacetResultItem : sizeFacetResults) {
+                    assertTrue("Unexpected pair: " + sizeFacetResultItem, subExpectedSizeInCategory.contains(sizeFacetResultItem));
+                }
+
+
 
                 status.setRollbackOnly();
 
@@ -977,6 +1107,14 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 assertTrue("Failed [" + context.getProductQuery() + "] SMELL is not nav attr, so we return all", products.size() > 1);
 
 
+
+                // sub shop search by sku attribute value
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, null, false,
+                        Collections.singletonMap("SMELL", (List) Arrays.asList("apple")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed [" + context.getProductQuery() + "] SMELL is not nav attr, so we return all", products.size() > 1);
+
+
                 status.setRollbackOnly();
 
             }
@@ -1044,6 +1182,15 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                         Collections.singletonMap("WEIGHT", (List) Arrays.asList("2.1-_-2.5")));
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 0, products.size());
+
+
+                // sub shops
+                // range values are excluding high value
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(130L, 131L, 132L), false,
+                        Collections.singletonMap("WEIGHT", (List) Arrays.asList("0.001-_-2.3")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertEquals("Range search with query [" + context.getProductQuery() + "] incorrect", 2, products.size());
+
 
                 status.setRollbackOnly();
 
@@ -1255,6 +1402,17 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 productDao.fullTextSearchReindex(false, 1000);
 
                 List<Product> products = productDao.fullTextSearch(luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(212L), false, null).getProductQuery());
+                assertEquals("Only 5 product available in 212 category", 5, products.size());
+                assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_1"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_2"));
+                assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_3"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_PREORDER"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_BACKORDER"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS"));
+                assertNotNull(getProductByCode(products, "PAT_PRODUCT_ALWAYS2"));
+
+                // sub shops availability
+                products = productDao.fullTextSearch(luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(212L), false, null).getProductQuery());
                 assertEquals("Only 5 product available in 212 category", 5, products.size());
                 assertNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_1"));
                 assertNotNull(getProductByCode(products, "PAT_PRODUCT_ON_STOCK_ONLY_2"));

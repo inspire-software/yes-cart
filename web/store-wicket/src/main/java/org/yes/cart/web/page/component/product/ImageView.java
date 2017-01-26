@@ -25,13 +25,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.entity.SeoImage;
 import org.yes.cart.domain.misc.Pair;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.Depictable;
 import org.yes.cart.web.support.i18n.I18NWebSupport;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -77,11 +75,11 @@ public class ImageView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        long shopId = ShopCodeContext.getShopId();
+        final long configShopId = getCurrentShopId();
         long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getProductListImageSizeConfig(categoryId, shopId);
-        final Pair<String, String> thumbSize = categoryServiceFacade.getThumbnailSizeConfig(categoryId, shopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getProductListImageSizeConfig(categoryId, configShopId);
+        final Pair<String, String> thumbSize = categoryServiceFacade.getThumbnailSizeConfig(categoryId, configShopId);
 
         final String width = imageSize.getFirst();
         final String height = imageSize.getSecond();

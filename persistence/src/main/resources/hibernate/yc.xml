@@ -1515,6 +1515,9 @@
             <property name="displayMetadescription" type="string" column="DISPLAY_METADESCRIPTION" length="4000" not-null="false"/>
         </component>
 
+        <many-to-one name="master" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SH_MASTER" lazy="false">
+            <column name="MASTER_ID" not-null="false"/>
+        </many-to-one>
 
         <bag name="shopCategory" inverse="false" lazy="false" cascade="all" order-by="RANK">
             <key>
@@ -2556,9 +2559,27 @@
        ]]>
     </query>
 
-   <query name="SHOP.BY.CODE">
+    <query name="SHOP.BY.CODE">
         <![CDATA[
        select o from ShopEntity o fetch all properties  where o.code = ?1
+       ]]>
+    </query>
+
+    <query name="SHOP.BY.NAME.AND.MASTER.ID">
+        <![CDATA[
+       select o from ShopEntity o fetch all properties  where o.name = ?1 and o.master.shopId = ?2
+       ]]>
+    </query>
+
+    <query name="SHOP.NONSUB.ONLY">
+        <![CDATA[
+       select o from ShopEntity o fetch all properties  where o.master is null
+       ]]>
+    </query>
+
+    <query name="SHOP.BY.MASTER.ID">
+        <![CDATA[
+       select o from ShopEntity o fetch all properties  where o.master.shopId = ?1
        ]]>
     </query>
 
@@ -3458,19 +3479,19 @@
 
     <query name="CUSTOMER.BY.EMAIL.SHOP">
         <![CDATA[
-            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.disabled = ?3
+            select cse.customer from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.disabled = ?3
         ]]>
     </query>
 
     <query name="EMAIL.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2
+            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2)
         ]]>
     </query>
 
     <query name="PASS.CHECK">
         <![CDATA[
-            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2 and cse.customer.password = ?3 and cse.disabled = ?4
+            select count(customerShopId) from CustomerShopEntity cse where cse.customer.email = ?1 and (cse.shop.shopId = ?2 or cse.shop.master.shopId = ?2) and cse.customer.password = ?3 and cse.disabled = ?4
         ]]>
     </query>
 

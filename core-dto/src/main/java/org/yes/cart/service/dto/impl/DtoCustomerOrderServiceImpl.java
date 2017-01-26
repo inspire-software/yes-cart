@@ -35,10 +35,7 @@ import org.yes.cart.domain.dto.impl.CustomerOrderDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDeliveryDetailDTOImpl;
 import org.yes.cart.domain.dto.impl.CustomerOrderDetailDTOImpl;
-import org.yes.cart.domain.entity.CustomerOrder;
-import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
-import org.yes.cart.domain.entity.CustomerOrderDet;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.misc.Result;
 import org.yes.cart.exception.UnableToCreateInstanceException;
@@ -471,7 +468,8 @@ public class DtoCustomerOrderServiceImpl
 
         if (CollectionUtils.isNotEmpty(orderList)) {
             final CustomerOrder customerOrder = orderList.get(0);
-            final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), customerOrder.getShop().getCode());
+            final Shop pgShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+            final PaymentGateway paymentGateway = paymentModulesManager.getPaymentGateway(customerOrder.getPgLabel(), pgShop.getCode());
             if (paymentGateway == null) {
                 ShopCodeContext.getLog(this).error("Cannot determine capture less/more because gateway {} is not resolved for shop {}, could it be disabled?", customerOrder.getPgLabel(), customerOrder.getShop().getCode());
             }

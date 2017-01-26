@@ -20,6 +20,8 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * User: denispavlov
@@ -33,7 +35,30 @@ public interface SkuPriceRelationshipSupport {
      *
      * @return list of all entities
      */
+    Map<Long, Set<Long>> getAllShopsAndSubs();
+
+    /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
     List<Shop> getAll();
+
+    /**
+     * Get all entities.
+     *
+     * @return list of all entities
+     */
+    List<Shop> getAllNonSub();
+
+    /**
+     * Get all entities.
+     *
+     * @param masterId master PK
+     *
+     * @return list of all entities
+     */
+    List<Shop> getAllMastered(long masterId);
 
     /**
      * Get prices for given sku on all shops.

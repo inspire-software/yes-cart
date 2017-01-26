@@ -158,7 +158,7 @@ public class VoCategoryServiceImpl implements VoCategoryService {
             }
             federationFacade.applyFederationFilter(batch, CategoryDTO.class);
             results.addAll(voAssemblySupport.assembleVos(VoCategory.class, CategoryDTO.class, batch));
-            start += max;
+            start++;
         } while (results.size() < max && max != Integer.MAX_VALUE);
         return results.size() > max ? results.subList(0, max) : results;
 

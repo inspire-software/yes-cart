@@ -157,7 +157,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
                         if (reindex) {
                             final AsyncContext reindexCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_PRODUCT_BULK_INDEX_TIMEOUT_MS);
                             Thread.sleep(INDEX_GET_READY_TIMEOUT); // let cache invalidation run before index
-                            final String indexToken = reindexService.reindexShopProducts(reindexCtx, ShopCodeContext.getShopId());
+                            final String indexToken = reindexService.reindexAllProducts(reindexCtx);
                             while (true) {
                                 Thread.sleep(INDEX_PING_INTERVAL);
                                 JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);

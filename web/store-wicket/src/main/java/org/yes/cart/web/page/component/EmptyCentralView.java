@@ -19,8 +19,6 @@ package org.yes.cart.web.page.component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 
@@ -63,12 +61,11 @@ public class EmptyCentralView extends AbstractCentralView {
     @Override
     protected void onBeforeRender() {
 
-        final long shopId = ShopCodeContext.getShopId();
         final String lang = getLocale().getLanguage();
 
         add(new TopCategories("topCategories"));
 
-        String footerCopyright = getContentInclude(shopId, "homepage_content_include", lang);
+        String footerCopyright = getContentInclude(getCurrentShopId(), "homepage_content_include", lang);
         addOrReplace(new Label("homepageContent", footerCopyright).setEscapeModelStrings(false));
 
         super.onBeforeRender();
@@ -76,8 +73,8 @@ public class EmptyCentralView extends AbstractCentralView {
 
     private String getContentInclude(long shopId, String contentUri, String lang) {
         final Map<String, Object> homepageCtx = new HashMap<String, Object>();
-        homepageCtx.put("shop", ApplicationDirector.getCurrentShop());
-        homepageCtx.put("shoppingCart", ApplicationDirector.getShoppingCart());
+        homepageCtx.put("shop", getCurrentShop());
+        homepageCtx.put("shoppingCart", getCurrentCart());
         String content = contentServiceFacade.getDynamicContentBody(
                 contentUri, shopId, lang, homepageCtx);
         if (content == null) {

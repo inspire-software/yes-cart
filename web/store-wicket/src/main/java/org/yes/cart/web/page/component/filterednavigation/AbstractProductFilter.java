@@ -26,7 +26,6 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.FilteredNavigationRecord;
 import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
 import org.yes.cart.web.support.constants.WebParametersKeys;
@@ -88,9 +87,11 @@ public abstract class AbstractProductFilter extends BaseComponent {
         super(id);
         this.navigationContext = navigationContext;
         this.categoryId  = categoryId;
-        final long shopId = ShopCodeContext.getShopId();
-        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, shopId).getFirst();
-        this.recordLimit = getCategoryFilterLimitConfig(categoryId, shopId);
+
+        final long configShopId = getCurrentShopId();
+        final long browsingShopId = getCurrentCustomerShopId();
+        this.categories = categoryServiceFacade.getSearchCategoriesIds(categoryId, browsingShopId).getFirst();
+        this.recordLimit = getCategoryFilterLimitConfig(categoryId, configShopId);
     }
 
     /**
@@ -124,7 +125,7 @@ public abstract class AbstractProductFilter extends BaseComponent {
      */
     public Category getCategory() {
         if (category == null) {
-            category = categoryServiceFacade.getCategory(categoryId, ShopCodeContext.getShopId());
+            category = categoryServiceFacade.getCategory(categoryId, getCurrentCustomerShopId());
         }
         return category;
     }

@@ -13,10 +13,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component,  OnInit } from '@angular/core';
+import { Component,  OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ManagerInfoVO } from '../model/index';
-import { ManagementService } from '../services/index';
+import { UserVO } from '../model/index';
+import { UserEventBus } from '../services/index';
 import { ShopVO } from '../model/index';
 import { LogUtil } from './../log/index';
 
@@ -26,31 +26,24 @@ import { LogUtil } from './../log/index';
   templateUrl: 'sidebar.component.html',
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
-  private currentUser : ManagerInfoVO;
   private currentUserName : string;
+  private menuType : string;
 
-  constructor (private _managementService : ManagementService,
-               private _router : Router) {
+  private userSub:any;
+
+  constructor (private _router : Router) {
     LogUtil.debug('SidebarComponent constructed');
   }
 
   ngOnInit() {
     LogUtil.debug('SidebarComponent ngOnInit');
-    var _sub:any = this._managementService.getMyself().subscribe( myself => {
-      LogUtil.debug('SidebarComponent getMyself', myself);
-      this.currentUser = myself;
-      if (this.currentUser.firstName != null && /.*\S+.*/.test(this.currentUser.firstName)) {
-        this.currentUserName = this.currentUser.firstName;
-      } else if (this.currentUser.lastName != null && /.*\S+.*/.test(this.currentUser.lastName)) {
-        this.currentUserName = this.currentUser.lastName;
-      } else {
-        this.currentUserName = this.currentUser.email;
-      }
-      _sub.unsubscribe();
+    this.userSub = UserEventBus.getUserEventBus().userUpdated$.subscribe(user => {
+      let currentUser:UserVO = user;
+      this.currentUserName = currentUser != null ? currentUser.name : 'anonymous';
+      this.menuType = currentUser != null ? currentUser.ui : 'FULL';
     });
-
   }
 
   protected selectNewShop() {
@@ -61,14 +54,29 @@ export class SidebarComponent implements OnInit {
 
   protected selectCurrentShop(shop:ShopVO) {
 
-    this._router.navigate(['/shop', shop.shopId]);
+    if (shop.masterCode != null) {
+      this._router.navigate(['/subshop', shop.shopId]);
+    } else {
+      this._router.navigate(['/shop', shop.shopId]);
+    }
 
   }
 
   protected selectCurrentShopContent(shop:ShopVO) {
 
-    this._router.navigate(['/content', shop.shopId]);
+    if (shop.masterCode != null) {
+      this._router.navigate(['/content', shop.masterId]);
+    } else {
+      this._router.navigate(['/content', shop.shopId]);
+    }
 
+  }
+
+  ngOnDestroy() {
+    LogUtil.debug('SidebarComponent ngOnDestroy');
+    if (this.userSub) {
+      this.userSub.unsubscribe();
+    }
   }
 
 }

@@ -35,6 +35,9 @@ public class VoShopSummary {
     private String name;
     private String themeChain;
 
+    private Long masterId;
+    private String masterCode;
+
     private List<MutablePair<String, Boolean>> categories = new ArrayList<MutablePair<String, Boolean>>();
 
     private List<MutablePair<String, Boolean>> carriers = new ArrayList<MutablePair<String, Boolean>>();
@@ -74,6 +77,7 @@ public class VoShopSummary {
     private MutablePair<String, Integer> searchSuggestMinChars;
 
 
+    private MutablePair<String, Boolean> b2bProfileActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
@@ -117,6 +121,22 @@ public class VoShopSummary {
 
     public void setCode(final String code) {
         this.code = code;
+    }
+
+    public Long getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(final Long masterId) {
+        this.masterId = masterId;
+    }
+
+    public String getMasterCode() {
+        return masterCode;
+    }
+
+    public void setMasterCode(final String masterCode) {
+        this.masterCode = masterCode;
     }
 
     public String getName() {
@@ -341,6 +361,14 @@ public class VoShopSummary {
 
     public void setSearchSuggestMinChars(final MutablePair<String, Integer> searchSuggestMinChars) {
         this.searchSuggestMinChars = searchSuggestMinChars;
+    }
+
+    public MutablePair<String, Boolean> getB2bProfileActive() {
+        return b2bProfileActive;
+    }
+
+    public void setB2bProfileActive(final MutablePair<String, Boolean> b2bProfileActive) {
+        this.b2bProfileActive = b2bProfileActive;
     }
 
     public MutablePair<String, Boolean> getCookiePolicy() {

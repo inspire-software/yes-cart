@@ -108,7 +108,7 @@ public class WishListView extends AbstractProductSearchResultList {
     protected void onBeforeRender() {
 
         boolean oldOwnerViewing = ownerViewing;
-        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject() != null && customerEmail.getObject().equals(ApplicationDirector.getShoppingCart().getCustomerEmail());
+        ownerViewing = !getPage().getPageParameters().getNamedKeys().contains("token") && customerEmail.getObject() != null && customerEmail.getObject().equals(getCurrentCart().getCustomerEmail());
         if (ownerViewing != oldOwnerViewing) {
             products = null; // reset products just in case
         }
@@ -122,7 +122,7 @@ public class WishListView extends AbstractProductSearchResultList {
         if (products == null) {
 
             final List<CustomerWishList> wishList = new ArrayList<CustomerWishList>(customerServiceFacade.getCustomerWishListByEmail(
-                    ApplicationDirector.getCurrentShop(),
+                    getCurrentShop(),
                     this.wishListType.getObject(), this.customerEmail.getObject(),
                     ownerViewing ? null : CustomerWishList.SHARED, this.wishListTag.getObject() != null ? new String[] { this.wishListTag.getObject() } : null));
 
@@ -136,8 +136,10 @@ public class WishListView extends AbstractProductSearchResultList {
 
                 }
 
+                final long browsingShopId = getCurrentCustomerShopId();
+
                 final List<ProductSearchResultDTO> uniqueProducts = productServiceFacade.getListProducts(
-                        productIds, -1L, ShopCodeContext.getShopId());
+                        productIds, -1L, browsingShopId);
 
                 final List<ProductSearchResultDTO> wishListProducts = new ArrayList<ProductSearchResultDTO>();
 
@@ -233,7 +235,7 @@ public class WishListView extends AbstractProductSearchResultList {
 
     private PriceView getPriceView(final ProductSearchResultDTO product, final CustomerWishList itemData) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         final Pair<ProductPriceModel, CustomerWishList.PriceChange> modelAndDelta = productServiceFacade.getSkuPrice(cart, itemData);
         final ProductPriceModel model = modelAndDelta.getFirst();

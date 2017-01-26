@@ -731,6 +731,7 @@
 
     create table TSHOP (
         SHOP_ID bigint not null auto_increment,
+        MASTER_ID bigint,
         VERSION bigint not null default 0,
         CODE varchar(255) not null unique,
         NAME varchar(64) not null,
@@ -1647,3 +1648,10 @@
     create index I_CRS_SHOP_DISABLED on TCARRIERSHOP (DISABLED);
     create index I_SWE_SHOP_DISABLED on TSHOPWAREHOUSE (DISABLED);
     create index I_CS_SHOP_DISABLED on TCUSTOMERSHOP (DISABLED);
+
+    alter table TSHOP
+        add index FK_SH_MASTER (MASTER_ID),
+        add constraint FK_SH_MASTER
+        foreign key (MASTER_ID)
+        references TSHOP (SHOP_ID);
+

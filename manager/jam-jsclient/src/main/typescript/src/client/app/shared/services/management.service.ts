@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Config } from '../config/env.config';
-import { ManagerInfoVO, LicenseAgreementVO } from '../model/index';
+import { UserVO, ManagerVO, ManagerInfoVO, LicenseAgreementVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -47,8 +47,52 @@ export class ManagementService {
    */
   getMyself() {
     return this.http.get(this._serviceBaseUrl + '/myself')
-      .map(res => <ManagerInfoVO> res.json())
+      .map(res => {
+        let manager = <ManagerVO> res.json();
+        let name = this.getUserName(manager);
+        let ui = this.getUserInterface(manager);
+        let user:UserVO = { manager: manager, name: name, ui: ui };
+        return user;
+      })
       .catch(this.handleError);
+  }
+
+  /**
+   * Determine display user name for given manager.
+   *
+   * @param manager manager
+   *
+   * @return string
+   */
+  getUserName(manager:ManagerInfoVO):string {
+    let currentUser:ManagerInfoVO = manager;
+    if (manager != null) {
+      if (currentUser.firstName != null && /.*\S+.*/.test(currentUser.firstName)) {
+        return currentUser.firstName;
+      } else if (currentUser.lastName != null && /.*\S+.*/.test(currentUser.lastName)) {
+        return currentUser.lastName;
+      } else {
+        return currentUser.email;
+      }
+    }
+    return 'anynomous';
+  }
+
+  /**
+   * Determine best suited UI interface.
+   *
+   * @param manager manager
+   *
+   * @return ui name
+   */
+  getUserInterface(manager:ManagerVO):string {
+    let ui = 'ADMIN';
+    manager.managerRoles.forEach(role => {
+       if ('ROLE_SMCALLCENTER' == role.code) {
+         ui = 'CC';
+       }
+    });
+    return ui;
   }
 
 

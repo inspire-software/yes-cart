@@ -77,6 +77,21 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         }
 
         final String imageObjectCode = pair.getSecond();
+        return getAttributes(objectId, imageObjectCode);
+
+    }
+
+
+    /**
+     * Template for retrieving object attributes.
+     *
+     * @param objectId master object id
+     * @return vo attributes
+     *
+     * @throws Exception
+     */
+    public List<V> getAttributes(final long objectId, final String imageObjectCode) throws Exception {
+
         final List<D> attributes = (List) this.genericAttrValueService.getEntityAttributes(objectId);
 
         final List<V> all = voAssemblySupport.assembleVos(voClass, dtoClass, attributes);
@@ -98,6 +113,7 @@ public abstract class VoAttributesCRUDTemplate<V extends VoAttrValue, D extends 
         return all;
 
     }
+
 
     /**
      * Extension hook to feed in entity specific hidden attributes

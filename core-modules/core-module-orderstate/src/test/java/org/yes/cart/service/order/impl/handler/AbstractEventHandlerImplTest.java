@@ -92,7 +92,6 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         testExtPgAlteredParameters.clear();
     }
 
-
     /**
      * Create new customer and new order for them of given type.
      *
@@ -105,7 +104,39 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
      * @throws Exception
      */
     protected CustomerOrder createTestOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery) throws Exception {
-        Customer customer = createCustomer("" + COUNTER++);
+        return createTestOrder(orderType, pgLabel, onePhysicalDelivery, false);
+    }
+
+    /**
+     * Create new customer and new order for them of given type.
+     *
+     * @param orderType see enum for different types
+     * @param pgLabel payment gateway to use
+     * @param onePhysicalDelivery multi delivery option
+     *
+     * @return customer order for testing
+     *
+     * @throws Exception
+     */
+    protected CustomerOrder createTestSubOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery) throws Exception {
+        return createTestOrder(orderType, pgLabel, onePhysicalDelivery, true);
+    }
+
+
+    /**
+     * Create new customer and new order for them of given type.
+     *
+     * @param orderType see enum for different types
+     * @param pgLabel payment gateway to use
+     * @param onePhysicalDelivery multi delivery option
+     * @param sub sub shop
+     *
+     * @return customer order for testing
+     *
+     * @throws Exception
+     */
+    protected CustomerOrder createTestOrder(TestOrderType orderType, String pgLabel, boolean onePhysicalDelivery, boolean sub) throws Exception {
+        Customer customer = sub ? createCustomerB2BSub("" + COUNTER++, false, false) : createCustomer("" + COUNTER++);
         assertFalse(customer.getAddress().isEmpty());
 
         final ShoppingCart cart;
@@ -125,6 +156,14 @@ public abstract class AbstractEventHandlerImplTest extends BaseCoreDBTestCase {
         assertEquals(CustomerOrder.ORDER_STATUS_NONE, customerOrder.getOrderStatus());
         customerOrder.setPgLabel(pgLabel);
         orderService.update(customerOrder);
+
+        // Ensure we have correct orders
+        if (sub) {
+            assertEquals(1010L, customerOrder.getShop().getShopId());
+        } else {
+            assertEquals(10L, customerOrder.getShop().getShopId());
+        }
+
         return customerOrder;
     }
 

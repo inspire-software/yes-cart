@@ -72,7 +72,7 @@ public class VoShopCategoryServiceImpl implements VoShopCategoryService {
     @Override
     public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
-        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
+        if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(summary.getCode())) {
             final List<CategoryDTO> categoryDTOs = dtoCategoryService.getAllByShopId(shopId);
             for (final CategoryDTO dto : categoryDTOs) {
 

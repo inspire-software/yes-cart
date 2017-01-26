@@ -26,9 +26,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.misc.Pair;
+import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
-import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -108,9 +107,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                final boolean enableProductLinks) {
         super(id);
 
+        final ShoppingCart cart = getCurrentCart();
         final CustomerOrder customerOrder = checkoutServiceFacade.findByReference(orderGuid);
         final Total grandTotal = checkoutServiceFacade.getOrderTotal(customerOrder);
-        final ProductPriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, ApplicationDirector.getShoppingCart());
+        final ProductPriceModel grandTotalPrice = checkoutServiceFacade.getOrderTotalAmount(customerOrder, cart);
 
         final String selectedLocale = getLocale().getLanguage();
         final Set<String> allPromos = checkoutServiceFacade.getOrderPromoCodes(customerOrder);
@@ -124,7 +124,9 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
         final String deliveryAddress = customerOrder.getShippingAddress();
         final String billingAddress = customerOrder.getBillingAddress();
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, ShopCodeContext.getShopId());
+        final long configShopId = cart.getShoppingContext().getShopId();
+
+        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, configShopId);
 
         add(
                 new ListView<CustomerOrderDelivery>(DELIVERY_LIST, new ArrayList<CustomerOrderDelivery>(customerOrder.getDelivery()))

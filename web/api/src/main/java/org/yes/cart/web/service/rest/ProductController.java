@@ -105,7 +105,7 @@ public class ProductController {
             final Brand brand = brandService.findById(prodRO.getBrandId());
             prodRO.setBrandName(brand.getName());
 
-            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getShopId());
+            final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productEntity, cart.getShoppingContext().getCustomerShopId());
 
             final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
             prodRO.setProductAvailabilityModel(amRo);
@@ -888,7 +888,7 @@ public class ProductController {
         final long productId = bookmarkMixin.resolveProductId(product);
         final ShoppingCart cart = cartMixin.getCurrentCart();
 
-        final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, cart.getShoppingContext().getShopId(), type);
+        final List<ProductSearchResultDTO> productAssociations = productServiceFacade.getProductAssociations(productId, cart.getShoppingContext().getCustomerShopId(), type);
 
         final List<ProductSearchResultRO> ros = new ArrayList<ProductSearchResultRO>();
 
@@ -898,7 +898,7 @@ public class ProductController {
 
             for (final ProductSearchResultDTO hit : productAssociations) {
 
-                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, cart.getShoppingContext().getShopId());
+                final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(hit, cart.getShoppingContext().getCustomerShopId());
 
                 final ProductSearchResultRO ro = mappingMixin.map(hit, ProductSearchResultRO.class, ProductSearchResultDTO.class);
 
@@ -1142,7 +1142,7 @@ public class ProductController {
             skuRO.setUitemplateFallback(templates.getSecond());
         }
 
-        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, cart.getShoppingContext().getShopId());
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(productSku, cart.getShoppingContext().getCustomerShopId());
 
         final ProductAvailabilityModelRO amRo = mappingMixin.map(skuPam, ProductAvailabilityModelRO.class, ProductAvailabilityModel.class);
         skuRO.setProductAvailabilityModel(amRo);

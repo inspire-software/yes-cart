@@ -143,7 +143,7 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
                     search = orderStatus.getFirst().equals(orderStatus.getSecond()) ? null : orderStatus.getSecond();
                     in = STATUS_IN.get(orderStatus.getFirst());
                 } else {
-                    search = null;
+                    search = filter;
                     in = null;
                 }
 

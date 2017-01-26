@@ -16,10 +16,7 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.shoppingcart.ShoppingCartCommandRegistry;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.*;
@@ -36,26 +33,33 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
 
     private static final long serialVersionUID = 20100122L;
 
-    private ShoppingCartCommand[] commands;
-    private final Map<String, ShoppingCartCommand> commandByKey = new HashMap<String, ShoppingCartCommand>();
+    private final ShoppingCartCommandConfigurationProvider configurationProvider;
+
+    private ConfigurableShoppingCartCommand[] commands;
+    private final Map<String, ConfigurableShoppingCartCommand> commandByKey = new HashMap<String, ConfigurableShoppingCartCommand>();
+
+    public ShoppingCartCommandFactoryImpl(final ShoppingCartCommandConfigurationProvider configurationProvider) {
+        this.configurationProvider = configurationProvider;
+    }
 
     /** {@inheritDoc} */
     @Override
-    public void registerCommand(final ShoppingCartCommand command) {
+    public void registerCommand(final ConfigurableShoppingCartCommand command) {
 
-        final ShoppingCartCommand mapped = commandByKey.get(command.getCmdKey());
+        final ConfigurableShoppingCartCommand mapped = commandByKey.get(command.getCmdKey());
         if (mapped != command) {
             if (mapped != null) {
                 ShopCodeContext.getLog(this).warn("Replacing command impl for: {} with {}", command.getCmdKey(), command);
             } else {
                 ShopCodeContext.getLog(this).info("Adding command impl for: {} with {}", command.getCmdKey(), command);
             }
+            command.configure(this.configurationProvider);
             commandByKey.put(command.getCmdKey(), command);
             commands = remapCommandChain(commandByKey.values());
         }
     }
 
-    ShoppingCartCommand[] remapCommandChain(final Collection<ShoppingCartCommand> commands) {
+    ConfigurableShoppingCartCommand[] remapCommandChain(final Collection<ConfigurableShoppingCartCommand> commands) {
         final List<ShoppingCartCommand> ordered = new ArrayList<ShoppingCartCommand>(commands);
         Collections.sort(ordered, new Comparator<ShoppingCartCommand>() {
             @Override
@@ -63,7 +67,7 @@ public class ShoppingCartCommandFactoryImpl implements ShoppingCartCommandFactor
                 return cmd1.getPriority() - cmd2.getPriority();
             }
         });
-        return ordered.toArray(new ShoppingCartCommand[ordered.size()]);
+        return ordered.toArray(new ConfigurableShoppingCartCommand[ordered.size()]);
     }
 
     /** {@inheritDoc} */

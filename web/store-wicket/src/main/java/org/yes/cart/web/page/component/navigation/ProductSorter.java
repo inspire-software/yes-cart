@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -64,7 +63,7 @@ public class ProductSorter extends BaseComponent {
             @Override
             protected void populateItem(final ListItem<String> stringSortOption) {
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final ShoppingCart cart = getCurrentCart();
 
                 ProductSortingUtils.SupportedSorting sort = ProductSortingUtils.getConfiguration(stringSortOption.getModelObject());
                 final boolean supported = sort != null;

@@ -1566,7 +1566,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
-            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
             allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
@@ -1618,7 +1618,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
-            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
             allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
@@ -1672,7 +1672,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
             allowing(info).isMultipleDelivery(); will(returnValue(true));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
-            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
             allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));
@@ -1727,7 +1727,7 @@ public class OrderSplittingStrategyImplTest {
             allowing(info).isMultipleDeliveryAvailable(); will(returnValue(true));
             allowing(info).isMultipleDelivery(); will(returnValue(false));
             allowing(cart).getShoppingContext(); will(returnValue(ctx));
-            allowing(ctx).getShopId(); will(returnValue(10L));
+            allowing(ctx).getCustomerShopId(); will(returnValue(10L));
             allowing(cart).getCartItemList(); will(returnValue(Arrays.asList(item, other)));
 
             allowing(warehouseService).getByShopId(10L, false); will(returnValue(Arrays.asList(warehouse)));

@@ -59,6 +59,34 @@ public interface ShopDTO extends Identifiable {
     void setCode(String code);
 
     /**
+     * Get pk value.
+     *
+     * @return pk value
+     */
+    Long getMasterId();
+
+    /**
+     * Set pk value.
+     *
+     * @param shopId pk value
+     */
+    void setMasterId(Long shopId);
+
+    /**
+     * Get shop code.
+     *
+     * @return shop code.
+     */
+    String getMasterCode();
+
+    /**
+     * Set shop code.
+     *
+     * @param code shop code.
+     */
+    void setMasterCode(String code);
+
+    /**
      * Get name.
      *
      * @return shop name.

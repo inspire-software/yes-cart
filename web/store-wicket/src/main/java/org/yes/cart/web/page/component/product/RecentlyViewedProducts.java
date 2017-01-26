@@ -18,8 +18,6 @@ package org.yes.cart.web.page.component.product;
 
 import org.yes.cart.domain.dto.ProductSearchResultDTO;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
-import org.yes.cart.web.util.WicketUtil;
 
 import java.util.List;
 
@@ -56,9 +54,9 @@ public class RecentlyViewedProducts extends AbstractProductSearchResultList {
         if (products == null) {
 
             final long categoryId = getWicketUtil().getCategoryId(getPage().getPageParameters());
-            final List<String> productIds = ApplicationDirector.getShoppingCart().getShoppingContext().getLatestViewedSkus();
-
-            products = productServiceFacade.getListProducts(productIds, categoryId, ShopCodeContext.getShopId());
+            final List<String> productIds = getCurrentCart().getShoppingContext().getLatestViewedSkus();
+            final long browsingShopId = getCurrentCustomerShopId();
+            products = productServiceFacade.getListProducts(productIds, categoryId, browsingShopId);
 
         }
         return products;

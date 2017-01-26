@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.message.consumer.StandardMessageListener;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.mail.MailComposer;
@@ -115,7 +116,9 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
         final OrderEvent orderEvent = (OrderEvent) args[0];
 
-        final String adminEmail = orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        final Shop emailShop = orderEvent.getCustomerOrder().getShop().getMaster() != null ? orderEvent.getCustomerOrder().getShop().getMaster() : orderEvent.getCustomerOrder().getShop();
+        final String adminEmail = emailShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
+        final String subAdminEmail = orderEvent.getCustomerOrder().getShop().getMaster() != null ? orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
 
         try {
             Object rez = pjp.proceed();
@@ -125,9 +128,15 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getEmail());
 
+                if (StringUtils.isBlank(subAdminEmail)) {
+                    LOG.error("Cant get sub-admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
+                } else {
+                    fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), subAdminEmail);
+                }
+
                 if (StringUtils.isBlank(adminEmail)) {
                     LOG.error("Cant get admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
-                }   else {
+                } else {
                     fillNotificationParameters(orderEvent, adminTemplates.get(templateKey), adminEmail);
                 }
 

@@ -20,9 +20,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.yes.cart.domain.entity.ProductPriceModel;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.ShoppingContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 
 import java.util.ArrayList;

@@ -134,7 +134,8 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final Object customerTypeData = registrationData.get("customerType");
         final String customerType = customerTypeData != null ? String.valueOf(customerTypeData) : null;
 
-        final Set<String> types = getShopCustomerTypesCodes(registrationShop, false);
+        final Shop configShop = registrationShop.getMaster() != null ? registrationShop.getMaster() : registrationShop;
+        final Set<String> types = getShopCustomerTypesCodes(configShop, false);
         if (!types.contains(customerType)) {
             ShopCodeContext.getLog(this).warn("SHOP_CUSTOMER_TYPES does not contain '{}' customer type or registrationData does not have 'customerType'", customerType);
             return null;
@@ -160,7 +161,7 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
         final String password = phrazeGenerator.getNextPassPhrase();
         customer.setPassword(password); // aspect will create hash but we need to generate password to be able to auto-login
 
-        registerCustomerCustomAttributes(customer, customerType, registrationShop, registrationData);
+        registerCustomerCustomAttributes(customer, customerType, configShop, registrationData);
 
         customerService.create(customer, registrationShop);
 

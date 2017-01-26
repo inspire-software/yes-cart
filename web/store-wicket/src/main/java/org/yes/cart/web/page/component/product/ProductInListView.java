@@ -34,7 +34,6 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.util.ShopCodeContext;
-import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.service.wicketsupport.LinksSupport;
@@ -126,7 +125,7 @@ public class ProductInListView extends BaseComponent {
         } else {
             skuCodeLink = links.newProductLink(PRODUCT_LINK_SKU, product.getId(), getPage().getPageParameters());
         }
-        add(skuCodeLink.add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(ApplicationDirector.getCurrentShop(), product))));
+        add(skuCodeLink.add(new Label(SKU_CODE_LABEL, getDisplaySkuCode(getCurrentShop(), product))));
 
         add(new Label(DESCRIPTION_LABEL, product.getDescription(selectedLocale)).setEscapeModelStrings(false));
 
@@ -151,8 +150,8 @@ public class ProductInListView extends BaseComponent {
                 )
         );
 
-
-        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(product, ShopCodeContext.getShopId());
+        final long browsingShopId = getCurrentCustomerShopId();
+        final ProductAvailabilityModel skuPam = productServiceFacade.getProductAvailability(product, browsingShopId);
 
         final boolean ableToAddDefault = skuPam.isAvailable() && skuPam.getDefaultSkuCode().equals(skuPam.getFirstAvailableSkuCode());
 
@@ -175,7 +174,7 @@ public class ProductInListView extends BaseComponent {
 
     private PriceView getPriceView(final ProductAvailabilityModel skuPam) {
 
-        final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart cart = getCurrentCart();
 
         final ProductPriceModel model = productServiceFacade.getSkuPrice(cart, null, skuPam.getDefaultSkuCode(), BigDecimal.ONE);
 

@@ -174,13 +174,23 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         mutableOrderInfo.setPaymentGatewayLabel(customerOrder.getPgLabel());
 
         mutableShoppingContext.setCustomerEmail(customerOrder.getEmail());
-        mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, customerOrder.getShop()));
+        final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+        mutableShoppingContext.setCustomerName(formatNameFor(customerOrder, configShop));
 
         final List<String> customerShops = new ArrayList<String>();
         customerShops.add(customerOrder.getShop().getCode());
         mutableShoppingContext.setCustomerShops(customerShops); // Only use order's shop, since it may be guest checkout
-        mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
-        mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
+        if (customerOrder.getShop().getMaster() != null) {
+            mutableShoppingContext.setShopId(customerOrder.getShop().getMaster().getShopId());
+            mutableShoppingContext.setShopCode(customerOrder.getShop().getMaster().getCode());
+            mutableShoppingContext.setCustomerShopId(customerOrder.getShop().getShopId());
+            mutableShoppingContext.setCustomerShopCode(customerOrder.getShop().getCode());
+        } else {
+            mutableShoppingContext.setShopId(customerOrder.getShop().getShopId());
+            mutableShoppingContext.setShopCode(customerOrder.getShop().getCode());
+            mutableShoppingContext.setCustomerShopId(customerOrder.getShop().getShopId());
+            mutableShoppingContext.setCustomerShopCode(customerOrder.getShop().getCode());
+        }
         mutableShoppingContext.setResolvedIp(customerOrder.getOrderIp());
 
         shoppingCart.recalculate();

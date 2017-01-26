@@ -28,6 +28,7 @@ import org.yes.cart.payment.impl.TestPaymentGatewayImpl;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEventHandler;
+import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.order.OrderItemAllocationException;
 import org.yes.cart.service.order.impl.OrderEventImpl;
 
@@ -95,6 +96,20 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
 
         final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
 
+        return prepareTestOrderOnline(customerOrder);
+
+    }
+
+    protected CustomerOrder createTestSubOrderOnlineProcessing(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestSubOrder(orderType, pgLabel, onePhysicalDelivery);
+
+        return prepareTestOrderOnline(customerOrder);
+
+    }
+
+
+    private CustomerOrder prepareTestOrderOnline(final CustomerOrder customerOrder) throws OrderException {
         assertTrue(pendingHandler.handle(
                 new OrderEventImpl("", //evt.payment.processed
                         customerOrder,
@@ -107,7 +122,6 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
         assertEquals(CustomerOrder.ORDER_STATUS_WAITING_PAYMENT, customerOrder.getOrderStatus());
 
         return customerOrder;
-
     }
 
 
@@ -115,6 +129,20 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
 
         final CustomerOrder customerOrder = super.createTestOrder(orderType, pgLabel, onePhysicalDelivery);
 
+        // deliberately remove all stock
+        return prepareTestOrderFailerReserve(customerOrder);
+
+    }
+
+    protected CustomerOrder createTestSubOrderFailedReserve(final TestOrderType orderType, final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestSubOrder(orderType, pgLabel, onePhysicalDelivery);
+        return prepareTestOrderFailerReserve(customerOrder);
+
+
+    }
+
+    private CustomerOrder prepareTestOrderFailerReserve(final CustomerOrder customerOrder) throws OrderException {
         // deliberately remove all stock
         debitInventoryAndAssert(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00", "0.00");
 
@@ -131,9 +159,7 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
 
         // Need to get fresh order from DB after rollback, same as in handler filter
         return orderService.findByReference(customerOrder.getGuid());
-
     }
-
 
 
     @Test
@@ -842,5 +868,120 @@ public class RefundProcessedOrderEventHandlerImplTest extends AbstractEventHandl
     }
 
 
+
+    @Test
+    public void testHandleMixedMultiPaymentPartialOnlineCapturePerShipmentRefundFailedSub() throws Exception {
+
+        configureTestPG(false, true, TestPaymentGatewayImpl.PROCESSING_NO + "259.74");
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, false, true);
+
+        CustomerOrder customerOrder = createTestSubOrderOnlineProcessing(TestOrderType.MIXED, label, false);
+
+        deactivateTestPgParameter(TestPaymentGatewayImpl.PROCESSING_NO + "259.74");
+        activateTestPgParameterSetOn(TestPaymentGatewayImpl.AUTH_CAPTURE_FAIL);
+        activateTestPgParameterSetOn(TestPaymentGatewayImpl.REFUND_FAIL_NO + "84.77");
+
+        // payment failed
+        assertTrue(paymentProcessedHandler.handle(
+                new OrderEventImpl("", //evt.payment.processed
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        deactivateTestPgParameter(TestPaymentGatewayImpl.AUTH_CAPTURE_FAIL);
+        deactivateTestPgParameter(TestPaymentGatewayImpl.REFUND_FAIL_NO + "84.77");
+
+        // attempt refund again
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.refund.processed
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+
+        // check reserved quantity
+        // standard
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "9.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+        // preorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST6", "500.00", "0.00");
+        // backorder
+        assertInventory(WAREHOUSE_ID, "CC_TEST5-NOINV", "0.00", "0.00");
+
+        assertEquals(customerOrder.getDelivery().size(), 3);
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_RESERVATION);
+
+        // Authorisation per delivery
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74",                     "259.74",                           "84.77",
+                              "689.74",                     "259.74",                           "84.77",
+                              "84.77"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.AUTH_CAPTURE,        PaymentGateway.AUTH_CAPTURE,
+                              PaymentGateway.REFUND,        PaymentGateway.AUTH_CAPTURE,        PaymentGateway.REFUND,
+                              PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_PROCESSING,  Payment.PAYMENT_STATUS_OK,
+                              Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_FAILED,      Payment.PAYMENT_STATUS_FAILED,
+                              Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE,                      Boolean.TRUE,
+                              Boolean.FALSE,                Boolean.FALSE,                      Boolean.FALSE,
+                              Boolean.FALSE));
+        assertEquals("1034.25", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+    }
+
+
+
+
+    @Test
+    public void testHandleStandardReserveFailedPaymentOkRefundNotSupportedExternalSub() throws Exception {
+
+        configureTestExtPG("4");
+
+        String label = assertPgFeatures("testExtFormPaymentGateway", true, true, false, false);
+
+        CustomerOrder customerOrder = createTestSubOrderFailedReserve(TestOrderType.STANDARD, label, false);
+
+        assertTrue(cancelNewOrderHandler.handle(
+                new OrderEventImpl("", //evt.new.order.cancel.refund
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1");
+                        }})));
+
+
+        // attempt refund manual
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.refund.processed
+                        customerOrder,
+                        null,
+                        new HashMap() {{
+                            put("forceManualProcessing", Boolean.TRUE);
+                            put("forceManualProcessingMessage", "Manual message");
+                        }})));
+
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST1", "0.00", "0.00");
+        assertInventory(WAREHOUSE_ID, "CC_TEST2", "1.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_INVENTORY_VOID_WAIT);
+
+        // payment OK, but refund is not supported
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("689.74",                     "689.74",                                           "689.74"),
+                Arrays.asList(PaymentGateway.AUTH_CAPTURE,  PaymentGateway.REFUND,                              PaymentGateway.REFUND),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_MANUAL_PROCESSING_REQUIRED,  Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.TRUE,                 Boolean.FALSE,                                      Boolean.FALSE)
+        );
+        assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("0.00", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_CANCELLED, customerOrder.getOrderStatus());
+
+    }
 
 }

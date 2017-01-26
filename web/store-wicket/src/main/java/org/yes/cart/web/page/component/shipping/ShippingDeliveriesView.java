@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
 import org.yes.cart.constants.Constants;
@@ -38,7 +37,6 @@ import org.yes.cart.shoppingcart.CartItem;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
@@ -104,8 +102,7 @@ public class ShippingDeliveriesView extends BaseComponent {
                                   final boolean enableProductLinks) {
         super(id);
 
-        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
-
+        final ShoppingCart shoppingCart = getCurrentCart();
         final String selectedLocale = getLocale().getLanguage();
 
         final Map<DeliveryBucket, List<CartItem>> bucketItemsMap = shoppingCart.getCartItemMap();
@@ -123,7 +120,8 @@ public class ShippingDeliveriesView extends BaseComponent {
 
         this.multipleDelivery = shoppingCart.getOrderInfo().isMultipleDelivery();
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, ShopCodeContext.getShopId());
+        final long configShopId = getCurrentShopId();
+        final Pair<String, String> imageSize = categoryServiceFacade.getThumbnailSizeConfig(0L, configShopId);
         final Map<String, String> supplierNames = shippingServiceFacade.getCartItemsSuppliers(shoppingCart);
 
         add(
@@ -229,7 +227,7 @@ public class ShippingDeliveriesView extends BaseComponent {
             public void onSelectionChanged() {
                 setModelObject(!getModelObject());
                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_MULTIPLEDELIVERY,
-                        ApplicationDirector.getShoppingCart(),
+                        getCurrentCart(),
                         (Map) Collections.singletonMap(ShoppingCartCommand.CMD_MULTIPLEDELIVERY, getModelObject().toString()));
                 super.onSelectionChanged();
                 ((AbstractWebPage) getPage()).persistCartIfNecessary();
@@ -240,7 +238,7 @@ public class ShippingDeliveriesView extends BaseComponent {
         add(new Form("paymentOptionsForm") {
                     @Override
                     public boolean isVisible() {
-                        return ApplicationDirector.getShoppingCart().getOrderInfo().isMultipleDeliveryAvailable();
+                        return getCurrentCart().getOrderInfo().isMultipleDeliveryAvailable();
                     }
                 }
                 .add(multiDelivery)
@@ -256,7 +254,7 @@ public class ShippingDeliveriesView extends BaseComponent {
     @Override
     protected void onBeforeRender() {
 
-        final ShoppingCart shoppingCart = ApplicationDirector.getShoppingCart();
+        final ShoppingCart shoppingCart = getCurrentCart();
         if (shoppingCart.getCartItemsSuppliers().size() > 1) {
             info(getLocalizer().getString("carrierSelectMultiSupplier", this));
         }

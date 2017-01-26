@@ -36,6 +36,10 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
     @DtoField(readOnly = true)
     private String shopCode;
     @DtoField(readOnly = true)
+    private long customerShopId;
+    @DtoField(readOnly = true)
+    private String customerShopCode;
+    @DtoField(readOnly = true)
     private String countryCode;
     @DtoField(readOnly = true)
     private String stateCode;
@@ -123,6 +127,22 @@ public class CartShoppingContextDTOImpl implements ShoppingContext, Serializable
 
     public void setShopCode(final String shopCode) {
         this.shopCode = shopCode;
+    }
+
+    public long getCustomerShopId() {
+        return customerShopId;
+    }
+
+    public void setCustomerShopId(final long customerShopId) {
+        this.customerShopId = customerShopId;
+    }
+
+    public String getCustomerShopCode() {
+        return customerShopCode;
+    }
+
+    public void setCustomerShopCode(final String customerShopCode) {
+        this.customerShopCode = customerShopCode;
     }
 
     public String getCountryCode() {

@@ -23,13 +23,10 @@ import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.entity.Seoable;
 import org.yes.cart.domain.queryobject.NavigationContext;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
-import org.yes.cart.web.support.constants.WicketServiceSpringKeys;
 import org.yes.cart.web.support.entity.decorator.impl.CategorySeoableDecoratorImpl;
 import org.yes.cart.web.support.seo.BookmarkService;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
-import org.yes.cart.web.util.WicketUtil;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -85,7 +82,7 @@ public abstract class AbstractCentralView extends BaseComponent {
      */
     public Category getCategory() {
         if (category == null) {
-            category = categoryServiceFacade.getCategory(categoryId, ShopCodeContext.getShopId());
+            category = categoryServiceFacade.getCategory(categoryId, getCurrentCustomerShopId());
         }
         return category;
     }

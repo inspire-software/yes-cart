@@ -75,6 +75,39 @@
         </div>
       </tab>
 
+
+      <tab  (select)="tabSelected('B2B')">
+
+        <template tabHeading>
+          {{ 'CUSTOMER_TAB_B2B' | translate }} <span class="label label-info">YCE</span>
+        </template>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="panel-body text-muted">
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMER_TYPE' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customer.customerType }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMER_POLICY' | translate }}</strong></div>
+                <div class="col-xs-9">{{ customer.pricingPolicy }}&nbsp;</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMER_B2B_BLOCK_CHECKOUT' | translate }}</strong></div>
+                <div class="col-xs-9"><i class="fa {{ customer.checkoutBocked || customer.checkoutBockedForOrdersOver > 0 ? 'fa-check text-muted' : 'fa-remove text-muted' }}"></i> {{ customer.checkoutBockedForOrdersOver > 0 ? '> ' + customer.checkoutBockedForOrdersOver : '' }}</div>
+              </div>
+              <div class="row">
+                <div class="col-xs-3"><strong>{{ 'CUSTOMER_B2B_APPROVE_ORDER' | translate }}</strong></div>
+                <div class="col-xs-9"><i class="fa {{ customer.ordersRequireApproval || customer.ordersRequireApprovalForOrdersOver > 0 ? 'fa-check text-muted' : 'fa-remove text-muted' }}"></i> {{ customer.ordersRequireApprovalForOrdersOver > 0 ? '> ' + customer.ordersRequireApprovalForOrdersOver : '' }}</div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
       <tab heading="{{ 'TAB_SHOPS' | translate }}"  (select)="tabSelected('Shops')">
 
         <template [ngIf]="customer != null">

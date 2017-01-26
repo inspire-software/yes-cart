@@ -31,6 +31,7 @@ import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.ro.*;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.misc.LanguageService;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
@@ -60,6 +61,9 @@ public class AuthenticationController {
 
     @Autowired
     private LanguageService languageService;
+
+    @Autowired
+    private ShopService shopService;
 
     @Autowired
     private CartMixin cartMixin;
@@ -662,7 +666,8 @@ public class AuthenticationController {
 
         // No existing users, non-typed customers or guests allowed
         if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())
-                || StringUtils.isBlank(registerRO.getCustomerType()) || "B2G".equals(registerRO.getCustomerType())) {
+                || StringUtils.isBlank(registerRO.getCustomerType()) || "B2G".equals(registerRO.getCustomerType())
+                || !customerServiceFacade.isShopCustomerTypeSupported(cartMixin.getCurrentShop(), registerRO.getCustomerType())) {
 
             return new AuthenticationResultRO("USER_FAILED");
 
@@ -670,6 +675,15 @@ public class AuthenticationController {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
+
+        Shop registrationShop = shop;
+        if (StringUtils.isNotBlank(registerRO.getOrganisation())) {
+            registrationShop = shopService.getSubShopByNameAndMaster(registerRO.getOrganisation(), shop.getShopId());
+            if (registrationShop == null) {
+                return new AuthenticationResultRO("ORGANISATION_FAILED");
+            }
+        }
+
 
         final Map<String, Object> data = new HashMap<String, Object>();
         data.put("customerType", registerRO.getCustomerType());
@@ -705,7 +719,7 @@ public class AuthenticationController {
             }
         }
 
-        final String password = customerServiceFacade.registerCustomer(shop, registerRO.getEmail(), data);
+        final String password = customerServiceFacade.registerCustomer(registrationShop, registerRO.getEmail(), data);
 
         final LoginRO loginRO = new LoginRO();
         loginRO.setUsername(registerRO.getEmail());

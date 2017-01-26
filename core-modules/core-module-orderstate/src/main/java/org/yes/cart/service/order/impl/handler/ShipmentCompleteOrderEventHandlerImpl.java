@@ -19,6 +19,7 @@ package org.yes.cart.service.order.impl.handler;
 import org.slf4j.Logger;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
@@ -57,7 +58,8 @@ public class ShipmentCompleteOrderEventHandlerImpl implements OrderEventHandler 
             final CustomerOrder order = orderEvent.getCustomerOrder();
             final CustomerOrderDelivery thisDelivery = orderEvent.getCustomerOrderDelivery();
 
-            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), order.getShop().getCode());
+            final Shop pgShop = order.getShop().getMaster() != null ? order.getShop().getMaster() : order.getShop();
+            final PaymentProcessor paymentProcessor = paymentProcessorFactory.create(order.getPgLabel(), pgShop.getCode());
             if (!paymentProcessor.isPaymentGatewayEnabled()) {
                 throw new PGDisabledException("PG " + order.getPgLabel() + " is disabled in " + order.getShop().getCode(), order.getPgLabel());
             }

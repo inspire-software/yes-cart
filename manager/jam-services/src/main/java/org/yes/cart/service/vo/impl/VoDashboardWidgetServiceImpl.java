@@ -46,16 +46,14 @@ public class VoDashboardWidgetServiceImpl implements VoDashboardWidgetService {
 
         final List<VoDashboardWidget> widgets = new ArrayList<>();
 
-        final VoManagerInfo manager = this.managementService.getMyself();
+        final VoManager manager = this.managementService.getMyself();
         if (manager != null) {
-
-            final VoManager managerAll = this.managementService.getByEmail(manager.getEmail());
 
             for (final VoDashboardWidgetPlugin plugin : this.plugins) {
 
-                if (plugin.applicable(managerAll)) {
+                if (plugin.applicable(manager)) {
 
-                    widgets.add(plugin.getWidget(managerAll));
+                    widgets.add(plugin.getWidget(manager));
 
                 }
 

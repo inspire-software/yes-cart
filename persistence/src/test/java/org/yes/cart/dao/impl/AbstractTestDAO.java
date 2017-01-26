@@ -21,6 +21,7 @@ import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -109,9 +110,12 @@ public abstract class AbstractTestDAO  {
     }
 
     protected IDataSet createDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder()
+        final FlatXmlDataSet dataSet = new FlatXmlDataSetBuilder()
                 //.setColumnSensing(true) // This enables auto discovery of columns but breaks the tests, possibly our data needs clean up
                 .build(getClass().getClassLoader().getResourceAsStream("initialdata.xml"));
+        final ReplacementDataSet rDataSet = new ReplacementDataSet(dataSet);
+        rDataSet.addReplacementObject("[NULL]", null);
+        return rDataSet;
     }
 
     protected void dumpDataBase(final String prefix, final String ... tables) throws Exception {

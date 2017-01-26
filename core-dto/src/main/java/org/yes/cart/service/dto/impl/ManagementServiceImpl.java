@@ -36,6 +36,7 @@ import org.yes.cart.domain.entity.*;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.ManagerService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.dto.ManagementService;
 
 import java.io.UnsupportedEncodingException;
@@ -57,6 +58,8 @@ public class ManagementServiceImpl implements ManagementService {
 
     private final ManagerService managerService;
 
+    private final ShopService shopService;
+
     private final GenericDAO<ManagerRole, Long> managerRoleDao;
 
     private final GenericDAO<Role, Long> roleDao;
@@ -76,19 +79,21 @@ public class ManagementServiceImpl implements ManagementService {
 
     /**
      * Construct user management service.
-     *
-     * @param managerService          manager service to use
+     * @param managerService      manager service to use
+     * @param shopService         shop service
      * @param managerRoleDao      manager roles dao
      * @param roleDao             role dao
      * @param dtoFactory          {@link DtoFactory}
      */
     public ManagementServiceImpl(final ManagerService managerService,
-                                    final GenericDAO<ManagerRole, Long> managerRoleDao,
-                                    final GenericDAO<Role, Long> roleDao,
-                                    final GenericDAO<Shop, Long> shopDao,
-                                    final DtoFactory dtoFactory,
-                                    final AdaptersRepository adaptersRepository) {
+                                 final ShopService shopService,
+                                 final GenericDAO<ManagerRole, Long> managerRoleDao,
+                                 final GenericDAO<Role, Long> roleDao,
+                                 final GenericDAO<Shop, Long> shopDao,
+                                 final DtoFactory dtoFactory,
+                                 final AdaptersRepository adaptersRepository) {
         this.managerService = managerService;
+        this.shopService = shopService;
         this.managerRoleDao = managerRoleDao;
         this.roleDao = roleDao;
         this.shopDao = shopDao;
@@ -321,14 +326,14 @@ public class ManagementServiceImpl implements ManagementService {
     /**
      * {@inheritDoc}
      */
-    public List<ShopDTO> getAssignedManagerShops(final String userId) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+    public List<ShopDTO> getAssignedManagerShops(final String userId, final boolean includeSubs) throws UnmappedInterfaceException, UnableToCreateInstanceException {
         final Manager manager = managerService.findSingleByCriteria(Restrictions.eq(EMAIL, userId));
         if (manager == null) {
             return Collections.emptyList();
         }
         final Collection<ManagerShop> assigned = manager.getShops();
         final List<ShopDTO> shopDTOs = new ArrayList<ShopDTO>(assigned.size());
-        fillManagerShopsDTOs(shopDTOs, assigned);
+        fillManagerShopsDTOs(shopDTOs, assigned, includeSubs);
         return shopDTOs;
     }
 
@@ -358,11 +363,22 @@ public class ManagementServiceImpl implements ManagementService {
     }
 
 
-    private void fillManagerShopsDTOs(final List<ShopDTO> result, final Collection<ManagerShop> shops)
+    private void fillManagerShopsDTOs(final List<ShopDTO> result, final Collection<ManagerShop> shops, final boolean includeSubs)
             throws UnmappedInterfaceException, UnableToCreateInstanceException {
-        for (ManagerShop shop : shops) {
+        for (ManagerShop managerShop : shops) {
             final ShopDTO shopDTO = dtoFactory.getByIface(ShopDTO.class);
-            shopAssembler.assembleDto(shopDTO, shop.getShop(), adaptersRepository.getAll(), dtoFactory);
+            final Shop shop = this.shopService.findById(managerShop.getShop().getShopId());
+            shopAssembler.assembleDto(shopDTO, shop, adaptersRepository.getAll(), dtoFactory);
+            if (includeSubs && shop.isB2BProfileActive()) {
+                final List<Shop> subs = this.shopService.getSubShopsByMaster(shop.getShopId());
+                if (subs != null) {
+                    for (final Shop subShop : subs) {
+                        final ShopDTO shopDTOsub = dtoFactory.getByIface(ShopDTO.class);
+                        shopAssembler.assembleDto(shopDTOsub, subShop, adaptersRepository.getAll(), dtoFactory);
+                        result.add(shopDTOsub);
+                    }
+                }
+            }
             result.add(shopDTO);
         }
     }

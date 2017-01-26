@@ -2,7 +2,7 @@ import { Component, OnDestroy, Inject } from '@angular/core';
 import { Config } from './shared/index';
 import './operators';
 
-import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, ValidationService } from './shared/services/index';
+import { ShopEventBus, ErrorEventBus, I18nEventBus, WindowMessageEventBus, UserEventBus, ValidationService, ManagementService } from './shared/services/index';
 import { YcValidators } from './shared/validation/validators';
 import { CookieUtil } from './shared/cookies/index';
 import { LogUtil } from './shared/log/index';
@@ -28,7 +28,9 @@ export class AppComponent implements OnDestroy {
               @Inject(ErrorEventBus)         _errorEventBus:ErrorEventBus,
               @Inject(I18nEventBus)          _i18nEventBus:I18nEventBus,
               @Inject(WindowMessageEventBus) _windowMessageEventBus:WindowMessageEventBus,
+              @Inject(UserEventBus)          _userEventBus:UserEventBus,
               @Inject(ValidationService)     _validationService:ValidationService,
+              @Inject(ManagementService)     _managementService:ManagementService,
               translate: TranslateService) {
     LogUtil.debug('Environment config', Config);
 
@@ -36,6 +38,7 @@ export class AppComponent implements OnDestroy {
     ShopEventBus.init(_shopEventBus);
     I18nEventBus.init(_i18nEventBus);
     WindowMessageEventBus.init(_windowMessageEventBus);
+    UserEventBus.init(_userEventBus);
     YcValidators.init(_validationService);
 
     var userLang = navigator.language.split('-')[0]; // use navigator lang if available
@@ -51,6 +54,12 @@ export class AppComponent implements OnDestroy {
     I18nEventBus.getI18nEventBus().emit(lang);
 
     this.loadUiPrefrences();
+
+    var _sub:any = _managementService.getMyself().subscribe( myself => {
+      LogUtil.debug('Loading user', myself);
+      UserEventBus.getUserEventBus().emit(myself);
+      _sub.unsubscribe();
+    });
 
   }
 

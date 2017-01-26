@@ -37,7 +37,10 @@ import org.yes.cart.service.vo.VoManagementService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -71,23 +74,19 @@ public class VoManagementServiceImpl implements VoManagementService {
 
     /** {@inheritDoc} */
     @Override
-    public VoManagerInfo getMyself() throws Exception {
-        final ManagerDTO me = getMyselfInternal();
-        if (me != null) {
-            return voAssemblySupport.assembleVo(VoManagerInfo.class, ManagerDTO.class, new VoManagerInfo(), me);
-        }
-        return null;
+    public VoManager getMyself() throws Exception {
+        return getMyselfInternal();
     }
 
-    private ManagerDTO getMyselfInternal() {
+    private VoManager getMyselfInternal() {
 
         if (SecurityContextHolder.getContext() == null || SecurityContextHolder.getContext().getAuthentication() == null) {
             return null;
         }
         final String currentManager = SecurityContextHolder.getContext().getAuthentication().getName();
+
         try {
-            final List<ManagerDTO> managers = this.managementService.getManagers(currentManager, null, null);
-            return managers.isEmpty() ? null : managers.get(0);
+            return getByEmailInternal(currentManager);
         } catch (Exception exp) {
             ShopCodeContext.getLog(this).error(exp.getMessage(), exp);
             return null;
@@ -129,33 +128,42 @@ public class VoManagementServiceImpl implements VoManagementService {
     @Override
     public VoManager getByEmail(String email) throws Exception {
         if (federationFacade.isManageable(email, ManagerDTO.class)) {
-            final List<ManagerDTO> all = managementService.getManagers(email, null, null);
-            if (CollectionUtils.isNotEmpty(all)) {
-                final ManagerDTO managerDTO = all.get(0);
-                final VoManager voManager = voAssemblySupport.assembleVo(
-                        VoManager.class, ManagerDTO.class, new VoManager(), managerDTO);
-                final List<VoManagerShop> voManagerShops = new ArrayList<>();
-                for (final ShopDTO shop : managementService.getAssignedManagerShops(voManager.getEmail())) {
-                    final VoManagerShop link = new VoManagerShop();
-                    link.setManagerId(voManager.getManagerId());
-                    link.setShopId(shop.getShopId());
-                    voManagerShops.add(link);
-                }
-                voManager.setManagerShops(voManagerShops);
-
-                final List<VoManagerRole> voManagerRoles = new ArrayList<>();
-                for (final RoleDTO role : managementService.getAssignedManagerRoles(voManager.getEmail())) {
-                    final VoManagerRole link = new VoManagerRole();
-                    link.setManagerId(voManager.getManagerId());
-                    link.setRoleId(role.getRoleId());
-                    link.setCode(role.getCode());
-                    voManagerRoles.add(link);
-                }
-                voManager.setManagerRoles(voManagerRoles);
+            final VoManager voManager = getByEmailInternal(email);
+            if (voManager != null) {
                 return voManager;
             }
         }
         throw new AccessDeniedException("Access is denied");
+    }
+
+    protected VoManager getByEmailInternal(final String email) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+        final List<ManagerDTO> all = managementService.getManagers(email, null, null);
+        if (CollectionUtils.isNotEmpty(all)) {
+            final ManagerDTO managerDTO = all.get(0);
+            final VoManager voManager = voAssemblySupport.assembleVo(
+                    VoManager.class, ManagerDTO.class, new VoManager(), managerDTO);
+            final List<VoManagerShop> voManagerShops = new ArrayList<>();
+            for (final ShopDTO shop : managementService.getAssignedManagerShops(voManager.getEmail(), false)) {
+                final VoManagerShop link = new VoManagerShop();
+                link.setManagerId(voManager.getManagerId());
+                link.setShopId(shop.getShopId());
+                voManagerShops.add(link);
+            }
+            voManager.setManagerShops(voManagerShops);
+
+            final List<VoManagerRole> voManagerRoles = new ArrayList<>();
+            for (final RoleDTO role : managementService.getAssignedManagerRoles(voManager.getEmail())) {
+                final VoManagerRole link = new VoManagerRole();
+                link.setManagerId(voManager.getManagerId());
+                link.setRoleId(role.getRoleId());
+                link.setCode(role.getCode());
+                voManagerRoles.add(link);
+            }
+            voManager.setManagerRoles(voManagerRoles);
+            return voManager;
+        } else {
+            return null;
+        }
     }
 
     /** {@inheritDoc} */
@@ -217,7 +225,7 @@ public class VoManagementServiceImpl implements VoManagementService {
             managementService.updateUser(voManager.getEmail(), voManager.getFirstName(),
                     voManager.getLastName());
 
-            for (final ShopDTO link : managementService.getAssignedManagerShops(voManager.getEmail())) {
+            for (final ShopDTO link : managementService.getAssignedManagerShops(voManager.getEmail(), false)) {
                 if (federationFacade.isShopAccessibleByCurrentManager(link.getShopId())) {
                     managementService.revokeShop(voManager.getEmail(), link.getCode());
                 } // else skip updates for inaccessible shops

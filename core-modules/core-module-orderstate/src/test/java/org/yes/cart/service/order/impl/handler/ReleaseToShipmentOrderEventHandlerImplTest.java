@@ -139,6 +139,26 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
     }
 
 
+    protected CustomerOrder createTestSubOrderOnlineElectronic(final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
+
+        final CustomerOrder customerOrder = super.createTestSubOrder(TestOrderType.ELECTRONIC, pgLabel, onePhysicalDelivery);
+
+        assertTrue(pendingHandler.handle(
+                new OrderEventImpl("", //evt.pending
+                        customerOrder,
+                        null,
+                        Collections.EMPTY_MAP)));
+
+        // Make sure we are in progress state at this point
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+
+        orderService.update(customerOrder);
+
+        return customerOrder;
+
+    }
+
+
 
     protected CustomerOrder createTestOrderOfflineStandard(final String pgLabel, final boolean onePhysicalDelivery) throws Exception {
 
@@ -219,10 +239,10 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
 
         // Authorisation
         assertMultiPaymentEntry(customerOrder.getOrdernum(),
-                Arrays.asList("689.74",                 "689.74"),
-                Arrays.asList(PaymentGateway.AUTH,      PaymentGateway.CAPTURE),
-                Arrays.asList(Payment.PAYMENT_STATUS_OK,Payment.PAYMENT_STATUS_OK),
-                Arrays.asList(Boolean.FALSE,            Boolean.TRUE));
+                Arrays.asList("689.74", "689.74"),
+                Arrays.asList(PaymentGateway.AUTH, PaymentGateway.CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK, Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE, Boolean.TRUE));
         assertEquals("689.74", customerOrder.getOrderTotal().toPlainString());
         assertEquals("689.74", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
 
@@ -671,6 +691,58 @@ public class ReleaseToShipmentOrderEventHandlerImplTest extends AbstractEventHan
         assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
     }
 
+
+
+
+
+    @Test
+    public void testHandleElectronicPaymentOkOnlineAuthSub() throws Exception {
+
+        // Fail the first capture
+        activateTestPgParameterSetOn(TestPaymentGatewayImpl.CAPTURE_FAIL);
+
+        String label = assertPgFeatures("testPaymentGateway", false, true, true, true);
+
+        CustomerOrder customerOrder = createTestSubOrderOnlineElectronic(label, false);
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT);
+
+        CustomerOrderDelivery delivery = null;
+        for (final CustomerOrderDelivery orderDelivery : customerOrder.getDelivery()) {
+            if (CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_READY_WAITING_PAYMENT.equals(orderDelivery.getDeliveryStatus())) {
+                assertNull(delivery); // make sure there is only one!
+                delivery = orderDelivery;
+            }
+        }
+
+        // Make payment pass
+        deactivateTestPgParameter(TestPaymentGatewayImpl.CAPTURE_FAIL);
+
+        assertTrue(handler.handle(
+                new OrderEventImpl("", //evt.release.to.shipment
+                        customerOrder,
+                        delivery,
+                        Collections.EMPTY_MAP)));
+
+        // check reserved quantity
+        assertInventory(WAREHOUSE_ID, "CC_TEST9", "0.00", "0.00");
+
+        assertDeliveryStates(customerOrder.getDelivery(), CustomerOrderDelivery.DELIVERY_STATUS_SHIPMENT_IN_PROGRESS);
+
+        // Authorisation
+        assertMultiPaymentEntry(customerOrder.getOrdernum(),
+                Arrays.asList("444.95",                     "444.95",                       "444.95"),
+                Arrays.asList(PaymentGateway.AUTH,          PaymentGateway.CAPTURE,         PaymentGateway.CAPTURE),
+                Arrays.asList(Payment.PAYMENT_STATUS_OK,    Payment.PAYMENT_STATUS_FAILED,  Payment.PAYMENT_STATUS_OK),
+                Arrays.asList(Boolean.FALSE,                Boolean.FALSE,                  Boolean.TRUE));
+        assertEquals("444.95", customerOrder.getOrderTotal().toPlainString());
+        assertEquals("444.95", paymentService.getOrderAmount(customerOrder.getOrdernum()).toPlainString());
+
+        assertEquals(CustomerOrder.ORDER_STATUS_IN_PROGRESS, customerOrder.getOrderStatus());
+    }
 
 
 }

@@ -85,6 +85,10 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                     long start = System.currentTimeMillis();
 
+                    listener.notifyMessage("Clearing cache before indexing ... full");
+
+                    clusterService.evictAllCache(context);
+
                     listener.notifyMessage("Indexing stared\n");
 
                     final Map<String, Boolean> indexingFinished = context.getAttribute(JobContextKeys.NODE_FULL_PRODUCT_INDEX_STATE);
@@ -178,7 +182,12 @@ public class ReindexServiceImpl extends SingletonJobRunner implements ReindexSer
 
                     long finish = System.currentTimeMillis();
 
-                    listener.notifyMessage("\nIndexing completed (" + ((finish - start) / 1000) + "s)");
+                    listener.notifyMessage("Indexing completed (" + ((finish - start) / 1000) + "s)");
+
+                    clusterService.evictAllCache(context);
+
+                    listener.notifyMessage("Cache is cleared after indexing ... full");
+
                     listener.notifyCompleted();
                 } catch (Throwable trw) {
                     ShopCodeContext.getLog(this).error(trw.getMessage(), trw);

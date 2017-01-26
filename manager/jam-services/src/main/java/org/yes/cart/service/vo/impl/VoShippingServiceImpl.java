@@ -106,7 +106,7 @@ public class VoShippingServiceImpl implements VoShippingService {
     @Override
     public void fillShopSummaryDetails(final VoShopSummary summary, final long shopId, final String lang) throws Exception {
 
-        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+        if (federationFacade.isShopAccessibleByCurrentManager(summary.getShopId())) {
             final Map<CarrierDTO, Boolean> all = dtoCarrierService.findAllByShopId(shopId);
 
             for (final Map.Entry<CarrierDTO, Boolean> dto : all.entrySet()) {
@@ -271,7 +271,7 @@ public class VoShippingServiceImpl implements VoShippingService {
                 }
             }
             results.addAll(voAssemblySupport.assembleVos(VoCarrierSla.class, CarrierSlaDTO.class, batch));
-            start += max;
+            start++;
         } while (results.size() < max && max != Integer.MAX_VALUE);
         return results.size() > max ? results.subList(0, max) : results;
     }

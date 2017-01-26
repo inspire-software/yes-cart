@@ -763,7 +763,7 @@ public class ShoppingCartImpl implements MutableShoppingCart {
             return ShoppingCart.SESSION_EXPIRED;
         } else if (StringUtils.isNotBlank(getCustomerEmail())
                    && StringUtils.isNotBlank(getCustomerName())) {
-            final String currentShop = getShoppingContext().getShopCode();
+            final String currentShop = getShoppingContext().getCustomerShopCode();
             if (getShoppingContext().getCustomerShops().contains(currentShop)) {
                 return ShoppingCart.LOGGED_IN;
             }

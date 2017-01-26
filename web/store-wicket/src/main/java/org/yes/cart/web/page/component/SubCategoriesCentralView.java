@@ -26,7 +26,6 @@ import org.yes.cart.domain.entity.Seo;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.domain.queryobject.NavigationContext;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
-import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.component.data.SortableCategoryDataProvider;
 import org.yes.cart.web.support.constants.WebParametersKeys;
 import org.yes.cart.web.support.entity.decorator.CategoryDecorator;
@@ -89,15 +88,16 @@ public class SubCategoriesCentralView extends AbstractCentralView {
         add(new TopCategories("topCategories"));
 
         final long categoryId = getCategoryId();
-        final long shopId = ShopCodeContext.getShopId();
+        final long configShopId = getCurrentShopId();
+        final long browsingShopId = getCurrentCustomerShopId();
         final String lang = getLocale().getLanguage();
 
-        final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, shopId, lang));
+        final List<CategoryDecorator> categories = decorate(categoryServiceFacade.getCurrentCategoryMenu(categoryId, browsingShopId, lang));
 
         final SortableDataProvider<CategoryDecorator> dataProvider = new SortableCategoryDataProvider(categories);
 
-        final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, shopId);
-        final int subCatsQty = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, shopId);
+        final Pair<String, String> imageSize = categoryServiceFacade.getCategoryListImageSizeConfig(categoryId, configShopId);
+        final int subCatsQty = categoryServiceFacade.getCategoryListColumnOptionsConfig(categoryId, configShopId);
 
         add(
                 new GridView<CategoryDecorator>(CATEGORY_LIST, dataProvider) {

@@ -32,9 +32,11 @@ import java.util.Map;
  * Date: 09-May-2011
  * Time: 13:16
  */
-public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
+public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCartCommand {
 
     private int priority = 0;
+
+    private ShoppingCartCommandConfigurationProvider configurationProvider;
 
     /**
      * Construct command.
@@ -45,6 +47,16 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
         registry.registerCommand(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void configure(final ShoppingCartCommandConfigurationProvider provider) {
+        this.configurationProvider = provider;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public final void execute(final ShoppingCart shoppingCart, final Map<String, Object> parameters) {
         // OOTB we only have mutable cart
         execute((MutableShoppingCart) shoppingCart, parameters);
@@ -65,6 +77,7 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
      */
     protected void recalculate(final MutableShoppingCart shoppingCart) {
         shoppingCart.recalculate();
+        setCheckoutOptions(shoppingCart);
     }
 
     /**
@@ -76,129 +89,44 @@ public abstract class AbstractCartCommandImpl implements ShoppingCartCommand {
         shoppingCart.markDirty();
     }
 
-
-    /**
-     * Default customer type determination.
-     *
-     * anonymous customers (null) - B2G
-     * customers with undefined customer type - B2C
-     * else as specified by customer.customerType
-     *
-     * @param customer customer or null for anonymous
-     *
-     * @return type (not null)
-     */
-    protected String getCurrentCustomerType(final Customer customer) {
-        return customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
-    }
-
     /**
      * Set customer tax options.
      *
-     * @param shop             current shop
-     * @param customer         optional customer (can be null for anonymous)
+     * @param cart             current cart
      * @param showTaxOption    optional flag to show tax or not
      * @param showNetOption    optional flag to display net or gross prices
      * @param showAmountOption optional flag to show amount ot percent of tax
-     * @param ctx              shopping cart context where to set these options
      */
-    protected void setTaxOptions(final Shop shop,
-                                 final Customer customer,
+    protected void setTaxOptions(final MutableShoppingCart cart,
                                  final Boolean showTaxOption,
                                  final Boolean showNetOption,
-                                 final Boolean showAmountOption,
-                                 final MutableShoppingContext ctx) {
+                                 final Boolean showAmountOption) {
 
-        // Resolve type. Anonymous type is B2G, blank is B2C
-        final String customerType = getCurrentCustomerType(customer);
-        boolean showTax = shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO);
-        if (showTax) {
-            // If types limit is set then only enable showTax option for given types. Anonymous type is B2G, blank is B2C
-            final String types = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES);
-            showTax = StringUtils.isBlank(types) || Arrays.asList(StringUtils.split(types, ',')).contains(customerType);
-        }
-        boolean showTaxNet = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_NET);
-        boolean showTaxAmount = showTax && shop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_SHOW_AMOUNT);
-
-        ctx.setTaxInfoChangeViewEnabled(false);
-        final String typesThatCanChangeView = shop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES);
-        // Ensure change view is allowed for anonymous
-        if (StringUtils.isNotBlank(typesThatCanChangeView)) {
-            final String[] customerTypesThatCanChangeView = StringUtils.split(typesThatCanChangeView, ',');
-            if (Arrays.asList(customerTypesThatCanChangeView).contains(customerType)) {
-                ctx.setTaxInfoChangeViewEnabled(true);
-            }
-        }
-
-        if (ctx.isTaxInfoChangeViewEnabled()) {
-            showTax = showTaxOption != null ? showTaxOption : showTax;
-            showTaxNet = showNetOption == null ? showTax && showTaxNet : showTax && showNetOption;
-            showTaxAmount = showAmountOption == null ? showTax && showTaxAmount : showTax && showAmountOption;
-        }
-
-        ctx.setTaxInfoEnabled(showTax);
-        ctx.setTaxInfoUseNet(showTaxNet);
-        ctx.setTaxInfoShowAmount(showTaxAmount);
+        this.configurationProvider.provide("TAX").visit(cart, showTaxOption, showNetOption, showAmountOption);
 
     }
 
     /**
      * Set default customer information that contributes to order info object.
      *
-     * @param shop             current shop
-     * @param customer         optional customer (can be null for anonymous)
-     * @param info             order info object to populate
+     * @param cart             current cart
      */
-    protected void setCustomerOptions(final Shop shop, final Customer customer, final MutableOrderInfo info) {
+    protected void setCustomerOptions(final MutableShoppingCart cart) {
 
-        final String customerType = getCurrentCustomerType(customer);
+        this.configurationProvider.provide("CUSTOMERTYPE").visit(cart);
+        this.configurationProvider.provide("CUSTOMER").visit(cart);
+        this.configurationProvider.provide("CHECKOUT").visit(cart);
 
-        boolean blockCheckout = shop.isSfBlockCustomerCheckout(customerType);
-        boolean orderRequiresApproval = shop.isSfRequireCustomerOrderApproval(customerType);
+    }
 
-        info.putDetail("customerType", customerType);
-        info.putDetail("b2bRequireApprove", String.valueOf(orderRequiresApproval));
-        info.putDetail("blockCheckout", String.valueOf(blockCheckout));
+    /**
+     * Set default customer information that contributes to order info object.
+     *
+     * @param cart             current cart
+     */
+    protected void setCheckoutOptions(final MutableShoppingCart cart) {
 
-        if (customer != null) {
-
-            // default reference
-            final AttrValue b2bRef = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REF);
-            info.putDetail("b2bRef", b2bRef != null && StringUtils.isNotBlank(b2bRef.getVal()) ? b2bRef.getVal() : null);
-
-            // Employee ID preset
-            final AttrValue employeeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID);
-            info.putDetail("b2bEmployeeId", employeeId != null && StringUtils.isNotBlank(employeeId.getVal()) ? employeeId.getVal() : null);
-
-            // Charge ID preset
-            final AttrValue b2bChargeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_CHARGE_ID);
-            info.putDetail("b2bChargeId", b2bChargeId != null && StringUtils.isNotBlank(b2bChargeId.getVal()) ? b2bChargeId.getVal() : null);
-
-            // Customer level approve flag
-            if (!orderRequiresApproval) {
-                final AttrValue orderRequiresApprovalCustomer =
-                        customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE);
-                info.putDetail("b2bRequireApprove", Boolean.valueOf(orderRequiresApprovalCustomer != null ? orderRequiresApprovalCustomer.getVal() : Boolean.FALSE.toString()).toString());
-            }
-
-            // Customer level block checkout
-            if (!blockCheckout) {
-                final AttrValue blockCheckoutCustomer =
-                        customer.getAttributeByCode(AttributeNamesKeys.Customer.BLOCK_CHECKOUT);
-                info.putDetail("blockCheckout", Boolean.valueOf(blockCheckoutCustomer != null ? blockCheckoutCustomer.getVal() : Boolean.FALSE.toString()).toString());
-            }
-
-        } else {
-
-            info.putDetail("b2bRef", null);
-            info.putDetail("b2bEmployeeId", null);
-            info.putDetail("b2bChargeId", null);
-
-        }
-
-        // Ensure approved information is removed
-        info.putDetail("b2bApprovedBy", null);
-        info.putDetail("b2bApprovedDate", null);
+        this.configurationProvider.provide("CHECKOUT").visit(cart);
 
     }
 

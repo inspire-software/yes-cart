@@ -56,8 +56,6 @@
 
     <bean id="setTaxOptionsCmd" class="org.yes.cart.shoppingcart.impl.SetTaxOptionsCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="customerService"/>
-        <constructor-arg index="2" ref="shopService"/>
         <property name="priority" value="11"/>
     </bean>
 
@@ -184,7 +182,6 @@
 
     <bean id="expireCartCmd" class="org.yes.cart.shoppingcart.impl.ExpireCartCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="shopService"/>
         <property name="priority" value="90"/>
     </bean>
 
@@ -195,7 +192,6 @@
 
     <bean id="logoutCmd" class="org.yes.cart.shoppingcart.impl.LogoutCommandImpl">
         <constructor-arg index="0" ref="shoppingCartCommandFactory"/>
-        <constructor-arg index="1" ref="shopService"/>
         <property name="priority" value="101"/>
     </bean>
 

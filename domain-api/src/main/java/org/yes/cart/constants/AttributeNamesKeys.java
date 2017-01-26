@@ -595,9 +595,19 @@ public interface AttributeNamesKeys {
         String B2B_REQUIRE_APPROVE = "CUSTOMER_B2B_REQUIRE_APPROVE";
 
         /**
+         * Customer specific orders require approval flag
+         */
+        String B2B_REQUIRE_APPROVE_X = "CUSTOMER_B2B_REQUIRE_APPROVE_X";
+
+        /**
          * Block checkout for this customer
          */
         String BLOCK_CHECKOUT = "CUSTOMER_BLOCK_CHECKOUT";
+
+        /**
+         * Block checkout for this customer
+         */
+        String BLOCK_CHECKOUT_X = "CUSTOMER_BLOCK_CHECKOUT_X";
 
         /**
          * Customer phone.
