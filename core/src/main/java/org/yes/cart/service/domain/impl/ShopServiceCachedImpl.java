@@ -243,7 +243,12 @@ public class ShopServiceCachedImpl implements ShopService {
     @CacheEvict(value ={
             "shopService-shopCategoriesIds",
             "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
+            "shopService-shopAllCategoriesIds",
+            "shopService-allShops",
+            "shopService-allShopsMap",
+            "shopService-allShopsFulfilmentMap",
+            "shopService-allNonSubShops",
+            "shopService-subShopsByMaster"
     }, allEntries = true)
     public Shop create(final Shop instance) {
         return shopService.create(instance);
