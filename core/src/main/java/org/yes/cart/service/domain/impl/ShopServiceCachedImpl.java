@@ -248,7 +248,11 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allShopsMap",
             "shopService-allShopsFulfilmentMap",
             "shopService-allNonSubShops",
-            "shopService-subShopsByMaster"
+            "shopService-subShopsByMaster",
+            "shopFederationStrategy-admin",
+            "shopFederationStrategy-shop",
+            "shopFederationStrategy-shopId",
+            "shopFederationStrategy-shopCode"
     }, allEntries = true)
     public Shop create(final Shop instance) {
         return shopService.create(instance);
