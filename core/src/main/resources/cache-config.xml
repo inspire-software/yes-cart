@@ -671,6 +671,10 @@
             <constructor-arg index="1" value="all"/>
         </bean>
         <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-allShopsFulfilmentMap"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="shopService-allNonSubShops"/>
             <constructor-arg index="1" value="all"/>
         </bean>
@@ -798,21 +802,17 @@
 
     <!-- ###################### System  ################################################################################################################## -->
 
-    <util:set id="SystemAll">
+    <util:set id="SystemKey">
         <bean class="org.yes.cart.domain.misc.Pair">
             <constructor-arg index="0" value="systemService-attributeValue"/>
-            <constructor-arg index="1" value="all"/>
-        </bean>
-        <bean class="org.yes.cart.domain.misc.Pair">
-            <constructor-arg index="0" value="systemService-attributeValues"/>
-            <constructor-arg index="1" value="all"/>
+            <constructor-arg index="1" value="key"/>
         </bean>
     </util:set>
 
     <util:map id="SystemCUD">
-        <entry key="Create" value-ref="SystemAll"/>
-        <entry key="Update" value-ref="SystemAll"/>
-        <entry key="Delete" value-ref="SystemAll"/>
+        <entry key="Create" value-ref="SystemKey"/>
+        <entry key="Update" value-ref="SystemKey"/>
+        <entry key="Delete" value-ref="SystemKey"/>
     </util:map>
 
     <!-- ###################### Customer  ################################################################################################################## -->

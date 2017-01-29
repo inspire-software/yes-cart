@@ -22,8 +22,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -82,7 +80,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "customerService-customerByEmail", condition = "#shop != null", key = "#email + #shop.code")
     public Customer getCustomerByEmail(final String email, Shop shop) {
         Customer customer = getGenericDao().findSingleByNamedQuery("CUSTOMER.BY.EMAIL.SHOP", email, shop.getShopId(), Boolean.FALSE);
         if (customer != null) {
@@ -254,9 +251,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      * @param attributeCode  given attribute code
      * @param attributeValue given attribute value
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = true)
     public void addAttribute(final Customer customer, final String attributeCode, final String attributeValue) {
         if (StringUtils.isNotBlank(attributeValue)) {
             AttrValueCustomer attrVal = customer.getAttributeByCode(attributeCode);
@@ -307,12 +301,18 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
         return rez;
     }
 
+
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-        "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
+    public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
+        super.update(customer);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : "B2C";
@@ -330,9 +330,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public Customer updateActivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
@@ -360,9 +357,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
     public Customer updateDeactivate(final Customer customer, final Shop shop, final boolean soft) {
 
         if (shop != null) {
@@ -386,7 +380,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @Override
     public Customer create(final Customer instance) {
         throw new UnsupportedOperationException("Please use create(final Customer customer, final Shop shop)");
     }
@@ -394,9 +387,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, key = "#email + #shopCode")
     public Customer update(final String email, final String shopCode) {
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
@@ -418,19 +408,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = false, condition = "#shop != null", key = "#customer.email + #shop.code")
-    public void resetPassword(final Customer customer, final Shop shop, final String authToken) {
-        super.update(customer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = true)
     public Customer update(final Customer instance) {
         return super.update(instance);
     }
@@ -438,9 +415,6 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "customerService-customerByEmail"
-    }, allEntries = true)
     public void delete(final Customer instance) {
         for(CustomerShop cshop : instance.getShops()) {
             customerShopDao.delete(cshop);

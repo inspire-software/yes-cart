@@ -112,14 +112,19 @@
 
     <!-- ################################ Bulk email  ###################################################### -->
 
-    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
-        <constructor-arg index="0" ref="mailService"/>
-        <constructor-arg index="1" ref="mailComposer"/>
-        <constructor-arg index="2" ref="mailSenderFactory"/>
-        <constructor-arg index="3" ref="systemService"/>
-        <constructor-arg index="4" ref="runtimeAttributeService"/>
-        <property name="delayBetweenEmailsMs" value="1000"/>
-        <property name="cycleExceptionsThreshold" value="3"/>
+    <bean id="bulkMailProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.mail.BulkMailProcessorImpl">
+                <constructor-arg index="0" ref="mailService"/>
+                <constructor-arg index="1" ref="mailComposer"/>
+                <constructor-arg index="2" ref="mailSenderFactory"/>
+                <property name="delayBetweenEmailsMs" value="1000"/>
+                <property name="cycleExceptionsThreshold" value="3"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_SEND_MAIL_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
     <bean name="sendMailJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -140,15 +145,22 @@
 
     <!-- ################################ Auto Import  ###################################################### -->
 
-    <bean id="autoImportListener" class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
-        <constructor-arg index="0" ref="shopService"/>
-        <constructor-arg index="1" ref="bulkImportService"/>
-        <constructor-arg index="2" ref="reindexService"/>
-        <constructor-arg index="3" ref="clusterService"/>
-        <constructor-arg index="4" ref="webAppManagerAsyncContextFactory"/>
-        <constructor-arg index="5" ref="systemService"/>
-        <constructor-arg index="6" ref="runtimeAttributeService"/>
-        <constructor-arg index="7" ref="authenticationManager"/>
+    <bean id="autoImportListener" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.bulkimport.LocalFileShareImportListenerImpl">
+                <constructor-arg index="0" ref="shopService"/>
+                <constructor-arg index="1" ref="bulkImportService"/>
+                <constructor-arg index="2" ref="reindexService"/>
+                <constructor-arg index="3" ref="clusterService"/>
+                <constructor-arg index="4" ref="webAppManagerAsyncContextFactory"/>
+                <constructor-arg index="5" ref="systemService"/>
+                <constructor-arg index="6" ref="runtimeAttributeService"/>
+                <constructor-arg index="7" ref="authenticationManager"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_LOCAL_FILE_IMPORT_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
     <bean name="autoImportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -170,60 +182,67 @@
     <!-- ################################ Image scanner  ################################################### -->
 
 
-    <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.images.LocalFileShareImageVaultProcessorImpl">
-        <constructor-arg index="0" ref="systemService"/>
-        <constructor-arg index="1" ref="ioProviderFactory"/>
-        <constructor-arg index="2">
-            <array>
-                <ref bean="categoryImageNameStrategy"/>
-                <ref bean="brandImageNameStrategy"/>
-                <ref bean="productImageNameStrategy"/>
-                <ref bean="shopImageNameStrategy"/>
-            </array>
-        </constructor-arg>
-        <constructor-arg index="3">
-            <array>
-                <bean id="imageVaultProcessorCategoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="importFederationFacade"/>
-                    <constructor-arg index="1" ref="categoryService"/>
-                    <constructor-arg index="2" ref="attributeService"/>
-                    <property name="insertOnly" value="true"/>
-                </bean>
+    <bean id="imageVaultProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.images.LocalFileShareImageVaultProcessorImpl">
+                <constructor-arg index="0" ref="systemService"/>
+                <constructor-arg index="1" ref="ioProviderFactory"/>
+                <constructor-arg index="2">
+                    <array>
+                        <ref bean="categoryImageNameStrategy"/>
+                        <ref bean="brandImageNameStrategy"/>
+                        <ref bean="productImageNameStrategy"/>
+                        <ref bean="shopImageNameStrategy"/>
+                    </array>
+                </constructor-arg>
+                <constructor-arg index="3">
+                    <array>
+                        <bean id="imageVaultProcessorCategoryImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.CategoryImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="categoryService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
 
-                <bean id="imageVaultProcessorBrandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="importFederationFacade"/>
-                    <constructor-arg index="1" ref="brandService"/>
-                    <constructor-arg index="2" ref="attributeService"/>
-                    <property name="insertOnly" value="true"/>
-                </bean>
+                        <bean id="imageVaultProcessorBrandImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.BrandImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="brandService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
 
-                <bean id="imageVaultProcessorShopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="importFederationFacade"/>
-                    <constructor-arg index="1" ref="shopService"/>
-                    <constructor-arg index="2" ref="attributeService"/>
-                    <property name="insertOnly" value="true"/>
-                </bean>
+                        <bean id="imageVaultProcessorShopImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ShopImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="shopService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
 
-                <bean id="imageVaultProcessorProductImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="importFederationFacade"/>
-                    <constructor-arg index="1" ref="productService"/>
-                    <constructor-arg index="2" ref="attributeService"/>
-                    <property name="insertOnly" value="true"/>
-                </bean>
+                        <bean id="imageVaultProcessorProductImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="productService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
 
-                <bean id="imageVaultProcessorProductSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
-                    <constructor-arg index="0" ref="importFederationFacade"/>
-                    <constructor-arg index="1" ref="productSkuService"/>
-                    <constructor-arg index="2" ref="attributeService"/>
-                    <property name="insertOnly" value="true"/>
-                </bean>
-            </array>
-        </constructor-arg>
-        <constructor-arg index="4" ref="reindexService"/>
-        <constructor-arg index="5" ref="clusterService"/>
-        <constructor-arg index="6" ref="webAppManagerAsyncContextFactory"/>
-        <constructor-arg index="7" ref="runtimeAttributeService"/>
-        <constructor-arg index="8" ref="authenticationManager"/>
+                        <bean id="imageVaultProcessorProductSkuImageImportDomainObjectStrategy" class="org.yes.cart.bulkimport.image.impl.ProductSkuImageImportDomainObjectStrategyImpl">
+                            <constructor-arg index="0" ref="importFederationFacade"/>
+                            <constructor-arg index="1" ref="productSkuService"/>
+                            <constructor-arg index="2" ref="attributeService"/>
+                            <property name="insertOnly" value="true"/>
+                        </bean>
+                    </array>
+                </constructor-arg>
+                <constructor-arg index="4" ref="reindexService"/>
+                <constructor-arg index="5" ref="clusterService"/>
+                <constructor-arg index="6" ref="webAppManagerAsyncContextFactory"/>
+                <constructor-arg index="7" ref="runtimeAttributeService"/>
+                <constructor-arg index="8" ref="authenticationManager"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
     <bean name="imageVaultProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">

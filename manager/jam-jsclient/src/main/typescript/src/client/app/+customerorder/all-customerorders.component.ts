@@ -106,7 +106,11 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   protected onRefreshHandler() {
     LogUtil.debug('AllCustomerOrdersComponent refresh handler');
-    this.getFilteredCustomerorders();
+    if (this.customerorderEdit != null) {
+      this.onRowEditCustomerorder(this.customerorderEdit);
+    } else {
+      this.getFilteredCustomerorders();
+    }
   }
 
   protected onCustomerorderSelected(data:CustomerOrderInfoVO) {
@@ -280,7 +284,7 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
     LogUtil.debug('AllCustomerOrdersComponent onRowEditCustomerorder handler', row);
 
     let lang = I18nEventBus.getI18nEventBus().current();
-    var _sub:any = this._customerorderService.getOrderById(lang, this.selectedCustomerorder.customerorderId).subscribe( customerorder => {
+    var _sub:any = this._customerorderService.getOrderById(lang, row.customerorderId).subscribe( customerorder => {
       LogUtil.debug('AllCustomerOrdersComponent getOrderById', customerorder);
 
       this.customerorderEdit = customerorder;

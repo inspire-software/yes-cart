@@ -19,8 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Tax;
 import org.yes.cart.domain.entity.TaxConfig;
@@ -48,7 +46,6 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
-    @Cacheable("taxConfigService-getTaxIdBy")
     public Long getTaxIdBy(final String shopCode, final String currency, final String countryCode, final String stateCode, final String productCode) {
 
         final List<Tax> shopTaxes = taxService.getTaxesByShopCode(shopCode, currency);
@@ -174,7 +171,6 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig create(final TaxConfig instance) {
         cleanRegionalTaxCodes(instance);
         regenerateGuid(instance);
@@ -182,7 +178,6 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public TaxConfig update(final TaxConfig instance) {
         cleanRegionalTaxCodes(instance);
         regenerateGuid(instance);
@@ -190,7 +185,6 @@ public class TaxConfigServiceImpl extends BaseGenericServiceImpl<TaxConfig> impl
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = "taxConfigService-getTaxIdBy", allEntries = true)
     public void delete(final TaxConfig instance) {
         super.delete(instance);
     }

@@ -17,7 +17,6 @@
 package org.yes.cart.service.image.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
@@ -52,7 +51,6 @@ public class CategoryImageNameStrategyImpl extends AbstractImageNameStrategyImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageNameStrategy-resolveObjectCode")
     public String resolveObjectCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {

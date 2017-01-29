@@ -29,7 +29,6 @@ import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Processor that allows to clean up abandoned shopping cart, so that we do not accumulate
@@ -62,8 +61,6 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
     public void run() {
 
         final Logger log = ShopCodeContext.getLog(this);
-
-        final long start = System.currentTimeMillis();
 
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
@@ -111,11 +108,7 @@ public class BulkAbandonedShoppingCartProcessorImpl implements Runnable {
             }
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Processing abandoned baskets ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Processing abandoned baskets ... completed");
 
     }
 

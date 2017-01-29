@@ -19,8 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
@@ -477,33 +475,12 @@ public class ImageServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageService-seoImage")
     public SeoImage getSeoImage(final String imageName) {
         java.util.List<SeoImage> seoImages = seoImageDao.findByCriteria(Restrictions.eq("imageName", imageName));
         if (seoImages == null || seoImages.isEmpty()) {
             return null;
         }
         return seoImages.get(0);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "imageService-seoImage"
-    }, allEntries = true)
-    public SeoImage update(SeoImage instance) {
-        return super.update(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "imageService-seoImage"
-    }, allEntries = true)
-    public void delete(SeoImage instance) {
-        super.delete(instance);
     }
 
     /**

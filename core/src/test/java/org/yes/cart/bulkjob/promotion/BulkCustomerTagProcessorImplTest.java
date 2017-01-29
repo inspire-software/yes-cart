@@ -22,6 +22,7 @@ import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.PromotionService;
+import org.yes.cart.service.domain.SystemService;
 
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
     @Test
     public void testRun() throws Exception {
 
+        final SystemService systemService = ctx().getBean("systemService", SystemService.class);
         final CustomerService customerService = ctx().getBean("customerService", CustomerService.class);
         final PromotionService promotionService = ctx().getBean("promotionService", PromotionService.class);
         final Runnable bulkCustomerTagProcessor = ctx().getBean("bulkCustomerTagProcessor", Runnable.class);
@@ -107,7 +109,10 @@ public class BulkCustomerTagProcessorImplTest extends BaseCoreDBTestCase {
         promotionService.create(cust3FirstTimeTag);
 
         // run the job
+        systemService.createOrGetAttributeValue("JOB_CUSTOMER_TAG_PAUSE", "Boolean");
+        systemService.updateAttributeValue("JOB_CUSTOMER_TAG_PAUSE", Boolean.FALSE.toString());
         bulkCustomerTagProcessor.run();
+        systemService.updateAttributeValue("JOB_CUSTOMER_TAG_PAUSE", Boolean.TRUE.toString());
 
         final List<Customer> customer1tagged = customerService.findCustomer(customer1.getEmail(), null, null, null, null, null, null);
 

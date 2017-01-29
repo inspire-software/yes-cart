@@ -74,8 +74,6 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
         log.info("Reindexing discontinued products on {}", nodeId);
 
-        final long start = System.currentTimeMillis();
-
         final List<Long> discontinued = self().findDiscontinuedProductsIds();
 
         if (discontinued != null && discontinued.size() > 0) {
@@ -100,13 +98,9 @@ public class ProductsPassedAvailabilityDateIndexProcessorImpl implements Product
 
         }
 
-        log.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued.size());
+        log.info("Reindexing discontinued products on {}, reindexed {}", nodeId, discontinued != null ? discontinued.size() : 0);
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Reindexing discontinued on {} ... completeed {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing discontinued on {} ... completed", nodeId);
 
     }
 

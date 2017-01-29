@@ -18,7 +18,6 @@ package org.yes.cart.service.image.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.service.image.ImageNameStrategy;
 import org.yes.cart.service.misc.LanguageService;
@@ -74,7 +73,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageNameStrategy-resolveObjectCode")
     public String resolveObjectCode(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -121,7 +119,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageNameStrategy-resolveLocale")
     public String resolveLocale(final String url) {
 
         if (StringUtils.isNotBlank(url)) {
@@ -148,7 +145,6 @@ public abstract class AbstractImageNameStrategyImpl implements ImageNameStrategy
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "imageNameStrategy-resolveSuffix")
     public String resolveSuffix(final String url) {
 
         if (StringUtils.isNotBlank(url)) {

@@ -279,7 +279,7 @@ public class ProductServiceImplTest extends BaseCoreDBTestCase {
                     names.add(item.getCode());
                 }
 
-                assertTrue("CC_TEST7 is from 104 with has parent 101", names.contains("CC_TEST7"));
+                assertTrue("CC_TEST7 is from 104 with parent 101", names.contains("CC_TEST7"));
 
             }
         });

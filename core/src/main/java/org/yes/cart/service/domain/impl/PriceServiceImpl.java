@@ -18,8 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -67,11 +65,9 @@ public class PriceServiceImpl
 
     }
 
-
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceService-minimalPrice")
     public SkuPrice getMinimalPrice(final Long productId,
                                     final String selectedSku,
                                     final long shopId,
@@ -153,7 +149,6 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceService-allCurrentPrices")
     public List<SkuPrice> getAllCurrentPrices(final Long productId,
                                               final String selectedSku,
                                               final long shopId,
@@ -327,7 +322,6 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "priceService-allPrices")
     public List<SkuPrice> getAllPrices(final Long productId, final String selectedSku, final String currencyCode) {
 
         if (productId != null) {
@@ -397,12 +391,6 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "imageService-seoImage" ,
-            "priceService-minimalPrice",
-            "priceService-allCurrentPrices",
-            "priceService-allPrices"
-    }, allEntries = true)
     public SkuPrice create(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
         return super.create(instance);
@@ -411,12 +399,6 @@ public class PriceServiceImpl
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "imageService-seoImage" ,
-            "priceService-minimalPrice",
-            "priceService-allCurrentPrices",
-            "priceService-allPrices"
-    }, allEntries = true)
     public SkuPrice update(final SkuPrice instance) {
         ensureNonZeroPrices(instance);
         return super.update(instance);
@@ -430,18 +412,5 @@ public class PriceServiceImpl
         if (entity.getMinimalPrice() != null && MoneyUtils.isFirstEqualToSecond(entity.getMinimalPrice(), BigDecimal.ZERO)) {
             entity.setMinimalPrice(null);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "imageService-seoImage" ,
-            "priceService-minimalPrice",
-            "priceService-allCurrentPrices",
-            "priceService-allPrices"
-    }, allEntries = true)
-    public void delete(final SkuPrice instance) {
-        super.delete(instance);
     }
 }

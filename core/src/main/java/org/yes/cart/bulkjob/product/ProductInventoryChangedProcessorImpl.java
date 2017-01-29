@@ -22,7 +22,6 @@ import org.yes.cart.bulkjob.cron.AbstractLastRunDependentProcessorImpl;
 import org.yes.cart.cache.CacheBundleHelper;
 import org.yes.cart.cluster.node.NodeService;
 import org.yes.cart.constants.AttributeNamesKeys;
-import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -46,7 +45,6 @@ import java.util.List;
 public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDependentProcessorImpl
         implements ProductInventoryChangedProcessorInternal {
 
-    private static final String PRODUCTINDEX = "PRODUCTINDEX";
     private static final String LAST_RUN_PREF = "JOB_PRODINVUP_LR_";
 
     private final SkuWarehouseService skuWarehouseService;
@@ -90,8 +88,6 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             log.info("Reindexing inventory updates on {}, reindexed ALL is already in progress", nodeId);
             return true;
         }
-
-        final long start = System.currentTimeMillis();
 
         int batchSize = getBatchSize();
 
@@ -156,11 +152,7 @@ public class ProductInventoryChangedProcessorImpl extends AbstractLastRunDepende
             flushCaches();
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Reindexing inventory updates on {} ... completed in {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing inventory updates on {} ... completed", nodeId);
 
         return true;
     }

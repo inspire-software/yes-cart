@@ -113,13 +113,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(101L, 104L, 313L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("This is fuzzy so we see all CC_TESTX", 1, products.size());
-                assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
+                assertEquals("This is fuzzy but we have exact match for 4, if this fails with 9 then is is relaxed query", 1, products.size());
+                assertEquals("CC_TEST4 is best (exact) match", "CC_TEST4", products.get(0).getCode());
                 // Search by SKU in sub category
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(300L), true,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST4")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertEquals("This is fuzzy so we see all CC_TESTX which are in 104 a sub of 101", 1, products.size());
+                assertEquals("This is fuzzy so we see all CC_TESTX which are in 104 (a sub of 101)", 1, products.size());
                 assertEquals("CC_TEST4 is best match", "CC_TEST4", products.get(0).getCode());
                 // Search by SKU in current category with sub categories flag on
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(10L, Arrays.asList(313L), true,

@@ -65,10 +65,8 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
         final String lastRunPreferenceAttributeName = getLastRunPreferenceAttributeName();
 
         if (!lastRunInitialised) {
-            if (!systemService.getAttributeValues().keySet().contains(lastRunPreferenceAttributeName)) {
-                runtimeAttributeService.create(lastRunPreferenceAttributeName, "SYSTEM", "Date");
-            } else {
-                final String pref = systemService.getAttributeValue(lastRunPreferenceAttributeName);
+            final String pref = systemService.createOrGetAttributeValue(lastRunPreferenceAttributeName, "Date");
+            if (pref != null) {
                 try {
                     lastRun = dateFormat.parse(pref);
                 } catch (ParseException e) {
@@ -81,10 +79,8 @@ public abstract class AbstractLastRunDependentProcessorImpl implements Runnable 
         if (doRun(lastRun)) {
 
             lastRun = now;
+            systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
 
-            synchronized (SystemService.class) {
-                systemService.updateAttributeValue(lastRunPreferenceAttributeName, dateFormat.format(now));
-            }
         }
 
     }

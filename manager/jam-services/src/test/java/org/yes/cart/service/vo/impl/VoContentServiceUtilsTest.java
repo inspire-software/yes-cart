@@ -16,9 +16,8 @@
 package org.yes.cart.service.vo.impl;
 
 import org.junit.Test;
-import org.yes.cart.service.domain.impl.ContentServiceImpl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: denispavlov

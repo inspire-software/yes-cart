@@ -20,8 +20,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.service.domain.PromotionService;
@@ -42,7 +40,6 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "promotionService-promotionsByShopCode")
     public List<Promotion> getPromotionsByShopCode(final String shopCode, final String currency, final boolean active) {
         if (active) {
             final Date now = new Date();
@@ -116,34 +113,4 @@ public class PromotionServiceImpl extends BaseGenericServiceImpl<Promotion> impl
         return null;
     }
 
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
-            "promotionService-factoryGetInstance",
-            "promotionService-groovyCache"
-    }, allEntries = true)
-    public Promotion create(final Promotion instance) {
-        return super.create(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
-            "promotionService-factoryGetInstance",
-            "promotionService-groovyCache"
-    }, allEntries = true)
-    public Promotion update(final Promotion instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "promotionService-promotionsByShopCode",
-            "promotionService-factoryGetInstance",
-            "promotionService-groovyCache"
-    }, allEntries = true)
-    public void delete(final Promotion instance) {
-        super.delete(instance);
-    }
 }

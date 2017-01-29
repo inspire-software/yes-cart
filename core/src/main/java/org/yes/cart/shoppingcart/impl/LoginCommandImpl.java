@@ -82,11 +82,17 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
             final MutableShoppingContext ctx = shoppingCart.getShoppingContext();
             final MutableOrderInfo info = shoppingCart.getOrderInfo();
             if (current != null && authenticate(email, current, passw)) {
+
                 final Customer customer = customerService.getCustomerByEmail(email, current);
                 final List<String> customerShops = new ArrayList<String>();
+                // set default shop
+                shoppingCart.getShoppingContext().setCustomerShopId(shoppingCart.getShoppingContext().getShopId());
+                shoppingCart.getShoppingContext().setCustomerShopCode(shoppingCart.getShoppingContext().getShopCode());
+                // set accessible shops
                 for (final Shop shop : customerService.getCustomerShops(customer)) {
                     customerShops.add(shop.getCode());
                     if (shop.getMaster() != null && shop.getMaster().getShopId() == shopId) {
+                        // set customer shop is registered in a sub of a master
                         shoppingCart.getShoppingContext().setCustomerShopId(shop.getShopId());
                         shoppingCart.getShoppingContext().setCustomerShopCode(shop.getCode());
                     }

@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
@@ -41,7 +40,6 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-allShopsMap")
     public Map<Long, Set<Long>> getAllShopsAndSubs() {
         final List<Shop> all = this.self().getAll();
         final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
@@ -65,19 +63,16 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
 
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-allNonSubShops")
     public List<Shop> getAllNonSub() {
         return this.shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-subShopsByMaster")
     public List<Shop> getAllMastered(final long masterId) {
         return this.shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
     }

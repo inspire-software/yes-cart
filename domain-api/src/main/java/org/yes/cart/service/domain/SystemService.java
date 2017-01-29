@@ -64,18 +64,22 @@ public interface SystemService {
     String getAttributeValueOrDefault(String key, String defaultValue);
 
     /**
-     * Get all system attributes.
+     * Get attribute value
      *
-     * @return system attributes
+     * @param key key
+     * @param eType attribute type
+     *
+     * @return value if found, otherwise is null
      */
-    Map<String, AttrValueSystem> findAttributeValues();
+
+    String createOrGetAttributeValue(String key, String eType);
 
     /**
      * Get all system attributes.
      *
      * @return system attributes
      */
-    Map<String, AttrValueSystem> getAttributeValues();
+    Map<String, AttrValueSystem> findAttributeValues();
 
     /**
      * Need to know default shop URL, in case if shop can not be resolved by domain name.

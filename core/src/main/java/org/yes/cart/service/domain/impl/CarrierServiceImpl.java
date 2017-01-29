@@ -17,8 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Carrier;
 import org.yes.cart.service.domain.CarrierService;
@@ -55,7 +53,6 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
     /**
      * {@inheritDoc}
      */
-    @Cacheable("carrierService-getCarriersByShopIdAndCurrency")
     public List<Carrier> getCarriersByShopId(final long shopId) {
         // This method must be READONLY transaction since we are modifying the list of SLA
         final List<Carrier> rez  = findCarriersByShopId(shopId, false);
@@ -65,27 +62,4 @@ public class CarrierServiceImpl extends BaseGenericServiceImpl<Carrier> implemen
         return new ArrayList<Carrier>(rez);
     }
 
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierService-getCarriersByShopIdAndCurrency"
-    }, allEntries = true)
-    public Carrier create(final Carrier instance) {
-        return super.create(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierService-getCarriersByShopIdAndCurrency"
-    }, allEntries = true)
-    public Carrier update(final Carrier instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierService-getCarriersByShopIdAndCurrency"
-    }, allEntries = true)
-    public void delete(final Carrier instance) {
-        super.delete(instance);
-    }
 }

@@ -77,13 +77,15 @@ public class AttributeValueBridge implements FieldBridge {
 
                             // primary search should only exist in primary search exact match
                             for (final String searchValue : searchValues) {
-                                document.add(new Field(
+                                final Field prime = new Field(
                                         ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPRIMARY_FIELD,
                                         searchValue,
                                         Field.Store.NO,
                                         Field.Index.NOT_ANALYZED,
                                         luceneOptions.getTermVector()
-                                ));
+                                );
+                                prime.setBoost(2f);
+                                document.add(prime);
                             }
 
                         } else {
@@ -93,22 +95,25 @@ public class AttributeValueBridge implements FieldBridge {
                             for (final String searchValue : searchValues) {
 
                                 // searchable and navigatable terms for global search tokenised
-                                document.add(new Field(
+                                final Field searchTokens = new Field(
                                         ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCH_FIELD,
                                         searchValue,
                                         Field.Store.NO,
                                         Field.Index.ANALYZED,
                                         luceneOptions.getTermVector()
-                                ));
+                                );
+                                document.add(searchTokens);
 
                                 // searchable and navigatable terms for global search full phrase
-                                document.add(new Field(
+                                final Field searchPhrase = new Field(
                                         ProductSearchQueryBuilder.ATTRIBUTE_VALUE_SEARCHPHRASE_FIELD,
                                         searchValue,
                                         Field.Store.NO,
                                         Field.Index.NOT_ANALYZED,
                                         luceneOptions.getTermVector()
-                                ));
+                                );
+                                searchPhrase.setBoost(1.2f); // +20% for full phrases
+                                document.add(searchPhrase);
                             }
 
                         }

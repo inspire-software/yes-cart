@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.ShopWarehouse;
@@ -57,7 +55,6 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-shopWarehouses")
     public List<Warehouse> getByShopId(final long shopId, boolean includeDisabled) {
         if (includeDisabled) {
             return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
@@ -74,19 +71,13 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
-    public ShopWarehouse findShopWarehouseById(long shopWarehouseId) {
+    public ShopWarehouse findShopWarehouseById(final long shopWarehouseId) {
 
         return shopWarehouseDao.findById(shopWarehouseId);
 
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public void assignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
 
         final Warehouse warehouse = findById(warehouseId);
@@ -114,12 +105,6 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds",
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public void unassignWarehouse(final long warehouseId, final long shopId, final boolean soft) {
 
         final Warehouse warehouse = findById(warehouseId);

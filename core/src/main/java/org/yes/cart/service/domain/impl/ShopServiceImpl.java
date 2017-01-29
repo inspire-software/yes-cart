@@ -17,8 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.AttributeService;
@@ -72,7 +70,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopByCode")
     public Shop getShopByCode(final String shopCode) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.CODE", shopCode);
     }
@@ -80,14 +77,12 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-allNonSubShops")
     public List<Shop> getNonSubShops() {
         return shopDao.findByNamedQuery("SHOP.NONSUB.ONLY");
     }
 
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-allShopsMap")
     public Map<Long, Set<Long>> getAllShopsAndSubs() {
         final List<Shop> all = this.proxy().getAll();
         final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
@@ -113,7 +108,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-subShopsByMaster")
     public List<Shop> getSubShopsByMaster(final long masterId) {
         return shopDao.findByNamedQuery("SHOP.BY.MASTER.ID", masterId);
     }
@@ -136,7 +130,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopById")
     public Shop getById(final long shopId) {
         return shopDao.findById(shopId);
     }
@@ -144,7 +137,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return super.findAll();
     }
@@ -152,7 +144,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopByDomainName")
     public Shop getShopByDomainName(final String serverName) {
         return shopDao.findSingleByNamedQuery("SHOP.BY.URL", serverName);
     }
@@ -170,7 +161,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return transform(getShopCategories(shopId));
     }
@@ -190,7 +180,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopContentIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getShopContentIds(final long shopId) {
         return transform(getShopContent(shopId));
     }
@@ -198,7 +187,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopAllCategoriesIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getShopAllCategoriesIds(final long shopId) {
         final Set<Long> all = new HashSet<Long>();
         all.addAll(proxy().getShopCategoriesIds(shopId));
@@ -240,7 +228,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param shopId given shop
      * @return list of assigned top level categories
      */
-    @Cacheable(value = "categoryService-topLevelCategories"/*, key="shop.shopId"*/)
     public Set<Category> getTopLevelCategories(final Long shopId) {
 
         final List<ShopCategory> top = (List) shopDao.findQueryObjectByNamedQuery("ALL.TOPCATEGORIES.BY.SHOPID", shopId);
@@ -274,7 +261,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoryParentId")
     public Long getShopCategoryParentId(final long shopId, final long categoryId) {
 
         final Set<Long> shopCatIds = proxy().getShopCategoriesIds(shopId);
@@ -305,7 +291,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoryTemplate")
     public String getShopCategoryTemplate(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -325,7 +310,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategorySearchTemplate")
     public String getShopCategorySearchTemplate(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -347,7 +331,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoryProductTypeId")
     public Long getShopCategoryProductTypeId(final long shopId, final long categoryId) {
         final Category category = categoryService.getById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -371,19 +354,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
      * @param attributeKey attribute key
      * @param attributeValue attribute value.
      */
-    @CacheEvict(value ={
-            "shopService-shopByCode",
-            "shopService-shopById",
-            "shopService-shopByDomainName",
-            "shopService-allShops",
-            "shopService-allShopsMap",
-            "shopService-allNonSubShops",
-            "shopService-subShopsByMaster",
-            "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds",
-            "web.addressBookFacade-allCountries",
-            "mailSenderBuilder-buildJavaMailSender"
-    }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {
         final Shop shop = shopDao.findById(shopId);
         if (shop != null) {
@@ -403,11 +373,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "shopService-shopCategoriesIds",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
-    }, allEntries = true)
     public Shop create(final Shop instance) {
         final Shop shop = super.create(instance);
         final Category category = contentService.getRootContent(shop.getShopId());
@@ -415,51 +380,6 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
             contentService.createRootContent(shop.getShopId());
         }
         return shop;
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "shopService-shopByCode",
-            "shopService-shopById",
-            "shopService-shopByDomainName",
-            "shopService-allShops",
-            "shopService-allShopsMap",
-            "shopService-allNonSubShops",
-            "shopService-subShopsByMaster",
-            "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds",
-            "themeService-themeChainByShopId",
-            "themeService-markupChainByShopId",
-            "themeService-mailTemplateChainByShopId",
-            "themeService-reportsTemplateChainByShopId",
-            "mailSenderBuilder-buildJavaMailSender"
-    }, allEntries = true)
-    public Shop update(Shop instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value ={
-            "shopService-shopByCode",
-            "shopService-shopById",
-            "shopService-shopByDomainName",
-            "shopService-allShops",
-            "shopService-allShopsMap",
-            "shopService-allNonSubShops",
-            "shopService-subShopsByMaster",
-            "shopService-shopCategoriesIds",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds",
-            "shopService-shopWarehouses",
-            "shopService-shopWarehousesIds",
-            "themeService-themeChainByShopId",
-            "themeService-markupChainByShopId",
-            "themeService-mailTemplateChainByShopId",
-            "themeService-reportsTemplateChainByShopId",
-            "mailSenderBuilder-buildJavaMailSender"
-    }, allEntries = true)
-    public void delete(Shop instance) {
-        super.delete(instance);
     }
 
 

@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.Warehouse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -35,6 +36,13 @@ public interface ShopWarehouseRelationshipSupport {
      * @return list of all entities
      */
     List<Shop> getAll();
+
+    /**
+     * Get map of all shops by fulfilment centre id.
+     *
+     * @return key => ff, value => shops
+     */
+    Map<Long, Set<Long>> getShopsByFulfilmentMap();
 
     /**
      * Get all warehouses that belong to given shop.

@@ -16,9 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.CarrierSla;
 import org.yes.cart.service.domain.CarrierSlaService;
@@ -41,7 +38,6 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
     }
 
     /** {@inheritDoc} */
-    @Cacheable("carrierSlaService-getById")
     public CarrierSla getById(final long carrierSlaId) {
         return findById(carrierSlaId);
     }
@@ -51,27 +47,4 @@ public class CarrierSlaServiceImpl extends BaseGenericServiceImpl<CarrierSla> im
         return getGenericDao().findByNamedQuery("CARRIER.SLA.BY.CARRIER", carrierId);
     }
 
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierSlaService-getById"
-    }, allEntries = false, key = "#instance.carrierslaId")
-    public CarrierSla create(final CarrierSla instance) {
-        return super.create(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierSlaService-getById"
-    }, allEntries = false, key = "#instance.carrierslaId")
-    public CarrierSla update(final CarrierSla instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "carrierSlaService-getById"
-    }, allEntries = false, key = "#instance.carrierslaId")
-    public void delete(final CarrierSla instance) {
-        super.delete(instance);
-    }
 }

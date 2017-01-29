@@ -17,8 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Product;
@@ -59,7 +57,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "skuWarehouseService-productSkusOnWarehouse")
     public List<SkuWarehouse> getProductSkusOnWarehouse(final long productId, final long warehouseId) {
         final Product product = productService.getProductById(productId, true);
         final Set<String> skus = new HashSet<String>();
@@ -75,7 +72,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
     public Map<String, BigDecimal> getProductAvailableToSellQuantity(final long productId, final Collection<Warehouse> warehouses) {
 
         final Product product = productService.getProductById(productId, true);
@@ -116,7 +112,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "skuWarehouseService-productOnWarehouse")
     public Map<String, BigDecimal> getProductSkuAvailableToSellQuantity(final String productSku, final Collection<Warehouse> warehouses) {
 
         final Map<String, BigDecimal> qty = new HashMap<String, BigDecimal>();
@@ -176,10 +171,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty) {
 
         return reservation(warehouse, productSkuCode, reserveQty, false);
@@ -190,10 +181,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public BigDecimal reservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal reserveQty, final boolean allowBackorder) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -238,10 +225,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public BigDecimal voidReservation(final Warehouse warehouse, final String productSkuCode, final BigDecimal voidQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
@@ -265,10 +248,6 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public BigDecimal credit(final Warehouse warehouse, final String productSkuCode, final BigDecimal addQty) {
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
 
@@ -287,34 +266,9 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
 
     }
 
-    /** {@inheritDoc}*/
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
-    public SkuWarehouse create(SkuWarehouse instance) {
-        final SkuWarehouse rez = super.create(instance);
-        return rez;
-    }
-
-    /** {@inheritDoc}*/
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
-    public SkuWarehouse update(SkuWarehouse instance) {
-        final SkuWarehouse rez = super.update(instance);
-        getGenericDao().flush(); // Need to make changes immediately available
-        return rez;
-    }
-
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productOnWarehouse",
-            "skuWarehouseService-productSkusOnWarehouse"
-    }, allEntries = true)
     public BigDecimal debit(final Warehouse warehouse, final String productSkuCode, final BigDecimal debitQty) {
 
         final SkuWarehouse skuWarehouse = findByWarehouseSkuForUpdate(warehouse, productSkuCode);
@@ -333,6 +287,19 @@ public class SkuWarehouseServiceImpl extends BaseGenericServiceImpl<SkuWarehouse
             }
         }
 
+    }
+
+    /** {@inheritDoc}*/
+    public SkuWarehouse create(SkuWarehouse instance) {
+        final SkuWarehouse rez = super.create(instance);
+        return rez;
+    }
+
+    /** {@inheritDoc}*/
+    public SkuWarehouse update(SkuWarehouse instance) {
+        final SkuWarehouse rez = super.update(instance);
+        getGenericDao().flush(); // Need to make changes immediately available
+        return rez;
     }
 
     private SkuWarehouse findByWarehouseSkuForUpdate(final Warehouse warehouse, final String productSkuCode) {

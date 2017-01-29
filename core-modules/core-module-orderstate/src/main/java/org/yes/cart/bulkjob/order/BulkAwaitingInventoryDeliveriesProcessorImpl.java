@@ -78,8 +78,6 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
         final Logger log = ShopCodeContext.getLog(this);
 
-        final long start = System.currentTimeMillis();
-
         log.info("Check orders awaiting allocation start date");
 
         final int allocWaiting = processAwaitingOrders(log, null,
@@ -110,11 +108,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
         }
         log.info("Transitioned {} deliveries awaiting inventory", inventoryWaiting);
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Check orders awaiting preorder start date ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Check orders awaiting preorder start date ... completed");
 
         return true;
     }

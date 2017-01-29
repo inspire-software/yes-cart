@@ -17,7 +17,6 @@
 package org.yes.cart.domain.entity.bridge.support.impl;
 
 import org.hibernate.Hibernate;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Category;
 import org.yes.cart.domain.entity.Shop;
@@ -48,7 +47,6 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "shopService-allShops")
     public List<Shop> getAll() {
         return this.shopDao.findAll();
     }
@@ -110,7 +108,6 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = "categoryService-byId")
     public Category getCategoryById(final long pk) {
         final Category cat = categoryDao.findById(pk);
         Hibernate.initialize(cat);
@@ -120,7 +117,6 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryParentsIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getCategoryParentsIds(final long categoryId) {
         final Category category = proxy().getCategoryById(categoryId);
         final Set<Long> parents = new HashSet<Long>();
@@ -139,7 +135,6 @@ public class ShopCategoryRelationshipSupportImpl implements ShopCategoryRelation
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "shopService-shopCategoriesIds"/*, key ="shop.getShopId()"*/)
     public Set<Long> getShopCategoriesIds(final long shopId) {
         return transform(getShopCategories(shopId));
     }

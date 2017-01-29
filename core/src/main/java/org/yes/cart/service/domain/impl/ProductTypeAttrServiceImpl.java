@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProdTypeAttributeViewGroup;
 import org.yes.cart.domain.entity.ProductTypeAttr;
@@ -43,7 +41,6 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "productTypeAttrService-viewGroupsByProductTypeId")
     public List<ProdTypeAttributeViewGroup> getViewGroupsByProductTypeId(final long productTypeId) {
         final List<ProdTypeAttributeViewGroup> groups = (List) getGenericDao()
                 .findQueryObjectByNamedQuery("PRODUCT.TYPE.VIEWGROUP.BY.PROD.TYPE.ID", productTypeId);
@@ -58,7 +55,6 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "productTypeAttrService-byProductTypeId")
     public List<ProductTypeAttr> getByProductTypeId(final long productTypeId) {
         final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.ATTR.BY.PROD.TYPE.ID", productTypeId);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
@@ -72,7 +68,6 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "productTypeAttrService-navigatableByProductTypeId")
     public List<ProductTypeAttr> getNavigatableByProductTypeId(final long productTypeId) {
         final List<ProductTypeAttr> attrs = getGenericDao().findByNamedQuery("PRODUCT.TYPE.NAV.ATTR.BY.PROD.TYPE.ID", productTypeId, Boolean.TRUE, Boolean.TRUE);
         // Need to sort this here as ordering has adverse effect on query - do not use "order by rank"
@@ -85,33 +80,4 @@ public class ProductTypeAttrServiceImpl extends BaseGenericServiceImpl<ProductTy
         return attrs;
     }
 
-    /** {@inheritDoc}*/
-    @CacheEvict(value ={
-            "productTypeAttrService-byProductTypeId",
-            "productTypeAttrService-navigatableByProductTypeId",
-            "productTypeAttrService-viewGroupsByProductTypeId"
-    } , allEntries = true )
-    public ProductTypeAttr create(ProductTypeAttr instance) {
-        return super.create(instance);
-    }
-
-    /** {@inheritDoc}*/
-    @CacheEvict(value ={
-            "productTypeAttrService-byProductTypeId",
-            "productTypeAttrService-navigatableByProductTypeId",
-            "productTypeAttrService-viewGroupsByProductTypeId"
-    } , allEntries = true )
-    public ProductTypeAttr update(ProductTypeAttr instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc}*/
-    @CacheEvict(value ={
-            "productTypeAttrService-byProductTypeId",
-            "productTypeAttrService-navigatableByProductTypeId",
-            "productTypeAttrService-viewGroupsByProductTypeId"
-    } , allEntries = true )
-    public void delete(ProductTypeAttr instance) {
-        super.delete(instance);
-    }
 }

@@ -57,8 +57,6 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
 
         final Logger log = ShopCodeContext.getLog(this);
 
-        final long start = System.currentTimeMillis();
-
         final Date lastModification =
                 new Date(System.currentTimeMillis() - determineExpiryInMs());
 
@@ -96,11 +94,7 @@ public class BulkExpiredGuestsProcessorImpl implements Runnable {
             }
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Processing expired guest ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Processing expired guest ... completed");
 
     }
 

@@ -48,20 +48,33 @@ public class YcCronJob extends QuartzJobBean implements StatefulJob {
         final NodeService nodeService = (NodeService) context.getMergedJobDataMap().get("nodeService");
 
         final String nodeId = nodeService.getCurrentNode().getId();
+        final long start = getTimeNow();
 
         log.info("Starting job {} on {}", jobName, nodeId);
 
         try {
             job.run();
 
-            log.info("Finished job {} on {}, next run {}", new Object[]{jobName, nodeId, context.getNextFireTime()});
+            final long sec = getExecutionTimeInSeconds(start);
+            log.info("Finished job {} on {} in {}s, next run {}", new Object[]{ jobName, nodeId, sec, context.getNextFireTime() });
 
         } catch (Throwable thw) {
 
-            log.error("Finished job {} on {}, next run {}", new Object[] { jobName, nodeId, context.getNextFireTime() });
+            final long sec = getExecutionTimeInSeconds(start);
+            log.error("Terminated job {} on {} in {}s, next run {}", new Object[] { jobName, nodeId, sec, context.getNextFireTime() });
             log.error(thw.getMessage(), thw);
 
         }
 
+    }
+
+    private long getExecutionTimeInSeconds(final long start) {
+        final long finish = getTimeNow();
+        final long ms = (finish - start);
+        return (ms > 0 ? ms / 1000 : 0);
+    }
+
+    private long getTimeNow() {
+        return System.currentTimeMillis();
     }
 }

@@ -20,8 +20,6 @@ import org.slf4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.yes.cart.domain.entity.Mail;
 import org.yes.cart.service.domain.MailService;
-import org.yes.cart.service.domain.RuntimeAttributeService;
-import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.mail.JavaMailSenderFactory;
 import org.yes.cart.service.mail.MailComposer;
 import org.yes.cart.util.ShopCodeContext;
@@ -37,53 +35,26 @@ import java.util.Map;
  */
 public class BulkMailProcessorImpl implements Runnable {
 
-    private static final String PAUSE_PREF = "JOB_SEND_MAIL_PAUSE";
-
     private final MailService mailService;
     private final MailComposer mailComposer;
     private final JavaMailSenderFactory javaMailSenderFactory;
-    private final SystemService systemService;
-    private final RuntimeAttributeService runtimeAttributeService;
 
     private long delayBetweenEmailsMs;
     private int cycleExceptionsThreshold;
 
-    private boolean pauseInitialised = false;
-
     public BulkMailProcessorImpl(final MailService mailService,
                                  final MailComposer mailComposer,
-                                 final JavaMailSenderFactory javaMailSenderFactory,
-                                 final SystemService systemService,
-                                 final RuntimeAttributeService runtimeAttributeService) {
+                                 final JavaMailSenderFactory javaMailSenderFactory) {
         this.mailService = mailService;
         this.mailComposer = mailComposer;
         this.javaMailSenderFactory = javaMailSenderFactory;
-        this.systemService = systemService;
-        this.runtimeAttributeService = runtimeAttributeService;
     }
 
     /** {@inheritDoc} */
     @Override
     public void run() {
 
-        if (!pauseInitialised) {
-            if (!systemService.getAttributeValues().keySet().contains(PAUSE_PREF)) {
-                synchronized (SystemService.class) {
-                    runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
-                    systemService.updateAttributeValue(PAUSE_PREF, Boolean.FALSE.toString());
-                }
-            }
-            pauseInitialised = true;
-        }
-
-        final String paused = systemService.getAttributeValue(PAUSE_PREF);
-        if (Boolean.valueOf(paused)) {
-            return;
-        }
-
         final Logger log = ShopCodeContext.getLog(this);
-
-        final long start = System.currentTimeMillis();
 
         log.info("Bulk send mail");
 
@@ -144,11 +115,7 @@ public class BulkMailProcessorImpl implements Runnable {
 
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Bulk send mail ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Bulk send mail ... completed");
 
     }
 

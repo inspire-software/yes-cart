@@ -116,9 +116,10 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
         final OrderEvent orderEvent = (OrderEvent) args[0];
 
-        final Shop emailShop = orderEvent.getCustomerOrder().getShop().getMaster() != null ? orderEvent.getCustomerOrder().getShop().getMaster() : orderEvent.getCustomerOrder().getShop();
+        final boolean mastered = orderEvent.getCustomerOrder().getShop().getMaster() != null;
+        final Shop emailShop = mastered ? orderEvent.getCustomerOrder().getShop().getMaster() : orderEvent.getCustomerOrder().getShop();
         final String adminEmail = emailShop.getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL);
-        final String subAdminEmail = orderEvent.getCustomerOrder().getShop().getMaster() != null ? orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
+        final String subAdminEmail = mastered ? orderEvent.getCustomerOrder().getShop().getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL) : null;
 
         try {
             Object rez = pjp.proceed();
@@ -128,10 +129,12 @@ public class OrderStateChangeListenerAspect  extends BaseOrderStateAspect {
 
                 fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), orderEvent.getCustomerOrder().getEmail());
 
-                if (StringUtils.isBlank(subAdminEmail)) {
-                    LOG.error("Cant get sub-admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode() );
-                } else {
-                    fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), subAdminEmail);
+                if (mastered) {
+                    if (StringUtils.isBlank(subAdminEmail)) {
+                        LOG.error("Cant get sub-admin email address for shop " + orderEvent.getCustomerOrder().getShop().getCode());
+                    } else {
+                        fillNotificationParameters(orderEvent, shopperTemplates.get(templateKey), subAdminEmail);
+                    }
                 }
 
                 if (StringUtils.isBlank(adminEmail)) {

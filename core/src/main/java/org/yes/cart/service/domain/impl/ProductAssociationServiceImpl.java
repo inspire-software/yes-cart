@@ -17,7 +17,6 @@
 
 package org.yes.cart.service.domain.impl;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.ProductAssociation;
 import org.yes.cart.service.domain.ProductAssociationService;
@@ -77,7 +76,6 @@ public class ProductAssociationServiceImpl
      * @param associationCode association code [up, cross, etc]
      * @return list of product associations
      */
-    @Cacheable(value = "productService-productAssociationsIds")
     public List<Long> getProductAssociationsIds(final Long productId, final String associationCode) {
         return (List) productAssociationDao.findQueryObjectByNamedQuery("PRODUCT.ASSOCIATIONS.IDS.BY.TYPE", productId, associationCode);
     }

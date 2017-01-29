@@ -109,6 +109,16 @@ public class ProductCategoryBridge implements FieldBridge {
                 luceneOptions.getTermVector()
         ));
 
+        addCategoryName(document, luceneOptions, category);
+
+        addCategoryParentIds(document, luceneOptions, category, support);
+
+    }
+
+    private void addCategoryName(final Document document,
+                                 final LuceneOptions luceneOptions,
+                                 final Category category) {
+
         document.add(new Field(
                 ProductSearchQueryBuilder.PRODUCT_CATEGORYNAME_FIELD,
                 category.getName(),
@@ -132,8 +142,6 @@ public class ProductCategoryBridge implements FieldBridge {
                 luceneOptions
         );
 
-        addCategoryParentIds(document, luceneOptions, category, support);
-
     }
 
     private void addCategoryParentIds(final Document document,
@@ -151,7 +159,12 @@ public class ProductCategoryBridge implements FieldBridge {
 
         final Set<Long> parentIds = support.getCategoryParentsIds(category.getCategoryId());
         for (final Long parentId : parentIds) {
-            addCategoryParentIds(document, luceneOptions, support.getCategoryById(parentId), support);
+
+            final Category parent = support.getCategoryById(parentId);
+
+            addCategoryName(document, luceneOptions, parent);
+
+            addCategoryParentIds(document, luceneOptions, parent, support);
         }
 
     }

@@ -18,8 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
@@ -53,7 +51,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-rootCategory")
     public Category getRootCategory() {
         return categoryDao.findSingleByNamedQuery("ROOTCATEGORY");
     }
@@ -61,7 +58,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Override
     public List<Long> getCategoryLinks(final long categoryId) {
         return (List) categoryDao.findQueryObjectByNamedQuery("LINKED.CATEGORY.IDS.BY.ID", categoryId);
     }
@@ -69,7 +65,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryTemplate")
     public String getCategoryTemplate(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -85,7 +80,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categorySearchTemplate")
     public String getCategorySearchTemplate(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -104,7 +98,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryProductTypeId")
     public Long getCategoryProductTypeId(final long categoryId) {
         final Category category = proxy().findById(categoryId);
         if (category != null && !category.isRoot()) {
@@ -128,7 +121,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param defaultValue  default value will be returned if value not found in hierarchy
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryService-categoryAttributeRecursive")
     public String getCategoryAttributeRecursive(final String locale, final long categoryId, final String attributeName, final String defaultValue) {
 
         final Category category = proxy().getById(categoryId);
@@ -165,7 +157,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
      * @param attributeNames set of attributes, to collect values.
      * @return value of given attribute name or defaultValue if value not found in category hierarchy
      */
-    @Cacheable(value = "categoryService-categoryAttributesRecursive")
     public String[] getCategoryAttributeRecursive(final String locale, final long categoryId, final String[] attributeNames) {
 
         final Category category;
@@ -201,7 +192,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryHasChildren")
     public boolean isCategoryHasChildren(final long categoryId) {
         final Category category = proxy().getById(categoryId);
         if (category != null) {
@@ -220,7 +210,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-childCategories")
     public List<Category> getChildCategories(final long categoryId) {
 
         final Category current = proxy().getById(categoryId);
@@ -268,7 +257,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-childCategoriesRecursive")
     public Set<Category> getChildCategoriesRecursive(final long categoryId) {
         final Category thisCat = proxy().getById(categoryId);
         if (thisCat != null) {
@@ -283,7 +271,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-childCategoriesRecursiveIds")
     public List<Long> getChildCategoriesRecursiveIds(final long categoryId) {
         final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
@@ -295,7 +282,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-childCategoriesRecursiveIdsWithLinks")
     public List<Long> getChildCategoriesRecursiveIdsWithLinks(final long categoryId) {
         final Set<Category> cats = proxy().getChildCategoriesRecursive(categoryId);
         if (cats.isEmpty()) {
@@ -364,7 +350,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryIdsWithLinks")
     public List<Long> getCategoryIdsWithLinks(final long categoryId) {
         final Category category = proxy().getById(categoryId);
         if (category != null) {
@@ -381,7 +366,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "categoryService-categoryHasSubcategory")
     public boolean isCategoryHasSubcategory(final long topCategoryId, final long subCategoryId) {
         final Category start = proxy().getById(subCategoryId);
         if (start != null) {
@@ -413,7 +397,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = "categoryService-byId")
     public Category getById(final long pk) {
         final Category cat = getGenericDao().findById(pk);
         Hibernate.initialize(cat);
@@ -502,100 +485,6 @@ public class CategoryServiceImpl extends BaseGenericServiceImpl<Category> implem
                 "CATEGORIES.BY.PRODUCTID",
                 productId
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "categoryService-topLevelCategories",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "categoryService-rootCategory",
-            "categoryService-categoryHasChildren",
-            "categoryService-childCategories",
-            "categoryService-childCategoriesRecursive",
-            "categoryService-childCategoriesRecursiveIds",
-            "categoryService-childCategoriesRecursiveIdsWithLinks",
-            "categoryService-categoryIdsWithLinks",
-            "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-categoryParentsIds",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
-    }, allEntries = true)
-    public Category create(Category instance) {
-        return super.create(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "categoryService-topLevelCategories",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "categoryService-rootCategory",
-            "shopService-shopCategoryParentId",
-            "categoryService-categoryTemplate",
-            "shopService-shopCategoryTemplate",
-            "categoryService-categorySearchTemplate",
-            "shopService-shopCategorySearchTemplate",
-            "categoryService-categoryProductTypeId",
-            "shopService-shopCategoryProductTypeId",
-            "categoryService-searchCategoriesIds",
-            "categoryService-categoryNewArrivalLimit",
-            "categoryService-categoryNewArrivalDate",
-            "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributesRecursive",
-            "categoryService-categoryHasChildren",
-            "categoryService-childCategories",
-            "categoryService-childCategoriesRecursive",
-            "categoryService-childCategoriesRecursiveIds",
-            "categoryService-childCategoriesRecursiveIdsWithLinks",
-            "categoryService-categoryIdsWithLinks",
-            "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-categoryParentsIds",
-            "shopService-shopCategoriesIds",
-            "shopService-shopAllCategoriesIds"
-    }, allEntries = true)
-    public Category update(Category instance) {
-        return super.update(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "categoryService-topLevelCategories",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "categoryService-rootCategory",
-            "shopService-shopCategoryParentId",
-            "categoryService-categoryTemplate",
-            "shopService-shopCategoryTemplate",
-            "categoryService-categorySearchTemplate",
-            "shopService-shopCategorySearchTemplate",
-            "categoryService-categoryProductTypeId",
-            "shopService-shopCategoryProductTypeId",
-            "categoryService-searchCategoriesIds",
-            "categoryService-categoryNewArrivalLimit",
-            "categoryService-categoryNewArrivalDate",
-            "categoryService-categoryAttributeRecursive",
-            "categoryService-categoryAttributesRecursive",
-            "categoryService-categoryHasChildren",
-            "categoryService-childCategories",
-            "categoryService-childCategoriesRecursive",
-            "categoryService-childCategoriesRecursiveIds",
-            "categoryService-childCategoriesRecursiveIdsWithLinks",
-            "categoryService-categoryIdsWithLinks",
-            "categoryService-categoryHasSubcategory",
-            "categoryService-byId",
-            "categoryService-categoryParentsIds"
-    }, allEntries = true)
-    public void delete(Category instance) {
-        super.delete(instance);
     }
 
     private CategoryService proxy;

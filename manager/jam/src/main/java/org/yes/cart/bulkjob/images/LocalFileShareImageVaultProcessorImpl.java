@@ -50,7 +50,6 @@ import java.util.*;
  */
 public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
-    private static final String PAUSE_PREF = "JOB_LOCAL_IMAGEVAULT_SCAN_PAUSE";
     public static final long INDEX_GET_READY_TIMEOUT = 5000L;
     public static final long INDEX_PING_INTERVAL = 15000L;
     public static final long WARMUP_GET_READY_TIMEOUT = 15000L;
@@ -90,26 +89,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
 
     public void run() {
 
-
-        if (!pauseInitialised) {
-            if (!systemService.getAttributeValues().keySet().contains(PAUSE_PREF)) {
-                synchronized (SystemService.class) {
-                    runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
-                    systemService.updateAttributeValue(PAUSE_PREF, Boolean.TRUE.toString());
-                }
-            }
-            pauseInitialised = true;
-        }
-
-        final String paused = systemService.getAttributeValue(PAUSE_PREF);
-        if (Boolean.valueOf(paused)) {
-            return;
-        }
-
-
         final String imgVault = systemService.getImageRepositoryDirectory();
-
-        final long start = System.currentTimeMillis();
 
         final Logger log = ShopCodeContext.getLog(this);
 
@@ -187,13 +167,7 @@ public class LocalFileShareImageVaultProcessorImpl implements Runnable {
             SecurityContextHolder.clearContext();
         }
 
-
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Scanning imagevault ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
-
+        log.info("Scanning imagevault ... completed");
 
     }
 

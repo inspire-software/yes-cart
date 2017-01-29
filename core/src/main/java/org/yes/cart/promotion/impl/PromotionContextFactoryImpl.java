@@ -16,8 +16,6 @@
 
 package org.yes.cart.promotion.impl;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.domain.entity.Promotion;
 import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.promotion.*;
@@ -54,7 +52,6 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "promotionService-factoryGetInstance")
     public PromotionContext getInstance(final String shopCode, final String currency) {
 
         final PromotionContextImpl ctx = new PromotionContextImpl(shopCode, strategy);
@@ -80,9 +77,6 @@ public class PromotionContextFactoryImpl implements PromotionContextFactory {
     }
 
     /** {@inheritDoc} */
-    @CacheEvict(value = {
-            "promotionService-factoryGetInstance"
-    }, key = "#shopCode", condition = "#ensureNew == true")
     public PromotionContext getInstance(final String shopCode, final String currency, final boolean ensureNew) {
         return proxy().getInstance(shopCode, currency);
     }

@@ -19,8 +19,6 @@ package org.yes.cart.service.domain.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.search.Query;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.domain.dto.ProductSkuSearchResultDTO;
@@ -84,7 +82,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productSkuService-productSkuBySkuCode")
     public ProductSku getProductSkuBySkuCode(final String skuCode) {
         return findProductSkuBySkuCode(skuCode);
     }
@@ -92,7 +89,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "productSkuService-productSkuSearchResultDTOByQuery")
     public List<ProductSkuSearchResultDTO> getProductSkuSearchResultDTOByQuery(final Query query) {
 
         final Pair<List<Object[]>, Integer> searchRez = ((GenericFullTextSearchCapableDAO) getGenericDao()).fullTextSearch(
@@ -162,10 +158,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById"
-    }, allEntries = true)
     public void removeAllPrices(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
         for (ProductSku sku : skus) {
@@ -176,10 +168,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById"
-    }, allEntries = true)
     public void removeAllPrices(final ProductSku sku) {
          getGenericDao().executeUpdate("REMOVE.ALL.SKUPRICE.BY.SKUCODE", sku.getCode());
 
@@ -188,10 +176,6 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-            "skuWarehouseService-productSkusOnWarehouse",
-            "skuWarehouseService-productOnWarehouse"
-    }, allEntries = true)
     public void removeAllInventory(final long productId) {
         final List<ProductSku> skus = getGenericDao().findByCriteria(Restrictions.eq("product.productId" , productId));
         for (ProductSku sku : skus) {
@@ -202,51 +186,8 @@ public class ProductSkuServiceImpl extends BaseGenericServiceImpl<ProductSku> im
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = {
-        "skuWarehouseService-productSkusOnWarehouse",
-        "skuWarehouseService-productOnWarehouse"
-    }, allEntries = true)
     public void removeAllInventory(final ProductSku sku) {
             getGenericDao().executeUpdate("REMOVE.ALL.SKU.INVENTORY", sku.getCode());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "skuWarehouseService-productSkusOnWarehouse",
-            "skuWarehouseService-productOnWarehouse",
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById",
-            "productService-productById"
-    }, allEntries = true)
-    public ProductSku create(final ProductSku instance) {
-        return super.create(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById"
-    }, allEntries = true)
-    public ProductSku update(final ProductSku instance) {
-        return super.update(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "skuWarehouseService-productSkusOnWarehouse",
-            "skuWarehouseService-productOnWarehouse",
-            "productSkuService-productSkuBySkuCode",
-            "productService-skuById",
-            "productService-productById"
-    }, allEntries = true)
-    public void delete(final ProductSku instance) {
-        super.delete(instance);
     }
 
 }

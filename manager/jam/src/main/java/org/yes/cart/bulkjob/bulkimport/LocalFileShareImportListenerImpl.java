@@ -112,7 +112,6 @@ import java.util.regex.Pattern;
  */
 public class LocalFileShareImportListenerImpl implements Runnable {
 
-    private static final String PAUSE_PREF = "JOB_LOCAL_FILE_IMPORT_PAUSE";
     private static final String FS_PREF = "JOB_LOCAL_FILE_IMPORT_FS_ROOT";
     public static final long INDEX_GET_READY_TIMEOUT = 5000L;
     public static final long INDEX_PING_INTERVAL = 15000L;
@@ -127,8 +126,6 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     private final RuntimeAttributeService runtimeAttributeService;
 
     private final AuthenticationManager authenticationManager;
-
-    private boolean pauseInitialised = false;
 
     public LocalFileShareImportListenerImpl(final ShopService shopService,
                                             final ImportDirectorService importDirectorService,
@@ -151,24 +148,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
     @Override
     public void run() {
 
-        if (!pauseInitialised) {
-            if (!systemService.getAttributeValues().keySet().contains(PAUSE_PREF)) {
-                synchronized (SystemService.class) {
-                    runtimeAttributeService.create(PAUSE_PREF, "SYSTEM", "Boolean");
-                    systemService.updateAttributeValue(PAUSE_PREF, Boolean.TRUE.toString());
-                }
-            }
-            pauseInitialised = true;
-        }
-
-        final String paused = systemService.getAttributeValue(PAUSE_PREF);
-        if (Boolean.valueOf(paused)) {
-            return;
-        }
-
         final Logger defaultLog = ShopCodeContext.getLog(this);
-
-        final long start = System.currentTimeMillis();
 
         defaultLog.info("Local file share listener");
 
@@ -192,11 +172,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
         runRootScan(defaultLog, root);
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        defaultLog.info("Local file share listener ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        defaultLog.info("Local file share listener ... completed");
 
     }
 
@@ -276,15 +252,21 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                 final SimpleDateFormat format = new SimpleDateFormat("_yyyy-MMM-dd-hh-mm-ss-SSS");
 
+                final int total = readyForImport.length;
+                int count = 1;
                 for (final File toImport : prioritiseProcessedFiles(readyForImport)) {
+
+                    defaultLog.info("Processing file {} of {}", count, total);
+                    shopLog.info("Processing file {} of {}", count, total);
+                    count++;
 
                     final String timestamp = format.format(new Date());
 
                     final File targetDirectory = new File(importDirPath + File.separator + PRINCIPAL + timestamp);
                     targetDirectory.mkdirs();
 
-                    defaultLog.info("Moving files to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
-                    shopLog.info("Moving files to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
+                    defaultLog.info("Moving file to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
+                    shopLog.info("Moving file to '{}' for shop {}", targetDirectory.getAbsolutePath(), shop.getCode());
 
                     Map<String, String> groupData = null;
                     for (final Map.Entry<Pattern, Map<String, String>> group : patternGroupMap.entrySet()) {
@@ -317,12 +299,18 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                         if (shopAuth.isAuthenticated()) {
                             SecurityContextHolder.getContext().setAuthentication(new RunAsUserAuthentication(user, pass, shopAuth.getAuthorities()));
 
+                            final long startImport = getTimeNow();
+
                             // Make this synchronous since we are already in async process
                             final String importToken = importDirectorService.doImport(groupName, destination, false);
                             final JobStatus importStatus = importDirectorService.getImportStatus(importToken);
 
-                            defaultLog.info("Importing '{}' for shop {} using group {} ... completed [{}]", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion() });
-                            shopLog.info("Importing '{}' for shop {} using group {} ... completed [{}]", new Object[]{toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion()});
+                            final long finishImport = getTimeNow();
+                            final long msImport = (finishImport - startImport);
+                            final long secImport = msImport > 0 ? msImport / 1000 : 0;
+
+                            defaultLog.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[] { toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
+                            shopLog.info("Importing '{}' for shop {} using group {} ... completed [{}] in {}s", new Object[]{ toImport.getAbsolutePath(), shop.getCode(), groupName, importStatus.getCompletion(), secImport });
 
                             final AsyncContext cacheCtx = createCtx(AttributeNamesKeys.System.SYSTEM_BACKDOOR_TIMEOUT_MS);
                             clusterService.evictAllCache(cacheCtx);
@@ -331,7 +319,9 @@ public class LocalFileShareImportListenerImpl implements Runnable {
 
                                 final boolean reindex = Boolean.valueOf(groupData.get("reindex"));
                                 if (reindex) {
-                                    
+
+                                    final long startIndex = getTimeNow();
+
                                     defaultLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[] { shop.getCode(), groupName });
                                     shopLog.info("Re-indexed products for shop {} using group {} ... starting", new Object[]{shop.getCode(), groupName});
 
@@ -343,8 +333,12 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                                         JobStatus reindexStatus = reindexService.getIndexJobStatus(reindexCtx, indexToken);
                                         if (reindexStatus.getState() == JobStatus.State.FINISHED) {
 
-                                            defaultLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion() });
-                                            shopLog.info("Re-indexed products for shop {} using group {} ... completed [{}]", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion() });
+                                            final long finishIndex = getTimeNow();
+                                            final long msIndex = (finishIndex - startIndex);
+                                            final long secIndex = msIndex > 0 ? msIndex / 1000 : 0;
+
+                                            defaultLog.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
+                                            shopLog.info("Re-indexed products for shop {} using group {} ... completed [{}] in {}s", new Object[] { shop.getCode(), groupName, reindexStatus.getCompletion(), secIndex });
 
                                             clusterService.evictAllCache(cacheCtx);
                                             Thread.sleep(WARMUP_GET_READY_TIMEOUT);
@@ -353,6 +347,7 @@ public class LocalFileShareImportListenerImpl implements Runnable {
                                             break;
                                         }
                                     }
+
                                 }
                             }
 
@@ -378,6 +373,10 @@ public class LocalFileShareImportListenerImpl implements Runnable {
             }
         }
 
+    }
+
+    private long getTimeNow() {
+        return System.currentTimeMillis();
     }
 
     private Map<Pattern, Map<String, String>> loadShopAutoImportConfigurations(final Logger shopLog, final File configProps, final Set<String> importGroupNames) throws IOException {

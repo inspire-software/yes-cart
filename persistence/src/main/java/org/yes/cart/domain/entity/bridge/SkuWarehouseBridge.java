@@ -16,13 +16,17 @@
 
 package org.yes.cart.domain.entity.bridge;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
 import org.hibernate.search.bridge.LuceneOptions;
 import org.hibernate.search.bridge.TwoWayFieldBridge;
 import org.yes.cart.constants.Constants;
-import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.entity.Product;
+import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.domain.entity.SkuWarehouse;
 import org.yes.cart.domain.entity.bridge.support.ShopWarehouseRelationshipSupport;
 import org.yes.cart.domain.entity.bridge.support.SkuWarehouseRelationshipSupport;
 import org.yes.cart.domain.query.ProductSearchQueryBuilder;
@@ -47,64 +51,103 @@ public class SkuWarehouseBridge implements TwoWayFieldBridge {
     /** {@inheritDoc} */
     public void set(final String proposedFiledName, final Object value, final Document document, final LuceneOptions luceneOptions) {
 
-        final ShopWarehouseRelationshipSupport shopSupport = getShopWarehouseRelationshipSupport();
-        final SkuWarehouseRelationshipSupport skuSupport = getSkuWarehouseRelationshipSupport();
-
         if (value instanceof Collection) {
 
-            final Set<Shop> availableIn = new HashSet<Shop>();
+            final ShopWarehouseRelationshipSupport shopSupport = getShopWarehouseRelationshipSupport();
+            final SkuWarehouseRelationshipSupport skuSupport = getSkuWarehouseRelationshipSupport();
+
+            final List<Shop> shops = shopSupport.getAll();
+            final Map<Long, Set<Long>> shopsByFulfilment = shopSupport.getShopsByFulfilmentMap();
+            final Map<Long, BigDecimal> qtyByShop = new HashMap<Long, BigDecimal>(shops.size() * 2);
+            final Set<Long> availableIn = new HashSet<Long>();
+
+
+            boolean always = false;
+            boolean preorder = false;
+            boolean skuStock = false;
 
             for (Object obj : (Collection) value) {
 
+                qtyByShop.clear();
+
                 final ProductSku sku = (ProductSku) obj;
 
-                final List<Shop> shops = shopSupport.getAll();
+                always = sku.getProduct().getAvailability() == Product.AVAILABILITY_ALWAYS;
+                preorder = sku.getProduct().getAvailability() == Product.AVAILABILITY_ALWAYS;
 
-                for (final Shop shop : shops) {
+                if (!always) {
+                    final List<SkuWarehouse> inventory = skuSupport.getQuantityOnWarehouse(sku.getCode());
 
-                    final List<Warehouse> warehouses = shopSupport.getShopWarehouses(shop.getShopId(), false);
+                    if (CollectionUtils.isNotEmpty(inventory)) {
+                        for (final SkuWarehouse stock : inventory) {
 
-                    final List<SkuWarehouse> inventory = skuSupport.getQuantityOnWarehouses(sku.getCode(), warehouses);
-                    BigDecimal qtyForShop = BigDecimal.ZERO;
-                    for (final SkuWarehouse stock : inventory) {
-                        qtyForShop = qtyForShop.add(stock.getAvailableToSell());
+                            final BigDecimal ats = stock.getAvailableToSell();
+                            // if standard with zero stock then not available
+                            if (sku.getProduct().getAvailability() != Product.AVAILABILITY_STANDARD
+                                    || MoneyUtils.isFirstBiggerThanSecond(ats, BigDecimal.ZERO)) {
+                                final long ff = stock.getWarehouse().getWarehouseId();
+                                final Set<Long> shs = shopsByFulfilment.get(ff);
+                                if (shs != null) {
+                                    final BigDecimal atsAdd = MoneyUtils.isFirstBiggerThanSecond(ats, BigDecimal.ZERO) ? ats : BigDecimal.ZERO;
+                                    for (final Long sh : shs) {
+                                        final BigDecimal inSh = qtyByShop.get(sh);
+                                        qtyByShop.put(sh, inSh == null ? atsAdd : inSh.add(atsAdd));
+                                    }
+                                }
+                                skuStock = skuStock || MoneyUtils.isFirstBiggerThanSecond(ats, BigDecimal.ZERO);
+                            }
+
+                        }
+
+                        for (final Map.Entry<Long, BigDecimal> qty : qtyByShop.entrySet()) {
+
+                            // Available in stock
+                            availableIn.add(qty.getKey());
+                            final String rez = objectToString(qty.getKey(), sku.getCode(), qty.getValue());
+
+                            // Compacted
+                            document.add(new Field(
+                                    proposedFiledName,
+                                    rez,
+                                    Field.Store.YES,
+                                    Field.Index.NOT_ANALYZED,
+                                    luceneOptions.getTermVector()
+                            ));
+
+                        }
+
                     }
+                } else {
 
-                    if (MoneyUtils.isFirstBiggerThanSecond(qtyForShop, BigDecimal.ZERO)) {
-                        String rez = objectToString(shop.getShopId(), sku.getCode(), qtyForShop);
+                    for (final Shop shop : shops) {
 
-                        // Compacted
-                        document.add(new Field(
-                                proposedFiledName,
-                                rez,
-                                Field.Store.YES,
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
-
-                        // Available in stock
-                        availableIn.add(shop);
-
-                    } else if (sku.getProduct().getAvailability() != Product.AVAILABILITY_STANDARD) {
-
-                        // Available as perpetual (dates are verified by the index interceptor)
-                        availableIn.add(shop);
+                        // Available as perpetual (preorder/backorder must have stock)
+                        availableIn.add(shop.getShopId());
+                        qtyByShop.put(shop.getShopId(), BigDecimal.ONE);
 
                     }
 
                 }
+
             }
 
-            for (final Shop shop : availableIn) {
+            for (final Long shop : availableIn) {
+
+                // out of stock stock items have -50% boost, preorder gives +25% boost
+                final boolean hasStock = always || skuStock;
+                final float boost = (hasStock ? 1.0f : 0.5f) + (preorder ? 0.25f : 0f);
 
                 // Fill in PK's of shops where we have this in stock.
-                document.add(new Field(
+                final Field inStock = new Field(
                         ProductSearchQueryBuilder.PRODUCT_SHOP_INSTOCK_FIELD,
-                        String.valueOf(shop.getShopId()),
+                        String.valueOf(shop),
                         Field.Store.NO,
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()
-                ));
+                );
+                inStock.setBoost(boost);
+
+                document.add(inStock);
 
             }
 

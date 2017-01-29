@@ -18,8 +18,6 @@ package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.i18n.I18NModel;
@@ -103,9 +101,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    public List<Attribute> findAvailableAttributes(
-            final String attributeGroupCode,
-            final List<String> exclude) {
+    public List<Attribute> findAvailableAttributes(final String attributeGroupCode, final List<String> exclude) {
         if (exclude == null || exclude.isEmpty()) {
             return findByAttributeGroupCode(attributeGroupCode);
         } else {
@@ -119,9 +115,7 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    public List<Attribute> findAttributesByCodes(
-            final String attributeGroupCode,
-            final List<String> codes) {
+    public List<Attribute> findAttributesByCodes(final String attributeGroupCode, final List<String> codes) {
         if (codes == null || codes.isEmpty()) {
             return Collections.emptyList();
         } else {
@@ -139,31 +133,28 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-availableAttributesByProductTypeId")
     public List<Attribute> getAvailableAttributesByProductTypeId(final long productTypeId) {
-        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId));
+        return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.PROD.TYPE.ID", productTypeId));
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-availableImageAttributesByGroupCode")
     public List<Attribute> getAvailableImageAttributesByGroupCode(final String attributeGroupCode) {
-        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode));
+        return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.IMAGE.ATTRIBUTE.BY.GROUP.CODE", attributeGroupCode));
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-availableAttributesByGroupCodeStartsWith")
     public List<Attribute> getAvailableAttributesByGroupCodeStartsWith(final String attributeGroupCode, final String codePrefix) {
-        return initBeforeCache(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%"));
+        return initEntities(getGenericDao().findByNamedQuery("PRODUCTS.ATTRIBUTE.BY.GROUP.CODE.LIKE.CODE", attributeGroupCode, codePrefix + "%"));
     }
 
     /*
      * Need to initialise attributes that we put into cache.
      */
-    private List<Attribute> initBeforeCache(final List<Attribute> dbList) {
+    private List<Attribute> initEntities(final List<Attribute> dbList) {
         if (dbList != null) {
             for (final Attribute attr : dbList) {
                 Hibernate.initialize(attr.getEtype());
@@ -176,7 +167,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allAttributeCodes")
     public Set<String> getAllAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.UNIQUE");
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -189,7 +179,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
     public Set<String> getAllNavigatableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -202,7 +191,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allSearchableAttributeCodes")
     public Set<String> getAllSearchableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
         return new HashSet<String>(allowedAttributeNames);
@@ -211,7 +199,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allSearchablePrimaryAttributeCodes")
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE", Boolean.TRUE, Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -220,7 +207,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allStorableAttributeCodes")
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -229,7 +215,6 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-singleNavigatableAttributeCodesByProductType")
     public Map<String, Integer> getSingleNavigatableAttributeCodesByProductType(final long productTypeId) {
         final List<Object[]> allowedAttributeNames = attributeDao
                 .findQueryObjectsByNamedQuery("ATTRIBUTE.CODES.AND.RANK.SINGLE.NAVIGATION.UNIQUE.BY.PRODUCTTYPE.ID",
@@ -244,7 +229,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return map;
     }
 
-    @Cacheable(value = "attributeService-navigatableAttributeDisplayValue")
+    /**
+     * {@inheritDoc}
+     */
     public I18NModel getNavigatableAttributeDisplayValue(final String attrCode, final String value) {
 
         final List<Object> productSkuDV = attributeDao.findQueryObjectRangeByNamedQuery(
@@ -268,7 +255,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return new FailoverStringI18NModel((String) productSkuDV.get(0), value);
     }
 
-    @Cacheable(value = "attributeService-allAttributeNames")
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, I18NModel> getAllAttributeNames() {
         Map<String, I18NModel> result = new HashMap<String, I18NModel>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
@@ -284,7 +273,9 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return result;
     }
 
-    @Cacheable(value = "attributeService-attributeNamesByCodes")
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, I18NModel> getAttributeNamesByCodes(final Set<String> codes) {
         Map<String, I18NModel> result = new HashMap<String, I18NModel>();
         List<Object[]> codeNameList = attributeDao.findQueryObjectsByNamedQuery(
@@ -301,57 +292,4 @@ public class AttributeServiceImpl extends BaseGenericServiceImpl<Attribute> impl
         return result;
     }
 
-    /** {@inheritDoc} */
-    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
-            "attributeService-availableImageAttributesByGroupCode",
-            "attributeService-availableAttributesByGroupCodeStartsWith",
-            "attributeService-allAttributeCodes",
-            "attributeService-allNavigatableAttributeCodes",
-            "attributeService-allSearchableAttributeCodes",
-            "attributeService-allSearchablePrimaryAttributeCodes",
-            "attributeService-allStorableAttributeCodes",
-            "attributeService-singleNavigatableAttributeCodesByProductType",
-            "attributeService-navigatableAttributeDisplayValue",
-            "attributeService-attributeNamesByCodes",
-            "attributeService-allAttributeNames"},
-             allEntries = true)
-    public Attribute create(Attribute instance) {
-        return super.create(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
-            "attributeService-availableImageAttributesByGroupCode",
-            "attributeService-availableAttributesByGroupCodeStartsWith",
-            "attributeService-allAttributeCodes",
-            "attributeService-allNavigatableAttributeCodes",
-            "attributeService-allSearchableAttributeCodes",
-            "attributeService-allSearchablePrimaryAttributeCodes",
-            "attributeService-allStorableAttributeCodes",
-            "attributeService-singleNavigatableAttributeCodesByProductType",
-            "attributeService-navigatableAttributeDisplayValue",
-            "attributeService-attributeNamesByCodes",
-            "attributeService-allAttributeNames"},
-            allEntries = true)
-    public Attribute update(Attribute instance) {
-        return super.update(instance);
-    }
-
-    /** {@inheritDoc} */
-    @CacheEvict(value = {"attributeService-availableAttributesByProductTypeId",
-            "attributeService-availableImageAttributesByGroupCode",
-            "attributeService-availableAttributesByGroupCodeStartsWith",
-            "attributeService-allAttributeCodes",
-            "attributeService-allNavigatableAttributeCodes",
-            "attributeService-allSearchableAttributeCodes",
-            "attributeService-allSearchablePrimaryAttributeCodes",
-            "attributeService-allStorableAttributeCodes",
-            "attributeService-singleNavigatableAttributeCodesByProductType",
-            "attributeService-navigatableAttributeDisplayValue",
-            "attributeService-attributeNamesByCodes",
-            "attributeService-allAttributeNames"},
-            allEntries = true)
-    public void delete(Attribute instance) {
-        super.delete(instance);
-    }
 }

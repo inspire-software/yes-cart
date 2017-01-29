@@ -58,8 +58,6 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
 
         final Logger log = ShopCodeContext.getLog(this);
 
-        final long start = System.currentTimeMillis();
-
         log.info("Processing tagging for customer");
 
         final ResultsIterator<Customer> customerIterator = customerService.getGenericDao().findAllIterator();
@@ -120,11 +118,7 @@ public class BulkCustomerTagProcessorImpl implements Runnable {
             }
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Processing tagging for customer ... completed in {}s", (ms > 0 ? ms / 1000 : 0));
+        log.info("Processing tagging for customer ... completed");
 
     }
 

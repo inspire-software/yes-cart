@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity.bridge.support.impl;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.bridge.support.NavigatableAttributesSupport;
@@ -42,7 +41,6 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allNavigatableAttributeCodes")
     public Set<String> getAllNavigatableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.NAVIGATION.UNIQUE", Boolean.TRUE);
         allowedAttributeNames.add(ProductSearchQueryBuilder.BRAND_FIELD);
@@ -55,7 +53,6 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allSearchableAttributeCodes")
     public Set<String> getAllSearchableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.UNIQUE", Boolean.TRUE, Boolean.FALSE);
         return new HashSet<String>(allowedAttributeNames);
@@ -64,7 +61,6 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allSearchablePrimaryAttributeCodes")
     public Set<String> getAllSearchablePrimaryAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.SEARCH.PRIMARY.UNIQUE", Boolean.TRUE, Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);
@@ -73,7 +69,6 @@ public class NavigatableAttributesSupportImpl implements NavigatableAttributesSu
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "attributeService-allStorableAttributeCodes")
     public Set<String> getAllStorableAttributeCodes() {
         final List allowedAttributeNames = attributeDao.findQueryObjectByNamedQuery("ATTRIBUTE.CODES.STORE.UNIQUE", Boolean.TRUE);
         return new HashSet<String>(allowedAttributeNames);

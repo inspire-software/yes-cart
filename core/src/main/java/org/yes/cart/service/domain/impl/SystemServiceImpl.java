@@ -17,8 +17,8 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.AttrValueSystem;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.System;
 import org.yes.cart.service.domain.AttributeService;
+import org.yes.cart.service.domain.RuntimeAttributeService;
 import org.yes.cart.service.domain.SystemService;
 
 import java.io.File;
@@ -42,35 +43,83 @@ public class SystemServiceImpl implements SystemService {
 
     private final AttributeService attributeService;
 
+    private final RuntimeAttributeService runtimeAttributeService;
+
+    private final Cache PREF_CACHE;
+
     /**
      * Construct system services, which is determinate shop set.
      * @param systemDao system dao
      * @param attributeService attribute service.
+     * @param runtimeAttributeService runtime attribute service
+     * @param cacheManager    cache manager to use
      */
-    public SystemServiceImpl(
-            final GenericDAO<System, Long> systemDao,
-            final AttributeService attributeService) {
+    public SystemServiceImpl(final GenericDAO<System, Long> systemDao,
+                             final AttributeService attributeService,
+                             final RuntimeAttributeService runtimeAttributeService,
+                             final CacheManager cacheManager) {
         this.systemDao = systemDao;
         this.attributeService = attributeService;
+        this.runtimeAttributeService = runtimeAttributeService;
+        PREF_CACHE = cacheManager.getCache("systemService-attributeValue");
+    }
+
+    private String getStringFromValueWrapper(final Cache.ValueWrapper wrapper) {
+        if (wrapper != null) {
+            return (String) wrapper.get();
+        }
+        return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "systemService-attributeValue")
     public String getAttributeValue(final String key) {
-        return getAttributeValue(key, getSystem().getAttributes());
+
+        final String value = getStringFromValueWrapper(PREF_CACHE.get(key));
+        if (value == null) {
+            final Map<String, AttrValueSystem> attrs = proxy().findAttributeValues();
+            preloadAttributeValues(attrs);
+            AttrValue attrValue = attrs.get(key);
+            if (attrValue != null) {
+                return attrValue.getVal();
+            }
+        }
+        return value;
+    }
+
+    private void preloadAttributeValues(final Map<String, AttrValueSystem> attrs) {
+        for (final Map.Entry<String, AttrValueSystem> entry : attrs.entrySet()) {
+            PREF_CACHE.put(entry.getKey(), entry.getValue().getVal());
+            PREF_CACHE.put(entry.getValue().getAttrvalueId(), entry.getValue().getVal());
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public String getAttributeValueOrDefault(final String key, final String defaultValue) {
-        final String original = proxy().getAttributeValue(key);
+        final String original = getAttributeValue(key);
         if (StringUtils.isBlank(original)) {
             return defaultValue;
         }
         return original;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String createOrGetAttributeValue(final String key, final String eType) {
+        final String value = this.getAttributeValueOrDefault(key, null);
+        if (value == null) {
+            synchronized (SystemService.class) {
+                final Map<String, AttrValueSystem> current = findAttributeValues();
+                if (!current.containsKey(key)) {
+                    runtimeAttributeService.create(key, "SYSTEM", eType);
+                }
+            }
+        }
+        return value;
     }
 
     /**
@@ -83,23 +132,12 @@ public class SystemServiceImpl implements SystemService {
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "systemService-attributeValues")
-    public Map<String, AttrValueSystem> getAttributeValues() {
-        return findAttributeValues();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value ={
-            "systemService-attributeValue",
-            "systemService-attributeValues"
-    }, allEntries = true)
     public synchronized void updateAttributeValue(final String key, final String value) {
 
-        AttrValueSystem attrVal = getSystem().getAttributes().get(key);
-
         final System system = getSystem();
+
+        AttrValueSystem attrVal = system.getAttributes().get(key);
+
         if (attrVal == null) {
             Attribute attr = attributeService.findByAttributeCode(key);
             if (attr != null) {
@@ -113,10 +151,17 @@ public class SystemServiceImpl implements SystemService {
         } else {
             attrVal.setVal(value);
         }
-        systemDao.saveOrUpdate(system);
-        // Must force attribute to be persisted to avoid optimistic locking
-        // Note this method should be synchronised to ensure that save in time
-        systemDao.flush();
+
+        if (attrVal != null) {
+            systemDao.saveOrUpdate(system);
+            // Must force attribute to be persisted to avoid optimistic locking
+            // Note this method should be synchronised to ensure that save in time
+            systemDao.flush();
+
+            attrVal = system.getAttributes().get(key);
+            PREF_CACHE.put(key, attrVal.getVal());
+            PREF_CACHE.put(attrVal.getAttrvalueId(), attrVal.getVal());
+        }
     }
 
 
@@ -207,21 +252,6 @@ public class SystemServiceImpl implements SystemService {
         return systemDao.findAll().get(0);
     }
 
-
-    /**
-     * Get the value of attribute from attribute value map.
-     *
-     * @param attrName attribute name
-     * @param values   map of attribute name and {@link AttrValue}
-     * @return null if attribute not present in map, otherwise value of attribute
-     */
-    private String getAttributeValue(final String attrName, final Map<String, AttrValueSystem> values) {
-        AttrValue attrValue = values.get(attrName);
-        if (attrValue != null) {
-            return attrValue.getVal();
-        }
-        return null;
-    }
 
     /** {@inheritDoc} */
     public GenericDAO getGenericDao() {

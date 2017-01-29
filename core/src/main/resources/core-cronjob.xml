@@ -33,50 +33,78 @@
         </property>
     </bean>
 
-    <bean id="bulkCustomerTagProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
-                <constructor-arg index="0" ref="shopService"/>
-                <constructor-arg index="1" ref="customerService"/>
-                <constructor-arg index="2" ref="promotionContextFactory"/>
-                <property name="batchSize" value="20"/>
+    <bean id="bulkCustomerTagProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean parent="txJobProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.bulkjob.promotion.BulkCustomerTagProcessorImpl">
+                        <constructor-arg index="0" ref="shopService"/>
+                        <constructor-arg index="1" ref="customerService"/>
+                        <constructor-arg index="2" ref="promotionContextFactory"/>
+                        <property name="batchSize" value="20"/>
+                    </bean>
+                </property>
             </bean>
         </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_CUSTOMER_TAG_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
-    <bean id="bulkAbandonedShoppingCartProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
-                <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <constructor-arg index="1" ref="customerOrderService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
-                <property name="batchSize" value="20"/> <!-- CPOINT -->
+    <bean id="bulkAbandonedShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean parent="txJobProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.bulkjob.shoppingcart.BulkAbandonedShoppingCartProcessorImpl">
+                        <constructor-arg index="0" ref="shoppingCartStateService"/>
+                        <constructor-arg index="1" ref="customerOrderService"/>
+                        <constructor-arg index="2" ref="systemService"/>
+                        <property name="abandonedTimeoutDays" value="30"/> <!-- CPOINT -->
+                        <property name="batchSize" value="20"/> <!-- CPOINT -->
+                    </bean>
+                </property>
             </bean>
         </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_ABANDONED_CARTS_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
-    <bean id="bulkEmptyAnonymousShoppingCartProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
-                <constructor-arg index="0" ref="shoppingCartStateService"/>
-                <constructor-arg index="1" ref="customerOrderService"/>
-                <constructor-arg index="2" ref="systemService"/>
-                <property name="abandonedTimeoutDays" value="1"/> <!-- CPOINT -->
-                <property name="batchSize" value="20"/> <!-- CPOINT -->
+    <bean id="bulkEmptyAnonymousShoppingCartProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean parent="txJobProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.bulkjob.shoppingcart.BulkEmptyAnonymousShoppingCartProcessorImpl">
+                        <constructor-arg index="0" ref="shoppingCartStateService"/>
+                        <constructor-arg index="1" ref="customerOrderService"/>
+                        <constructor-arg index="2" ref="systemService"/>
+                        <property name="abandonedTimeoutDays" value="1"/> <!-- CPOINT -->
+                        <property name="batchSize" value="20"/> <!-- CPOINT -->
+                    </bean>
+                </property>
             </bean>
         </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_EMPTY_CARTS_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
-    <bean id="bulkExpiredGuestsProcessor" parent="txJobProxyTemplate">
-        <property name="target">
-            <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
-                <constructor-arg index="0" ref="customerService"/>
-                <constructor-arg index="1" ref="systemService"/>
-                <property name="expiredTimeoutDays" value="1"/> <!-- CPOINT -->
-                <property name="batchSize" value="20"/> <!-- CPOINT -->
+    <bean id="bulkExpiredGuestsProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean parent="txJobProxyTemplate">
+                <property name="target">
+                    <bean class="org.yes.cart.bulkjob.customer.BulkExpiredGuestsProcessorImpl">
+                        <constructor-arg index="0" ref="customerService"/>
+                        <constructor-arg index="1" ref="systemService"/>
+                        <property name="expiredTimeoutDays" value="1"/> <!-- CPOINT -->
+                        <property name="batchSize" value="20"/> <!-- CPOINT -->
+                    </bean>
+                </property>
             </bean>
         </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_EXPIRE_GUESTS_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
 </beans>

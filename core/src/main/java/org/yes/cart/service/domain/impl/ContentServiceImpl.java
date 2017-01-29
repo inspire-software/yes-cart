@@ -17,8 +17,6 @@
 package org.yes.cart.service.domain.impl;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.Category;
@@ -94,7 +92,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-rootContent")
     public Category getRootContent(final long shopId) {
         if (shopId <= 0) {
             throw new IllegalArgumentException("Shop must not be null or transient");
@@ -105,7 +102,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @CacheEvict(value = "contentService-rootContent")
     public Category createRootContent(final long shopId) {
         final List<Object> shops = categoryDao.findQueryObjectByNamedQuery("SHOPCODE.BY.SHOP.ID", shopId);
         if (shops != null && shops.size() == 1) {
@@ -133,7 +129,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentTemplate" )
     public String getContentTemplate(final long contentId) {
         final Category content = proxy().findById(contentId);
         if (content != null && !content.isRoot()) {
@@ -149,7 +144,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final long contentId, final String locale) {
         final String attributeKey = "CONTENT_BODY_" + locale + "_%";
         final List<Object> bodyList = categoryDao.findQueryObjectByNamedQuery("CONTENTBODY.BY.CONTENTID", contentId, attributeKey, new Date());
@@ -168,7 +162,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentBody")
     public String getContentBody(final String contentUri, final String locale) {
         final Long id = findContentIdBySeoUri(contentUri);
         if (id != null) {
@@ -180,7 +173,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getDynamicContentBody(final long contentId, final String locale, final Map<String, Object> context) {
 
         final String rawContent = proxy().getContentBody(contentId, locale);
@@ -197,7 +189,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Override
     public String getDynamicContentBody(final String contentUri, final String locale, final Map<String, Object> context) {
 
         final String rawContent = proxy().getContentBody(contentUri, locale);
@@ -214,7 +205,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentAttributeRecursive")
     public String getContentAttributeRecursive(final String locale, final long contentId, final String attributeName, final String defaultValue) {
 
         final Category content = proxy().getById(contentId);
@@ -242,7 +232,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentAttributesRecursive" )
     public String[] getContentAttributeRecursive(final String locale, final long contentId, final String[] attributeNames) {
 
         final Category content;
@@ -278,7 +267,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-childContent")
     public List<Category> getChildContent(final long contentId) {
         return findChildContentWithAvailability(contentId, true);
     }
@@ -317,7 +305,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-childContentRecursive")
     public Set<Category> getChildContentRecursive(final long contentId) {
         final Category thisCon = proxy().getById(contentId);
         if (thisCon != null) {
@@ -342,7 +329,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Override
     public List<Category> findBy(final long shopId, final String code, final String name, final String uri, final int page, final int pageSize) {
 
         final String codeP = StringUtils.isNotBlank(code) ? "%" + code.toLowerCase() + "%" : null;
@@ -390,7 +376,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc} Just to cache
      */
-    @Cacheable(value = "contentService-byId")
     public Category getById(final long pk) {
         return getGenericDao().findById(pk);
     }
@@ -441,7 +426,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
     /**
      * {@inheritDoc}
      */
-    @Cacheable(value = "contentService-contentHasSubcontent")
     public boolean isContentHasSubcontent(final long topContentId, final long subContentId) {
         final Category start = proxy().getById(subContentId);
         if (start != null) {
@@ -468,71 +452,6 @@ public class ContentServiceImpl extends BaseGenericServiceImpl<Category> impleme
                 }
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "contentService-contentAttributeRecursive",
-            "contentService-contentAttributesRecursive",
-            "contentService-childContent",
-            "contentService-childContentRecursive",
-            "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
-
-    },allEntries = true)
-    public Category create(Category instance) {
-        return super.create(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value = {
-            "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "contentService-contentTemplate",
-            "contentService-contentBody" ,
-            "contentService-contentAttributeRecursive",
-            "contentService-contentAttributesRecursive",
-            "contentService-childContent",
-            "contentService-childContentRecursive",
-            "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
-    }, allEntries = true)
-    public Category update(Category instance) {
-        return super.update(instance);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @CacheEvict(value ={
-            "contentService-rootContent",
-            "categoryService-currentCategoryMenu",
-            "breadCrumbBuilder-breadCrumbs",
-            "contentService-contentTemplate",
-            "contentService-contentBody" ,
-            "contentService-contentAttributeRecursive",
-            "contentService-contentAttributesRecursive",
-            "contentService-childContent",
-            "contentService-childContentRecursive",
-            "contentService-byId",
-            "contentService-contentHasSubcontent",
-            "shopService-shopContentIds",
-            "shopService-shopAllCategoriesIds"
-    }, allEntries = true)
-    public void delete(Category instance) {
-        super.delete(instance);
     }
 
     private ContentService proxy;

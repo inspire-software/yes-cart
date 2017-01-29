@@ -44,11 +44,18 @@
 
     <!-- ################################ Regular Global/Discontinued products indexing  ####################### -->
 
-    <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
-        <constructor-arg index="0" ref="productService"/>
-        <constructor-arg index="1" ref="nodeService"/>
-        <constructor-arg index="2" ref="systemService"/>
-        <constructor-arg index="3" ref="sfProductCacheHelper"/>
+    <bean id="productsGlobalIndexProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor">
+            <bean class="org.yes.cart.bulkjob.product.ProductsGlobalIndexProcessorImpl">
+                <constructor-arg index="0" ref="productService"/>
+                <constructor-arg index="1" ref="nodeService"/>
+                <constructor-arg index="2" ref="systemService"/>
+                <constructor-arg index="3" ref="sfProductCacheHelper"/>
+            </bean>
+        </property>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_GLOBALREINDEX_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
     </bean>
 
     <bean name="productsGlobalIndexProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -68,8 +75,7 @@
     </bean>
 
 
-
-    <bean id="productsPassedAvailabilityDateIndexProcessor" parent="txJobProxyTemplate">
+    <bean id="productsPassedAvailabilityDateIndexProcessorInternal" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductsPassedAvailabilityDateIndexProcessorImpl">
                 <constructor-arg index="0" ref="productService"/>
@@ -77,7 +83,7 @@
                 <constructor-arg index="2" ref="systemService"/>
                 <constructor-arg index="3" ref="sfProductCacheHelper"/>
                 <property name="numberOfDays" value="2"/>
-                <lookup-method name="getSelf" bean="productsPassedAvailabilityDateIndexProcessor"/>
+                <lookup-method name="getSelf" bean="productsPassedAvailabilityDateIndexProcessorInternal"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -89,6 +95,14 @@
             </props>
         </property>
     </bean>
+
+    <bean id="productsPassedAvailabilityDateIndexProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="productsPassedAvailabilityDateIndexProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_EXPIREREINDEX_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
+    </bean>
+
 
     <bean name="reindexDiscontinuedProductsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
         <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
@@ -108,7 +122,7 @@
 
     <!-- ################################ Inventory updates products indexing  ############################# -->
 
-    <bean id="productInventoryChangedProcessor" parent="txJobProxyTemplate">
+    <bean id="productInventoryChangedProcessorInternal" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.product.ProductInventoryChangedProcessorImpl">
                 <constructor-arg index="0" ref="skuWarehouseService"/>
@@ -117,7 +131,7 @@
                 <constructor-arg index="3" ref="systemService"/>
                 <constructor-arg index="4" ref="runtimeAttributeService"/>
                 <constructor-arg index="5" ref="sfProductCacheHelper"/>
-                <lookup-method name="getSelf" bean="productInventoryChangedProcessor"/>
+                <lookup-method name="getSelf" bean="productInventoryChangedProcessorInternal"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -127,6 +141,13 @@
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
+    </bean>
+
+    <bean id="productInventoryChangedProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="productInventoryChangedProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_PRODINVUP_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
     <bean name="productInventoryChangedProcessorJob" class="org.springframework.scheduling.quartz.JobDetailBean">

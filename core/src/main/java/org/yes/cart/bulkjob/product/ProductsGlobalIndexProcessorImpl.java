@@ -70,8 +70,6 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
             return;
         }
 
-        final long start = System.currentTimeMillis();
-
         final GenericFullTextSearchCapableDAO.FTIndexState state = productService.getProductsFullTextIndexState();
         if (!state.isFullTextSearchReindexInProgress()) {
 
@@ -95,11 +93,7 @@ public class ProductsGlobalIndexProcessorImpl implements Runnable {
 
         }
 
-        final long finish = System.currentTimeMillis();
-
-        final long ms = (finish - start);
-
-        log.info("Reindexing on {} ... completed in {}s", nodeId, (ms > 0 ? ms / 1000 : 0));
+        log.info("Reindexing all on {} ... completed", nodeId);
 
     }
 
