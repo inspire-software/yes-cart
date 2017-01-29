@@ -24,7 +24,7 @@ import org.yes.cart.util.ShopCodeContext;
  * Date: 27/01/2017
  * Time: 10:00
  */
-public class PausableProcessorWrapperImpl implements Runnable {
+public class PausableProcessorWrapperImpl implements Runnable, PausableProcessor {
 
     private Runnable processor;
     private SystemService systemService;
@@ -33,6 +33,9 @@ public class PausableProcessorWrapperImpl implements Runnable {
 
     private boolean pauseInitialised = false;
 
+    /**
+     * {@inheritDoc}
+     */
     public void run() {
 
         if (!pauseInitialised) {
@@ -67,5 +70,21 @@ public class PausableProcessorWrapperImpl implements Runnable {
 
     public void setPausePreferenceDefault(final boolean pausePreferenceDefault) {
         this.pausePreferenceDefault = pausePreferenceDefault;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPaused() {
+        final String paused = systemService.getAttributeValue(pausePreferenceKey);
+        return Boolean.valueOf(paused);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPaused(final boolean paused) {
+        systemService.createOrGetAttributeValue(pausePreferenceKey, "Boolean");
+        systemService.updateAttributeValue(pausePreferenceKey, String.valueOf(paused));
     }
 }
