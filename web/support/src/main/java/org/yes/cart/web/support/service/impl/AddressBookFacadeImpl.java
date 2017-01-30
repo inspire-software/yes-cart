@@ -149,10 +149,16 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             rez.setAddrline2(original.getAddrline2());
             rez.setCountryCode(original.getCountryCode());
             rez.setStateCode(original.getStateCode());
+            rez.setCustom0(original.getCustom0());
             rez.setCustom1(original.getCustom1());
             rez.setCustom2(original.getCustom2());
             rez.setCustom3(original.getCustom3());
             rez.setCustom4(original.getCustom4());
+            rez.setCustom5(original.getCustom5());
+            rez.setCustom6(original.getCustom6());
+            rez.setCustom7(original.getCustom7());
+            rez.setCustom8(original.getCustom8());
+            rez.setCustom9(original.getCustom9());
 
             return rez;
 
