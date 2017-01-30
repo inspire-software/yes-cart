@@ -557,6 +557,9 @@
   "CUSTOMER_POLICY": "Policy",
   "CUSTOMER_TAG": "Tags",
   "CUSTOMER_RESET_MSG": "Do you wish to reset customer password and send email notification on behalf of {{ shop }}?",
+  "CUSTOMER_B2B_BLOCK_CHECKOUT": "Kasse auschecken",
+  "CUSTOMER_B2B_APPROVE_ORDER": "Auftragsfreigabe erforderlich",
+  "CUSTOMER_TAB_B2B": "B2B",
 
   "MANAGER_ENABLED": "Active",
 

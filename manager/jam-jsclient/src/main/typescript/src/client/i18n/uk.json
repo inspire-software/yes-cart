@@ -557,6 +557,9 @@
   "CUSTOMER_POLICY": "Політика",
   "CUSTOMER_TAG": "Теги",
   "CUSTOMER_RESET_MSG": "Ви бажаєте скинути пароль клієнта і відправити повідомлення по електронній пошті від імені {{ shop }}?",
+  "CUSTOMER_B2B_BLOCK_CHECKOUT": "Блокувати замовлення",
+  "CUSTOMER_B2B_APPROVE_ORDER": "Вимагають затвердження замовлень",
+  "CUSTOMER_TAB_B2B": "B2B",
 
   "MANAGER_ENABLED": "Активний",
 
