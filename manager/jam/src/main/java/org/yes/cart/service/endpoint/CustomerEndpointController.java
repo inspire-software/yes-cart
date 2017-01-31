@@ -42,6 +42,11 @@ public interface CustomerEndpointController {
     List<VoCustomerInfo> getFilteredCustomer(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/types/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") String lang) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
     VoCustomer getCustomerById(@PathVariable("id") long id) throws Exception;

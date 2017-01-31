@@ -554,6 +554,7 @@
   "CUSTOMER_LASTNAME": "Фамилия",
   "CUSTOMER_FULLNAME": "Полное имя",
   "CUSTOMER_TYPE": "Тип",
+  "CUSTOMER_TYPES_AVAILABLE": "Типы определенные в доступных магазинах",
   "CUSTOMER_POLICY": "Политика",
   "CUSTOMER_TAG": "Теги",
   "CUSTOMER_RESET_MSG": "Вы хотите сбросить пароль клиента и отправить уведомление по электронной почте от имени {{ shop }}?",

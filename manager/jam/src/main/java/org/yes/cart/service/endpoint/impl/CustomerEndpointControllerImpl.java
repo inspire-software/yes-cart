@@ -26,6 +26,7 @@ import org.yes.cart.domain.vo.VoCustomer;
 import org.yes.cart.domain.vo.VoCustomerInfo;
 import org.yes.cart.service.endpoint.CustomerEndpointController;
 import org.yes.cart.service.vo.VoCustomerService;
+import org.yes.cart.service.vo.VoShopService;
 
 import java.util.List;
 
@@ -38,16 +39,25 @@ import java.util.List;
 public class CustomerEndpointControllerImpl implements CustomerEndpointController {
 
     private final VoCustomerService voCustomerService;
+    private final VoShopService voShopService;
 
     @Autowired
-    public CustomerEndpointControllerImpl(final VoCustomerService voCustomerService) {
+    public CustomerEndpointControllerImpl(final VoCustomerService voCustomerService,
+                                          final VoShopService voShopService) {
         this.voCustomerService = voCustomerService;
+        this.voShopService = voShopService;
     }
 
     @Override
     public @ResponseBody
     List<VoCustomerInfo> getFilteredCustomer(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
         return voCustomerService.getFiltered(filter, max);
+    }
+
+    @Override
+    public @ResponseBody
+    List<MutablePair<String, String>> getCustomerTypes(@PathVariable("lang") final String lang) throws Exception {
+        return voShopService.getAvailableShopsCustomerTypes(lang);
     }
 
     @Override
@@ -91,4 +101,5 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
     void resetPassword(@PathVariable("customerId") final long customerId, @PathVariable("shopId") final long shopId) throws Exception {
         voCustomerService.resetPassword(customerId, shopId);
     }
+
 }

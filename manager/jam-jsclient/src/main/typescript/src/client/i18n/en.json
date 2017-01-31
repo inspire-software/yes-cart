@@ -554,6 +554,7 @@
   "CUSTOMER_LASTNAME": "Last name",
   "CUSTOMER_FULLNAME": "Customer",
   "CUSTOMER_TYPE": "Type",
+  "CUSTOMER_TYPES_AVAILABLE": "Supported types defined for accessible shops",
   "CUSTOMER_POLICY": "Policy",
   "CUSTOMER_TAG": "Tags",
   "CUSTOMER_RESET_MSG": "Do you wish to reset customer password and send email notification on behalf of {{ shop }}?",

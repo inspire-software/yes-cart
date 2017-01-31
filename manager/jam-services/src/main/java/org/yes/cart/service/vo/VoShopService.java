@@ -214,4 +214,12 @@ public interface VoShopService {
     List<VoAttrValueShop> update(List<MutablePair<VoAttrValueShop, Boolean>> vo) throws Exception;
 
 
+    /**
+     * Get supported attributes by given shop
+     * @param locale locale
+     * @return customer types
+     * @throws Exception
+     */
+    List<MutablePair<String, String>> getAvailableShopsCustomerTypes(String locale) throws Exception;
+
 }

@@ -15,6 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { CustomerService, I18nEventBus } from './../../shared/services/index';
 import { YcValidators } from './../../shared/validation/validators';
 import { ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
@@ -63,9 +64,16 @@ export class CustomerComponent implements OnInit, OnDestroy {
   @ViewChild('resetConfirmationModalDialog')
   private resetConfirmationModalDialog:ModalComponent;
 
+  @ViewChild('typeHelpModalDialog')
+  private typeHelpModalDialog:ModalComponent;
+
+  private availableCustomerTypes:Pair<string, string>[] = null;
+  private selectedCustomerType:string = null;
+
   private searchHelpShow:boolean = false;
 
-  constructor(fb: FormBuilder) {
+  constructor(private _customerService:CustomerService,
+              fb: FormBuilder) {
     LogUtil.debug('CustomerComponent constructed');
 
     this.customerForm = fb.group({
@@ -248,7 +256,31 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.attributeFilter = '#0#';
   }
 
+  protected onTypeHelpClick() {
 
+    let lang = I18nEventBus.getI18nEventBus().current();
+    let _sub:any = this._customerService.getCustomerTypes(lang).subscribe((types:Pair<string, string>[]) => {
+      LogUtil.debug('CustomerComponent available types', types);
+      this.availableCustomerTypes = types;
+      _sub.unsubscribe();
+
+      this.typeHelpModalDialog.show();
+    });
+
+  }
+
+  protected onSelectCustomerType(customerType:Pair<string, string> ) {
+    this.selectedCustomerType = customerType.first;
+  }
+
+  protected onSelectCustomerTypeResult(modalresult: ModalResult) {
+    LogUtil.debug('CustomerComponent onSelectCustomerTypeResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+      this._customer.customerType = this.selectedCustomerType;
+      this.selectedCustomerType = null;
+      this.formChange();
+    }
+  }
 
   private recalculateShops():void {
 

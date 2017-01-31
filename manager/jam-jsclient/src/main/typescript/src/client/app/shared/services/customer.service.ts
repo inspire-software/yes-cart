@@ -58,6 +58,17 @@ export class CustomerService {
 
 
   /**
+   * Get list of all customers types, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getCustomerTypes(lang:string) {
+
+    return this.http.get(this._serviceBaseUrl + '/types/' + lang)
+      .map(res => <Pair<string, string>[]> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
    * Get customer, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */

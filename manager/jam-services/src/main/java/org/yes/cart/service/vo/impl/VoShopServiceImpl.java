@@ -870,6 +870,49 @@ public class VoShopServiceImpl implements VoShopService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public List<MutablePair<String, String>> getAvailableShopsCustomerTypes(final String locale) throws Exception {
+
+        final List<MutablePair<String, String>> types = new ArrayList<MutablePair<String, String>>();
+
+        final Set<String> knownCustomerTypes = new HashSet<String>();
+        for (final ShopDTO shopDTO : federationFacade.getAccessibleShopsByCurrentManager()) {
+
+            final long configShopId = shopDTO.getMasterId() != null ? shopDTO.getMasterId() : shopDTO.getShopId();
+            final String configShopCode = shopDTO.getMasterId() != null ? shopDTO.getMasterCode() : shopDTO.getCode();
+
+            final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(configShopId, configShopCode);
+
+            final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+            if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
+
+                final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
+                final String[] registrationTypesNames = StringUtils.split(
+                        getDisplayName(registrationTypesCsv.getDisplayVals(), registrationTypesCsv.getVal(), locale), ',');
+
+                for (int i = 0; i < registrationTypes.length; i++) {
+                    final MutablePair<String, String> typeAndName = MutablePair.of(
+                            registrationTypes[i],
+                            registrationTypesNames.length > i ? registrationTypesNames[i] : registrationTypes[i]
+                    );
+                    if (!knownCustomerTypes.contains(typeAndName.getFirst())) {
+                        knownCustomerTypes.add(typeAndName.getFirst());
+                        types.add(typeAndName);
+                    }
+                }
+
+            }
+
+        }
+
+        return types;
+
+    }
+
+    
+
+    /**
      * Spring IoC
      *
      * @param attributes attributes to skip
