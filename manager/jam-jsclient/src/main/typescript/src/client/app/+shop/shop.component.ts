@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ShopVO } from './../shared/model/index';
+import { ShopVO, CustomerVO } from './../shared/model/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShopEventBus, ShopService } from './../shared/services/index';
 import { LogUtil } from './../shared/log/index';
@@ -28,6 +28,8 @@ import { LogUtil } from './../shared/log/index';
 export class ShopComponent implements OnInit, OnDestroy {
 
   private shop:ShopVO;
+  private addressShops:ShopVO[];
+  private shopCustomer:CustomerVO;
 
   private shopIdSub:any;
   private shopSub:any;
@@ -44,6 +46,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   private reloadPGs:boolean = false;
   private reloadSummary:boolean = true;
   private reloadB2b:boolean = false;
+  private reloadAddressbook:boolean = false;
 
   constructor(private _shopService:ShopService,
               private _route: ActivatedRoute,
@@ -51,6 +54,13 @@ export class ShopComponent implements OnInit, OnDestroy {
     LogUtil.debug('ShopComponent constructed');
     this.shopSub = ShopEventBus.getShopEventBus().shopUpdated$.subscribe(shopevt => {
       this.shop = shopevt;
+      if (this.shop != null) {
+        this.addressShops = [ this.shop ];
+        this.shopCustomer = null; // YCE
+      } else {
+        this.addressShops = [];
+        this.shopCustomer = null;
+      }
     });
   }
 
@@ -96,6 +106,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.reloadPGs = tab === 'PGs';
     this.reloadSummary = tab === 'Summary';
     this.reloadB2b = tab === 'B2B';
+    this.reloadAddressbook = tab === 'Addressbook';
 
   }
 

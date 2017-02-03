@@ -92,10 +92,7 @@
     <bean id="addressBookFacade" class="org.yes.cart.web.support.service.impl.AddressBookFacadeImpl">
         <constructor-arg index="0" ref="customerService"/>
         <constructor-arg index="1" ref="addressService"/>
-        <constructor-arg index="2" ref="countryService"/>
-        <constructor-arg index="3" ref="stateService"/>
-        <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="attributeService"/>
+        <constructor-arg index="2" ref="shopAddressCustomisationSupport"/>
     </bean>
 
     <bean id="customerServiceFacade" class="org.yes.cart.web.support.service.impl.CustomerServiceFacadeImpl">
@@ -103,6 +100,7 @@
         <constructor-arg index="1" ref="customerWishListService"/>
         <constructor-arg index="2" ref="attributeService"/>
         <constructor-arg index="3" ref="passPhraseGenerator"/>
+        <constructor-arg index="4" ref="shopCustomerCustomisationSupport"/>
     </bean>
 
     <bean id="promotionFacade" class="org.yes.cart.web.support.service.impl.PromotionFacadeImpl">

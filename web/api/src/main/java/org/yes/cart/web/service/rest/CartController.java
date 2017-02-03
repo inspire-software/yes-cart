@@ -1314,7 +1314,13 @@ public class CartController {
                         final Customer customer = customerServiceFacade.getCheckoutCustomer(cartMixin.getCurrentShop(), cart);
 
                         if (customer != null) {
-                            for (final Address address : customer.getAddress()) {
+
+                            final Shop customerShop = cartMixin.getCurrentCustomerShop();
+                            final List<Address> optionAddress = new ArrayList<Address>();
+                            optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING));
+                            optionAddress.addAll(addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING));
+
+                            for (final Address address : optionAddress) {
                                 if (address.getAddressId() == billingAddressId) {
                                     billing = address;
                                 }
@@ -1723,6 +1729,7 @@ public class CartController {
         if (addressId > 0L) {
             final ShoppingCart cart = cartMixin.getCurrentCart();
             final Shop shop = cartMixin.getCurrentShop();
+            final Shop customerShop = cartMixin.getCurrentCustomerShop();
 
             final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
@@ -1732,7 +1739,7 @@ public class CartController {
                 for (final AddressRO address : addresses) {
                     if (address.getAddressId() == addressId) {
 
-                        final Address optionAddress = addressBookFacade.getAddress(customer, option.getAddressId(), type);
+                        final Address optionAddress = addressBookFacade.getAddress(customer, customerShop, option.getAddressId(), type);
 
                         if (optionAddress != null) {
 
@@ -2388,7 +2395,7 @@ public class CartController {
         }
 
         if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), cartMixin.getCurrentShop())) {
+                && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), cartMixin.getCurrentCustomerShop())) {
             // Must have an address if it is required
             final OrderPreviewRO review = new OrderPreviewRO();
             review.setSuccess(false);

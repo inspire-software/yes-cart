@@ -35,16 +35,14 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.ServiceSpringKeys;
-import org.yes.cart.domain.entity.Address;
-import org.yes.cart.domain.entity.AttrValue;
-import org.yes.cart.domain.entity.Country;
-import org.yes.cart.domain.entity.State;
+import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.I18NModel;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.application.ApplicationDirector;
+import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.customer.dynaform.EditorFactory;
 import org.yes.cart.web.page.component.util.CountryModel;
 import org.yes.cart.web.page.component.util.CountryRenderer;
@@ -225,7 +223,7 @@ public class AddressForm extends Form<Address> {
 
                 final boolean isNew = addr.getAddressId() == 0;
 
-                final ShoppingCart cart = ApplicationDirector.getShoppingCart();
+                final ShoppingCart cart = ((AbstractWebPage) getPage()).getCurrentCart();
                 if (isNew || cart.getLogonState() == ShoppingCart.LOGGED_IN) {
 
                     for (final AttrValue value : values) {
@@ -236,7 +234,8 @@ public class AddressForm extends Form<Address> {
                         }
                     }
 
-                    addressBookFacade.createOrUpdate(addr);
+                    final Shop shop = ((AbstractWebPage) getPage()).getCurrentCustomerShop();
+                    addressBookFacade.createOrUpdate(addr, shop);
 
                     // if we just added new address that became new default or we modified an address that is in the cart
                     // reset address

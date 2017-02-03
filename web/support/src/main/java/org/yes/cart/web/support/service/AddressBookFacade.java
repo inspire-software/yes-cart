@@ -32,42 +32,56 @@ public interface AddressBookFacade {
      * has at least one address in the address book.
      *
      * @param email customer email
-     * @param shop shop
+     * @param customerShop shop
      *
      * @return true if at least one address exists
      */
-    boolean customerHasAtLeastOneAddress(String email, Shop shop);
+    boolean customerHasAtLeastOneAddress(String email, Shop customerShop);
 
 
     /**
      * Get addresses applicable for given shop.
      *
      * @param customer customer
-     * @param shop shop
+     * @param customerShop shop
      * @param addressType address type
      * @return list of applicable addresses
      */
-    List<Address> getAddresses(Customer customer, Shop shop, String addressType);
+    List<Address> getAddresses(Customer customer, Shop customerShop, String addressType);
 
     /**
      * Get existing address or create new instance object.
      *
      * @param customer customer of the address
+     * @param customerShop shop
      * @param addrId address PK
      * @param addressType type of address
      * @return address instance
      */
-    Address getAddress(Customer customer, String addrId, String addressType);
+    Address getAddress(Customer customer, Shop customerShop, String addrId, String addressType);
+
+
+    /**
+     * Get existing address default address.
+     *
+     * @param customer customer of the address
+     * @param customerShop shop
+     * @param addressType type of address
+     * @return address instance
+     */
+    Address getDefaultAddress(Customer customer, Shop customerShop, String addressType);
+
 
     /**
      * Create a copy of the existing address.
      *
      * @param customer customer of the address
+     * @param customerShop shop
      * @param addrId address PK
      * @param addressType type of address
      * @return new address instance with copy of original data (or null if not found)
      */
-    Address copyAddress(Customer customer, String addrId, String addressType);
+    Address copyAddress(Customer customer, Shop customerShop, String addrId, String addressType);
 
     /**
      * Get address form attributes to be displayed for current customer.
@@ -84,24 +98,27 @@ public interface AddressBookFacade {
      * Create or update address object.
      *
      * @param address address
+     * @param customerShop shop
      */
-    void createOrUpdate(Address address);
+    void createOrUpdate(Address address, Shop customerShop);
 
     /**
      * Removes address and resets default address.
      *
      * @param address address to remove
+     * @param customerShop shop
      */
-    void remove(Address address);
+    void remove(Address address, Shop customerShop);
 
     /**
      * Set given address as default inside address type group.
      *
      * @param address instance to update
+     * @param customerShop shop
      *
      * @return persisted instance of address.
      */
-    Address useAsDefault(Address address);
+    Address useAsDefault(Address address, Shop customerShop);
 
     /**
      * Find all countries.

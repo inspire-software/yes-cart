@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package org.yes.cart.web.support.service.impl;
+package org.yes.cart.service.domain.impl;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
@@ -32,10 +32,10 @@ import static org.junit.Assert.*;
 
 /**
  * User: denispavlov
- * Date: 01/02/2016
- * Time: 21:13
+ * Date: 31/01/2017
+ * Time: 13:41
  */
-public class CustomerServiceFacadeImplTest {
+public class ShopCustomerCustomisationSupportImplTest {
 
     private final Mockery context = new JUnit4Mockery();
 
@@ -48,7 +48,7 @@ public class CustomerServiceFacadeImplTest {
             one(shop).getAttributeByCode(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES); will(returnValue(null));
         }});
 
-        final List<Pair<String, I18NModel>> types = new CustomerServiceFacadeImpl(null, null, null, null).getShopSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertTrue(types.isEmpty());
@@ -68,7 +68,7 @@ public class CustomerServiceFacadeImplTest {
             allowing(av).getVal(); will(returnValue(""));
         }});
 
-        final List<Pair<String, I18NModel>> types = new CustomerServiceFacadeImpl(null, null, null, null).getShopSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertTrue(types.isEmpty());
@@ -89,7 +89,7 @@ public class CustomerServiceFacadeImplTest {
             allowing(av).getDisplayVal(); will(returnValue(null));
         }});
 
-        final List<Pair<String, I18NModel>> types = new CustomerServiceFacadeImpl(null, null, null, null).getShopSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertEquals(2, types.size());
@@ -114,7 +114,7 @@ public class CustomerServiceFacadeImplTest {
             allowing(av).getDisplayVal(); will(returnValue("en#~#Private#~#de#~#Private DE,Company DE"));
         }});
 
-        final List<Pair<String, I18NModel>> types = new CustomerServiceFacadeImpl(null, null, null, null).getShopSupportedCustomerTypes(shop);
+        final List<Pair<String, I18NModel>> types = new ShopCustomerCustomisationSupportImpl(null).getSupportedCustomerTypes(shop);
 
         assertNotNull(types);
         assertEquals(2, types.size());

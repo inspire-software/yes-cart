@@ -327,6 +327,8 @@ public class VoShopServiceImpl implements VoShopService {
     protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
         summary.setB2bProfileActive(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
+        summary.setB2bAddressbookActive(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK, lang, false));
         summary.setCookiePolicy(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(

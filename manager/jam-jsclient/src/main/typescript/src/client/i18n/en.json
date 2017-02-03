@@ -16,6 +16,7 @@
   "UNIQUE_REQUIRED": "This value has already been used. Please choose another.",
   "TAGS_REQUIRED": "Tags must be separated by space and should be one word. E.g. 'onetag another third123'",
   "EMAIL_REQUIRED": "Valid email address is required",
+  "PHONE_REQUIRED": "Valid phone is required (e.g. +44 077 777-777, (0)77-777-777, 777-777)",
   "TAX_REQUIRED": "Valid tax rate is required, a number from 0 to 100",
   "SAVEDOBJECT_REQUIRED": "To display this information please save the main data first",
 
@@ -195,6 +196,7 @@
   "TAB_SEARCH": "Search Index",
   "TAB_CONFIGURATIONS": "Configurations",
   "TAB_ROLES": "Roles",
+  "TAB_ADDRESSBOOK": "Address book",
 
   "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",

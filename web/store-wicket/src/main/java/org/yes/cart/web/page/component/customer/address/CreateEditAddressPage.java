@@ -88,7 +88,7 @@ public class CreateEditAddressPage extends AbstractWebPage {
 
         final String addrType = params.get(WebParametersKeys.ADDRESS_TYPE).toString();
 
-        final Address address = addressBookFacade.getAddress(customer, addrId, addrType);
+        final Address address = addressBookFacade.getAddress(customer, getCurrentCustomerShop(), addrId, addrType);
 
         final Pair<Class<? extends Page>, PageParameters> successTarget = determineSuccessTarget(isCheckout, customer);
         final Pair<Class<? extends Page>, PageParameters> cancelTarget = determineCancelTarget(isCheckout, customer);

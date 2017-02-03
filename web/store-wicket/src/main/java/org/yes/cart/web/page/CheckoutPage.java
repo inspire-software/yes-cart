@@ -268,7 +268,7 @@ public class CheckoutPage extends AbstractWebPage {
             executeHttpPostedCommands();
             // For final step we:
             if ((!cart.isBillingAddressNotRequired() || !cart.isDeliveryAddressNotRequired())
-                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentShop())) {
+                    && !addressBookFacade.customerHasAtLeastOneAddress(customer.getEmail(), getCurrentCustomerShop())) {
                 // Must have an address if it is required
                 final PageParameters parameters = new PageParameters(getPageParameters());
                 parameters.set(STEP, STEP_ADDR);

@@ -263,6 +263,11 @@ public interface AttributeNamesKeys {
         String SHOP_B2B = "SHOP_B2B";
 
         /**
+         * Enable B2B address book mode.
+         */
+        String SHOP_B2B_ADDRESSBOOK = "SHOP_B2B_ADDRESSBOOK";
+
+        /**
          * Storefront requires authentication.
          */
         String SHOP_SF_REQUIRE_LOGIN = "SHOP_SF_REQUIRE_LOGIN";

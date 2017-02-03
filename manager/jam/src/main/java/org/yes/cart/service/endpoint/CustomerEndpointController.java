@@ -20,9 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
+import org.yes.cart.domain.vo.*;
 
 import java.util.List;
 
@@ -82,5 +80,28 @@ public interface CustomerEndpointController {
     @RequestMapping(value = "/reset/{customerId}/{shopId}", method = RequestMethod.POST)
     @ResponseBody
     void resetPassword(@PathVariable("customerId") long customerId, @PathVariable("shopId") long shopId) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/addressbook/{id}/{formattingShopId}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAddressBook getAddressBook(@PathVariable("id") long customerId, @PathVariable("formattingShopId") long formattingShopId, @PathVariable("lang") String lang) throws Exception;
+
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/addressbook", method = RequestMethod.PUT, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAddress createAddress(@RequestBody VoAddress vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
+    @RequestMapping(value = "/addressbook", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoAddress updateAddress(@RequestBody VoAddress vo)  throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/addressbook/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    void removeAddress(@PathVariable("id") long id) throws Exception;
+
 
 }

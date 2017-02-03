@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 import { ServicesModule } from '../shared/services/services.module';
 
+import { AddressBookPagesModule } from '../+address/address.pages.module';
+
 import { SystemPagesModule } from '../+system/system.pages.module';
 
 import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
@@ -12,7 +14,7 @@ import { ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, Sh
 import { ShopComponent, SubShopComponent } from './index';
 
 @NgModule({
-    imports: [CommonModule, SharedModule, ServicesModule, SystemPagesModule],
+    imports: [CommonModule, SharedModule, ServicesModule, SystemPagesModule, AddressBookPagesModule],
     declarations: [
       ShopAttributesComponent, ShopCarrierComponent, ShopCatalogComponent, ShopCurrencyComponent,
       ShopFulfilmentCentreComponent, ShopLanguageComponent, ShopLocationComponent, ShopMainComponent,

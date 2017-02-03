@@ -191,6 +191,13 @@ public interface AddressDTO extends Identifiable {
      */
     long getCustomerId();
 
+    /**
+     * Set customer id
+     *
+     * @param customerId customer id
+     */
+    void setCustomerId(long customerId);
+
 
     /**
      * Is address default. Only one default addrtess allowed per address type.

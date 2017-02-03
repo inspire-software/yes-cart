@@ -67,7 +67,7 @@ public class AddressDTOImpl implements AddressDTO {
     @DtoField(value = "middlename")
     private String middlename;
 
-    @DtoField(value = "defaultAddress")
+    @DtoField(value = "defaultAddress", readOnly = true)
     private boolean defaultAddress;
 
     @DtoField(value = "phone1")

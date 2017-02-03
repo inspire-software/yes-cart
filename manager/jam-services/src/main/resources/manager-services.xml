@@ -365,6 +365,16 @@
     </bean>
 
 
+    <bean id="voAddressBookService" class="org.yes.cart.service.vo.impl.VoAddressBookServiceImpl">
+        <constructor-arg index="0" ref="dtoAddressService"/>
+        <constructor-arg index="1" ref="dtoShopService"/>
+        <constructor-arg index="2" ref="countryService"/>
+        <constructor-arg index="3" ref="stateService"/>
+        <constructor-arg index="4" ref="uiFederationFacade"/>
+        <constructor-arg index="5" ref="voAssemblySupport"/>
+    </bean>
+
+
     <bean id="voValidationService" class="org.yes.cart.service.vo.impl.VoValidationServiceImpl">
         <constructor-arg index="0">
             <map>

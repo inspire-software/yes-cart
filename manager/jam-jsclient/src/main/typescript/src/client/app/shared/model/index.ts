@@ -17,5 +17,6 @@ export * from './payment.model';
 export * from './organisation.model';
 export * from './customerorder.model';
 export * from './customer.model';
+export * from './address.model';
 export * from './reports.model';
 export * from './validation.model';

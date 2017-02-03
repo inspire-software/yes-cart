@@ -110,6 +110,10 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10882,  'SHOP_CPROFATTRS_READONLY_B2C', 'SHOP_CPROFATTRS_READONLY_B2C',  0,  NULL,  'Customer (B2C): profile form attributes - read only (CSV)',
     'List of customer attributes separated by comma to be shown on profile form but not editable',  1004, 1001, 0, 0, 0, 0);
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10883,  'SHOP_B2B_ADDRESSBOOK', 'SHOP_B2B_ADDRESSBOOK',  0,  NULL,  'Shop: B2B addressbook mode enable',
+    'Disables customer addressbook access, all customers can only use B2B shop addressbook',  1008, 1001, 0, 0, 0, 0);
+
 
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  10980,  'CART_SESSION_EXPIRY_SECONDS', 'CART_SESSION_EXPIRY_SECONDS',  0,  NULL,  'Customer: session expiry in seconds',

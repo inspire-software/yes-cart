@@ -17,6 +17,8 @@
 package org.yes.cart.service.dto;
 
 import org.yes.cart.domain.dto.AddressDTO;
+import org.yes.cart.domain.dto.AttrValueCustomerDTO;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.exception.UnableToCreateInstanceException;
 import org.yes.cart.exception.UnmappedInterfaceException;
 
@@ -38,5 +40,24 @@ public interface DtoAddressService extends GenericDTOService<AddressDTO> {
     List<AddressDTO> getAddressesByCustomerId(long customerId)
             throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get customers addresses
+     *
+     * @param customerId customer id
+     * @param formattingShopId shop to which this customer relates
+     * @param lang language
+     * @return list of addresses
+     */
+    List<Pair<Long, String>> getFormattedAddressesByCustomerId(long customerId, long formattingShopId, String lang)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 
+    /**
+     * Get address form.
+     * @param customerId customer id
+     * @param formattingShopId shop to which this customer relates
+     * @param addressType address type
+     * @return form fields (same as on SF)
+     */
+    List<AttrValueCustomerDTO> getAddressForm(long customerId, long formattingShopId, String addressType)
+            throws UnmappedInterfaceException, UnableToCreateInstanceException;
 }

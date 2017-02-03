@@ -26,6 +26,9 @@ import org.yes.cart.service.domain.AddressService;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -72,13 +75,19 @@ public class TestAddressServiceImpl extends BaseCoreDBTestCase {
         address.setCity("New-Vasyki");
         address.setAddrline1("line0");
         address.setCountryCode("ZH");
-        address.setAddressType(Address.ADDR_TYPE_BILLING);
+        address.setAddressType(Address.ADDR_TYPE_SHIPPING);
         address.setCustomer(customer);
         addressService.create(address);
         customer = customerService.findById(customer.getCustomerId());
         assertEquals(2, customer.getAddress().size());
-        assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId()).size());
-        assertTrue(addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPPING).isEmpty());
-        assertEquals(2, addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_BILLING).size());
+        final List<Address> addresses = addressService.getAddressesByCustomerId(customer.getCustomerId());
+        assertEquals(2, addresses.size());
+        assertTrue(Arrays.asList("US", "ZH").contains(addresses.get(0).getCountryCode()));
+        final List<Address> shipping = addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_SHIPPING);
+        assertEquals(1, shipping.size());
+        assertEquals("ZH", shipping.get(0).getCountryCode());
+        final List<Address> billing = addressService.getAddressesByCustomerId(customer.getCustomerId(), Address.ADDR_TYPE_BILLING);
+        assertEquals(1, billing.size());
+        assertEquals("US", billing.get(0).getCountryCode());
     }
 }

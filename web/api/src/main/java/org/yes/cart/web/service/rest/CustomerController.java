@@ -864,13 +864,14 @@ public class CustomerController {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
+        final Shop customerShop = cartMixin.getCurrentCustomerShop();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
         if (customer == null) {
             cartMixin.throwSecurityExceptionIfNotLoggedIn();
         }
 
-        final Address addressEntity = addressBookFacade.getAddress(customer, String.valueOf(address.getAddressId()), type);
+        final Address addressEntity = addressBookFacade.getAddress(customer, customerShop, String.valueOf(address.getAddressId()), type);
 
         if (StringUtils.isNotBlank(address.getSalutation())) {
             addressEntity.setSalutation(address.getSalutation());
@@ -897,7 +898,7 @@ public class CustomerController {
             addressEntity.setPhone1(address.getPhone1());
         }
 
-        addressBookFacade.createOrUpdate(addressEntity);
+        addressBookFacade.createOrUpdate(addressEntity, customerShop);
 
         return viewAddressbookInternal(type);
     }

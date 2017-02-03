@@ -78,6 +78,7 @@ public class VoShopSummary {
 
 
     private MutablePair<String, Boolean> b2bProfileActive;
+    private MutablePair<String, Boolean> b2bAddressbookActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
@@ -369,6 +370,14 @@ public class VoShopSummary {
 
     public void setB2bProfileActive(final MutablePair<String, Boolean> b2bProfileActive) {
         this.b2bProfileActive = b2bProfileActive;
+    }
+
+    public MutablePair<String, Boolean> getB2bAddressbookActive() {
+        return b2bAddressbookActive;
+    }
+
+    public void setB2bAddressbookActive(final MutablePair<String, Boolean> b2bAddressbookActive) {
+        this.b2bAddressbookActive = b2bAddressbookActive;
     }
 
     public MutablePair<String, Boolean> getCookiePolicy() {

@@ -93,8 +93,14 @@ public class ApplicationDirector implements ApplicationContextAware {
      * @param serverDomainName given given domain address.
      * @return {@link Shop}
      */
-    public Shop getShopByDomainName(final String serverDomainName) {
-        return shopService.getShopByDomainName(serverDomainName);
+    public static Shop getShopByDomainName(final String serverDomainName) {
+
+        final ShopService service = getInstance().shopService;
+        if (service == null) {
+            throw new IllegalStateException("ApplicationDirector.shopService is not initialised");
+        }
+
+        return service.getShopByDomainName(serverDomainName);
     }
 
 
@@ -105,6 +111,27 @@ public class ApplicationDirector implements ApplicationContextAware {
      */
     public static Shop getCurrentShop() {
         return shopThreadLocal.get();
+    }
+
+    /**
+     * Get current shop from local thread.
+     *
+     * @return {@link Shop} instance
+     */
+    public static Shop getCurrentCustomerShop() {
+
+        final ShoppingCart cart = getShoppingCart();
+        final Shop shop = getCurrentShop();
+        if (cart != null && cart.getShoppingContext().getCustomerShopId() != shop.getShopId()) {
+
+            final ShopService service = getInstance().shopService;
+            if (service == null) {
+                throw new IllegalStateException("ApplicationDirector.shopService is not initialised");
+            }
+
+            return service.getById(cart.getShoppingContext().getCustomerShopId());
+        }
+        return shop;
     }
 
     /**

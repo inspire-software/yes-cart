@@ -18,7 +18,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { Config } from '../config/env.config';
-import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, Pair } from '../model/index';
+import { CustomerVO, CustomerInfoVO, AttrValueCustomerVO, AddressBookVO, AddressVO, Pair } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
@@ -155,6 +155,56 @@ export class CustomerService {
 
     return this.http.post(this._serviceBaseUrl + '/reset/' + customer.customerId + '/' + shopId, null, options)
         .catch(this.handleError);
+  }
+
+
+  /**
+   * Get laddress book of a customer, which are accessible to manage or view,
+   * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
+   */
+  getAddressBook(customer:CustomerVO, formattingShopId:number, lang:string) {
+
+    return this.http.get(this._serviceBaseUrl + '/addressbook/' + customer.customerId + '/' + formattingShopId + '/' + lang)
+      .map(res => <AddressBookVO> res.json())
+      .catch(this.handleError);
+  }
+
+
+
+  /**
+   * Create/update address.
+   * @param address address
+   * @returns {Observable<R>}
+   */
+  saveAddress(address:AddressVO) {
+
+    let body = JSON.stringify(address);
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    if (address.addressId > 0) {
+      return this.http.post(this._serviceBaseUrl + '/addressbook', body, options)
+        .map(res => <AddressVO> res.json())
+        .catch(this.handleError);
+    } else {
+      return this.http.put(this._serviceBaseUrl + '/addressbook', body, options)
+        .map(res => <AddressVO> res.json())
+        .catch(this.handleError);
+    }
+  }
+
+
+  /**
+   * Remove address.
+   * @param address address
+   * @returns {Observable<R>}
+   */
+  removeAddress(address:AddressVO) {
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.delete(this._serviceBaseUrl + '/addressbook/' + address.addressId, options)
+      .catch(this.handleError);
   }
 
 

@@ -181,7 +181,7 @@ public interface Customer extends RegisteredPerson, Auditable, Taggable {
 
 
     /**
-     * Get customer addreese by given type.
+     * Get customer addresses by given type.
      *
      * @param addressType address type
      * @return list of addresses.

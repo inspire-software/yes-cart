@@ -21,10 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.yes.cart.domain.misc.MutablePair;
-import org.yes.cart.domain.vo.VoAttrValueCustomer;
-import org.yes.cart.domain.vo.VoCustomer;
-import org.yes.cart.domain.vo.VoCustomerInfo;
+import org.yes.cart.domain.vo.*;
 import org.yes.cart.service.endpoint.CustomerEndpointController;
+import org.yes.cart.service.vo.VoAddressBookService;
 import org.yes.cart.service.vo.VoCustomerService;
 import org.yes.cart.service.vo.VoShopService;
 
@@ -40,12 +39,15 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
 
     private final VoCustomerService voCustomerService;
     private final VoShopService voShopService;
+    private final VoAddressBookService voAddressBookService;
 
     @Autowired
     public CustomerEndpointControllerImpl(final VoCustomerService voCustomerService,
-                                          final VoShopService voShopService) {
+                                          final VoShopService voShopService,
+                                          final VoAddressBookService voAddressBookService) {
         this.voCustomerService = voCustomerService;
         this.voShopService = voShopService;
+        this.voAddressBookService = voAddressBookService;
     }
 
     @Override
@@ -102,4 +104,27 @@ public class CustomerEndpointControllerImpl implements CustomerEndpointControlle
         voCustomerService.resetPassword(customerId, shopId);
     }
 
+    @Override
+    public @ResponseBody
+    VoAddressBook getAddressBook(@PathVariable("id") final long customerId, @PathVariable("formattingShopId") final long formattingShopId, @PathVariable("lang") final String lang) throws Exception {
+        return voAddressBookService.getAddressBook(customerId, formattingShopId, lang);
+    }
+
+    @Override
+    public @ResponseBody
+    VoAddress createAddress(@RequestBody final VoAddress vo) throws Exception {
+        return voAddressBookService.create(vo);
+    }
+
+    @Override
+    public @ResponseBody
+    VoAddress updateAddress(@RequestBody final VoAddress vo) throws Exception {
+        return voAddressBookService.update(vo);
+    }
+
+    @Override
+    public @ResponseBody
+    void removeAddress(@PathVariable("id") final long id) throws Exception {
+        voAddressBookService.remove(id);
+    }
 }

@@ -30,6 +30,7 @@ import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.Total;
 
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -213,6 +214,9 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         final boolean guest = shoppingCart.getLogonState() != ShoppingCart.LOGGED_IN;
 
+        final Shop customerShop = customerOrder.getShop();
+        final Shop configShop = customerShop.getMaster() != null ? customerShop.getMaster() : customerShop;
+
         final Customer customer = customerService.getCustomerByEmail(
                 guest ? shoppingCart.getGuid() : shoppingCart.getCustomerEmail(),
                 customerOrder.getShop()
@@ -229,7 +233,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             Address billingAddress = null;
             Address shippingAddress = null;
 
-            for (final Address address : customer.getAddress()) {
+            for (final Address address : getAddressbook(customerShop, customer)) {
                 if (address.getAddressId() == selectedBillingAddressId) {
                     billingAddress = address;
                 }
@@ -242,16 +246,15 @@ public class OrderAssemblerImpl implements OrderAssembler {
             }
 
             if (billingAddress == null && !billingNotRequired) {
-                billingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
+                billingAddress = getCustomerDefaultAddress(customerShop, customer, Address.ADDR_TYPE_BILLING);
             }
             if (shippingAddress == null && !shippingNotRequired) {
-                shippingAddress = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
+                shippingAddress = getCustomerDefaultAddress(customerShop, customer, Address.ADDR_TYPE_SHIPPING);
             }
 
             final boolean sameAddress = !shoppingCart.isSeparateBillingAddress() || billingAddress == null;
 
             if (!shippingNotRequired) {
-                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
                 customerOrder.setShippingAddress(formatAddress(shippingAddress, configShop, customer, customerOrder.getLocale()));
             } else {
                 customerOrder.setShippingAddress("");
@@ -262,7 +265,6 @@ public class OrderAssemblerImpl implements OrderAssembler {
             }
 
             if (!billingNotRequired) {
-                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
                 customerOrder.setBillingAddress(formatAddress(billingAddress, configShop, customer, customerOrder.getLocale()));
             } else {
                 customerOrder.setBillingAddress("");
@@ -300,6 +302,31 @@ public class OrderAssemblerImpl implements OrderAssembler {
 
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
 
+    }
+
+    /**
+     * Get customer address book for this shop
+     *
+     * @param shop shop
+     * @param customer customer
+     *
+     * @return addresses
+     */
+    protected Collection<Address> getAddressbook(final Shop shop, final Customer customer) {
+        return customer.getAddress();
+    }
+
+    /**
+     * Get default customer address for this shop.
+     *
+     * @param shop shop
+     * @param customer customer
+     * @param addrType type of address
+     *
+     * @return address to use
+     */
+    protected Address getCustomerDefaultAddress(final Shop shop, final Customer customer, final String addrType) {
+        return customer.getDefaultAddress(addrType);
     }
 
     /**

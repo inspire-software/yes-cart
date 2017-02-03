@@ -32,6 +32,15 @@
       <yc-shop-attributes [shop]="shop" [reload]="reloadAttributes"></yc-shop-attributes>
     </tab>
 
+    <tab  (select)="tabSelected('Addressbook')">
+
+      <template tabHeading>
+        {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">YCE</span>
+      </template>
+
+      <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
+    </tab>
+
   </tabset>
 
 </template>

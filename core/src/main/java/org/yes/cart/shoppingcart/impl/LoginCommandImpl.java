@@ -122,7 +122,7 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
         if (!shoppingCart.getOrderInfo().isBillingAddressNotRequired()
                 || !shoppingCart.getOrderInfo().isDeliveryAddressNotRequired()) {
 
-            setDefaultAddressesIfPossible(shop,  customer, shoppingCart);
+            setDefaultAddressesIfPossible(shoppingCart);
 
         }
     }

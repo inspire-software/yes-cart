@@ -260,6 +260,14 @@
     </bean>
 
 
+    <bean id="shopAddressCustomisationSupport" class="org.yes.cart.service.domain.impl.ShopAddressCustomisationSupportImpl">
+        <constructor-arg index="0" ref="addressService"/>
+        <constructor-arg index="1" ref="countryService"/>
+        <constructor-arg index="2" ref="stateService"/>
+        <constructor-arg index="3" ref="shopService"/>
+        <constructor-arg index="4" ref="attributeService"/>
+    </bean>
+
 
     <bean id="customerWishListService" parent="txProxyTemplate">
         <property name="target">
@@ -664,6 +672,10 @@
         </constructor-arg>
     </bean>
 
+    <bean id="shopCustomerCustomisationSupport" class="org.yes.cart.service.domain.impl.ShopCustomerCustomisationSupportImpl">
+        <constructor-arg index="0" ref="customerService"/>
+    </bean>
+
     <bean id="managerService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.domain.impl.ManagerServiceImpl">
@@ -925,6 +937,12 @@
         <property name="visitorId" value="CUSTOMER"/>
     </bean>
 
+    <bean id="shoppingCartCommandConfigurationDefaultAddressVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationDefaultAddressVisitorImpl">
+        <constructor-arg index="0" ref="customerService"/>
+        <constructor-arg index="1" ref="shopService"/>
+        <property name="visitorId" value="DEFAULTADDRESS"/>
+    </bean>
+
     <bean id="shoppingCartCommandConfigurationTaxOptionsVisitor" class="org.yes.cart.shoppingcart.impl.ShoppingCartCommandConfigurationTaxOptionsVisitorImpl">
         <constructor-arg index="0" ref="customerService"/>
         <constructor-arg index="1" ref="shopService"/>
@@ -937,6 +955,7 @@
                 <ref bean="shoppingCartCommandConfigurationCheckoutVisitor"/>
                 <ref bean="shoppingCartCommandConfigurationCustomerTypeVisitor"/>
                 <ref bean="shoppingCartCommandConfigurationCustomerVisitor"/>
+                <ref bean="shoppingCartCommandConfigurationDefaultAddressVisitor"/>
                 <ref bean="shoppingCartCommandConfigurationTaxOptionsVisitor"/>
             </set>
         </constructor-arg>

@@ -10,6 +10,7 @@ import { TranslateModule } from 'ng2-translate/bundles/index';
 
 import { CatalogPagesModule } from './+catalog/catalog.pages.module';
 import { ContentPagesModule } from './+content/content.pages.module';
+import { AddressBookPagesModule } from './+address/address.pages.module';
 import { CustomerPagesModule } from './+customer/customer.pages.module';
 import { CustomerOrderPagesModule } from './+customerorder/customerorder.pages.module';
 import { FulfilmentPagesModule } from './+fulfilment/fulfilment.pages.module';
@@ -32,6 +33,7 @@ import { ServicesModule } from './shared/services/services.module';
     TranslateModule.forRoot(),
     CatalogPagesModule,
     ContentPagesModule,
+    AddressBookPagesModule,
     CustomerPagesModule,
     CustomerOrderPagesModule,
     FulfilmentPagesModule,

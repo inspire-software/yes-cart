@@ -3444,13 +3444,6 @@
         ]]>
     </query>
 
-    <query name="ADDRESSES.BY.CUSTOMER">
-        <![CDATA[
-            select a.customer.customerId from AddressEntity a
-                where a.customer.customerId = ?1
-        ]]>
-    </query>
-
     <query name="CUSTOMER.IDS.BY.ADDRESS">
         <![CDATA[
             select distinct(a.customer.customerId) from AddressEntity a
@@ -3459,6 +3452,12 @@
         ]]>
     </query>
 
+    <query name="ADDRESSES.BY.CUSTOMER">
+        <![CDATA[
+            select a from AddressEntity a
+                where a.customer.customerId = ?1
+        ]]>
+    </query>
 
     <query name="ADDRESSES.BY.CUSTOMER.TYPE">
         <![CDATA[

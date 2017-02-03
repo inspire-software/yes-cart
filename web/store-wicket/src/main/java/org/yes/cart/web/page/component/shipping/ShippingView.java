@@ -39,6 +39,7 @@ import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.BaseComponent;
 import org.yes.cart.web.page.component.price.PriceView;
 import org.yes.cart.web.support.constants.StorefrontServiceSpringKeys;
+import org.yes.cart.web.support.service.AddressBookFacade;
 import org.yes.cart.web.support.service.ContentServiceFacade;
 import org.yes.cart.web.support.service.CustomerServiceFacade;
 import org.yes.cart.web.support.service.ShippingServiceFacade;
@@ -63,6 +64,9 @@ public class ShippingView extends BaseComponent {
 
     @SpringBean(name = StorefrontServiceSpringKeys.CUSTOMER_SERVICE_FACADE)
     private CustomerServiceFacade customerServiceFacade;
+
+    @SpringBean(name = StorefrontServiceSpringKeys.ADDRESS_BOOK_FACADE)
+    private AddressBookFacade addressBookFacade;
 
     @SpringBean(name = StorefrontServiceSpringKeys.SHIPPING_SERVICE_FACADE)
     private ShippingServiceFacade shippingServiceFacade;
@@ -128,8 +132,10 @@ public class ShippingView extends BaseComponent {
                 final Address shippingAddress;
                 if (customer != null &&
                         (!addressNotRequired.getFirst() || !addressNotRequired.getSecond())) {
-                    final Address billingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-                    final Address shippingAddressTemp = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
+
+                    final Shop customerShop = getCurrentCustomerShop();
+                    final Address billingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_BILLING);
+                    final Address shippingAddressTemp = addressBookFacade.getDefaultAddress(customer, customerShop, Address.ADDR_TYPE_SHIPPING);
 
                     if (shippingAddressTemp != null) { //normal case when we entered shipping address
 

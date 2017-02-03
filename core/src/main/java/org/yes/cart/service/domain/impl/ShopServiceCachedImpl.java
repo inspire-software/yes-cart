@@ -218,7 +218,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-subShopsByMaster",
             "shopService-shopWarehouses",
             "shopService-shopWarehousesIds",
-            "web.addressBookFacade-allCountries",
+            "addressBookService-allCountries",
             "mailSenderBuilder-buildJavaMailSender"
     }, allEntries = true)
     public void updateAttributeValue(final long shopId, final String attributeKey, final String attributeValue) {

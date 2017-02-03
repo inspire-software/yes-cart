@@ -41,6 +41,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private _attributes:AttrValueCustomerVO[] = [];
   private attributeFilter:string;
 
+  private addressShops:ShopVO[] = [];
   private _shops:any = {};
   private resetShopName:string = null;
   private resetShop:ShopVO = null;
@@ -71,6 +72,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private selectedCustomerType:string = null;
 
   private searchHelpShow:boolean = false;
+
+  private reloadAddressbook:boolean = false;
 
   constructor(private _customerService:CustomerService,
               fb: FormBuilder) {
@@ -115,6 +118,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     UiUtil.formInitialise(this, 'initialising', 'customerForm', '_customer', customer, customer != null && customer.customerId > 0, ['email']);
     this._changes = [];
+    this.tabSelected('Main');
     this.recalculateShops();
 
   }
@@ -159,6 +163,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
   tabSelected(tab:any) {
     LogUtil.debug('CustomerComponent tabSelected', tab);
+    this.reloadAddressbook = tab === 'Addressbook';
   }
 
 
@@ -291,9 +296,14 @@ export class CustomerComponent implements OnInit, OnDestroy {
       this.availableShops = this.getAvailableShopNames();
       this.supportedShops = [];
     }
+
+    let addressShops:ShopVO[] = [];
+    this.supportedShops.forEach(item => {
+      addressShops.push(item.first);
+    });
+    this.addressShops = addressShops;
+
   }
-
-
 
   private getAvailableShopNames():Array<Pair<ShopVO, CustomerShopLinkVO>> {
 

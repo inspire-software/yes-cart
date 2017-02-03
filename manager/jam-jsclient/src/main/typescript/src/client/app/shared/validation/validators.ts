@@ -72,9 +72,9 @@ export class YcValidators {
 
   static requiredPk = Validators.compose([Validators.required, YcValidators.pk]);
 
-  static validPhone = Validators.pattern('[\\+]?[\\(\\)0-9\- ]');
+  static validPhone = Validators.pattern('([+]){0,1}([()0-9- ]){5,}');
 
-  static validEmail = Validators.pattern('[_a-z0-9-]+(\\.[_a-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})');
+  static validEmail = Validators.pattern('[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})');
 
   static requiredValidEmail = Validators.compose([Validators.required, YcValidators.validEmail]);
 

@@ -372,6 +372,10 @@ alter table TSHOP add index FK_SH_MASTER (MASTER_ID), add constraint FK_SH_MASTE
 -- alter table TSHOP add constraint FK_SH_MASTER foreign key (MASTER_ID) references TSHOP;
 
 
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10883,  'SHOP_B2B_ADDRESSBOOK', 'SHOP_B2B_ADDRESSBOOK',  0,  NULL,  'Shop: B2B addressbook mode enable',
+    'Disables customer addressbook access, all customers can only use B2B shop addressbook',  1008, 1001, 0, 0, 0, 0);
+
 --
 -- YC-000 Performance optimisations and runtime improvements
 --

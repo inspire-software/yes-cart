@@ -97,17 +97,19 @@ public class ManageAddressesView extends BaseComponent {
 
         final List<Address> allowed = determineAllowedAddresses(customerModel, addressType);
 
+
+
         add(
                 new Form(SELECT_ADDRESSES_FORM).add(
                         new RadioGroup<Address>(
                                 ADDRESS_RADIO_GROUP,
-                                new Model<Address>(customerModel.getObject() != null ? customerModel.getObject().getDefaultAddress(addressType) : null)) {
+                                new Model<Address>(addressBookFacade.getDefaultAddress(customerModel.getObject(), getCurrentCustomerShop(), addressType))) {
 
                             @Override
                             protected void onSelectionChanged(final Object o) {
                                 final Address address = (Address) o;
                                 super.onSelectionChanged(address);
-                                addressBookFacade.useAsDefault(address);
+                                addressBookFacade.useAsDefault(address, getCurrentCustomerShop());
                                 final String key = Address.ADDR_TYPE_BILLING.equals(addressType) ?
                                         ShoppingCartCommand.CMD_SETADDRESES_P_BILLING_ADDRESS : ShoppingCartCommand.CMD_SETADDRESES_P_DELIVERY_ADDRESS;
                                 shoppingCartCommandFactory.execute(ShoppingCartCommand.CMD_SETADDRESES, getCurrentCart(),
@@ -195,7 +197,8 @@ public class ManageAddressesView extends BaseComponent {
                             /** {@inheritDoc} */
                             @Override
                             public void onSubmit() {
-                                addressBookFacade.remove(address);
+                                final Shop shop = ((AbstractWebPage) getPage()).getCurrentCustomerShop();
+                                addressBookFacade.remove(address, shop);
                                 if (returnToCheckout) {
                                     setResponsePage((Class) wicketPagesMounter.getPageProviderByUri("/checkout").get());
                                 } else {

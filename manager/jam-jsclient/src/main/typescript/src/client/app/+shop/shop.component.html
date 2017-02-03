@@ -65,6 +65,17 @@
       <yc-shop-subs [shop]="shop" [reload]="reloadB2b"></yc-shop-subs>
     </tab>
 
+
+    <tab  (select)="tabSelected('Addressbook')">
+
+      <template tabHeading>
+        {{ 'TAB_ADDRESSBOOK' | translate }} <span class="label label-info">YCE</span>
+      </template>
+
+      <yc-addressbook [customer]="shopCustomer" [reload]="reloadAddressbook" [shops]="addressShops"></yc-addressbook>
+    </tab>
+
+
   </tabset>
 
 </template>

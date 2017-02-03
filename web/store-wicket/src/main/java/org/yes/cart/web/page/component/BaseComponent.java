@@ -126,6 +126,15 @@ public class BaseComponent extends Panel {
     /**
      * Retrieve current shop.
      *
+     * @return shop object
+     */
+    public Shop getCurrentCustomerShop() {
+        return ApplicationDirector.getCurrentCustomerShop();
+    }
+
+    /**
+     * Retrieve current shop.
+     *
      * @return shop PK
      */
     public long getCurrentShopId() {

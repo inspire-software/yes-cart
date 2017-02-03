@@ -136,42 +136,11 @@ public abstract class AbstractCartCommandImpl implements ConfigurableShoppingCar
      * Since customers could have defaults set to country which is not supported by shop billing/delivery address
      * a check is made for compatibility first.
      *
-     * @param shop             current shop
-     * @param customer         customer
      * @param cart             current cart
      */
-    protected void setDefaultAddressesIfPossible(final Shop shop, final Customer customer, final MutableShoppingCart cart) {
+    protected void setDefaultAddressesIfPossible(final MutableShoppingCart cart) {
 
-        final Address delivery = customer.getDefaultAddress(Address.ADDR_TYPE_SHIPPING);
-        final Address billing = customer.getDefaultAddress(Address.ADDR_TYPE_BILLING);
-
-        Address pricingAddress = null;
-        final MutableOrderInfo info = cart.getOrderInfo();
-        final MutableShoppingContext ctx = cart.getShoppingContext();
-
-        if (!info.isDeliveryAddressNotRequired() && delivery != null &&
-                shop.getSupportedShippingCountriesAsList().contains(delivery.getCountryCode())) {
-            info.setDeliveryAddressId(delivery.getAddressId());
-            pricingAddress = delivery;
-        }
-        if (!info.isBillingAddressNotRequired() && (delivery != null || billing != null)) {
-            if (billing != null &&
-                    shop.getSupportedBillingCountriesAsList().contains(billing.getCountryCode())) {
-                info.setBillingAddressId(billing.getAddressId());
-                pricingAddress = billing;
-            } else if (delivery != null &&
-                    shop.getSupportedBillingCountriesAsList().contains(delivery.getCountryCode())) {
-                info.setBillingAddressId(delivery.getAddressId());
-            }
-        }
-
-        if (pricingAddress != null) {
-            ctx.setCountryCode(pricingAddress.getCountryCode());
-            ctx.setStateCode(pricingAddress.getStateCode());
-        } else {
-            ctx.setCountryCode(null);
-            ctx.setStateCode(null);
-        }
+        this.configurationProvider.provide("DEFAULTADDRESS").visit(cart);
 
     }
 

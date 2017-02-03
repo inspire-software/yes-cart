@@ -18,16 +18,16 @@ package org.yes.cart.web.support.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.cache.annotation.Cacheable;
-import org.yes.cart.constants.AttributeGroupNames;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.service.domain.*;
-import org.yes.cart.util.ShopCodeContext;
+import org.yes.cart.service.domain.AddressCustomisationSupport;
+import org.yes.cart.service.domain.AddressService;
+import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.web.support.service.AddressBookFacade;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * User: denispavlov
@@ -38,48 +38,40 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     private final CustomerService customerService;
     private final AddressService addressService;
-    private final CountryService countryService;
-    private final StateService stateService;
-    private final ShopService shopService;
-    private final AttributeService attributeService;
+    private final AddressCustomisationSupport addressCustomisationSupport;
 
     public AddressBookFacadeImpl(final CustomerService customerService,
                                  final AddressService addressService,
-                                 final CountryService countryService,
-                                 final StateService stateService,
-                                 final ShopService shopService,
-                                 final AttributeService attributeService) {
+                                 final AddressCustomisationSupport addressCustomisationSupport) {
         this.customerService = customerService;
         this.addressService = addressService;
-        this.countryService = countryService;
-        this.stateService = stateService;
-        this.shopService = shopService;
-        this.attributeService = attributeService;
+        this.addressCustomisationSupport = addressCustomisationSupport;
     }
 
     /** {@inheritDoc} */
-    public boolean customerHasAtLeastOneAddress(final String email, final Shop shop) {
+    public boolean customerHasAtLeastOneAddress(final String email, final Shop customerShop) {
 
         if (StringUtils.isNotBlank(email)) {
 
-            final Customer customer = customerService.getCustomerByEmail(email, shop);
+            final Customer customer = customerService.getCustomerByEmail(email, customerShop);
             if (customer != null) {
                 return
-                        !getAddresses(customer, shop, Address.ADDR_TYPE_BILLING).isEmpty() ||
-                        !getAddresses(customer, shop, Address.ADDR_TYPE_SHIPPING).isEmpty();
+                        !getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING).isEmpty() ||
+                        !getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING).isEmpty();
             }
         }
         return false;
     }
 
     /** {@inheritDoc} */
-    public List<Address> getAddresses(final Customer customer, final Shop shop, final String addressType) {
+    public List<Address> getAddresses(final Customer customer, final Shop customerShop, final String addressType) {
 
         final List<Address> allowed = new ArrayList<Address>();
         if (customer != null) {
-            final List<Address> allAvailable = customer.getAddresses(addressType);
+            final Shop configShop = customerShop.getMaster() != null ? customerShop.getMaster() : customerShop;
+            final Collection<Address> allAvailable = getAddressbook(customerShop, customer, addressType);
             final List<String> allowedCountries = Address.ADDR_TYPE_BILLING.equals(addressType) ?
-                    shop.getSupportedBillingCountriesAsList() : shop.getSupportedShippingCountriesAsList();
+                    configShop.getSupportedBillingCountriesAsList() : configShop.getSupportedShippingCountriesAsList();
 
             for (final Address address : allAvailable) {
                 if (allowedCountries.contains(address.getCountryCode())) {
@@ -91,7 +83,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     }
 
     /** {@inheritDoc} */
-    public Address getAddress(final Customer customer, final String addrId, final String addressType) {
+    public Address getAddress(final Customer customer, final Shop customerShop, final String addrId, final String addressType) {
         long pk;
         try {
             pk = NumberUtils.toLong(addrId);
@@ -99,7 +91,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
             pk = 0;
         }
         Address rez = null;
-        for (Address addr : customer.getAddress()) {
+        for (Address addr : getAddressbook(customerShop, customer)) {
             if (addr.getAddressId() == pk) {
                 rez = addr;
                 break;
@@ -121,10 +113,50 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         return rez;
     }
 
-    /** {@inheritDoc} */
-    public Address copyAddress(final Customer customer, final String addrId, final String addressType) {
+    /**
+     * Get existing address default address.
+     *
+     * @param customer customer of the address
+     * @param customerShop shop
+     * @param addressType type of address
+     * @return address instance
+     */
+    public Address getDefaultAddress(final Customer customer, final Shop customerShop, final String addressType) {
+        if (customer == null || customerShop == null) {
+            return null;
+        }
+        return customer.getDefaultAddress(addressType);
+    }
 
-        final Address original = getAddress(customer, addrId, addressType);
+    /**
+     * Get customer address book for this shop
+     *
+     * @param customerShop shop
+     * @param customer customer
+     *
+     * @return addresses
+     */
+    protected Collection<Address> getAddressbook(final Shop customerShop, final Customer customer) {
+        return customer.getAddress();
+    }
+
+    /**
+     * Get customer address book for this shop
+     *
+     * @param customerShop shop
+     * @param customer customer
+     *
+     * @return addresses
+     */
+    protected Collection<Address> getAddressbook(final Shop customerShop, final Customer customer, final String type) {
+        return customer.getAddresses(type);
+    }
+
+
+    /** {@inheritDoc} */
+    public Address copyAddress(final Customer customer, final Shop customerShop, final String addrId, final String addressType) {
+
+        final Address original = getAddress(customer, customerShop, addrId, addressType);
 
         if (original.getAddressId() > 0L) {
 
@@ -166,177 +198,71 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
         return null;
     }
 
-    private static final List<String> DEFAULT_FIELDS = Arrays.asList(
-            "firstname", "lastname",
-            "addrline1", "addrline2",
-            "city", "postcode",
-            "stateCode", "countryCode",
-            "phone1"
-    );
-
-    private static final List<String> OPTIONAL_FIELDS = Arrays.asList(
-            "salutation", "middlename",
-            "addrline2",
-            "stateCode",
-            "phone2", "mobile1", "mobile2",
-            "email1", "email2",
-            "custom0", "custom1", "custom2", "custom3", "custom4",
-            "custom5", "custom6", "custom7", "custom8", "custom9"
-    );
-
     /** {@inheritDoc} */
     public List<AttrValue> getShopCustomerAddressAttributes(final Customer customer, final Shop shop, final String addressType) {
 
-        final List<String> addressFormAttributes = getAddressFormAttributeList(customer, shop, addressType);
+        return addressCustomisationSupport.getShopCustomerAddressAttributes(customer, shop, addressType);
 
-        List<Attribute> formFieldsConfig = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, addressFormAttributes);
-        if (formFieldsConfig.isEmpty()) {
-            formFieldsConfig = createDefaultFormFieldConfig();
-        }
+    }
 
-        final Map<String, Attribute> formFieldsConfigMap = new HashMap<String, Attribute>();
-        for (final Attribute attribute : formFieldsConfig) {
-            formFieldsConfigMap.put(attribute.getCode(), attribute);
-        }
+    /** {@inheritDoc} */
+    public List<Country> getAllCountries(final String shopCode, final String addressType) {
 
-        final List<AttrValue> addressAttributes = new ArrayList<AttrValue>();
-        for (final String formFieldConfigName : addressFormAttributes) {
-            final Attribute formFieldConfig = formFieldsConfigMap.get(formFieldConfigName);
-            if (formFieldConfig != null) {
-                final AttrValue av = attributeService.getGenericDao().getEntityFactory().getByIface(AttrValueCustomer.class);
-                av.setAttribute(formFieldConfig);
-                addressAttributes.add(av);
+        return addressCustomisationSupport.getAllCountries(shopCode, addressType);
+
+    }
+
+    /** {@inheritDoc} */
+    public List<State> getStatesByCountry(final String countryCode) {
+
+        return addressCustomisationSupport.getStatesByCountry(countryCode);
+
+    }
+
+    /** {@inheritDoc} */
+    public void createOrUpdate(final Address address, final Shop customerShop) {
+        if (!customerShop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK)) {
+            if (address.getAddressId() == 0) {
+                // Need to add address to customer only just before the creation
+                address.getCustomer().getAddress().add(address);
+                addressService.create(address);
+            } else {
+                addressService.update(address);
             }
         }
-
-        return addressAttributes;
     }
 
-    private List<Attribute> createDefaultFormFieldConfig() {
+    /** {@inheritDoc} */
+    public void remove(Address address, final Shop customerShop) {
 
-        final Etype etype = attributeService.getGenericDao().getEntityFactory().getByIface(Etype.class);
-        etype.setBusinesstype("String");
-        etype.setJavatype("java.lang.String");
+        if (!customerShop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK)) {
+            final boolean isDefault = address.isDefaultAddress();
+            addressService.delete(address);
 
-        final List<Attribute> attributes = new ArrayList<Attribute>();
-        for (final String addressFormAttribute : DEFAULT_FIELDS) {
-            final Attribute attr = attributeService.getGenericDao().getEntityFactory().getByIface(Attribute.class);
-            attr.setVal(addressFormAttribute);
-            attr.setCode(addressFormAttribute);
-            attr.setEtype(etype);
-            attr.setMandatory(!OPTIONAL_FIELDS.contains(addressFormAttribute));
-            attributes.add(attr);
-        }
-        return attributes;
-    }
-
-    private List<String> getAddressFormAttributeList(final Customer customer, final Shop shop, final String addressType) {
-
-        List<String> addressFormAttributes = new ArrayList<String>(DEFAULT_FIELDS);
-
-        final List<String> formConfigsToTry = new ArrayList<>();
-
-        appendAddressFormAttributeDefinitions(customer, addressType, formConfigsToTry, shop.getCode() + "__");
-        appendAddressFormAttributeDefinitions(customer, addressType, formConfigsToTry, "");
-
-        final List<Attribute> formConfigs = attributeService.findAttributesByCodes(AttributeGroupNames.ADDRESS, formConfigsToTry);
-
-        final Map<String, Attribute> formConfigsMap = new HashMap<String, Attribute>();
-        for (final Attribute attr : formConfigs) {
-            formConfigsMap.put(attr.getCode(), attr);
-        }
-
-        for (final String configToTry : formConfigsToTry) {
-            if (formConfigsMap.containsKey(configToTry)) {
-                if (StringUtils.isNotBlank(formConfigsMap.get(configToTry).getVal())) {
-                    final List<String> formAttrs = new ArrayList<String>();
-                    for (final String formAttr : StringUtils.split(formConfigsMap.get(configToTry).getVal(), ',')) {
-                        if (StringUtils.isNotBlank(formAttr)) {
-                            formAttrs.add(formAttr.trim());
-                        }
-                    }
-                    if (!formAttrs.isEmpty()) {
-                        addressFormAttributes = formAttrs;
-                        break;
-                    }
+            if (isDefault) {
+                // set new default address in case if default address was deleted
+                final List<Address> restOfAddresses = addressService.getAddressesByCustomerId(
+                        address.getCustomer().getCustomerId(),
+                        address.getAddressType());
+                if (!restOfAddresses.isEmpty()) {
+                    addressService.updateSetDefault(restOfAddresses.get(0));
                 }
             }
         }
-
-        return addressFormAttributes;
-    }
-
-    private void appendAddressFormAttributeDefinitions(final Customer customer, final String addressType, final List<String> formConfigsToTry, final String prefix) {
-
-        final String type = customer.getCustomerType();
-        if (StringUtils.isNotBlank(type)) {
-            formConfigsToTry.add(prefix + type + "_addressform_" + addressType);
-            formConfigsToTry.add(prefix + type + "_addressform");
-        }
-        formConfigsToTry.add(prefix + "default_addressform_" + addressType);
-        formConfigsToTry.add(prefix + "default_addressform");
-
     }
 
     /** {@inheritDoc} */
-    @Cacheable(value = "web.addressBookFacade-allCountries")
-    public List<Country> getAllCountries(final String shopCode, final String addressType) {
-        final Shop shop = shopService.getShopByCode(shopCode);
-        final List<String> supported;
-        if ("S".equals(addressType)) {
-            supported = shop.getSupportedShippingCountriesAsList();
-        } else {
-            supported = shop.getSupportedBillingCountriesAsList();
+    public Address useAsDefault(Address address, final Shop customerShop) {
+        if (!customerShop.isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK)) {
+            return addressService.updateSetDefault(address);
         }
-        if (supported.isEmpty()) {
-            ShopCodeContext.getLog(this).warn("No '{}' countries configured for shop {}", addressType, shopCode);
-            return Collections.emptyList();
-        }
-        return countryService.findByCriteria(Restrictions.in("countryCode", supported));
-    }
-
-    /** {@inheritDoc} */
-    @Cacheable(value = "web.addressBookFacade-statesByCountry")
-    public List<State> getStatesByCountry(final String countryCode) {
-        return stateService.findByCountry(countryCode);
-    }
-
-    /** {@inheritDoc} */
-    public void createOrUpdate(final Address address) {
-        if (address.getAddressId() == 0) {
-            // Need to add address to customer only just before the creation
-            address.getCustomer().getAddress().add(address);
-            addressService.create(address);
-        } else {
-            addressService.update(address);
-        }
-    }
-
-    /** {@inheritDoc} */
-    public void remove(Address address) {
-
-        final boolean isDefault = address.isDefaultAddress();
-        addressService.delete(address);
-
-        if (isDefault) {
-            // set new default address in case if default address was deleted
-            final List<Address> restOfAddresses = addressService.getAddressesByCustomerId(
-                    address.getCustomer().getCustomerId(),
-                    address.getAddressType());
-            if (!restOfAddresses.isEmpty()) {
-                addressService.updateSetDefault(restOfAddresses.get(0));
-            }
-        }
-
-    }
-
-    /** {@inheritDoc} */
-    public Address useAsDefault(Address address) {
-        return addressService.updateSetDefault(address);
+        return address;
     }
 
     /** {@inheritDoc} */
     public String formatAddressFor(final Address address, final Shop shop, final Customer customer, final String lang) {
-        return addressService.formatAddressFor(address, shop, customer, lang);
+
+        return addressCustomisationSupport.formatAddressFor(address, shop, customer, lang);
+
     }
 }
