@@ -13,13 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-import { Component, OnInit, OnDestroy, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CustomerService, I18nEventBus, Util } from './../../shared/services/index';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, CustomerVO, CustomerShopLinkVO, AttrValueCustomerVO, AddressBookVO, AddressVO, AttrValueVO, Pair } from './../../shared/model/index';
-import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
-import { AttributeValuesComponent } from './../../shared/attributes/index';
+import { ShopVO, CustomerVO, AddressBookVO, AddressVO, AttrValueVO, Pair } from './../../shared/model/index';
+import { Futures, Future } from './../../shared/event/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { Config } from './../../shared/config/env.config';
 import { UiUtil } from './../../shared/ui/index';
