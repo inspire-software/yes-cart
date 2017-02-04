@@ -1741,7 +1741,7 @@ public class CartController {
 
                         final Address optionAddress = addressBookFacade.getAddress(customer, customerShop, option.getAddressId(), type);
 
-                        if (optionAddress != null) {
+                        if (optionAddress != null && optionAddress.getAddressId() > 0) {
 
                             final Map<String, Object> params = new HashMap<String, Object>();
                             params.put(ShoppingCartCommand.CMD_SETADDRESES, ShoppingCartCommand.CMD_SETADDRESES);

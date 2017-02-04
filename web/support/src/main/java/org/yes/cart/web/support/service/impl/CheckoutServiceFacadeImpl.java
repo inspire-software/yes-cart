@@ -16,6 +16,7 @@
 
 package org.yes.cart.web.support.service.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.yes.cart.constants.Constants;
@@ -181,6 +182,10 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
+        if (cart.getOrderInfo().isDetailByKeyTrue("blockCheckout")) {
+            return Collections.emptyList();
+        }
+
         final String lang = cart.getCurrentLocale();
         if (!cart.isAllCarrierSlaSelected() || cart.getShippingList().isEmpty()) {
             return Collections.emptyList();
@@ -201,12 +206,20 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
             }
         }
 
+        if (CollectionUtils.isEmpty(carrierSlaPGs)) {
+            return Collections.emptyList();
+        }
+
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
         final Map<String, Integer> sorting = new HashMap<String, Integer>();
+        final boolean approve = cart.getOrderInfo().isDetailByKeyTrue("b2bRequireApprove");
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
             if (carrierSlaPGs.contains(descriptor.getLabel())) {
                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());
+                if (approve && gateway.getPaymentGatewayFeatures().isOnlineGateway()) {
+                    continue; // TODO: online PG's should not be allowed through approve flow at least for now
+                }
                 available.add(new Pair<PaymentGatewayDescriptor, String>(descriptor, gateway.getName(lang)));
                 final String priority = gateway.getParameterValue("priority");
                 if (priority == null) {

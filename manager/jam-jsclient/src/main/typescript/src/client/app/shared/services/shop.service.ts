@@ -84,7 +84,7 @@ export class ShopService {
 
 
   /**
-   * Save or create given shop detal - the root of shop related information.
+   * Save or create given shop detail - the root of shop related information.
    * @param shop
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
@@ -102,7 +102,7 @@ export class ShopService {
 
 
   /**
-   * Save or create given shop detal - the root of shop related information.
+   * Save or create given shop detail - the root of shop related information.
    * @param shop
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
@@ -125,7 +125,7 @@ export class ShopService {
   }
 
   /**
-   * Save or create given shop detal - the root of shop related information.
+   * Save or create given shop detail - the root of shop related information.
    * @param shop
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */

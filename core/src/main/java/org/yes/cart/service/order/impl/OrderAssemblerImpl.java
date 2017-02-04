@@ -16,8 +16,6 @@
 
 package org.yes.cart.service.order.impl;
 
-import org.apache.commons.lang.time.DateUtils;
-import org.springframework.beans.BeanUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
