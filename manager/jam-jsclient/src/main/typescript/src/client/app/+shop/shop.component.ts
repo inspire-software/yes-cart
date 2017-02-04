@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ShopVO, CustomerVO } from './../shared/model/index';
+import { ShopVO, CustomerInfoVO } from './../shared/model/index';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ShopEventBus, ShopService } from './../shared/services/index';
 import { LogUtil } from './../shared/log/index';
@@ -29,7 +29,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   private shop:ShopVO;
   private addressShops:ShopVO[];
-  private shopCustomer:CustomerVO;
+  private shopCustomer:CustomerInfoVO;
 
   private shopIdSub:any;
   private shopSub:any;

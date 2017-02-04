@@ -17,7 +17,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CustomerService, I18nEventBus, Util } from './../../shared/services/index';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO, CustomerVO, AddressBookVO, AddressVO, AttrValueVO, Pair } from './../../shared/model/index';
+import { ShopVO, CustomerInfoVO, AddressBookVO, AddressVO, AttrValueVO, Pair } from './../../shared/model/index';
 import { Futures, Future } from './../../shared/event/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { Config } from './../../shared/config/env.config';
@@ -33,7 +33,7 @@ import { LogUtil } from './../../shared/log/index';
 
 export class AddressBookComponent implements OnInit, OnDestroy {
 
-  private _customer:CustomerVO;
+  private _customer:CustomerInfoVO;
   private addressFilter:string;
   private _reload:boolean = false;
 
@@ -135,7 +135,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set customer(customer:CustomerVO) {
+  set customer(customer:CustomerInfoVO) {
 
     if (this._customer == null || (customer != null && this._customer.customerId != customer.customerId)) {
       this._customer = customer;
@@ -146,7 +146,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   }
 
-  get customer():CustomerVO {
+  get customer():CustomerInfoVO {
     return this._customer;
   }
 

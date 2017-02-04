@@ -162,7 +162,7 @@ export class CustomerService {
    * Get laddress book of a customer, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getAddressBook(customer:CustomerVO, formattingShopId:number, lang:string) {
+  getAddressBook(customer:CustomerInfoVO, formattingShopId:number, lang:string) {
 
     return this.http.get(this._serviceBaseUrl + '/addressbook/' + customer.customerId + '/' + formattingShopId + '/' + lang)
       .map(res => <AddressBookVO> res.json())

@@ -84,7 +84,7 @@ public class VoShopServiceImpl implements VoShopService {
      * @param voAssemblySupport vo support
      * @param voIOSupport vo support
      * @param systemService system service
-     * @param themeService
+     * @param themeService theme service
      */
     public VoShopServiceImpl(final LanguageService languageService,
                              final CurrencyService currencyService,
