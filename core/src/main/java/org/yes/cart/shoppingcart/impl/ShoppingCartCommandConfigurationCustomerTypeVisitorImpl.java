@@ -40,7 +40,8 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
      */
     public void visit(final MutableShoppingCart cart, final Object... args) {
 
-        ensureCustomerType(cart);
+        String customerType = determineType(determineCustomer(cart));
+        cart.getOrderInfo().putDetail("customerType", customerType);
 
     }
 

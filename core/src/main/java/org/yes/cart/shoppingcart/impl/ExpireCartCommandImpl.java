@@ -51,10 +51,10 @@ public class ExpireCartCommandImpl  extends AbstractCartCommandImpl implements S
         if (parameters.containsKey(getCmdKey())) {
 
             shoppingCart.getShoppingContext().clearContext();
-            setTaxOptions(shoppingCart, null, null, null);
-
             shoppingCart.getOrderInfo().clearInfo();
+
             setCustomerOptions(shoppingCart);
+            setTaxOptions(shoppingCart, null, null, null);
 
             if (shoppingCart.removeItemOffers()) {
                 // Offers have to be removed from cart, since we may get stale prices

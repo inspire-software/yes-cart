@@ -102,17 +102,17 @@ public class LoginCommandImpl extends AbstractRecalculatePriceCartCommandImpl im
                 ctx.setCustomerName(customerService.formatNameFor(customer, current));
                 ctx.setCustomerShops(customerShops);
                 setDefaultAddressesIfNecessary(current, customer, shoppingCart);
-                setDefaultTaxOptions(shoppingCart);
                 setDefaultCustomerOptions(shoppingCart);
+                setDefaultTaxOptions(shoppingCart);
 
                 recalculatePricesInCart(shoppingCart);
                 recalculate(shoppingCart);
                 markDirty(shoppingCart);
             } else {
                 ctx.clearContext();
-                setDefaultTaxOptions(shoppingCart);
                 info.clearInfo();
                 setDefaultCustomerOptions(shoppingCart);
+                setDefaultTaxOptions(shoppingCart);
                 markDirty(shoppingCart);
             }
         }
