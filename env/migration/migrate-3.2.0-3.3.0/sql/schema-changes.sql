@@ -409,3 +409,16 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11212,  'JOB_EXPIREREINDEX_PAUSE', 'JOB_EXPIREREINDEX_PAUSE',  0,  NULL,  'Job\\Reindex Discontinued Products: pause reindex',
     'Pause discontinued products reindex job',  1008, 1000, 0, 0, 0, 0);
 
+--
+-- YC-656 Improve order domain model by allowing copying attributes to order lines
+--
+
+alter table TCUSTOMERORDERDET add column STORED_ATTRIBUTES longtext;
+alter table TCUSTOMERORDERDELIVERYDET add column STORED_ATTRIBUTES longtext;
+-- alter table TCUSTOMERORDERDET add column STORED_ATTRIBUTES varchar(4000);
+-- alter table TCUSTOMERORDERDELIVERYDET add column STORED_ATTRIBUTES varchar(4000);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8008,  'SHOP_PRODUCT_STORED_ATTRIBUTES', 'SHOP_PRODUCT_STORED_ATTRIBUTES',  0,  NULL,  'Product: stored attributes to copy to order',
+  'Attributes that should be copied to order lines',  1004, 1001, 0, 0, 0, 0);
+

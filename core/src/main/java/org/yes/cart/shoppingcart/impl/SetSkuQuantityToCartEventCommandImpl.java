@@ -16,9 +16,9 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.slf4j.Logger;
 import org.yes.cart.domain.entity.ProductQuantityModel;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductQuantityStrategy;
 import org.yes.cart.service.domain.ProductService;
@@ -110,7 +110,11 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
         if (productSku != null) {
 
             final BigDecimal validQuantity = getQuantityValue(parameters, productSku, shoppingCart.getProductSkuQuantity(productSku.getCode()));
-            shoppingCart.setProductSkuToCart(productSku.getCode(), validQuantity);
+            final String skuName = new FailoverStringI18NModel(
+                    productSku.getDisplayName(),
+                    productSku.getName()
+            ).getValue(shoppingCart.getCurrentLocale());
+            shoppingCart.setProductSkuToCart(productSku.getCode(), skuName, validQuantity);
             recalculatePricesInCart(shoppingCart);
             ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
                     productSku.getCode(),
@@ -119,7 +123,7 @@ public class SetSkuQuantityToCartEventCommandImpl  extends AbstractSkuCartComman
         } else if (determineSkuPrice(shoppingCart, skuCode, BigDecimal.ONE) != null) {
             // if we have no product for SKU, make sure we have price for this SKU
             final BigDecimal validQuantity = getQuantityValue(parameters, null, shoppingCart.getProductSkuQuantity(skuCode));
-            shoppingCart.setProductSkuToCart(skuCode, validQuantity);
+            shoppingCart.setProductSkuToCart(skuCode, skuCode, validQuantity);
             recalculatePricesInCart(shoppingCart);
             ShopCodeContext.getLog(this).debug("Set product sku with code {} to qty {}",
                     skuCode,

@@ -23,9 +23,11 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDeliveryDetailDTO;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Map;
 
 /**
  * Customer order detail DTO interface implementation.
@@ -91,6 +93,9 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
 
     @DtoField(value = "delivery.deliveryStatus", readOnly = true)
     private String deliveryStatusLabel;
+
+    @DtoField(value = "allValues", readOnly = true)
+    private Map<String, Pair<String, String>> allValues;
 
 
     public BigDecimal getLineTotal() {
@@ -276,6 +281,14 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
 
     public void setDeliveryStatusLabel(final String deliveryStatusLabel) {
         this.deliveryStatusLabel = deliveryStatusLabel;
+    }
+
+    public Map<String, Pair<String, String>> getAllValues() {
+        return allValues;
+    }
+
+    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+        this.allValues = allValues;
     }
 
     public String toString() {

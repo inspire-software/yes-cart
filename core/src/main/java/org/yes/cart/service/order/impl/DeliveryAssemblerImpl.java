@@ -31,7 +31,6 @@ import org.yes.cart.shoppingcart.Total;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -184,6 +183,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setTaxCode(orderDet.getTaxCode());
         deliveryDet.setTaxRate(orderDet.getTaxRate());
         deliveryDet.setTaxExclusiveOfPrice(orderDet.isTaxExclusiveOfPrice());
+        deliveryDet.setAllValues(orderDet.getAllValues());
 
     }
 

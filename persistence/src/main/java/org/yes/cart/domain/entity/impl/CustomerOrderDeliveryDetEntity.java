@@ -17,11 +17,16 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
+import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -58,6 +63,8 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     private String createdBy;
     private String updatedBy;
     private String guid;
+
+    private CustomerOrderDetAttributesImpl storedAttributes = new CustomerOrderDetAttributesImpl();
 
     public CustomerOrderDeliveryDetEntity() {
     }
@@ -250,6 +257,34 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
 
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+
+    public String getStoredAttributesInternal() {
+        return storedAttributes != null ? storedAttributes.toString() : null;
+    }
+
+    public void setStoredAttributesInternal(final String storedAttributesInternal) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(storedAttributesInternal);
+    }
+
+    public Pair<String, String> getValue(final String code) {
+        return storedAttributes != null ? storedAttributes.getValue(code) : null;
+    }
+
+    public void putValue(final String code, final String value, final String displayValue) {
+        if (storedAttributes == null) {
+            storedAttributes = new CustomerOrderDetAttributesImpl();
+        }
+        storedAttributes.putValue(code, value, displayValue);
+    }
+
+    public Map<String, Pair<String, String>> getAllValues() {
+        return storedAttributes != null ? storedAttributes.getAllValues() : Collections.<String, Pair<String, String>>emptyMap();
+    }
+
+    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
     public long getId() {

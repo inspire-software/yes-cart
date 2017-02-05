@@ -413,6 +413,20 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     List<String> getSupportedProfileFormReadOnlyAttributesAsList(String customerType);
 
+    /**
+     * Get all product attributes that need to be copied to order line.
+     *
+     * @return CSV list of attribute codes.
+     */
+    String getProductStoredAttributes();
+
+
+    /**
+     * Get all product attributes that need to be copied to order line.
+     *
+     * @return list of attribute codes.
+     */
+    List<String> getProductStoredAttributesAsList();
 
 }
 

@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 
+import { Pair } from './common.model';
 import { PromotionVO } from './pricelists.model';
 
 export interface CustomerOrderInfoVO {
@@ -114,6 +115,7 @@ export interface CustomerOrderLineVO {
   deliveryNum : string;
   deliveryStatusLabel : string;
 
+  allValues: Pair<string, Pair<string, string>>[];
 }
 
 export interface CustomerOrderDeliveryInfoVO {

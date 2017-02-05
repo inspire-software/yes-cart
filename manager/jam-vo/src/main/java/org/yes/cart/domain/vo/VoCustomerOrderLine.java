@@ -18,6 +18,7 @@ package org.yes.cart.domain.vo;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
+import org.yes.cart.domain.misc.MutablePair;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -81,6 +82,9 @@ public class VoCustomerOrderLine {
 
     @DtoField(value = "deliveryStatusLabel", readOnly = true)
     private String deliveryStatusLabel;
+
+    @DtoField(value = "allValues", converter = "PairMapToPairList", readOnly = true)
+    private List<MutablePair<String, MutablePair<String, String>>> allValues;
 
     public long getCustomerOrderDeliveryDetId() {
         return customerOrderDeliveryDetId;
@@ -240,5 +244,13 @@ public class VoCustomerOrderLine {
 
     public void setDeliveryStatusLabel(final String deliveryStatusLabel) {
         this.deliveryStatusLabel = deliveryStatusLabel;
+    }
+
+    public List<MutablePair<String, MutablePair<String, String>>> getAllValues() {
+        return allValues;
+    }
+
+    public void setAllValues(final List<MutablePair<String, MutablePair<String, String>>> allValues) {
+        this.allValues = allValues;
     }
 }

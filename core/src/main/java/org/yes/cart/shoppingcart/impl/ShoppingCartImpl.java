@@ -292,10 +292,11 @@ public class ShoppingCartImpl implements MutableShoppingCart {
     }
 
     /** {@inheritDoc} */
-    public boolean setProductSkuToCart(final String sku, final BigDecimal quantity) {
+    public boolean setProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
 
         final CartItemImpl newItem = new CartItemImpl();
         newItem.setProductSkuCode(sku);
+        newItem.setProductName(skuName);
         newItem.setQuantity(quantity);
 
         final int skuIndex = indexOfProductSku(sku);

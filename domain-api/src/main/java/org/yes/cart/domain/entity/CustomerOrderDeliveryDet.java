@@ -16,9 +16,12 @@
 
 package org.yes.cart.domain.entity;
 
+import org.yes.cart.domain.entityindexer.StoredAttributes;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 
 /**
@@ -281,5 +284,29 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      */
     void setAppliedPromo(String appliedPromo);
 
+
+    /**
+     * @param code attribute code
+     *
+     * @return string value and display value for that code
+     */
+    Pair<String, String> getValue(String code);
+
+    /**
+     * @param code attribute code
+     * @param value string value for that code
+     * @param displayValue display value object
+     */
+    void putValue(String code, String value, String displayValue);
+
+    /**
+     * @return all values mapped to codes
+     */
+    Map<String, Pair<String, String>> getAllValues();
+
+    /**
+     * @param allValues all values
+     */
+    void setAllValues(Map<String, Pair<String, String>> allValues);
 
 }

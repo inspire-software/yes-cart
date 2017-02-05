@@ -40,6 +40,7 @@
             <map>
                 <entry key="DisplayValues"                      value-ref="voDisplayValues"/>
                 <entry key="CSVToList"                          value-ref="voCSVToList"/>
+                <entry key="PairMapToPairList"                  value-ref="voPairMapToPairList"/>
                 <entry key="ProductTypeAttrNavigationRanges"    value-ref="voProductTypeAttrNavigationRanges"/>
                 <entry key="CategoryNavigationPriceTiers"       value-ref="voCategoryNavigationPriceTiers"/>
             </map>
@@ -48,6 +49,7 @@
 
     <bean id="voDisplayValues" class="org.yes.cart.domain.vo.converter.DisplayValueMapToListMutablePairConverter"/>
     <bean id="voCSVToList" class="org.yes.cart.domain.vo.converter.CSVToListConverter"/>
+    <bean id="voPairMapToPairList" class="org.yes.cart.domain.vo.converter.PairMapToPairListConverter"/>
     <bean id="voProductTypeAttrNavigationRanges" class="org.yes.cart.domain.vo.converter.StringToProductTypeAttrNavigationRangesConverter"/>
     <bean id="voCategoryNavigationPriceTiers" class="org.yes.cart.domain.vo.converter.StringToCategoryNavigationPriceTiersConverter"/>
 

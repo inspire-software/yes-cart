@@ -16,13 +16,11 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.apache.commons.lang.StringUtils;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.shoppingcart.*;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -285,7 +283,7 @@ public class ShoppingCartShippingCostContainerImpl implements MutableShoppingCar
     }
 
     @Override
-    public boolean setProductSkuToCart(final String sku, final BigDecimal quantity) {
+    public boolean setProductSkuToCart(final String sku, final String skuName, final BigDecimal quantity) {
         return false;
     }
 

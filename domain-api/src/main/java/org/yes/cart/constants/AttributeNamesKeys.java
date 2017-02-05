@@ -394,6 +394,11 @@ public interface AttributeNamesKeys {
         String SHOP_INCLUDE_SUBCATEGORIES_IN_SEARCH = "INCLUDE_SUBCATEGORIES_IN_SEARCH_SHOP";
 
         /**
+         * Product attributes to copy over to order line
+         */
+        String SHOP_PRODUCT_STORED_ATTRIBUTES = "SHOP_PRODUCT_STORED_ATTRIBUTES";
+
+        /**
          * Flag whether to use manufacturer code or seller code as primary UI property
          */
         String SHOP_PRODUCT_DISPLAY_MANUFACTURER_CODE = "PRODUCT_DISPLAY_MANUFACTURER_CODE_SHOP";

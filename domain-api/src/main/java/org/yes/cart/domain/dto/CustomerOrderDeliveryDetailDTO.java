@@ -17,8 +17,10 @@ package org.yes.cart.domain.dto;
 
 
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * Customer order detail DTO interface.
@@ -307,5 +309,15 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
      * @param lineTax qty * (grossPrice - netPrice)
      */
     void setLineTax(BigDecimal lineTax);
+
+    /**
+     * @return all values mapped to codes
+     */
+    Map<String, Pair<String, String>> getAllValues();
+
+    /**
+     * @param allValues all values
+     */
+    void setAllValues(Map<String, Pair<String, String>> allValues);
 
 }

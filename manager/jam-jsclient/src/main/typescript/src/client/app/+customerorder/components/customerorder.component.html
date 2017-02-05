@@ -64,7 +64,10 @@
                   <tbody>
                   <tr *ngFor="let row of customerorder.lines" class="{{row == selectedLine || (selectedDelivery != null && row.deliveryNum == selectedDelivery.deliveryNum) ? 'active' : ''}}">
                     <td title="{{ 'CUSTOMERORDER_DELIVERY' | translate }}"><a class="{{ isLineDeliveryHasNext(row) ? 'js-click' : 'disabled' }}" (click)="onSelectLineRow(row)">{{row.deliveryNum}}</a><br/>{{row.supplierCode ? (row.supplierCode + ': ') : ''}}{{ row.deliveryStatusLabel | translate }}</td>
-                    <td title="{{ 'NAME' | translate }}">{{row.skuCode}}<br/>{{row.skuName}}</td>
+                    <td title="{{ 'NAME' | translate }}">
+                      {{row.skuCode}}<br/>{{row.skuName}}
+                      <ul><li *ngFor="let oneValue of row.allValues" title="{{ oneValue.first }}: {{ oneValue.second.first }}">{{ oneValue.second.second ? oneValue.second.second : oneValue.second.first }}</li></ul>
+                    </td>
                     <td title="{{ 'QUANTITY' | translate }}" class="text-right">{{row.qty | ycquantity}}</td>
                     <td title="{{ 'PRICE' | translate }}" class="text-right"><span [innerHTML]="getLinePriceFlags(row)"></span> {{row.price | ycprice}}</td>
                     <td title="{{ 'TAX' | translate }}" class="text-right">{{row.taxCode}} @ {{row.taxRate}}%</td>

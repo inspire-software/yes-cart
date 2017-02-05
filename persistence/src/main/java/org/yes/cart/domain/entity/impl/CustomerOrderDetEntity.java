@@ -18,11 +18,14 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrder;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -59,6 +62,8 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private String createdBy;
     private String updatedBy;
     private String guid;
+
+    private CustomerOrderDetAttributesImpl storedAttributes = new CustomerOrderDetAttributesImpl();
 
     public CustomerOrderDetEntity() {
     }
@@ -202,6 +207,33 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
         this.supplierCode = supplierCode;
     }
 
+    public String getStoredAttributesInternal() {
+        return storedAttributes != null ? storedAttributes.toString() : null;
+    }
+
+    public void setStoredAttributesInternal(final String storedAttributesInternal) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(storedAttributesInternal);
+    }
+
+    public Pair<String, String> getValue(final String code) {
+        return storedAttributes != null ? storedAttributes.getValue(code) : null;
+    }
+
+    public void putValue(final String code, final String value, final String displayValue) {
+        if (storedAttributes == null) {
+            storedAttributes = new CustomerOrderDetAttributesImpl();
+        }
+        storedAttributes.putValue(code, value, displayValue);
+    }
+
+    public Map<String, Pair<String, String>> getAllValues() {
+        return storedAttributes != null ? storedAttributes.getAllValues() : Collections.<String, Pair<String, String>>emptyMap();
+    }
+
+    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
+    }
+
     public CustomerOrder getCustomerOrder() {
         return this.customerOrder;
     }
@@ -257,7 +289,6 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     public long getId() {
         return this.customerOrderDetId;
     }
-
 
     public void setCustomerOrderDetId(long customerOrderDetId) {
         this.customerOrderDetId = customerOrderDetId;

@@ -75,6 +75,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Boolean sfPageTraceOn = null;
     private Boolean sfRequireCustomerLogin = null;
 
+    private List<String> productStoredAttributesAsList;
+
     public ShopEntity() {
     }
 
@@ -471,6 +473,22 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             this.supportedProfileFormReadOnlyAttributesByType.put(customerType, supportedProfileFormReadOnlyAttributesAsList);
         }
         return supportedProfileFormReadOnlyAttributesAsList;
+    }
+
+    public String getProductStoredAttributes() {
+        return getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_PRODUCT_STORED_ATTRIBUTES);
+    }
+
+    public List<String> getProductStoredAttributesAsList() {
+        if (productStoredAttributesAsList == null) {
+            final String attributes = getProductStoredAttributes();
+            if (attributes != null) {
+                productStoredAttributesAsList = Arrays.asList(StringUtils.split(attributes, ','));
+            } else {
+                productStoredAttributesAsList = Collections.emptyList();
+            }
+        }
+        return productStoredAttributesAsList;
     }
 
     public Collection<AttrValueShop> getAttributesByCode(final String attributeCode) {

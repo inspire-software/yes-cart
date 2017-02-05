@@ -89,12 +89,13 @@ public interface MutableShoppingCart extends ShoppingCart, Serializable {
      * Set sku quantity, in case if sku not present in cart it will be added.
      *
      * @param sku      product sku to add
+     * @param skuName  product name to add
      * @param quantity the quantity to add
      * @return true if item has been added to the cart as a separate cart item,
      *         false if adding this item cause only quantity update of already present in cart
      *         product sku.
      */
-    boolean setProductSkuToCart(String sku, BigDecimal quantity);
+    boolean setProductSkuToCart(String sku, String skuName, BigDecimal quantity);
 
     /**
      * Set sku supplier to be used.

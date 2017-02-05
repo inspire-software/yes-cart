@@ -2075,6 +2075,8 @@
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
 
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
+
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ODET_CUSTORDER">
             <column name="CUSTOMERORDER_ID" not-null="true"/>
         </many-to-one>
@@ -2187,6 +2189,8 @@
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
 
         <many-to-one name="delivery" class="org.yes.cart.domain.entity.impl.CustomerOrderDeliveryEntity" foreign-key="FK_CODD_DL">
             <column name="CUSTOMERORDERDELIVERY_ID" not-null="true"/>

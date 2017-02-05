@@ -273,6 +273,7 @@
     <!-- order statuses from CustomerOrder interface -->
     <entry key="os.none">-</entry>
     <entry key="os.pending">Pending</entry>
+    <entry key="os.waiting.approve">Awaiting approval</entry>
     <entry key="os.waiting">Awaiting confirmation</entry>
     <entry key="os.waiting.payment">Awaiting payment</entry>
     <entry key="os.in.progress">In progress</entry>

@@ -16,11 +16,14 @@
 
 package org.yes.cart.service.order.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.i18n.impl.FailoverStringI18NModel;
+import org.yes.cart.domain.i18n.impl.StringI18NModel;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.service.order.*;
 import org.yes.cart.shoppingcart.CartItem;
@@ -42,6 +45,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
     private final OrderNumberGenerator orderNumberGenerator;
     private final EntityFactory entityFactory;
     private final ShopService shopService;
+    private final ProductService productService;
     private final ProductSkuService productSkuService;
     private final OrderAddressFormatter addressFormatter;
     private final PromotionCouponService promotionCouponService;
@@ -55,20 +59,22 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * @param genericDAO           generic DAO
      * @param customerService      customer service
      * @param shopService          shop service
+     * @param productService       product service
      * @param productSkuService    product sku service
-     * @param addressFormatter     format string to create address in one string from {@link org.yes.cart.domain.entity.Address} entity.
+     * @param addressFormatter     format string to create address in one string from {@link Address} entity.
      * @param promotionCouponService coupon service
      * @param addressService       address service
      */
-    public OrderAssemblerImpl(
-            final OrderNumberGenerator orderNumberGenerator,
-            final GenericDAO genericDAO,
-            final CustomerService customerService,
-            final ShopService shopService,
-            final ProductSkuService productSkuService,
-            final OrderAddressFormatter addressFormatter,
-            final PromotionCouponService promotionCouponService,
-            final AddressService addressService) {
+    public OrderAssemblerImpl(final OrderNumberGenerator orderNumberGenerator,
+                              final GenericDAO genericDAO,
+                              final CustomerService customerService,
+                              final ShopService shopService,
+                              final ProductService productService,
+                              final ProductSkuService productSkuService,
+                              final OrderAddressFormatter addressFormatter,
+                              final PromotionCouponService promotionCouponService,
+                              final AddressService addressService) {
+        this.productService = productService;
         this.promotionCouponService = promotionCouponService;
         this.entityFactory = genericDAO.getEntityFactory();
         this.orderNumberGenerator = orderNumberGenerator;
@@ -368,21 +374,60 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setTaxExclusiveOfPrice(item.isTaxExclusiveOfPrice());
 
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
+            fillOrderDetail(customerOrder, item, customerOrderDet, temp);
 
-            // this is cached call so it should speed-up things
-            final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
-            if (sku == null) {
-                throw new OrderAssemblyException("No order line sku for " + item.getProductSkuCode());
-            }
-            if (Product.AVAILABILITY_SHOWROOM == sku.getProduct().getAvailability()) {
-                throw new OrderAssemblyException("Sku is for showroom only " + item.getProductSkuCode());
-            }
-            customerOrderDet.setProductName(
-                    new FailoverStringI18NModel(sku.getDisplayName(), sku.getName()).getValue(customerOrder.getLocale()));
 
+            customerOrderDet.setProductName(item.getProductName());
             customerOrderDet.setSupplierCode(item.getSupplierCode());
         }
 
+    }
+
+    /**
+     * Fill specific product details for current item.
+     *
+     * @param customerOrder    order
+     * @param item             item
+     * @param customerOrderDet item to populate
+     * @param temp             temporary
+     *
+     * @throws OrderAssemblyException
+     */
+    protected void fillOrderDetail(final CustomerOrder customerOrder, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
+
+        final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
+        if (sku != null) {
+            if (Product.AVAILABILITY_SHOWROOM == sku.getProduct().getAvailability()) {
+                throw new OrderAssemblyException("Sku is for showroom only " + item.getProductSkuCode());
+            }
+            if (!temp) {
+                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
+                final List<String> storedAttributes = configShop.getProductStoredAttributesAsList();
+                if (CollectionUtils.isNotEmpty(storedAttributes)) {
+                    // fill product first
+                    final Product product = productService.getProductById(sku.getProduct().getProductId(), true);
+                    for (final AttrValue av : product.getAttributes()) {
+                        if (storedAttributes.contains(av.getAttribute().getCode())) {
+                            final String name =
+                                    new FailoverStringI18NModel(av.getAttribute().getDisplayName(), av.getAttribute().getName()).getValue(customerOrder.getLocale());
+                            final String displayValue =
+                                    new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
+                            customerOrderDet.putValue(av.getAttribute().getCode(), av.getVal(), name + ": " + displayValue);
+                        }
+                    }
+                    // fill SKU specific (will override product ones)
+                    for (final AttrValue av : sku.getAttributes()) {
+                        if (storedAttributes.contains(av.getAttribute().getCode())) {
+                            final String name =
+                                    new FailoverStringI18NModel(av.getAttribute().getDisplayName(), av.getAttribute().getName()).getValue(customerOrder.getLocale());
+                            final String displayValue =
+                                    new FailoverStringI18NModel(av.getDisplayVal(), av.getVal()).getValue(customerOrder.getLocale());
+                            customerOrderDet.putValue(av.getAttribute().getCode(), av.getVal(), name + ": " + displayValue);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private Address createCopy(final Address address) {
