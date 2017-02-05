@@ -240,6 +240,7 @@ export class ShopTaxesComponent implements OnInit, OnDestroy {
   protected onTaxSelected(data:TaxVO) {
     LogUtil.debug('ShopTaxesComponent onTaxSelected', data);
     this.selectedTax = data;
+    this.getFilteredTaxConfig();
   }
 
   protected onTaxconfigSelected(data:TaxConfigVO) {
