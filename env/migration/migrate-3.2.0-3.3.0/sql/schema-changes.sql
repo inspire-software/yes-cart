@@ -312,6 +312,7 @@ alter table TADDRESS add column CUSTOM9 varchar(255);
 
 --
 -- YC-716 B2B customer accounts
+-- YC-763 Improve customer order domain model
 --
 
 alter table TCUSTOMERORDERDELIVERY add column EXPORT_BLOCK bit not null default 0;
@@ -421,4 +422,3 @@ alter table TCUSTOMERORDERDELIVERYDET add column STORED_ATTRIBUTES longtext;
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8008,  'SHOP_PRODUCT_STORED_ATTRIBUTES', 'SHOP_PRODUCT_STORED_ATTRIBUTES',  0,  NULL,  'Product: stored attributes to copy to order',
   'Attributes that should be copied to order lines',  1004, 1001, 0, 0, 0, 0);
-
