@@ -53,6 +53,19 @@ public class CarrierSlaRO implements Serializable {
     @DtoField(value = "maxDays", readOnly = true)
     private Integer maxDays;
 
+    @DtoField(value = "minDays", readOnly = true)
+    private Integer minDays;
+
+    @DtoField(value = "excludeWeekDays", readOnly = true)
+    private String excludeWeekDays;
+
+    @DtoField(value = "excludeDates", readOnly = true)
+    private String excludeDates;
+
+    @DtoField(value = "guaranteed", readOnly = true)
+    private boolean guaranteed;
+
+
     @DtoField(value = "slaType", readOnly = true)
     private String slaType;
 
@@ -117,6 +130,42 @@ public class CarrierSlaRO implements Serializable {
 
     public void setMaxDays(final Integer maxDays) {
         this.maxDays = maxDays;
+    }
+
+    @XmlAttribute(name = "min-days")
+    public Integer getMinDays() {
+        return minDays;
+    }
+
+    public void setMinDays(final Integer minDays) {
+        this.minDays = minDays;
+    }
+
+    @XmlAttribute(name = "exclude-week-days")
+    public String getExcludeWeekDays() {
+        return excludeWeekDays;
+    }
+
+    public void setExcludeWeekDays(final String excludeWeekDays) {
+        this.excludeWeekDays = excludeWeekDays;
+    }
+
+    @XmlElement(name = "exclude-dates")
+    public String getExcludeDates() {
+        return excludeDates;
+    }
+
+    public void setExcludeDates(final String excludeDates) {
+        this.excludeDates = excludeDates;
+    }
+
+    @XmlAttribute(name = "guaranteed")
+    public boolean isGuaranteed() {
+        return guaranteed;
+    }
+
+    public void setGuaranteed(final boolean guaranteed) {
+        this.guaranteed = guaranteed;
     }
 
     @XmlAttribute(name = "sla-type")

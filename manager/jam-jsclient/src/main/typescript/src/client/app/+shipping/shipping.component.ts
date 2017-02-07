@@ -82,7 +82,7 @@ export class ShippingComponent implements OnInit, OnDestroy {
     return {
       carrierslaId: 0, carrierId: carrierId, code: null, name: '', description: '',
       displayNames: [], displayDescriptions: [],
-      maxDays: 1, slaType: 'F', script: '',
+      maxDays: 1, minDays: 1, excludeWeekDays: [], excludeDates: [], guaranteed: false, slaType: 'F', script: '',
       billingAddressNotRequired: false, deliveryAddressNotRequired: false,
       supportedPaymentGateways: [], supportedFulfilmentCentres: []
     };

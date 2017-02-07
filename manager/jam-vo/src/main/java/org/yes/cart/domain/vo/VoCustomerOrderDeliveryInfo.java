@@ -77,6 +77,15 @@ public class VoCustomerOrderDeliveryInfo {
     @DtoField(value = "deliveryGroup", readOnly = true)
     private String deliveryGroup;
 
+    @DtoField(value = "deliveryRemarks", readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(value = "deliveryEstimatedMin", readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(value = "deliveryEstimatedMax", readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(value = "deliveryGuaranteed", readOnly = true)
+    private Date deliveryGuaranteed;
+
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
     @DtoField(value = "listPrice", readOnly = true)
@@ -233,6 +242,38 @@ public class VoCustomerOrderDeliveryInfo {
 
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
     public BigDecimal getPrice() {

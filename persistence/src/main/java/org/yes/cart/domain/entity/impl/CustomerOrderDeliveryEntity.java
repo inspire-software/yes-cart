@@ -52,6 +52,11 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     private String deliveryStatus;
 
+    private String deliveryRemarks;
+    private Date deliveryEstimatedMin;
+    private Date deliveryEstimatedMax;
+    private Date deliveryGuaranteed;
+
     private boolean blockExport;
     private Date lastExportDate;
     private String lastExportStatus;
@@ -166,6 +171,38 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     public void setDeliveryStatus(String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
     public boolean isBlockExport() {

@@ -21,6 +21,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.misc.MutablePair;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,6 +46,17 @@ public class VoCustomerOrderLine {
     private BigDecimal qty;
     @DtoField(value = "supplierCode", readOnly = true)
     private String supplierCode;
+
+    @DtoField(value = "deliveryRemarks", readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(value = "deliveryEstimatedMin", readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(value = "deliveryEstimatedMax", readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(value = "deliveryGuaranteed", readOnly = true)
+    private Date deliveryGuaranteed;
+    @DtoField(value = "b2bRemarks", readOnly = true)
+    private String b2bRemarks;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -124,6 +136,46 @@ public class VoCustomerOrderLine {
 
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     public BigDecimal getPrice() {

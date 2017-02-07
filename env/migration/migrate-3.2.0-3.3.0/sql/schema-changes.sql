@@ -422,3 +422,46 @@ alter table TCUSTOMERORDERDELIVERYDET add column STORED_ATTRIBUTES longtext;
 INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
   VALUES (  8008,  'SHOP_PRODUCT_STORED_ATTRIBUTES', 'SHOP_PRODUCT_STORED_ATTRIBUTES',  0,  NULL,  'Product: stored attributes to copy to order',
   'Attributes that should be copied to order lines',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-752 Improve delivery time information for the order
+--
+
+alter table TCARRIERSLA add column MIN_DAYS integer;
+alter table TCARRIERSLA add column EXCLUDE_WEEK_DAYS varchar(15);
+alter table TCARRIERSLA add column EXCLUDE_DATES longtext;
+-- alter table TCARRIERSLA add column EXCLUDE_DATES varchar(4000);
+alter table TCARRIERSLA add column GUARANTEED bit not null default 0;
+-- alter table TCARRIERSLA add column GUARANTEED smallint not null DEFAULT 0;
+
+alter table TCUSTOMERORDER add column B2B_REMARKS varchar(255);
+
+alter table TCUSTOMERORDERDELIVERY add column DELIVERY_REMARKS varchar(255);
+alter table TCUSTOMERORDERDELIVERY add column DELIVERY_EST_MIN datetime;
+-- alter table TCUSTOMERORDERDELIVERY add column DELIVERY_EST_MIN timestamp;
+alter table TCUSTOMERORDERDELIVERY add column DELIVERY_EST_MAX datetime;
+-- alter table TCUSTOMERORDERDELIVERY add column DELIVERY_EST_MAX timestamp;
+alter table TCUSTOMERORDERDELIVERY add column DELIVERY_GUARANTEED datetime;
+-- alter table TCUSTOMERORDERDELIVERY add column DELIVERY_GUARANTEED timestamp;
+
+alter table TCUSTOMERORDERDET add column B2B_REMARKS varchar(255);
+alter table TCUSTOMERORDERDET add column DELIVERY_REMARKS varchar(255);
+alter table TCUSTOMERORDERDET add column DELIVERY_EST_MIN datetime;
+-- alter table TCUSTOMERORDERDET add column DELIVERY_EST_MIN timestamp;
+alter table TCUSTOMERORDERDET add column DELIVERY_EST_MAX datetime;
+-- alter table TCUSTOMERORDERDET add column DELIVERY_EST_MAX timestamp;
+alter table TCUSTOMERORDERDET add column DELIVERY_GUARANTEED datetime;
+-- alter table TCUSTOMERORDERDET add column DELIVERY_GUARANTEED timestamp;
+
+alter table TCUSTOMERORDERDELIVERYDET add column B2B_REMARKS varchar(255);
+alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_REMARKS varchar(255);
+alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_EST_MIN datetime;
+-- alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_EST_MIN timestamp;
+alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_EST_MAX datetime;
+-- alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_EST_MAX timestamp;
+alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_GUARANTEED datetime;
+-- alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_GUARANTEED timestamp;
+
+alter table TWAREHOUSE add column DEFAULT_STD_LEAD_TIME integer default 0;
+alter table TWAREHOUSE add column DEFAULT_BO_LEAD_TIME integer default 0;
+

@@ -24,6 +24,7 @@
                 <wicket:message key="deliveryNum">[ Delivery ]</wicket:message>
                 <span wicket:id="deliveryCode">[delivery Code]</span>
             </label>
+            <p><strong wicket:id="deliveryTime">Estimated between X and Y</strong> <span wicket:id="deliveryRemarks">Some notes about delivery</span></p>
             <div class="row no-margin cart-items-header hidden-xs">
                 <div class="col-xs-12 col-sm-6">
                     <span><wicket:message key="productName">[Product name]</wicket:message></span>
@@ -52,6 +53,7 @@
                             <span wicket:id="itemName">[sku name]</span>
                         </div>
                         <span wicket:id="itemCode">[sku code]</span>
+                        <div><small><strong wicket:id="itemDeliveryTime">Estimated between X and Y</strong> <span wicket:id="itemDeliveryRemarks">Some notes about delivery</span></small></div>
                     </div>
                     <div class="col-xs-12 col-sm-2 text-right">
                         <wicket:container wicket:id="itemPrice">

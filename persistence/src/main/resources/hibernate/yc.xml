@@ -1447,6 +1447,9 @@
         <property name="city" type="string" column="CITY" length="128" not-null="false"/>
         <property name="postcode" type="string" column="POSTCODE" length="16" not-null="false"/>
 
+        <property name="defaultStandardStockLeadTime" type="java.lang.Integer" column="DEFAULT_STD_LEAD_TIME" not-null="false"/>
+        <property name="defaultBackorderStockLeadTime" type="java.lang.Integer" column="DEFAULT_BO_LEAD_TIME" not-null="false"/>
+
         <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
         <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
@@ -1957,8 +1960,13 @@
         <property name="appliedPromo" column="APPLIED_PROMO" type="string" length="255" not-null="false"/>
 
         <property name="locale" column="LOCALE" type="string" length="5" not-null="true"/>
-        <property name="orderMessage" type="string" length="4000">
+        <property name="orderMessage" type="string" length="255">
             <column name="MESSAGE">
+                <comment>Free text information per each order. Can be whatever</comment>
+            </column>
+        </property>
+        <property name="b2bRemarks" type="string" length="255">
+            <column name="B2B_REMARKS">
                 <comment>Free text information per each order. Can be whatever</comment>
             </column>
         </property>
@@ -2075,6 +2083,13 @@
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
 
+        <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
+
+        <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
+
         <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
 
         <many-to-one name="customerOrder" class="org.yes.cart.domain.entity.impl.CustomerOrderEntity" foreign-key="FK_ODET_CUSTORDER">
@@ -2125,6 +2140,11 @@
         <property name="taxRate" column="TAX_RATE" type="java.math.BigDecimal" not-null="true"/>
         <property name="taxExclusiveOfPrice" column="TAX_EXCLUSIVE_OF_PRICE" type="boolean" length="1" not-null="true"/>
         <property name="taxCode" column="TAX_CODE" type="string" length="255" not-null="true"/>
+
+        <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
 
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
@@ -2189,6 +2209,13 @@
         <property name="productName" column="PRODUCTNAME" type="string" length="4000" not-null="true"/>
 
         <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255"/>
+
+        <property name="deliveryRemarks" column="DELIVERY_REMARKS" type="string" length="255"/>
+        <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
+        <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
+        <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
+
+        <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
 
         <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
 
@@ -2261,6 +2288,10 @@
         <property name="displayDescription" column="DISPLAYDESCRIPTION" type="string" length="4000"/>
 
         <property name="maxDays" column="MAX_DAYS" type="java.lang.Integer"/>
+        <property name="minDays" column="MIN_DAYS" type="java.lang.Integer"/>
+        <property name="excludeWeekDays" column="EXCLUDE_WEEK_DAYS"  type="string" length="15"/>
+        <property name="excludeDates" column="EXCLUDE_DATES"  type="string" length="4000"/>
+        <property name="guaranteed" column="GUARANTEED"  type="boolean" not-null="true"/>
 
         <property name="slaType"  column="SLA_TYPE" type="string" length="1" not-null="true"/>
         <property name="script"   column="SCRIPT"   type="string" length="4000"/>

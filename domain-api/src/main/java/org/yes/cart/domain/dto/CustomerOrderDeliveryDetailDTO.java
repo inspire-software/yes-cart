@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.Identifiable;
 import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -95,6 +96,78 @@ public interface CustomerOrderDeliveryDetailDTO extends Identifiable {
      * @param deliveryGroup delivery group
      */
     void setDeliveryGroup(String deliveryGroup);
+
+
+    /**
+     * Delivery remarks (could be used for third party integrations or in JAM)
+     *
+     * @return remarks
+     */
+    String getDeliveryRemarks();
+
+    /**
+     * Delivery remarks (could be used for third party integrations or in JAM)
+     *
+     * @param deliveryRemarks remarks
+     */
+    void setDeliveryRemarks(String deliveryRemarks);
+
+    /**
+     * Earliest date the delivery is estimated for.
+     *
+     * @return estimated date
+     */
+    Date getDeliveryEstimatedMin();
+
+    /**
+     * Earliest date the delivery is estimated for.
+     *
+     * @param deliveryEstimatedMin estimated date
+     */
+    void setDeliveryEstimatedMin(Date deliveryEstimatedMin);
+
+    /**
+     * Latest date the delivery is estimated for.
+     *
+     * @return estimated date
+     */
+    Date getDeliveryEstimatedMax();
+
+    /**
+     * Latest date the delivery is estimated for.
+     *
+     * @param deliveryEstimatedMax estimated date
+     */
+    void setDeliveryEstimatedMax(Date deliveryEstimatedMax);
+
+    /**
+     * Guaranteed delivery date.
+     *
+     * @return guaranteed date
+     */
+    Date getDeliveryGuaranteed();
+
+    /**
+     * Guaranteed delivery date.
+     *
+     * @param deliveryGuaranteed guaranteed date
+     */
+    void setDeliveryGuaranteed(Date deliveryGuaranteed);
+
+    /**
+     * B2B remarks.
+     *
+     * @return remarks
+     */
+    String getB2bRemarks();
+
+    /**
+     * B2B remarks.
+     *
+     * @param b2bRemarks remarks
+     */
+    void setB2bRemarks(String b2bRemarks);
+
 
     /**
      * Get quantity.

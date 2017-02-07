@@ -151,7 +151,12 @@ export class SlasComponent implements OnInit, OnDestroy {
 
     let supported = row.supportedFulfilmentCentres;
     if (!supported) {
-      return [ { warehouseId: 0, code: '-', name: '-', description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] } ];
+      return [ {
+        warehouseId: 0, code: '-', name: '-', description: null,
+        countryCode: null, stateCode: null, city: null, postcode: null,
+        defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
+        displayNames: []
+      } ];
     }
 
     let labels = <Array<FulfilmentCentreInfoVO>>[];
@@ -159,7 +164,12 @@ export class SlasComponent implements OnInit, OnDestroy {
       if (this._fcs.hasOwnProperty(code)) {
         labels.push(this._fcs[code]);
       } else {
-        labels.push({ warehouseId: 0, code: code, name: code, description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] });
+        labels.push({
+          warehouseId: 0, code: code, name: code, description: null,
+          countryCode: null, stateCode: null, city: null, postcode: null,
+          defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
+          displayNames: []
+        });
       }
     });
     return labels;

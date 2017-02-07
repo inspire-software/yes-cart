@@ -17,7 +17,7 @@
       <tr *ngFor="let row of filteredSlas; let i = index" class="{{row == selectedSla ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
           <td title="{{ 'CARRIERSLA_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
-          <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }}</a></td>
+          <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }} <i class="fa {{ row.guaranteed ? 'fa-check-circle' : 'fa-exchange' }}"></i> {{ row.minDays > 0 ? row.minDays : '0' }}{{ row.maxDays > 0 ? ' - ' + row.maxDays : '' }}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'CARRIERSLA_BILL' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.billingAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>
           <td title="{{ 'CARRIERSLA_SHIP' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.deliveryAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>

@@ -22,10 +22,7 @@ import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.WarehouseService;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -60,6 +57,16 @@ public class WarehouseServiceImpl extends BaseGenericServiceImpl<Warehouse> impl
             return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP", shopId));
         }
         return new ArrayList<Warehouse>(getGenericDao().findByNamedQuery("ASSIGNED.WAREHOUSES.TO.SHOP.DISABLED", shopId, Boolean.FALSE));
+    }
+
+    /** {@inheritDoc} */
+    public Map<String, Warehouse> getByShopIdMapped(final long shopId, final boolean includeDisabled) {
+        final List<Warehouse> warehouses = getByShopId(shopId, false);
+        final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
+        for (final Warehouse warehouse : warehouses) {
+            warehouseByCode.put(warehouse.getCode(), warehouse);
+        }
+        return warehouseByCode;
     }
 
     /** {@inheritDoc} */

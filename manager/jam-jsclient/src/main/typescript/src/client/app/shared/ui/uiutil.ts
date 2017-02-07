@@ -83,7 +83,7 @@ export class UiUtil {
         UiUtil.toTwoChars(date.getHours()) + ':' + UiUtil.toTwoChars(date.getMinutes()) + ':' + UiUtil.toTwoChars(date.getSeconds());
 
     }
-    return date.getFullYear() + '-' + UiUtil.toTwoChars(date.getMonth()) + '-' + UiUtil.toTwoChars(date.getDate());
+    return date.getFullYear() + '-' + UiUtil.toTwoChars(date.getMonth() + 1) + '-' + UiUtil.toTwoChars(date.getDate());
   }
 
   /**

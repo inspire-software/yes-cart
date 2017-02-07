@@ -22,6 +22,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
@@ -36,11 +38,11 @@ import org.yes.cart.web.support.entity.decorator.ProductSkuDecorator;
 import org.yes.cart.web.support.service.CategoryServiceFacade;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 import org.yes.cart.web.support.service.ProductServiceFacade;
+import org.yes.cart.web.util.WicketUtil;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * Class responsible to show cart with delivery amount and taxes for verification before payments.
@@ -57,6 +59,10 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
     private static final String DELIVERY_LIST = "deliveryList";
 
     private static final String DELIVERY_CODE = "deliveryCode";
+    private static final String DELIVERY_TIME = "deliveryTime";
+    private static final String DELIVERY_REMARKS = "deliveryRemarks";
+    private static final String DELIVERY_TIME_ITEM = "itemDeliveryTime";
+    private static final String DELIVERY_REMARKS_ITEM = "itemDeliveryRemarks";
 
     private static final String DELIVERY_SUB_TOTAL = "deliverySubTotal";
     private static final String DELIVERY_SUB_TOTAL_TAX = "deliverySubTotalTax";
@@ -145,9 +151,42 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final Total total = checkoutServiceFacade.getOrderDeliveryTotal(customerOrder, delivery);
 
+                        final IModel<String> deliveryTime;
+                        final boolean showDeliveryTime;
+                        if (delivery.getDeliveryGuaranteed() != null) {
+                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                            deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
+                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryGuaranteed())));
+                            showDeliveryTime = true;
+                        } else if (delivery.getDeliveryEstimatedMin() != null) {
+                            if (delivery.getDeliveryEstimatedMax() != null) {
+                                final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedXY",
+                                        new HashMap<String, Object>(4) {{
+                                            put("from", df.format(delivery.getDeliveryEstimatedMin()));
+                                            put("to", df.format(delivery.getDeliveryEstimatedMax()));
+                                        }});
+                                showDeliveryTime = true;
+                            } else {
+                                final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
+                                        Collections.<String, Object>singletonMap("from", df.format(delivery.getDeliveryEstimatedMin())));
+                                showDeliveryTime = true;
+                            }
+                        } else {
+                            deliveryTime = null;
+                            showDeliveryTime = false;
+                        }
+
                         customerOrderDeliveryListItem
                                 .add(
                                         new Label(DELIVERY_CODE, delivery.getDeliveryNum())
+                                )
+                                .add(
+                                        new Label(DELIVERY_TIME, deliveryTime).setVisible(showDeliveryTime)
+                                )
+                                .add(
+                                        new Label(DELIVERY_REMARKS, delivery.getDeliveryRemarks()).setVisible(StringUtils.isNotBlank(delivery.getDeliveryRemarks()))
                                 )
                                 .add(
 
@@ -175,6 +214,34 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 final LinksSupport links = getWicketSupportFacade().links();
 
+                                                final IModel<String> deliveryTime;
+                                                final boolean showDeliveryTime;
+                                                if (det.getDeliveryGuaranteed() != null) {
+                                                    final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                                    deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
+                                                            Collections.<String, Object>singletonMap("date", df.format(det.getDeliveryGuaranteed())));
+                                                    showDeliveryTime = true;
+                                                } else if (det.getDeliveryEstimatedMin() != null) {
+                                                    if (det.getDeliveryEstimatedMax() != null) {
+                                                        final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                                        deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedXY",
+                                                                new HashMap<String, Object>(4) {{
+                                                                    put("from", df.format(det.getDeliveryEstimatedMin()));
+                                                                    put("to", df.format(det.getDeliveryEstimatedMax()));
+                                                                }});
+                                                        showDeliveryTime = true;
+                                                    } else {
+                                                        final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                                        deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryEstimatedX",
+                                                                Collections.<String, Object>singletonMap("from", df.format(det.getDeliveryEstimatedMin())));
+                                                        showDeliveryTime = true;
+                                                    }
+                                                } else {
+                                                    deliveryTime = null;
+                                                    showDeliveryTime = false;
+                                                }
+
+
                                                 customerOrderDeliveryDetListItem
                                                         .add(
                                                                 links.newProductSkuLink(ITEM_NAME_LINK, productSkuDecorator.getId())
@@ -185,6 +252,12 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
                                                         )
                                                         .add(
                                                                 new Label(ITEM_CODE, det.getProductSkuCode())
+                                                        )
+                                                        .add(
+                                                                new Label(DELIVERY_TIME_ITEM, deliveryTime).setVisible(showDeliveryTime)
+                                                        )
+                                                        .add(
+                                                                new Label(DELIVERY_REMARKS_ITEM, det.getDeliveryRemarks()).setVisible(StringUtils.isNotBlank(det.getDeliveryRemarks()))
                                                         )
                                                         .add(
                                                                 new Label(ITEM_PRICE, det.getPrice().toString())

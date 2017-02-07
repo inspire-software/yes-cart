@@ -17,10 +17,13 @@
 package org.yes.cart.domain.ro;
 
 import com.inspiresoftware.lib.dto.geda.annotations.Dto;
+import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * User: denispavlov
@@ -33,7 +36,20 @@ public class DeliveryItemRO extends CartItemRO implements Serializable {
 
     private static final long serialVersionUID = 20150301L;
 
+    @DtoField(readOnly = true)
     private long customerOrderDeliveryDetId;
+
+    @DtoField(readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(readOnly = true)
+    private Date deliveryGuaranteed;
+    @DtoField(readOnly = true)
+    private String b2bRemarks;
+
 
     @XmlAttribute(name = "customer-order-delivery-det-id")
     public long getCustomerOrderDeliveryDetId() {
@@ -42,6 +58,52 @@ public class DeliveryItemRO extends CartItemRO implements Serializable {
 
     public void setCustomerOrderDeliveryDetId(final long customerOrderDeliveryDetId) {
         this.customerOrderDeliveryDetId = customerOrderDeliveryDetId;
+    }
+
+
+    @XmlElement(name = "item-delivery-remarks")
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    @XmlAttribute(name = "item-delivery-estimated-min")
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    @XmlAttribute(name = "item-delivery-estimated-max")
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    @XmlAttribute(name = "item-delivery-guaranteed")
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    @XmlElement(name = "item-b2b-remarks")
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
 }

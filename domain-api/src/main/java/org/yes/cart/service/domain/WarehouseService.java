@@ -20,6 +20,7 @@ import org.yes.cart.domain.entity.ShopWarehouse;
 import org.yes.cart.domain.entity.Warehouse;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -37,6 +38,16 @@ public interface WarehouseService extends GenericService<Warehouse> {
      * @return list of assigned warehouses
      */
     List<Warehouse> getByShopId(long shopId, boolean includeDisabled);
+
+
+    /**
+     * Find warehouses, that assigned to given shop id.
+     *
+     * @param shopId given shop id
+     * @param includeDisabled true to include disabled links
+     * @return map of assigned warehouses by code
+     */
+    Map<String, Warehouse> getByShopIdMapped(long shopId, boolean includeDisabled);
 
     /**
      * Set usage rank to ShopWarehouseDTO.

@@ -722,6 +722,18 @@
             <constructor-arg index="0" value="priceService-determinePricingPolicy"/>
             <constructor-arg index="1" value="all"/>
         </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopWarehouses"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopWarehousesMap"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
+        <bean class="org.yes.cart.domain.misc.Pair">
+            <constructor-arg index="0" value="shopService-shopWarehousesIds"/>
+            <constructor-arg index="1" value="all"/>
+        </bean>
     </util:set>
 
     <util:map id="ShopCUD">

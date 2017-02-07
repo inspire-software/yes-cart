@@ -28,8 +28,6 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,13 +112,8 @@ public class CancelOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl i
 
         if (voidCredit || voidReservation) {
 
-            // map warehouses by code
-            final List<Warehouse> warehouses = warehouseService.getByShopId(
+            final Map<String, Warehouse> warehouseByCode = warehouseService.getByShopIdMapped(
                     delivery.getCustomerOrder().getShop().getShopId(), false);
-            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
-            for (final Warehouse warehouse : warehouses) {
-                warehouseByCode.put(warehouse.getCode(), warehouse);
-            }
 
             for (CustomerOrderDeliveryDet det : delivery.getDetail()) {
 

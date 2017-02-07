@@ -26,6 +26,7 @@ import org.yes.cart.domain.entity.Warehouse;
 import org.yes.cart.service.domain.WarehouseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -47,6 +48,14 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     }
 
     /** {@inheritDoc} */
+    @Cacheable(value = "shopService-shopWarehousesMap")
+    public Map<String, Warehouse> getByShopIdMapped(final long shopId, final boolean includeDisabled) {
+        return warehouseService.getByShopIdMapped(shopId, includeDisabled);
+    }
+
+
+
+    /** {@inheritDoc} */
     public void updateShopWarehouseRank(final long shopWarehouseId, final int newRank) {
         warehouseService.updateShopWarehouseRank(shopWarehouseId, newRank);
     }
@@ -59,6 +68,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     /** {@inheritDoc} */
     @CacheEvict(value = {
             "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"
@@ -71,6 +81,7 @@ public class WarehouseServiceCachedImpl implements WarehouseService {
     /** {@inheritDoc} */
     @CacheEvict(value = {
             "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
             "skuWarehouseService-productOnWarehouse",
             "skuWarehouseService-productSkusOnWarehouse"

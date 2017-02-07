@@ -164,4 +164,39 @@ public interface WarehouseDTO extends Identifiable {
     // address part of warehouse end
 
 
+
+    /**
+     * Lead time necessary to prepare the order before the items are physically shipped out.
+     *
+     * @return lead time
+     */
+    int getDefaultStandardStockLeadTime();
+
+    /**
+     * Lead time necessary to prepare the order before the items are physically shipped out.
+     * This is default (average time). Product specific lead times will override this.
+     *
+     * @param defaultStandardStockLeadTime lead time
+     */
+    void setDefaultStandardStockLeadTime(int defaultStandardStockLeadTime);
+
+
+
+    /**
+     * Lead time necessary to prepare the order before the items are physically shipped out.
+     * This is default (average time). Product specific lead times will override this.
+     *
+     * @return lead time
+     */
+    int getDefaultBackorderStockLeadTime();
+
+    /**
+     * Lead time necessary to prepare the order before the items are physically shipped out.
+     * This is default (average time). Product specific lead times will override this.
+     *
+     * @param defaultBackorderStockLeadTime lead time
+     */
+    void setDefaultBackorderStockLeadTime(int defaultBackorderStockLeadTime);
+
+
 }

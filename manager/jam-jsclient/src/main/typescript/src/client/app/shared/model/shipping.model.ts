@@ -62,6 +62,11 @@ export interface CarrierSlaVO {
   displayDescriptions : Pair<string, string>[];
 
   maxDays : number;
+  minDays : number;
+  excludeWeekDays : string[];
+  excludeDates : Pair<Date, Date>[];
+  guaranteed : boolean;
+
   slaType : string;
   script : string;
 

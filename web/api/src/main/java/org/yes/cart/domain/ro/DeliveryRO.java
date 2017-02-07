@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,6 +71,15 @@ public class DeliveryRO implements Serializable {
     private String deliveryStatus;
     @DtoField(value = "deliveryGroup", readOnly = true)
     private String deliveryGroup;
+
+    @DtoField(value = "deliveryRemarks", readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(value = "deliveryEstimatedMin", readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(value = "deliveryEstimatedMax", readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(value = "deliveryGuaranteed", readOnly = true)
+    private Date deliveryGuaranteed;
 
     private CartTotalRO total;
 
@@ -183,6 +193,42 @@ public class DeliveryRO implements Serializable {
 
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    @XmlElement(name = "delivery-remarks")
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    @XmlAttribute(name = "delivery-estimated-min")
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    @XmlAttribute(name = "delivery-estimated-max")
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    @XmlAttribute(name = "delivery-guaranteed")
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
     public CartTotalRO getTotal() {

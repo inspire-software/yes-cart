@@ -480,6 +480,20 @@ public interface CustomerOrder extends Auditable {
     void setB2bApprovedDate(Date b2bApprovedDate);
 
 
+    /**
+     * B2B customer remarks. Used by customer for their purposes.
+     *
+     * @return remarks
+     */
+    String getB2bRemarks();
+
+    /**
+     * B2B customer remarks. Used by customer for their purposes.
+     *
+     * @param b2bRemarks remarks
+     */
+    void setB2bRemarks(String b2bRemarks);
+
 
     /**
      * Get Customer.

@@ -70,6 +70,7 @@ export interface CustomerOrderInfoVO {
   b2bRequireApprove : boolean;
   b2bApprovedBy : string;
   b2bApprovedDate : Date;
+  b2bRemarks : string;
 
 }
 
@@ -92,6 +93,12 @@ export interface CustomerOrderLineVO {
   skuName : string;
 
   supplierCode : string;
+
+  deliveryRemarks : string;
+  deliveryEstimatedMin : Date;
+  deliveryEstimatedMax : Date;
+  deliveryGuaranteed : Date;
+  b2bRemarks : string;
 
   qty : number;
   price : number;
@@ -128,6 +135,11 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryGroup : string;
   deliveryStatus : string;
   deliveryStatusNextOptions : string[];
+
+  deliveryRemarks : string;
+  deliveryEstimatedMin : Date;
+  deliveryEstimatedMax : Date;
+  deliveryGuaranteed : Date;
 
   blockExport : boolean;
   lastExportDate : Date;

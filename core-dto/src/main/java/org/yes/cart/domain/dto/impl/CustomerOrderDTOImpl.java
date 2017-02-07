@@ -134,6 +134,8 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     private String b2bApprovedBy;
     @DtoField(value = "b2bApprovedDate", readOnly = true)
     private Date b2bApprovedDate;
+    @DtoField(value = "b2bRemarks", readOnly = true)
+    private String b2bRemarks;
 
 
     /**
@@ -631,6 +633,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setB2bApprovedDate(final Date b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     /**

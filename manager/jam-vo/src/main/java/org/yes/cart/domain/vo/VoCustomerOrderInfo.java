@@ -136,6 +136,8 @@ public class VoCustomerOrderInfo {
     private String b2bApprovedBy;
     @DtoField(value = "b2bApprovedDate", readOnly = true)
     private Date b2bApprovedDate;
+    @DtoField(value = "b2bRemarks", readOnly = true)
+    private String b2bRemarks;
 
     public long getCustomerorderId() {
         return customerorderId;
@@ -463,5 +465,13 @@ public class VoCustomerOrderInfo {
 
     public void setB2bApprovedDate(final Date b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 }

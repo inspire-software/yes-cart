@@ -60,7 +60,7 @@
     <!--<logger name="org.hibernate.cache" level="INFO">-->
         <!--<appender-ref ref="stdout"/>-->
     <!--</logger>-->
-    <logger name="RESTTEST" level="OFF"><!-- Set level to INFO to print request/response of the tests -->
+    <logger name="RESTTEST" level="INFO"><!-- Set level to INFO to print request/response of the tests -->
         <appender-ref ref="stdout"/>
     </logger>
     <root level="ERROR"><!-- Lower logging level to diagnose problems with tests -->

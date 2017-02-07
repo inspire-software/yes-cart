@@ -114,6 +114,34 @@
 
       </tab>
 
+      <tab heading="{{ 'TAB_CONFIGURATIONS' | translate }}"  (select)="tabSelected('Configurations')">
+
+        <div>
+          <div class="col-md-9 col-lg-6">
+            <div class="panel-body">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_STD_LEAD' | translate }}" formControlName="defaultStandardStockLeadTime" name="defaultStandardStockLeadTime" type="text" [(ngModel)]="centre.defaultStandardStockLeadTime">
+                  <div [hidden]="centreForm.controls['defaultStandardStockLeadTime'].valid || centreForm.controls['defaultStandardStockLeadTime'].pristine" class="alert alert-danger">
+                    {{ 'POS_INT_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}</label>
+                  <input autofocus class="form-control" placeholder="{{ 'FULFILMENT_CENTRE_BO_LEAD' | translate }}" formControlName="defaultBackorderStockLeadTime" name="defaultBackorderStockLeadTime" type="text" [(ngModel)]="centre.defaultBackorderStockLeadTime">
+                  <div [hidden]="centreForm.controls['defaultBackorderStockLeadTime'].valid || centreForm.controls['defaultBackorderStockLeadTime'].pristine" class="alert alert-danger">
+                    {{ 'POS_INT_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+
+      </tab>
+
     </tabset>
   </form>
 

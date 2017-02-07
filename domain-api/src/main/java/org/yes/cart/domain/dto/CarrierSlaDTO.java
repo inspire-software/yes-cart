@@ -151,6 +151,67 @@ public interface CarrierSlaDTO extends Identifiable, Codable {
     void setMaxDays(Integer maxDays);
 
 
+    /**
+     * Get min days delivery.
+     *
+     * @return min days delivery.
+     */
+    Integer getMinDays();
+
+    /**
+     * Set min days delivery.
+     *
+     * @param minDays min days delivery.
+     */
+    void setMinDays(Integer minDays);
+
+    /**
+     * Exclude weekdays. CSV of {@link java.util.Calendar#DAY_OF_WEEK}
+     *
+     * @return csv of days of week when delivery is NOT available
+     */
+    String getExcludeWeekDays();
+
+    /**
+     * Exclude weekdays. CSV of {@link java.util.Calendar#DAY_OF_WEEK}
+     *
+     * @param excludeWeekDays csv of days of week when delivery is NOT available
+     */
+    void setExcludeWeekDays(String excludeWeekDays);
+
+    /**
+     * CSV od Dates and Date Ranges when delivery is not available.
+     *
+     * Format of date: yyyy-MM-dd
+     * Format of range: yyyy-MM-dd:yyyy-MM-dd
+     *
+     * @return csv of dates and ranges
+     */
+    String getExcludeDates();
+
+    /**
+     * CSV od Dates and Date Ranges when delivery is not available.
+     *
+     * Format of date: yyyy-MM-dd
+     * Format of range: yyyy-MM-dd:yyyy-MM-dd
+     *
+     * @param excludeDates  csv of dates and ranges
+     */
+    void setExcludeDates(String excludeDates);
+
+    /**
+     * Flag to denote that this is a guaranteed delivery for {@link #getMinDays()}. (e.g. next day delivery)
+     *
+     * @return guaranteed delivery flag
+     */
+    boolean isGuaranteed();
+
+    /**
+     * Flag to denote that this is a guaranteed delivery for {@link #getMinDays()}. (e.g. next day delivery)
+     *
+     * @param guaranteed guaranteed delivery flag
+     */
+    void setGuaranteed(boolean guaranteed);
 
     /**
      * Is billing address not required for this order.

@@ -39,6 +39,10 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private String description;
     private String displayDescription;
     private Integer maxDays;
+    private Integer minDays;
+    private String excludeWeekDays;
+    private String excludeDates;
+    private boolean guaranteed;
     private String slaType;
     private String script;
     private String supportedPaymentGateways;
@@ -98,6 +102,46 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     public void setMaxDays(Integer maxDays) {
         this.maxDays = maxDays;
+    }
+
+    public Integer getMinDays() {
+        return minDays;
+    }
+
+    public void setMinDays(final Integer minDays) {
+        this.minDays = minDays;
+    }
+
+    public String getExcludeWeekDays() {
+        return excludeWeekDays;
+    }
+
+    public void setExcludeWeekDays(final String excludeWeekDays) {
+        this.excludeWeekDays = excludeWeekDays;
+    }
+
+    public String getExcludeDates() {
+        return excludeDates;
+    }
+
+    public void setExcludeDates(final String excludeDates) {
+        this.excludeDates = excludeDates;
+    }
+
+    public boolean isGuaranteed() {
+        return guaranteed;
+    }
+
+    public void setGuaranteed(final boolean guaranteed) {
+        this.guaranteed = guaranteed;
+    }
+
+    public void setSupportedPaymentGatewaysAsList(final List<String> supportedPaymentGatewaysAsList) {
+        this.supportedPaymentGatewaysAsList = supportedPaymentGatewaysAsList;
+    }
+
+    public void setSupportedFulfilmentCentresAsList(final List<String> supportedFulfilmentCentresAsList) {
+        this.supportedFulfilmentCentresAsList = supportedFulfilmentCentresAsList;
     }
 
     public String getSlaType() {

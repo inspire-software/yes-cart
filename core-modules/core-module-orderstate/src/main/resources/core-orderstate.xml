@@ -214,6 +214,14 @@
         </property>
     </bean>
 
+    <bean id="offlinePaymentDeliveryTimeEstimationListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.OfflinePaymentDeliveryTimeEstimationListenerImpl">
+                <constructor-arg index="0" ref="deliveryTimeEstimationVisitor"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
         <constructor-arg index="0">
@@ -246,7 +254,9 @@
             </map>
         </constructor-arg>
         <constructor-arg index="2">
-            <map/>
+            <map>
+                <entry key="evt.payment.confirmed"         value-ref="offlinePaymentDeliveryTimeEstimationListener"/>
+            </map>
         </constructor-arg>
     </bean>
 

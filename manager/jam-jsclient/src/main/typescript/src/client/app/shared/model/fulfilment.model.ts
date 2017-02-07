@@ -27,6 +27,9 @@ export interface FulfilmentCentreInfoVO {
   city : string;
   postcode : string;
 
+  defaultStandardStockLeadTime : number;
+  defaultBackorderStockLeadTime : number;
+
   displayNames : Pair<string, string>[];
 
 }

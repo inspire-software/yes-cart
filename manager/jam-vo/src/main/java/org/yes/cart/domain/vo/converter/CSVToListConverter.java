@@ -43,7 +43,9 @@ public class CSVToListConverter implements ValueConverter {
     @Override
     public Object convertToEntity(final Object object, final Object oldEntity, final BeanFactory beanFactory) {
         if (object instanceof Collection) {
-            return StringUtils.join((Collection) object, ',');
+            if (!((Collection) object).isEmpty()) {
+                return StringUtils.join((Collection) object, ',');
+            }
         }
         return null;
     }

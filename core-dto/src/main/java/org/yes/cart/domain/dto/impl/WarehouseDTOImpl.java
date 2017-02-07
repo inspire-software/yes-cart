@@ -56,6 +56,12 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     @DtoField(value = "postcode")
     private String postcode;
 
+    @DtoField(value = "defaultStandardStockLeadTime")
+    private int defaultStandardStockLeadTime;
+
+    @DtoField(value = "defaultBackorderStockLeadTime")
+    private int defaultBackorderStockLeadTime;
+
     @DtoField(value = "displayName", converter = "i18nStringConverter")
     private Map<String, String> displayNames;
 
@@ -158,6 +164,26 @@ public class WarehouseDTOImpl implements WarehouseDTO {
     /** {@inheritDoc}*/
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
+    }
+
+    /** {@inheritDoc}*/
+    public int getDefaultStandardStockLeadTime() {
+        return defaultStandardStockLeadTime;
+    }
+
+    /** {@inheritDoc}*/
+    public void setDefaultStandardStockLeadTime(final int defaultStandardStockLeadTime) {
+        this.defaultStandardStockLeadTime = defaultStandardStockLeadTime;
+    }
+
+    /** {@inheritDoc}*/
+    public int getDefaultBackorderStockLeadTime() {
+        return defaultBackorderStockLeadTime;
+    }
+
+    /** {@inheritDoc}*/
+    public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
+        this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
     }
 
     @Override

@@ -2443,6 +2443,7 @@ public class CartController {
         try {
             final CustomerOrder order = checkoutServiceFacade.createFromCart(cart);
             order.setPgLabel(cart.getOrderInfo().getPaymentGatewayLabel());
+            checkoutServiceFacade.estimateDeliveryTimeForOnlinePaymentOrder(order);
             checkoutServiceFacade.update(order);
 
             final Total total = checkoutServiceFacade.getOrderTotal(order);

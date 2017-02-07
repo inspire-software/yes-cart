@@ -310,6 +310,21 @@ public interface CustomerOrderDTO extends Identifiable {
 
 
     /**
+     * B2B customer remarks. Used by customer for their purposes.
+     *
+     * @return remarks
+     */
+    String getB2bRemarks();
+
+    /**
+     * B2B customer remarks. Used by customer for their purposes.
+     *
+     * @param b2bRemarks remarks
+     */
+    void setB2bRemarks(String b2bRemarks);
+
+
+    /**
      * Is order will be delivered in several shipments.
      *
      * @return true in case multiple deliveries, false in case of single delivery.

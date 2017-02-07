@@ -118,11 +118,12 @@
     <bean id="checkoutServiceFacade" class="org.yes.cart.web.support.service.impl.CheckoutServiceFacadeImpl">
         <constructor-arg index="0" ref="customerOrderService"/>
         <constructor-arg index="1" ref="amountCalculationStrategy"/>
-        <constructor-arg index="2" ref="customerOrderPaymentService"/>
-        <constructor-arg index="3" ref="carrierSlaService"/>
-        <constructor-arg index="4" ref="paymentProcessorFactory"/>
-        <constructor-arg index="5" ref="paymentModulesManager"/>
-        <constructor-arg index="6" ref="reportGenerator"/>
+        <constructor-arg index="2" ref="deliveryTimeEstimationVisitor"/>
+        <constructor-arg index="3" ref="customerOrderPaymentService"/>
+        <constructor-arg index="4" ref="carrierSlaService"/>
+        <constructor-arg index="5" ref="paymentProcessorFactory"/>
+        <constructor-arg index="6" ref="paymentModulesManager"/>
+        <constructor-arg index="7" ref="reportGenerator"/>
     </bean>
 
     <bean id="categoryServiceFacade"  class="org.yes.cart.web.support.service.impl.CategoryServiceFacadeImpl">

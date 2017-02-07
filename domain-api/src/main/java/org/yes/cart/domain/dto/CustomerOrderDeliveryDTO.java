@@ -217,6 +217,63 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
 
 
     /**
+     * Delivery remarks (could be used for third party integrations or in JAM)
+     *
+     * @return remarks
+     */
+    String getDeliveryRemarks();
+
+    /**
+     * Delivery remarks (could be used for third party integrations or in JAM)
+     *
+     * @param deliveryRemarks
+     */
+    void setDeliveryRemarks(String deliveryRemarks);
+
+    /**
+     * Earliest date the delivery is estimated for.
+     *
+     * @return estimated date
+     */
+    Date getDeliveryEstimatedMin();
+
+    /**
+     * Earliest date the delivery is estimated for.
+     *
+     * @param deliveryEstimatedMin estimated date
+     */
+    void setDeliveryEstimatedMin(Date deliveryEstimatedMin);
+
+    /**
+     * Latest date the delivery is estimated for.
+     *
+     * @return estimated date
+     */
+    Date getDeliveryEstimatedMax();
+
+    /**
+     * Latest date the delivery is estimated for.
+     *
+     * @param deliveryEstimatedMax estimated date
+     */
+    void setDeliveryEstimatedMax(Date deliveryEstimatedMax);
+
+    /**
+     * Guaranteed delivery date.
+     *
+     * @return guaranteed date
+     */
+    Date getDeliveryGuaranteed();
+
+    /**
+     * Guaranteed delivery date.
+     *
+     * @param deliveryGuaranteed guaranteed date
+     */
+    void setDeliveryGuaranteed(Date deliveryGuaranteed);
+
+
+    /**
      * Flag for better export management control (e.g. hold off export until fraud check is performed).
      *
      * @return true if export is blocked

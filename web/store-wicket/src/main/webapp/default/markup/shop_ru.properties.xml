@@ -175,6 +175,9 @@
     <entry key="grandTotalAmount">Сумма (с НДС)</entry>
     <entry key="billingAddress">Адрес</entry>
     <entry key="orderVerification">Проверьте заказ и выберите метод оплаты</entry>
+    <entry key="deliveryEstimatedX">Доставка после ${from}</entry>
+    <entry key="deliveryEstimatedXY">Доставка: ${from} - ${to}</entry>
+    <entry key="deliveryGuaranteed">Дата доставки ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Способ доставки</entry>

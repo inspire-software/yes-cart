@@ -16,7 +16,6 @@
 
 package org.yes.cart.service.order.impl.handler;
 
-import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
 import org.yes.cart.domain.entity.Product;
@@ -32,8 +31,6 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -107,13 +104,8 @@ public class ProcessAllocationOrderEventHandlerImpl implements OrderEventHandler
 
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-            // map warehouses by code
-            final List<Warehouse> warehouses = warehouseService.getByShopId(
+            final Map<String, Warehouse> warehouseByCode = warehouseService.getByShopIdMapped(
                     orderDelivery.getCustomerOrder().getShop().getShopId(), false);
-            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
-            for (final Warehouse warehouse : warehouses) {
-                warehouseByCode.put(warehouse.getCode(), warehouse);
-            }
 
             for (CustomerOrderDeliveryDet det : deliveryDetails) {
 

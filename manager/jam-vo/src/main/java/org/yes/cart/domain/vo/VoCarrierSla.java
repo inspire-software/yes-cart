@@ -20,6 +20,7 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.domain.misc.MutablePair;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +48,18 @@ public class VoCarrierSla {
 
     @DtoField(value = "maxDays")
     private Integer maxDays;
+
+    @DtoField(value = "minDays")
+    private Integer minDays;
+
+    @DtoField(value = "excludeWeekDays", converter = "CSVToList")
+    private List<String> excludeWeekDays;
+
+    @DtoField(value = "excludeDates", converter = "CSVToListDatesPairs")
+    private List<MutablePair<Date, Date>> excludeDates;
+
+    @DtoField(value = "guaranteed")
+    private boolean guaranteed;
 
     @DtoField(value = "slaType")
     private String slaType;
@@ -110,6 +123,38 @@ public class VoCarrierSla {
 
     public void setMaxDays(final Integer maxDays) {
         this.maxDays = maxDays;
+    }
+
+    public Integer getMinDays() {
+        return minDays;
+    }
+
+    public void setMinDays(final Integer minDays) {
+        this.minDays = minDays;
+    }
+
+    public List<String> getExcludeWeekDays() {
+        return excludeWeekDays;
+    }
+
+    public void setExcludeWeekDays(final List<String> excludeWeekDays) {
+        this.excludeWeekDays = excludeWeekDays;
+    }
+
+    public List<MutablePair<Date, Date>> getExcludeDates() {
+        return excludeDates;
+    }
+
+    public void setExcludeDates(final List<MutablePair<Date, Date>> excludeDates) {
+        this.excludeDates = excludeDates;
+    }
+
+    public boolean isGuaranteed() {
+        return guaranteed;
+    }
+
+    public void setGuaranteed(final boolean guaranteed) {
+        this.guaranteed = guaranteed;
     }
 
     public String getSlaType() {

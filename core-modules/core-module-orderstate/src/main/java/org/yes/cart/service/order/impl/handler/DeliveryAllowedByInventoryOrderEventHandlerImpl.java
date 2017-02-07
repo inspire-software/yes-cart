@@ -17,19 +17,14 @@
 package org.yes.cart.service.order.impl.handler;
 
 import org.yes.cart.domain.entity.*;
-import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderEventHandler;
 import org.yes.cart.service.order.OrderItemAllocationException;
-import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.util.ShopCodeContext;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,13 +62,8 @@ public class DeliveryAllowedByInventoryOrderEventHandlerImpl
 
             if (!CustomerOrderDelivery.ELECTRONIC_DELIVERY_GROUP.equals(orderDelivery.getDeliveryGroup())) {
 
-                // map warehouses by code
-                final List<Warehouse> warehouses = getWarehouseService().getByShopId(
+                final Map<String, Warehouse> warehouseByCode = getWarehouseService().getByShopIdMapped(
                         orderEvent.getCustomerOrder().getShop().getShopId(), false);
-                final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
-                for (final Warehouse warehouse : warehouses) {
-                    warehouseByCode.put(warehouse.getCode(), warehouse);
-                }
 
                 // If this delivery is physical then try inventory
                 for (CustomerOrderDeliveryDet det : orderDelivery.getDetail()) {

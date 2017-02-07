@@ -70,6 +70,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private boolean b2bRequireApprove;
     private String b2bApprovedBy;
     private Date b2bApprovedDate;
+    private String b2bRemarks;
 
     private Customer customer;
     private Shop shop;
@@ -267,6 +268,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setB2bApprovedDate(final Date b2bApprovedDate) {
         this.b2bApprovedDate = b2bApprovedDate;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     public Customer getCustomer() {

@@ -54,6 +54,12 @@ public class VoFulfilmentCentreInfo {
     @DtoField(value = "postcode")
     private String postcode;
 
+    @DtoField(value = "defaultStandardStockLeadTime")
+    private int defaultStandardStockLeadTime;
+
+    @DtoField(value = "defaultBackorderStockLeadTime")
+    private int defaultBackorderStockLeadTime;
+
     @DtoField(value = "displayNames", converter = "DisplayValues")
     private List<MutablePair<String, String>> displayNames;
 
@@ -119,6 +125,22 @@ public class VoFulfilmentCentreInfo {
 
     public void setPostcode(final String postcode) {
         this.postcode = postcode;
+    }
+
+    public int getDefaultStandardStockLeadTime() {
+        return defaultStandardStockLeadTime;
+    }
+
+    public void setDefaultStandardStockLeadTime(final int defaultStandardStockLeadTime) {
+        this.defaultStandardStockLeadTime = defaultStandardStockLeadTime;
+    }
+
+    public int getDefaultBackorderStockLeadTime() {
+        return defaultBackorderStockLeadTime;
+    }
+
+    public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
+        this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
     }
 
     public List<MutablePair<String, String>> getDisplayNames() {

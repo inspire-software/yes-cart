@@ -81,6 +81,8 @@ export class FulfilmentCentreComponent implements OnInit, OnDestroy {
       'stateCode': ['', YcValidators.nonBlankTrimmed],
       'city': ['', YcValidators.nonBlankTrimmed],
       'postcode': ['', YcValidators.nonBlankTrimmed],
+      'defaultStandardStockLeadTime': ['', YcValidators.requiredPositiveWholeNumber],
+      'defaultBackorderStockLeadTime': ['', YcValidators.requiredPositiveWholeNumber],
       'fulfilmentShops': [''],
     });
 

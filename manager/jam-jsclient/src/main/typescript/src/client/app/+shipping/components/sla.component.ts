@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO } from './../../shared/model/index';
+import { CarrierSlaVO, PaymentGatewayInfoVO, FulfilmentCentreInfoVO, ValidationRequestVO, Pair } from './../../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { UiUtil } from './../../shared/ui/index';
 import { LogUtil } from './../../shared/log/index';
@@ -49,6 +49,17 @@ export class SlaComponent implements OnInit, OnDestroy {
   private slaForm:any;
   private slaFormSub:any; // tslint:disable-line:no-unused-variable
 
+  private _excludeMonday:boolean = false;
+  private _excludeTuesday:boolean = false;
+  private _excludeWednesday:boolean = false;
+  private _excludeThursday:boolean = false;
+  private _excludeFriday:boolean = false;
+  private _excludeSaturday:boolean = false;
+  private _excludeSunday:boolean = false;
+
+  private _excludefrom:Date;
+  private _excludeto:Date;
+
   constructor(fb: FormBuilder) {
     LogUtil.debug('SlaComponent constructed');
 
@@ -80,7 +91,18 @@ export class SlaComponent implements OnInit, OnDestroy {
 
     this.slaForm = fb.group({
       'code': ['', validCode],
-      'maxDays': ['', YcValidators.requiredPositiveWholeNumber],
+      'maxDays': ['', YcValidators.positiveWholeNumber],
+      'minDays': ['', YcValidators.requiredPositiveWholeNumber],
+      'excludeMonday': [''],
+      'excludeTuesday': [''],
+      'excludeWednesday': [''],
+      'excludeThursday': [''],
+      'excludeFriday': [''],
+      'excludeSaturday': [''],
+      'excludeSunday': [''],
+      'excludefrom': ['', YcValidators.validDate],
+      'excludeto': ['', YcValidators.validDate],
+      'guaranteed': [''],
       'slaType': ['', Validators.required],
       'script': ['', YcValidators.nonBlankTrimmed],
       'billingAddressNotRequired': [''],
@@ -136,12 +158,94 @@ export class SlaComponent implements OnInit, OnDestroy {
     UiUtil.formInitialise(this, 'initialising', 'slaForm', '_sla', sla);
     this.recalculatePgs();
     this.recalculateFcs();
+    this.recalculateWeekDayExclusions();
 
   }
 
   get sla():CarrierSlaVO {
     return this._sla;
   }
+
+  get excludeMonday():boolean {
+    return this._excludeMonday;
+  }
+
+  set excludeMonday(value:boolean) {
+    this._excludeMonday = value;
+    this.setWeekDayExclusion('2', value);
+  }
+
+  get excludeTuesday():boolean {
+    return this._excludeTuesday;
+  }
+
+  set excludeTuesday(value:boolean) {
+    this._excludeTuesday = value;
+    this.setWeekDayExclusion('3', value);
+  }
+
+  get excludeWednesday():boolean {
+    return this._excludeWednesday;
+  }
+
+  set excludeWednesday(value:boolean) {
+    this._excludeWednesday = value;
+    this.setWeekDayExclusion('4', value);
+  }
+
+  get excludeThursday():boolean {
+    return this._excludeThursday;
+  }
+
+  set excludeThursday(value:boolean) {
+    this._excludeThursday = value;
+    this.setWeekDayExclusion('5', value);
+  }
+
+  get excludeFriday():boolean {
+    return this._excludeFriday;
+  }
+
+  set excludeFriday(value:boolean) {
+    this._excludeFriday = value;
+    this.setWeekDayExclusion('6', value);
+  }
+
+  get excludeSaturday():boolean {
+    return this._excludeSaturday;
+  }
+
+  set excludeSaturday(value:boolean) {
+    this._excludeSaturday = value;
+    this.setWeekDayExclusion('7', value);
+  }
+
+  get excludeSunday():boolean {
+    return this._excludeSunday;
+  }
+
+  set excludeSunday(value:boolean) {
+    this._excludeSunday = value;
+    this.setWeekDayExclusion('1', value);
+  }
+
+
+  get excludeto():string {
+    return UiUtil.dateInputGetterProxy(this, '_excludeto');
+  }
+
+  set excludeto(availableto:string) {
+    UiUtil.dateInputSetterProxy(this, '_excludeto', availableto);
+  }
+
+  get excludefrom():string {
+    return UiUtil.dateInputGetterProxy(this, '_excludefrom');
+  }
+
+  set excludefrom(availablefrom:string) {
+    UiUtil.dateInputSetterProxy(this, '_excludefrom', availablefrom);
+  }
+
 
   onNameDataChange(event:FormValidationEvent<any>) {
     UiUtil.formI18nDataChange(this, 'slaForm', 'name', event);
@@ -216,6 +320,32 @@ export class SlaComponent implements OnInit, OnDestroy {
     LogUtil.debug('SlaComponent tabSelected', tab);
   }
 
+  onExclusionDateRemove(range:Pair<Date, Date>) {
+    LogUtil.debug('SlaComponent onExclusionDateRemove', this._sla, range);
+    if (this._sla.excludeDates != null) {
+      let idx = this._sla.excludeDates.findIndex(pair => {
+        return pair.first == range.first;
+      });
+      if (idx != -1) {
+        this._sla.excludeDates.splice(idx, 1);
+        this._sla.excludeDates = this._sla.excludeDates.slice(0, this._sla.excludeDates.length); // reset to propagate changes
+        this.formChange();
+      }
+    }
+  }
+
+  onExclusionDateNew() {
+    if (this._excludefrom != null) {
+      if (this._sla.excludeDates == null) {
+        this._sla.excludeDates = [];
+      }
+      this._sla.excludeDates.push({first: this._excludefrom, second: this._excludeto});
+      this._excludefrom = null;
+      this._excludeto = null;
+      LogUtil.debug('SlaComponent onExclusionDateNew', this._sla);
+    }
+  }
+
 
   private getAvailablePGNames():Array<PaymentGatewayInfoVO> {
     let supported = this._sla.supportedPaymentGateways;
@@ -282,11 +412,18 @@ export class SlaComponent implements OnInit, OnDestroy {
       if (this._fcs.hasOwnProperty(code)) {
         labels.push(this._fcs[code]);
       } else {
-        labels.push({ warehouseId: 0, code: code, name: code, description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [] });
+        labels.push({
+          warehouseId: 0, code: code, name: code, description: null,
+          countryCode: null, stateCode: null, city: null, postcode: null,
+          defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
+          displayNames: []
+        });
       }
     });
     return labels;
   }
+
+
 
 
   private recalculateFcs():void {
@@ -296,5 +433,45 @@ export class SlaComponent implements OnInit, OnDestroy {
     }
   }
 
+  private setWeekDayExclusion(day:string, exclude:boolean) {
+    if (this._sla != null) {
+      if (this._sla.excludeWeekDays == null) {
+        this._sla.excludeWeekDays = [];
+      }
+      LogUtil.debug('SlaComponent setWeekDayExclusion', day, exclude, this._sla.excludeWeekDays);
+      let idx = this._sla.excludeWeekDays.indexOf(day);
+      if (exclude && idx == -1) { // excluded day, was not in exclusions
+        this._sla.excludeWeekDays.push(day);
+        LogUtil.debug('SlaComponent setWeekDayExclusion push', day, exclude, this._sla.excludeWeekDays);
+      } else if (!exclude && idx != -1) { // included day, was in exclusions
+        this._sla.excludeWeekDays.splice(idx, 1);
+        LogUtil.debug('SlaComponent setWeekDayExclusion splice', day, exclude, this._sla.excludeWeekDays);
+      }
+    }
+  }
+
+  private recalculateWeekDayExclusions():void {
+
+    this._excludefrom = null;
+    this._excludeto = null;
+
+    if (this._sla != null && this._sla.excludeWeekDays != null) {
+      this._excludeMonday = this._sla.excludeWeekDays.indexOf('2') != -1;
+      this._excludeTuesday = this._sla.excludeWeekDays.indexOf('3') != -1;
+      this._excludeWednesday = this._sla.excludeWeekDays.indexOf('4') != -1;
+      this._excludeThursday = this._sla.excludeWeekDays.indexOf('5') != -1;
+      this._excludeFriday = this._sla.excludeWeekDays.indexOf('6') != -1;
+      this._excludeSaturday = this._sla.excludeWeekDays.indexOf('7') != -1;
+      this._excludeSunday = this._sla.excludeWeekDays.indexOf('1') != -1;
+    } else {
+      this._excludeMonday = false;
+      this._excludeTuesday = false;
+      this._excludeWednesday = false;
+      this._excludeThursday = false;
+      this._excludeFriday = false;
+      this._excludeSaturday = false;
+      this._excludeSunday = false;
+    }
+  }
 
 }

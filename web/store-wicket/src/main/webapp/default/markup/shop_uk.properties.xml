@@ -175,6 +175,9 @@
     <entry key="grandTotalAmount">Сума (з ПДВ)</entry>
     <entry key="billingAddress">Адреса</entry>
     <entry key="orderVerification">Перевірте замовлення та виберіть спосіб оплати</entry>
+    <entry key="deliveryEstimatedX">Доставка після ${from}</entry>
+    <entry key="deliveryEstimatedXY">Доставка: ${from} - ${to}</entry>
+    <entry key="deliveryGuaranteed">Дата доставки ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Спосіб доставки</entry>

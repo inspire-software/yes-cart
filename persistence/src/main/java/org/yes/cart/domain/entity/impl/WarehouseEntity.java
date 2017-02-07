@@ -41,6 +41,9 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
     private String city;
     private String postcode;
 
+    private int defaultStandardStockLeadTime;
+    private int defaultBackorderStockLeadTime;
+
     private Collection<ShopWarehouse> warehouseShop = new ArrayList<ShopWarehouse>(5);
 
     private Date createdTimestamp;
@@ -122,6 +125,22 @@ public class WarehouseEntity implements org.yes.cart.domain.entity.Warehouse, ja
 
     public void setPostcode(String postcode) {
         this.postcode = postcode;
+    }
+
+    public int getDefaultStandardStockLeadTime() {
+        return defaultStandardStockLeadTime;
+    }
+
+    public void setDefaultStandardStockLeadTime(final int defaultStandardStockLeadTime) {
+        this.defaultStandardStockLeadTime = defaultStandardStockLeadTime;
+    }
+
+    public int getDefaultBackorderStockLeadTime() {
+        return defaultBackorderStockLeadTime;
+    }
+
+    public void setDefaultBackorderStockLeadTime(final int defaultBackorderStockLeadTime) {
+        this.defaultBackorderStockLeadTime = defaultBackorderStockLeadTime;
     }
 
     public Date getCreatedTimestamp() {

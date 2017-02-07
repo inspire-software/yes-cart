@@ -180,6 +180,19 @@ public interface CheckoutServiceFacade {
     CustomerOrder createFromCart(ShoppingCart shoppingCart) throws OrderAssemblyException;
 
     /**
+     * Estimate the delivery time according to carrier sla and ietms in the order. This method is
+     * aimed at online PG's only. The rationale is that we can estimate delivery for paid (or confirmed)
+     * orders. For online PG orders the payment is taken straight away and thus it is safe to
+     * provide delivery estimation time. For offline orders there may be some time for interaction
+     * between customer and shop owner to verify that payment is made offline or will be made.
+     * In some cases offline payments may taken days to resolve thus it is potentially unsafe to
+     * provide an estimate for these orders until they are confirmed.
+     *
+     * @param customerOrder customer order
+     */
+    void estimateDeliveryTimeForOnlinePaymentOrder(CustomerOrder customerOrder);
+
+    /**
      * Determine if multiple delivery option should be allowed for this cart.
      * True is returned if this cart contains items that can be delivered using multiple
      * deliveries such as available and pre-order items in one cart.

@@ -35,6 +35,7 @@ public interface Constants {
      * We used short form format to prevent localisation issues in csv. All parts of date time imports are numbers.
      */
     String DEFAULT_IMPORT_DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
+    String DEFAULT_IMPORT_DATE_FORMAT = "yyyy-MM-dd";
 
     String DEFAULT_DATE_FORMAT = "dd MMMMM yyyy";
 

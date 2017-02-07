@@ -85,6 +85,8 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
             info.putDetail("b2bRef", null);
             info.putDetail("b2bEmployeeId", null);
             info.putDetail("b2bChargeId", null);
+            info.putDetail("b2bRequireApproveCustomer", null);
+            info.putDetail("blockCheckoutCustomer", null);
 
         }
 

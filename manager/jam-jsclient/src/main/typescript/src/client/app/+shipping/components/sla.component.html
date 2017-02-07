@@ -40,11 +40,85 @@
                     {{ 'NON_BLANK_TRIMMED_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div>
+                  <input formControlName="guaranteed" name="guaranteed" type="checkbox" [(ngModel)]="sla.guaranteed">
+                  <label>{{ 'CARRIERSLA_GUARANTEED' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_MINDAYS' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'CARRIERSLA_MINDAYS' | translate }}" formControlName="minDays" name="minDays" type="text" [(ngModel)]="sla.minDays">
+                  <div [hidden]="slaForm.controls['minDays'].valid || slaForm.controls['minDays'].pristine" class="alert alert-danger">
+                    {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
                 <div class="form-group">
                   <label>{{ 'CARRIERSLA_MAXDAYS' | translate }}</label>
                   <input class="form-control" placeholder="{{ 'CARRIERSLA_MAXDAYS' | translate }}" formControlName="maxDays" name="maxDays" type="text" [(ngModel)]="sla.maxDays">
                   <div [hidden]="slaForm.controls['maxDays'].valid || slaForm.controls['maxDays'].pristine" class="alert alert-danger">
                     {{ 'NUM_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_EXCLUSIONS' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeMonday" name="excludeMonday" type="checkbox" [(ngModel)]="excludeMonday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_MON' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeTuesday" name="excludeTuesday" type="checkbox" [(ngModel)]="excludeTuesday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_TUE' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeWednesday" name="excludeWednesday" type="checkbox" [(ngModel)]="excludeWednesday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_WED' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeThursday" name="excludeThursday" type="checkbox" [(ngModel)]="excludeThursday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_THU' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeFriday" name="excludeFriday" type="checkbox" [(ngModel)]="excludeFriday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_FRI' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeSaturday" name="excludeSaturday" type="checkbox" [(ngModel)]="excludeSaturday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_SAT' | translate }}</label>
+                </div>
+                <div>
+                  <input formControlName="excludeSunday" name="excludeSunday" type="checkbox" [(ngModel)]="excludeSunday">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_SUN' | translate }}</label>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_DATES' | translate }}</label>
+                  <div>
+                    <ul>
+                      <li *ngFor="let range of sla.excludeDates">
+                        {{ range.first | ycdate }}{{ range.second ? (' - ' + (range.second | ycdate)) : '' }}
+                        <button type="button" (click)="onExclusionDateRemove(range)" class="js-click btn btn-danger btn-circle" title="{{ 'MODAL_BUTTON_DELETE' | translate }}">
+                          <i class="fa  fa-remove"></i>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'CARRIERSLA_EXCLUDE_DATES_ONE' | translate }}</label>
+                  <div class="row">
+                    <div class="col-xs-12 col-md-5">
+                      <input class="form-control" placeholder="{{ 'CARRIERSLA_EXCLUDE_DATES_ONE_FROM' | translate }}" formControlName="excludefrom" name="excludefrom" type="text" [(ngModel)]="excludefrom">
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                      <input class="form-control" placeholder="{{ 'CARRIERSLA_EXCLUDE_DATES_ONE_TO' | translate }}" formControlName="excludeto" name="excludeto" type="text" [(ngModel)]="excludeto">
+                    </div>
+                    <div class="col-xs-12 col-md-2">
+                      <button type="button" (click)="onExclusionDateNew()" [disabled]="!(slaForm.controls['excludefrom'].valid) || !(slaForm.controls['excludeto'].valid)" class="js-click btn btn-circle" title="{{ 'MODAL_BUTTON_CREATE' | translate }}">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div [hidden]="(slaForm.controls['excludefrom'].valid || slaForm.controls['excludefrom'].pristine) && (slaForm.controls['excludeto'].valid || slaForm.controls['excludeto'].pristine)" class="alert alert-danger">
+                    {{ 'DATE_REQUIRED' | translate }}
                   </div>
                 </div>
                 <div>

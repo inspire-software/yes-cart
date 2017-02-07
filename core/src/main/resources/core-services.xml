@@ -1013,6 +1013,10 @@
         </constructor-arg>
     </bean>
 
+    <bean id="deliveryTimeEstimationVisitor" class="org.yes.cart.shoppingcart.impl.DeliveryTimeEstimationVisitorImpl">
+        <constructor-arg index="0" ref="warehouseService"/>
+    </bean>
+
     <bean id="taxProvider" class="org.yes.cart.shoppingcart.impl.TaxProviderImpl">
         <constructor-arg index="0" ref="taxService"/>
         <constructor-arg index="1" ref="taxConfigService"/>

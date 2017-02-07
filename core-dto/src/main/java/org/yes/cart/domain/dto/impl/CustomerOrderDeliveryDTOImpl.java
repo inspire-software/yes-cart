@@ -85,6 +85,16 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     @DtoField(value = "deliveryGroup", readOnly = true)
     private String deliveryGroup;
 
+    @DtoField(value = "deliveryRemarks", readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(value = "deliveryEstimatedMin", readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(value = "deliveryEstimatedMax", readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(value = "deliveryGuaranteed", readOnly = true)
+    private Date deliveryGuaranteed;
+
+
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
     @DtoField(value = "listPrice", readOnly = true)
@@ -384,6 +394,46 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    /** {@inheritDoc} */
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    /** {@inheritDoc} */
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    /** {@inheritDoc} */
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    /** {@inheritDoc} */
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
     /** {@inheritDoc} */

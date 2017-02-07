@@ -217,6 +217,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allNonSubShops",
             "shopService-subShopsByMaster",
             "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
             "addressBookService-allCountries",
             "mailSenderBuilder-buildJavaMailSender"
@@ -269,6 +270,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-allNonSubShops",
             "shopService-subShopsByMaster",
             "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",
@@ -294,6 +296,7 @@ public class ShopServiceCachedImpl implements ShopService {
             "shopService-shopContentIds",
             "shopService-shopAllCategoriesIds",
             "shopService-shopWarehouses",
+            "shopService-shopWarehousesMap",
             "shopService-shopWarehousesIds",
             "themeService-themeChainByShopId",
             "themeService-markupChainByShopId",

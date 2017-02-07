@@ -28,6 +28,7 @@ import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -54,6 +55,17 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
     private String supplierCode;
     @DtoField(readOnly = true)
     private String deliveryGroup;
+
+    @DtoField(readOnly = true)
+    private String deliveryRemarks;
+    @DtoField(readOnly = true)
+    private Date deliveryEstimatedMin;
+    @DtoField(readOnly = true)
+    private Date deliveryEstimatedMax;
+    @DtoField(readOnly = true)
+    private Date deliveryGuaranteed;
+    @DtoField(readOnly = true)
+    private String b2bRemarks;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -168,6 +180,46 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
 
     public void setDeliveryGroup(final String deliveryGroup) {
         this.deliveryGroup = deliveryGroup;
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     public BigDecimal getQty() {

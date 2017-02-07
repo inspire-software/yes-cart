@@ -467,9 +467,13 @@ public class CheckoutPage extends AbstractWebPage {
                 final Total total = checkoutServiceFacade.getOrderTotal(order);
                 final BigDecimal grandTotal = total.getTotalAmount();
 
-                //pay pal express checkout gateway support
+                // update pgLabel and delivery info on the order
                 order.setPgLabel((String) descriptor);
+                checkoutServiceFacade.estimateDeliveryTimeForOnlinePaymentOrder(order);
                 checkoutServiceFacade.update(order);
+
+                // Refresh the order view
+                rez.addOrReplace(new ShoppingCartPaymentVerificationView("orderVerificationView", shoppingCart.getGuid(), false));
 
 
                 final String htmlForm = getPaymentForm(order, grandTotal);

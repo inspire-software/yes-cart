@@ -57,6 +57,14 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     private String productSkuCode;
     private String productName;
     private String supplierCode;
+
+    private String deliveryRemarks;
+    private Date deliveryEstimatedMin;
+    private Date deliveryEstimatedMax;
+    private Date deliveryGuaranteed;
+
+    private String b2bRemarks;
+
     private CustomerOrderDelivery delivery;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -157,6 +165,46 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     public DeliveryBucket getDeliveryBucket() {
         final String supplierCode = this.supplierCode == null ? "" : this.supplierCode;
         return new DeliveryBucketImpl(getDeliveryGroup(), supplierCode, getDelivery().getDeliveryNum());
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     public CustomerOrderDelivery getDelivery() {

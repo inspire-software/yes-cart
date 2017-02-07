@@ -46,6 +46,18 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "maxDays")
     private Integer maxDays;
 
+    @DtoField(value = "minDays")
+    private Integer minDays;
+
+    @DtoField(value = "excludeWeekDays")
+    private String excludeWeekDays;
+
+    @DtoField(value = "excludeDates")
+    private String excludeDates;
+
+    @DtoField(value = "guaranteed")
+    private boolean guaranteed;
+
     @DtoField(value = "slaType")
     private String slaType;
 
@@ -178,6 +190,62 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setMaxDays(final Integer maxDays) {
         this.maxDays = maxDays;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Integer getMinDays() {
+        return minDays;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMinDays(final Integer minDays) {
+        this.minDays = minDays;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getExcludeWeekDays() {
+        return excludeWeekDays;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setExcludeWeekDays(final String excludeWeekDays) {
+        this.excludeWeekDays = excludeWeekDays;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getExcludeDates() {
+        return excludeDates;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setExcludeDates(final String excludeDates) {
+        this.excludeDates = excludeDates;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isGuaranteed() {
+        return guaranteed;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setGuaranteed(final boolean guaranteed) {
+        this.guaranteed = guaranteed;
     }
 
     /**

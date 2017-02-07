@@ -175,6 +175,9 @@
     <entry key="grandTotalAmount">Totalbetrag (inkl. MwSt.)</entry>
     <entry key="billingAddress">Adresse</entry>
     <entry key="orderVerification">Bestellung überprüfen und Zahlungsart wählen</entry>
+    <entry key="deliveryEstimatedX">Voraussichtliche Lieferzeit nach dem ${from}</entry>
+    <entry key="deliveryEstimatedXY">Voraussichtliche Lieferzeit ist zwischen ${from} und ${to}</entry>
+    <entry key="deliveryGuaranteed">Liefertermin ist ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Versandart</entry>

@@ -62,7 +62,12 @@ export class FulfilmentComponent implements OnInit, OnDestroy {
   }
 
   newCentreInstance():FulfilmentCentreVO {
-    return { warehouseId: 0, code: '', name: '', description: null, countryCode: null, stateCode: null, city: null, postcode: null, displayNames: [], fulfilmentShops: [] };
+    return {
+      warehouseId: 0, code: '', name: '', description: null,
+      countryCode: null, stateCode: null, city: null, postcode: null,
+      defaultStandardStockLeadTime: 0, defaultBackorderStockLeadTime: 0,
+      displayNames: [], fulfilmentShops: []
+    };
   }
 
   ngOnInit() {

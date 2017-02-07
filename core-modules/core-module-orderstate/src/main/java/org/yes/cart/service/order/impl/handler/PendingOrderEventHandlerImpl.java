@@ -32,7 +32,9 @@ import org.yes.cart.util.DomainApiUtils;
 import org.yes.cart.util.MoneyUtils;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Initial {@link CustomerOrder#ORDER_STATUS_PENDING} state.
@@ -134,13 +136,8 @@ public class PendingOrderEventHandlerImpl extends AbstractOrderEventHandlerImpl 
 
             final Collection<CustomerOrderDeliveryDet> deliveryDetails = orderDelivery.getDetail();
 
-            // map warehouses by code
-            final List<Warehouse> warehouses = warehouseService.getByShopId(
+            final Map<String, Warehouse> warehouseByCode = warehouseService.getByShopIdMapped(
                     orderDelivery.getCustomerOrder().getShop().getShopId(), false);
-            final Map<String, Warehouse> warehouseByCode = new HashMap<String, Warehouse>();
-            for (final Warehouse warehouse : warehouses) {
-                warehouseByCode.put(warehouse.getCode(), warehouse);
-            }
 
             final Date now = now();
 

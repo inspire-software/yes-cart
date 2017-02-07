@@ -56,6 +56,14 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
     private String productSkuCode;
     private String productName;
     private String supplierCode;
+
+    private String deliveryRemarks;
+    private Date deliveryEstimatedMin;
+    private Date deliveryEstimatedMax;
+    private Date deliveryGuaranteed;
+
+    private String b2bRemarks;
+
     private CustomerOrder customerOrder;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -205,6 +213,46 @@ public class CustomerOrderDetEntity implements org.yes.cart.domain.entity.Custom
 
     public void setSupplierCode(final String supplierCode) {
         this.supplierCode = supplierCode;
+    }
+
+    public String getDeliveryRemarks() {
+        return deliveryRemarks;
+    }
+
+    public void setDeliveryRemarks(final String deliveryRemarks) {
+        this.deliveryRemarks = deliveryRemarks;
+    }
+
+    public Date getDeliveryEstimatedMin() {
+        return deliveryEstimatedMin;
+    }
+
+    public void setDeliveryEstimatedMin(final Date deliveryEstimatedMin) {
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+    }
+
+    public Date getDeliveryEstimatedMax() {
+        return deliveryEstimatedMax;
+    }
+
+    public void setDeliveryEstimatedMax(final Date deliveryEstimatedMax) {
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+    }
+
+    public Date getDeliveryGuaranteed() {
+        return deliveryGuaranteed;
+    }
+
+    public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
+        this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public String getB2bRemarks() {
+        return b2bRemarks;
+    }
+
+    public void setB2bRemarks(final String b2bRemarks) {
+        this.b2bRemarks = b2bRemarks;
     }
 
     public String getStoredAttributesInternal() {

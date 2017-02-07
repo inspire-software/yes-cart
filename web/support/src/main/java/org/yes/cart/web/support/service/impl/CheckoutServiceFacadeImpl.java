@@ -37,10 +37,7 @@ import org.yes.cart.service.order.OrderAssemblyException;
 import org.yes.cart.service.payment.PaymentModulesManager;
 import org.yes.cart.service.payment.PaymentProcessor;
 import org.yes.cart.service.payment.PaymentProcessorFactory;
-import org.yes.cart.shoppingcart.AmountCalculationStrategy;
-import org.yes.cart.shoppingcart.CartItem;
-import org.yes.cart.shoppingcart.ShoppingCart;
-import org.yes.cart.shoppingcart.Total;
+import org.yes.cart.shoppingcart.*;
 import org.yes.cart.util.MoneyUtils;
 import org.yes.cart.web.support.service.CheckoutServiceFacade;
 
@@ -57,6 +54,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     private final CustomerOrderService customerOrderService;
     private final AmountCalculationStrategy amountCalculationStrategy;
+    private final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor;
     private final CustomerOrderPaymentService customerOrderPaymentService;
     private final CarrierSlaService carrierSlaService;
     private final PaymentProcessorFactory paymentProcessorFactory;
@@ -65,6 +63,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
 
     public CheckoutServiceFacadeImpl(final CustomerOrderService customerOrderService,
                                      final AmountCalculationStrategy amountCalculationStrategy,
+                                     final DeliveryTimeEstimationVisitor deliveryTimeEstimationVisitor,
                                      final CustomerOrderPaymentService customerOrderPaymentService,
                                      final CarrierSlaService carrierSlaService,
                                      final PaymentProcessorFactory paymentProcessorFactory,
@@ -72,6 +71,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
                                      final ReportGenerator reportGenerator) {
         this.customerOrderService = customerOrderService;
         this.amountCalculationStrategy = amountCalculationStrategy;
+        this.deliveryTimeEstimationVisitor = deliveryTimeEstimationVisitor;
         this.customerOrderPaymentService = customerOrderPaymentService;
         this.carrierSlaService = carrierSlaService;
         this.paymentProcessorFactory = paymentProcessorFactory;
@@ -259,8 +259,8 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         // AUTH or AUTH_CAPTURE for full order amount with successful result
         final List<CustomerOrderPayment> payments =
                 customerOrderPaymentService.findBy(customerOrder.getOrdernum(), null,
-                        new String[] { Payment.PAYMENT_STATUS_OK },
-                        new String[] { PaymentGateway.AUTH, PaymentGateway.AUTH_CAPTURE });
+                        new String[]{Payment.PAYMENT_STATUS_OK},
+                        new String[]{PaymentGateway.AUTH, PaymentGateway.AUTH_CAPTURE});
 
         if (payments == null || payments.isEmpty()) {
             return false;
@@ -319,6 +319,21 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public CustomerOrder createFromCart(final ShoppingCart shoppingCart) throws OrderAssemblyException {
         return customerOrderService.createFromCart(shoppingCart);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void estimateDeliveryTimeForOnlinePaymentOrder(final CustomerOrder customerOrder) {
+        final PaymentGateway pg = getOrderPaymentGateway(customerOrder);
+        if (pg != null && pg.getPaymentGatewayFeatures().isOnlineGateway()) {
+            deliveryTimeEstimationVisitor.visit(customerOrder);
+        } else {
+            for (final CustomerOrderDelivery delivery : customerOrder.getDelivery()) {
+                delivery.setDeliveryGuaranteed(null);
+                delivery.setDeliveryEstimatedMin(null);
+                delivery.setDeliveryEstimatedMax(null);
+            }
+        }
     }
 
     /** {@inheritDoc} */
