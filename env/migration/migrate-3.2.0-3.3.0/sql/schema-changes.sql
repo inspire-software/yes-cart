@@ -474,3 +474,45 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  10884,  'SHOP_B2B_STRICT_PRICE', 'SHOP_B2B_STRICT_PRICE',  0,  NULL,  'Shop: B2B strict price mode enable',
     'Disables main shop look up. Only sub shop prices are considered',  1008, 1001, 0, 0, 0, 0);
 
+--
+--  YC-765 Add Invoice payment gateway
+--
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10501, 'invoicePaymentGateway', 'name', 'Invoice payment', 'Gateway name (default)', 'Gateway name (default)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10502, 'invoicePaymentGateway', 'name_en', 'Invoice payment', 'Gateway name (EN)', 'Gateway name (EN)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10503, 'invoicePaymentGateway', 'name_ru', 'Счет фактура', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10504, 'invoicePaymentGateway', 'name_uk', 'Рахунок-фактура', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10505, 'invoicePaymentGateway', 'name_de', 'Rechnungen', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10550, 'invoicePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10601, 'authInvoicePaymentGateway', 'name', 'Authorize invoice payment', 'Gateway name (default)', 'Gateway name (default)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10602, 'authInvoicePaymentGateway', 'name_en', 'Authorize invoice payment', 'Gateway name (EN)', 'Gateway name (EN)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10603, 'authInvoicePaymentGateway', 'name_ru', 'Счет фактура с авторизацией', 'Название платежного шлюза (RU)', 'Название платежного шлюза (RU)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10604, 'authInvoicePaymentGateway', 'name_uk', 'Рахунок фактура з авторизацією', 'Назва платіжного шлюзу (UK)', 'Назва платіжного шлюзу (UK)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10605, 'authInvoicePaymentGateway', 'name_de', 'Rechnungsfreigabe', 'Gateway-Namen (DE)', 'Gateway-Namen (DE)');
+
+INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
+VALUES (10650, 'authInvoicePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
