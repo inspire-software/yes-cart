@@ -72,6 +72,8 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfBlockCustomerCheckoutTypes;
 
     private Boolean B2BProfileActive = null;
+    private Boolean B2BAddresBookActive = null;
+    private Boolean B2BStrictPriceActive = null;
     private Boolean sfPageTraceOn = null;
     private Boolean sfRequireCustomerLogin = null;
 
@@ -524,6 +526,20 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
             this.B2BProfileActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B);
         }
         return this.B2BProfileActive;
+    }
+
+    public boolean isB2BAddressBookActive() {
+        if (this.B2BAddresBookActive == null) {
+            this.B2BAddresBookActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK);
+        }
+        return this.B2BAddresBookActive;
+    }
+
+    public boolean isB2BStrictPriceActive() {
+        if (this.B2BStrictPriceActive == null) {
+            this.B2BStrictPriceActive = isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE);
+        }
+        return this.B2BStrictPriceActive;
     }
 
     public boolean isSfPageTraceOn() {

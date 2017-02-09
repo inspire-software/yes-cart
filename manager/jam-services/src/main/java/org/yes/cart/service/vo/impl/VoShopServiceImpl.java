@@ -277,10 +277,13 @@ public class VoShopServiceImpl implements VoShopService {
         final ShopDTO shopDTO = dtoShopService.getById(shopId);
         if (shopDTO != null && federationFacade.isShopAccessibleByCurrentManager(shopDTO.getCode())) {
 
+            final long currentShopId = shopDTO.getShopId();
+            final String currentShopCode = shopDTO.getCode();
             final long configShopId = shopDTO.getMasterId() != null ? shopDTO.getMasterId() : shopDTO.getShopId();
             final String configShopCode = shopDTO.getMasterId() != null ? shopDTO.getMasterCode() : shopDTO.getCode();
 
             final Map<String, VoAttrValueShop> attrsMap = getStringVoAttrValueShopMap(configShopId, configShopCode);
+            final Map<String, VoAttrValueShop> attrsMapSub = currentShopId == configShopId ? attrsMap : getStringVoAttrValueShopMap(currentShopId, currentShopCode);
 
             addMainInfo(summary, configShopId, shopDTO);
 
@@ -299,6 +302,8 @@ public class VoShopServiceImpl implements VoShopService {
             addTaxConfig(summary, lang, attrsMap);
 
             addCustomerConfig(summary, lang, attrsMap);
+
+            addCustomerConfigSub(summary, lang, attrsMapSub);
 
             addEmailTemplatesBasicSettings(summary, lang, attrsMap);
 
@@ -324,11 +329,23 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SF_PAGE_TRACE, lang, false));
     }
 
-    protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
-        summary.setB2bProfileActive(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
+    protected void addCustomerConfigSub(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        final MutablePair<String, String> adminEmail = getShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-");
+        if (!summary.getAdminEmail().getSecond().equals(adminEmail.getSecond())) {
+            summary.getAdminEmail().setSecond(adminEmail.getSecond() + " (" + summary.getAdminEmail().getSecond() + ")");
+        }
         summary.setB2bAddressbookActive(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK, lang, false));
+        summary.setB2bStrictPriceActive(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE, lang, false));
+    }
+
+    protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
+        summary.setAdminEmail(getShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-"));
+        summary.setB2bProfileActive(getBooleanShopAttributeConfig(
+                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
         summary.setCookiePolicy(getBooleanShopAttributeConfig(
                 attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(

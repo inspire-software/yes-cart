@@ -976,6 +976,7 @@
 
     <bean id="defaultDeliveryCostRegionalPriceResolver" class="org.yes.cart.shoppingcart.impl.DeliveryCostRegionalPriceResolverImpl">
         <constructor-arg index="0" ref="priceService"/>
+        <constructor-arg index="1" ref="shopService"/>
     </bean>
 
     <bean id="deliveryCostCalculationStrategy"  class="org.yes.cart.shoppingcart.impl.DefaultDeliveryCostCalculationStrategy"> <!-- CPOINT delivery calculation strategy -->

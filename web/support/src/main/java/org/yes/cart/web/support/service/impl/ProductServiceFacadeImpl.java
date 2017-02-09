@@ -364,6 +364,80 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
 
     }
 
+    private boolean isPriceValid(final SkuPrice price) {
+        return price != null && price.getRegularPrice() != null;
+    }
+
+    /**
+     * We resolve prices from current customer shop first. In simple setup this would be the same as the master.
+     * In case current and master differs we are in B2B mode, so we check if we are not in strict profile and
+     * attempt to resolve price from master.
+     *
+     * @param cart      cart
+     * @param productId productId (in case no specific sku is selected)
+     * @param sku       sku to resolve price for
+     * @param qty       quantity
+     *
+     * @return resolved SKU price
+     */
+    protected SkuPrice resolveMinimalPrice(final ShoppingCart cart,
+                                           final Long productId,
+                                           final String sku,
+                                           final BigDecimal qty) {
+
+        final long customerShopId = cart.getShoppingContext().getCustomerShopId();
+        final long masterShopId = cart.getShoppingContext().getShopId();
+        // Fallback only if we have a B2B non-strict mode
+        final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
+        final String shopCode = cart.getShoppingContext().getShopCode();
+        final String currency = cart.getCurrencyCode();
+
+        // Policy is setup on master
+        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
+                shopCode, currency, cart.getCustomerEmail(),
+                cart.getShoppingContext().getCountryCode(),
+                cart.getShoppingContext().getStateCode()
+        );
+
+        return priceService.getMinimalPrice(productId, sku, customerShopId, fallbackShopId, currency, qty, false, policy.getID());
+
+    }
+
+
+    /**
+     * We resolve prices from current customer shop first. In simple setup this would be the same as the master.
+     * In case current and master differs we are in B2B mode, so we check if we are not in strict profile and
+     * attempt to resolve price from master.
+     *
+     * @param cart      cart
+     * @param productId productId (in case no specific sku is selected)
+     * @param sku       sku to resolve price for
+     *
+     * @return resolved SKU price
+     */
+    protected Collection<SkuPrice> resolvePrices(final ShoppingCart cart,
+                                                 final Long productId,
+                                                 final String sku) {
+
+        final long customerShopId = cart.getShoppingContext().getCustomerShopId();
+        final long masterShopId = cart.getShoppingContext().getShopId();
+        // Fallback only if we have a B2B non-strict mode
+        final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
+        final String shopCode = cart.getShoppingContext().getShopCode();
+        final String currency = cart.getCurrencyCode();
+
+        // Policy is setup on master
+        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
+                shopCode, currency, cart.getCustomerEmail(),
+                cart.getShoppingContext().getCountryCode(),
+                cart.getShoppingContext().getStateCode()
+        );
+
+        return priceService.getAllCurrentPrices(productId, sku, customerShopId, fallbackShopId, currency, policy.getID());
+
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -371,25 +445,15 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
     public Pair<ProductPriceModel, CustomerWishList.PriceChange> getSkuPrice(final ShoppingCart cart,
                                                                              final CustomerWishList item) {
 
-        final long shopId = cart.getShoppingContext().getShopId();
-        final String shopCode = cart.getShoppingContext().getShopCode();
-        final String currency = cart.getCurrencyCode();
         final String sku = item.getSkus().getCode();
         final BigDecimal qty = item.getQuantity();
 
-        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shopCode, currency, cart.getCustomerEmail(),
-                cart.getShoppingContext().getCountryCode(),
-                cart.getShoppingContext().getStateCode()
-        );
-
-        final SkuPrice priceNow = priceService.getMinimalPrice(null, sku, shopId, currency, qty, false, policy.getID());
-        final boolean isPriceNowAvailable = priceNow != null && priceNow.getRegularPrice() != null;
+        final SkuPrice priceNow = resolveMinimalPrice(cart, null, sku, qty);
 
         final String addedPriceCurr = item.getRegularPriceCurrencyWhenAdded();
         final Pair<BigDecimal, BigDecimal> price;
         final CustomerWishList.PriceChange priceInfo;
-        if (isPriceNowAvailable) {
+        if (isPriceValid(priceNow)) {
             if (ApplicationDirector.getShoppingCart().getCurrencyCode().equals(addedPriceCurr)) {
                 final BigDecimal addedPrice = item.getRegularPriceWhenAdded();
                 final BigDecimal saleNow = MoneyUtils.minPositive(priceNow.getRegularPrice(), priceNow.getSalePriceForCalculation());
@@ -450,17 +514,9 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                          final String skuCode,
                                          final BigDecimal quantity) {
 
-        final long shopId = cart.getShoppingContext().getShopId();
-        final String shopCode = cart.getShoppingContext().getShopCode();
         final String currency = cart.getCurrencyCode();
 
-        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shopCode, currency, cart.getCustomerEmail(),
-                cart.getShoppingContext().getCountryCode(),
-                cart.getShoppingContext().getStateCode()
-        );
-
-        final SkuPrice resolved = priceService.getMinimalPrice(productId, skuCode, shopId, currency, quantity, false, policy.getID());
+        final SkuPrice resolved = resolveMinimalPrice(cart, productId, skuCode, quantity);
 
         if (resolved != null) {
 
@@ -661,17 +717,7 @@ public class ProductServiceFacadeImpl implements ProductServiceFacade {
                                                 final Long productId,
                                                 final String skuCode) {
 
-        final long shopId = cart.getShoppingContext().getShopId();
-        final String shopCode = cart.getShoppingContext().getShopCode();
-        final String currency = cart.getCurrencyCode();
-
-        final PricingPolicyProvider.PricingPolicy policy = pricingPolicyProvider.determinePricingPolicy(
-                shopCode, currency, cart.getCustomerEmail(),
-                cart.getShoppingContext().getCountryCode(),
-                cart.getShoppingContext().getStateCode()
-        );
-
-        final Collection<SkuPrice> prices = priceService.getAllCurrentPrices(productId, skuCode, shopId, currency, policy.getID());
+        final Collection<SkuPrice> prices = resolvePrices(cart, productId, skuCode);
 
         if (CollectionUtils.isNotEmpty(prices)) {
 

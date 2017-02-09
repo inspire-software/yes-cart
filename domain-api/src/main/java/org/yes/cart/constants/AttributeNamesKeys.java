@@ -268,6 +268,11 @@ public interface AttributeNamesKeys {
         String SHOP_B2B_ADDRESSBOOK = "SHOP_B2B_ADDRESSBOOK";
 
         /**
+         * Enable B2B stict price mode (only prices in sub shop are considered).
+         */
+        String SHOP_B2B_STRICT_PRICE = "SHOP_B2B_STRICT_PRICE";
+
+        /**
          * Storefront requires authentication.
          */
         String SHOP_SF_REQUIRE_LOGIN = "SHOP_SF_REQUIRE_LOGIN";

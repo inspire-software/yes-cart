@@ -59,7 +59,7 @@ public class SkuPriceBridge implements FieldBridge {
         final SkuPriceRelationshipSupport support = getSkuPriceRelationshipSupport();
         final List<SkuPrice> allPrices = support.getSkuPrices(((ProductSku) value).getCode());
 
-        List<Long> availableIn = null;
+        Set<Long> availableIn = null;
         if (!allPrices.isEmpty()) {
 
             final Map<Long, Map<String, SkuPrice>> lowestQuantityPrice = new HashMap<Long, Map<String, SkuPrice>>();
@@ -97,7 +97,7 @@ public class SkuPriceBridge implements FieldBridge {
             }
 
             if (!lowestQuantityPrice.isEmpty()) {
-                availableIn = new LinkedList<Long>();
+                availableIn = new HashSet<Long>();
                 for (final Map.Entry<Long, Map<String, SkuPrice>> shop : lowestQuantityPrice.entrySet()) {
                     for (final Map.Entry<String, SkuPrice> currency : shop.getValue().entrySet()) {
 
@@ -113,22 +113,29 @@ public class SkuPriceBridge implements FieldBridge {
                         );
                         document.add(facetField);
 
-                        final Set<Long> subs = support.getAllShopsAndSubs().get(shop.getKey());
+                        final Set<Shop> subs = support.getAllShopsAndSubs().get(shop.getKey());
 
                         if (CollectionUtils.isNotEmpty(subs)) {
 
-                            for (final Long subShopId : subs) {
+                            for (final Shop subShop : subs) {
 
-                                rez = objectToString(subShopId, currency.getKey(), price);
+                                if (!subShop.isB2BStrictPriceActive()) {
 
-                                Field subFacetField = new Field(
-                                        rez.getFirst(),
-                                        rez.getSecond(),
-                                        Field.Store.NO,
-                                        Field.Index.NOT_ANALYZED,
-                                        luceneOptions.getTermVector()
-                                );
-                                document.add(subFacetField);
+                                    rez = objectToString(subShop.getShopId(), currency.getKey(), price);
+
+                                    Field subFacetField = new Field(
+                                            rez.getFirst(),
+                                            rez.getSecond(),
+                                            Field.Store.NO,
+                                            Field.Index.NOT_ANALYZED,
+                                            luceneOptions.getTermVector()
+                                    );
+                                    document.add(subFacetField);
+
+                                    // Note that price is inherited for this sub shop
+                                    availableIn.add(subShop.getShopId());
+
+                                }
                             }
 
                         }
@@ -167,25 +174,6 @@ public class SkuPriceBridge implements FieldBridge {
                         Field.Index.NOT_ANALYZED,
                         luceneOptions.getTermVector()
                 ));
-
-
-                final Set<Long> subs = support.getAllShopsAndSubs().get(shopId);
-
-                if (CollectionUtils.isNotEmpty(subs)) {
-
-                    for (final Long subShopId : subs) {
-                        // Fill in PK's for all sub shops as well.
-                        document.add(new Field(
-                                ProductSearchQueryBuilder.PRODUCT_SHOP_HASPRICE_FIELD,
-                                String.valueOf(subShopId),
-                                Field.Store.NO,
-                                Field.Index.NOT_ANALYZED,
-                                luceneOptions.getTermVector()
-                        ));
-                    }
-
-                }
-
             }
 
         }

@@ -152,8 +152,10 @@ export interface ShopSummaryVO {
   taxEnableShowNet: Pair<string, boolean>;
   taxEnableShowAmount: Pair<string, boolean>;
 
+  adminEmail: Pair<string, string>;
   b2bProfileActive: Pair<string, boolean>;
   b2bAddressbookActive: Pair<string, boolean>;
+  b2bStrictPriceActive: Pair<string, boolean>;
   cookiePolicy: Pair<string, boolean>;
   anonymousBrowsing: Pair<string, boolean>;
   customerSession: Pair<string, string>;

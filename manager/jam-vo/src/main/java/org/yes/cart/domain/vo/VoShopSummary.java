@@ -77,8 +77,10 @@ public class VoShopSummary {
     private MutablePair<String, Integer> searchSuggestMinChars;
 
 
+    private MutablePair<String, String> adminEmail;
     private MutablePair<String, Boolean> b2bProfileActive;
     private MutablePair<String, Boolean> b2bAddressbookActive;
+    private MutablePair<String, Boolean> b2bStrictPriceActive;
     private MutablePair<String, Boolean> cookiePolicy;
     private MutablePair<String, Boolean> anonymousBrowsing;
     private MutablePair<String, String> customerSession;
@@ -364,6 +366,14 @@ public class VoShopSummary {
         this.searchSuggestMinChars = searchSuggestMinChars;
     }
 
+    public MutablePair<String, String> getAdminEmail() {
+        return adminEmail;
+    }
+
+    public void setAdminEmail(final MutablePair<String, String> adminEmail) {
+        this.adminEmail = adminEmail;
+    }
+
     public MutablePair<String, Boolean> getB2bProfileActive() {
         return b2bProfileActive;
     }
@@ -378,6 +388,14 @@ public class VoShopSummary {
 
     public void setB2bAddressbookActive(final MutablePair<String, Boolean> b2bAddressbookActive) {
         this.b2bAddressbookActive = b2bAddressbookActive;
+    }
+
+    public MutablePair<String, Boolean> getB2bStrictPriceActive() {
+        return b2bStrictPriceActive;
+    }
+
+    public void setB2bStrictPriceActive(final MutablePair<String, Boolean> b2bStrictPriceActive) {
+        this.b2bStrictPriceActive = b2bStrictPriceActive;
     }
 
     public MutablePair<String, Boolean> getCookiePolicy() {

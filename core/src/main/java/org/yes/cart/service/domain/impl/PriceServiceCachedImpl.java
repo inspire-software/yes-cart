@@ -49,12 +49,13 @@ public class PriceServiceCachedImpl implements PriceService {
     @Cacheable(value = "priceService-minimalPrice")
     public SkuPrice getMinimalPrice(final Long productId,
                                     final String selectedSku,
-                                    final long shopId,
+                                    final long customerShopId,
+                                    final Long masterShopId,
                                     final String currencyCode,
                                     final BigDecimal quantity,
                                     final boolean enforceTier,
                                     final String pricingPolicy) {
-        return priceService.getMinimalPrice(productId, selectedSku, shopId, currencyCode, quantity, enforceTier, pricingPolicy);
+        return priceService.getMinimalPrice(productId, selectedSku, customerShopId, masterShopId, currencyCode, quantity, enforceTier, pricingPolicy);
     }
 
     /**
@@ -63,10 +64,11 @@ public class PriceServiceCachedImpl implements PriceService {
     @Cacheable(value = "priceService-allCurrentPrices")
     public List<SkuPrice> getAllCurrentPrices(final Long productId,
                                               final String selectedSku,
-                                              final long shopId,
+                                              final long customerShopId,
+                                              final Long masterShopId,
                                               final String currencyCode,
                                               final String pricingPolicy) {
-        return priceService.getAllCurrentPrices(productId, selectedSku, shopId, currencyCode, pricingPolicy);
+        return priceService.getAllCurrentPrices(productId, selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy);
     }
 
 
@@ -81,8 +83,8 @@ public class PriceServiceCachedImpl implements PriceService {
     /**
      * {@inheritDoc}
      */
-    public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree, final String currency, final Shop shop) {
-        return priceService.getPriceNavigationRecords(priceTierTree, currency, shop);
+    public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree, final String currency, final Shop customerShop) {
+        return priceService.getPriceNavigationRecords(priceTierTree, currency, customerShop);
     }
 
     /**

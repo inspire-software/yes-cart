@@ -16,7 +16,6 @@
 
 package org.yes.cart.shoppingcart.impl;
 
-import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.domain.entity.SkuPrice;
 import org.yes.cart.service.domain.PriceService;
 import org.yes.cart.service.domain.ProductService;
@@ -80,18 +79,16 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
         } else {
 
-            final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
+            final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
+            final long masterShopId = shoppingCart.getShoppingContext().getShopId();
+            // Fallback only if we have a B2B non-strict mode
+            final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
 
-            final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
-                    shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
-                    shoppingCart.getShoppingContext().getCountryCode(),
-                    shoppingCart.getShoppingContext().getStateCode()
-            );
-
+            final PricingPolicyProvider.PricingPolicy policy = determinePricingPolicy(shoppingCart);
 
             for (final CartItem cartItem : shoppingCart.getCartItemList()) {
 
-                setProductSkuPrice(shoppingCart, shop, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
+                setProductSkuPrice(shoppingCart, customerShopId, masterShopId, cartItem.getProductSkuCode(), cartItem.getQty(), policy);
 
             }
 
@@ -120,18 +117,18 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
 
         } else {
 
-            final Shop shop = shopService.getById(shoppingCart.getShoppingContext().getShopId());
+            final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
+            final long masterShopId = shoppingCart.getShoppingContext().getShopId();
+            // Fallback only if we have a B2B non-strict mode
+            final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
 
-            final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
-                    shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
-                    shoppingCart.getShoppingContext().getCountryCode(),
-                    shoppingCart.getShoppingContext().getStateCode()
-            );
+            final PricingPolicyProvider.PricingPolicy policy = determinePricingPolicy(shoppingCart);
 
             final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                     null,
                     skuCode,
-                    shop.getShopId(),
+                    customerShopId,
+                    masterShopId,
                     shoppingCart.getCurrencyCode(),
                     qty,
                     false,
@@ -148,8 +145,17 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         return null;
     }
 
+    private PricingPolicyProvider.PricingPolicy determinePricingPolicy(final MutableShoppingCart shoppingCart) {
+        return getPricingPolicyProvider().determinePricingPolicy(
+                        shoppingCart.getShoppingContext().getShopCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                        shoppingCart.getShoppingContext().getCountryCode(),
+                        shoppingCart.getShoppingContext().getStateCode()
+                );
+    }
+
     private void setProductSkuPrice(final MutableShoppingCart shoppingCart,
-                                    final Shop shop,
+                                    final long customerShopId,
+                                    final Long masterShopId,
                                     final String skuCode,
                                     final BigDecimal qty,
                                     final PricingPolicyProvider.PricingPolicy policy) {
@@ -157,7 +163,8 @@ public abstract class AbstractRecalculatePriceCartCommandImpl extends AbstractCa
         final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
-                shop.getShopId(),
+                customerShopId,
+                masterShopId,
                 shoppingCart.getCurrencyCode(),
                 qty,
                 false,

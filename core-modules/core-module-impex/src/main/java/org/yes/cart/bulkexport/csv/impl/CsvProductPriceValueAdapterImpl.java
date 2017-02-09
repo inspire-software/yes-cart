@@ -51,14 +51,20 @@ public class CsvProductPriceValueAdapterImpl implements ValueAdapter {
         final String shopCode = impExColumn.getParentDescriptor().getContext().getShopCode();
         final Shop shop = shopService.getShopByCode(shopCode);
         if (shop != null) {
+            final Long fallbackId;
+            if (shop.getMaster() != null && !shop.isB2BStrictPriceActive()) {
+                fallbackId = shop.getMaster().getShopId();
+            } else {
+                fallbackId = null;
+            }
             final String currency = impExColumn.getContext();
             SkuPrice price = null;
             if (rawValue instanceof Long) {
                 // product ID
-                price = priceService.getMinimalPrice((Long) rawValue, null, shop.getShopId(), currency, BigDecimal.ONE, false, null);
+                price = priceService.getMinimalPrice((Long) rawValue, null, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null);
             } else if (rawValue instanceof String) {
                 // SKU
-                price = priceService.getMinimalPrice(null, (String) rawValue, shop.getShopId(), currency, BigDecimal.ONE, false, null);
+                price = priceService.getMinimalPrice(null, (String) rawValue, shop.getShopId(), fallbackId, currency, BigDecimal.ONE, false, null);
             }
             if (price != null && price.getSkuPriceId() > 0L) {
                 final BigDecimal sale = price.getSalePriceForCalculation();

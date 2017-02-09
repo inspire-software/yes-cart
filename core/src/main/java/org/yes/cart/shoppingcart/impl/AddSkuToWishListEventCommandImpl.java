@@ -207,7 +207,6 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         }
 
         // not found so need to create one
-        final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
         final String skuCode = productSku.getCode();
 
         final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(BigDecimal.ZERO, productSku);
@@ -217,8 +216,16 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
 
         final BigDecimal quantity = pqm.getValidAddQty(getQuantityValue(parameters));
 
+        final long customerShopId = shoppingCart.getShoppingContext().getCustomerShopId();
+        final long masterShopId = shoppingCart.getShoppingContext().getShopId();
+        // Fallback only if we have a B2B non-strict mode
+        final Long fallbackShopId = masterShopId == customerShopId || getShopService().getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
+        final String shopCode = shoppingCart.getShoppingContext().getShopCode();
+        final String currency = shoppingCart.getCurrencyCode();
+
+        // Policy is setup on master
         final PricingPolicyProvider.PricingPolicy policy = getPricingPolicyProvider().determinePricingPolicy(
-                shop.getCode(), shoppingCart.getCurrencyCode(), shoppingCart.getCustomerEmail(),
+                shopCode, currency, shoppingCart.getCustomerEmail(),
                 shoppingCart.getShoppingContext().getCountryCode(),
                 shoppingCart.getShoppingContext().getStateCode()
         );
@@ -227,13 +234,16 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
         final SkuPrice skuPrice = getPriceService().getMinimalPrice(
                 null,
                 skuCode,
-                shop.getShopId(),
-                shoppingCart.getCurrencyCode(),
+                customerShopId,
+                fallbackShopId,
+                currency,
                 quantity,
                 false,
                 policy.getID());
 
         final BigDecimal price = MoneyUtils.minPositive(skuPrice.getSalePriceForCalculation(), skuPrice.getRegularPrice());
+
+        final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
 
         final CustomerWishList customerWishList = customerWishListService.getGenericDao().getEntityFactory().getByIface(CustomerWishList.class);
         customerWishList.setCustomer(customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop));

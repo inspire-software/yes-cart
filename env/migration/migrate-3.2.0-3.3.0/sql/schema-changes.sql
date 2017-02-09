@@ -465,3 +465,12 @@ alter table TCUSTOMERORDERDELIVERYDET add column DELIVERY_GUARANTEED datetime;
 alter table TWAREHOUSE add column DEFAULT_STD_LEAD_TIME integer default 0;
 alter table TWAREHOUSE add column DEFAULT_BO_LEAD_TIME integer default 0;
 
+--
+-- YC-675 Price service should retrieve sub shop price when B2B mode is enabled
+--
+
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  10884,  'SHOP_B2B_STRICT_PRICE', 'SHOP_B2B_STRICT_PRICE',  0,  NULL,  'Shop: B2B strict price mode enable',
+    'Disables main shop look up. Only sub shop prices are considered',  1008, 1001, 0, 0, 0, 0);
+

@@ -164,9 +164,10 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
   editNewCentreNameModalResult(modalresult:ModalResult) {
     LogUtil.debug('ShopFulfilmentCentreComponent editNewCentreNameModalResult modal result', modalresult);
     if (ModalAction.POSITIVE === modalresult.action) {
-      this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
+      let _sub:any = this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
           carVo => {
             this.validForSave = false;
+            _sub.unsubscribe()
             this.onRefreshHandler();
         }
       );

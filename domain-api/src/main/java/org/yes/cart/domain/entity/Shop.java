@@ -161,11 +161,28 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     Collection<AttrValueShop> getAttributesByCode(String attributeCode);
 
     /**
-     * Is B2B profile set.
+     * Is B2B profile set. B2B profile is used for setup of shop that contains sub shops. Each of the
+     * sub shops is considered a B2B organisation with its own settings for inventory, catalog and pricing.
+     *
+     * @return true if B2B profile is set.
+     */
+    boolean isB2BProfileActive();
+
+    /**
+     * Is B2B address book enforced. Enforces single address book for all customers registered under B2B
+     * account, customer only have read access.
+     *
+     * @return true if B2B address mode is set.
+     */
+    boolean isB2BAddressBookActive();
+
+    /**
+     * Is B2B strict pricing is enforced. By default B2B can use its own price settings as well as have
+     * fallback to the master shop. Strict mode disabled fallback to master prices.
      *
      * @return true is B2B profile is set.
      */
-    boolean isB2BProfileActive();
+    boolean isB2BStrictPriceActive();
 
     /**
      * Is page caching on.

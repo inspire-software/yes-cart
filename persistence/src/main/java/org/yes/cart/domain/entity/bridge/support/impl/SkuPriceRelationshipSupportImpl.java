@@ -40,22 +40,22 @@ public class SkuPriceRelationshipSupportImpl implements SkuPriceRelationshipSupp
     }
 
     /** {@inheritDoc} */
-    public Map<Long, Set<Long>> getAllShopsAndSubs() {
+    public Map<Long, Set<Shop>> getAllShopsAndSubs() {
         final List<Shop> all = this.self().getAll();
-        final Map<Long, Set<Long>> shopsMap = new HashMap<Long, Set<Long>>();
+        final Map<Long, Set<Shop>> shopsMap = new HashMap<Long, Set<Shop>>();
         for (final Shop shop : all) {
             if (shop.getMaster() == null) {
-                final Set<Long> subs = shopsMap.get(shop.getShopId());
+                final Set<Shop> subs = shopsMap.get(shop.getShopId());
                 if (subs == null) {
-                    shopsMap.put(shop.getShopId(), new HashSet<Long>());
+                    shopsMap.put(shop.getShopId(), new HashSet<Shop>());
                 }
             } else {
-                Set<Long> subs = shopsMap.get(shop.getMaster().getShopId());
+                Set<Shop> subs = shopsMap.get(shop.getMaster().getShopId());
                 if (subs == null) {
-                    subs = new HashSet<Long>();
+                    subs = new HashSet<Shop>();
                     shopsMap.put(shop.getMaster().getShopId(), subs);
                 }
-                subs.add(shop.getShopId());
+                subs.add(shop);
             }
         }
         return shopsMap;

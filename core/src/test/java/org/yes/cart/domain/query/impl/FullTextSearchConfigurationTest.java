@@ -88,6 +88,31 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
         super.setUp();
     }
 
+    private void assertProduct(final List<Product> products, final String hasCode) {
+        if (products.isEmpty()) {
+            fail("No " + hasCode + ", empty list");
+        } else {
+            for (final Product product : products) {
+                if (hasCode.equals(product.getCode())) {
+                    return;
+                }
+            }
+            fail("No " + hasCode + " was not in the list");
+        }
+    }
+
+
+    private void assertNoProduct(final List<Product> products, final String hasCode) {
+        if (!products.isEmpty()) {
+            for (final Product product : products) {
+                if (hasCode.equals(product.getCode())) {
+                    fail(hasCode + " was in the list");
+                }
+            }
+        }
+    }
+
+
     @Test
     public void testCategoryQuerySearch() throws InterruptedException {
 
@@ -198,8 +223,39 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(101L, 104L), false,
                         Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
                 products = productDao.fullTextSearch(context.getProductQuery());
-                assertTrue("Failed [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertTrue("Failed bender price is inherited [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertProduct(products, "BENDER");
 
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST1")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed CC_TEST1 price is inherited [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertProduct(products, "CC_TEST1");
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1010L, Arrays.asList(104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST5")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed CC_TEST5 price is inherited [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertProduct(products, "CC_TEST5");
+
+                // basic search in a sub shop (strict)
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1011L, Arrays.asList(101L, 104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("bender")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed bender is availability SHOWROOM [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertProduct(products, "BENDER");
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1011L, Arrays.asList(104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST1")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed CC_TEST1 price is in 1011 [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertProduct(products, "CC_TEST1");
+
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1011L, Arrays.asList(104L), false,
+                        Collections.singletonMap(ProductSearchQueryBuilder.QUERY, (List) Arrays.asList("CC_TEST5")));
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertTrue("Failed CC_TEST5 price is not in 1011 [" + context.getProductQuery().toString() + "]", !products.isEmpty());
+                assertNoProduct(products, "CC_TEST5");
 
                 status.setRollbackOnly();
             }
@@ -321,6 +377,13 @@ public class FullTextSearchConfigurationTest extends AbstractTestDAO {
                 products = productDao.fullTextSearch(context.getProductQuery());
                 assertFalse("Product must be found in 10 shop. Failed [" + context.getProductQuery().toString() + "]", products.isEmpty());
                 assertEquals("BENDER is best match", "BENDER", products.get(0).getCode());
+
+                // basic search in a sub shop strict price
+                context = luceneQueryFactory.getFilteredNavigationQueryChain(1011L, null, false,
+                        Collections.<String, List>emptyMap());
+                products = productDao.fullTextSearch(context.getProductQuery());
+                assertFalse("Product must be found in 10 shop. Failed [" + context.getProductQuery().toString() + "]", products.isEmpty());
+                assertEquals("There are only 3 products with price + 1 show room", 4, products.size());
 
 
                 status.setRollbackOnly();

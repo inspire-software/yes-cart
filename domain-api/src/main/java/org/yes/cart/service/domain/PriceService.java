@@ -38,20 +38,22 @@ public interface PriceService extends GenericService<SkuPrice> {
      * Get minimal price for given product skus (all), shop, currency and quantity.
      *
      *
-     * @param productId     optional product to filter the prices. If null the price will be chosen by selectedSku.
-     * @param selectedSku   optional sku to filter the prices. if null all product skus will be  considered to
-     *                      determine minimal price
-     * @param shopId        shop
-     * @param currencyCode  desirable currency
-     * @param quantity      quantity tier
-     * @param enforceTier   force to pick closest tier price rather than cheapest
-     * @param pricingPolicy optional pricing policy
+     * @param productId      optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku    optional sku to filter the prices. if null all product skus will be  considered to
+     *                       determine minimal price
+     * @param customerShopId shop for which to get the price for
+     * @param masterShopId   optional fallback shop (if specified the result will be a merge of prices available in both shops)
+     * @param currencyCode   desirable currency
+     * @param quantity       quantity tier
+     * @param enforceTier    force to pick closest tier price rather than cheapest
+     * @param pricingPolicy  optional pricing policy
      *
      * @return lowest available sku price
      */
     SkuPrice getMinimalPrice(final Long productId,
                              final String selectedSku,
-                             final long shopId,
+                             final long customerShopId,
+                             final Long masterShopId,
                              final String currencyCode,
                              final BigDecimal quantity,
                              final boolean enforceTier,
@@ -60,18 +62,20 @@ public interface PriceService extends GenericService<SkuPrice> {
     /**
      * Get all prices for given product skus (all), shop, currency and quantity.
      *
-     * @param productId    optional product to filter the prices. If null the price will be chosen by selectedSku.
-     * @param selectedSku  optional sku to filter the prices. if null all product skus will be  considered to
-     *                     determine minimal price
-     * @param shopId       shop
-     * @param currencyCode desirable currency
-     * @param pricingPolicy optional pricing policy
+     * @param productId      optional product to filter the prices. If null the price will be chosen by selectedSku.
+     * @param selectedSku    optional sku to filter the prices. if null all product skus will be  considered to
+     *                       determine minimal price
+     * @param customerShopId shop for which to get the price for
+     * @param masterShopId   optional fallback shop (if specified the result will be a merge of prices available in both shops)
+     * @param currencyCode   desirable currency
+     * @param pricingPolicy  optional pricing policy
      *
      * @return lowest available sku price
      */
     List<SkuPrice> getAllCurrentPrices(final Long productId,
                                        final String selectedSku,
-                                       final long shopId,
+                                       final long customerShopId,
+                                       final Long masterShopId,
                                        final String currencyCode,
                                        final String pricingPolicy);
 
@@ -94,11 +98,11 @@ public interface PriceService extends GenericService<SkuPrice> {
      *
      * @param priceTierTree given price tier tree
      * @param currency      currency code
-     * @param shop          currency shop
+     * @param customerShop  customer shop
      * @return list of navigation records for given price tree and currency
      */
     List<FilteredNavigationRecord> getPriceNavigationRecords(PriceTierTree priceTierTree,
                                                              String currency,
-                                                             Shop shop);
+                                                             Shop customerShop);
 
 }

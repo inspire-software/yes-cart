@@ -62,6 +62,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -69,7 +70,124 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+
+
+        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+
+        assertNotNull(model);
+
+        assertNull(model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertNull(model.getQuantity());
+
+        assertNull(model.getRegularPrice());
+        assertNull(model.getSalePrice());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+
+    @Test
+    public void testGetSkuPriceSearchAndProductDetailsNoPriceB2BStrict() throws Exception {
+
+        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final PricingPolicyProvider.PricingPolicy policy = context.mock(PricingPolicyProvider.PricingPolicy.class, "policy");
+
+        final Shop b2b = context.mock(Shop.class, "b2b");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(345L));
+            allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
+            allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
+            allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
+            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
+            allowing(policy).getID(); will(returnValue("P1"));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 345L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(shopService).getById(345L); will(returnValue(b2b));
+            allowing(b2b).isB2BStrictPriceActive(); will(returnValue(true));
+        }});
+
+        final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
+
+
+        final ProductPriceModel model = facade.getSkuPrice(cart, 123L, "ABC", BigDecimal.ONE);
+
+        assertNotNull(model);
+
+        assertNull(model.getRef());
+
+        assertEquals("EUR", model.getCurrency());
+        assertNull(model.getQuantity());
+
+        assertNull(model.getRegularPrice());
+        assertNull(model.getSalePrice());
+
+        assertFalse(model.isTaxInfoEnabled());
+        assertFalse(model.isTaxInfoUseNet());
+        assertFalse(model.isTaxInfoShowAmount());
+
+        assertNull(model.getPriceTaxCode());
+        assertNull(model.getPriceTaxRate());
+        assertFalse(model.isPriceTaxExclusive());
+        assertNull(model.getPriceTax());
+
+        context.assertIsSatisfied();
+
+    }
+
+
+
+    @Test
+    public void testGetSkuPriceSearchAndProductDetailsNoPriceB2B() throws Exception {
+
+        final PriceService priceService = context.mock(PriceService.class, "priceService");
+        final PricingPolicyProvider pricingPolicyProvider = context.mock(PricingPolicyProvider.class, "pricingPolicyProvider");
+        final ShopService shopService = context.mock(ShopService.class, "shopService");
+
+        final ShoppingCart cart = context.mock(ShoppingCart.class, "cart");
+        final ShoppingContext cartCtx = context.mock(ShoppingContext.class, "cartCtx");
+        final PricingPolicyProvider.PricingPolicy policy = context.mock(PricingPolicyProvider.PricingPolicy.class, "policy");
+
+        final Shop b2b = context.mock(Shop.class, "b2b");
+
+        context.checking(new Expectations() {{
+            allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
+            allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(345L));
+            allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
+            allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
+            allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
+            allowing(cart).getCustomerEmail(); will(returnValue("bob@doe.com"));
+            allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
+            allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
+            allowing(policy).getID(); will(returnValue("P1"));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 345L, 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(null));
+            allowing(shopService).getById(345L); will(returnValue(b2b));
+            allowing(b2b).isB2BStrictPriceActive(); will(returnValue(false));
         }});
 
         final ProductServiceFacade facade = new ProductServiceFacadeImpl(null, null, null, null, null, null, pricingPolicyProvider, priceService, null, null, null, shopService, null);
@@ -118,6 +236,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -125,7 +244,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -180,6 +299,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -187,7 +307,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -244,6 +364,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -251,7 +372,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue(null));
             allowing(skuPrice).getQuantity(); will(returnValue(null));
             allowing(skuPrice).getRegularPrice(); will(returnValue(null));
@@ -309,6 +430,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -316,7 +438,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -371,6 +493,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -378,7 +501,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -437,6 +560,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -444,7 +568,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -509,6 +633,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -516,7 +641,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -584,6 +709,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -591,7 +717,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -658,6 +784,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -665,7 +792,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -733,6 +860,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -740,7 +868,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -805,6 +933,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -812,7 +941,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -880,6 +1009,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -887,7 +1017,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));
@@ -954,6 +1084,7 @@ public class ProductServiceFacadeImplTest {
         context.checking(new Expectations() {{
             allowing(cart).getShoppingContext(); will(returnValue(cartCtx));
             allowing(cartCtx).getShopId(); will(returnValue(234L));
+            allowing(cartCtx).getCustomerShopId(); will(returnValue(234L));
             allowing(cartCtx).getShopCode(); will(returnValue("SHOP10"));
             allowing(cartCtx).getCountryCode(); will(returnValue("GB"));
             allowing(cartCtx).getStateCode(); will(returnValue("GB-LON"));
@@ -961,7 +1092,7 @@ public class ProductServiceFacadeImplTest {
             allowing(cart).getCurrencyCode(); will(returnValue("EUR"));
             allowing(pricingPolicyProvider).determinePricingPolicy("SHOP10", "EUR", "bob@doe.com", "GB", "GB-LON"); will(returnValue(policy));
             allowing(policy).getID(); will(returnValue("P1"));
-            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
+            allowing(priceService).getMinimalPrice(123L, "ABC", 234L, null, "EUR", BigDecimal.ONE, false, "P1"); will(returnValue(skuPrice));
             allowing(skuPrice).getSkuCode(); will(returnValue("ABC"));
             allowing(skuPrice).getQuantity(); will(returnValue(BigDecimal.ONE));
             allowing(skuPrice).getRegularPrice(); will(returnValue(new BigDecimal("100.00")));

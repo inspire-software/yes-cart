@@ -35,7 +35,7 @@ public interface SkuPriceRelationshipSupport {
      *
      * @return list of all entities
      */
-    Map<Long, Set<Long>> getAllShopsAndSubs();
+    Map<Long, Set<Shop>> getAllShopsAndSubs();
 
     /**
      * Get all entities.

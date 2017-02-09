@@ -41,14 +41,10 @@ import java.util.*;
  * Date: 09-May-2011
  * Time: 14:12:54
  */
-public class PriceServiceImpl
-        extends BaseGenericServiceImpl<SkuPrice>
-        implements PriceService {
-
+public class PriceServiceImpl extends BaseGenericServiceImpl<SkuPrice> implements PriceService {
 
     private final PriceNavigation priceNavigation;
     private final GenericDAO<SkuPrice, Long> skuPriceDao;
-
 
     /**
      * Constructor.
@@ -70,7 +66,8 @@ public class PriceServiceImpl
      */
     public SkuPrice getMinimalPrice(final Long productId,
                                     final String selectedSku,
-                                    final long shopId,
+                                    final long customerShopId,
+                                    final Long masterShopId,
                                     final String currencyCode,
                                     final BigDecimal quantity,
                                     final boolean enforceTier,
@@ -78,9 +75,9 @@ public class PriceServiceImpl
 
         final List<Pair<String, SkuPrice>> skuPrices;
         if (selectedSku == null && productId != null) {
-            skuPrices = getSkuPrices(productId, shopId, currencyCode, pricingPolicy);
+            skuPrices = getSkuPrices(productId, customerShopId, masterShopId, currencyCode, pricingPolicy);
         } else if (selectedSku != null) {
-            skuPrices = getSkuPrices(selectedSku, shopId, currencyCode, pricingPolicy);
+            skuPrices = getSkuPrices(selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy);
         } else {
             skuPrices = Collections.emptyList();
         }
@@ -151,15 +148,16 @@ public class PriceServiceImpl
      */
     public List<SkuPrice> getAllCurrentPrices(final Long productId,
                                               final String selectedSku,
-                                              final long shopId,
+                                              final long customerShopId,
+                                              final Long masterShopId,
                                               final String currencyCode,
                                               final String pricingPolicy) {
 
         final List<Pair<String, SkuPrice>> skuPrices;
         if (selectedSku == null && productId != null) {
-            skuPrices = getSkuPrices(productId, shopId, currencyCode, pricingPolicy);
+            skuPrices = getSkuPrices(productId, customerShopId, masterShopId, currencyCode, pricingPolicy);
         } else if (selectedSku != null) {
-            skuPrices = getSkuPrices(selectedSku, shopId, currencyCode, pricingPolicy);
+            skuPrices = getSkuPrices(selectedSku, customerShopId, masterShopId, currencyCode, pricingPolicy);
         } else {
             skuPrices = Collections.emptyList();
         }
@@ -190,7 +188,7 @@ public class PriceServiceImpl
     }
 
     /**
-     * Atm we can have different price definitions (lowest in list with high priority):
+     * At the moment we can have different price definitions (lowest in list with high priority):
      * price without any time limitations;
      * price, which starts in infinitive past and will be end at some date;
      * price, which has the start date but no end date;
@@ -203,7 +201,7 @@ public class PriceServiceImpl
 
         final List<Pair<String, SkuPrice>> allPrices = new LinkedList<Pair<String, SkuPrice>>();
 
-        final Date now = new Date(); //TODO: V2 time machine
+        final Date now = now();
         for (Pair<String, SkuPrice> skuPrice : skuPrices) {
 
             if (DomainApiUtils.isObjectAvailableNow(true, skuPrice.getSecond().getSalefrom(), skuPrice.getSecond().getSaleto(), now)) {
@@ -215,35 +213,49 @@ public class PriceServiceImpl
         return allPrices;
     }
 
+    Date now() {
+        return new Date(); //TODO: time machine
+    }
+
     /**
      * Get the sku prices filtered by shop.
      *
-     * @param skuCode      SKU code
-     * @param shopId       shop filter
-     * @param currencyCode currency code
-     * @param pricingPolicy optional pricing policy
+     * @param skuCode         SKU code
+     * @param customerShopId  shop filter
+     * @param masterShopId    optional fallback shop filter
+     * @param currencyCode    currency code
+     * @param pricingPolicy   optional pricing policy
      *
      * @return list of sku prices
      */
-    List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode, final long shopId, final String currencyCode, final String pricingPolicy) {
+    List<Pair<String, SkuPrice>> getSkuPrices(final String skuCode,
+                                              final long customerShopId,
+                                              final Long masterShopId,
+                                              final String currencyCode,
+                                              final String pricingPolicy) {
 
-        return getSkuPriceFilteredByShopCurrency(skuCode, shopId, currencyCode, pricingPolicy);
+        return getSkuPriceFilteredByShopCurrency(skuCode, customerShopId, masterShopId, currencyCode, pricingPolicy);
 
     }
 
     /**
      * Get the sku prices filtered by shop.
      *
-     * @param productId    product PK
-     * @param shopId       shop filter
-     * @param currencyCode currency code
-     * @param pricingPolicy optional pricing policy
+     * @param productId       product PK
+     * @param customerShopId  shop filter
+     * @param masterShopId    optional fallback shop filter
+     * @param currencyCode    currency code
+     * @param pricingPolicy   optional pricing policy
      *
      * @return list of sku prices
      */
-    List<Pair<String, SkuPrice>> getSkuPrices(final long productId, final long shopId, final String currencyCode, final String pricingPolicy) {
+    List<Pair<String, SkuPrice>> getSkuPrices(final long productId,
+                                              final long customerShopId,
+                                              final Long masterShopId,
+                                              final String currencyCode,
+                                              final String pricingPolicy) {
 
-        return getSkuPriceFilteredByShopCurrency(productId, shopId, currencyCode, pricingPolicy);
+        return getSkuPriceFilteredByShopCurrency(productId, customerShopId, masterShopId, currencyCode, pricingPolicy);
 
     }
 
@@ -272,17 +284,28 @@ public class PriceServiceImpl
     }
 
     private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final String skuCode,
-                                                                           final long shopId,
+                                                                           final long customerShopId,
+                                                                           final Long masterShopId,
                                                                            final String currencyCode,
                                                                            final String pricingPolicy) {
 
         final List<SkuPrice> prices;
         if (StringUtils.isNotBlank(pricingPolicy)) {
-            prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP.AND.POLICY",
-                    skuCode, currencyCode, shopId, pricingPolicy);
+            if (masterShopId != null) {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOPS.AND.POLICY",
+                        skuCode, currencyCode, customerShopId, masterShopId, pricingPolicy);
+            } else {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP.AND.POLICY",
+                        skuCode, currencyCode, customerShopId, pricingPolicy);
+            }
         } else {
-            prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
-                    skuCode, currencyCode, shopId);
+            if (masterShopId != null) {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOPS",
+                        skuCode, currencyCode, customerShopId, masterShopId);
+            } else {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.CODE.AND.CURRENCY.AND.SHOP",
+                        skuCode, currencyCode, customerShopId);
+            }
         }
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
@@ -296,17 +319,28 @@ public class PriceServiceImpl
     }
 
     private List<Pair<String, SkuPrice>> getSkuPriceFilteredByShopCurrency(final long productId,
-                                                                           final long shopId,
+                                                                           final long customerShopId,
+                                                                           final Long masterShopId,
                                                                            final String currencyCode,
                                                                            final String pricingPolicy) {
 
         final List<SkuPrice> prices;
         if (StringUtils.isNotBlank(pricingPolicy)) {
-            prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP.AND.POLICY",
-                    productId, currencyCode, shopId, pricingPolicy);
+            if (masterShopId != null) {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOPS.AND.POLICY",
+                        productId, currencyCode, customerShopId, masterShopId, pricingPolicy);
+            } else {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP.AND.POLICY",
+                        productId, currencyCode, customerShopId, pricingPolicy);
+            }
         } else {
-            prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
-                    productId, currencyCode, shopId);
+            if (masterShopId != null) {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOPS",
+                        productId, currencyCode, customerShopId, masterShopId);
+            } else {
+                prices = getGenericDao().findByNamedQuery("SKUPRICE.BY.PRODUCT.AND.CURRENCY.AND.SHOP",
+                        productId, currencyCode, customerShopId);
+            }
         }
         if (CollectionUtils.isNotEmpty(prices)) {
             final List<Pair<String, SkuPrice>> rez = new ArrayList<Pair<String, SkuPrice>>(prices.size());
@@ -340,8 +374,8 @@ public class PriceServiceImpl
      */
     public List<FilteredNavigationRecord> getPriceNavigationRecords(final PriceTierTree priceTierTree,
                                                                     final String currency,
-                                                                    final Shop shop) {
-        final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, shop);
+                                                                    final Shop customerShop) {
+        final List<PriceTierNode> priceTierNodes = getPriceTierNodes(priceTierTree, currency, customerShop);
         final List<FilteredNavigationRecord> result = new ArrayList<FilteredNavigationRecord>(priceTierNodes.size());
         for (PriceTierNode priceTierNode : priceTierNodes) {
             result.add(

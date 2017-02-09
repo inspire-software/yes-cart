@@ -95,10 +95,16 @@ public class ItemGiftPromotionAction extends AbstractItemPromotionAction impleme
 
     private SkuPrice getGiftPrices(final String sku, final ShoppingCart cart) {
         try {
+            final long customerShopId = cart.getShoppingContext().getCustomerShopId();
+            final long masterShopId = cart.getShoppingContext().getShopId();
+            // Fallback only if we have a B2B non-strict mode
+            final Long fallbackShopId = masterShopId == customerShopId || shopService.getById(customerShopId).isB2BStrictPriceActive() ? null : masterShopId;
+
             return priceService.getMinimalPrice(
                     null,
                     sku,
-                    cart.getShoppingContext().getShopId(),
+                    customerShopId,
+                    fallbackShopId,
                     cart.getCurrencyCode(),
                     BigDecimal.ONE, false, null);
         } catch (Exception exp) {

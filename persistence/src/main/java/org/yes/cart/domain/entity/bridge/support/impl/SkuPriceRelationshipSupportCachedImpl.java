@@ -40,7 +40,7 @@ public class SkuPriceRelationshipSupportCachedImpl implements SkuPriceRelationsh
 
     /** {@inheritDoc} */
     @Cacheable(value = "shopService-allShopsMap")
-    public Map<Long, Set<Long>> getAllShopsAndSubs() {
+    public Map<Long, Set<Shop>> getAllShopsAndSubs() {
         return support.getAllShopsAndSubs();
     }
 
