@@ -316,7 +316,9 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
             final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : "B2C";
-            final boolean requiredApproval = shop.isSfRequireCustomerRegistrationApproval(customerType);
+            final boolean requiredApproval = shop.getMaster() != null ?
+                    shop.getMaster().isSfRequireCustomerRegistrationApproval(customerType) :
+                    shop.isSfRequireCustomerRegistrationApproval(customerType);
             final CustomerShop customerShop = getGenericDao().getEntityFactory().getByIface(CustomerShop.class);
             customerShop.setCustomer(customer);
             customerShop.setShop(shop);
