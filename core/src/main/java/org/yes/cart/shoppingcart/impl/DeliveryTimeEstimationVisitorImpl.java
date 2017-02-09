@@ -104,8 +104,11 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
             final CarrierSla sla = customerOrderDelivery.getCarrierSla();
             final Map<Date, Date> slaExcludedDates = getCarrierSlaExcludedDates(sla);
 
-            if (sla.getMinDays() > 0) {
-                minDeliveryTime.add(Calendar.DAY_OF_YEAR, sla.getMinDays());
+            final int minDays = sla.getMinDays() != null ? sla.getMinDays() : 0;
+            final int maxDays = sla.getMaxDays() != null ? sla.getMaxDays() : 0;
+
+            if (minDays > 0) {
+                minDeliveryTime.add(Calendar.DAY_OF_YEAR, minDays);
                 skipWeekdayExclusions(sla, minDeliveryTime);
                 skipDatesExclusions(sla, minDeliveryTime, slaExcludedDates);
             }
@@ -124,8 +127,8 @@ public class DeliveryTimeEstimationVisitorImpl implements DeliveryTimeEstimation
 
             } else {
                 min = minDeliveryTime.getTime();
-                if (sla.getMaxDays() > sla.getMinDays()) {
-                    minDeliveryTime.add(Calendar.DAY_OF_YEAR, sla.getMaxDays() - sla.getMinDays());
+                if (maxDays > minDays) {
+                    minDeliveryTime.add(Calendar.DAY_OF_YEAR, maxDays - minDays);
                     skipWeekdayExclusions(sla, minDeliveryTime);
                 }
                 max = minDeliveryTime.getTime();
