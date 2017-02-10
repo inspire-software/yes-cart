@@ -664,6 +664,7 @@ public interface AttributeNamesKeys {
 
         String ORDER_INFO_CUSTOMER_TYPE = "customerType";
         String ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON = "shoppingListsEnabled";
+        String ORDER_INFO_CUSTOMER_REPEAT_ORDER_ON = "repeatOrderEnabled";
         String ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON = "rfqEnabled";
         String ORDER_INFO_CUSTOMER_SHOPPING_B2B_FORM_ON = "orderB2BFormEnabled";
         String ORDER_INFO_CUSTOMER_SHOPPING_B2B_LINEREMARKS_ON = "orderB2BLineRemarksEnabled";

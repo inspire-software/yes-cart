@@ -53,6 +53,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         boolean blockCheckout = shop.isSfBlockCustomerCheckout(customerType);
         boolean orderRequiresApproval = shop.isSfRequireCustomerOrderApproval(customerType);
         boolean shoppingListsEnabled = shop.isSfShoppingListsEnabled(customerType);
+        boolean repeatOrderEnabled = shop.isSfRepeatOrdersEnabled(customerType);
         boolean rfqEnabled = shop.isSfRFQEnabled(customerType);
         boolean orderB2BFormEnabled = shop.isSfB2BOrderFormEnabled(customerType);
         boolean orderB2BLineRemarksEnabled = shop.isSfB2BOrderLineRemarksEnabled(customerType);
@@ -62,6 +63,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE, String.valueOf(orderRequiresApproval));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE, String.valueOf(blockCheckout));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON, String.valueOf(shoppingListsEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_REPEAT_ORDER_ON, String.valueOf(repeatOrderEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON, String.valueOf(rfqEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_B2B_FORM_ON, String.valueOf(orderB2BFormEnabled));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_B2B_LINEREMARKS_ON, String.valueOf(orderB2BLineRemarksEnabled));
