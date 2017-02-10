@@ -16,10 +16,12 @@
 
 package org.yes.cart.shoppingcart.impl;
 
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.shoppingcart.MutableOrderInfo;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -223,5 +225,15 @@ public class OrderInfoImpl implements MutableOrderInfo {
         this.billingAddressId = null;
         this.deliveryAddressId = null;
         this.setOrderMessage(null);
+        this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, null);
+        this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE, null);
+        this.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID, null);
+        final Iterator<Map.Entry<String, String>> details = getDetailsInternal().entrySet().iterator();
+        while (details.hasNext()) {
+            final Map.Entry<String, String> detail = details.next();
+            if (detail.getKey().startsWith(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID)) {
+                details.remove();
+            }
+        }
     }
 }
