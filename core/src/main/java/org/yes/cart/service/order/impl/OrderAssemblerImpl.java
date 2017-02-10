@@ -18,6 +18,7 @@ package org.yes.cart.service.order.impl;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.dao.EntityFactory;
 import org.yes.cart.dao.GenericDAO;
@@ -158,12 +159,12 @@ public class OrderAssemblerImpl implements OrderAssembler {
      */
     private void fillB2BData(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final boolean temp) throws OrderAssemblyException {
 
-        customerOrder.setB2bRef(shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
-        customerOrder.setB2bEmployeeId(shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
-        customerOrder.setB2bChargeId(shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
-        customerOrder.setB2bRequireApprove(Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove")));
-        customerOrder.setB2bApprovedBy(shoppingCart.getOrderInfo().getDetailByKey("b2bApprovedBy"));
-        final String approvedDate = shoppingCart.getOrderInfo().getDetailByKey("b2bApprovedDate");
+        customerOrder.setB2bRef(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF));
+        customerOrder.setB2bEmployeeId(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID));
+        customerOrder.setB2bChargeId(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID));
+        customerOrder.setB2bRequireApprove(Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER)));
+        customerOrder.setB2bApprovedBy(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY));
+        final String approvedDate = shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE);
         if (approvedDate != null) {
             try {
                 customerOrder.setB2bApprovedDate(new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).parse(approvedDate));
@@ -305,6 +306,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
         }
 
         customerOrder.setOrderMessage(shoppingCart.getOrderMessage());
+        customerOrder.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_REMARKS_ID));
+
 
     }
 
@@ -374,7 +377,7 @@ public class OrderAssemblerImpl implements OrderAssembler {
             customerOrderDet.setTaxExclusiveOfPrice(item.isTaxExclusiveOfPrice());
 
             customerOrderDet.setProductSkuCode(item.getProductSkuCode());
-            fillOrderDetail(customerOrder, item, customerOrderDet, temp);
+            fillOrderDetail(customerOrder, shoppingCart, item, customerOrderDet, temp);
 
 
             customerOrderDet.setProductName(item.getProductName());
@@ -387,13 +390,18 @@ public class OrderAssemblerImpl implements OrderAssembler {
      * Fill specific product details for current item.
      *
      * @param customerOrder    order
+     * @param shoppingCart     cart
      * @param item             item
      * @param customerOrderDet item to populate
      * @param temp             temporary
      *
      * @throws OrderAssemblyException
      */
-    protected void fillOrderDetail(final CustomerOrder customerOrder, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
+    protected void fillOrderDetail(final CustomerOrder customerOrder, final ShoppingCart shoppingCart, final CartItem item, final CustomerOrderDet customerOrderDet, final boolean temp) throws OrderAssemblyException {
+
+        if (!item.isGift()) {
+            customerOrderDet.setB2bRemarks(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + item.getProductSkuCode()));
+        }
 
         final ProductSku sku = productSkuService.getProductSkuBySkuCode(item.getProductSkuCode());
         if (sku != null) {

@@ -184,6 +184,7 @@ public class DeliveryAssemblerImpl implements DeliveryAssembler {
         deliveryDet.setTaxRate(orderDet.getTaxRate());
         deliveryDet.setTaxExclusiveOfPrice(orderDet.isTaxExclusiveOfPrice());
         deliveryDet.setAllValues(orderDet.getAllValues());
+        deliveryDet.setB2bRemarks(orderDet.getB2bRemarks());
 
     }
 

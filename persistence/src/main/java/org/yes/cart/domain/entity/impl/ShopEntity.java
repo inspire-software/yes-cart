@@ -70,6 +70,11 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfRequireCustomerRegistrationNotificationTypes;
     private Set<String> sfRequireCustomerOrderApprovalTypes;
     private Set<String> sfBlockCustomerCheckoutTypes;
+    private Set<String> sfRepeatOrdersEnabledTypes;
+    private Set<String> sfB2BOrderLineRemarksEnabledTypes;
+    private Set<String> sfB2BOrderFormEnabledTypes;
+    private Set<String> sfShoppingListsEnabledTypes;
+    private Set<String> sfRFQEnabledTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean B2BAddresBookActive = null;
@@ -619,6 +624,94 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isSfBlockCustomerCheckout(final String customerType) {
         return getSfBlockCustomerCheckoutTypes().contains(customerType);
+    }
+
+    private Set<String> getSfRepeatOrdersEnabledTypes() {
+        if (this.sfRepeatOrdersEnabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES);
+            if (attrs != null) {
+                this.sfRepeatOrdersEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfRepeatOrdersEnabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfRepeatOrdersEnabledTypes;
+    }
+
+    public boolean isSfRepeatOrdersEnabled(final String customerType) {
+        return getSfRepeatOrdersEnabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfShoppingListsEnabledTypes() {
+        if (this.sfShoppingListsEnabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES);
+            if (attrs != null) {
+                this.sfShoppingListsEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfShoppingListsEnabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfShoppingListsEnabledTypes;
+    }
+
+    public boolean isSfShoppingListsEnabled(final String customerType) {
+        return getSfShoppingListsEnabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfB2BOrderLineRemarksEnabledTypes() {
+        if (this.sfB2BOrderLineRemarksEnabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES);
+            if (attrs != null) {
+                this.sfB2BOrderLineRemarksEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfB2BOrderLineRemarksEnabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfB2BOrderLineRemarksEnabledTypes;
+    }
+
+    public boolean isSfB2BOrderLineRemarksEnabled(final String customerType) {
+        return getSfB2BOrderLineRemarksEnabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfB2BOrderFormEnabledTypes() {
+        if (this.sfB2BOrderFormEnabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES);
+            if (attrs != null) {
+                this.sfB2BOrderFormEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfB2BOrderFormEnabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfB2BOrderFormEnabledTypes;
+    }
+
+    public boolean isSfB2BOrderFormEnabled(final String customerType) {
+        return getSfB2BOrderFormEnabledTypes().contains(customerType);
+    }
+
+    private Set<String> getSfRFQEnabledTypes() {
+        if (this.sfRFQEnabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES);
+            if (attrs != null) {
+                this.sfRFQEnabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfRFQEnabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfRFQEnabledTypes;
+    }
+
+    public boolean isSfRFQEnabled(final String customerType) {
+        return getSfRFQEnabledTypes().contains(customerType);
+    }
+
+    public boolean isSfPromoCouponsEnabled(final String customerType) {
+        return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_COUPONS);
+    }
+
+    public boolean isSfOrderMessageEnabled(final String customerType) {
+        return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
     }
 
     public String getDefaultShopUrl() {

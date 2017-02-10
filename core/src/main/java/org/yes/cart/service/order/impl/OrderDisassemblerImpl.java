@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.service.domain.CustomerService;
@@ -109,13 +110,13 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
         MutableOrderInfo mutableOrderInfo = shoppingCart.getOrderInfo();
         MutableShoppingContext mutableShoppingContext = shoppingCart.getShoppingContext();
 
-        mutableOrderInfo.putDetail("b2bRef", customerOrder.getB2bRef());
-        mutableOrderInfo.putDetail("b2bEmployeeId", customerOrder.getB2bEmployeeId());
-        mutableOrderInfo.putDetail("b2bChargeId", customerOrder.getB2bChargeId());
-        mutableOrderInfo.putDetail("b2bRequireApprove", String.valueOf(customerOrder.isB2bRequireApprove()));
-        mutableOrderInfo.putDetail("b2bApprovedBy", customerOrder.getB2bApprovedBy());
+        mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF, customerOrder.getB2bRef());
+        mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID, customerOrder.getB2bEmployeeId());
+        mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID, customerOrder.getB2bChargeId());
+        mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER, String.valueOf(customerOrder.isB2bRequireApprove()));
+        mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, customerOrder.getB2bApprovedBy());
         if (customerOrder.getB2bApprovedBy() != null) {
-            mutableOrderInfo.putDetail("b2bApprovedDate",
+            mutableOrderInfo.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE,
                     new SimpleDateFormat(Constants.DEFAULT_IMPORT_DATE_TIME_FORMAT).format(customerOrder.getB2bApprovedBy()));
         }
 

@@ -236,6 +236,69 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
     boolean isSfBlockCustomerCheckout(String customerType);
 
     /**
+     * Flag to indicate that this shop allows repeat orders feature.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can repeat order
+     */
+    boolean isSfRepeatOrdersEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows shopping lists feature.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can create shopping lists
+     */
+    boolean isSfShoppingListsEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows per line remarks.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can add per line remarks
+     */
+    boolean isSfB2BOrderLineRemarksEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows B2B form to be populated.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can add information to B2B order form
+     */
+    boolean isSfB2BOrderFormEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows RFQ.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can create RFQ
+     */
+    boolean isSfRFQEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows coupon codes.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can add coupon codes
+     */
+    boolean isSfPromoCouponsEnabled(String customerType);
+
+    /**
+     * Flag to indicate that this shop allows order message.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if this type of customer can add order message
+     */
+    boolean isSfOrderMessageEnabled(String customerType);
+
+    /**
      * Flag to denote if shop is disabled on not.
      *
      * @return true if shop is disabled

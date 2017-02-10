@@ -234,7 +234,7 @@ public class VoShopServiceImpl implements VoShopService {
 
         final AttrValueShopDTO supportedTypes = avsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
         if (supportedTypes != null) {
-            supportedTypes.setVal("B2C");
+            supportedTypes.setVal(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
             dtoShopService.createEntityAttributeValue(supportedTypes);
         }
 
@@ -378,9 +378,9 @@ public class VoShopServiceImpl implements VoShopService {
                 knownCustomerTypes.add(typeAndName.getFirst());
                 summary.getCustomerTypes().add(typeAndName);
             }
-            if (!knownCustomerTypes.contains("B2G")) {
-                knownCustomerTypes.add("B2G");
-                summary.getCustomerTypes().add(MutablePair.of("B2G", "-"));
+            if (!knownCustomerTypes.contains(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST)) {
+                knownCustomerTypes.add(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST);
+                summary.getCustomerTypes().add(MutablePair.of(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST, "-"));
             }
 
         }
@@ -401,6 +401,14 @@ public class VoShopServiceImpl implements VoShopService {
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE, lang);
         final MutablePair<String, List<String>> blockCheckout =
                 getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER, lang);
+        final MutablePair<String, List<String>> repeatOrders =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES, lang);
+        final MutablePair<String, List<String>> orderLineRemarks =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES, lang);
+        final MutablePair<String, List<String>> orderForm =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES, lang);
+        final MutablePair<String, List<String>> shoppingLists =
+                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES, lang);
 
         final Set<String> additionalTypes = new HashSet<String>();
         additionalTypes.addAll(ableToRegister.getSecond());
@@ -411,6 +419,10 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(rfq.getSecond());
         additionalTypes.addAll(approve.getSecond());
         additionalTypes.addAll(blockCheckout.getSecond());
+        additionalTypes.addAll(repeatOrders.getSecond());
+        additionalTypes.addAll(orderLineRemarks.getSecond());
+        additionalTypes.addAll(orderForm.getSecond());
+        additionalTypes.addAll(shoppingLists.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
             additionalTypes.removeAll(knownCustomerTypes);
             if (!additionalTypes.isEmpty()) {
@@ -429,6 +441,10 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesRfq(rfq);
         summary.setCustomerTypesOrderApproval(approve);
         summary.setCustomerTypesBlockCheckout(blockCheckout);
+        summary.setCustomerTypesRepeatOrders(repeatOrders);
+        summary.setCustomerTypesB2BOrderLineRemarks(orderLineRemarks);
+        summary.setCustomerTypesB2BOrderForm(orderForm);
+        summary.setCustomerTypesShoppingLists(shoppingLists);
     }
 
     protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

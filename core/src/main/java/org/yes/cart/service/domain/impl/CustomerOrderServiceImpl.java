@@ -17,6 +17,7 @@
 package org.yes.cart.service.domain.impl;
 
 import org.hibernate.criterion.Restrictions;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericDAO;
 import org.yes.cart.dao.ResultsIterator;
 import org.yes.cart.domain.entity.Customer;
@@ -206,7 +207,7 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
             throws OrderAssemblyException {
 
 
-        final boolean checkoutBlocked = Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
+        final boolean checkoutBlocked = Boolean.valueOf(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
         if (checkoutBlocked) {
             throw new PlaceOrderDisabledException(shoppingCart.getCustomerEmail());
         }

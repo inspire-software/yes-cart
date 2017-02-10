@@ -52,47 +52,61 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
 
         boolean blockCheckout = shop.isSfBlockCustomerCheckout(customerType);
         boolean orderRequiresApproval = shop.isSfRequireCustomerOrderApproval(customerType);
+        boolean shoppingListsEnabled = shop.isSfShoppingListsEnabled(customerType);
+        boolean rfqEnabled = shop.isSfRFQEnabled(customerType);
+        boolean orderB2BFormEnabled = shop.isSfB2BOrderFormEnabled(customerType);
+        boolean orderB2BLineRemarksEnabled = shop.isSfB2BOrderLineRemarksEnabled(customerType);
+        boolean orderMessageEnabled = shop.isSfOrderMessageEnabled(customerType);
+        boolean promoCouponsEnabled = shop.isSfPromoCouponsEnabled(customerType);
 
-        info.putDetail("b2bRequireApproveType", String.valueOf(orderRequiresApproval));
-        info.putDetail("blockCheckoutType", String.valueOf(blockCheckout));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE, String.valueOf(orderRequiresApproval));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE, String.valueOf(blockCheckout));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON, String.valueOf(shoppingListsEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON, String.valueOf(rfqEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_B2B_FORM_ON, String.valueOf(orderB2BFormEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_SHOPPING_B2B_LINEREMARKS_ON, String.valueOf(orderB2BLineRemarksEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_MESSAGE_ON, String.valueOf(orderMessageEnabled));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_COUPONS_ON, String.valueOf(promoCouponsEnabled));
 
         if (customer != null) {
 
             // default reference
             final AttrValue b2bRef = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REF);
-            info.putDetail("b2bRef", b2bRef != null && StringUtils.isNotBlank(b2bRef.getVal()) ? b2bRef.getVal() : null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF, b2bRef != null && StringUtils.isNotBlank(b2bRef.getVal()) ? b2bRef.getVal() : null);
 
             // Employee ID preset
             final AttrValue employeeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_EMPLOYEE_ID);
-            info.putDetail("b2bEmployeeId", employeeId != null && StringUtils.isNotBlank(employeeId.getVal()) ? employeeId.getVal() : null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID, employeeId != null && StringUtils.isNotBlank(employeeId.getVal()) ? employeeId.getVal() : null);
 
             // Charge ID preset
             final AttrValue b2bChargeId = customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_CHARGE_ID);
-            info.putDetail("b2bChargeId", b2bChargeId != null && StringUtils.isNotBlank(b2bChargeId.getVal()) ? b2bChargeId.getVal() : null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID, b2bChargeId != null && StringUtils.isNotBlank(b2bChargeId.getVal()) ? b2bChargeId.getVal() : null);
 
             // Customer level approve flag
             final AttrValue orderRequiresApprovalCustomer =
                     customer.getAttributeByCode(AttributeNamesKeys.Customer.B2B_REQUIRE_APPROVE);
-            info.putDetail("b2bRequireApproveCustomer", Boolean.valueOf(orderRequiresApprovalCustomer != null ? orderRequiresApprovalCustomer.getVal() : Boolean.FALSE.toString()).toString());
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_CUSTOMER, Boolean.valueOf(orderRequiresApprovalCustomer != null ? orderRequiresApprovalCustomer.getVal() : Boolean.FALSE.toString()).toString());
 
             // Customer level block checkout
             final AttrValue blockCheckoutCustomer =
                     customer.getAttributeByCode(AttributeNamesKeys.Customer.BLOCK_CHECKOUT);
-            info.putDetail("blockCheckoutCustomer", Boolean.valueOf(blockCheckoutCustomer != null ? blockCheckoutCustomer.getVal() : Boolean.FALSE.toString()).toString());
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER, Boolean.valueOf(blockCheckoutCustomer != null ? blockCheckoutCustomer.getVal() : Boolean.FALSE.toString()).toString());
 
         } else {
 
-            info.putDetail("b2bRef", null);
-            info.putDetail("b2bEmployeeId", null);
-            info.putDetail("b2bChargeId", null);
-            info.putDetail("b2bRequireApproveCustomer", null);
-            info.putDetail("blockCheckoutCustomer", null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_CUSTOMER, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_CUSTOMER_X, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER, null);
+            info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER_X, null);
 
         }
 
         // Ensure approved information is removed
-        info.putDetail("b2bApprovedBy", null);
-        info.putDetail("b2bApprovedDate", null);
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_BY, null);
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_B2B_APPROVED_DATE, null);
 
 
     }

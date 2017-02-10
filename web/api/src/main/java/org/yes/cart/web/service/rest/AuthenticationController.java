@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Attribute;
 import org.yes.cart.domain.entity.Customer;
@@ -486,7 +487,7 @@ public class AuthenticationController {
             // Retrieve form fields for type
 
             formRO.setCustomerType(customerType);
-            if ("B2G".equals(customerType)) {
+            if (AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(customerType)) {
                 formRO.setCustomerTypeSupported(customerServiceFacade.isShopGuestCheckoutSupported(shop));
             } else {
                 formRO.setCustomerTypeSupported(customerServiceFacade.isShopCustomerTypeSupported(shop, customerType));
@@ -666,7 +667,7 @@ public class AuthenticationController {
 
         // No existing users, non-typed customers or guests allowed
         if (customerServiceFacade.isCustomerRegistered(cartMixin.getCurrentShop(), registerRO.getEmail())
-                || StringUtils.isBlank(registerRO.getCustomerType()) || "B2G".equals(registerRO.getCustomerType())
+                || StringUtils.isBlank(registerRO.getCustomerType()) || AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())
                 || !customerServiceFacade.isShopCustomerTypeSupported(cartMixin.getCurrentShop(), registerRO.getCustomerType())) {
 
             return new AuthenticationResultRO("USER_FAILED");
@@ -859,7 +860,7 @@ public class AuthenticationController {
         }
 
         // Only guests allowed
-        if (StringUtils.isBlank(registerRO.getCustomerType()) || !"B2G".equals(registerRO.getCustomerType())) {
+        if (StringUtils.isBlank(registerRO.getCustomerType()) || !AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST.equals(registerRO.getCustomerType())) {
 
             return new AuthenticationResultRO("GUEST_FAILED");
 

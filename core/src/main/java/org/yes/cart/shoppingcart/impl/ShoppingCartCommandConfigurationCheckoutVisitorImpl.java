@@ -45,11 +45,13 @@ public class ShoppingCartCommandConfigurationCheckoutVisitorImpl extends Shoppin
 
         final MutableOrderInfo info = cart.getOrderInfo();
 
-        boolean blockCheckout = info.isDetailByKeyTrue("blockCheckoutType") || info.isDetailByKeyTrue("blockCheckoutCustomer");
-        boolean orderRequiresApproval = info.isDetailByKeyTrue("b2bRequireApproveType") || info.isDetailByKeyTrue("b2bRequireApproveCustomer");
+        boolean blockCheckout = info.isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE) ||
+                info.isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER);
+        boolean orderRequiresApproval = info.isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE) ||
+                info.isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_CUSTOMER);
 
-        info.putDetail("b2bRequireApprove", String.valueOf(orderRequiresApproval));
-        info.putDetail("blockCheckout", String.valueOf(blockCheckout));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER, String.valueOf(orderRequiresApproval));
+        info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT, String.valueOf(blockCheckout));
 
     }
 

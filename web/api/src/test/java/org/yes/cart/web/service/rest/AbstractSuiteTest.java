@@ -27,6 +27,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.context.WebApplicationContext;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.dao.GenericFullTextSearchCapableDAO;
 import org.yes.cart.dao.constants.DaoServiceBeanKeys;
 import org.yes.cart.dao.impl.AbstractTestDAO;
@@ -121,7 +122,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final RegisterRO register = new RegisterRO();
         register.setEmail(email);
-        register.setCustomerType("B2C");
+        register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
         register.setCustom(new HashMap<String, String>());
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");
@@ -143,7 +144,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final RegisterRO register = new RegisterRO();
         register.setEmail(email);
-        register.setCustomerType("B2C");
+        register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR);
         register.setOrganisation("Sub Gadget universe");
         register.setCustom(new HashMap<String, String>());
         register.getCustom().put("firstname", "Bob");
@@ -166,7 +167,7 @@ public abstract class AbstractSuiteTest extends AbstractTestDAO {
 
         final RegisterRO register = new RegisterRO();
         register.setEmail(email);
-        register.setCustomerType("B2G");
+        register.setCustomerType(AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST);
         register.setCustom(new HashMap<String, String>());
         register.getCustom().put("firstname", "Bob");
         register.getCustom().put("lastname", "Doe");

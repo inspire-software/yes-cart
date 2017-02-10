@@ -18,6 +18,7 @@ package org.yes.cart.shoppingcart.impl;
 
 import org.junit.Test;
 import org.yes.cart.BaseCoreDBTestCase;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.Shop;
@@ -67,11 +68,11 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
-        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
-        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
-        assertNull(shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
-        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove"));
-        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF));
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID));
+        assertNull(shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
 
     }
 
@@ -106,11 +107,11 @@ public class LoginCommandImplTest extends BaseCoreDBTestCase {
         shoppingCart.getShoppingContext().setShopId(shop10.getShopId());
         commands.execute(shoppingCart, (Map) params);
         assertEquals(ShoppingCart.LOGGED_IN, shoppingCart.getLogonState());
-        assertEquals("REF-001", shoppingCart.getOrderInfo().getDetailByKey("b2bRef"));
-        assertEquals("CHARGE-001", shoppingCart.getOrderInfo().getDetailByKey("b2bChargeId"));
-        assertEquals("EMP-001", shoppingCart.getOrderInfo().getDetailByKey("b2bEmployeeId"));
-        assertEquals("true", shoppingCart.getOrderInfo().getDetailByKey("b2bRequireApprove"));
-        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey("blockCheckout"));
+        assertEquals("REF-001", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_REF));
+        assertEquals("CHARGE-001", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_CHARGE_ID));
+        assertEquals("EMP-001", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_B2B_EMPLOYEE_ID));
+        assertEquals("true", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER));
+        assertEquals("false", shoppingCart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT));
 
     }
 

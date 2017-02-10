@@ -516,3 +516,31 @@ VALUES (10605, 'authInvoicePaymentGateway', 'name_de', 'Rechnungsfreigabe', 'Gat
 
 INSERT INTO TPAYMENTGATEWAYPARAMETER (PAYMENTGATEWAYPARAMETER_ID, PG_LABEL, P_LABEL, P_VALUE, P_NAME, P_DESCRIPTION)
 VALUES (10650, 'authInvoicePaymentGateway', 'priority', '100', 'Gateway priority', 'Gateway priority');
+
+--
+-- YC-695 B2B repeat order
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8010,  'SHOP_SF_REPEAT_ORDER_T', 'SHOP_SF_REPEAT_ORDER_TYPES',  0,  NULL,  'Customer: repeat order feature enabled (CSV)',  'CSV of customer types which can repeat order
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-766 Shopping Lists feature
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8011,  'SHOP_SF_SHOPLIST_T', 'SHOP_SF_SHOPPING_LIST_TYPES',  0,  NULL,  'Customer: shopping list feature enabled (CSV)',  'CSV of customer types which can create shopping lists
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+--
+-- YC-769 Per line remarks in shopping cart
+--
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8012,  'SHOP_SF_B2B_LINEREMARK_T', 'SHOP_SF_B2B_LINE_REMARKS_TYPES',  0,  NULL,  'Customer: line remarks feature enabled (CSV)',  'CSV of customer types which can leave remarks per line
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8013,  'SHOP_SF_B2B_ORDFORM_T', 'SHOP_SF_B2B_ORDER_FORM_TYPES',  0,  NULL,  'Customer: B2B form feature enabled (CSV)',  'CSV of customer types which can add B2B information on the order
+  E.g. B2B,B2E',  1004, 1001, 0, 0, 0, 0);

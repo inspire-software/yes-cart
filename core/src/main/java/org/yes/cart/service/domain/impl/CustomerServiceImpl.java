@@ -315,7 +315,7 @@ public class CustomerServiceImpl extends BaseGenericServiceImpl<Customer> implem
      */
     public Customer create(final Customer customer, final Shop shop) {
         if (shop != null) {
-            final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : "B2C";
+            final String customerType = StringUtils.isNotBlank(customer.getCustomerType()) ? customer.getCustomerType() : AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR;
             final boolean requiredApproval = shop.getMaster() != null ?
                     shop.getMaster().isSfRequireCustomerRegistrationApproval(customerType) :
                     shop.isSfRequireCustomerRegistrationApproval(customerType);

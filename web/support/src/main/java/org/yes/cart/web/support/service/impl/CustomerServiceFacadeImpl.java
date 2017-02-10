@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
 
-    private static final String GUEST_TYPE = "B2G";
+    private static final String GUEST_TYPE = AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST;
 
     private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;

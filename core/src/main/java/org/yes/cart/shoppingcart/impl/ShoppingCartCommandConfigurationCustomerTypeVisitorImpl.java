@@ -17,6 +17,7 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.service.domain.CustomerService;
 import org.yes.cart.service.domain.ShopService;
@@ -41,7 +42,7 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
     public void visit(final MutableShoppingCart cart, final Object... args) {
 
         String customerType = determineType(determineCustomer(cart));
-        cart.getOrderInfo().putDetail("customerType", customerType);
+        cart.getOrderInfo().putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE, customerType);
 
     }
 
@@ -53,7 +54,9 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
      * @return non null type
      */
     protected String determineType(final Customer customer) {
-        return customer == null ? "B2G" : (StringUtils.isBlank(customer.getCustomerType()) ? "B2C" : customer.getCustomerType());
+        return customer == null ?
+                AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST :
+                (StringUtils.isBlank(customer.getCustomerType()) ? AttributeNamesKeys.Cart.CUSTOMER_TYPE_REGULAR : customer.getCustomerType());
     }
 
 
@@ -65,7 +68,7 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
      * @return customer type if set, null otherwise
      */
     protected String getCustomerType(final MutableShoppingCart cart) {
-        return cart.getOrderInfo().getDetailByKey("customerType");
+        return cart.getOrderInfo().getDetailByKey(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE);
     }
 
 
@@ -81,7 +84,7 @@ public class ShoppingCartCommandConfigurationCustomerTypeVisitorImpl extends Abs
         if (customerType == null) {
 
             customerType = determineType(determineCustomer(cart));
-            cart.getOrderInfo().putDetail("customerType", customerType);
+            cart.getOrderInfo().putDetail(AttributeNamesKeys.Cart.ORDER_INFO_CUSTOMER_TYPE, customerType);
 
         }
         return customerType;

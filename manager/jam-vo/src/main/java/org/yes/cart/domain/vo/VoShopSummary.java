@@ -93,6 +93,10 @@ public class VoShopSummary {
     private MutablePair<String, List<String>> customerTypesRfq;
     private MutablePair<String, List<String>> customerTypesOrderApproval;
     private MutablePair<String, List<String>> customerTypesBlockCheckout;
+    private MutablePair<String, List<String>> customerTypesRepeatOrders;
+    private MutablePair<String, List<String>> customerTypesShoppingLists;
+    private MutablePair<String, List<String>> customerTypesB2BOrderLineRemarks;
+    private MutablePair<String, List<String>> customerTypesB2BOrderForm;
 
     private List<MutablePair<String, Boolean>> emailTemplates = new ArrayList<MutablePair<String, Boolean>>();
     private List<MutablePair<String, Boolean>> emailTemplatesYCE = new ArrayList<MutablePair<String, Boolean>>();
@@ -492,6 +496,38 @@ public class VoShopSummary {
 
     public void setCustomerTypesBlockCheckout(final MutablePair<String, List<String>> customerTypesBlockCheckout) {
         this.customerTypesBlockCheckout = customerTypesBlockCheckout;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesRepeatOrders() {
+        return customerTypesRepeatOrders;
+    }
+
+    public void setCustomerTypesRepeatOrders(final MutablePair<String, List<String>> customerTypesRepeatOrders) {
+        this.customerTypesRepeatOrders = customerTypesRepeatOrders;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesShoppingLists() {
+        return customerTypesShoppingLists;
+    }
+
+    public void setCustomerTypesShoppingLists(final MutablePair<String, List<String>> customerTypesShoppingLists) {
+        this.customerTypesShoppingLists = customerTypesShoppingLists;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesB2BOrderLineRemarks() {
+        return customerTypesB2BOrderLineRemarks;
+    }
+
+    public void setCustomerTypesB2BOrderLineRemarks(final MutablePair<String, List<String>> customerTypesB2BOrderLineRemarks) {
+        this.customerTypesB2BOrderLineRemarks = customerTypesB2BOrderLineRemarks;
+    }
+
+    public MutablePair<String, List<String>> getCustomerTypesB2BOrderForm() {
+        return customerTypesB2BOrderForm;
+    }
+
+    public void setCustomerTypesB2BOrderForm(final MutablePair<String, List<String>> customerTypesB2BOrderForm) {
+        this.customerTypesB2BOrderForm = customerTypesB2BOrderForm;
     }
 
     public List<MutablePair<String, Boolean>> getEmailTemplates() {

@@ -19,6 +19,7 @@ package org.yes.cart.web.support.service.impl;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
 import org.yes.cart.domain.entity.impl.ProductPriceModelImpl;
@@ -182,7 +183,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
     @Override
     public List<Pair<PaymentGatewayDescriptor, String>> getPaymentGatewaysDescriptors(final Shop shop, final ShoppingCart cart) {
 
-        if (cart.getOrderInfo().isDetailByKeyTrue("blockCheckout")) {
+        if (cart.getOrderInfo().isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT)) {
             return Collections.emptyList();
         }
 
@@ -213,7 +214,7 @@ public class CheckoutServiceFacadeImpl implements CheckoutServiceFacade {
         final List<PaymentGatewayDescriptor> descriptors = paymentModulesManager.getPaymentGatewaysDescriptors(false, cart.getShoppingContext().getShopCode());
         final List<Pair<PaymentGatewayDescriptor, String>> available = new ArrayList<Pair<PaymentGatewayDescriptor, String>>(descriptors.size());
         final Map<String, Integer> sorting = new HashMap<String, Integer>();
-        final boolean approve = cart.getOrderInfo().isDetailByKeyTrue("b2bRequireApprove");
+        final boolean approve = cart.getOrderInfo().isDetailByKeyTrue(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER);
         for (final PaymentGatewayDescriptor descriptor : descriptors) {
             if (carrierSlaPGs.contains(descriptor.getLabel())) {
                 final PaymentGateway gateway = paymentModulesManager.getPaymentGateway(descriptor.getLabel(), cart.getShoppingContext().getShopCode());

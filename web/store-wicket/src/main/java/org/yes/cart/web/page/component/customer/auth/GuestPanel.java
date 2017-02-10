@@ -30,6 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.AttrValue;
 import org.yes.cart.domain.entity.AttrValueCustomer;
 import org.yes.cart.domain.entity.Shop;
@@ -93,7 +94,7 @@ public class GuestPanel extends BaseComponent {
 
         final boolean guestSupported = customerServiceFacade.isShopGuestCheckoutSupported(shop);
 
-        add(new GuestForm(GUEST_FORM, "B2G", target.getFirst(), target.getSecond()));
+        add(new GuestForm(GUEST_FORM, AttributeNamesKeys.Cart.CUSTOMER_TYPE_GUEST, target.getFirst(), target.getSecond()));
 
         setVisible(guestSupported);
 

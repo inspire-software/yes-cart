@@ -30,6 +30,8 @@ public interface CustomerWishList extends Auditable {
 
     String SIMPLE_WISH_ITEM = "W";
 
+    String SHOPPING_LIST_ITEM = "S";
+
     String CART_SAVE_FOR_LATER = "C";
 
     String REMIND_WHEN_WILL_BE_AVAILABLE = "A";

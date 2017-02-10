@@ -298,6 +298,26 @@ public interface AttributeNamesKeys {
         String SHOP_SF_CANNOT_PLACE_ORDER = "SHOP_SF_CANNOT_PLACE_ORDER_TYPES";
 
         /**
+         * Customer types who can do repeat orders.
+         */
+        String SHOP_SF_REPEAT_ORDER_TYPES = "SHOP_SF_REPEAT_ORDER_TYPES";
+
+        /**
+         * Customer types who can create shopping lists.
+         */
+        String SHOP_SF_SHOPPING_LIST_TYPES = "SHOP_SF_SHOPPING_LIST_TYPES";
+
+        /**
+         * Customer types who can leave per line remarks.
+         */
+        String SHOP_SF_B2B_LINE_REMARKS_TYPES = "SHOP_SF_B2B_LINE_REMARKS_TYPES";
+
+        /**
+         * Customer types who can add B2B related information.
+         */
+        String SHOP_SF_B2B_ORDER_FORM_TYPES = "SHOP_SF_B2B_ORDER_FORM_TYPES";
+
+        /**
          * Supported by shop currencies.
          */
         String SUPPORTED_CURRENCIES = "CURRENCY";
@@ -633,6 +653,41 @@ public interface AttributeNamesKeys {
          * Customer has opted in for marketing contact.
          */
         String MARKETING_OPT_IN = "MARKETING_OPT_IN";
+
+    }
+
+    interface Cart {
+
+        String CUSTOMER_TYPE_GUEST = "B2G";
+
+        String CUSTOMER_TYPE_REGULAR = "B2C";
+
+        String ORDER_INFO_CUSTOMER_TYPE = "customerType";
+        String ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON = "shoppingListsEnabled";
+        String ORDER_INFO_CUSTOMER_SHOPPING_RFQ_ON = "rfqEnabled";
+        String ORDER_INFO_CUSTOMER_SHOPPING_B2B_FORM_ON = "orderB2BFormEnabled";
+        String ORDER_INFO_CUSTOMER_SHOPPING_B2B_LINEREMARKS_ON = "orderB2BLineRemarksEnabled";
+        String ORDER_INFO_CUSTOMER_MESSAGE_ON = "orderMessageEnabled";
+        String ORDER_INFO_COUPONS_ON = "couponsEnabled";
+
+        String ORDER_INFO_BLOCK_CHECKOUT = "blockCheckout";
+        String ORDER_INFO_BLOCK_CHECKOUT_TYPE = "blockCheckoutType";
+        String ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER = "blockCheckoutCustomer";
+        String ORDER_INFO_BLOCK_CHECKOUT_CUSTOMER_X = "blockCheckoutCustomerX";
+
+        String ORDER_INFO_APPROVE_ORDER = "b2bRequireApprove";
+        String ORDER_INFO_APPROVE_ORDER_TYPE = "b2bRequireApproveType";
+        String ORDER_INFO_APPROVE_ORDER_CUSTOMER = "b2bRequireApproveCustomer";
+        String ORDER_INFO_APPROVE_ORDER_CUSTOMER_X = "b2bRequireApproveCustomerX";
+
+        String ORDER_INFO_B2B_REF = "b2bRef";
+        String ORDER_INFO_B2B_EMPLOYEE_ID = "b2bEmployeeId";
+        String ORDER_INFO_B2B_CHARGE_ID = "b2bChargeId";
+        String ORDER_INFO_B2B_ORDER_REMARKS_ID = "b2bRemarks";
+        String ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID = "b2bRemarksLine";
+
+        String ORDER_INFO_B2B_APPROVED_BY = "b2bApprovedBy";
+        String ORDER_INFO_B2B_APPROVED_DATE = "b2bApprovedDate";
 
     }
 
