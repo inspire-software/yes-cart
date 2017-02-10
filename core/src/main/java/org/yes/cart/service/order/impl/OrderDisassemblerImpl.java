@@ -17,6 +17,7 @@
 package org.yes.cart.service.order.impl;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.entity.*;
@@ -76,6 +77,12 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                         shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                     }
                     shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
+                    if (StringUtils.isNotBlank(orderDet.getB2bRemarks())) {
+                        shoppingCart.getOrderInfo().putDetail(
+                                AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + orderDet.getProductSkuCode(),
+                                orderDet.getB2bRemarks()
+                        );
+                    }
                 }
             }
         } else {
@@ -94,6 +101,12 @@ public class OrderDisassemblerImpl implements OrderDisassembler {
                             shoppingCart.setProductSkuOffer(orderDet.getProductSkuCode(), orderDet.getPrice(), orderDet.getAppliedPromo());
                         }
                         shoppingCart.setProductSkuDeliveryBucket(orderDet.getProductSkuCode(), orderDet.getDeliveryBucket());
+                        if (StringUtils.isNotBlank(orderDet.getB2bRemarks())) {
+                            shoppingCart.getOrderInfo().putDetail(
+                                    AttributeNamesKeys.Cart.ORDER_INFO_B2B_ORDER_LINE_REMARKS_ID + orderDet.getProductSkuCode(),
+                                    orderDet.getB2bRemarks()
+                            );
+                        }
                     }
                 }
             }

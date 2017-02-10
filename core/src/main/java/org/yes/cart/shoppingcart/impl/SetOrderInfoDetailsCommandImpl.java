@@ -59,7 +59,7 @@ public class SetOrderInfoDetailsCommandImpl extends AbstractCartCommandImpl  imp
                 if (keyAndValues != null) {
                     boolean modified = false;
                     for (final String keyAndValueRaw : keyAndValues) {
-                        final String[] keyAndValue = StringUtils.split(keyAndValueRaw, "-", 2);
+                        final String[] keyAndValue = StringUtils.split(keyAndValueRaw, ":", 2);
                         if (keyAndValue != null && keyAndValue.length == 2) {
                             shoppingCart.getOrderInfo().putDetail(keyAndValue[0], keyAndValue[1]);
                             modified = true;

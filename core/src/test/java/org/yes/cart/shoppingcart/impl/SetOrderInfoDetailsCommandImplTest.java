@@ -50,14 +50,14 @@ public class SetOrderInfoDetailsCommandImplTest extends BaseCoreDBTestCase {
 
         Map params = new HashMap();
 
-        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, "detail1-001|detail2-002|detail3|-004");
+        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, "detail1:001|detail2:002|detail3|:004");
 
         commands.execute(shoppingCart, params);
         assertEquals(2, shoppingCart.getOrderInfo().getDetails().size());
         assertEquals("001", shoppingCart.getOrderInfo().getDetailByKey("detail1"));
         assertEquals("002", shoppingCart.getOrderInfo().getDetailByKey("detail2"));
 
-        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, "detail3-003");
+        params.put(ShoppingCartCommand.CMD_SETORDERDETAILS, "detail3:003");
 
         commands.execute(shoppingCart, params);
         assertEquals(3, shoppingCart.getOrderInfo().getDetails().size());
