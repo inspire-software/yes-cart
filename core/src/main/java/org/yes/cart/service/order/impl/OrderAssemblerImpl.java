@@ -409,8 +409,8 @@ public class OrderAssemblerImpl implements OrderAssembler {
                 throw new OrderAssemblyException("Sku is for showroom only " + item.getProductSkuCode());
             }
             if (!temp) {
-                final Shop configShop = customerOrder.getShop().getMaster() != null ? customerOrder.getShop().getMaster() : customerOrder.getShop();
-                final List<String> storedAttributes = configShop.getProductStoredAttributesAsList();
+                // stored attributes are configured per customer group
+                final List<String> storedAttributes = customerOrder.getShop().getProductStoredAttributesAsList();
                 if (CollectionUtils.isNotEmpty(storedAttributes)) {
                     // fill product first
                     final Product product = productService.getProductById(sku.getProduct().getProductId(), true);
