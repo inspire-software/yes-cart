@@ -176,6 +176,10 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
             if (item.getSkus().getSkuId() == productSku.getSkuId()
                     && item.getWlType().equals(type)) {
 
+                if (CustomerWishList.SHOPPING_LIST_ITEM.equals(type) && !tags.equals(item.getTag())) {
+                    continue; // This is not the same shopping list
+                }
+
                 // duplicate item, so just update quantity
                 final ProductQuantityModel pqm = productQuantityStrategy.getQuantityModel(item.getQuantity(), productSku);
                 if (!pqm.canOrderMore()) {
@@ -185,19 +189,22 @@ public class AddSkuToWishListEventCommandImpl extends AbstractSkuCartCommandImpl
                 final BigDecimal quantity = pqm.getValidSetQty(item.getQuantity().add(getQuantityValue(parameters)));
                 item.setQuantity(quantity);
 
-                final Set<String> tag = new TreeSet<String>();
-                if (!tagsr && StringUtils.isNotBlank(item.getTag())) {
-                    tag.addAll(Arrays.asList(StringUtils.split(item.getTag(), ' ')));
+                if (!CustomerWishList.SHOPPING_LIST_ITEM.equals(type)) {
+                    final Set<String> tag = new TreeSet<String>();
+                    if (!tagsr && StringUtils.isNotBlank(item.getTag())) {
+                        tag.addAll(Arrays.asList(StringUtils.split(item.getTag(), ' ')));
+                    }
+                    if (StringUtils.isNotBlank(tags)) {
+                        tag.addAll(Arrays.asList(StringUtils.split(tags, ' ')));
+                    }
+                    if (tag.isEmpty()) {
+                        item.setTag(null);
+                    } else {
+                        item.setTag(StringUtils.join(tag, ' '));
+                    }
+
+                    item.setVisibility(visibility);
                 }
-                if (StringUtils.isNotBlank(tags)) {
-                    tag.addAll(Arrays.asList(StringUtils.split(tags, ' ')));
-                }
-                if (tag.isEmpty()) {
-                    item.setTag(null);
-                } else {
-                    item.setTag(StringUtils.join(tag, ' '));
-                }
-                item.setVisibility(visibility);
 
                 customerWishListService.update(item);
                 return;
