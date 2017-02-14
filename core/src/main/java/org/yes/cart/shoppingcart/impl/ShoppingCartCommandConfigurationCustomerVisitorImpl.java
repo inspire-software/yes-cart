@@ -59,7 +59,7 @@ public class ShoppingCartCommandConfigurationCustomerVisitorImpl extends Shoppin
         boolean orderB2BLineRemarksEnabled = shop.isSfB2BOrderLineRemarksEnabled(customerType);
         boolean orderMessageEnabled = shop.isSfOrderMessageEnabled(customerType);
         boolean promoCouponsEnabled = shop.isSfPromoCouponsEnabled(customerType);
-        boolean addressBookEnabled = shop.isSfAddressBookEnabled(customerType);
+        boolean addressBookEnabled = !shop.isB2BAddressBookActive() && shop.isSfAddressBookEnabled(customerType);
 
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_APPROVE_ORDER_TYPE, String.valueOf(orderRequiresApproval));
         info.putDetail(AttributeNamesKeys.Cart.ORDER_INFO_BLOCK_CHECKOUT_TYPE, String.valueOf(blockCheckout));
