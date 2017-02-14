@@ -255,8 +255,7 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     public Address useAsDefault(Address address, final Shop customerShop) {
-        if (!customerShop.isB2BAddressBookActive() &&
-                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
+        if (!customerShop.isB2BAddressBookActive()) {
             return addressService.updateSetDefault(address);
         }
         return address;
