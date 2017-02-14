@@ -168,6 +168,11 @@ export interface ShopSummaryVO {
   customerTypesRfq: Pair<string, string[]>;
   customerTypesOrderApproval: Pair<string, string[]>;
   customerTypesBlockCheckout: Pair<string, string[]>;
+  customerTypesRepeatOrders: Pair<string, string[]>;
+  customerTypesShoppingLists: Pair<string, string[]>;
+  customerTypesB2BOrderLineRemarks: Pair<string, string[]>;
+  customerTypesB2BOrderForm: Pair<string, string[]>;
+  customerTypesAddressBookDisabled: Pair<string, string[]>;
 
   emailTemplates: Pair<string, boolean[]>;
   emailTemplatesYCE: Pair<string, boolean[]>;

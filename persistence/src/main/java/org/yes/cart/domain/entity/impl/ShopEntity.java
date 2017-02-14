@@ -75,6 +75,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private Set<String> sfB2BOrderFormEnabledTypes;
     private Set<String> sfShoppingListsEnabledTypes;
     private Set<String> sfRFQEnabledTypes;
+    private Set<String> sfAddressBookDisabledTypes;
 
     private Boolean B2BProfileActive = null;
     private Boolean B2BAddresBookActive = null;
@@ -712,6 +713,23 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public boolean isSfOrderMessageEnabled(final String customerType) {
         return isAttributeValueByCodeTrue(AttributeNamesKeys.Shop.CART_UPDATE_ENABLE_ORDER_MSG);
+    }
+
+
+    private Set<String> getSfAddressBookDisabledTypes() {
+        if (this.sfAddressBookDisabledTypes == null) {
+            final String attrs = getAttributeValueByCode(AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES);
+            if (attrs != null) {
+                this.sfAddressBookDisabledTypes = new HashSet<String>(Arrays.asList(StringUtils.split(attrs, ',')));
+            } else {
+                this.sfAddressBookDisabledTypes = Collections.emptySet();
+            }
+        }
+        return this.sfAddressBookDisabledTypes;
+    }
+
+    public boolean isSfAddressBookEnabled(final String customerType) {
+        return !getSfAddressBookDisabledTypes().contains(customerType);
     }
 
     public String getDefaultShopUrl() {

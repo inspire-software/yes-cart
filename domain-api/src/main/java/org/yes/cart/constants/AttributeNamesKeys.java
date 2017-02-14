@@ -358,6 +358,11 @@ public interface AttributeNamesKeys {
         String SHOP_RFQ_CUSTOMER_TYPES = "SHOP_RFQ_CUSTOMER_TYPES";
 
         /**
+         * Customer types for whom address book management is disabled (addresses only managed via call centre).
+         */
+        String SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES = "SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES";
+
+        /**
          * Supported by shop storefront languages.
          */
         String SUPPORTED_LANGUAGES = "SUPPORTED_LANGUAGES";
@@ -670,6 +675,7 @@ public interface AttributeNamesKeys {
         String ORDER_INFO_CUSTOMER_SHOPPING_B2B_LINEREMARKS_ON = "orderB2BLineRemarksEnabled";
         String ORDER_INFO_CUSTOMER_MESSAGE_ON = "orderMessageEnabled";
         String ORDER_INFO_COUPONS_ON = "couponsEnabled";
+        String ORDER_INFO_ADDRESSBOOK_ON = "addressBookEnabled";
 
         String ORDER_INFO_BLOCK_CHECKOUT = "blockCheckout";
         String ORDER_INFO_BLOCK_CHECKOUT_TYPE = "blockCheckoutType";

@@ -301,9 +301,7 @@ public class VoShopServiceImpl implements VoShopService {
 
             addTaxConfig(summary, lang, attrsMap);
 
-            addCustomerConfig(summary, lang, attrsMap);
-
-            addCustomerConfigSub(summary, lang, attrsMapSub);
+            addCustomerConfig(summary, lang, attrsMap, attrsMapSub);
 
             addEmailTemplatesBasicSettings(summary, lang, attrsMap);
 
@@ -329,30 +327,31 @@ public class VoShopServiceImpl implements VoShopService {
                 attrsMap, AttributeNamesKeys.Shop.SHOP_SF_PAGE_TRACE, lang, false));
     }
 
-    protected void addCustomerConfigSub(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
-        final MutablePair<String, String> adminEmail = getShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-");
-        if (!summary.getAdminEmail().getSecond().equals(adminEmail.getSecond())) {
-            summary.getAdminEmail().setSecond(adminEmail.getSecond() + " (" + summary.getAdminEmail().getSecond() + ")");
-        }
-        summary.setB2bAddressbookActive(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK, lang, false));
-        summary.setB2bStrictPriceActive(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE, lang, false));
-    }
+    protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> masterAttrsMap, final Map<String, VoAttrValueShop> subAttrsMap) {
 
-    protected void addCustomerConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {
         summary.setAdminEmail(getShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-"));
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-"));
+        final MutablePair<String, String> subAdminEmail = getShopAttributeConfig(
+                subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADMIN_EMAIL, lang, "-");
+        if (!summary.getAdminEmail().getSecond().equals(subAdminEmail.getSecond())) {
+            summary.getAdminEmail().setSecond(subAdminEmail.getSecond() + " (" + summary.getAdminEmail().getSecond() + ")");
+        }
+
+        // B2B address book + strict price is from SUB
+        summary.setB2bAddressbookActive(getBooleanShopAttributeConfig(
+                subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_ADDRESSBOOK, lang, false));
+        summary.setB2bStrictPriceActive(getBooleanShopAttributeConfig(
+                subAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B_STRICT_PRICE, lang, false));
+
         summary.setB2bProfileActive(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_B2B, lang, false));
         summary.setCookiePolicy(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_COOKIE_POLICY_ENABLE, lang, false));
         summary.setAnonymousBrowsing(getBooleanShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
+                masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_LOGIN, lang, true));
 
         final MutablePair<String, String> sessionExpiry = getShopAttributeConfig(
-                attrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
+                masterAttrsMap, AttributeNamesKeys.Shop.CART_SESSION_EXPIRY_SECONDS, lang, "21600");
         int sessionExpirySeconds = NumberUtils.toInt(sessionExpiry.getFirst());
         String time = "6h";
         if (sessionExpirySeconds > 3600) { // more than hour
@@ -363,7 +362,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerSession(MutablePair.of(sessionExpiry.getFirst(), time));
 
         final Set<String> knownCustomerTypes = new HashSet<String>();
-        final VoAttrValueShop registrationTypesCsv = attrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
+        final VoAttrValueShop registrationTypesCsv = masterAttrsMap.get(AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES);
         if (registrationTypesCsv != null && StringUtils.isNotBlank(registrationTypesCsv.getVal())) {
 
             final String[] registrationTypes = StringUtils.split(registrationTypesCsv.getVal(), ',');
@@ -385,30 +384,39 @@ public class VoShopServiceImpl implements VoShopService {
 
         }
 
+        // Registrations are at master level since we do not know the SUB yet
         final MutablePair<String, List<String>> ableToRegister =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_CUSTOMER_TYPES, lang);
+
+        // Email related config is at master level
         final MutablePair<String, List<String>> approveRegister =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_APPROVE, lang);
         final MutablePair<String, List<String>> notifyRegister =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_REG_NOTIFICATION, lang);
+
+        // Tax information is at Master level
         final MutablePair<String, List<String>> seeTax =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CUSTOMER_TYPES, lang);
         final MutablePair<String, List<String>> changeTax =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
+                getCsvShopAttributeConfig(masterAttrsMap, AttributeNamesKeys.Shop.SHOP_PRODUCT_ENABLE_PRICE_TAX_INFO_CHANGE_TYPES, lang);
+
+        // RFQ, approvals, checkout block, repeat order, shopping list and address book disabling is at sub level
         final MutablePair<String, List<String>> rfq =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_RFQ_CUSTOMER_TYPES, lang);
         final MutablePair<String, List<String>> approve =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REQUIRE_ORDER_APPROVE, lang);
         final MutablePair<String, List<String>> blockCheckout =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_CANNOT_PLACE_ORDER, lang);
         final MutablePair<String, List<String>> repeatOrders =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_REPEAT_ORDER_TYPES, lang);
         final MutablePair<String, List<String>> orderLineRemarks =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_LINE_REMARKS_TYPES, lang);
         final MutablePair<String, List<String>> orderForm =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_B2B_ORDER_FORM_TYPES, lang);
         final MutablePair<String, List<String>> shoppingLists =
-                getCsvShopAttributeConfig(attrsMap, AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES, lang);
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_SF_SHOPPING_LIST_TYPES, lang);
+        final MutablePair<String, List<String>> addressBookDisabled =
+                getCsvShopAttributeConfig(subAttrsMap, AttributeNamesKeys.Shop.SHOP_ADDRESSBOOK_DISABLED_CUSTOMER_TYPES, lang);
 
         final Set<String> additionalTypes = new HashSet<String>();
         additionalTypes.addAll(ableToRegister.getSecond());
@@ -423,6 +431,7 @@ public class VoShopServiceImpl implements VoShopService {
         additionalTypes.addAll(orderLineRemarks.getSecond());
         additionalTypes.addAll(orderForm.getSecond());
         additionalTypes.addAll(shoppingLists.getSecond());
+        additionalTypes.addAll(addressBookDisabled.getSecond());
         if (CollectionUtils.isNotEmpty(additionalTypes)) {
             additionalTypes.removeAll(knownCustomerTypes);
             if (!additionalTypes.isEmpty()) {
@@ -445,6 +454,7 @@ public class VoShopServiceImpl implements VoShopService {
         summary.setCustomerTypesB2BOrderLineRemarks(orderLineRemarks);
         summary.setCustomerTypesB2BOrderForm(orderForm);
         summary.setCustomerTypesShoppingLists(shoppingLists);
+        summary.setCustomerTypesAddressBookDisabled(addressBookDisabled);
     }
 
     protected void addTaxConfig(final VoShopSummary summary, final String lang, final Map<String, VoAttrValueShop> attrsMap) {

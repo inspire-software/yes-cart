@@ -298,6 +298,17 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     boolean isSfOrderMessageEnabled(String customerType);
 
+
+    /**
+     * Determine if address book management is enable for customer type.
+     *
+     * @param customerType type of customer
+     *
+     * @return true if B2B address mode is set.
+     */
+    boolean isSfAddressBookEnabled(String customerType);
+
+
     /**
      * Flag to denote if shop is disabled on not.
      *

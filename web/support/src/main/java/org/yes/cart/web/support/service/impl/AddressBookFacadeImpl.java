@@ -221,7 +221,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     public void createOrUpdate(final Address address, final Shop customerShop) {
-        if (!customerShop.isB2BAddressBookActive()) {
+        if (!customerShop.isB2BAddressBookActive() &&
+                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
             if (address.getAddressId() == 0) {
                 // Need to add address to customer only just before the creation
                 address.getCustomer().getAddress().add(address);
@@ -235,7 +236,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
     /** {@inheritDoc} */
     public void remove(Address address, final Shop customerShop) {
 
-        if (!customerShop.isB2BAddressBookActive()) {
+        if (!customerShop.isB2BAddressBookActive() &&
+                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
             final boolean isDefault = address.isDefaultAddress();
             addressService.delete(address);
 
@@ -253,7 +255,8 @@ public class AddressBookFacadeImpl implements AddressBookFacade {
 
     /** {@inheritDoc} */
     public Address useAsDefault(Address address, final Shop customerShop) {
-        if (!customerShop.isB2BAddressBookActive()) {
+        if (!customerShop.isB2BAddressBookActive() &&
+                customerShop.isSfAddressBookEnabled(address.getCustomer().getCustomerType())) {
             return addressService.updateSetDefault(address);
         }
         return address;
