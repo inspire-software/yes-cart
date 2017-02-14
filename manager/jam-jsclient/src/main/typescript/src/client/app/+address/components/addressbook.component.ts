@@ -356,6 +356,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
 
   private reloadAddressbook():void {
 
+    LogUtil.debug('AddressBookComponent reloadAddressbook', this._customer, this._shops);
     if (this._customer != null && this._customer.customerId > 0 && this._shops != null && this._shops.length > 0) {
 
       if (!(this.formattingShopId > 0)) {
@@ -372,6 +373,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
         this.buildAddressFormConfig();
         _sub.unsubscribe();
         this.loading = false;
+        this._reload = false;
       });
 
     } else {

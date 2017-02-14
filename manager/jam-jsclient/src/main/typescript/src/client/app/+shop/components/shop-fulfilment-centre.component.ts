@@ -167,7 +167,7 @@ export class ShopFulfilmentCentreComponent implements OnInit, OnDestroy {
       let _sub:any = this._fulfilmentService.createFulfilmentCentre(this.newCentre, this.shop.shopId).subscribe(
           carVo => {
             this.validForSave = false;
-            _sub.unsubscribe()
+            _sub.unsubscribe();
             this.onRefreshHandler();
         }
       );
