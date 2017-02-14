@@ -95,7 +95,7 @@ public class TestExtFormPaymentGatewayImpl extends AbstractPaymentGatewayImpl im
      * {@inheritDoc}
      */
     public String restoreOrderGuid(final Map privateCallBackParameters) {
-        return (String) privateCallBackParameters.get(ORDER_GUID_PARAM_KEY);
+        return HttpParamsUtils.getSingleValue(privateCallBackParameters.get(ORDER_GUID_PARAM_KEY));
     }
 
     /**

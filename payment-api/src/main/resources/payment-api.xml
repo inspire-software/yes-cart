@@ -66,6 +66,15 @@
         </property>
     </bean>
 
+    <bean id="paymentGatewayCallbackDao" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.persistence.service.impl.PaymentModuleGenericDAOImpl">
+                <constructor-arg index="0" value="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayCallbackEntity"/>
+                <property name="sessionFactory" ref="paySessionFactory"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="customerOrderPaymentService" parent="txPayProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.payment.service.impl.CustomerOrderPaymentServiceImpl">
@@ -78,6 +87,14 @@
         <property name="target">
             <bean class="org.yes.cart.payment.service.impl.PaymentGatewayParameterServiceImpl">
                 <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="paymentGatewayParameterDao"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="paymentGatewayCallbackService" parent="txPayProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.payment.service.impl.PaymentModuleGenericServiceImpl">
+                <constructor-arg index="0" type="org.yes.cart.payment.persistence.service.PaymentModuleGenericDAO"  ref="paymentGatewayCallbackDao"/>
             </bean>
         </property>
     </bean>

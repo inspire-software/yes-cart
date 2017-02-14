@@ -84,4 +84,24 @@
         <property name="guid" column="GUID" type="string" length="36"  index="PAYMENTGATEWAYPARAMETER_GUID"/>
     </class>
 
+    <class name="org.yes.cart.payment.persistence.entity.impl.PaymentGatewayCallbackEntity" table="TPAYMENTGATEWAYCALLBACK">
+        <comment>Payment gateway configuration</comment>
+        <id name="paymentGatewayCallbackId" type="long">
+            <column name="PAYMENTGATEWAYCALLBACK_ID" not-null="true"/>
+            <generator class="identity"/>
+        </id>
+
+        <property name="label" length="64" type="java.lang.String" column="PG_LABEL"/>
+        <property name="shopCode" length="255" type="java.lang.String" column="SHOP_CODE"/>
+        <property name="parameterMapInternal" length="12000" type="java.lang.String" column="PG_PARAMS"/>
+        <property name="requestDump" length="12000" type="java.lang.String" column="REQUEST_DUMP"/>
+        <property name="processed" type="boolean" column="PROCESSED" index="PAYMENTGATEWAYCALLBACK_PROCESSED"/>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36"  index="PAYMENTGATEWAYCALLBACK_GUID"/>
+    </class>
+
 </hibernate-mapping>

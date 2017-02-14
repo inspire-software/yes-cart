@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.domain.entity.Shop;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
@@ -83,24 +84,29 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
         final Logger log = ShopCodeContext.getLog(this);
 
+        final String callbackDump = HttpUtil.dumpRequest((HttpServletRequest) servletRequest);
+
         if (isCallerIpAllowed(servletRequest)) {
 
             if (log.isDebugEnabled()) {
-                log.debug(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+                log.debug(callbackDump);
             }
 
             final Map parameters = servletRequest.getParameterMap();
 
+            final PaymentGatewayCallback callback = paymentCallBackHandlerFacade.registerCallback(
+                    parameters, paymentGatewayLabel, ShopCodeContext.getShopCode(), callbackDump);
+
             try {
 
-                paymentCallBackHandlerFacade.handlePaymentCallback(parameters, paymentGatewayLabel);
+                paymentCallBackHandlerFacade.handlePaymentCallback(callback);
 
                 ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_OK);
 
             } catch (OrderException e) {
 
                 log.error("Transition failed during payment call back for " + paymentGatewayLabel + " payment gateway" , e);
-                log.error(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+                log.error(callbackDump);
 
                 // Send 500, so that PG know that there was an issue and may resend the update
                 ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -111,7 +117,7 @@ public class BasePaymentGatewayCallBackFilter extends AbstractFilter implements 
 
             if (log.isWarnEnabled()) {
                 log.warn("Received payment gateway callback from unauthorised IP {}", ipResolver.resolve((HttpServletRequest) servletRequest));
-                log.warn(HttpUtil.dumpRequest((HttpServletRequest) servletRequest));
+                log.warn(callbackDump);
             }
             // Send forbidden to notify PG that this is a security issue and not error of any kind
             ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN);

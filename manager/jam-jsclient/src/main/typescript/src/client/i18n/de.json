@@ -625,6 +625,7 @@
   "DASHBOARD_CUSTOMERS_TODAY": "New customers",
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "This week",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
+  "DASHBOARD_PG_CALLBACK": "Verwalten von PG-Rückrufen",
 
   "REPORT_reportAvailableStock" : "Inventory report",
   "REPORT_reportPayments" : "Payments report",

@@ -24,54 +24,9 @@
                     <i class="fa fa-shopping-cart fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.OrdersInShop.data.ordersToday }}</div>
-                    <div>{{ 'DASHBOARD_ORDERS_TODAY' | translate }}</div>
-                  </div>
-                </div>
-              </div>
-              <a [routerLink]="['/customerorder/allorders']">
-                <div class="panel-footer">
-                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                  <div class="clearfix"></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-            <div class="panel panel-yellow">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-shopping-cart fa-5x"></i>
-                  </div>
-                  <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.OrdersInShop.data.ordersThisWeek }}</div>
-                    <div>{{ 'DASHBOARD_ORDERS_THIS_WEEK' | translate }}</div>
-                  </div>
-                </div>
-              </div>
-              <a [routerLink]="['/customerorder/allorders']">
-                <div class="panel-footer">
-                  <span class="pull-left">{{ 'DASHBOARD_ORDERS_DETAILS' | translate }}</span>
-                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                  <div class="clearfix"></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6" *ngIf="widgets.OrdersInShop">
-            <div class="panel panel-yellow">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-shopping-cart fa-5x"></i>
-                  </div>
-                  <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.OrdersInShop.data.ordersThisMonth }}</div>
-                    <div>{{ 'DASHBOARD_ORDERS_THIS_MONTH' | translate }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_TODAY' | translate }} {{ widgets.OrdersInShop.data.ordersToday }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_THIS_WEEK' | translate }} {{ widgets.OrdersInShop.data.ordersThisWeek }}</div>
+                    <div>{{ 'DASHBOARD_ORDERS_THIS_MONTH' | translate }} {{ widgets.OrdersInShop.data.ordersThisMonth }}</div>
                   </div>
                 </div>
               </div>
@@ -107,6 +62,30 @@
               </a>
             </div>
           </div>
+
+
+          <div class="col-lg-3 col-md-6" *ngIf="widgets.UnprocessedPgCallbacks">
+            <div class="panel panel-red">
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-xs-3">
+                    <i class="fa fa-dollar fa-5x"></i>
+                  </div>
+                  <div class="col-xs-9 text-right">
+                    <div *ngFor="let node of widgets.UnprocessedPgCallbacks.data" title="{{ node.first }}">{{ node.first.length > 15 ? (node.first.substring(0, 15) + '...') : node.first }} {{ node.second }}</div>
+                  </div>
+                </div>
+              </div>
+              <a>
+                <div class="panel-footer">
+                  <span class="pull-left"><span class="label label-info">YCE</span> <span class="text-muted">{{ 'DASHBOARD_PG_CALLBACK' | translate }}</span></span>
+                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                  <div class="clearfix"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
         </div>
 
         <div class="row">
@@ -118,8 +97,9 @@
                     <i class="fa fa-user fa-5x"></i>
                   </div>
                   <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.CustomersInShop.data.customersToday }}</div>
-                    <div>{{ 'DASHBOARD_CUSTOMERS_TODAY' | translate }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_TODAY' | translate }} {{ widgets.CustomersInShop.data.customersToday }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_WEEK' | translate }} {{ widgets.CustomersInShop.data.customersThisWeek }}</div>
+                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_MONTH' | translate }} {{ widgets.CustomersInShop.data.customersThisMonth }}</div>
                   </div>
                 </div>
               </div>
@@ -133,51 +113,6 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-user fa-5x"></i>
-                  </div>
-                  <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.CustomersInShop.data.customersThisWeek }}</div>
-                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_WEEK' | translate }}</div>
-                  </div>
-                </div>
-              </div>
-              <a [routerLink]="['/customer/allcustomers']">
-                <div class="panel-footer">
-                  <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
-                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                  <div class="clearfix"></div>
-                </div>
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6" *ngIf="widgets.CustomersInShop">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <div class="row">
-                  <div class="col-xs-3">
-                    <i class="fa fa-user fa-5x"></i>
-                  </div>
-                  <div class="col-xs-9 text-right">
-                    <div class="huge">{{ widgets.CustomersInShop.data.customersThisMonth }}</div>
-                    <div>{{ 'DASHBOARD_CUSTOMERS_THIS_MONTH' | translate }}</div>
-                  </div>
-                </div>
-              </div>
-              <a [routerLink]="['/customer/allcustomers']">
-                <div class="panel-footer">
-                  <span class="pull-left">{{ 'DASHBOARD_CUSTOMERS_DETAILS' | translate }}</span>
-                  <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                  <div class="clearfix"></div>
-                </div>
-              </a>
-            </div>
-          </div>
         </div>
 
         <div class="row">

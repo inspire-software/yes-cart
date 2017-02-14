@@ -23,6 +23,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGatewayExternalForm;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
+import org.yes.cart.payment.persistence.entity.impl.PaymentGatewayCallbackEntity;
+import org.yes.cart.payment.service.PaymentModuleGenericService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.order.OrderEvent;
 import org.yes.cart.service.order.OrderException;
@@ -35,6 +38,7 @@ import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -45,27 +49,54 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
     private final PaymentModulesManager paymentModulesManager;
     private final CustomerOrderService customerOrderService;
+    private final PaymentModuleGenericService<PaymentGatewayCallback> paymentGatewayCallbackService;
 
     private ApplicationContext applicationContext;
 
     private OrderStateManager orderStateManager;
 
     /**
-     * Constract service.
+     * Construct service.
      *
      * @param paymentModulesManager Payment modules manager to get the order number from request parameters.
      * @param customerOrderService  to get order
+     * @param paymentGatewayCallbackService callback service
      */
     public PaymentCallBackHandlerFacadeImpl(final PaymentModulesManager paymentModulesManager,
-                                            final CustomerOrderService customerOrderService) {
+                                            final CustomerOrderService customerOrderService,
+                                            final PaymentModuleGenericService<PaymentGatewayCallback> paymentGatewayCallbackService) {
         this.paymentModulesManager = paymentModulesManager;
         this.customerOrderService = customerOrderService;
+        this.paymentGatewayCallbackService = paymentGatewayCallbackService;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void handlePaymentCallback(final Map parameters, final String paymentGatewayLabel) throws OrderException {
+    public PaymentGatewayCallback registerCallback(final Map parameters,
+                                                   final String paymentGatewayLabel,
+                                                   final String shopCode,
+                                                   final String requestDump) {
+
+        final PaymentGatewayCallback callback = new PaymentGatewayCallbackEntity();
+        callback.setLabel(paymentGatewayLabel);
+        callback.setProcessed(false);
+        callback.setParameterMap(parameters);
+        callback.setRequestDump(requestDump);
+        callback.setShopCode(shopCode);
+        callback.setGuid(UUID.randomUUID().toString());
+
+        return this.paymentGatewayCallbackService.create(callback);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void handlePaymentCallback(final PaymentGatewayCallback callback) throws OrderException {
+
+        final Map parameters = callback.getParameterMap();
+        final String paymentGatewayLabel = callback.getLabel();
 
         final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
 
@@ -73,20 +104,20 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
         if (StringUtils.isNotBlank(orderGuid)) {
 
-            log.info("Order guid to handle at call back handler is {}", orderGuid);
+            log.info("Order guid to handle at call back handler is {}. Callback: {}", orderGuid, callback.getPaymentGatewayCallbackId());
 
             final CustomerOrder order = customerOrderService.findByReference(orderGuid);
 
             if (order == null) {
 
                 if (log.isWarnEnabled()) {
-                    log.warn("Can not get order with guid {}", orderGuid);
+                    log.warn("Can not get order with guid {}. Callback: {}", orderGuid, callback.getPaymentGatewayCallbackId());
                 }
                 return;
             }
 
             if (log.isInfoEnabled()) {
-                log.warn("Processing callback for order with guid {}", orderGuid);
+                log.warn("Processing callback for order with guid {}. Callback: {}", orderGuid, callback.getPaymentGatewayCallbackId());
             }
 
             if (CustomerOrder.ORDER_STATUS_NONE.endsWith(order.getOrderStatus())) {
@@ -95,33 +126,49 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
                 try {
                     handleNewOrderToPending(parameters, orderGuid, log);
+                    finaliseCallback(callback, "New order to pending", log);
                 } catch (OrderItemAllocationException oiae) {
                     handleNewOrderToCancelWithRefund(parameters, orderGuid, log);
+                    finaliseCallback(callback, "New order to cancelled, because there was no stock", log);
                 }
 
             } else if (CustomerOrder.ORDER_STATUS_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
 
                 handleWaitingPaymentToPending(parameters, orderGuid, log);
+                finaliseCallback(callback, "New order to waiting payment", log);
 
             } else if (CustomerOrder.ORDER_STATUS_CANCELLED_WAITING_PAYMENT.endsWith(order.getOrderStatus()) ||
                     CustomerOrder.ORDER_STATUS_RETURNED_WAITING_PAYMENT.endsWith(order.getOrderStatus())) {
 
                 handleWaitingRefundToPending(parameters, orderGuid, log);
+                finaliseCallback(callback, "Waiting payment to pending", log);
 
             } else {
 
                 if (log.isWarnEnabled()) {
-                    log.warn("Can not handle state {} for order with guid {}", order.getOrderStatus(), orderGuid);
+                    log.warn("Can not handle state {} for order with guid {}. Callback: {}",
+                            new Object[] { order.getOrderStatus(), orderGuid, callback.getPaymentGatewayCallbackId() });
                 }
 
             }
 
         } else {
             log.warn("Order guid to handle at call back handler is NULL or blank. " +
-                    "This is abnormal behaviour and it is recommended to enable DEBUG log for " +
-                    "SHOPXX.org.yes.cart.web.filter.payment and SHOPXX.org.yes.cart.payment.impl and review " +
-                    "allowed IPs for PG for shop. Also check that hash signatures are correctly configured.");
+                            "This is abnormal behaviour and it is recommended to enable DEBUG log for " +
+                            "SHOPXX.org.yes.cart.web.filter.payment and SHOPXX.org.yes.cart.payment.impl and review " +
+                            "allowed IPs for PG for shop. Also check that hash signatures are correctly configured. Callback: {}",
+                    callback.getPaymentGatewayCallbackId());
         }
+    }
+
+    private void finaliseCallback(final PaymentGatewayCallback callback, final String msg, final Logger log) {
+
+        callback.setProcessed(true);
+        paymentGatewayCallbackService.update(callback);
+        if (log.isInfoEnabled()) {
+            log.info("Callback {} processed. {}", callback.getPaymentGatewayCallbackId(), msg);
+        }
+
     }
 
     private void handleNewOrderToCancelWithRefund(final Map parameters, final String orderGuid, final Logger log) throws OrderException {

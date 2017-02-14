@@ -481,6 +481,9 @@
   "CUSTOMERORDER_DELIVERY_D4": "Доставка (електронна)",
   "CUSTOMERORDER_DELIVERY_D5": "Доставка (змішана)",
   "CUSTOMERORDER_DELIVERY_TIP": "Доступні дії для доставки. Натисніть посилання доставки або товар в списку доставки.",
+  "CUSTOMERORDER_DELIVERY_ESTIMATED": "Термін постачання",
+  "CUSTOMERORDER_DELIVERY_GUARANTEED": "Гарантована доставка",
+  "CUSTOMERORDER_DELIVERY_REMARKS": "Примітки з доставки",
   "CUSTOMERORDER_TOTAL_ITEM_LIST": "Разом товару (без знижок)",
   "CUSTOMERORDER_TOTAL_ITEM_TAX": "ПДВ",
   "CUSTOMERORDER_TOTAL_ORDER": "Разом за замовленням (до оплати)",
@@ -622,6 +625,7 @@
   "DASHBOARD_CUSTOMERS_TODAY": "Нові покупці",
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "На цьому тижні",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "В цьому місяці",
+  "DASHBOARD_PG_CALLBACK": "Управління підтверджень з ПШ",
 
   "REPORT_reportAvailableStock" : "Звіт інвентаризації",
   "REPORT_reportPayments" : "Звіт по оплатах",

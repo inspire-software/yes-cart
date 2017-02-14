@@ -57,6 +57,7 @@
     <bean id="paymentCallBackHandlerFacade" class="org.yes.cart.service.payment.impl.PaymentCallBackHandlerFacadeImpl">
         <constructor-arg index="0" ref="paymentModulesManager"/>
         <constructor-arg index="1" ref="customerOrderService"/>
+        <constructor-arg index="2" ref="paymentGatewayCallbackService"/>
     </bean>
 
 </beans>

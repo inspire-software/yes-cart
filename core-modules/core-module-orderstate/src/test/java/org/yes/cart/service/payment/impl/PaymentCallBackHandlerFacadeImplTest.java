@@ -27,6 +27,7 @@ import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.impl.TestExtFormPaymentGatewayImpl;
 import org.yes.cart.payment.persistence.entity.CustomerOrderPayment;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
 import org.yes.cart.service.domain.CustomerOrderService;
 import org.yes.cart.service.domain.SkuWarehouseService;
@@ -86,12 +87,15 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
                 customerOrder.getOrderStatus());
         final String ordGuid = customerOrder.getCartGuid();
         ShopCodeContext.setShopCode(customerOrder.getShop().getCode());
-        paymentCallBackHandlerFacade.handlePaymentCallback(
+        final PaymentGatewayCallback callback = paymentCallBackHandlerFacade.registerCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
-                "testExtFormPaymentGatewayLabel");
+                "testExtFormPaymentGatewayLabel",
+                customerOrder.getShop().getCode(), "TEST"
+        );
+        paymentCallBackHandlerFacade.handlePaymentCallback(callback);
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByReference(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_IN_PROGRESS state",
@@ -128,12 +132,15 @@ public class PaymentCallBackHandlerFacadeImplTest extends BaseCoreDBTestCase {
 
         final String ordGuid = customerOrder.getCartGuid();
         ShopCodeContext.setShopCode(customerOrder.getShop().getCode());
-        paymentCallBackHandlerFacade.handlePaymentCallback(
+        final PaymentGatewayCallback callback = paymentCallBackHandlerFacade.registerCallback(
                 new HashMap<String, String>() {{
                     put(TestExtFormPaymentGatewayImpl.ORDER_GUID_PARAM_KEY, ordGuid);
                     put(TestExtFormPaymentGatewayImpl.AUTH_RESPONSE_CODE_PARAM_KEY, "1"); // 1 - means ok
                 }},
-                "testExtFormPaymentGatewayLabel");
+                "testExtFormPaymentGatewayLabel",
+                customerOrder.getShop().getCode(), "TEST"
+        );
+        paymentCallBackHandlerFacade.handlePaymentCallback(callback);
         ShopCodeContext.clear();
         customerOrder = customerOrderService.findByReference(customerOrder.getCartGuid());
         assertEquals("Order must be in ORDER_STATUS_CANCELLED_WAITING_PAYMENT state",  //because item is out of stock and we have AUTH_CAPTURE so we need a REFUND

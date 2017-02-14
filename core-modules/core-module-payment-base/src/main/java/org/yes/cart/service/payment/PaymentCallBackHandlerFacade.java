@@ -16,8 +16,10 @@
 
 package org.yes.cart.service.payment;
 
+import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.service.order.OrderException;
 
+import javax.servlet.ServletRequest;
 import java.util.Map;
 
 /**
@@ -30,12 +32,26 @@ import java.util.Map;
  */
 public interface PaymentCallBackHandlerFacade {
 
+    /**
+     * Register callback for given payment gateway.
+     *
+     * @param parameters          callback parameters (usually {@link ServletRequest#getParameterMap()})
+     * @param paymentGatewayLabel label for this payment gateway
+     * @param shopCode            shop code
+     * @param requestDump         string representation of all information in this callback
+     *
+     * @return callback object
+     */
+    PaymentGatewayCallback registerCallback(Map parameters,
+                                            String paymentGatewayLabel,
+                                            String shopCode,
+                                            String requestDump);
 
     /**
      * Handle call back from payment gateway
-     * @param parameters map with http parameters
-     * @param paymentGatewayLabel particular payment gateway label
+     *
+     * @param callback callback object to handle
      */
-    void handlePaymentCallback(Map parameters, final String paymentGatewayLabel) throws OrderException;
+    void handlePaymentCallback(PaymentGatewayCallback callback) throws OrderException;
 
 }

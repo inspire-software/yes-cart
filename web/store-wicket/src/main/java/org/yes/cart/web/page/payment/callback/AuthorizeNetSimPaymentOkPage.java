@@ -24,13 +24,13 @@ import org.slf4j.Logger;
 import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.payment.PaymentGateway;
+import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.order.OrderException;
 import org.yes.cart.service.payment.PaymentCallBackHandlerFacade;
 import org.yes.cart.shoppingcart.ShoppingCart;
 import org.yes.cart.shoppingcart.ShoppingCartCommand;
 import org.yes.cart.shoppingcart.ShoppingCartCommandFactory;
-import org.yes.cart.util.HttpParamsUtils;
 import org.yes.cart.util.ShopCodeContext;
 import org.yes.cart.web.page.AbstractWebPage;
 import org.yes.cart.web.page.component.header.HeaderMetaInclude;
@@ -108,15 +108,20 @@ public class AuthorizeNetSimPaymentOkPage extends AbstractWebPage {
 
         final HttpServletRequest httpServletRequest = wicketUtil.getHttpServletRequest();
 
+        final String callbackDump = HttpUtil.dumpRequest(httpServletRequest);
+
         if (log.isDebugEnabled()) {
-            log.debug(HttpUtil.dumpRequest(httpServletRequest));
+            log.debug(callbackDump);
         }
 
         try {
+
+            final PaymentGatewayCallback callback = paymentCallBackHandlerFacade.registerCallback(
+                    httpServletRequest.getParameterMap(), "authorizeNetSimPaymentGatewayLabel",
+                    ShopCodeContext.getShopCode(), callbackDump);
+
             // Authorize.Net does not have callback, so relay page should be used instead
-            paymentCallBackHandlerFacade.handlePaymentCallback(
-                    HttpParamsUtils.createSingleValueMap(httpServletRequest.getParameterMap()),
-                    "authorizeNetSimPaymentGatewayLabel");
+            paymentCallBackHandlerFacade.handlePaymentCallback(callback);
 
         } catch (OrderException e) {
 
