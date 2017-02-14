@@ -120,7 +120,8 @@
         <constructor-arg index="2" ref="pricingPolicyProvider"/>
         <constructor-arg index="3" ref="productService"/>
         <constructor-arg index="4" ref="shopService"/>
-        <constructor-arg index="5" ref="customerWishListService"/>
+        <constructor-arg index="5" ref="customerService"/>
+        <constructor-arg index="6" ref="customerWishListService"/>
         <property name="priority" value="61"/>
     </bean>
 

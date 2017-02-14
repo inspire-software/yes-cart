@@ -82,42 +82,44 @@ public class CustomerServiceFacadeImpl implements CustomerServiceFacade {
     /** {@inheritDoc} */
     public List<CustomerWishList> getCustomerWishListByEmail(final Shop shop, final String type, final String email,final String visibility, final String... tags) {
 
-        final List<CustomerWishList> allItems = customerWishListService.getWishListByCustomerEmail(email, shop.getShopId());
-
         final List<CustomerWishList> filtered = new ArrayList<CustomerWishList>();
-        for (final CustomerWishList item : allItems) {
+        final Customer customer = customerService.getCustomerByEmail(email, shop);
+        if (customer != null) {
+            final List<CustomerWishList> allItems = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
 
-            if (visibility != null && !visibility.equals(item.getVisibility())) {
-                continue;
-            }
+            for (final CustomerWishList item : allItems) {
 
-            if (type != null && !type.equals(item.getWlType())) {
-                continue;
-            }
+                if (visibility != null && !visibility.equals(item.getVisibility())) {
+                    continue;
+                }
 
-            if (tags != null && tags.length > 0) {
-                final String itemTagStr = item.getTag();
-                if (StringUtils.isNotBlank(itemTagStr)) {
-                    boolean noTag = true;
-                    final List<String> itemTags = Arrays.asList(StringUtils.split(itemTagStr, ' '));
-                    for (final String tag : tags) {
-                        if (itemTags.contains(tag)) {
-                            noTag = false;
-                            break;
+                if (type != null && !type.equals(item.getWlType())) {
+                    continue;
+                }
+
+                if (tags != null && tags.length > 0) {
+                    final String itemTagStr = item.getTag();
+                    if (StringUtils.isNotBlank(itemTagStr)) {
+                        boolean noTag = true;
+                        final List<String> itemTags = Arrays.asList(StringUtils.split(itemTagStr, ' '));
+                        for (final String tag : tags) {
+                            if (itemTags.contains(tag)) {
+                                noTag = false;
+                                break;
+                            }
+                        }
+                        if (noTag) {
+                            continue;
                         }
                     }
-                    if (noTag) {
-                        continue;
-                    }
+                } else if (CustomerWishList.SHARED.equals(visibility)) {
+                    continue; // Do not allow shared lists without tag
                 }
-            } else if (CustomerWishList.SHARED.equals(visibility)) {
-                continue; // Do not allow shared lists without tag
+
+                filtered.add(item);
+
             }
-
-            filtered.add(item);
-
         }
-
         return filtered;
     }
 

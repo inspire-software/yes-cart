@@ -17,8 +17,10 @@
 package org.yes.cart.shoppingcart.impl;
 
 import org.slf4j.Logger;
+import org.yes.cart.domain.entity.Customer;
 import org.yes.cart.domain.entity.CustomerWishList;
 import org.yes.cart.domain.entity.ProductSku;
+import org.yes.cart.domain.entity.Shop;
 import org.yes.cart.service.domain.*;
 import org.yes.cart.shoppingcart.MutableShoppingCart;
 import org.yes.cart.shoppingcart.PricingPolicyProvider;
@@ -40,16 +42,17 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
 
     private static final long serialVersionUID = 20100122L;
 
+    private final CustomerService customerService;
     private final CustomerWishListService customerWishListService;
 
     /**
      * Construct sku command.
-     *
      * @param registry shopping cart command registry
      * @param priceService price service
      * @param pricingPolicyProvider pricing policy provider
      * @param productService product service
      * @param shopService shop service
+     * @param customerService customer service
      * @param customerWishListService customer wish list service
      */
     public RemoveSkuFromWishListEventCommandImpl(final ShoppingCartCommandRegistry registry,
@@ -57,8 +60,10 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
                                                  final PricingPolicyProvider pricingPolicyProvider,
                                                  final ProductService productService,
                                                  final ShopService shopService,
+                                                 final CustomerService customerService,
                                                  final CustomerWishListService customerWishListService) {
         super(registry, priceService, pricingPolicyProvider, productService, shopService);
+        this.customerService = customerService;
         this.customerWishListService = customerWishListService;
     }
 
@@ -120,8 +125,16 @@ public class RemoveSkuFromWishListEventCommandImpl extends AbstractSkuCartComman
 
     private void removeWishListItem(final ShoppingCart shoppingCart, final ProductSku productSku, final long pk) {
 
-        final List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(
-                shoppingCart.getCustomerEmail(), shoppingCart.getShoppingContext().getShopId());
+        final Shop shop = getShopService().getById(shoppingCart.getShoppingContext().getShopId());
+        if (shop == null) {
+            return;
+        }
+        final Customer customer = customerService.getCustomerByEmail(shoppingCart.getCustomerEmail(), shop);
+        if (customer == null) {
+            return;
+        }
+
+        final List<CustomerWishList> wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
 
         for (final CustomerWishList item : wishList) {
 

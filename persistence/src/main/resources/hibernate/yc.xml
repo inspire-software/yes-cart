@@ -3536,14 +3536,6 @@
         ]]>
     </query>
 
-    <query name="WISHLIST.BY.CUSTOMER.EMAIL">
-        <![CDATA[
-            select w from CustomerWishListEntity w
-                where w.customer.customerId =
-                    (select cse.customer.customerId from CustomerShopEntity cse where cse.customer.email = ?1 and cse.shop.shopId = ?2)
-        ]]>
-    </query>
-
     <query name="CARRIER.SLA.BY.CARRIER">
         <![CDATA[
             select a from CarrierSlaEntity a

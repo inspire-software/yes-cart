@@ -76,7 +76,7 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
                 (Map) singletonMap(ShoppingCartCommand.CMD_CHANGECURRENCY, "EUR"));
 
 
-        List<CustomerWishList> wishList = customerWishListService.getWishListByCustomerEmail(customer.getEmail(), 10L);
+        List<CustomerWishList> wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
         assertNotNull(wishList);
         assertTrue(wishList.isEmpty());
 
@@ -87,12 +87,9 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
 
         commands.execute(shoppingCart, (Map) params);
 
-        wishList = customerWishListService.getWishListByCustomerEmail(customer.getEmail(), 10L);
+        wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
         assertNotNull(wishList);
         assertEquals(1, wishList.size());
-        List<CustomerWishList> wishList2 = customerWishListService.getWishListByCustomerEmail(customer.getEmail(), 11L);
-        assertNotNull(wishList2);
-        assertTrue(wishList2.isEmpty()); // Make sure we do not see wishlists in another shop
 
         CustomerWishList item1 = wishList.get(0);
         assertEquals(CustomerWishList.PRIVATE, item1.getVisibility());
@@ -110,7 +107,7 @@ public class RemoveSkuFromWishListEventCommandImplTest extends BaseCoreDBTestCas
         commands.execute(shoppingCart, (Map) params);
 
 
-        wishList = customerWishListService.getWishListByCustomerEmail(customer.getEmail(), 10L);
+        wishList = customerWishListService.findWishListByCustomerId(customer.getCustomerId());
         assertNotNull(wishList);
         assertTrue(wishList.isEmpty());
 

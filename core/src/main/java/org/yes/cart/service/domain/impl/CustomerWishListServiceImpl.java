@@ -40,12 +40,7 @@ public class CustomerWishListServiceImpl extends BaseGenericServiceImpl<Customer
 
     /** {@inheritDoc} */
     public List<CustomerWishList> findWishListByCustomerId(final long customerId) {
-        return getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER", customerId);
-    }
-
-    /** {@inheritDoc} */
-    public List<CustomerWishList> getWishListByCustomerEmail(final String email, final long shopId) {
-        final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER.EMAIL", email, shopId);
+        final List<CustomerWishList> wishList = getGenericDao().findByNamedQuery("WISHLIST.BY.CUSTOMER", customerId);
         for (final CustomerWishList item : wishList) {
             // Need to load the sku information, so that it is available without session
             Hibernate.initialize(item.getSkus());
