@@ -900,6 +900,7 @@
         <entry key="CustomerEntity"            value-ref="CustomerCUD"/>
         <entry key="CustomerShopEntity"        value-ref="CustomerCUD"/>
         <entry key="AttrValueEntityCustomer"   value-ref="CustomerCUD"/>
+        <entry key="AddressEntity"             value-ref="CustomerCUD"/>
         <entry key="ManagerEntity"             value-ref="ManagerCUD"/>
         <entry key="ManagerRoleEntity"         value-ref="ManagerCUD"/>
         <entry key="ManagerShopEntity"         value-ref="ManagerCUD"/>
