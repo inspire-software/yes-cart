@@ -96,9 +96,8 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
     public void handlePaymentCallback(final PaymentGatewayCallback callback) throws OrderException {
 
         final Map parameters = callback.getParameterMap();
-        final String paymentGatewayLabel = callback.getLabel();
 
-        final String orderGuid = getOrderGuid(parameters, paymentGatewayLabel);
+        final String orderGuid = getOrderGuid(callback);
 
         final Logger log = ShopCodeContext.getLog(this);
 
@@ -327,13 +326,15 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
 
 
 
-    private String getOrderGuid(final Map privateCallBackParameters, final String paymentGatewayLabel) {
+    private String getOrderGuid(final PaymentGatewayCallback callback) {
         final Logger log = ShopCodeContext.getLog(this);
-        final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel);
+        final Map privateCallBackParameters = callback.getParameterMap();
+        final String paymentGatewayLabel = callback.getLabel();
+        final PaymentGatewayExternalForm paymentGateway = getPaymentGateway(paymentGatewayLabel, callback.getShopCode());
         if (paymentGateway == null) {
             if (log.isErrorEnabled()) {
                 log.error("Get order guid from http request with {} payment gateway cannot be resolved. Is payment gateway enabled?\n{}",
-                        paymentGatewayLabel, HttpParamsUtils.stringify("CALLBACK", privateCallBackParameters));
+                        paymentGatewayLabel, HttpParamsUtils.stringify("CALLBACK:\n", privateCallBackParameters));
             }
             return null;
         }
@@ -345,11 +346,11 @@ public class PaymentCallBackHandlerFacadeImpl implements PaymentCallBackHandlerF
         return orderGuid;
     }
 
-    private PaymentGatewayExternalForm getPaymentGateway(String paymentGatewayLabel) {
-        if ("DEFAULT".equals(ShopCodeContext.getShopCode())) {
+    private PaymentGatewayExternalForm getPaymentGateway(final String paymentGatewayLabel, final String shopCode) {
+        if ("DEFAULT".equals(shopCode)) {
             throw new RuntimeException("Payment gateway URL must be configured for shop specific URL's");
         }
-        return (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel, ShopCodeContext.getShopCode());
+        return (PaymentGatewayExternalForm) paymentModulesManager.getPaymentGateway(paymentGatewayLabel, shopCode);
     }
 
 
