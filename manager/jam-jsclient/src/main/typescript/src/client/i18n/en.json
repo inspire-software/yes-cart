@@ -627,6 +627,8 @@
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "This week",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "This month",
   "DASHBOARD_PG_CALLBACK": "Manage PG callbacks",
+  "DASHBOARD_ALERTS": "Attention",
+  "DASHBOARD_ALERTS_mailQueue": "Mail queue is not empty ({{value}})",
 
   "REPORT_reportAvailableStock" : "Inventory report",
   "REPORT_reportPayments" : "Payments report",

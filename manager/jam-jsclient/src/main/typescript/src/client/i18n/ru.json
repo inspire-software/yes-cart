@@ -166,6 +166,7 @@
   "PANEL_SYSTEM_EXPORT": "Экспорт",
   "PANEL_SYSTEM_INDEX": "Поисковый индекс",
   "PANEL_SYSTEM_PG": "Платежные шлюзы",
+  "PANEL_PG_CALLBACK": "Необработанные подтверждения",
   "PANEL_SYSTEM_PREFS": "Настройки",
   "PANEL_SYSTEM_QUERY": "Запрос БД",
   "PANEL_SYSTEM_CACHE": "Кэш",
@@ -626,6 +627,8 @@
   "DASHBOARD_CUSTOMERS_THIS_WEEK": "На этой неделе",
   "DASHBOARD_CUSTOMERS_THIS_MONTH": "В этом месяце",
   "DASHBOARD_PG_CALLBACK": "Управление подтверждений с ПШ",
+  "DASHBOARD_ALERTS": "Внимание",
+  "DASHBOARD_ALERTS_mailQueue": "Очередь почты не пуста ({{value}})",
 
   "REPORT_reportAvailableStock" : "Отчет инвентаризации",
   "REPORT_reportPayments" : "Отчет по оплатам",

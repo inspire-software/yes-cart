@@ -149,6 +149,10 @@
                     <constructor-arg index="0" ref="paymentGatewayCallbackService"/>
                     <constructor-arg index="1" ref="shopService"/>
                 </bean>
+                <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginAlerts">
+                    <constructor-arg index="0" ref="shopService"/>
+                    <constructor-arg index="1" ref="mailService"/>
+                </bean>
             </list>
         </property>
     </bean>
