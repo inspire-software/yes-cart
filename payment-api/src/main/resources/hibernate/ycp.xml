@@ -92,7 +92,7 @@
         </id>
 
         <property name="label" length="64" type="java.lang.String" column="PG_LABEL"/>
-        <property name="shopCode" length="255" type="java.lang.String" column="SHOP_CODE"/>
+        <property name="shopCode" length="255" type="java.lang.String" column="SHOP_CODE"  index="PAYMENTGATEWAYCALLBACK_SHOP"/>
         <property name="parameterMapInternal" length="12000" type="java.lang.String" column="PG_PARAMS"/>
         <property name="requestDump" length="12000" type="java.lang.String" column="REQUEST_DUMP"/>
         <property name="processed" type="boolean" column="PROCESSED" index="PAYMENTGATEWAYCALLBACK_PROCESSED"/>

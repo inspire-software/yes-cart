@@ -21,8 +21,10 @@ import org.yes.cart.domain.misc.MutablePair;
 import org.yes.cart.domain.vo.VoDashboardWidget;
 import org.yes.cart.domain.vo.VoManager;
 import org.yes.cart.domain.vo.VoManagerRole;
+import org.yes.cart.domain.vo.VoManagerShop;
 import org.yes.cart.payment.persistence.entity.PaymentGatewayCallback;
 import org.yes.cart.payment.service.PaymentModuleGenericService;
+import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoDashboardWidgetPlugin;
 import org.yes.cart.service.vo.VoDashboardWidgetService;
 
@@ -38,9 +40,12 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
     private final List<String> roles = Arrays.asList("ROLE_SMADMIN", "ROLE_SMSHOPADMIN");
 
     private PaymentModuleGenericService<PaymentGatewayCallback> paymentModuleGenericService;
+    private final ShopService shopService;
 
-    public VoDashboardWidgetPluginUnprocessedPgCallbacks(final PaymentModuleGenericService<PaymentGatewayCallback> paymentModuleGenericService) {
+    public VoDashboardWidgetPluginUnprocessedPgCallbacks(final PaymentModuleGenericService<PaymentGatewayCallback> paymentModuleGenericService,
+                                                         final ShopService shopService) {
         this.paymentModuleGenericService = paymentModuleGenericService;
+        this.shopService = shopService;
     }
 
     @Override
@@ -48,7 +53,7 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
         if (manager.getManagerShops().size() > 0) {
             for (final VoManagerRole role : manager.getManagerRoles()) {
                 if (roles.contains(role.getCode())) {
-                    return true;
+                    return manager.getManagerShops().size() > 0;
                 }
             }
         }
@@ -58,11 +63,21 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
     @Override
     public VoDashboardWidget getWidget(final VoManager manager) {
 
+        final Set<String> shops = new HashSet<>();
+        for (final VoManagerShop shop : manager.getManagerShops()) {
+            shops.add(this.shopService.getById(shop.getShopId()).getCode());
+            final Set<Long> subs = this.shopService.getAllShopsAndSubs().get(shop.getShopId());
+            if (subs != null) {
+                shops.add(this.shopService.getById(shop.getShopId()).getCode());
+            }
+        }
+
         final VoDashboardWidget widget = new VoDashboardWidget();
         widget.setWidgetId("UnprocessedPgCallbacks");
 
         final Map<String, Integer> counts = new HashMap<>();
-        final List<PaymentGatewayCallback> callbacks = this.paymentModuleGenericService.findByCriteria(Restrictions.eq("processed", Boolean.FALSE));
+        final List<PaymentGatewayCallback> callbacks = this.paymentModuleGenericService.findByCriteria(
+                Restrictions.eq("processed", Boolean.FALSE), Restrictions.in("shopCode", shops));
         for (final PaymentGatewayCallback callback : callbacks) {
 
             final Integer count = counts.get(callback.getLabel());
@@ -83,7 +98,10 @@ public class VoDashboardWidgetPluginUnprocessedPgCallbacks implements VoDashboar
             }
         }
 
-        widget.setData(data);
+        widget.setData(new HashMap<String, Object>() {{
+            put("hasUnprocessed", !counts.isEmpty());
+            put("unprocessed", data);
+        }});
 
         return widget;
     }

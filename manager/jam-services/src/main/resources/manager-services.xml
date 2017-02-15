@@ -147,6 +147,7 @@
                 </bean>
                 <bean class="org.yes.cart.service.vo.impl.VoDashboardWidgetPluginUnprocessedPgCallbacks">
                     <constructor-arg index="0" ref="paymentGatewayCallbackService"/>
+                    <constructor-arg index="1" ref="shopService"/>
                 </bean>
             </list>
         </property>
