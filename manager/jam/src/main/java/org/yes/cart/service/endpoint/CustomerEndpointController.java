@@ -98,7 +98,7 @@ public interface CustomerEndpointController {
     @ResponseBody
     VoAddress updateAddress(@RequestBody VoAddress vo)  throws Exception;
 
-    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/addressbook/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     void removeAddress(@PathVariable("id") long id) throws Exception;
