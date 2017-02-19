@@ -66,6 +66,7 @@ public interface OrderStateManager {
     String EVT_PACK_COMPLETE                = "evt.packing.complete";          // order packed, so just wait for shipment
     String EVT_RELEASE_TO_SHIPMENT          = "evt.release.to.shipment";       // right now delivery on the way to the customer
     String EVT_SHIPMENT_COMPLETE            = "evt.shipment.complete";         // lets go to capture funds and update qty
+    String EVT_DELIVERY_UPDATE              = "evt.delivery.update";           // event to auto-progress order using delivery update object (to be used for integrations)
 
 
 

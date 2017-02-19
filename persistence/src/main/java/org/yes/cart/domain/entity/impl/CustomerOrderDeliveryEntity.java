@@ -56,6 +56,7 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
     private Date deliveryEstimatedMin;
     private Date deliveryEstimatedMax;
     private Date deliveryGuaranteed;
+    private Date deliveryConfirmed;
 
     private boolean blockExport;
     private Date lastExportDate;
@@ -203,6 +204,14 @@ public class CustomerOrderDeliveryEntity implements org.yes.cart.domain.entity.C
 
     public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public Date getDeliveryConfirmed() {
+        return deliveryConfirmed;
+    }
+
+    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+        this.deliveryConfirmed = deliveryConfirmed;
     }
 
     public boolean isBlockExport() {

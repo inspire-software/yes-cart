@@ -499,6 +499,7 @@
   "CUSTOMERORDER_B2B_APPROVEDBY": "Затверджено (ким)",
   "CUSTOMERORDER_B2B_APPROVEDDATE": "Затверджено (дата)",
   "CUSTOMERORDER_B2B_REMARKS": "Примітка",
+  "CUSTOMERORDER_B2B_SUPPLIER_INVOICE": "Рахунок-фактура постачальника",
 
   "CUSTOMERORDER_TAB_OVERVIEW": "Огляд",
   "CUSTOMERORDER_TAB_EXTRADETAILS": "Додаткова інформація",

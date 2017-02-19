@@ -17,8 +17,6 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
-import org.yes.cart.domain.entityindexer.StoredAttributes;
-import org.yes.cart.domain.entityindexer.impl.StoredAttributesImpl;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.order.DeliveryBucket;
 import org.yes.cart.service.order.impl.DeliveryBucketImpl;
@@ -62,8 +60,13 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
     private Date deliveryEstimatedMin;
     private Date deliveryEstimatedMax;
     private Date deliveryGuaranteed;
+    private Date deliveryConfirmed;
+    private BigDecimal deliveredQuantity;
 
     private String b2bRemarks;
+
+    private String supplierInvoiceNo;
+    private Date supplierInvoiceDate;
 
     private CustomerOrderDelivery delivery;
     private Date createdTimestamp;
@@ -199,12 +202,52 @@ public class CustomerOrderDeliveryDetEntity implements org.yes.cart.domain.entit
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
+    public Date getDeliveryConfirmed() {
+        return deliveryConfirmed;
+    }
+
+    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+        this.deliveryConfirmed = deliveryConfirmed;
+    }
+
+    public BigDecimal getDeliveredQuantity() {
+        return deliveredQuantity;
+    }
+
+    public void setDeliveredQuantity(final BigDecimal deliveredQuantity) {
+        this.deliveredQuantity = deliveredQuantity;
+    }
+
+    public boolean isDeliveryRejected() {
+        return this.deliveredQuantity != null && this.deliveredQuantity.compareTo(BigDecimal.ZERO) == 0;
+    }
+
+    public boolean isDeliveryDifferent() {
+        return this.deliveredQuantity != null && this.qty != null && this.deliveredQuantity.compareTo(this.qty) != 0;
+    }
+
     public String getB2bRemarks() {
         return b2bRemarks;
     }
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    public String getSupplierInvoiceNo() {
+        return supplierInvoiceNo;
+    }
+
+    public void setSupplierInvoiceNo(final String supplierInvoiceNo) {
+        this.supplierInvoiceNo = supplierInvoiceNo;
+    }
+
+    public Date getSupplierInvoiceDate() {
+        return supplierInvoiceDate;
+    }
+
+    public void setSupplierInvoiceDate(final Date supplierInvoiceDate) {
+        this.supplierInvoiceDate = supplierInvoiceDate;
     }
 
     public CustomerOrderDelivery getDelivery() {

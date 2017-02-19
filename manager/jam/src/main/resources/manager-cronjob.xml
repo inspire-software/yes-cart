@@ -39,6 +39,24 @@
         <property name="cronExpression" value="${yum.cron.preorderJob}" />
     </bean>
 
+    <!-- ################################ Backorder/Delivery notifications  ################################# -->
+
+    <bean name="deliveryInfoUpdateJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="org.yes.cart.bulkjob.cron.YcCronJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobName" value="Order Delivery Information Update Processing" />
+                <entry key="job" value-ref="orderDeliveryInfoUpdateProcessor" />
+                <entry key="nodeService" value-ref="nodeService" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="deliveryInfoUpdateJobCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="deliveryInfoUpdateJob" />
+        <property name="cronExpression" value="${yum.cron.deliveryInfoUpdateJob}" />
+    </bean>
+
     <!-- ################################ Abandon shopping cart clean up  ################################### -->
 
     <bean name="abandonedShoppingCartJob" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -291,6 +309,7 @@
         <property name="triggers">
             <list>
                 <ref bean="preOrderJobCronTrigger" />
+                <ref bean="deliveryInfoUpdateJobCronTrigger" />
                 <ref bean="abandonedShoppingCartJobCronTrigger" />
                 <ref bean="emptyAnonymousShoppingCartJobCronTrigger" />
                 <ref bean="expiredGuestsJobCronTrigger" />

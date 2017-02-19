@@ -15,7 +15,7 @@
  */
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO } from './../../shared/model/index';
+import { CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderLineVO, PromotionVO, Pair } from './../../shared/model/index';
 import { LogUtil } from './../../shared/log/index';
 
 @Component({
@@ -171,6 +171,30 @@ export class CustomerOrderComponent implements OnInit, OnDestroy {
     }
     this.selectedLine = null;
     this.dataSelected.emit(this.selectedDelivery);
+  }
+
+  protected getInvoiceNumbers():Pair<string, Date>[] {
+    let invoiceNumbers:string[] = [];
+    let invoiceNumbersAndDate:Pair<string, Date>[] = [];
+
+    if (this._customerorder != null) {
+
+      this._customerorder.lines.forEach( _line => {
+
+        if (_line.supplierInvoiceNo != null) {
+
+          if (!invoiceNumbers.includes(_line.supplierInvoiceNo)) {
+            invoiceNumbersAndDate.push({ first: _line.supplierInvoiceNo, second: _line.supplierInvoiceDate });
+            invoiceNumbers.push(_line.supplierInvoiceNo);
+          }
+
+        }
+
+      });
+
+    }
+
+    return invoiceNumbersAndDate;
   }
 
 

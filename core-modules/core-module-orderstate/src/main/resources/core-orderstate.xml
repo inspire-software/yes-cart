@@ -193,6 +193,17 @@
         </property>
     </bean>
 
+    <!-- Auto transition of order using delivery update object -->
+    <bean id="deliveryUpdateOrderEventHandler"  parent="txProxyOrderEventHandlerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.handler.delivery.DeliveryUpdateOrderEventHandlerImpl">
+                <constructor-arg index="0" ref="warehouseService"/>
+                <constructor-arg index="1" ref="skuWarehouseService"/>
+                <constructor-arg index="2" ref="productService"/>
+            </bean>
+        </property>
+    </bean>
+
 
     <bean id="txProxyOrderStateTransitionListenerTemplate" abstract="true"
           class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -246,6 +257,7 @@
                 <entry key="evt.order.cancel.refund"       value-ref="cancelOrderWithRefundOrderEventHandler"/>
                 <entry key="evt.new.order.cancel.refund"   value-ref="cancelNewOrderWithRefundOrderEventHandler"/>
                 <entry key="evt.refund.processed"          value-ref="refundProcessedOrderEventHandler"/>
+                <entry key="evt.delivery.update"           value-ref="deliveryUpdateOrderEventHandler"/>
             </map>
         </constructor-arg>
         <constructor-arg index="1">

@@ -2145,6 +2145,7 @@
         <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
         <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
         <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
+        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="timestamp"/>
 
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
@@ -2214,8 +2215,13 @@
         <property name="deliveryEstimatedMin" column="DELIVERY_EST_MIN" type="timestamp"/>
         <property name="deliveryEstimatedMax" column="DELIVERY_EST_MAX" type="timestamp"/>
         <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
+        <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="timestamp"/>
+        <property name="deliveredQuantity" column="DELIVERED_QUANTITY" type="java.math.BigDecimal"/>
 
         <property name="b2bRemarks" column="B2B_REMARKS" type="string" length="255"/>
+
+        <property name="supplierInvoiceNo" column="SUPPLIER_INVOICE_NO" type="string" length="255"/>
+        <property name="supplierInvoiceDate" column="SUPPLIER_INVOICE_DATE" type="timestamp"/>
 
         <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
 

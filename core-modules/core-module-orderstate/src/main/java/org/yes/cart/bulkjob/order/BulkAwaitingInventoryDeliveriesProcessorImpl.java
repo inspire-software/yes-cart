@@ -145,7 +145,7 @@ public class BulkAwaitingInventoryDeliveriesProcessorImpl extends AbstractLastRu
 
                 } catch (OrderException oexp) {
 
-                    log.warn("Cannot process delivery " + deliveryId, oexp);
+                    log.warn("Cannot process delivery " + deliveryId + ", caused: " + oexp.getMessage());
 
                 } catch (Exception exp) {
 

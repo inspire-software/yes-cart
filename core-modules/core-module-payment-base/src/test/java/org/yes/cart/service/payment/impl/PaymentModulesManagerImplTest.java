@@ -90,9 +90,9 @@ public class PaymentModulesManagerImplTest extends BaseCoreDBTestCase {
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "DEFAULT");
         assertEquals(4, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(true, "SHOIP1");
-        assertEquals(3, paymentGateways.size());
+        assertEquals(4, paymentGateways.size());
         paymentGateways = paymentModulesManager.getPaymentGatewaysDescriptors(false, "SHOIP1");
-        assertEquals(2, paymentGateways.size());
+        assertEquals(3, paymentGateways.size());
     }
 
     /**

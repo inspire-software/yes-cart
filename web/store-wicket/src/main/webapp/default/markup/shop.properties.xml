@@ -178,6 +178,7 @@
     <entry key="deliveryEstimatedX">Estimated delivery is after ${from}</entry>
     <entry key="deliveryEstimatedXY">Estimated delivery is between ${from} and ${to}</entry>
     <entry key="deliveryGuaranteed">Delivery date is ${date}</entry>
+    <entry key="deliveryConfirmed">Delivered on ${date}</entry>
 
     <!-- ShippingDeliveriesView -->
     <entry key="deliveryCarrierSelect">Shipping method</entry>

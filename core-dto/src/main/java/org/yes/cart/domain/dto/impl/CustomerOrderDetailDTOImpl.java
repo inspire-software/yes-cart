@@ -64,6 +64,7 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
     private Date deliveryEstimatedMax;
     @DtoField(readOnly = true)
     private Date deliveryGuaranteed;
+
     @DtoField(readOnly = true)
     private String b2bRemarks;
 
@@ -214,12 +215,60 @@ public class CustomerOrderDetailDTOImpl implements CustomerOrderDeliveryDetailDT
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
+    public Date getDeliveryConfirmed() {
+        return null;
+    }
+
+    public void setDeliveryConfirmed(final Date delivered) {
+
+    }
+
+    public BigDecimal getDeliveredQuantity() {
+        return null;
+    }
+
+    public void setDeliveredQuantity(final BigDecimal deliveredQuantity) {
+
+    }
+
+    public boolean isDeliveryRejected() {
+        return false;
+    }
+
+    public void setDeliveryRejected(final boolean deliveryRejected) {
+
+    }
+
+    public boolean isDeliveryDifferent() {
+        return false;
+    }
+
+    public void setDeliveryDifferent(final boolean deliveryDifferent) {
+
+    }
+
     public String getB2bRemarks() {
         return b2bRemarks;
     }
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    public String getSupplierInvoiceNo() {
+        return null;
+    }
+
+    public void setSupplierInvoiceNo(final String invoiceNo) {
+
+    }
+
+    public Date getSupplierInvoiceDate() {
+        return null;
+    }
+
+    public void setSupplierInvoiceDate(final Date supplierInvoiceDate) {
+
     }
 
     public BigDecimal getQty() {

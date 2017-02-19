@@ -93,6 +93,8 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     private Date deliveryEstimatedMax;
     @DtoField(value = "deliveryGuaranteed", readOnly = true)
     private Date deliveryGuaranteed;
+    @DtoField(value = "deliveryConfirmed", readOnly = true)
+    private Date deliveryConfirmed;
 
 
     @DtoField(value = "price", readOnly = true)
@@ -434,6 +436,16 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    /** {@inheritDoc} */
+    public Date getDeliveryConfirmed() {
+        return deliveryConfirmed;
+    }
+
+    /** {@inheritDoc} */
+    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+        this.deliveryConfirmed = deliveryConfirmed;
     }
 
     /** {@inheritDoc} */

@@ -98,7 +98,15 @@ export interface CustomerOrderLineVO {
   deliveryEstimatedMin : Date;
   deliveryEstimatedMax : Date;
   deliveryGuaranteed : Date;
+  deliveryConfirmed : Date;
+  deliveredQuantity : number;
+  deliveryRejected : boolean;
+  deliveryDifferent : boolean;
+
   b2bRemarks : string;
+
+  supplierInvoiceNo : string;
+  supplierInvoiceDate : Date;
 
   qty : number;
   price : number;
@@ -140,6 +148,7 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryEstimatedMin : Date;
   deliveryEstimatedMax : Date;
   deliveryGuaranteed : Date;
+  deliveryConfirmed : Date;
 
   blockExport : boolean;
   lastExportDate : Date;

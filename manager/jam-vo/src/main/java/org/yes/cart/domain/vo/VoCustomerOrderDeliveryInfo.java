@@ -85,6 +85,8 @@ public class VoCustomerOrderDeliveryInfo {
     private Date deliveryEstimatedMax;
     @DtoField(value = "deliveryGuaranteed", readOnly = true)
     private Date deliveryGuaranteed;
+    @DtoField(value = "deliveryConfirmed", readOnly = true)
+    private Date deliveryConfirmed;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -274,6 +276,14 @@ public class VoCustomerOrderDeliveryInfo {
 
     public void setDeliveryGuaranteed(final Date deliveryGuaranteed) {
         this.deliveryGuaranteed = deliveryGuaranteed;
+    }
+
+    public Date getDeliveryConfirmed() {
+        return deliveryConfirmed;
+    }
+
+    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+        this.deliveryConfirmed = deliveryConfirmed;
     }
 
     public BigDecimal getPrice() {

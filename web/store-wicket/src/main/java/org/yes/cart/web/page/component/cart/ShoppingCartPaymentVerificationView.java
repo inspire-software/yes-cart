@@ -153,7 +153,12 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                         final IModel<String> deliveryTime;
                         final boolean showDeliveryTime;
-                        if (delivery.getDeliveryGuaranteed() != null) {
+                        if (delivery.getDeliveryConfirmed() != null) {
+                            final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                            deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
+                                    Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryConfirmed())));
+                            showDeliveryTime = true;
+                        } else if (delivery.getDeliveryGuaranteed() != null) {
                             final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                             deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
                                     Collections.<String, Object>singletonMap("date", df.format(delivery.getDeliveryGuaranteed())));
@@ -216,7 +221,12 @@ public class ShoppingCartPaymentVerificationView extends BaseComponent {
 
                                                 final IModel<String> deliveryTime;
                                                 final boolean showDeliveryTime;
-                                                if (det.getDeliveryGuaranteed() != null) {
+                                                if (det.getDeliveryConfirmed() != null) {
+                                                    final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
+                                                    deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryConfirmed",
+                                                            Collections.<String, Object>singletonMap("date", df.format(det.getDeliveryConfirmed())));
+                                                    showDeliveryTime = true;
+                                                } else if (det.getDeliveryGuaranteed() != null) {
                                                     final DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, getLocale());
                                                     deliveryTime = WicketUtil.createStringResourceModel(this, "deliveryGuaranteed",
                                                             Collections.<String, Object>singletonMap("date", df.format(det.getDeliveryGuaranteed())));

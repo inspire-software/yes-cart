@@ -68,7 +68,21 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
     @DtoField(readOnly = true)
     private Date deliveryGuaranteed;
     @DtoField(readOnly = true)
+    private Date deliveryConfirmed;
+    @DtoField(readOnly = true)
+    private BigDecimal deliveredQuantity;
+    @DtoField(readOnly = true)
+    private boolean deliveryRejected;
+    @DtoField(readOnly = true)
+    private boolean deliveryDifferent;
+
+    @DtoField(readOnly = true)
     private String b2bRemarks;
+
+    @DtoField(readOnly = true)
+    private String supplierInvoiceNo;
+    @DtoField(readOnly = true)
+    private Date supplierInvoiceDate;
 
     @DtoField(value = "price", readOnly = true)
     private BigDecimal price;
@@ -212,12 +226,60 @@ public class CustomerOrderDeliveryDetailDTOImpl implements CustomerOrderDelivery
         this.deliveryGuaranteed = deliveryGuaranteed;
     }
 
+    public Date getDeliveryConfirmed() {
+        return deliveryConfirmed;
+    }
+
+    public void setDeliveryConfirmed(final Date deliveryConfirmed) {
+        this.deliveryConfirmed = deliveryConfirmed;
+    }
+
+    public BigDecimal getDeliveredQuantity() {
+        return deliveredQuantity;
+    }
+
+    public void setDeliveredQuantity(final BigDecimal deliveredQuantity) {
+        this.deliveredQuantity = deliveredQuantity;
+    }
+
+    public boolean isDeliveryRejected() {
+        return deliveryRejected;
+    }
+
+    public void setDeliveryRejected(final boolean deliveryRejected) {
+        this.deliveryRejected = deliveryRejected;
+    }
+
+    public boolean isDeliveryDifferent() {
+        return deliveryDifferent;
+    }
+
+    public void setDeliveryDifferent(final boolean deliveryDifferent) {
+        this.deliveryDifferent = deliveryDifferent;
+    }
+
     public String getB2bRemarks() {
         return b2bRemarks;
     }
 
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    public String getSupplierInvoiceNo() {
+        return supplierInvoiceNo;
+    }
+
+    public void setSupplierInvoiceNo(final String supplierInvoiceNo) {
+        this.supplierInvoiceNo = supplierInvoiceNo;
+    }
+
+    public Date getSupplierInvoiceDate() {
+        return supplierInvoiceDate;
+    }
+
+    public void setSupplierInvoiceDate(final Date supplierInvoiceDate) {
+        this.supplierInvoiceDate = supplierInvoiceDate;
     }
 
     public BigDecimal getQty() {

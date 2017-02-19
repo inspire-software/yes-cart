@@ -24,7 +24,9 @@
     <import resource="classpath:core-cronjob.xml"/>
     <import resource="classpath:core-services.xml"/>
 
-    <bean id="bulkAwaitingInventoryDeliveriesProcessor" parent="txJobProxyTemplate">
+    <!-- ################################ Pre order inventory scanning  ###################################### -->
+
+    <bean id="bulkAwaitingInventoryDeliveriesProcessorInternal" parent="txJobProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.bulkjob.order.BulkAwaitingInventoryDeliveriesProcessorImpl">
                 <constructor-arg index="0" ref="customerOrderService"/>
@@ -32,7 +34,7 @@
                 <constructor-arg index="2" ref="skuWarehouseService"/>
                 <constructor-arg index="3" ref="systemService"/>
                 <constructor-arg index="4" ref="runtimeAttributeService"/>
-                <lookup-method name="getSelfProxy" bean="bulkAwaitingInventoryDeliveriesProcessor"/>
+                <lookup-method name="getSelfProxy" bean="bulkAwaitingInventoryDeliveriesProcessorInternal"/>
             </bean>
         </property>
         <property name="transactionAttributes">
@@ -43,6 +45,40 @@
                 <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
             </props>
         </property>
+    </bean>
+
+    <bean id="bulkAwaitingInventoryDeliveriesProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="bulkAwaitingInventoryDeliveriesProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_DELIVERY_WAIT_INVENTORY_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
+    </bean>
+
+    <!-- ################################ Backorder/Delivery notifications  ################################# -->
+
+    <bean id="orderDeliveryInfoUpdateProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.bulkjob.order.OrderDeliveryInfoUpdateProcessorImpl">
+                <constructor-arg index="0" ref="customerOrderService"/>
+                <constructor-arg index="1" ref="orderStateManager"/>
+                <lookup-method name="getSelfProxy" bean="orderDeliveryInfoUpdateProcessorInternal"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- All job beans are Runnable, and they must run in isolation  -->
+                <prop key="run">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="processDeliveryUpdate">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="orderDeliveryInfoUpdateProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="orderDeliveryInfoUpdateProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_DELIVERY_INFO_UPDATE_PAUSE"/>
+        <property name="pausePreferenceDefault" value="false"/>
     </bean>
 
 </beans>

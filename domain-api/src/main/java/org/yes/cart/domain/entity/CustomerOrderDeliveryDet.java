@@ -16,7 +16,6 @@
 
 package org.yes.cart.domain.entity;
 
-import org.yes.cart.domain.entityindexer.StoredAttributes;
 import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.shoppingcart.CartItem;
 
@@ -162,6 +161,51 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
     void setDeliveryGuaranteed(Date deliveryGuaranteed);
 
     /**
+     * Confirmed delivery date. This date should be populated from the third party integrations and denoted
+     * actual confirmed date of delivery. If this is field is null it only means that there is not confirmation
+     * by the delivery company that the items is delivered, it does not mean that it has not been delivered.
+     *
+     * @return guaranteed date
+     */
+    Date getDeliveryConfirmed();
+
+    /**
+     * Actual confirmed delivery date.
+     *
+     * @param delivered confirmed delivery date
+     */
+    void setDeliveryConfirmed(Date delivered);
+
+    /**
+     * Actual delivered quantity. Zero indicates that item has been rejected. Must remain null if no
+     * confirmation received. See {@link #getDeliveryConfirmed()}.
+     *
+     * @return confirmed delivered quantity
+     */
+    BigDecimal getDeliveredQuantity();
+
+    /**
+     * Confirmed quantity.
+     *
+     * @param deliveredQuantity confirmed quantity
+     */
+    void setDeliveredQuantity(BigDecimal deliveredQuantity);
+
+    /**
+     * Helper check for {@link #getDeliveredQuantity()} == 0. If no confirmed quantity this check should return false.
+     *
+     * @return true if delivery was rejected for this line.
+     */
+    boolean isDeliveryRejected();
+
+    /**
+     * Helper check for {@link #getDeliveredQuantity()} == {@link #getQty()}. If no confirmed quantity this check should return false.
+     *
+     * @return true if delivery was different for this line.
+     */
+    boolean isDeliveryDifferent();
+
+    /**
      * B2B remarks.
      *
      * @return remarks
@@ -175,6 +219,35 @@ public interface CustomerOrderDeliveryDet extends Auditable, CartItem {
      */
     void setB2bRemarks(String b2bRemarks);
 
+    /**
+     * Invoice number for this item. In most cases invoice matches the order, however in some cases
+     * with long term recurring orders invoices are done either in bulk or per article, hence invoice
+     * number is per line.
+     *
+     * @return supplier invoice number
+     */
+    String getSupplierInvoiceNo();
+
+    /**
+     * Set invoice number for this line.
+     *
+     * @param invoiceNo invoice number
+     */
+    void setSupplierInvoiceNo(String invoiceNo);
+
+    /**
+     * Inovice date, see {@link #getSupplierInvoiceNo()}.
+     *
+     * @return invoice date
+     */
+    Date getSupplierInvoiceDate();
+
+    /**
+     * Set invoice date.
+     *
+     * @param supplierInvoiceDate invoice date
+     */
+    void setSupplierInvoiceDate(Date supplierInvoiceDate);
 
     /**
      * Get order delivery.

@@ -274,6 +274,22 @@ public interface CustomerOrderDeliveryDTO   extends Identifiable {
 
 
     /**
+     * Guaranteed delivery date. This date should be populated from the third party integrations and denoted
+     * actual confirmed date of delivery. If this is field is null it only means that there is not confirmation
+     * by the delivery company that the items is delivered, it does not mean that it has not been delivered.
+     *
+     * @return guaranteed date
+     */
+    Date getDeliveryConfirmed();
+
+    /**
+     * Actual confirmed delivery date.
+     *
+     * @param delivered confirmed delivery date
+     */
+    void setDeliveryConfirmed(Date delivered);
+
+    /**
      * Flag for better export management control (e.g. hold off export until fraud check is performed).
      *
      * @return true if export is blocked
