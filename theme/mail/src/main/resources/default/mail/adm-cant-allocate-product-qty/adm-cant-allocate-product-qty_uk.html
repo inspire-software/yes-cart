@@ -34,7 +34,11 @@
                         Відсутній залишок для товара <b>$sku.name</b>, код <b>$sku.code</b> <br>
                         для замовлення <b>$root.ordernum</b> на <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> для $root.firstname $root.lastname $root.email <br>
 
-                        ${include('common-adm-order-details')}
+                        <% if (getProperty('delivery') != null) { %>
+                            ${include('common-adm-order-delivery-details')}
+                        <% } else { %>
+                            ${include('common-adm-order-details')}
+                        <% } %>
 
                     </td>
                     <td width="2%">&nbsp;</td>

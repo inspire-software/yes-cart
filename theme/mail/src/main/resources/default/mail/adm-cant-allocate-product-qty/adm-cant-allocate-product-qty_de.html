@@ -34,7 +34,11 @@
                         Die Artikel können leider nicht reserviert werden <b>$sku.name</b>, SKU <b>$sku.code</b> <br>
                         für Bestellung <b>$root.ordernum</b> at <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> für $root.firstname $root.lastname $root.email
 
-                        ${include('common-adm-order-details')}
+                        <% if (getProperty('delivery') != null) { %>
+                            ${include('common-adm-order-delivery-details')}
+                        <% } else { %>
+                            ${include('common-adm-order-details')}
+                        <% } %>
 
                     </td>
                     <td width="2%">&nbsp;</td>

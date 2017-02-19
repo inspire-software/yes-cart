@@ -34,8 +34,11 @@
                         Cannot allocate quantity for product <b>$sku.name</b>, code <b>$sku.code</b> <br>
                         for order <b>$root.ordernum</b> at <a href="<%out.print(shop.getDefaultShopUrl())%>">$shop.name</a> for $root.firstname $root.lastname $root.email
 
-                        ${include('common-adm-order-details')}
-
+                        <% if (getProperty('delivery') != null) { %>
+                            ${include('common-adm-order-delivery-details')}
+                        <% } else { %>
+                            ${include('common-adm-order-details')}
+                        <% } %>
                     </td>
                     <td width="2%">&nbsp;</td>
                 </tr>
