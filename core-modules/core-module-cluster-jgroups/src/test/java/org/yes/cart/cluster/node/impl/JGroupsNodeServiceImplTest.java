@@ -74,9 +74,9 @@ public class JGroupsNodeServiceImplTest {
         final ServletContext ctx2 = context.mock(ServletContext.class, "ctx2");
         final ServletContext ctx3 = context.mock(ServletContext.class, "ctx3");
 
-        setExpectations(ctx1, new NodeImpl(false, "YES0", "SFW", "DEFAULT", "YCTEST", false));
-        setExpectations(ctx2, new NodeImpl(false, "YES1", "API", "DEFAULT", "YCTEST", true));
-        setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "YCTEST", true));
+        setExpectations(ctx1, new NodeImpl(false, "YES0", "SFW", "DEFAULT", "YCTEST", "0.0.0", "ABC", false));
+        setExpectations(ctx2, new NodeImpl(false, "YES1", "API", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
+        setExpectations(ctx3, new NodeImpl(false, "JAM", "ADM", "DEFAULT", "YCTEST", "0.0.0", "ABC", true));
 
         ns1.setServletContext(ctx1);
         Thread.sleep(200L);
@@ -161,6 +161,12 @@ public class JGroupsNodeServiceImplTest {
             one(ctxe).hasMoreElements(); will(returnValue(true));
             one(ctxe).nextElement(); will(returnValue(NodeService.CLUSTER_ID));
             one(ctx).getInitParameter(NodeService.CLUSTER_ID); will(returnValue(node.getClusterId()));
+            one(ctxe).hasMoreElements(); will(returnValue(true));
+            one(ctxe).nextElement(); will(returnValue(NodeService.VERSION));
+            one(ctx).getInitParameter(NodeService.VERSION); will(returnValue(node.getVersion()));
+            one(ctxe).hasMoreElements(); will(returnValue(true));
+            one(ctxe).nextElement(); will(returnValue(NodeService.BUILD_NO));
+            one(ctx).getInitParameter(NodeService.BUILD_NO); will(returnValue(node.getBuildNo()));
             one(ctxe).hasMoreElements(); will(returnValue(true));
             one(ctxe).nextElement(); will(returnValue(NodeService.LUCENE_INDEX_DISABLED));
             one(ctx).getInitParameter(NodeService.LUCENE_INDEX_DISABLED); will(returnValue(String.valueOf(node.isFtIndexDisabled())));

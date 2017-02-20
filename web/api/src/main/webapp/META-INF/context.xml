@@ -64,6 +64,8 @@
     <Parameter name="NODE_TYPE" value="API" override="false"/>
     <Parameter name="NODE_CONFIG" value="${cluster.config.api.node_config}" override="false"/>
     <Parameter name="CLUSTER_ID" value="${cluster.config.cluster_id}" override="false"/>
+    <Parameter name="VERSION" value="${project.version}" override="false"/>
+    <Parameter name="BUILD_NO" value="${buildNumber}" override="false"/>
     <Parameter name="LUCENE_INDEX_DISABLED" value="${cluster.config.api.lucene_index_disabled}" override="false"/>
     <Parameter name="CHANNEL_URI" value="${cluster.config.api.ws.channel_uri}" override="false"/>
 

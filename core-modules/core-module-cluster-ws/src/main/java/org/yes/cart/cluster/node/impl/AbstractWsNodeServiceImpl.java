@@ -45,7 +45,7 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
     protected Logger LOG;
 
     private final Map<String, String> configuration = new HashMap<String, String>();
-    private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", true);
+    private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
     private final List<Node> cluster = new CopyOnWriteArrayList<Node>();
 
     protected Map<String, List<MessageListener>> listeners = new HashMap<String, List<MessageListener>>();
@@ -265,6 +265,8 @@ public abstract class AbstractWsNodeServiceImpl implements NodeService, ServletC
                 configuration.get(NODE_TYPE),
                 configuration.get(NODE_CONFIG),
                 configuration.get(CLUSTER_ID),
+                configuration.get(VERSION),
+                configuration.get(BUILD_NO),
                 Boolean.valueOf(luceneDisabledValue)
         );
         node.setChannel(configuration.get(CHANNEL_URI));

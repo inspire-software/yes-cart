@@ -34,6 +34,10 @@ public interface NodeService {
     String NODE_TYPE = "NODE_TYPE";
     /** Node config context parameter (DEFAULT, STAGING or PRODUCTION) */
     String NODE_CONFIG = "NODE_CONFIG";
+    /** Version number */
+    String VERSION = "VERSION";
+    /** Build number */
+    String BUILD_NO = "BUILD_NO";
     /** Cluster ID context parameter */
     String CLUSTER_ID = "CLUSTER_ID";
     /** Lucene index disabled (use to suppress indexing jobs if yes-shop and yes-api on the same Servlet container) */

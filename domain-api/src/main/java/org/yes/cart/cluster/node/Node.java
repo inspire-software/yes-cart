@@ -70,4 +70,25 @@ public interface Node extends Serializable {
      */
     String getChannel();
 
+    /**
+     * Application node version.
+     *
+     * @return version
+     */
+    String getVersion();
+
+    /**
+     * Application node build number.
+     *
+     * @return build number
+     */
+    String getBuildNo();
+
+    /**
+     * Get full version number.
+     *
+     * @return full version number
+     */
+    String getFullVersion();
+
 }

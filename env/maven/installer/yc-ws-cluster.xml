@@ -21,6 +21,8 @@
         <node-id>${cluster.config.yes.node_id}</node-id>
         <node-type>SFW</node-type>
         <node-config>${cluster.config.yes.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>${cluster.config.yes.lucene_index_disabled}</lucene-index-disabled>
         <channel>${cluster.config.yes.ws.channel_uri}</channel>
     </node>
@@ -29,6 +31,8 @@
         <node-id>${cluster.config.api.node_id}</node-id>
         <node-type>API</node-type>
         <node-config>${cluster.config.api.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>${cluster.config.api.lucene_index_disabled}</lucene-index-disabled>
         <channel>${cluster.config.api.ws.channel_uri}</channel>
     </node>
@@ -37,6 +41,8 @@
         <node-id>${cluster.config.admin.node_id}</node-id>
         <node-type>ADM</node-type>
         <node-config>${cluster.config.admin.node_config}</node-config>
+        <version>${project.version}</version>
+        <build-number>${buildNumber}</build-number>
         <lucene-index-disabled>true</lucene-index-disabled>
     </node>
 </nodes>

@@ -58,6 +58,9 @@ export interface ClusterNodeVO {
   nodeType : string;
   nodeConfig : string;
   clusterId : string;
+  version : string;
+  buildNo : string;
+  fullVersion : string;
   ftIndexDisabled : boolean;
 
   channel : string;

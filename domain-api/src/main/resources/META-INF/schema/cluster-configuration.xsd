@@ -40,6 +40,8 @@
                         <xs:element name="node-id" type="xs:string"/>
                         <xs:element name="node-type" type="NodeTypeType"/>
                         <xs:element name="node-config" type="NodeConfigType"/>
+                        <xs:element name="version" type="xs:string" minOccurs="0"/>
+                        <xs:element name="build-number" type="xs:string" minOccurs="0"/>
                         <xs:element name="lucene-index-disabled" type="xs:boolean"/>
                         <xs:element name="channel" type="xs:string" minOccurs="0"/>
                     </xs:sequence>

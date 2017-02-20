@@ -21,6 +21,8 @@
         <node-id>YES1</node-id>
         <node-type>API</node-type>
         <node-config>DEFAULT</node-config>
+        <version>0.0.0</version>
+        <build-number>TEST</build-number>
         <lucene-index-disabled>false</lucene-index-disabled>
     </node>
 </nodes>

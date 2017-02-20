@@ -50,7 +50,7 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
     private Logger LOG;
 
     private final Map<String, String> configuration = new HashMap<String, String>();
-    private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", true);
+    private Node node = new NodeImpl(true, "-", null, "DEFAULT", "YCCLUSTER", "N/A", "", true);
     private final List<Node> cluster = new CopyOnWriteArrayList<Node>();
     private final Map<Address, String> clusterAddresses = new HashMap<Address, String>();
 
@@ -420,6 +420,8 @@ public class JGroupsNodeServiceImpl implements NodeService, ServletContextAware,
                 configuration.get(NODE_TYPE),
                 configuration.get(NODE_CONFIG),
                 configuration.get(CLUSTER_ID),
+                configuration.get(VERSION),
+                configuration.get(BUILD_NO),
                 Boolean.valueOf(luceneDisabledValue)
         );
         this.cluster.add(node);

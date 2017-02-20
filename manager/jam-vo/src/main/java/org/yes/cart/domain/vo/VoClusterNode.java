@@ -41,6 +41,12 @@ public class VoClusterNode {
     @DtoField(readOnly = true)
     private String clusterId;
     @DtoField(readOnly = true)
+    private String version;
+    @DtoField(readOnly = true)
+    private String buildNo;
+    @DtoField(readOnly = true)
+    private String fullVersion;
+    @DtoField(readOnly = true)
     private boolean ftIndexDisabled;
 
     @DtoField(readOnly = true)
@@ -100,6 +106,30 @@ public class VoClusterNode {
 
     public void setClusterId(final String clusterId) {
         this.clusterId = clusterId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(final String version) {
+        this.version = version;
+    }
+
+    public String getBuildNo() {
+        return buildNo;
+    }
+
+    public void setBuildNo(final String buildNo) {
+        this.buildNo = buildNo;
+    }
+
+    public String getFullVersion() {
+        return fullVersion;
+    }
+
+    public void setFullVersion(final String fullVersion) {
+        this.fullVersion = fullVersion;
     }
 
     public boolean isFtIndexDisabled() {

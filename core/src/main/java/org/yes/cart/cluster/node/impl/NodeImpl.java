@@ -32,6 +32,8 @@ public class NodeImpl implements Node {
     private String nodeId;
     private String nodeType;
     private String nodeConfig;
+    private String version;
+    private String buildNo;
     private String clusterId;
     private boolean ftIndexDisabled;
 
@@ -42,7 +44,7 @@ public class NodeImpl implements Node {
 
     public NodeImpl(final boolean current,
                     final Node node) {
-        this(current, node.getNodeId(), node.getNodeType(), node.getNodeConfig(), node.getClusterId(), node.isFtIndexDisabled());
+        this(current, node.getNodeId(), node.getNodeType(), node.getNodeConfig(), node.getClusterId(), node.getVersion(), node.getBuildNo(), node.isFtIndexDisabled());
         setChannel(node.getChannel());
     }
 
@@ -53,6 +55,8 @@ public class NodeImpl implements Node {
                     final String nodeType,
                     final String nodeConfig,
                     final String clusterId,
+                    final String version,
+                    final String buildNo,
                     final boolean ftIndexDisabled) {
         this.id = fullNodeId(nodeId, clusterId);
         this.current = current;
@@ -63,6 +67,8 @@ public class NodeImpl implements Node {
         this.clusterId = clusterId;
         this.ftIndexDisabled = ftIndexDisabled;
         this.channel = "";
+        this.version = version;
+        this.buildNo = buildNo;
     }
 
     private String fullNodeId(final String nodeId, final String clusterId) {
@@ -200,6 +206,46 @@ public class NodeImpl implements Node {
         this.channel = channel;
     }
 
+    /**
+     * Get version.
+     *
+     * @return version
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * Set version.
+     *
+     * @param version version
+     */
+    public void setVersion(final String version) {
+        this.version = version;
+    }
+
+    /**
+     * Get build number.
+     *
+     * @return build number
+     */
+    public String getBuildNo() {
+        return buildNo;
+    }
+
+    /**
+     * Set build number.
+     *
+     * @param buildNo build number
+     */
+    public void setBuildNo(final String buildNo) {
+        this.buildNo = buildNo;
+    }
+
+    /** {@inheritDoc} */
+    public String getFullVersion() {
+        return (version != null ? version : "N/A") + (buildNo != null && buildNo.length() > 0 ?  "-rev." + buildNo : "");
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -216,6 +262,8 @@ public class NodeImpl implements Node {
         if (nodeConfig != null ? !nodeConfig.equals(node.nodeConfig) : node.nodeConfig != null) return false;
         if (nodeId != null ? !nodeId.equals(node.nodeId) : node.nodeId != null) return false;
         if (nodeType != null ? !nodeType.equals(node.nodeType) : node.nodeType != null) return false;
+        if (version != null ? !version.equals(node.version) : node.version != null) return false;
+        if (buildNo != null ? !buildNo.equals(node.buildNo) : node.buildNo != null) return false;
 
         return true;
     }
@@ -229,6 +277,8 @@ public class NodeImpl implements Node {
         result = 31 * result + (nodeType != null ? nodeType.hashCode() : 0);
         result = 31 * result + (nodeConfig != null ? nodeConfig.hashCode() : 0);
         result = 31 * result + (clusterId != null ? clusterId.hashCode() : 0);
+        result = 31 * result + (version != null ? version.hashCode() : 0);
+        result = 31 * result + (buildNo != null ? buildNo.hashCode() : 0);
         result = 31 * result + (ftIndexDisabled ? 1 : 0);
         return result;
     }
@@ -243,6 +293,7 @@ public class NodeImpl implements Node {
                 ", nodeType='" + nodeType + '\'' +
                 ", nodeConfig='" + nodeConfig + '\'' +
                 ", clusterId='" + clusterId + '\'' +
+                ", version='" + version + "-rev." + buildNo + '\'' +
                 ", luceneIndexDisabled=" + ftIndexDisabled +
                 '}';
     }
