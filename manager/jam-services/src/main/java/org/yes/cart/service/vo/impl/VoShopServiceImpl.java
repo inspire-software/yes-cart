@@ -883,12 +883,15 @@ public class VoShopServiceImpl implements VoShopService {
      * {@inheritDoc}
      */
     public VoShop updateDisabledFlag(final long shopId, final boolean disabled) throws Exception {
-        final ShopDTO dto = dtoShopService.updateDisabledFlag(shopId, disabled);
-        if (dto != null) {
-            return getById(shopId);
-        } else {
-            throw new AccessDeniedException("Access is denied");
+        final ShopDTO shop = dtoShopService.getById(shopId);
+        if (shop.getMasterId() == null && federationFacade.isCurrentUserSystemAdmin() ||
+                shop.getMasterId() != null && federationFacade.isShopAccessibleByCurrentManager(shop.getMasterId())) {
+            final ShopDTO dto = dtoShopService.updateDisabledFlag(shopId, disabled);
+            if (dto != null) {
+                return getById(shopId);
+            }
         }
+        throw new AccessDeniedException("Access is denied");
     }
 
 

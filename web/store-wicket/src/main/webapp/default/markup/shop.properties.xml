@@ -244,7 +244,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Password is not valid</entry>
     <entry key="customerNotExists">Email is not registered. Please register.</entry>
-    <entry key="customerNotActiveInShop">E-mail is not active for this shop. To activate please enter login and password again and click "Sign In".</entry>
+    <entry key="customerNotActiveInShop">Account is not active for this shop.</entry>
     <entry key="existingUser">Registered customer</entry>
     <entry key="restorePassword">Restore password</entry>
     <entry key="tryRestorePassword">Forgot password?</entry>

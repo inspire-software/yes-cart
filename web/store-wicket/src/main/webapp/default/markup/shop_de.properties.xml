@@ -244,7 +244,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Falsches Passwort</entry>
     <entry key="customerNotExists">Kein Konto vorhanden. Bitte registrieren Sie sich zuerst.</entry>
-    <entry key="customerNotActiveInShop">Ihre E-Mail Adresse ist im Shop noch nicht aktiviert. Zum Aktivieren loggen Sie sich bitte nochmals mit Ihren Logindaten ein und klicken auf "Anmelden".</entry>
+    <entry key="customerNotActiveInShop">Konto ist nicht aktiviert.</entry>
     <entry key="existingUser">Registrierter Kunde</entry>
     <entry key="restorePassword">Passwort zurücksetzen</entry>
     <entry key="tryRestorePassword">Passwort vergessen?</entry>

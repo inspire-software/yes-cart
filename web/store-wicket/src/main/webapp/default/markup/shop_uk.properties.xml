@@ -244,7 +244,7 @@
     <!-- LoginPanel -->
     <entry key="wrongPassword">Невірний пароль</entry>
     <entry key="customerNotExists">E-mail не зареєстрований. Пройдіть процедуру реєстрації.</entry>
-    <entry key="customerNotActiveInShop">E-mail не активований для цього магазину. Для активації введіть логін і пароль ще раз і натісніть "Вхід".</entry>
+    <entry key="customerNotActiveInShop">E-mail не активований.</entry>
     <entry key="existingUser">Зареєстрований покупець</entry>
     <entry key="restorePassword">Відновити пароль</entry>
     <entry key="tryRestorePassword">Забули пароль?</entry>
