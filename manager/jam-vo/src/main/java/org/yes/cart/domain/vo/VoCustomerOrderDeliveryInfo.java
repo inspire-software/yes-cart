@@ -108,6 +108,8 @@ public class VoCustomerOrderDeliveryInfo {
     @DtoField(value = "taxExclusiveOfPrice", readOnly = true)
     private boolean taxExclusiveOfPrice;
 
+    @DtoField(value = "eligibleForExport", readOnly = true)
+    private String eligibleForExport;
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
@@ -356,6 +358,14 @@ public class VoCustomerOrderDeliveryInfo {
 
     public void setTaxExclusiveOfPrice(final boolean taxExclusiveOfPrice) {
         this.taxExclusiveOfPrice = taxExclusiveOfPrice;
+    }
+
+    public String getEligibleForExport() {
+        return eligibleForExport;
+    }
+
+    public void setEligibleForExport(final String eligibleForExport) {
+        this.eligibleForExport = eligibleForExport;
     }
 
     public boolean isBlockExport() {

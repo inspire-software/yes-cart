@@ -59,6 +59,7 @@ export interface CustomerOrderInfoVO {
 
   orderIp : string;
 
+  eligibleForExport : string;
   blockExport : boolean;
   lastExportDate : Date;
   lastExportStatus : string;
@@ -150,6 +151,7 @@ export interface CustomerOrderDeliveryInfoVO {
   deliveryGuaranteed : Date;
   deliveryConfirmed : Date;
 
+  eligibleForExport : string;
   blockExport : boolean;
   lastExportDate : Date;
   lastExportStatus : string;

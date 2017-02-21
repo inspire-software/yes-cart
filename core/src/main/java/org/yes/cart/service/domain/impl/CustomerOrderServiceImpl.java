@@ -88,6 +88,13 @@ public class CustomerOrderServiceImpl extends BaseGenericServiceImpl<CustomerOrd
     /**
      * {@inheritDoc}
      */
+    public List<Long> findEligibleForExportOrderIds() {
+        return (List) customerOrderDeliveryDao.findQueryObjectByNamedQuery("ORDERS.IDS.BY.ELIGIBLE.FOR.EXPORT", Boolean.FALSE);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<Long> findAwaitingDeliveriesIds(final List<String> skuCodes, final String deliveryStatus, final List<String> orderStatus) {
 
         final List<Long> waitingDeliveries;

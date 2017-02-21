@@ -99,6 +99,13 @@ public interface CustomerOrderService extends GenericService<CustomerOrder> {
     CustomerOrderDelivery findDelivery(long deliveryId);
 
     /**
+     * Find order ids with eligible for export flag set to true.
+     *
+     * @return order ids with eligible for export flag
+     */
+    List<Long> findEligibleForExportOrderIds();
+
+    /**
      * Find orders, which are waiting for inventory to be completed.
      *
      * @param skuCodes       what sku is required. optional

@@ -118,6 +118,11 @@ public class StandardMessageListener implements Runnable {
     public static final String DELIVERY = "delivery";
 
     /**
+     * Delivery name. {@link org.yes.cart.domain.entity.CustomerOrderDelivery} id this is a delivery notification.
+     */
+    public static final String SUP_DELIVERIES = "supplierDeliveries";
+
+    /**
      * Carrier name. Localised carrier name.
      */
     public static final String DELIVERY_CARRIER = "deliveryCarrierName";

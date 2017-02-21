@@ -612,3 +612,24 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
   VALUES (  11214,  'JOB_DELINFOUPDT_PAUSE', 'JOB_DELIVERY_INFO_UPDATE_PAUSE',  0,  NULL,  'Job\\Order Delivery Information Update Processing: pause',
     'Pause order delivery information update processing job',  1008, 1000, 0, 0, 0, 0);
 
+--
+-- YC-772 Integrate order auto export listener into order state machine
+--
+
+alter table TCUSTOMERORDER add column ELIGIBLE_FOR_EXPORT varchar(20);
+create index CUSTOMERORDER_ELIGEXP on TCUSTOMERORDER (ELIGIBLE_FOR_EXPORT);
+
+alter table TCUSTOMERORDERDELIVERY add column ELIGIBLE_FOR_EXPORT varchar(20);
+create index CUSTOMERORDERDELIVERY_ELIGEXP on TCUSTOMERORDERDELIVERY (ELIGIBLE_FOR_EXPORT);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  11215,  'JOB_ORDERAUTOEXP_PAUSE', 'JOB_ORDER_AUTO_EXPORT_PAUSE',  0,  NULL,  'Job\\Order Auto Export Processing: pause',
+    'Pause order auto export processing job',  1008, 1000, 0, 0, 0, 0);
+
+INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPTION, ETYPE_ID, ATTRIBUTEGROUP_ID, STORE, SEARCH, SEARCHPRIMARY, NAV)
+  VALUES (  8009,  'ORDER_EXP_MAIL_SUP', 'ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS',  0,  NULL,  'Export Orders\\Auto mail notification',
+    'Property mapping for supplier codes and corresponding emails (CSV). This is email notification export to suppliers upon successful/authorised payment of the order.
+E.g. MAIN.INITPAID=sales@warehouse.com,admin@warehouse.com
+SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
+
+

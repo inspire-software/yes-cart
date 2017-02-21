@@ -21,7 +21,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- ########################################## bulk import ########################## -->
+    <!-- ########################################## bulk export ########################## -->
 
     <import resource="core-federation-impex.xml"/>
     <import resource="classpath:core-export.xml"/>
@@ -101,6 +101,31 @@
         <lookup-method name="getNewBulkPaymentExportService" bean="csvBulkPaymentExportService"/>
         <lookup-method name="getNewBulkExportImagesService" bean="imagesBulkExportService"/>
 
+    </bean>
+
+
+    <!-- ########################################## order export ########################## -->
+
+    <bean id="emailNotificationOrderExporter" class="org.yes.cart.orderexport.mail.EmailNotificationOrderExporterImpl">
+        <constructor-arg ref="aspectExecutor"/>
+        <constructor-arg index="1" type="org.yes.cart.service.theme.ThemeService" ref="themeService"/>
+        <constructor-arg index="2" type="org.yes.cart.service.domain.MailService" ref="mailService"/>
+        <constructor-arg index="3" type="org.yes.cart.service.mail.MailComposer" ref="mailComposer"/>
+        <constructor-arg index="4" type="org.yes.cart.service.domain.CustomerService" ref="customerService"/>
+        <constructor-arg index="5" type="org.yes.cart.service.domain.ShopService" ref="shopService"/>
+        <constructor-arg index="6" type="org.yes.cart.service.domain.ProductSkuService" ref="productSkuService"/>
+        <constructor-arg index="7">
+            <map>
+                <!--
+                    There are 3 mappings: in progress is normal flow, partially shipped and completed are for orders
+                    containing electronic delivery
+                 -->
+                <entry key="os.in.progress"         value="sup-order-new"/>
+                <entry key="os.partially.shipped"   value="sup-order-new"/>
+                <entry key="os.completed"           value="sup-order-new"/>
+            </map>
+        </constructor-arg>
+        <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
     </bean>
 
 

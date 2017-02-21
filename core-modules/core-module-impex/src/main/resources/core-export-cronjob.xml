@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2009 Denys Pavlov, Igor Azarnyi
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:core-cronjob.xml"/>
+    <import resource="classpath:core-services.xml"/>
+
+    <!-- ################################ AutoExport notifications  ################################# -->
+
+    <bean id="orderAutoExportProcessorInternal" parent="txJobProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.orderexport.impl.OrderAutoExportProcessorImpl">
+                <constructor-arg index="0" ref="customerOrderService"/>
+                <lookup-method name="getSelfProxy" bean="orderAutoExportProcessorInternal"/>
+            </bean>
+        </property>
+        <property name="transactionAttributes">
+            <props>
+                <!-- All job beans are Runnable, and they must run in isolation  -->
+                <prop key="run">PROPAGATION_NOT_SUPPORTED</prop>
+                <prop key="processSingleOrder">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="markFailedOrder">PROPAGATION_REQUIRES_NEW,-Throwable</prop>
+                <prop key="*">PROPAGATION_NOT_SUPPORTED</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="orderAutoExportProcessor" class="org.yes.cart.bulkjob.cron.PausableProcessorWrapperImpl">
+        <property name="processor" ref="orderAutoExportProcessorInternal"/>
+        <property name="systemService" ref="systemService"/>
+        <property name="pausePreferenceKey" value="JOB_ORDER_AUTO_EXPORT_PAUSE"/>
+        <property name="pausePreferenceDefault" value="true"/>
+    </bean>
+
+</beans>
+

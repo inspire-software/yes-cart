@@ -115,6 +115,8 @@ public class VoCustomerOrderInfo {
     @DtoField(value = "appliedPromo", converter = "CSVToList", readOnly = true)
     private List<String> appliedPromo;
 
+    @DtoField(value = "eligibleForExport", readOnly = true)
+    private String eligibleForExport;
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
@@ -385,6 +387,14 @@ public class VoCustomerOrderInfo {
 
     public void setAppliedPromo(final List<String> appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+    public String getEligibleForExport() {
+        return eligibleForExport;
+    }
+
+    public void setEligibleForExport(final String eligibleForExport) {
+        this.eligibleForExport = eligibleForExport;
     }
 
     public boolean isBlockExport() {

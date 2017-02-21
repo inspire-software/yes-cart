@@ -1,0 +1,81 @@
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td colspan="2" align="left">Order information:</td>
+    </tr>
+    <%
+    def totalSum = 0;
+    for (Object delivery : supplierDeliveries) {
+    def deliverySum = 0;
+    %>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td>Delivery</td>
+        <td align="right"><b>$delivery.deliveryNum</b></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <table width="100%" style="border-collapse: collapse;" cellpadding="3" cellspacing="0">
+                <tr bgcolor="#DBEAF9">
+                    <td width="20%" style="border: 1px solid #E0E0E0;">Code</td>
+                    <td width="40%" style="border: 1px solid #E0E0E0;">Name</td>
+                    <td width="10%" style="border: 1px solid #E0E0E0;text-align: right;">Quantity</td>
+                    <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Price (<%=root.currency%>)</td>
+                    <td width="15%" style="border: 1px solid #E0E0E0;text-align: right;">Sum (<%=root.currency%>)</td>
+                </tr>
+                <%
+                for(Object deliveryItem : delivery.getDetail()) {
+                def lineTotal = (deliveryItem.price * deliveryItem.qty).setScale(2, BigDecimal.ROUND_HALF_UP);
+                deliverySum += lineTotal;
+                %>
+                <tr>
+                    <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                        <%=deliveryItem.productSkuCode %>
+                    </td>
+                    <td style="border: 1px solid #E0E0E0;text-align:left;vertical-align:top;">
+                        <%=deliveryItem.productName %>
+                    </td>
+                    <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                        <%=deliveryItem.qty.setScale(0, BigDecimal.ROUND_HALF_UP) %>
+                    </td>
+                    <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                        <%=deliveryItem.price.setScale(2,BigDecimal.ROUND_HALF_UP)%>
+                    </td>
+                    <td style="border: 1px solid #E0E0E0;text-align:right;vertical-align:top;">
+                        <%=lineTotal%>
+                    </td>
+                </tr>
+                <%
+                }
+                %>
+                <tr>
+                    <td colspan="3" style="border: 1px solid #E0E0E0;">Delivery sub total (<%=root.currency%>)</td>
+                    <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=deliverySum%></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border: 1px solid #E0E0E0;">Shipping cost (<%=root.currency%>) ${deliveryCarrierSlaName[delivery.deliveryNum]}</td>
+                    <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=delivery.price%></td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border: 1px solid #E0E0E0;">Delivery total (<%=root.currency%>)</td>
+                    <td colspan="2" style="border: 1px solid #E0E0E0;text-align: right"><%=(delivery.price + deliverySum).setScale(2, BigDecimal.ROUND_HALF_UP)%></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <%
+    totalSum += (delivery.price + deliverySum);
+    }
+    %>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <tr>
+        <td><b>Order total (<%=root.currency%>)</b></td>
+        <td align="right"><b><%=totalSum.setScale(2, BigDecimal.ROUND_HALF_UP)%></b></td>
+    </tr>
+</table>

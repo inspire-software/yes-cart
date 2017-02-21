@@ -337,6 +337,20 @@ public interface CustomerOrder extends Auditable {
     void setOrderStatus(String orderStatus);
 
     /**
+     * Flag for export management control.
+     *
+     * @return type of order export applicable for this order
+     */
+    String getEligibleForExport();
+
+    /**
+     * Flag for export management control.
+     *
+     * @param eligibleForExport type of order export applicable for this order
+     */
+    void setEligibleForExport(String eligibleForExport);
+
+    /**
      * Flag for better export management control (e.g. hold off export until fraud check is performed).
      *
      * @return true if export is blocked

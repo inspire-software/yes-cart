@@ -25,6 +25,7 @@
 
     <import resource="classpath:core-services.xml"/>
     <import resource="classpath:core-federation-impex.xml"/>
+    <import resource="core-export-cronjob.xml"/>
 
     <bean id="exportDescriptorXStreamProvider" class="org.yes.cart.bulkexport.stream.xml.CsvExportDescriptorXStreamProvider"/>
 

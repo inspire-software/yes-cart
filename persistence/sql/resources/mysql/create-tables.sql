@@ -307,6 +307,7 @@
         APPLIED_PROMO varchar(255),
         MESSAGE varchar(255) comment 'Free text information per each order. Can be whatever',
         ORDERSTATUS varchar(64) not null,
+        ELIGIBLE_FOR_EXPORT varchar(20),
         EXPORT_BLOCK bit not null default 0,
         EXPORT_LAST_DATE datetime,
         EXPORT_LAST_STATUS varchar(255),
@@ -358,6 +359,7 @@
         DELIVERY_EST_MAX datetime,
         DELIVERY_GUARANTEED datetime,
         DELIVERY_CONFIRMED datetime,
+        ELIGIBLE_FOR_EXPORT varchar(20),
         EXPORT_BLOCK bit not null default 0,
         EXPORT_LAST_DATE datetime,
         EXPORT_LAST_STATUS varchar(255),
@@ -1302,6 +1304,8 @@
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
     create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
+    create index CUSTOMERORDER_ELIGEXP on TCUSTOMERORDER (ELIGIBLE_FOR_EXPORT);
+
 
     alter table TCUSTOMERORDER
         add index FK_ORDER_BILLADDR (BILL_ADDRESS_ID),
@@ -1315,6 +1319,7 @@
         foreign key (SHIP_ADDRESS_ID)
         references TADDRESS (ADDRESS_ID);
 
+    create index CUSTOMERORDERDELIVERY_ELIGEXP on TCUSTOMERORDERDELIVERY (ELIGIBLE_FOR_EXPORT);
 
     alter table TCUSTOMERORDERDELIVERY
         add index FK_OD_ORD (CUSTOMERORDER_ID),

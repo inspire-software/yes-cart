@@ -128,6 +128,8 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     )
     private Collection<CustomerOrderDeliveryDetailDTO> detail;
 
+    @DtoField(value = "eligibleForExport", readOnly = true)
+    private String eligibleForExport;
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
@@ -316,6 +318,16 @@ public class CustomerOrderDeliveryDTOImpl implements CustomerOrderDeliveryDTO {
     /** {@inheritDoc} */
     public void setDeliveryStatus(final String deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    /** {@inheritDoc} */
+    public String getEligibleForExport() {
+        return eligibleForExport;
+    }
+
+    /** {@inheritDoc} */
+    public void setEligibleForExport(final String eligibleForExport) {
+        this.eligibleForExport = eligibleForExport;
     }
 
     /** {@inheritDoc} */

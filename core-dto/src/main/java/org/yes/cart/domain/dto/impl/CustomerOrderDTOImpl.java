@@ -113,6 +113,8 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     @DtoField(value = "appliedPromo", readOnly = true)
     private String appliedPromo;
 
+    @DtoField(value = "eligibleForExport", readOnly = true)
+    private String eligibleForExport;
     @DtoField(value = "blockExport", readOnly = true)
     private boolean blockExport;
     @DtoField(value = "lastExportDate", readOnly = true)
@@ -493,6 +495,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setSalutation(final String salutation) {
         this.salutation = salutation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getEligibleForExport() {
+        return eligibleForExport;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEligibleForExport(final String eligibleForExport) {
+        this.eligibleForExport = eligibleForExport;
     }
 
     /**

@@ -315,6 +315,7 @@
         APPLIED_PROMO varchar(255),
         MESSAGE varchar(255),
         ORDERSTATUS varchar(64) not null,
+        ELIGIBLE_FOR_EXPORT varchar(20),
         EXPORT_BLOCK smallint not null default 0,
         EXPORT_LAST_DATE timestamp,
         EXPORT_LAST_STATUS varchar(255),
@@ -367,6 +368,7 @@
         DELIVERY_EST_MAX timestamp,
         DELIVERY_GUARANTEED timestamp,
         DELIVERY_CONFIRMED timestamp,
+        ELIGIBLE_FOR_EXPORT varchar(20),
         EXPORT_BLOCK smallint not null default 0,
         EXPORT_LAST_DATE timestamp,
         EXPORT_LAST_STATUS varchar(255),
@@ -1317,6 +1319,7 @@
     create index CUSTOMERORDER_NUM on TCUSTOMERORDER (ORDERNUM);
     create index CUSTOMERORDER_CART on TCUSTOMERORDER (CART_GUID);
     create index CUSTOMERORDER_EMAIL on TCUSTOMERORDER (EMAIL);
+    create index CUSTOMERORDER_ELIGEXP on TCUSTOMERORDER (ELIGIBLE_FOR_EXPORT);
 
 
     alter table TCUSTOMERORDER
@@ -1330,6 +1333,7 @@
         foreign key (SHIP_ADDRESS_ID)
         references TADDRESS;
 
+    create index CUSTOMERORDERDELIVERY_ELIGEXP on TCUSTOMERORDERDELIVERY (ELIGIBLE_FOR_EXPORT);
 
     alter table TCUSTOMERORDERDELIVERY 
         add constraint FK_OD_ORD 

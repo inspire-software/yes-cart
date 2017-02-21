@@ -233,6 +233,13 @@
         </property>
     </bean>
 
+    <bean id="paymentConfirmedOrderAutoExportListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.PaymentConfirmedOrderAutoExportListenerImpl"/>
+        </property>
+    </bean>
+
+
 
     <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
         <constructor-arg index="0">
@@ -267,7 +274,13 @@
         </constructor-arg>
         <constructor-arg index="2">
             <map>
-                <entry key="evt.payment.confirmed"         value-ref="offlinePaymentDeliveryTimeEstimationListener"/>
+                <entry key="evt.pending"                   value-ref="paymentConfirmedOrderAutoExportListener"/>
+                <entry key="evt.payment.confirmed">
+                    <list>
+                        <ref bean="offlinePaymentDeliveryTimeEstimationListener"/>
+                        <ref bean="paymentConfirmedOrderAutoExportListener"/>
+                    </list>
+                </entry>
             </map>
         </constructor-arg>
     </bean>

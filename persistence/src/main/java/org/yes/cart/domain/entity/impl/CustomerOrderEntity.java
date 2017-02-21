@@ -59,6 +59,7 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     private String orderStatus;
 
+    private String eligibleForExport;
     private boolean blockExport;
     private Date lastExportDate;
     private String lastExportStatus;
@@ -188,6 +189,14 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getEligibleForExport() {
+        return eligibleForExport;
+    }
+
+    public void setEligibleForExport(final String eligibleForExport) {
+        this.eligibleForExport = eligibleForExport;
     }
 
     public boolean isBlockExport() {

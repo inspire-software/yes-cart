@@ -596,6 +596,11 @@ public interface AttributeNamesKeys {
          */
         String SHOP_SF_PAGE_TRACE = "SHOP_SF_PAGE_TRACE";
 
+        /**
+         * Supported suppliers map: code => email
+         */
+        String ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS = "ORDER_EXPORTER_MAIL_SUPPORTED_SUPPLIERS";
+
     }
 
     interface Brand {

@@ -1973,6 +1973,7 @@
 
         <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
 
+        <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDER_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
         <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
@@ -2147,6 +2148,7 @@
         <property name="deliveryGuaranteed" column="DELIVERY_GUARANTEED" type="timestamp"/>
         <property name="deliveryConfirmed" column="DELIVERY_CONFIRMED" type="timestamp"/>
 
+        <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDERDELIVERY_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
         <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
@@ -2824,6 +2826,11 @@
     <query name="ORDERS.BY.DELIVERY.IDS">
        select distinct d.customerOrder from CustomerOrderDeliveryEntity d
        where d.customerOrderDeliveryId in ?1
+    </query>
+
+    <query name="ORDERS.IDS.BY.ELIGIBLE.FOR.EXPORT">
+        select o.customerorderId from CustomerOrderEntity o
+        where o.eligibleForExport is not null and o.blockExport = ?1
     </query>
 
 

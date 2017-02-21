@@ -115,13 +115,14 @@ public abstract class BaseOrderStateAspect extends BaseNotificationAspect  {
 
 
     }
-        /**
-        * Create email and sent it.
-        *
-        * @param orderEvent       given order event
-        * @param emailTempateName optional email tempate name
-        * @param emailsAddresses  set of email addresses
-        */
+
+    /**
+     * Create email and sent it.
+     *
+     * @param orderEvent       given order event
+     * @param emailTempateName optional email tempate name
+     * @param emailsAddresses  set of email addresses
+     */
     protected void fillNotificationParameters(final OrderEvent orderEvent, final String emailTempateName, final String... emailsAddresses) {
 
         fillNotificationParameters( orderEvent, emailTempateName, null, emailsAddresses);
