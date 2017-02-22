@@ -27,6 +27,7 @@ import org.yes.cart.service.vo.VoPromotionService;
 import org.yes.cart.service.vo.VoTaxService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -121,8 +122,8 @@ public class PricingEndpointControllerImpl implements PricingEndpointController 
     }
 
     @Override
-    public @ResponseBody List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
-        return voPromotionService.getFilteredPromotion(shopCode, currency, filter, max);
+    public @ResponseBody List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") final String shopCode, @PathVariable("currency") final String currency, @RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
+        return voPromotionService.getFilteredPromotion(shopCode, currency, (String) filter.get("filter"), (List) filter.get("types"), (List) filter.get("actions"), max);
     }
 
     @Override

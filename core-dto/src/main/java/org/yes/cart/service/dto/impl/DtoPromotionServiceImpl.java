@@ -17,6 +17,7 @@
 package org.yes.cart.service.dto.impl;
 
 import com.inspiresoftware.lib.dto.geda.adapter.repository.AdaptersRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -191,6 +192,119 @@ public class DtoPromotionServiceImpl
 
         return dtos;
     }
+
+
+    @Override
+    public List<PromotionDTO> findBy(final String shopCode, final String currency, final String filter, final List<String> types, final List<String> actions, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<PromotionDTO> dtos = new ArrayList<>();
+
+
+        if (StringUtils.hasLength(shopCode) && StringUtils.hasLength(currency)) {
+            // only allow lists for shop+currency selection
+
+            final List<Criterion> criteria = new ArrayList<Criterion>();
+            criteria.add(Restrictions.eq("shopCode", shopCode));
+            criteria.add(Restrictions.eq("currency", currency));
+            if (StringUtils.hasLength(filter)) {
+
+                final Pair<Date, Date> dateSearch = ComplexSearchUtils.checkDateRangeSearch(filter);
+
+                if (dateSearch != null) {
+
+                    if (dateSearch.getFirst() != null) {
+
+                        criteria.add(Restrictions.le("enabledFrom", dateSearch.getFirst()));
+
+                    }
+
+                    if (dateSearch.getSecond() != null) {
+
+                        criteria.add(Restrictions.ge("enabledTo", dateSearch.getSecond()));
+
+                    }
+
+
+                } else {
+
+                    final Pair<String, String> enabled = ComplexSearchUtils.checkSpecialSearch(filter, ENABLED);
+
+                    boolean enabledOnly = enabled != null && "+".equals(enabled.getFirst());
+                    boolean disabledOnly = enabled != null && "-".equals(enabled.getFirst());
+
+                    if (enabledOnly) {
+                        final Date now = new Date();
+                        criteria.add(Restrictions.eq("enabled", Boolean.TRUE));
+                        criteria.add(Restrictions.or(
+                                Restrictions.isNull("enabledFrom"),
+                                Restrictions.le("enabledFrom", now)
+                        ));
+                        criteria.add(Restrictions.or(
+                                Restrictions.isNull("enabledTo"),
+                                Restrictions.gt("enabledTo", now)
+                        ));
+                    }
+                    if (disabledOnly) {
+                        final Date now = new Date();
+                        criteria.add(Restrictions.or(
+                                Restrictions.eq("enabled", Boolean.FALSE),
+                                Restrictions.gt("enabledFrom", now),
+                                Restrictions.lt("enabledTo", now)
+                        ));
+                    }
+
+                    if (enabled == null || !enabled.getFirst().equals(enabled.getSecond())) {
+
+                        final Pair<String, String> tagOrCodeOrConditionOrAction = ComplexSearchUtils.checkSpecialSearch(enabled != null ? enabled.getSecond() : filter, TAG_OR_CODE_OR_CONDITION_OR_ACTION);
+
+                        if (tagOrCodeOrConditionOrAction != null) {
+
+                            if ("#".equals(tagOrCodeOrConditionOrAction.getFirst())) {
+
+                                criteria.add(Restrictions.or(
+                                        Restrictions.ilike("code", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
+                                        Restrictions.ilike("tag", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
+                                ));
+
+                            } else if ("?".equals(tagOrCodeOrConditionOrAction.getFirst())) {
+
+                                criteria.add(Restrictions.or(
+                                        Restrictions.ilike("eligibilityCondition", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE),
+                                        Restrictions.ilike("promoActionContext", tagOrCodeOrConditionOrAction.getSecond(), MatchMode.ANYWHERE)
+                                ));
+
+                            }
+
+                        } else {
+
+                            criteria.add(Restrictions.or(
+                                    Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
+                                    Restrictions.ilike("description", filter, MatchMode.ANYWHERE)
+                            ));
+
+                        }
+                    }
+                }
+
+            }
+
+            if (CollectionUtils.isNotEmpty(types)) {
+                criteria.add(Restrictions.in("promoType", types));
+            }
+            if (CollectionUtils.isNotEmpty(actions)) {
+                criteria.add(Restrictions.in("promoAction", actions));
+            }
+
+            final List<Promotion> entities = getService().getGenericDao().findByCriteria(
+                    page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PROMO_ORDER);
+
+            fillDTOs(entities, dtos);
+        }
+
+        return dtos;
+    }
+
 
     @Override
     public List<PromotionDTO> findByCodes(final Set<String> codes) throws UnmappedInterfaceException, UnableToCreateInstanceException {

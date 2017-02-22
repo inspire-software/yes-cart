@@ -77,6 +77,23 @@ public class VoPromotionServiceImpl implements VoPromotionService {
     /**
      * {@inheritDoc}
      */
+    public List<VoPromotion> getFilteredPromotion(final String shopCode, final String currency, final String filter, final List<String> types, final List<String> actions, final int max) throws Exception {
+
+        final List<VoPromotion> list = new ArrayList<>();
+
+        if (federationFacade.isManageable(shopCode, ShopDTO.class)) {
+
+            final List<PromotionDTO> dtos = dtoPromotionService.findBy(shopCode, currency, filter, types, actions, 0, max);
+            return voAssemblySupport.assembleVos(VoPromotion.class, PromotionDTO.class, dtos);
+
+        }
+
+        return list;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public VoPromotion getPromotionById(final long id) throws Exception {
         final PromotionDTO dto = dtoPromotionService.getById(id);
         if (federationFacade.isManageable(dto.getShopCode(), ShopDTO.class)) {

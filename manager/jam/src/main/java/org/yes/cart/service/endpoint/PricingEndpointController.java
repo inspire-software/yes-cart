@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yes.cart.domain.vo.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -117,9 +118,9 @@ public interface PricingEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
-    @RequestMapping(value = "/promotion/shop/{shopCode}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/promotion/shop/{shopCode}/currency/{currency}/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoPromotion> getFilteredPromotion(@PathVariable("shopCode") String shopCode, @PathVariable("currency") String currency, @RequestBody Map<String, Object> filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/promotion/{id}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })

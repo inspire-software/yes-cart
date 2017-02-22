@@ -229,10 +229,10 @@ export class PricingService {
    * Get list of all promotions, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPromotions(shop:ShopVO, currency:string, filter:string, max:number) {
+  getFilteredPromotions(shop:ShopVO, currency:string, filter:string, types:string[], actions:string[], max:number) {
 
-    let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
+    let body = JSON.stringify({ filter: filter, types: types, actions: actions });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/promotion/shop/' + shop.code + '/currency/' + currency + '/filtered/' + max, body, options)

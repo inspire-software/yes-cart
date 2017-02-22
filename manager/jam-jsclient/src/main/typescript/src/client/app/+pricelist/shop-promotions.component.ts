@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { PricingService, Util } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { PromotionVO, ShopVO } from './../shared/model/index';
+import { PromotionVO, ShopVO, Pair } from './../shared/model/index';
 import { FormValidationEvent, Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -35,6 +35,20 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
 
   private static _selectedShop:ShopVO;
   private static _selectedCurrency:string;
+
+  private static _promoTypes:Pair<string, boolean>[] = [
+    { first: 'O', second: false },
+    { first: 'S', second: false },
+    { first: 'I', second: false },
+    { first: 'C', second: false },
+  ];
+
+  private static _promoActions:Pair<string, boolean>[] = [
+    { first: 'F', second: false },
+    { first: 'P', second: false },
+    { first: 'G', second: false },
+    { first: 'T', second: false },
+  ];
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -107,6 +121,24 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
       tag: null
     };
   }
+
+
+  get promoTypes():Pair<string, boolean>[] {
+    return ShopPromotionsComponent._promoTypes;
+  }
+
+  set promoTypes(value:Pair<string, boolean>[]) {
+    ShopPromotionsComponent._promoTypes = value;
+  }
+
+  get promoActions():Pair<string, boolean>[] {
+    return ShopPromotionsComponent._promoActions;
+  }
+
+  set promoActions(value:Pair<string, boolean>[]) {
+    ShopPromotionsComponent._promoActions = value;
+  }
+
 
   ngOnInit() {
     LogUtil.debug('ShopPromotionsComponent ngOnInit');
@@ -383,7 +415,22 @@ export class ShopPromotionsComponent implements OnInit, OnDestroy {
     if (this.selectedShop != null && this.selectedCurrency != null && !this.promotionFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, max).subscribe( allpromotions => {
+
+      let types:string[] = [];
+      ShopPromotionsComponent._promoTypes.forEach((_type:Pair<string, boolean>) => {
+        if (_type.second) {
+          types.push(_type.first);
+        }
+      });
+
+      let actions:string[] = [];
+      ShopPromotionsComponent._promoActions.forEach((_action:Pair<string, boolean>) => {
+        if (_action.second) {
+          actions.push(_action.first);
+        }
+      });
+
+      var _sub:any = this._promotionService.getFilteredPromotions(this.selectedShop, this.selectedCurrency, this.promotionFilter, types, actions, max).subscribe( allpromotions => {
         LogUtil.debug('ShopPromotionsComponent getFilteredPromotions', allpromotions);
         this.promotions = allpromotions;
         this.selectedPromotion = null;
