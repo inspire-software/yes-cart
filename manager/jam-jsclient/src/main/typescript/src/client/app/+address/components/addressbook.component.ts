@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { CustomerService, I18nEventBus, Util } from './../../shared/services/index';
 import { YcValidators } from './../../shared/validation/validators';
 import { ShopVO, CustomerInfoVO, AddressBookVO, AddressVO, AttrValueVO, Pair } from './../../shared/model/index';
@@ -134,15 +134,92 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     this.validForSave = this.addressForm.valid;
   }
 
+  formConfigureValidator(formField:AddressFormField, defaultValidator:ValidatorFn):ValidatorFn {
+    if (formField != null) {
+      if (formField.regex) {
+        if (formField.mandatory) {
+          return Validators.compose([Validators.required, Validators.pattern(formField.regex)]);
+        }
+        return Validators.pattern(formField.regex);
+      } else if (defaultValidator != null) {
+        if (formField.mandatory) {
+          return Validators.compose([Validators.required, defaultValidator]);
+        }
+        return defaultValidator;
+      } else if (formField.mandatory) {
+        return Validators.required;
+      }
+    }
+    return defaultValidator;
+  }
+
+  formConfigure(addressType:string):void {
+    if (addressType != null && this.addressFormConfig[addressType] != null) {
+
+      let cfg:any = this.addressFormConfig[addressType];
+
+      this.addressForm.controls['postcode'].validator = this.formConfigureValidator(cfg['postcode'], YcValidators.nonBlankTrimmed);
+      this.addressForm.controls['addrline2'].validator = this.formConfigureValidator(cfg['addrline2'], YcValidators.nonBlankTrimmed);
+
+      this.addressForm.controls['middlename'].validator = this.formConfigureValidator(cfg['middlename'], YcValidators.nonBlankTrimmed);
+
+      this.addressForm.controls['phone1'].validator = this.formConfigureValidator(cfg['phone1'], YcValidators.validPhone);
+      this.addressForm.controls['phone2'].validator = this.formConfigureValidator(cfg['phone2'], YcValidators.validPhone);
+      this.addressForm.controls['mobile1'].validator = this.formConfigureValidator(cfg['mobile1'], YcValidators.validPhone);
+      this.addressForm.controls['mobile2'].validator = this.formConfigureValidator(cfg['mobile2'], YcValidators.validPhone);
+
+      this.addressForm.controls['email1'].validator = this.formConfigureValidator(cfg['email1'], YcValidators.validEmail);
+      this.addressForm.controls['email2'].validator = this.formConfigureValidator(cfg['email2'], YcValidators.validEmail);
+
+      this.addressForm.controls['custom0'].validator = this.formConfigureValidator(cfg['custom0'], null);
+      this.addressForm.controls['custom1'].validator = this.formConfigureValidator(cfg['custom1'], null);
+      this.addressForm.controls['custom2'].validator = this.formConfigureValidator(cfg['custom2'], null);
+      this.addressForm.controls['custom3'].validator = this.formConfigureValidator(cfg['custom3'], null);
+      this.addressForm.controls['custom4'].validator = this.formConfigureValidator(cfg['custom4'], null);
+      this.addressForm.controls['custom5'].validator = this.formConfigureValidator(cfg['custom5'], null);
+      this.addressForm.controls['custom6'].validator = this.formConfigureValidator(cfg['custom6'], null);
+      this.addressForm.controls['custom7'].validator = this.formConfigureValidator(cfg['custom7'], null);
+      this.addressForm.controls['custom8'].validator = this.formConfigureValidator(cfg['custom8'], null);
+      this.addressForm.controls['custom9'].validator = this.formConfigureValidator(cfg['custom9'], null);
+
+    } else {
+
+      this.addressForm.controls['postcode'].validator = YcValidators.nonBlankTrimmed;
+      this.addressForm.controls['addrline2'].validator = YcValidators.nonBlankTrimmed;
+
+      this.addressForm.controls['middlename'].validator = YcValidators.nonBlankTrimmed;
+
+      this.addressForm.controls['phone1'].validator = YcValidators.validPhone;
+      this.addressForm.controls['phone2'].validator = YcValidators.validPhone;
+      this.addressForm.controls['mobile1'].validator = YcValidators.validPhone;
+      this.addressForm.controls['mobile2'].validator = YcValidators.validPhone;
+
+      this.addressForm.controls['email1'].validator = YcValidators.validEmail;
+      this.addressForm.controls['email2'].validator = YcValidators.validEmail;
+
+      this.addressForm.controls['custom0'].validator = null;
+      this.addressForm.controls['custom1'].validator = null;
+      this.addressForm.controls['custom2'].validator = null;
+      this.addressForm.controls['custom3'].validator = null;
+      this.addressForm.controls['custom4'].validator = null;
+      this.addressForm.controls['custom5'].validator = null;
+      this.addressForm.controls['custom6'].validator = null;
+      this.addressForm.controls['custom7'].validator = null;
+      this.addressForm.controls['custom8'].validator = null;
+      this.addressForm.controls['custom9'].validator = null;
+
+    }
+  }
+
   @Input()
   set customer(customer:CustomerInfoVO) {
 
-    if (this._customer == null || (customer != null && this._customer.customerId != customer.customerId)) {
-      this._customer = customer;
-      if (this._reload) {
-        this.reloadAddressbook();
-      }
+    if (this._customer == null || customer == null || this._customer.customerId != customer.customerId) {
+      this._shops = [];
+      this.addressBook = null;
+      this._reload = true;
     }
+    this._customer = customer;
 
   }
 
@@ -221,6 +298,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
       UiUtil.formInitialise(this, 'initialising', 'addressForm', 'addressEdit', Util.clone(address), address != null && address.addressId > 0, ['addressType']);
       this.reloadCountries();
       this.reloadStates();
+      this.formConfigure(address.addressType);
       this.editModalDialog.show();
     }
   }
@@ -228,6 +306,7 @@ export class AddressBookComponent implements OnInit, OnDestroy {
   protected onAddressTypeChange(event:any) {
 
     this.reloadCountries();
+    this.formConfigure(this.addressEdit.addressType);
 
   }
 
@@ -443,8 +522,15 @@ export class AddressBookComponent implements OnInit, OnDestroy {
           let fieldCfg:AddressFormField = {
             name: field.attribute.val,
             label: this.getAttributeName(field.attribute.displayNames, field.attribute.name, lang),
-            validationMessage: this.getAttributeName(field.attribute.validationFailedMessage, null, lang)
+            validationMessage: this.getAttributeName(field.attribute.validationFailedMessage, null, lang),
+            mandatory: field.attribute.mandatory,
+            regex: field.attribute.regexp,
+            options: null
           };
+
+          if (fieldCfg.name == 'salutation') {
+            fieldCfg.options = this.getSalutationOptions(field.attribute.choiceData, lang);
+          }
 
           fields[fieldCfg.name] = fieldCfg;
 
@@ -477,6 +563,21 @@ export class AddressBookComponent implements OnInit, OnDestroy {
     return def;
   }
 
+  private getSalutationOptions(choice:Pair<string, string>[], lang:string):Pair<string, string>[] {
+    let i18n = this.getAttributeName(choice, null, lang);
+    if (i18n != null) {
+      let salutations:Pair<string, string>[] = [];
+      i18n.split(',').forEach(_option => {
+        let valueAndName = _option.split('-', 2);
+        if (valueAndName.length == 2) {
+          salutations.push({first: valueAndName[0], second: valueAndName[1]});
+        }
+      });
+      return salutations;
+    }
+    return [];
+  }
+
 
 }
 
@@ -485,5 +586,8 @@ interface AddressFormField {
   name: string;
   label: string;
   validationMessage: string;
+  mandatory: boolean;
+  regex: string;
+  options: Pair<string, string>[];
 
 }

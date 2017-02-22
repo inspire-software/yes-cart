@@ -60,7 +60,7 @@ export interface AttributeVO {
 
   rank : number;
 
-  choiceData : any;
+  choiceData : Pair<string, string>[];
 
   store : boolean;
   search : boolean;

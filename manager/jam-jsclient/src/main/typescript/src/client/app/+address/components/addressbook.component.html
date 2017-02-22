@@ -10,7 +10,7 @@
 
 </template>
 
-<template [ngIf]="customer != null && addressBook == null">
+<template [ngIf]="customer == null || addressBook == null">
 
   <div class="row {{ loading ? 'loading-data' : '' }}">
     <div class="col-xs-12 block-padding-spacer">
@@ -85,6 +85,44 @@
                 <option value="S">{{ 'SHIPPING' | translate }}</option>
                 <option value="B">{{ 'BILLING' | translate  }}</option>
               </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].salutation != null">
+            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].salutation.label }}</div>
+            <div class="col-lg-9">
+              <select class="form-control" formControlName="salutation" name="salutation" type="text" [(ngModel)]="addressEdit.salutation">
+                <option *ngFor="let sal of addressFormConfig[addressEdit.addressType].salutation.options" value="{{ sal.first }}">{{ sal.second }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].firstname != null">
+            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].firstname.label }}</div>
+            <div class="col-lg-9">
+              <input class="form-control" formControlName="firstname" name="firstname" type="text" [(ngModel)]="addressEdit.firstname">
+              <div [hidden]="addressForm.controls['firstname'].valid || addressForm.controls['firstname'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].firstname.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].firstname.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].middlename != null">
+            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].middlename.label }}</div>
+            <div class="col-lg-9">
+              <input class="form-control" formControlName="middlename" name="middlename" type="text" [(ngModel)]="addressEdit.middlename">
+              <div [hidden]="addressForm.controls['middlename'].valid || addressForm.controls['middlename'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].middlename.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].middlename.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].lastname != null">
+            <div class="col-lg-3">{{ addressFormConfig[addressEdit.addressType].lastname.label }}</div>
+            <div class="col-lg-9">
+              <input class="form-control" formControlName="lastname" name="lastname" type="text" [(ngModel)]="addressEdit.lastname">
+              <div [hidden]="addressForm.controls['lastname'].valid || addressForm.controls['lastname'].pristine" class="alert alert-danger">
+                {{ addressFormConfig[addressEdit.addressType].lastname.validationMessage != null ?
+                addressFormConfig[addressEdit.addressType].lastname.validationMessage : ('NON_BLANK_TRIMMED_REQUIRED' | translate) }}
+              </div>
             </div>
           </div>
           <div class="row" *ngIf="addressFormConfig[addressEdit.addressType].countryCode != null">
