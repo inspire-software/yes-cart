@@ -346,6 +346,19 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Long findShopIdByCode(final String code) {
+        List<Object> list = shopDao.findQueryObjectByNamedQuery("SHOP.ID.BY.SHOPCODE", code);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+        return null;
+    }
 
     /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.

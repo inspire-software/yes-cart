@@ -488,6 +488,15 @@
                         </entry>
                     </map>
                 </entry>
+                <entry key="shop">
+                    <map>
+                        <entry key="code">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceShopCodeImpl">
+                                <constructor-arg index="0" ref="shopService"/>
+                            </bean>
+                        </entry>
+                    </map>
+                </entry>
                 <entry key="warehouse">
                     <map>
                         <entry key="code">

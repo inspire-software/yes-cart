@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { YcValidators } from './../../shared/validation/validators';
-import { ShopVO } from './../../shared/model/index';
+import { ShopVO, ValidationRequestVO } from './../../shared/model/index';
 import { ShopEventBus, ShopService, Util } from './../../shared/services/index';
 import { Futures, Future } from './../../shared/event/index';
 import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
@@ -57,8 +57,23 @@ export class ShopMainComponent implements OnInit, OnDestroy {
 
     let that = this;
 
+    let validCode = function(control:any):any {
+
+      let code = control.value;
+      if (code == null || code == '' || that.shop == null|| !that.shopMainForm || (!that.shopMainForm.dirty && that.shop.shopId > 0)) {
+        return null;
+      }
+
+      let basic = YcValidators.requiredValidCode(control);
+      if (basic == null) {
+        var req:ValidationRequestVO = { subject: 'shop', subjectId: that.shop.shopId, field: 'code', value: code };
+        return YcValidators.validRemoteCheck(control, req);
+      }
+      return basic;
+    };
+
     this.shopMainForm = fb.group({
-        'code': ['', YcValidators.requiredValidCode],
+        'code': ['', validCode],
         'name': ['', YcValidators.requiredNonBlankTrimmed],
         'description': [''],
         'fspointer': [''],

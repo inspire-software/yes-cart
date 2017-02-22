@@ -201,6 +201,13 @@ public class ShopServiceCachedImpl implements ShopService {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public Long findShopIdByCode(final String code) {
+        return shopService.findShopIdByCode(code);
+    }
+
+    /**
      * Set attribute value. New attribute value will be created, if attribute has not value for given shop.
      *
      * @param shopId shop id

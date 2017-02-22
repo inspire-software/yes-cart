@@ -2737,6 +2737,14 @@
        ]]>
     </query>
 
+
+    <query name="SHOP.ID.BY.SHOPCODE">
+        <![CDATA[
+          select s.shopId from ShopEntity s  where s.code = ?1
+       ]]>
+    </query>
+
+
     <query name="CONTENTBODY.BY.CONTENTID">
         <![CDATA[
        select av.val from CategoryEntity c, AttrValueEntityCategory av

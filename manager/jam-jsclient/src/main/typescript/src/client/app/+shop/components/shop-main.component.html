@@ -22,6 +22,12 @@
               <label>{{ 'CODE' | translate }} <span [hidden]="shop.masterCode == null" class="label label-success">{{shop.masterCode}}</span> <span [hidden]="shop.masterCode == null" class="label label-info">YCE</span></label>
               <input autofocus  class="form-control" placeholder="{{ 'CODE' | translate }}" formControlName="code" name="code" type="text" [(ngModel)]="shop.code">
               <div [hidden]="shopMainForm.controls['code'].valid || shopMainForm.controls['code'].pristine" class="alert alert-danger">
+                <div [hidden]="!shopMainForm.controls['code'].hasError('checking')">
+                  {{ 'REMOTE_CHECK' | translate }}
+                </div>
+                <div [hidden]="!shopMainForm.controls['code'].hasError('DUPLICATE')">
+                  {{ 'UNIQUE_REQUIRED' | translate }}
+                </div>
                 {{ 'ALPHANUM_REQUIRED' | translate }}
               </div>
             </div>

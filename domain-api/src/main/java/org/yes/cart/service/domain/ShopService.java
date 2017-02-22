@@ -196,4 +196,14 @@ public interface ShopService extends AttributeManageGenericService<Shop> {
      */
     Long getShopCategoryProductTypeId(long shopId, long categoryId);
 
+
+    /**
+     * Get shop id by given code
+     *
+     * @param code given code
+     * @return shop id if found otherwise null
+     */
+    Long findShopIdByCode(String code);
+
+
 }

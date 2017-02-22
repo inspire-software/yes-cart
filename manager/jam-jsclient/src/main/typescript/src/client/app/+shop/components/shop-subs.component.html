@@ -68,6 +68,12 @@
           <div class="col-lg-9">
             <input class="form-control" formControlName="code" type="text" [(ngModel)]="subShopToEdit.code">
             <div [hidden]="shopSubForm.controls['code'].valid || shopSubForm.controls['code'].pristine" class="alert alert-danger">
+              <div [hidden]="!shopSubForm.controls['code'].hasError('checking')">
+                {{ 'REMOTE_CHECK' | translate }}
+              </div>
+              <div [hidden]="!shopSubForm.controls['code'].hasError('DUPLICATE')">
+                {{ 'UNIQUE_REQUIRED' | translate }}
+              </div>
               {{ 'ALPHANUM_REQUIRED' | translate }}
             </div>
           </div>
