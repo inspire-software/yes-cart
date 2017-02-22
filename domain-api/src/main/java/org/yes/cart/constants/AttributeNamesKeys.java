@@ -672,6 +672,8 @@ public interface AttributeNamesKeys {
 
         String CUSTOMER_TYPE_REGULAR = "B2C";
 
+        String CUSTOMER_TYPE_B2BSUB = "B2E";
+
         String ORDER_INFO_CUSTOMER_TYPE = "customerType";
         String ORDER_INFO_CUSTOMER_SHOPPING_LIST_ON = "shoppingListsEnabled";
         String ORDER_INFO_CUSTOMER_REPEAT_ORDER_ON = "repeatOrderEnabled";
