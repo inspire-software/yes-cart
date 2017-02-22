@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService, I18nEventBus, ErrorEventBus } from './../shared/services/index';
 import { ModalComponent, ModalResult, ModalAction } from './../shared/modal/index';
-import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO } from './../shared/model/index';
+import { CustomerOrderInfoVO, CustomerOrderVO, CustomerOrderDeliveryInfoVO, CustomerOrderTransitionResultVO, Pair } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -32,6 +32,36 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
 
   private static CUSTOMERORDERS:string = 'customerorders';
   private static CUSTOMERORDER:string = 'customerorder';
+
+  private static _statuses:Pair<string, boolean>[] = [
+    { first: 'os.none', second: false },
+    { first: 'os.pending', second: true },
+    { first: 'os.waiting.payment', second: true },
+    { first: 'os.waiting', second: true },
+    { first: 'os.in.progress', second: true },
+    { first: 'os.cancelled', second: false },
+    { first: 'os.cancelled.waiting.payment', second: false },
+    { first: 'os.returned', second: false },
+    { first: 'os.returned.waiting.payment', second: false },
+    { first: 'os.partially.shipped', second: true },
+    { first: 'os.completed', second: false },
+  ];
+
+  private static _open:string[] = [
+    'os.pending', 'os.waiting', 'os.waiting.payment', 'os.in.progress', 'os.partially.shipped'
+  ];
+
+  private static _pendingPayments:string[] = [
+    'os.waiting.payment', 'os.cancelled.waiting.payment', 'os.returned.waiting.payment'
+  ];
+
+  private static _cancelled:string[] = [
+    'os.cancelled', 'os.cancelled.waiting.payment', 'os.returned', 'os.returned.waiting.payment'
+  ];
+
+  private static _completed:string[] = [
+    'os.completed'
+  ];
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -91,6 +121,14 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       that.getFilteredCustomerorders();
     }, this.delayedFilteringMs);
 
+  }
+
+  get statuses():Pair<string, boolean>[] {
+    return AllCustomerOrdersComponent._statuses;
+  }
+
+  set statuses(value:Pair<string, boolean>[]) {
+    AllCustomerOrdersComponent._statuses = value;
   }
 
   ngOnDestroy() {
@@ -237,26 +275,38 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchStatusOpen() {
-    this.searchHelpShow = false;
-    this.customerorderFilter = '~~';
+    //this.searchHelpShow = false;
+    //this.customerorderFilter = '~~';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllCustomerOrdersComponent._open.includes(_st.first);
+    });
     this.getFilteredCustomerorders();
   }
 
   protected onSearchStatusPayment() {
-    this.searchHelpShow = false;
-    this.customerorderFilter = '$$';
+    //this.searchHelpShow = false;
+    //this.customerorderFilter = '$$';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllCustomerOrdersComponent._pendingPayments.includes(_st.first);
+    });
     this.getFilteredCustomerorders();
   }
 
   protected onSearchStatusCancelled() {
-    this.searchHelpShow = false;
-    this.customerorderFilter = '--';
+    //this.searchHelpShow = false;
+    //this.customerorderFilter = '--';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllCustomerOrdersComponent._cancelled.includes(_st.first);
+    });
     this.getFilteredCustomerorders();
   }
 
   protected onSearchStatusCompleted() {
-    this.searchHelpShow = false;
-    this.customerorderFilter = '++';
+    //this.searchHelpShow = false;
+    //this.customerorderFilter = '++';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllCustomerOrdersComponent._completed.includes(_st.first);
+    });
     this.getFilteredCustomerorders();
   }
 
@@ -618,7 +668,15 @@ export class AllCustomerOrdersComponent implements OnInit, OnDestroy {
       this.loading = true;
       let lang = I18nEventBus.getI18nEventBus().current();
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, max).subscribe( allcustomerorders => {
+
+      let sts:string[] = [];
+      AllCustomerOrdersComponent._statuses.forEach((_st:Pair<string, boolean>) => {
+        if (_st.second) {
+          sts.push(_st.first);
+        }
+      });
+
+      var _sub:any = this._customerorderService.getFilteredOrders(lang, this.customerorderFilter, sts, max).subscribe( allcustomerorders => {
         LogUtil.debug('AllCustomerOrdersComponent getFilteredCustomerorders', allcustomerorders);
         this.customerorders = allcustomerorders;
         this.selectedCustomerorder = null;

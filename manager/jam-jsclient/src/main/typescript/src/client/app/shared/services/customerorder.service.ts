@@ -45,10 +45,10 @@ export class CustomerOrderService {
    * Get list of all orders, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredOrders(lang:string, filter:string, max:number) {
+  getFilteredOrders(lang:string, filter:string, statuses:string[], max:number) {
 
-    let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
+    let body = JSON.stringify({ filter: filter, statuses: statuses });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/filtered/' + max + '/' + lang, body, options)
@@ -112,10 +112,10 @@ export class CustomerOrderService {
    * Get list of all payments, which are accessible to manage or view,
    * @returns {Promise<IteratorResult<T>>|Promise<T>|Q.Promise<IteratorResult<T>>}
    */
-  getFilteredPayments(filter:string, max:number) {
+  getFilteredPayments(filter:string, operations:string[], statuses:string[], max:number) {
 
-    let body = filter;
-    let headers = new Headers({ 'Content-Type': 'text/plain; charset=utf-8' });
+    let body = JSON.stringify({ filter: filter, operations: operations, statuses: statuses });
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     let options = new RequestOptions({ headers: headers });
 
     return this.http.post(this._serviceBaseUrl + '/payments/filtered/' + max + '/', body, options)

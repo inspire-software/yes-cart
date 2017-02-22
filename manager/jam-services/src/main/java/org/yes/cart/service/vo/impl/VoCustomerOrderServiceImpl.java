@@ -104,6 +104,41 @@ public class VoCustomerOrderServiceImpl implements VoCustomerOrderService {
         return results.size() > max ? results.subList(0, max) : results;
     }
 
+
+
+    @Override
+    public List<VoCustomerOrderInfo> getFiltered(final String lang, final String filter, final List<String> statuses, final int max) throws Exception {
+
+        final List<VoCustomerOrderInfo> results = new ArrayList<>();
+
+        Map<String, String> pgNames = Collections.emptyMap();
+        int start = 0;
+        do {
+            final List<CustomerOrderDTO> batch = dtoCustomerOrderService.findBy(filter, statuses, start, max);
+            if (batch.isEmpty()) {
+                break;
+            } else if (start == 0) {
+                pgNames = dtoCustomerOrderService.getOrderPgLabels(lang);
+            }
+            federationFacade.applyFederationFilter(batch, CustomerOrderDTO.class);
+
+            for (final CustomerOrderDTO order : batch) {
+
+                final VoCustomerOrderInfo vo =
+                        voAssemblySupport.assembleVo(VoCustomerOrderInfo.class, CustomerOrderDTO.class, new VoCustomerOrderInfo(), order);
+
+                vo.setPgName(pgNames.get(vo.getPgLabel()));
+                vo.setOrderStatusNextOptions(determineOrderStatusNextOptions(vo));
+                vo.setOrderPaymentStatus(determinePaymentStatus(vo));
+
+                results.add(vo);
+            }
+            start++;
+        } while (results.size() < max && max != Integer.MAX_VALUE);
+        return results.size() > max ? results.subList(0, max) : results;
+    }
+
+
     private String determinePaymentStatus(final VoCustomerOrderInfo vo) {
         if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderTotal(), BigDecimal.ZERO)) {
             if (MoneyUtils.isFirstBiggerThanSecond(vo.getOrderPaymentBalance(), vo.getOrderTotal())) {

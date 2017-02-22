@@ -25,6 +25,7 @@ import org.yes.cart.domain.vo.VoCustomerOrderTransitionResult;
 import org.yes.cart.domain.vo.VoPayment;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -37,9 +38,9 @@ public interface CustomerOrderEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
-    @RequestMapping(value = "/filtered/{max}/{lang}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/filtered/{max}/{lang}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") String lang, @RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") String lang, @RequestBody Map<String, Object> filter, @PathVariable("max") int max) throws Exception;
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
     @RequestMapping(value = "/order/{id}/{lang}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -59,9 +60,9 @@ public interface CustomerOrderEndpointController {
 
 
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMCALLCENTER"})
-    @RequestMapping(value = "/payments/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.TEXT_PLAIN_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/payments/filtered/{max}", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody
-    List<VoPayment> getFilteredPayments(@RequestBody String filter, @PathVariable("max") int max) throws Exception;
+    List<VoPayment> getFilteredPayments(@RequestBody Map<String, Object> filter, @PathVariable("max") int max) throws Exception;
 
 
 }

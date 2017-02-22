@@ -16,7 +16,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CustomerOrderService } from './../shared/services/index';
 import { ModalComponent } from './../shared/modal/index';
-import { PaymentVO } from './../shared/model/index';
+import { PaymentVO, Pair } from './../shared/model/index';
 import { Futures, Future } from './../shared/event/index';
 import { Config } from './../shared/config/env.config';
 import { UiUtil } from './../shared/ui/index';
@@ -29,6 +29,43 @@ import { LogUtil } from './../shared/log/index';
 })
 
 export class AllPaymentsComponent implements OnInit, OnDestroy {
+
+  private static _operations:Pair<string, boolean>[] = [
+    { first: 'AUTH', second: false },
+    { first: 'REVERSE_AUTH', second: false },
+    { first: 'CAPTURE', second: false },
+    { first: 'VOID_CAPTURE', second: false },
+    { first: 'AUTH_CAPTURE', second: false },
+    { first: 'REFUND', second: false },
+  ];
+
+  private static _statuses:Pair<string, boolean>[] = [
+    { first: 'Ok', second: false },
+    { first: 'Failed', second: false },
+    { first: 'Processing', second: false },
+    { first: 'Manual processing required', second: false },
+  ];
+
+  private static _incommingPayments:string[] = [
+    'AUTH', 'AUTH_CAPTURE', 'CAPTURE'
+  ];
+
+  private static _outgoingPayments:string[] = [
+    'REFUND', 'REVERSE_AUTH', 'VOID_CAPTURE'
+  ];
+
+  private static _pendingPayments:string[] = [
+    'Processing', 'Failed', 'Manual processing required'
+  ];
+
+  private static _failedPayments:string[] = [
+    'Failed', 'Manual processing required'
+  ];
+
+  private static _completedPayments:string[] = [
+    'Ok'
+  ];
+
 
   private searchHelpShow:boolean = false;
   private forceShowAll:boolean = false;
@@ -65,6 +102,22 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
       that.getFilteredPayments();
     }, this.delayedFilteringMs);
 
+  }
+
+  get operations():Pair<string, boolean>[] {
+    return AllPaymentsComponent._operations;
+  }
+
+  set operations(value:Pair<string, boolean>[]) {
+    AllPaymentsComponent._operations = value;
+  }
+
+  get statuses():Pair<string, boolean>[] {
+    return AllPaymentsComponent._statuses;
+  }
+
+  set statuses(value:Pair<string, boolean>[]) {
+    AllPaymentsComponent._statuses = value;
   }
 
   ngOnDestroy() {
@@ -110,32 +163,47 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
   }
 
   protected onSearchStatusOpen() {
-    this.searchHelpShow = false;
-    this.paymentFilter = '~~';
+    //this.searchHelpShow = false;
+    //this.paymentFilter = '~~';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllPaymentsComponent._pendingPayments.includes(_st.first);
+    });
     this.getFilteredPayments();
   }
 
   protected onSearchStatusPaymentIncoming() {
-    this.searchHelpShow = false;
-    this.paymentFilter = '$+';
+    //this.searchHelpShow = false;
+    //this.paymentFilter = '$+';
+    this.operations.forEach((_op:Pair<string, boolean>) => {
+      _op.second = AllPaymentsComponent._incommingPayments.includes(_op.first);
+    });
     this.getFilteredPayments();
   }
 
   protected onSearchStatusPaymentOutgoing() {
-    this.searchHelpShow = false;
-    this.paymentFilter = '$-';
+    //this.searchHelpShow = false;
+    //this.paymentFilter = '$-';
+    this.operations.forEach((_op:Pair<string, boolean>) => {
+      _op.second = AllPaymentsComponent._outgoingPayments.includes(_op.first);
+    });
     this.getFilteredPayments();
   }
 
   protected onSearchStatusCancelled() {
-    this.searchHelpShow = false;
-    this.paymentFilter = '--';
+    //this.searchHelpShow = false;
+    //this.paymentFilter = '--';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllPaymentsComponent._failedPayments.includes(_st.first);
+    });
     this.getFilteredPayments();
   }
 
   protected onSearchStatusCompleted() {
-    this.searchHelpShow = false;
-    this.paymentFilter = '++';
+    //this.searchHelpShow = false;
+    //this.paymentFilter = '++';
+    this.statuses.forEach((_st:Pair<string, boolean>) => {
+      _st.second = AllPaymentsComponent._completedPayments.includes(_st.first);
+    });
     this.getFilteredPayments();
   }
 
@@ -186,7 +254,22 @@ export class AllPaymentsComponent implements OnInit, OnDestroy {
     if (!this.paymentFilterRequired) {
       this.loading = true;
       let max = this.forceShowAll ? this.filterNoCap : this.filterCap;
-      var _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, max).subscribe( allpayments => {
+
+      let ops:string[] = [];
+      AllPaymentsComponent._operations.forEach((_op:Pair<string, boolean>) => {
+        if (_op.second) {
+          ops.push(_op.first);
+        }
+      });
+
+      let sts:string[] = [];
+      AllPaymentsComponent._statuses.forEach((_st:Pair<string, boolean>) => {
+        if (_st.second) {
+          sts.push(_st.first);
+        }
+      });
+
+      var _sub:any = this._paymentService.getFilteredPayments(this.paymentFilter, ops, sts, max).subscribe( allpayments => {
         LogUtil.debug('AllPaymentsComponent getFilteredPayments', allpayments);
         this.payments = allpayments;
         this.selectedPayment = null;

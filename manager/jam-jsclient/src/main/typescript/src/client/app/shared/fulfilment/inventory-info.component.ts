@@ -83,7 +83,7 @@ export class InventoryInfoComponent implements OnInit {
     LogUtil.debug('InventoryInfoComponent loading orders', this._skuCode);
     let lang = I18nEventBus.getI18nEventBus().current();
     this.loading = true;
-    var _subc:any = this._customerOrderService.getFilteredOrders(lang, '!' + this._skuCode, this.filterCap).subscribe(
+    var _subc:any = this._customerOrderService.getFilteredOrders(lang, '!' + this._skuCode, [], this.filterCap).subscribe(
         info => {
           LogUtil.debug('InventoryInfoComponent all orders', info);
           this.orders = info;

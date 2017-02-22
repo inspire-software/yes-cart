@@ -22,4 +22,17 @@ public interface DtoCustomerOrderPaymentService {
      */
     List<CustomerOrderPayment> findBy(String filter, int page, int pageSize);
 
+    /**
+     * Find payments.
+     *
+     * @param filter filter
+     * @param operations operations
+     * @param statuses statuses
+     * @param page page start
+     * @param pageSize max results
+     *
+     * @return payments
+     */
+    List<CustomerOrderPayment> findBy(String filter, List<String> operations, List<String> statuses, int page, int pageSize);
+
 }

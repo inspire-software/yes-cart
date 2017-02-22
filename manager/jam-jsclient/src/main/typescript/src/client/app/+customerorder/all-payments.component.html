@@ -31,6 +31,8 @@
   <div  class="{{ loading ? 'loading-data' : '' }}">
     <div *ngIf="searchHelpShow">
       <div class="bg-info text-padding block-margin-spacer">
+        <ul><li *ngFor="let operation of operations"><input type="checkbox" name="{{operation.first}}" [(ngModel)]="operation.second" (ngModelChange)="onFilterChange($event)"/> {{operation.first}}</li></ul>
+        <ul><li *ngFor="let status of statuses"><input type="checkbox" name="{{status.first}}" [(ngModel)]="status.second" (ngModelChange)="onFilterChange($event)"/> {{status.first}}</li></ul>
         <p>{{ 'SEARCH_HELP_PAYMENT_DEFAULT' | translate }}</p>
         <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_PENDING' | translate }} <span><button type="button" (click)="onSearchStatusOpen()" class="btn btn-circle"><i class="fa fa-exclamation"></i></button></span></p>
         <p>{{ 'SEARCH_HELP_PAYMENT_STATUS_FAILED' | translate }} <span><button type="button" (click)="onSearchStatusCancelled()" class="btn btn-circle"><i class="fa fa-remove"></i></button></span></p>

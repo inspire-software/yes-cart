@@ -1,5 +1,6 @@
 package org.yes.cart.service.dto.impl;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.Criterion;
@@ -175,6 +176,91 @@ public class DtoCustomerOrderPaymentServiceImpl extends PaymentModuleGenericServ
 
         }
 
+
+        return getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PAYMENT_ORDER);
+    }
+
+    @Override
+    public List<CustomerOrderPayment> findBy(final String filter, final List<String> operations, final List<String> statuses, final int page, final int pageSize) {
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+
+        if (StringUtils.isNotBlank(filter)) {
+
+            final Pair<String, String> orderNumberOrCustomerOrDetails =
+                    ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_DETAILS);
+            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrDetails == null ?
+                    ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+            if (orderNumberOrCustomerOrDetails != null) {
+
+                if ("#".equals(orderNumberOrCustomerOrDetails.getFirst())) {
+                    // order/transaction number search
+                    final String orderNumber = orderNumberOrCustomerOrDetails.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("orderNumber", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("orderShipment", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionReferenceId", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionRequestToken", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionAuthorizationCode", orderNumber, MatchMode.ANYWHERE)
+                    ));
+                } else if ("?".equals(orderNumberOrCustomerOrDetails.getFirst())) {
+                    // customer search
+                    final String customer = orderNumberOrCustomerOrDetails.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("cardNumber", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("cardHolderName", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("shopperIpAddress", customer, MatchMode.ANYWHERE)
+                    ));
+                } else if ("@".equals(orderNumberOrCustomerOrDetails.getFirst())) {
+                    // address search
+                    final String address = orderNumberOrCustomerOrDetails.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("transactionOperation", address, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionOperationResultCode", address, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionOperationResultMessage", address, MatchMode.ANYWHERE)
+                    ));
+                }
+
+            } else if (dateSearch != null) {
+
+                final Date from = dateSearch.getFirst();
+                final Date to = dateSearch.getSecond();
+
+                // time search
+                if (from != null) {
+                    criteria.add(Restrictions.ge("createdTimestamp", from));
+                }
+                if (to != null) {
+                    criteria.add(Restrictions.le("createdTimestamp", to));
+                }
+
+            } else {
+
+                final String search = filter;
+
+                if (StringUtils.isNotBlank(search)) {
+                    // basic search
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("orderNumber", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("orderShipment", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("cardHolderName", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionGatewayLabel", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("transactionOperation", search, MatchMode.ANYWHERE)
+                    ));
+                }
+
+            }
+
+        }
+
+        if (CollectionUtils.isNotEmpty(statuses)) {
+            criteria.add(Restrictions.in("paymentProcessorResult", statuses));
+        }
+
+        if (CollectionUtils.isNotEmpty(operations)) {
+            criteria.add(Restrictions.in("transactionOperation", operations));
+        }
 
         return getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), PAYMENT_ORDER);
     }

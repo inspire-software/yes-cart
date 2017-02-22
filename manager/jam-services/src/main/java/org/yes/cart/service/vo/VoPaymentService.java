@@ -40,4 +40,18 @@ public interface VoPaymentService {
      */
     List<VoPayment> getFiltered(String filter, int max) throws Exception;
 
+    /**
+     * Get all payments for given filter
+     *
+     * @param filter filter
+     * @param operations operations
+     * @param statuses statuses
+     * @param max max results
+     *
+     * @return orders
+     *
+     * @throws Exception
+     */
+    List<VoPayment> getFiltered(String filter, List<String> operations, List<String> statuses, int max) throws Exception;
+
 }

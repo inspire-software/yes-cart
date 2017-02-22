@@ -43,6 +43,20 @@ public interface VoCustomerOrderService {
     List<VoCustomerOrderInfo> getFiltered(String lang, String filter, int max) throws Exception;
 
     /**
+     * Get all orders for given filter
+     *
+     * @param lang language used for PG localizations
+     * @param filter filter
+     * @param statuses statuses
+     * @param max max results
+     *
+     * @return orders
+     *
+     * @throws Exception
+     */
+    List<VoCustomerOrderInfo> getFiltered(String lang, String filter, List<String> statuses, int max) throws Exception;
+
+    /**
      * Get order by id
      *
      * @param lang language used for PG localizations

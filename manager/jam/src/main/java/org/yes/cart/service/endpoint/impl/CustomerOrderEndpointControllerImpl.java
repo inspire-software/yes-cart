@@ -29,6 +29,7 @@ import org.yes.cart.service.vo.VoCustomerOrderService;
 import org.yes.cart.service.vo.VoPaymentService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -50,8 +51,8 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
-        return voCustomerOrderService.getFiltered(lang, filter, max);
+    List<VoCustomerOrderInfo> getFilteredOrders(@PathVariable("lang") final String lang, @RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
+        return voCustomerOrderService.getFiltered(lang, (String) filter.get("filter"), (List) filter.get("statuses"), max);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class CustomerOrderEndpointControllerImpl implements CustomerOrderEndpoin
 
     @Override
     public @ResponseBody
-    List<VoPayment> getFilteredPayments(@RequestBody final String filter, @PathVariable("max") final int max) throws Exception {
-        return voPaymentService.getFiltered(filter, max);
+    List<VoPayment> getFilteredPayments(@RequestBody final Map<String, Object> filter, @PathVariable("max") final int max) throws Exception {
+        return voPaymentService.getFiltered((String) filter.get("filter"), (List) filter.get("operations"), (List) filter.get("statuses"), max);
     }
 }

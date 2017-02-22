@@ -708,6 +708,92 @@ public class DtoCustomerOrderServiceImpl
         return orders;
     }
 
+
+    @Override
+    public List<CustomerOrderDTO> findBy(final String filter, final List<String> statuses, final int page, final int pageSize) throws UnmappedInterfaceException, UnableToCreateInstanceException {
+
+        final List<CustomerOrderDTO> orders = new ArrayList<>();
+
+        final List<Criterion> criteria = new ArrayList<Criterion>();
+
+        if (StringUtils.isNotBlank(filter)) {
+
+            final Pair<String, String> orderNumberOrCustomerOrAddressOrSku = ComplexSearchUtils.checkSpecialSearch(filter, ORDER_OR_CUSTOMER_OR_ADDRESS_OR_SKU);
+            final Pair<Date, Date> dateSearch = orderNumberOrCustomerOrAddressOrSku == null ? ComplexSearchUtils.checkDateRangeSearch(filter) : null;
+
+            if (orderNumberOrCustomerOrAddressOrSku != null) {
+
+                if ("#".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    // order number search
+                    final String orderNumber = orderNumberOrCustomerOrAddressOrSku.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("ordernum", orderNumber, MatchMode.ANYWHERE),
+                            Restrictions.ilike("cartGuid", orderNumber, MatchMode.ANYWHERE)
+                    ));
+                } else if ("?".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    // customer search
+                    final String customer = orderNumberOrCustomerOrAddressOrSku.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("email", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("firstname", customer, MatchMode.ANYWHERE),
+                            Restrictions.ilike("lastname", customer, MatchMode.ANYWHERE)
+                    ));
+                } else if ("@".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    // address search
+                    final String address = orderNumberOrCustomerOrAddressOrSku.getSecond();
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("billingAddress", address, MatchMode.ANYWHERE),
+                            Restrictions.ilike("shippingAddress", address, MatchMode.ANYWHERE)
+                    ));
+                } else if ("!".equals(orderNumberOrCustomerOrAddressOrSku.getFirst())) {
+                    if (page > 0) {
+                        return Collections.emptyList();
+                    }
+                    return findByReservation(orderNumberOrCustomerOrAddressOrSku.getSecond());
+                }
+
+            } else if (dateSearch != null) {
+
+                final Date from = dateSearch.getFirst();
+                final Date to = dateSearch.getSecond();
+
+                // time search
+                if (from != null) {
+                    criteria.add(Restrictions.ge("orderTimestamp", from));
+                }
+                if (to != null) {
+                    criteria.add(Restrictions.le("orderTimestamp", to));
+                }
+
+            } else {
+
+                final String search = filter;
+
+                if (StringUtils.isNotBlank(search)) {
+                    // basic search
+                    criteria.add(Restrictions.or(
+                            Restrictions.ilike("ordernum", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("email", search, MatchMode.ANYWHERE),
+                            Restrictions.ilike("lastname", search, MatchMode.ANYWHERE)
+                    ));
+                }
+
+            }
+
+        }
+
+        if (CollectionUtils.isNotEmpty(statuses)) {
+            criteria.add(Restrictions.in("orderStatus", statuses));
+        }
+
+        final List<CustomerOrder> entities = service.getGenericDao().findByCriteria(page * pageSize, pageSize, criteria.toArray(new Criterion[criteria.size()]), ORDERS_ORDER);
+
+        fillDTOs(entities, orders);
+
+        return orders;
+    }
+
+
     private List<CustomerOrderDTO> findByReservation(final String sku) throws UnmappedInterfaceException, UnableToCreateInstanceException {
 
         final List<String> orderStatusThatCouldHaveReservations = Arrays.asList(CustomerOrder.ORDER_STATUS_IN_PROGRESS, CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);

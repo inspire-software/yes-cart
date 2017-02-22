@@ -90,6 +90,8 @@ export class ManagementService {
     manager.managerRoles.forEach(role => {
        if ('ROLE_SMCALLCENTER' == role.code) {
          ui = 'CC';
+       } else if ('ROLE_SMADMIN' == role.code) {
+         ui = 'SYSADMIN';
        }
     });
     return ui;
