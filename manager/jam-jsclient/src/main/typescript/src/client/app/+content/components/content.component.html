@@ -196,7 +196,7 @@
 
             <div class="panel panel-default" *ngFor="let body of content.contentBodies">
               <div class="panel-heading">
-                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> {{ content.name }} ({{ body.lang }})</h3>
+                <h3 class="panel-title"><span><button type="button" (click)="onCMSEdit(body)" class="btn btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-edit"></i></button></span> <span><button type="button" (click)="onCMSEditRaw(body)" class="btn btn-circle" title="{{ 'MODAL_BUTTON_EDIT' | translate }}"><i class="fa fa-code"></i></button></span> {{ content.name }} <span [ngClass]="body.text ? 'label label-success' : 'label label-danger'">{{ body.lang }}</span></h3>
               </div>
               <div class="panel-body" [innerHTML]="getCMSPreview(body)"></div>
             </div>
@@ -277,3 +277,26 @@
 
 <yc-content-select #contentParentSelectComponent [shop]="shop"
                    (dataSelected)="onContentParentSelected($event)"></yc-content-select>
+
+
+<yc-modal #rawEditConfirmationModalDialog
+          title="{{ 'MODAL_BUTTON_EDIT' | translate }}"
+          cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
+          positiveLabel="{{ 'MODAL_BUTTON_CHANGE' | translate }}"
+          [valid]="true"
+          (closed)="onEditConfirmationResult($event)">
+
+  <form role="form" *ngIf="bodyEdit != null">
+    <fieldset>
+      <div class="row">
+        <div class="col-xs-12">{{ content != null ? content.name : '' }} <span class="label label-info">{{ bodyEdit.lang }}</span></div>
+      </div>
+      <div class="row block-margin-spacer">
+        <div class="col-xs-12">
+          <textarea class="form-control" name="bodyEditChange" [(ngModel)]="bodyEditChange"></textarea>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+</yc-modal>

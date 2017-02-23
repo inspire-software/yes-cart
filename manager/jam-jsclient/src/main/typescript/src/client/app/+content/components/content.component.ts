@@ -20,6 +20,7 @@ import { ShopVO, ContentVO, ContentWithBodyVO, AttrValueContentVO, ContentBodyVO
 import { FormValidationEvent, Futures, Future } from './../../shared/event/index';
 import { WindowMessageEventBus } from './../../shared/services/index';
 import { UiUtil } from './../../shared/ui/index';
+import { ModalComponent, ModalResult, ModalAction } from './../../shared/modal/index';
 import { ContentSelectComponent } from './../../shared/content/index';
 import { AttributeValuesComponent } from './../../shared/attributes/index';
 import { LogUtil } from './../../shared/log/index';
@@ -61,6 +62,12 @@ export class ContentComponent implements OnInit, OnDestroy {
 
   @ViewChild('contentParentSelectComponent')
   private contentParentSelectComponent:ContentSelectComponent;
+
+  @ViewChild('rawEditConfirmationModalDialog')
+  private rawEditConfirmationModalDialog:ModalComponent;
+
+  private bodyEdit:ContentBodyVO;
+  private bodyEditChange:string;
 
   private searchHelpShow:boolean = false;
 
@@ -281,6 +288,30 @@ export class ContentComponent implements OnInit, OnDestroy {
     };
 
   }
+
+  protected onCMSEditRaw(body:ContentBodyVO) {
+
+    this.bodyEdit = body;
+    this.bodyEditChange = body != null ? body.text : '';
+    this.rawEditConfirmationModalDialog.show();
+
+  }
+
+
+  protected onEditConfirmationResult(modalresult: ModalResult) {
+    LogUtil.debug('ContentComponent onEditConfirmationResult modal result is ', modalresult);
+    if (ModalAction.POSITIVE === modalresult.action) {
+
+      if (this.bodyEdit != null) {
+        LogUtil.debug('ContentComponent onDeleteConfirmationResult', this.bodyEdit);
+        this.bodyEdit.text = this.bodyEditChange;
+        this.bodyEditChange = null;
+        this.bodyEdit = null;
+        this.formChange();
+      }
+    }
+  }
+
 
   protected getCMSPreview(body:ContentBodyVO) {
 
