@@ -455,8 +455,9 @@ public class CustomerController {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
+        final Shop customerShop = cartMixin.getCurrentCustomerShop();
 
-        return addressSupportMixin.viewAddressOptions(cart, shop, type);
+        return addressSupportMixin.viewAddressOptions(cart, shop, customerShop, type);
 
     }
 

@@ -689,19 +689,20 @@ public class CheckoutPage extends AbstractWebPage {
     private void addFeedbackForAddressSelection() {
 
         final Shop shop = getCurrentShop();
+        final Shop customerShop = getCurrentCustomerShop();
         final ShoppingCart cart = getCurrentCart();
 
         final Customer customer = customerServiceFacade.getCheckoutCustomer(
                 shop,
                 cart);
 
-        if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_SHIPPING).isEmpty()) {
+        if (addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_SHIPPING).isEmpty()) {
 
             info(getLocalizer().getString("selectDeliveryAddress", this));
 
         } else if (cart.getOrderInfo().isSeparateBillingAddress()) {
 
-            if (addressBookFacade.getAddresses(customer, shop, Address.ADDR_TYPE_BILLING).isEmpty()) {
+            if (addressBookFacade.getAddresses(customer, customerShop, Address.ADDR_TYPE_BILLING).isEmpty()) {
                 info(getLocalizer().getString("selectBillingAddress", this));
             }
         }

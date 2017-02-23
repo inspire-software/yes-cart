@@ -48,12 +48,14 @@ public class AddressSupportMixin extends RoMappingMixin {
      *
      * @param cart cart
      * @param shop shop
+     * @param customerShop customerShop
      * @param addressType type
      *
      * @return list of customer addresses
      */
     public List<AddressRO> viewAddressOptions(final ShoppingCart cart,
                                               final Shop shop,
+                                              final Shop customerShop,
                                               final String addressType) {
 
         final List<AddressRO> ros = new ArrayList<AddressRO>();
@@ -65,7 +67,7 @@ public class AddressSupportMixin extends RoMappingMixin {
             final List<Country> countries = addressBookFacade.getAllCountries(shop.getCode(), addressType);
 
 
-            final List<Address> addresses = new ArrayList<Address>(addressBookFacade.getAddresses(customer, shop, addressType));
+            final List<Address> addresses = new ArrayList<Address>(addressBookFacade.getAddresses(customer, customerShop, addressType));
 
             for (final Address address : addresses) {
 

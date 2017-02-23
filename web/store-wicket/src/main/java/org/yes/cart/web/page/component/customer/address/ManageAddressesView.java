@@ -156,9 +156,9 @@ public class ManageAddressesView extends BaseComponent {
 
     private List<Address> determineAllowedAddresses(final IModel<Customer> customerModel, final String addressType) {
 
-        final Shop shop = getCurrentShop();
+        final Shop customerShop = getCurrentCustomerShop();
 
-        return addressBookFacade.getAddresses(customerModel.getObject(), shop, addressType);
+        return addressBookFacade.getAddresses(customerModel.getObject(), customerShop, addressType);
 
     }
 

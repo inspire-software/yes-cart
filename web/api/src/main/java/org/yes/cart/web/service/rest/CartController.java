@@ -1363,8 +1363,9 @@ public class CartController {
 
         final ShoppingCart cart = cartMixin.getCurrentCart();
         final Shop shop = cartMixin.getCurrentShop();
+        final Shop customerShop = cartMixin.getCurrentCustomerShop();
 
-        return addressSupportMixin.viewAddressOptions(cart, shop, type);
+        return addressSupportMixin.viewAddressOptions(cart, shop, customerShop, type);
 
     }
 
@@ -1734,7 +1735,7 @@ public class CartController {
             final Customer customer = customerServiceFacade.getCheckoutCustomer(shop, cart);
 
             if (customer != null) {
-                final List<AddressRO> addresses = addressSupportMixin.viewAddressOptions(cart, shop, type);
+                final List<AddressRO> addresses = addressSupportMixin.viewAddressOptions(cart, shop, customerShop, type);
 
                 for (final AddressRO address : addresses) {
                     if (address.getAddressId() == addressId) {
