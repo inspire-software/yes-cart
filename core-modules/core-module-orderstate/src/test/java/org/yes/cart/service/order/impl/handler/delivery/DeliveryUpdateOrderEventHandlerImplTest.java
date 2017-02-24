@@ -22,6 +22,7 @@ import org.yes.cart.constants.ServiceSpringKeys;
 import org.yes.cart.domain.entity.CustomerOrder;
 import org.yes.cart.domain.entity.CustomerOrderDelivery;
 import org.yes.cart.domain.entity.CustomerOrderDeliveryDet;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.payment.PaymentGateway;
 import org.yes.cart.payment.dto.Payment;
 import org.yes.cart.payment.service.CustomerOrderPaymentService;
@@ -101,7 +102,8 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
                 "WAREHOUSE_1",
                 Arrays.<OrderDeliveryLineStatusUpdate>asList(
                     new OrderDeliveryLineStatusUpdateImpl(
-                            null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null
+                            null, "CC_TEST1", "packing", date("2017-02-17"), date("2017-02-20"), null, null, null, null, false, null, null,
+                            Collections.singletonMap("TrackingURL", new Pair<String, String>("http://tracking.com?ref=00001", null))
                     )
                 )
         );
@@ -146,6 +148,11 @@ public class DeliveryUpdateOrderEventHandlerImplTest extends AbstractEventHandle
         assertNull(test11.getDeliveryConfirmed());
         assertFalse(test11.isDeliveryRejected());
         assertFalse(test11.isDeliveryDifferent());
+        assertNotNull(test11.getAllValues());
+        final Pair<String, String> trackingUrl = test11.getValue("TrackingURL");
+        assertNotNull(trackingUrl);
+        assertEquals("http://tracking.com?ref=00001", trackingUrl.getFirst());
+        assertNull(trackingUrl.getSecond());
 
         final CustomerOrderDeliveryDet test12 = detailsBySKU1.get("CC_TEST2");
         assertNotNull(test12);

@@ -16,8 +16,11 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.yes.cart.domain.misc.Pair;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -109,6 +112,13 @@ public interface OrderDeliveryLineStatusUpdate {
      * @return supplier invoice date
      */
     Date getSupplierInvoiceDate();
+
+    /**
+     * Additional data per line.
+     *
+     * @return line additional data key => { value, displayValue }
+     */
+    Map<String, Pair<String, String>> getAdditionalData();
 
 
 }

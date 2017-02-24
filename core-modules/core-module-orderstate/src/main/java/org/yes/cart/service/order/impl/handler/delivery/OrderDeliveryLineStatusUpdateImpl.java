@@ -16,8 +16,12 @@
 
 package org.yes.cart.service.order.impl.handler.delivery;
 
+import org.yes.cart.domain.misc.Pair;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: denispavlov
@@ -39,6 +43,7 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
     private final boolean rejected;
     private final String supplierInvoiceNo;
     private final Date supplierInvoiceDate;
+    private final Map<String, Pair<String, String>> additionalData = new HashMap<String, Pair<String, String>>();
 
 
     public OrderDeliveryLineStatusUpdateImpl(final Long orderLineRef,
@@ -65,6 +70,34 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
         this.rejected = rejected;
         this.supplierInvoiceNo = supplierInvoiceNo;
         this.supplierInvoiceDate = supplierInvoiceDate;
+    }
+
+    public OrderDeliveryLineStatusUpdateImpl(final Long orderLineRef,
+                                             final String sku,
+                                             final String orderDeliveryStatus,
+                                             final Date deliveryEstimatedMin,
+                                             final Date deliveryEstimatedMax,
+                                             final Date deliveryGuaranteed,
+                                             final Date deliveryConfirmed,
+                                             final BigDecimal orderedQty,
+                                             final BigDecimal deliveredQty,
+                                             final boolean rejected,
+                                             final String supplierInvoiceNo,
+                                             final Date supplierInvoiceDate,
+                                             final Map<String, Pair<String, String>> additionalData) {
+        this.orderLineRef = orderLineRef;
+        this.sku = sku;
+        this.orderDeliveryStatus = orderDeliveryStatus;
+        this.deliveryEstimatedMin = deliveryEstimatedMin;
+        this.deliveryEstimatedMax = deliveryEstimatedMax;
+        this.deliveryGuaranteed = deliveryGuaranteed;
+        this.deliveryConfirmed = deliveryConfirmed;
+        this.orderedQty = orderedQty;
+        this.deliveredQty = deliveredQty;
+        this.rejected = rejected;
+        this.supplierInvoiceNo = supplierInvoiceNo;
+        this.supplierInvoiceDate = supplierInvoiceDate;
+        this.additionalData.putAll(additionalData);
     }
 
     public Long getOrderLineRef() {
@@ -113,6 +146,10 @@ public class OrderDeliveryLineStatusUpdateImpl implements OrderDeliveryLineStatu
 
     public Date getSupplierInvoiceDate() {
         return supplierInvoiceDate;
+    }
+
+    public Map<String, Pair<String, String>> getAdditionalData() {
+        return additionalData;
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 import org.yes.cart.service.domain.ProductService;
 import org.yes.cart.service.domain.SkuWarehouseService;
 import org.yes.cart.service.domain.WarehouseService;
@@ -170,6 +171,16 @@ public class DeliveryUpdateOrderEventHandlerImpl implements OrderEventHandler, A
                             }
                             if (lineUpdate.getSupplierInvoiceDate() != null) {
                                 detail.setSupplierInvoiceDate(lineUpdate.getSupplierInvoiceDate());
+                            }
+
+                            if (lineUpdate.getAdditionalData() != null) {
+                                for (final Map.Entry<String, Pair<String, String>> data : lineUpdate.getAdditionalData().entrySet()) {
+                                    if (data.getValue() != null) {
+                                        detail.putValue(data.getKey(), data.getValue().getFirst(), data.getValue().getSecond());
+                                    } else {
+                                        detail.putValue(data.getKey(), null, null);
+                                    }
+                                }
                             }
 
                         } else {
