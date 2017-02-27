@@ -42,9 +42,18 @@ public class SkuPriceSkuCodeToNameConverter implements ValueConverter {
         final String skuCode = ((SkuPrice) object).getSkuCode();
         String name = getName(skuCode, "SKU.NAME.BY.CODE");
         if (name == null) {
-            name = getName(skuCode, "SKU.NAME.BY.SLA.CODE");
+            name = getName(slaCode(skuCode), "SKU.NAME.BY.SLA.CODE");
         }
         return name;
+    }
+
+    protected String slaCode(final String skuCode) {
+        if (skuCode.endsWith("_KG")) {
+            return skuCode.substring(0, skuCode.length() - 3);
+        } else if (skuCode.endsWith("_KGMAX")) {
+            return skuCode.substring(0, skuCode.length() - 6);
+        }
+        return skuCode;
     }
 
     protected String getName(final String skuCode, final String query) {
