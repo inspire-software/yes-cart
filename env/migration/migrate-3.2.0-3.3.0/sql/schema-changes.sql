@@ -319,7 +319,8 @@ alter table TCUSTOMERORDERDELIVERY add column EXPORT_BLOCK bit not null default 
 -- alter table TCUSTOMERORDERDELIVERY add column EXPORT_BLOCK smallint not null default 0;
 alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DATE datetime;
 -- alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DATE timestamp;
-alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_STATUS varchar(255);
+alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_STATUS longtext;
+-- alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_STATUS varchar(4000);
 alter table TCUSTOMERORDERDELIVERY add column EXPORT_LAST_DELIVERYSTATUS varchar(64);
 
 

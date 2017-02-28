@@ -1976,7 +1976,7 @@
         <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDER_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
-        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
+        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="4000"/>
         <property name="lastExportOrderStatus" column="EXPORT_LAST_ORDERSTATUS" type="string" length="64"/>
 
         <property name="b2bRef" column="B2B_REF" type="string" length="64"/>
@@ -2151,7 +2151,7 @@
         <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDERDELIVERY_ELIGEXP"/>
         <property name="blockExport" column="EXPORT_BLOCK" type="boolean" length="1" not-null="true"/>
         <property name="lastExportDate" column="EXPORT_LAST_DATE" type="timestamp"/>
-        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="255"/>
+        <property name="lastExportStatus" column="EXPORT_LAST_STATUS" type="string" length="4000"/>
         <property name="lastExportDeliveryStatus" column="EXPORT_LAST_DELIVERYSTATUS" type="string" length="64"/>
 
         <property name="deliveryStatus" column="DELIVERYSTATUS" type="string" length="64" not-null="true"/>
