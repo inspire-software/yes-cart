@@ -16,6 +16,10 @@
       <yc-shop-main></yc-shop-main>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_ALIAS' | translate }}" (select)="tabSelected('Aliases')">
+      <yc-shop-alias [shop]="shop" [reload]="reloadAliases"></yc-shop-alias>
+    </tab>
+
     <tab heading="{{ 'SHOP_TAB_CATALOG' | translate }}" (select)="tabSelected('Catalogue')">
       <yc-shop-catalog [shop]="shop" [reload]="reloadCatalogue"></yc-shop-catalog>
     </tab>

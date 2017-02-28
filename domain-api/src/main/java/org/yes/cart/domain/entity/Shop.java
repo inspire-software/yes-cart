@@ -131,6 +131,22 @@ public interface Shop extends Auditable, Attributable, Seoable, Codable {
      */
     void setShopUrl(Set<ShopUrl> shopUrl);
 
+
+    /**
+     * Get shop aliases.
+     *
+     * @return list of aliases.
+     */
+    Set<ShopAlias> getShopAlias();
+
+    /**
+     * Set list of aliases.
+     *
+     * @param shopAlias aliases.
+     */
+    void setShopAlias(Set<ShopAlias> shopAlias);
+
+
     /**
      * Get the named advertizing places.
      *

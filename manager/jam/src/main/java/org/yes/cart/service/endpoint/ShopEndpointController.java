@@ -97,6 +97,18 @@ public interface ShopEndpointController {
     @ResponseBody
     VoShopUrl update(@RequestBody VoShopUrl voShopUrl)  throws Exception;
 
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
+    @RequestMapping(value = "/aliases/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShopAlias getAlias(@PathVariable("shopId") long shopId) throws Exception;
+
+    @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN"})
+    @RequestMapping(value = "/aliases", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE },  produces = { MediaType.APPLICATION_JSON_VALUE })
+    @ResponseBody
+    VoShopAlias update(@RequestBody VoShopAlias voShopAlias)  throws Exception;
+
+
     @Secured({"ROLE_SMADMIN","ROLE_SMSHOPADMIN","ROLE_SMWAREHOUSEADMIN","ROLE_SMCALLCENTER","ROLE_SMMARKETINGADMIN"})
     @RequestMapping(value = "/currencies/{shopId}", method = RequestMethod.GET,  produces = { MediaType.APPLICATION_JSON_VALUE })
     @ResponseBody

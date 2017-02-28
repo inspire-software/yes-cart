@@ -162,6 +162,14 @@
         </property>
     </bean>
 
+    <bean id="shopAliasService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.domain.impl.ShopAliasServiceImpl">
+                <constructor-arg type="org.yes.cart.dao.GenericDAO" ref="shopAliasDao"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="categoryService" class="org.yes.cart.service.domain.impl.CategoryServiceCachedImpl">
         <constructor-arg>
             <bean parent="txProxyTemplate">

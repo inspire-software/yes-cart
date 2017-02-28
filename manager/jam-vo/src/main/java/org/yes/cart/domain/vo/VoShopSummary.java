@@ -61,6 +61,8 @@ public class VoShopSummary {
     private MutablePair<String, String> primaryUrlAndThemeChain;
     private List<MutablePair<String, String>> aliasUrlAndThemeChain = new ArrayList<MutablePair<String, String>>();
 
+    private List<String> aliases = new ArrayList<String>();
+
     private MutablePair<String, Boolean> checkoutEnableGuest;
     private MutablePair<String, Boolean> checkoutEnableCoupons;
     private MutablePair<String, Boolean> checkoutEnableMessage;
@@ -273,6 +275,14 @@ public class VoShopSummary {
 
     public void setAliasUrlAndThemeChain(final List<MutablePair<String, String>> aliasUrlAndThemeChain) {
         this.aliasUrlAndThemeChain = aliasUrlAndThemeChain;
+    }
+
+    public List<String> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(final List<String> aliases) {
+        this.aliases = aliases;
     }
 
     public MutablePair<String, Boolean> getCheckoutEnableGuest() {

@@ -6,6 +6,7 @@ export * from './shop-seo.component';
 export * from './shop-currency.component';
 export * from './shop-language.component';
 export * from './shop-url.component';
+export * from './shop-alias.component';
 export * from './shop-catalog.component';
 export * from './shop-location.component';
 export * from './shop-carrier.component';

@@ -49,13 +49,14 @@
         <constructor-arg index="1" ref="currencyService"/>
         <constructor-arg index="2" ref="countryService"/>
         <constructor-arg index="3" ref="dtoShopUrlService"/>
-        <constructor-arg index="4" ref="dtoShopService"/>
-        <constructor-arg index="5" ref="dtoAttributeService"/>
-        <constructor-arg index="6" ref="uiFederationFacade"/>
-        <constructor-arg index="7" ref="voAssemblySupport"/>
-        <constructor-arg index="8" ref="voIOSupport"/>
-        <constructor-arg index="9" ref="systemService"/>
-        <constructor-arg index="10" ref="themeService"/>
+        <constructor-arg index="4" ref="dtoShopAliasService"/>
+        <constructor-arg index="5" ref="dtoShopService"/>
+        <constructor-arg index="6" ref="dtoAttributeService"/>
+        <constructor-arg index="7" ref="uiFederationFacade"/>
+        <constructor-arg index="8" ref="voAssemblySupport"/>
+        <constructor-arg index="9" ref="voIOSupport"/>
+        <constructor-arg index="10" ref="systemService"/>
+        <constructor-arg index="11" ref="themeService"/>
         <property name="skipAttributesInView">
             <list>
                 <value>CURRENCY</value>
@@ -492,6 +493,11 @@
                     <map>
                         <entry key="code">
                             <bean class="org.yes.cart.service.vo.impl.VoValidationServiceShopCodeImpl">
+                                <constructor-arg index="0" ref="shopService"/>
+                            </bean>
+                        </entry>
+                        <entry key="alias">
+                            <bean class="org.yes.cart.service.vo.impl.VoValidationServiceShopAliasImpl">
                                 <constructor-arg index="0" ref="shopService"/>
                             </bean>
                         </entry>

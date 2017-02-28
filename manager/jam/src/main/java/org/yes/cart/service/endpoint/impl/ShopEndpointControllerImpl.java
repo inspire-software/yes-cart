@@ -126,6 +126,16 @@ public class ShopEndpointControllerImpl implements ShopEndpointController {
     }
 
     public @ResponseBody
+    VoShopAlias getAlias(@PathVariable("shopId") final long shopId) throws Exception {
+        return voShopService.getShopAliases(shopId);
+    }
+
+    public @ResponseBody
+    VoShopAlias update(@RequestBody final VoShopAlias voShopAlias) throws Exception {
+        return voShopService.update(voShopAlias);
+    }
+
+    public @ResponseBody
     VoShopSupportedCurrencies getCurrency(@PathVariable("shopId") final long shopId) throws Exception {
         return voShopService.getShopCurrencies(shopId);
     }

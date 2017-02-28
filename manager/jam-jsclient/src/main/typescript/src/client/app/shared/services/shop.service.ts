@@ -19,7 +19,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import { Config } from '../config/env.config';
 import { Util } from './util';
 import { LogUtil } from './../log/index';
-import { ShopVO, ShopUrlVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair, ShopSummaryVO, SubShopVO } from '../model/index';
+import { ShopVO, ShopUrlVO, ShopAliasVO, ShopSeoVO, ShopSupportedCurrenciesVO, ShopLanguagesVO, ShopLocationsVO, AttrValueShopVO, CategoryVO, Pair, ShopSummaryVO, SubShopVO } from '../model/index';
 import { ErrorEventBus } from './error-event-bus.service';
 import { Observable }     from 'rxjs/Observable';
 import 'rxjs/Rx';
@@ -211,8 +211,38 @@ export class ShopService {
 
   }
 
+
   /**
-   * Get urls for gien shop id.
+   * Get aliases for gien shop id.
+   * @param id
+   * @returns {Observable<R>}
+   */
+  getShopAliases(id:number) {
+    return this.http.get(this._serviceBaseUrl + '/aliases/' + id)
+      .map(res => <ShopAliasVO> res.json())
+      .catch(this.handleError);
+  }
+
+  /**
+   * Save changes in list of shop aliases
+   * @param shopAlias
+   * @returns {Promise<ShopAliasVO>}
+   */
+  saveShopAliases(shopAlias:ShopAliasVO) {
+
+    let body = JSON.stringify(shopAlias);
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    let options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this._serviceBaseUrl + '/aliases', body, options)
+      .map(res => <ShopAliasVO> res.json())
+      .catch(this.handleError);
+
+  }
+
+
+  /**
+   * Get currencies for given shop id.
    * @param id
    * @returns {Observable<R>}
    */

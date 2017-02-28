@@ -187,6 +187,17 @@
         </property>
     </bean>
 
+    <bean id="dtoShopAliasService" parent="txProxyTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.dto.impl.DtoShopAliasServiceImpl">
+                <constructor-arg index="0" ref="shopAliasService"/>
+                <constructor-arg index="1" ref="shopService"/>
+                <constructor-arg index="2" type="org.yes.cart.domain.dto.factory.DtoFactory" ref="dtoInterfaceToClassFactory"/>
+                <constructor-arg index="3" ref="dtoAssemblerAdaptersRepository"/>
+            </bean>
+        </property>
+    </bean>
+
     <bean id="dtoBrandService" parent="txProxyTemplate">
         <property name="target">
             <bean class="org.yes.cart.service.dto.impl.DtoBrandServiceImpl">
@@ -497,6 +508,7 @@
                 <entry key="org.yes.cart.domain.dto.EtypeDTO" value="org.yes.cart.domain.dto.impl.EtypeDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopDTO" value="org.yes.cart.domain.dto.impl.ShopDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ShopUrlDTO" value="org.yes.cart.domain.dto.impl.ShopUrlDTOImpl"/>
+                <entry key="org.yes.cart.domain.dto.ShopAliasDTO" value="org.yes.cart.domain.dto.impl.ShopAliasDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.CategoryDTO" value="org.yes.cart.domain.dto.impl.CategoryDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.BrandDTO" value="org.yes.cart.domain.dto.impl.BrandDTOImpl"/>
                 <entry key="org.yes.cart.domain.dto.ProductTypeDTO" value="org.yes.cart.domain.dto.impl.ProductTypeDTOImpl"/>

@@ -357,6 +357,14 @@ public class ShopServiceImpl extends BaseGenericServiceImpl<Shop> implements Sho
                 return (Long) id;
             }
         }
+        list = shopDao.findQueryObjectByNamedQuery("SHOP.ID.BY.SHOPALIAS", code);
+        if (list != null && !list.isEmpty()) {
+            final Object id = list.get(0);
+            if (id instanceof Long) {
+                return (Long) id;
+            }
+        }
+
         return null;
     }
 

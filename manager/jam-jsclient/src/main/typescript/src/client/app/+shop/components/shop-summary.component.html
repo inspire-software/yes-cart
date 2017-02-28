@@ -33,7 +33,12 @@
       <div class="panel-body">
         <div class="row block-margin-spacer">
           <div class="col-xs-5 col-md-4"><strong>{{ 'NAME' | translate }}</strong></div>
-          <div class="col-xs-7 col-md-8"><span [ngClass]="shopSummary.disabled ? 'label label-danger':'label label-success'">{{shopSummary.masterCode != null ? shopSummary.masterCode + ': ' : ''}}{{shopSummary.code}}</span> {{shopSummary.name}} <span [hidden]="shopSummary.masterCode == null" class="label label-info">YCE</span></div>
+          <div class="col-xs-7 col-md-8">
+            <div><span [ngClass]="shopSummary.disabled ? 'label label-danger':'label label-success'">{{shopSummary.masterCode != null ? shopSummary.masterCode + ': ' : ''}}{{shopSummary.code}}</span> {{shopSummary.name}} <span [hidden]="shopSummary.masterCode == null" class="label label-info">YCE</span></div>
+            <div *ngFor="let aliasCode of shopSummary.aliases">
+              <span class="label label-info">{{aliasCode}}</span> {{shopSummary.name}}
+            </div>
+          </div>
         </div>
         <div class="row block-margin-spacer">
           <div class="col-xs-5 col-md-4"><strong>{{ 'SHOP_THEME_CHAIN' | translate }}</strong></div>

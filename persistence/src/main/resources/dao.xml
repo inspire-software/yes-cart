@@ -153,6 +153,7 @@
                 <entry key="org.yes.cart.domain.entity.ShopAdvPlaceRule" value="org.yes.cart.domain.entity.impl.ShopAdvPlaceRuleEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopCategory" value="org.yes.cart.domain.entity.impl.ShopCategoryEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopUrl" value="org.yes.cart.domain.entity.impl.ShopUrlEntity"/>
+                <entry key="org.yes.cart.domain.entity.ShopAlias" value="org.yes.cart.domain.entity.impl.ShopAliasEntity"/>
                 <entry key="org.yes.cart.domain.entity.Warehouse" value="org.yes.cart.domain.entity.impl.WarehouseEntity"/>
                 <entry key="org.yes.cart.domain.entity.ShopWarehouse" value="org.yes.cart.domain.entity.impl.ShopWarehouseEntity"/>
 
@@ -430,6 +431,12 @@
 
     <bean id="shopUrlDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
         <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopUrlEntity</value></constructor-arg>
+        <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="shopAliasDao" class="org.yes.cart.dao.impl.GenericDAOHibernateImpl">
+        <constructor-arg><value>org.yes.cart.domain.entity.impl.ShopAliasEntity</value></constructor-arg>
         <constructor-arg type="org.yes.cart.dao.EntityFactory" ref="internalEntityFactory"/>
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

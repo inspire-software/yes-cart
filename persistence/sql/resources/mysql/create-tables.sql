@@ -872,6 +872,19 @@
         primary key (STOREURL_ID)
     ) ;
 
+    create table TSHOPALIAS (
+        STOREALIAS_ID bigint not null auto_increment,
+        VERSION bigint not null default 0,
+        SHOP_ALIAS varchar(255) not null unique,
+        SHOP_ID bigint not null,
+        CREATED_TIMESTAMP datetime,
+        UPDATED_TIMESTAMP datetime,
+        CREATED_BY varchar(64),
+        UPDATED_BY varchar(64),
+        GUID varchar(36) not null unique,
+        primary key (STOREALIAS_ID)
+    ) ;
+
     create table TSHOPWAREHOUSE (
         SHOPWAREHOUSE_ID bigint not null auto_increment,
         VERSION bigint not null default 0,
@@ -1551,6 +1564,13 @@
         add index FK_SHOPURL_SHOP (SHOP_ID), 
         add constraint FK_SHOPURL_SHOP 
         foreign key (SHOP_ID) 
+        references TSHOP (SHOP_ID);
+
+
+    alter table TSHOPALIAS
+        add index FK_SHOPALIAS_SHOP (SHOP_ID),
+        add constraint FK_SHOPALIAS_SHOP
+        foreign key (SHOP_ID)
         references TSHOP (SHOP_ID);
 
 

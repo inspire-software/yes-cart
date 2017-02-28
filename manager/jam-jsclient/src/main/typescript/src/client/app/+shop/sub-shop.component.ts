@@ -38,6 +38,7 @@ export class SubShopComponent implements OnInit, OnDestroy {
   private reloadAttributes:boolean = false;
   private reloadSEO:boolean = false;
   private reloadUrls:boolean = false;
+  private reloadAliases:boolean = false;
   private reloadCarriers:boolean = false;
   private reloadWarehouse:boolean = false;
   private reloadCurrency:boolean = false;
@@ -97,6 +98,7 @@ export class SubShopComponent implements OnInit, OnDestroy {
     this.reloadAttributes = tab === 'Attributes';
     this.reloadSEO = tab === 'SEO';
     this.reloadUrls = tab === 'Urls';
+    this.reloadAliases = tab === 'Aliases';
     this.reloadCarriers = tab === 'Carriers';
     this.reloadWarehouse = tab === 'Warehouse';
     this.reloadCurrency = tab === 'Currency';

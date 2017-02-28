@@ -19,16 +19,19 @@ package org.yes.cart.service.vo.impl;
 import org.yes.cart.service.domain.ShopService;
 import org.yes.cart.service.vo.VoValidationService;
 
+import java.util.regex.Pattern;
+
 /**
  * User: denispavlov
  * Date: 29/08/2016
  * Time: 15:31
  */
-public class VoValidationServiceShopCodeImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
+public class VoValidationServiceShopAliasImpl extends AbstractVoValidationServiceSubjectCodeFieldImpl implements VoValidationService {
 
     private final ShopService shopService;
 
-    public VoValidationServiceShopCodeImpl(final ShopService shopService) {
+    public VoValidationServiceShopAliasImpl(final ShopService shopService) {
+        super(Pattern.compile("^\\S+(.*\\S)*$"));
         this.shopService = shopService;
     }
 

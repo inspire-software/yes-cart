@@ -75,6 +75,22 @@ export interface ShopUrlVO {
 }
 
 /**
+ * Record in shop urls.
+ */
+export interface AliasVO {
+  aliasId : number;
+  alias : string;
+}
+
+/**
+ * Shop alias.
+ */
+export interface ShopAliasVO {
+  shopId : number;
+  aliases : Array<AliasVO>;
+}
+
+/**
  * Represent supported currencies.
  */
 export interface ShopSupportedCurrenciesVO {
@@ -142,6 +158,7 @@ export interface ShopSummaryVO {
   previewCss: string;
   primaryUrlAndThemeChain: Pair<string, string>;
   aliasUrlAndThemeChain: Pair<string, string>[];
+  aliases: string[];
 
   checkoutEnableGuest: Pair<string, boolean>;
   checkoutEnableCoupons: Pair<string, boolean>;

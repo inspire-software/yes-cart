@@ -23,8 +23,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.yes.cart.constants.AttributeNamesKeys;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.AttrValueShopDTO;
+import org.yes.cart.domain.dto.ShopAliasDTO;
 import org.yes.cart.domain.dto.ShopDTO;
 import org.yes.cart.domain.dto.ShopUrlDTO;
+import org.yes.cart.domain.dto.impl.ShopAliasDTOImpl;
 import org.yes.cart.domain.dto.impl.ShopUrlDTOImpl;
 import org.yes.cart.domain.entity.Country;
 import org.yes.cart.domain.misc.MutablePair;
@@ -35,6 +37,7 @@ import org.yes.cart.exception.UnmappedInterfaceException;
 import org.yes.cart.service.domain.CountryService;
 import org.yes.cart.service.domain.SystemService;
 import org.yes.cart.service.dto.DtoAttributeService;
+import org.yes.cart.service.dto.DtoShopAliasService;
 import org.yes.cart.service.dto.DtoShopService;
 import org.yes.cart.service.dto.DtoShopUrlService;
 import org.yes.cart.service.federation.FederationFacade;
@@ -56,6 +59,7 @@ public class VoShopServiceImpl implements VoShopService {
 
     private final DtoShopService dtoShopService;
     private final DtoShopUrlService dtoShopUrlService;
+    private final DtoShopAliasService dtoShopAliasService;
     private final DtoAttributeService dtoAttributeService;
 
     private final FederationFacade federationFacade;
@@ -78,6 +82,7 @@ public class VoShopServiceImpl implements VoShopService {
      * @param currencyService currencies
      * @param countryService  locations
      * @param dtoShopUrlService underlying service to work with shop urls.
+     * @param dtoShopAliasService underlying service to work with shop aliases.
      * @param dtoShopService    underlying service to use.
      * @param dtoAttributeService attribute service
      * @param federationFacade  access.
@@ -90,6 +95,7 @@ public class VoShopServiceImpl implements VoShopService {
                              final CurrencyService currencyService,
                              final CountryService countryService,
                              final DtoShopUrlService dtoShopUrlService,
+                             final DtoShopAliasService dtoShopAliasService,
                              final DtoShopService dtoShopService,
                              final DtoAttributeService dtoAttributeService,
                              final FederationFacade federationFacade,
@@ -100,6 +106,7 @@ public class VoShopServiceImpl implements VoShopService {
         this.currencyService = currencyService;
         this.countryService = countryService;
         this.dtoShopUrlService = dtoShopUrlService;
+        this.dtoShopAliasService = dtoShopAliasService;
         this.dtoShopService = dtoShopService;
         this.dtoAttributeService = dtoAttributeService;
         this.federationFacade = federationFacade;
@@ -294,6 +301,8 @@ public class VoShopServiceImpl implements VoShopService {
             addShopLocations(summary, configShopId);
 
             addShopUrls(summary, configShopId);
+
+            addShopAliasess(summary, currentShopId);
 
             addSearchConfig(summary, lang, attrsMap);
 
@@ -519,6 +528,13 @@ public class VoShopServiceImpl implements VoShopService {
                         )
                 );
             }
+        }
+    }
+
+    protected void addShopAliasess(final VoShopSummary summary, final long shopId) throws Exception {
+        final VoShopAlias aliases = getShopAliasesInternal(shopId);
+        for (final VoShopAliasDetail alias : aliases.getAliases()) {
+            summary.getAliases().add(alias.getAlias());
         }
     }
 
@@ -759,6 +775,59 @@ public class VoShopServiceImpl implements VoShopService {
             throw new AccessDeniedException("Access is denied");
         }
     }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoShopAlias getShopAliases(long shopId) throws Exception {
+        if (federationFacade.isShopAccessibleByCurrentManager(shopId)) {
+            return getShopAliasesInternal(shopId);
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    private VoShopAlias getShopAliasesInternal(long shopId) throws Exception {
+        final List<ShopAliasDTO> shopAliasDTO = dtoShopAliasService.getAllByShopId(shopId);
+        final VoShopAlias voShopAlias = new VoShopAlias();
+        voShopAlias.setAliases(voAssemblySupport.assembleVos(VoShopAliasDetail.class, ShopAliasDTO.class, shopAliasDTO));
+        voShopAlias.setShopId(shopId);
+
+        return voShopAlias;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoShopAlias update(VoShopAlias vo) throws Exception {
+        if (vo != null && federationFacade.isShopAccessibleByCurrentManager(vo.getShopId())) {
+            final List<ShopAliasDTO> originalShopAliasDTOs = dtoShopAliasService.getAllByShopId(vo.getShopId());
+            final Set<Long> updated = new HashSet<>();
+            for (VoShopAliasDetail aliasDetail : vo.getAliases()) {
+                ShopAliasDTO shopAliasDTO =
+                        voAssemblySupport.assembleDto(ShopAliasDTO.class, VoShopAliasDetail.class, new ShopAliasDTOImpl(), aliasDetail);
+                shopAliasDTO.setShopId(vo.getShopId());
+                if (aliasDetail.getAliasId() == 0) {  //new one insert
+                    dtoShopAliasService.create(shopAliasDTO);
+                } else { //update
+                    dtoShopAliasService.update(shopAliasDTO);
+                    updated.add(shopAliasDTO.getStoreAliasId());
+                }
+            }
+            for (ShopAliasDTO dto : originalShopAliasDTOs) {
+                if (!updated.contains(dto.getId())) {
+                    dtoShopAliasService.remove(dto.getId());
+                }
+            }
+            return getShopAliases(vo.getShopId());
+        } else {
+            throw new AccessDeniedException("Access is denied");
+        }
+    }
+
 
     /**
      * {@inheritDoc}

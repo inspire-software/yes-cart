@@ -24,6 +24,10 @@
       <yc-shop-url [shop]="shop" [reload]="reloadUrls"></yc-shop-url>
     </tab>
 
+    <tab heading="{{ 'SHOP_TAB_ALIAS' | translate }}" (select)="tabSelected('Aliases')">
+      <yc-shop-alias [shop]="shop" [reload]="reloadAliases"></yc-shop-alias>
+    </tab>
+
     <tab heading="{{ 'SHOP_TAB_CURRENCY' | translate }}" (select)="tabSelected('Currency')">
       <yc-shop-currency [shop]="shop" [reload]="reloadCurrency"></yc-shop-currency>
     </tab>

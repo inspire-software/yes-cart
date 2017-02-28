@@ -60,7 +60,7 @@ export class ShopMainComponent implements OnInit, OnDestroy {
     let validCode = function(control:any):any {
 
       let code = control.value;
-      if (code == null || code == '' || that.shop == null|| !that.shopMainForm || (!that.shopMainForm.dirty && that.shop.shopId > 0)) {
+      if (that.shop == null|| !that.shopMainForm || (!that.shopMainForm.dirty && that.shop.shopId > 0)) {
         return null;
       }
 

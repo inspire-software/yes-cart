@@ -38,6 +38,7 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
     private String fspointer;
     private boolean disabled;
     private Set<ShopUrl> shopUrl = new HashSet<ShopUrl>(0);
+    private Set<ShopAlias> shopAlias = new HashSet<ShopAlias>(0);
     private Collection<ShopAdvPlace> advertisingPlaces = new ArrayList<ShopAdvPlace>(0);
     private Collection<AttrValueShop> attributes = new ArrayList<AttrValueShop>(0);
     private SeoEntity seoInternal;
@@ -145,6 +146,14 @@ public class ShopEntity implements org.yes.cart.domain.entity.Shop, java.io.Seri
 
     public void setShopUrl(Set<ShopUrl> shopUrl) {
         this.shopUrl = shopUrl;
+    }
+
+    public Set<ShopAlias> getShopAlias() {
+        return shopAlias;
+    }
+
+    public void setShopAlias(final Set<ShopAlias> shopAlias) {
+        this.shopAlias = shopAlias;
     }
 
     public Collection<ShopAdvPlace> getAdvertisingPlaces() {

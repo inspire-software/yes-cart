@@ -125,13 +125,31 @@ public interface VoShopService {
     VoShopUrl getShopUrls(long shopId) throws Exception;
 
     /**
-     * Update shop urls, that are belong to some shop
+     * Update shop urls
      *
      * @param vo urls
      * @return updated version of shop urls
      * @throws Exception
      */
     VoShopUrl update(VoShopUrl vo) throws Exception;
+
+    /**
+     * Get aliases for shop.
+     *
+     * @param shopId pk
+     * @return aliases
+     * @throws Exception
+     */
+    VoShopAlias getShopAliases(long shopId) throws Exception;
+
+    /**
+     * Update shop aliases
+     *
+     * @param vo aliases
+     * @return updated version of shop aliases
+     * @throws Exception
+     */
+    VoShopAlias update(VoShopAlias vo) throws Exception;
 
     /**
      * GEt supprted currencies.

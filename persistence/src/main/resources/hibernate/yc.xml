@@ -1495,6 +1495,12 @@
             </key>
             <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopUrlEntity"/>
         </set>
+        <set name="shopAlias" inverse="true" lazy="false" cascade="all">
+            <key>
+                <column name="SHOP_ID" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="org.yes.cart.domain.entity.impl.ShopAliasEntity"/>
+        </set>
         <bag name="advertisingPlaces" inverse="false" lazy="false" cascade="all">
             <key>
                 <column name="SHOP_ID" not-null="true"/>
@@ -1684,6 +1690,29 @@
         <property name="themeChain" column="THEME_CHAIN" type="string" length="512" not-null="false" lazy="false"/>
         <property name="primary" column="PRIMARY_URL" type="boolean"/>
         <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPURL_SHOP">
+            <column name="SHOP_ID" not-null="true"/>
+        </many-to-one>
+
+        <property name="createdTimestamp" column="CREATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="updatedTimestamp" column="UPDATED_TIMESTAMP" type="timestamp" not-null="false"/>
+        <property name="createdBy" column="CREATED_BY" type="string" length="64" not-null="false"/>
+        <property name="updatedBy" column="UPDATED_BY" type="string" length="64" not-null="false"/>
+        <property name="guid" column="GUID" type="string" length="36" unique-key="SHOPURL_GUID" not-null="true"/>
+
+    </class>
+
+
+    <class name="org.yes.cart.domain.entity.impl.ShopAliasEntity" table="TSHOPALIAS">
+        <id name="storeAliasId" column="STOREALIAS_ID" type="long">
+            <generator class="native">
+                <param name="table">HIBERNATE_UNIQUE_KEYS</param>
+                <param name="column">value</param>
+            </generator>
+        </id>
+        <version name="version" column="VERSION" type="long"/>
+
+        <property name="alias" column="SHOP_ALIAS" type="string" length="255" not-null="true" lazy="false" index="SHOPALIAS_ALIAS"/>
+        <many-to-one name="shop" class="org.yes.cart.domain.entity.impl.ShopEntity" foreign-key="FK_SHOPALIAS_SHOP">
             <column name="SHOP_ID" not-null="true"/>
         </many-to-one>
 
@@ -2743,6 +2772,12 @@
     <query name="SHOP.ID.BY.SHOPCODE">
         <![CDATA[
           select s.shopId from ShopEntity s  where s.code = ?1
+       ]]>
+    </query>
+
+    <query name="SHOP.ID.BY.SHOPALIAS">
+        <![CDATA[
+          select a.shop.shopId from ShopAliasEntity a  where a.alias = ?1
        ]]>
     </query>
 
