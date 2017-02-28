@@ -640,7 +640,7 @@ SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
 alter table TCARRIERSLA add column EXTERNAL_REF varchar(40);
 
 --
---
+-- YC-775 Shop alias codes to aid integrations
 --
 
     create table TSHOPALIAS (
