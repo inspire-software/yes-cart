@@ -146,7 +146,7 @@ public class AdminInterceptor extends AuditInterceptor implements ApplicationCon
 
                     if (threadContext == null) {
                         ShopCodeContext.getLog(this)
-                                .warn("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
+                                .debug("Cannot invalidate cache for entity [" + entityName + "] pk value =  [" + pk + "] - no async context ");
                         return;
                     }
 
