@@ -634,7 +634,7 @@ E.g. MAIN.INITPAID=sales@warehouse.com,admin@warehouse.com
 SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
 
 --
---
+--  YC-774 External reference for carrier SLA to use in exports
 --
 
 alter table TCARRIERSLA add column EXTERNAL_REF varchar(40);
