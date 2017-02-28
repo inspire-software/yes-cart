@@ -51,6 +51,7 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
     private List<String> supportedFulfilmentCentresAsList;
     private boolean billingAddressNotRequired;
     private boolean deliveryAddressNotRequired;
+    private String externalRef;
     private Carrier carrier;
     private Date createdTimestamp;
     private Date updatedTimestamp;
@@ -216,6 +217,14 @@ public class CarrierSlaEntity implements org.yes.cart.domain.entity.CarrierSla, 
 
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
+    }
+
+    public String getExternalRef() {
+        return externalRef;
+    }
+
+    public void setExternalRef(final String externalRef) {
+        this.externalRef = externalRef;
     }
 
     public Carrier getCarrier() {

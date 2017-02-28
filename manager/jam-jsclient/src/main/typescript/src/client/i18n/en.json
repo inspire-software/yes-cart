@@ -199,6 +199,7 @@
   "TAB_CONFIGURATIONS": "Configurations",
   "TAB_ROLES": "Roles",
   "TAB_ADDRESSBOOK": "Address book",
+  "TAB_EXTERNAL": "External",
 
   "ATTRIBUTE_USAGE": "Product types that use attribute {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Attribute is not used by any product Type",
@@ -263,6 +264,7 @@
   "LOCATION_POST_CODE": "Post code",
 
   "CARRIERSLA_CODE": "SLA SKU",
+  "CARRIERSLA_REF": "Ref",
   "CARRIERSLA_GUARANTEED": "Guaranteed delivery (Min days)",
   "CARRIERSLA_MINDAYS": "Min days",
   "CARRIERSLA_MAXDAYS": "Max days",
@@ -338,7 +340,6 @@
   "PRODUCT_SEARCH_TEMPLATE": "Search template",
 
   "PRODUCT_TAB_AVAILABILITY": "Availability",
-  "PRODUCT_TAB_EXTERNAL": "External",
   "PRODUCT_TAB_CATALOG": "Catalog",
   "PRODUCT_TAB_ASSOCIATIONS": "Associations",
 

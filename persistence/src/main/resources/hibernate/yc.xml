@@ -2310,6 +2310,8 @@
         <property name="supportedPaymentGateways" column="SUPPORTED_PGS" type="string" length="1024"/>
         <property name="supportedFulfilmentCentres" column="SUPPORTED_FCS" type="string" length="1024"/>
 
+        <property name="externalRef" column="EXTERNAL_REF"  type="string" length="40"/>
+
         <many-to-one name="carrier" class="org.yes.cart.domain.entity.impl.CarrierEntity" foreign-key="FK_CSLA_CARR" lazy="false">
             <column name="CARRIER_ID" not-null="true"/>
         </many-to-one>

@@ -4,7 +4,7 @@
     <table class="table-bordered table-striped table-condensed cf">
       <thead class="cf">
       <tr>
-        <th>{{ 'CARRIERSLA_CODE' | translate }}</th>
+        <th>{{ 'CARRIERSLA_CODE' | translate }} / {{ 'CARRIERSLA_REF' | translate}}</th>
         <th>{{ 'CARRIERSLA_SLATYPE' | translate }}</th>
         <th>{{ 'NAME' | translate }}</th>
         <th>{{ 'CARRIERSLA_BILL' | translate }}</th>
@@ -16,7 +16,7 @@
       <tbody>
       <tr *ngFor="let row of filteredSlas; let i = index" class="{{row == selectedSla ? 'active' : ''}}">
         <template [ngIf]=" ( i >= pageStart &&  i < pageEnd )">
-          <td title="{{ 'CARRIERSLA_CODE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}}</a></td>
+          <td title="{{ 'CARRIERSLA_CODE' | translate }} / {{ 'CARRIERSLA_REF' | translate}}"><a class="js-click" (click)="onSelectRow(row)">{{row.code}} {{ row.externalRef != null ? ('/ ' + row.externalRef) : '' }}</a></td>
           <td title="{{ 'CARRIERSLA_SLATYPE' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{ ('CARRIERSLA_SLATYPE_' + row.slaType) | translate }} <i class="fa {{ row.guaranteed ? 'fa-check-circle' : 'fa-exchange' }}"></i> {{ row.minDays > 0 ? row.minDays : '0' }}{{ row.maxDays > 0 ? ' - ' + row.maxDays : '' }}</a></td>
           <td title="{{ 'NAME' | translate }}"><a class="js-click" (click)="onSelectRow(row)">{{row.name}}</a></td>
           <td title="{{ 'CARRIERSLA_BILL' | translate }}"><a class="js-click" (click)="onSelectRow(row)"><i class="fa {{ row.billingAddressNotRequired ? 'fa-times-circle' : 'fa-check-circle' }}"></i></a></td>

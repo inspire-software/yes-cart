@@ -306,6 +306,19 @@ public interface CarrierSla extends Auditable {
      */
     List<String> getSupportedFulfilmentCentresAsList();
 
+    /**
+     * External reference (e.g. for custom export to 3rd party systems)
+     *
+     * @return external reference
+     */
+    String getExternalRef();
+
+    /**
+     * External reference (e.g. for custom export to 3rd party systems)
+     *
+     * @param externalRef external reference
+     */
+    void setExternalRef(String externalRef);
 
     /**
      * Get carrier.

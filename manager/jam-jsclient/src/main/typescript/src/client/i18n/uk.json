@@ -199,6 +199,7 @@
   "TAB_CONFIGURATIONS": "Конфігурації",
   "TAB_ROLES": "Ролі",
   "TAB_ADDRESSBOOK": "Адресна книга",
+  "TAB_EXTERNAL": "Зовнішнє",
 
   "ATTRIBUTE_USAGE": "Типи товарів, які використовують атрибут {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Атрибут не використовується",
@@ -263,6 +264,7 @@
   "LOCATION_POST_CODE": "Поштовий індекс",
 
   "CARRIERSLA_CODE": "Артикул",
+  "CARRIERSLA_REF": "Код",
   "CARRIERSLA_GUARANTEED": "Гарантована доставка (Мін. днів)",
   "CARRIERSLA_MINDAYS": "Мін. днів",
   "CARRIERSLA_MAXDAYS": "Макс. днів",
@@ -338,7 +340,6 @@
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон пошуку",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступність",
-  "PRODUCT_TAB_EXTERNAL": "Зовнішнє",
   "PRODUCT_TAB_CATALOG": "Каталог",
   "PRODUCT_TAB_ASSOCIATIONS": "Зв'язки",
 

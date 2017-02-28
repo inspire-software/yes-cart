@@ -199,6 +199,7 @@
   "TAB_CONFIGURATIONS": "Конфигурации",
   "TAB_ROLES": "Роли",
   "TAB_ADDRESSBOOK": "Адресная книга",
+  "TAB_EXTERNAL": "Внешнее",
 
   "ATTRIBUTE_USAGE": "Типы товаров, которые используют атрибут {{code}}",
   "ATTRIBUTE_USAGE_NONE": "Атрибут не используется",
@@ -263,6 +264,7 @@
   "LOCATION_POST_CODE": "Почтовый индекс",
 
   "CARRIERSLA_CODE": "Артикул",
+  "CARRIERSLA_REF": "Код",
   "CARRIERSLA_GUARANTEED": "Гарантированная доставка (Мин. дней)",
   "CARRIERSLA_MINDAYS": "Мин. дней",
   "CARRIERSLA_MAXDAYS": "Макс. дней",
@@ -338,7 +340,6 @@
   "PRODUCT_SEARCH_TEMPLATE": "Шаблон поиска",
 
   "PRODUCT_TAB_AVAILABILITY": "Доступность",
-  "PRODUCT_TAB_EXTERNAL": "Внешнее",
   "PRODUCT_TAB_CATALOG": "Каталог",
   "PRODUCT_TAB_ASSOCIATIONS": "Связи",
 

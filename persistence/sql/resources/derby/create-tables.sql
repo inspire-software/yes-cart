@@ -166,6 +166,7 @@
         DELIVERY_ADDRESS_NOT_REQUIRED smallint not null,
         SUPPORTED_PGS varchar(1024),
         SUPPORTED_FCS varchar(1024),
+        EXTERNAL_REF varchar(40),
         CARRIER_ID bigint not null,
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,

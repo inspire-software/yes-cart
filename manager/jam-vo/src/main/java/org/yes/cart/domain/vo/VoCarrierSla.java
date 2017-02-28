@@ -85,6 +85,9 @@ public class VoCarrierSla {
     @DtoField(value = "deliveryAddressNotRequired")
     private boolean deliveryAddressNotRequired;
 
+    @DtoField(value = "externalRef")
+    private String externalRef;
+
     public long getCarrierslaId() {
         return carrierslaId;
     }
@@ -229,4 +232,11 @@ public class VoCarrierSla {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
     }
 
+    public String getExternalRef() {
+        return externalRef;
+    }
+
+    public void setExternalRef(final String externalRef) {
+        this.externalRef = externalRef;
+    }
 }

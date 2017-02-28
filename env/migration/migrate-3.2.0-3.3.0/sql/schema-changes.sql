@@ -633,4 +633,8 @@ INSERT INTO TATTRIBUTE (ATTRIBUTE_ID, GUID, CODE, MANDATORY, VAL, NAME, DESCRIPT
 E.g. MAIN.INITPAID=sales@warehouse.com,admin@warehouse.com
 SECOND.INITPAID=sales@wahouse2.com',  1012, 1001, 0, 0, 0, 0);
 
+--
+--
+--
 
+alter table TCARRIERSLA add column EXTERNAL_REF varchar(40);

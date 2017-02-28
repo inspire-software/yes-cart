@@ -110,7 +110,8 @@ export class SlaComponent implements OnInit, OnDestroy {
       'name': [''],
       'description': [''],
       'supportedPaymentGateways': [''],
-      'supportedFulfilmentCentres': ['']
+      'supportedFulfilmentCentres': [''],
+      'externalRef': ['', YcValidators.nonBlankTrimmed]
     });
 
     this.delayedChange = Futures.perpetual(function() {

@@ -76,4 +76,6 @@ export interface CarrierSlaVO {
   supportedPaymentGateways : Array<string>;
   supportedFulfilmentCentres : Array<string>;
 
+  externalRef : string;
+
 }

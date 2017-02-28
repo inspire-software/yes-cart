@@ -89,6 +89,9 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
     @DtoField(value = "deliveryAddressNotRequired")
     private boolean deliveryAddressNotRequired;
 
+    @DtoField(value = "externalRef")
+    private String externalRef;
+
     /** {@inheritDoc} */
     public long getCarrierslaId() {
         return carrierslaId;
@@ -330,6 +333,20 @@ public class CarrierSlaDTOImpl implements CarrierSlaDTO {
      */
     public void setDeliveryAddressNotRequired(final boolean deliveryAddressNotRequired) {
         this.deliveryAddressNotRequired = deliveryAddressNotRequired;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getExternalRef() {
+        return externalRef;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setExternalRef(final String externalRef) {
+        this.externalRef = externalRef;
     }
 
     /**

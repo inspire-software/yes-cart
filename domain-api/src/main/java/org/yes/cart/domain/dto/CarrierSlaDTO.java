@@ -273,6 +273,21 @@ public interface CarrierSlaDTO extends Identifiable, Codable {
 
 
     /**
+     * External reference (e.g. for custom export to 3rd party systems)
+     *
+     * @return external reference
+     */
+    String getExternalRef();
+
+    /**
+     * External reference (e.g. for custom export to 3rd party systems)
+     *
+     * @param externalRef external reference
+     */
+    void setExternalRef(String externalRef);
+
+
+    /**
      * Get carrier.
      *
      * @return pk value of carrier.
