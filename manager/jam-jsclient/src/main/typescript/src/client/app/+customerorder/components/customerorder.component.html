@@ -317,10 +317,14 @@
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_EXPORT_LAST' | translate }}</strong></div>
                 <div class="col-xs-9">
-                  <div *ngIf="customerorder.lastExportOrderStatus != null">{{ customerorder.ordernum }} {{ customerorder.lastExportOrderStatus | translate }} {{ customerorder.lastExportDate | ycdatetime }} {{ customerorder.lastExportStatus }}</div>
+                  <div *ngIf="customerorder.lastExportOrderStatus != null">
+                    <strong class="{{ customerorder.lastExportStatus != null ? 'text-danger' : '' }}">{{ customerorder.ordernum }}</strong> {{ customerorder.lastExportOrderStatus | translate }} {{ customerorder.lastExportDate | ycdatetime }}
+                    <pre *ngIf="customerorder.lastExportStatus != null">{{ customerorder.lastExportStatus }}</pre>
+                  </div>
                   <div *ngFor=" let exportedDelivery of customerorder.deliveries">
                     <template [ngIf]="exportedDelivery.lastExportDeliveryStatus != null">
-                      {{ exportedDelivery.deliveryNum }} {{ exportedDelivery.lastExportDeliveryStatus | translate }} {{ exportedDelivery.lastExportDate | ycdatetime }} {{ exportedDelivery.lastExportStatus }}
+                      <strong class="{{ exportedDelivery.lastExportStatus != null ? 'text-danger' : '' }}">{{ exportedDelivery.deliveryNum }}</strong> {{ exportedDelivery.lastExportDeliveryStatus | translate }} {{ exportedDelivery.lastExportDate | ycdatetime }}
+                      <pre *ngIf="exportedDelivery.lastExportStatus != null">{{ exportedDelivery.lastExportStatus }}</pre>
                     </template>
                   </div>
                 </div>
