@@ -235,10 +235,67 @@
 
     <bean id="paymentConfirmedOrderAutoExportListener" parent="txProxyOrderStateTransitionListenerTemplate">
         <property name="target">
-            <bean class="org.yes.cart.service.order.impl.listener.PaymentConfirmedOrderAutoExportListenerImpl"/>
+            <bean class="org.yes.cart.service.order.impl.listener.OrderAutoExportListenerImpl">
+                <property name="orderEligibilityType" value="INITPAID"/>
+                <property name="deliveryEligibilityType" value="INITPAID"/>
+                <property name="validOrderStates">
+                    <set>
+                        <value>os.in.progress</value>
+                        <value>os.partially.shipped</value>
+                        <value>os.completed</value>
+                    </set>
+                </property>
+            </bean>
         </property>
     </bean>
 
+
+    <bean id="deliveryInfoUpdatedOrderAutoExportListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.OrderAutoExportListenerImpl">
+                <property name="orderEligibilityType" value="DELIVERY"/>
+                <property name="deliveryEligibilityType" value="DELIVERY"/>
+                <property name="validOrderStates">
+                    <set>
+                        <value>os.in.progress</value>
+                        <value>os.partially.shipped</value>
+                        <value>os.completed</value>
+                    </set>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <bean id="cancelledOrderAutoExportListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.OrderAutoExportListenerImpl">
+                <property name="orderEligibilityType" value="CANCELLED"/>
+                <property name="deliveryEligibilityType" value="CANCELLED"/>
+                <property name="validOrderStates">
+                    <set>
+                        <value>os.cancelled</value>
+                        <value>os.cancelled.waiting.payment</value>
+                    </set>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="returnedOrderAutoExportListener" parent="txProxyOrderStateTransitionListenerTemplate">
+        <property name="target">
+            <bean class="org.yes.cart.service.order.impl.listener.OrderAutoExportListenerImpl">
+                <property name="orderEligibilityType" value="RETURNED"/>
+                <property name="deliveryEligibilityType" value="RETURNED"/>
+                <property name="validOrderStates">
+                    <set>
+                        <value>os.returned</value>
+                        <value>os.returned.waiting.payment</value>
+                    </set>
+                </property>
+            </bean>
+        </property>
+    </bean>
 
 
     <bean id="orderStateManager" class="org.yes.cart.service.order.impl.OrderStateManagerImpl">
@@ -279,6 +336,16 @@
                     <list>
                         <ref bean="offlinePaymentDeliveryTimeEstimationListener"/>
                         <ref bean="paymentConfirmedOrderAutoExportListener"/>
+                    </list>
+                </entry>
+
+                <entry key="evt.delivery.update"            value-ref="deliveryInfoUpdatedOrderAutoExportListener"/>
+                <entry key="evt.release.to.shipment"        value-ref="deliveryInfoUpdatedOrderAutoExportListener"/>
+
+                <entry key="evt.order.cancel.refund">
+                    <list>
+                        <ref bean="cancelledOrderAutoExportListener"/>
+                        <ref bean="returnedOrderAutoExportListener"/>
                     </list>
                 </entry>
             </map>

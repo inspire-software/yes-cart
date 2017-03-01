@@ -33,9 +33,12 @@ import java.util.Set;
  * Date: 20/02/2017
  * Time: 11:26
  */
-public class PaymentConfirmedOrderAutoExportListenerImpl implements OrderStateAfterTransitionListener {
+public class OrderAutoExportListenerImpl implements OrderStateAfterTransitionListener {
 
-    public static final String ELIGIBILITY_TYPE = "INITPAID";
+    private String orderEligibilityType;
+    private String deliveryEligibilityType;
+    private Set<String> validOrderStates;
+    private Set<String> validDeliveryStates;
 
     /** {@inheritDoc} */
     @Override
@@ -54,10 +57,13 @@ public class PaymentConfirmedOrderAutoExportListenerImpl implements OrderStateAf
                 if (isValidDeliveryState(delivery)) {
 
                     final Logger log = ShopCodeContext.getLog(this);
-                    log.debug("OrderEvent {} is eligible for auto export", orderEvent);
+                    if (log.isDebugEnabled()) {
+                        log.debug("OrderEvent {} is eligible for auto export {}/{}",
+                                new Object[] { orderEvent, orderEligibilityType, deliveryEligibilityType });
+                    }
 
-                    order.setEligibleForExport(ELIGIBILITY_TYPE);
-                    delivery.setEligibleForExport(ELIGIBILITY_TYPE);
+                    order.setEligibleForExport(orderEligibilityType);
+                    delivery.setEligibleForExport(deliveryEligibilityType);
 
                 }
 
@@ -68,22 +74,53 @@ public class PaymentConfirmedOrderAutoExportListenerImpl implements OrderStateAf
 
     }
 
-    private static final Set<String> VALID = new HashSet<String>() {{
-        add(CustomerOrder.ORDER_STATUS_IN_PROGRESS);
-        add(CustomerOrder.ORDER_STATUS_PARTIALLY_SHIPPED);
-        add(CustomerOrder.ORDER_STATUS_COMPLETED);
-    }};
-
     protected boolean isValidOrderState(final CustomerOrder customerOrder) {
 
-        return !customerOrder.isBlockExport() && VALID.contains(customerOrder.getOrderStatus());
+        return !customerOrder.isBlockExport() &&
+                (validOrderStates == null || validOrderStates.contains(customerOrder.getOrderStatus()));
 
     }
 
     protected boolean isValidDeliveryState(final CustomerOrderDelivery customerOrderDelivery) {
 
-        return !customerOrderDelivery.isBlockExport();
+        return !customerOrderDelivery.isBlockExport() &&
+                (validDeliveryStates == null || validDeliveryStates.contains(customerOrderDelivery.getDeliveryStatus()));
 
     }
 
+    /**
+     * Order export eligibility type if state is allowed.
+     *
+     * @param orderEligibilityType type
+     */
+    public void setOrderEligibilityType(final String orderEligibilityType) {
+        this.orderEligibilityType = orderEligibilityType;
+    }
+
+    /**
+     * Delivery export eligibility type if state is allowed.
+     *
+     * @param deliveryEligibilityType type
+     */
+    public void setDeliveryEligibilityType(final String deliveryEligibilityType) {
+        this.deliveryEligibilityType = deliveryEligibilityType;
+    }
+
+    /**
+     * Set of valid order states.
+     *
+     * @param validOrderStates valid states
+     */
+    public void setValidOrderStates(final Set<String> validOrderStates) {
+        this.validOrderStates = validOrderStates;
+    }
+
+    /**
+     * Set of valida delivery states.
+     *
+     * @param validDeliveryStates valid states
+     */
+    public void setValidDeliveryStates(final Set<String> validDeliveryStates) {
+        this.validDeliveryStates = validDeliveryStates;
+    }
 }
