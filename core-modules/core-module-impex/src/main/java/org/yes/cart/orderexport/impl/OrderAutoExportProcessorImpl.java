@@ -101,28 +101,36 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
 
             for (final CustomerOrderDelivery delivery : eligibleDeliveries) {
 
-                delivery.setEligibleForExport(null);
-                if (exported.contains(delivery.getCustomerOrderDeliveryId())) {
-                    delivery.setLastExportDate(new Date());
-                    delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
-                    delivery.setLastExportStatus(null); // No status - OK
-                    log.debug("Delivery {} exported", delivery.getDeliveryNum());
+                if (!delivery.isBlockExport()) {
+                    delivery.setEligibleForExport(null);
+                    if (exported.contains(delivery.getCustomerOrderDeliveryId())) {
+                        delivery.setLastExportDate(new Date());
+                        delivery.setLastExportDeliveryStatus(delivery.getDeliveryStatus());
+                        delivery.setLastExportStatus(null); // No status - OK
+                        log.debug("Delivery {} exported", delivery.getDeliveryNum());
+                    } else {
+                        log.debug("Delivery {} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum());
+                    }
                 } else {
-                    log.debug("Delivery {} is not exported (possibly no valid exporter?)", delivery.getDeliveryNum());
+                    log.debug("Delivery {} was marked as blocked", delivery.getDeliveryNum());
                 }
 
             }
 
         }
 
-        customerOrder.setEligibleForExport(null);
-        if (!exported.isEmpty()) {
-            customerOrder.setLastExportDate(new Date());
-            customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
-            customerOrder.setLastExportStatus(null); // No status - OK
-            log.debug("Order {} exported", customerOrder.getOrdernum());
+        if (!customerOrder.isBlockExport()) {
+            customerOrder.setEligibleForExport(null);
+            if (!exported.isEmpty()) {
+                customerOrder.setLastExportDate(new Date());
+                customerOrder.setLastExportOrderStatus(customerOrder.getOrderStatus());
+                customerOrder.setLastExportStatus(null); // No status - OK
+                log.debug("Order {} exported", customerOrder.getOrdernum());
+            } else {
+                log.debug("Order {} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum());
+            }
         } else {
-            log.debug("Order {} is not exported (possibly no valid exporter?)", customerOrder.getOrdernum());
+            log.debug("Order {} was marked as blocked", customerOrder.getOrdernum());
         }
         customerOrderService.update(customerOrder);
     }

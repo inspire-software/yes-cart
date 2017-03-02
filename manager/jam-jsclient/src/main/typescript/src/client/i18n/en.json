@@ -494,6 +494,7 @@
   "CUSTOMERORDER_EXPORT_BLOCK": "Export blocked",
   "CUSTOMERORDER_EXPORT_BLOCK_TIP": "Export blocking prevents this order from export. This could be due to a flow transition (order is in a state that should not be exported), or a manual blocking.",
   "CUSTOMERORDER_EXPORT_LAST": "Last export",
+  "CUSTOMERORDER_EXPORT_NEXT": "Next export",
   "CUSTOMERORDER_B2B_REF": "Customer reference",
   "CUSTOMERORDER_B2B_EMPLOYEEID": "Customer employee ID",
   "CUSTOMERORDER_B2B_CHARGEID": "Charge to",

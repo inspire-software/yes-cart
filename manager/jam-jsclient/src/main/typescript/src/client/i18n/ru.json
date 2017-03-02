@@ -494,6 +494,7 @@
   "CUSTOMERORDER_EXPORT_BLOCK": "Экспорт заблокирован",
   "CUSTOMERORDER_EXPORT_BLOCK_TIP": "Блокировка предотвращает этот заказ от экспорта. Это может быть связано с обработкой заказа (состояние заказа, которое не должно быть экспортировано) или ручной блокировки.",
   "CUSTOMERORDER_EXPORT_LAST": "Последний экспорт",
+  "CUSTOMERORDER_EXPORT_NEXT": "Следующий экспорт",
   "CUSTOMERORDER_B2B_REF": "Номер заказа клиента",
   "CUSTOMERORDER_B2B_EMPLOYEEID": "Номер сотрудника",
   "CUSTOMERORDER_B2B_CHARGEID": "Поручитель",

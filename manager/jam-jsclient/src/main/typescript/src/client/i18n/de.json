@@ -494,6 +494,7 @@
   "CUSTOMERORDER_EXPORT_BLOCK": "Export gesperrt",
   "CUSTOMERORDER_EXPORT_BLOCK_TIP": "Export-Blockierung verhindert diese Reihenfolge beim Export. Dies könnte auf einen Strömungsübergang zurückzuführen sein (die Reihenfolge ist in einem Zustand, der nicht exportiert werden sollte) oder eine manuelle Blockierung.",
   "CUSTOMERORDER_EXPORT_LAST": "Letzter Export",
+  "CUSTOMERORDER_EXPORT_NEXT": "Nächster Export",
   "CUSTOMERORDER_B2B_REF": "Bestellrefernz",
   "CUSTOMERORDER_B2B_EMPLOYEEID": "Mitarbeiter ID",
   "CUSTOMERORDER_B2B_CHARGEID": "Kostenstelle",
