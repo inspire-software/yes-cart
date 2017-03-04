@@ -51,6 +51,15 @@ public class ProductDTOImpl implements ProductDTO {
     @DtoField(value = "manufacturerCode")
     private String manufacturerCode;
 
+    @DtoField(value = "manufacturerPartCode")
+    private String manufacturerPartCode;
+
+    @DtoField(value = "supplierCode")
+    private String supplierCode;
+
+    @DtoField(value = "supplierCatalogCode")
+    private String supplierCatalogCode;
+
     @DtoField(value = "pimCode")
     private String pimCode;
 
@@ -217,6 +226,48 @@ public class ProductDTOImpl implements ProductDTO {
      */
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getManufacturerPartCode() {
+        return manufacturerPartCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setManufacturerPartCode(final String manufacturerPartCode) {
+        this.manufacturerPartCode = manufacturerPartCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getSupplierCatalogCode() {
+        return supplierCatalogCode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSupplierCatalogCode(final String supplierCatalogCode) {
+        this.supplierCatalogCode = supplierCatalogCode;
     }
 
     /**

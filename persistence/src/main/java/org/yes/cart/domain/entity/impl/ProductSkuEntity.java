@@ -42,6 +42,9 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     private String code;
     private String manufacturerCode;
+    private String manufacturerPartCode;
+    private String supplierCode;
+    private String supplierCatalogCode;
     private String name;
     private String displayName;
     private String description;
@@ -84,6 +87,30 @@ public class ProductSkuEntity implements org.yes.cart.domain.entity.ProductSku, 
 
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    public String getManufacturerPartCode() {
+        return manufacturerPartCode;
+    }
+
+    public void setManufacturerPartCode(final String manufacturerPartCode) {
+        this.manufacturerPartCode = manufacturerPartCode;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getSupplierCatalogCode() {
+        return supplierCatalogCode;
+    }
+
+    public void setSupplierCatalogCode(final String supplierCatalogCode) {
+        this.supplierCatalogCode = supplierCatalogCode;
     }
 
     @Field(index = Index.YES, analyze = Analyze.YES, norms = Norms.YES, store = Store.YES)

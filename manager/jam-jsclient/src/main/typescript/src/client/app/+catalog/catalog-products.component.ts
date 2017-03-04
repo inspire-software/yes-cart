@@ -81,7 +81,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
   newProductInstance():ProductWithLinksVO {
     return {
       productId: 0,
-      guid: null, code: null, manufacturerCode: null, pimCode: null,
+      guid: null, code: null,
+      manufacturerCode: null, manufacturerPartCode: null,
+      supplierCode: null, supplierCatalogCode: null,
+      pimCode: null,
       tag: null,
       availablefrom: null, availableto: null,
       availability: 1,
@@ -102,7 +105,10 @@ export class CatalogProductsComponent implements OnInit, OnDestroy {
     let product = this.selectedProduct != null ? this.selectedProduct.productId : 0;
     return {
       skuId: 0, productId: product,
-      guid: null, code: null, manufacturerCode: null, barCode: null,
+      guid: null, code: null,
+      manufacturerCode: null, manufacturerPartCode: null,
+      supplierCode: null, supplierCatalogCode: null,
+      barCode: null,
       rank: 0,
       name: '', description: null, displayNames: [],
       uri: null,

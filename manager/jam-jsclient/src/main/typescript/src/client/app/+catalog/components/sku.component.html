@@ -43,6 +43,13 @@
                     {{ 'NO_WHITESPACE_REQUIRED' | translate }}
                   </div>
                 </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_MANUFACTURER_PART_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_MANUFACTURER_PART_CODE' | translate }}" formControlName="manufacturerPartCode" name="manufacturerPartCode" type="text" [(ngModel)]="sku.manufacturerPartCode">
+                  <div [hidden]="skuForm.controls['manufacturerPartCode'].valid || skuForm.controls['manufacturerPartCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
 
                 <div class="form-group">
                   <label>{{ 'PRODUCT_BAR_CODE' | translate }}</label>
@@ -143,6 +150,35 @@
                              value="metadescription"
                              i18n="displayMetadescriptions"
                              (dataChanged)="onMetaDataChange($event)"></yc-i18n-table>
+            </div>
+          </div>
+
+        </div>
+
+      </tab>
+
+      <tab heading="{{ 'TAB_EXTERNAL' | translate }}"  (select)="tabSelected('External')">
+
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-md-9 col-lg-6">
+              <fieldset>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_SUPPLIER_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_SUPPLIER_CODE' | translate }}" formControlName="supplierCode" name="supplierCode" type="text" [(ngModel)]="sku.supplierCode">
+                  <div [hidden]="skuForm.controls['supplierCode'].valid || skuForm.controls['supplierCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>{{ 'PRODUCT_SUPPLIER_CATALOG_CODE' | translate }}</label>
+                  <input class="form-control" placeholder="{{ 'PRODUCT_SUPPLIER_CATALOG_CODE' | translate }}" formControlName="supplierCatalogCode" name="supplierCatalogCode" type="text" [(ngModel)]="sku.supplierCatalogCode">
+                  <div [hidden]="skuForm.controls['supplierCatalogCode'].valid || skuForm.controls['supplierCatalogCode'].pristine" class="alert alert-danger">
+                    {{ 'NO_WHITESPACE_REQUIRED' | translate }}
+                  </div>
+                </div>
+              </fieldset>
             </div>
           </div>
 

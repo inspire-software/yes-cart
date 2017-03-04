@@ -220,6 +220,8 @@ public class DtoProductServiceImpl
                                 Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
                                 Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
                                 Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("manufacturerPartCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
+                                Restrictions.ilike("supplierCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
                                 Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT),
                                 Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.EXACT)
                         ));
@@ -230,6 +232,8 @@ public class DtoProductServiceImpl
                                 Restrictions.ilike("guid", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
                                 Restrictions.ilike("code", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
                                 Restrictions.ilike("manufacturerCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("manufacturerPartCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
+                                Restrictions.ilike("supplierCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
                                 Restrictions.ilike("pimCode", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE),
                                 Restrictions.ilike("tag", tagOrCodeOrBrandOrType.getSecond(), MatchMode.ANYWHERE)
                         ));
@@ -258,6 +262,8 @@ public class DtoProductServiceImpl
                     criteria.add(Restrictions.or(
                             Restrictions.ilike("code", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("manufacturerCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("manufacturerPartCode", filter, MatchMode.ANYWHERE),
+                            Restrictions.ilike("supplierCode", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("pimCode", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("name", filter, MatchMode.ANYWHERE),
                             Restrictions.ilike("description", filter, MatchMode.ANYWHERE)

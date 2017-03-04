@@ -41,6 +41,15 @@ public class VoProductSku {
     @DtoField(value = "manufacturerCode")
     private String manufacturerCode;
 
+    @DtoField(value = "manufacturerPartCode")
+    private String manufacturerPartCode;
+
+    @DtoField(value = "supplierCode")
+    private String supplierCode;
+
+    @DtoField(value = "supplierCatalogCode")
+    private String supplierCatalogCode;
+
     @DtoField(value = "name")
     private String name;
 
@@ -111,6 +120,30 @@ public class VoProductSku {
 
     public void setManufacturerCode(final String manufacturerCode) {
         this.manufacturerCode = manufacturerCode;
+    }
+
+    public String getManufacturerPartCode() {
+        return manufacturerPartCode;
+    }
+
+    public void setManufacturerPartCode(final String manufacturerPartCode) {
+        this.manufacturerPartCode = manufacturerPartCode;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(final String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getSupplierCatalogCode() {
+        return supplierCatalogCode;
+    }
+
+    public void setSupplierCatalogCode(final String supplierCatalogCode) {
+        this.supplierCatalogCode = supplierCatalogCode;
     }
 
     public String getName() {

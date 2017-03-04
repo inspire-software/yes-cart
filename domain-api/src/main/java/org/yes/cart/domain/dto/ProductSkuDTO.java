@@ -74,6 +74,51 @@ public interface ProductSkuDTO extends Identifiable, Guidable {
     void setManufacturerCode(String code);
 
     /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getManufacturerPartCode();
+
+    /**
+     * Manufacturer non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code manufacturer code
+     */
+    void setManufacturerPartCode(String code);
+
+    /**
+     * Get the non unique product code.
+     *
+     * @return product code.
+     */
+    String getSupplierCode();
+
+    /**
+     * Supplier non unique product code.
+     * Limitation code must not contains underscore
+     *
+     * @param code supplier code
+     */
+    void setSupplierCode(String code);
+
+    /**
+     * Get the non unique product catalog code.
+     *
+     * @return catalog code.
+     */
+    String getSupplierCatalogCode();
+
+    /**
+     * Supplier non unique catalog code.
+     * Limitation code must not contains underscore
+     *
+     * @param code catalog code
+     */
+    void setSupplierCatalogCode(String code);
+
+    /**
      * Get name.
      *
      * @return sku name.

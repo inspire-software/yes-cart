@@ -53,6 +53,9 @@ export interface ProductSkuVO {
   guid : string;
   code : string;
   manufacturerCode : string;
+  manufacturerPartCode : string;
+  supplierCode : string;
+  supplierCatalogCode : string;
   barCode : string;
 
   rank : number;
@@ -107,6 +110,9 @@ export interface ProductVO {
   guid : string;
   code : string;
   manufacturerCode : string;
+  manufacturerPartCode : string;
+  supplierCode : string;
+  supplierCatalogCode : string;
   pimCode : string;
 
   tag : string;

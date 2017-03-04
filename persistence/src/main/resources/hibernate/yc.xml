@@ -1076,24 +1076,15 @@
                 <comment>Product or product sku code</comment>
             </column>
         </property>
-        <property name="manufacturerCode" type="string" length="255" index="PRODUCT_MCODE" not-null="false">
-            <column name="MANUFACTURER_CODE" length="255" not-null="false">
-                <comment>Product or product sku code</comment>
-            </column>
-        </property>
-        <property name="pimCode" type="string" length="255" index="PRODUCT_PCODE" not-null="false">
-            <column name="PIM_CODE" length="255" not-null="false">
-                <comment>Product code in PIM</comment>
-            </column>
-        </property>
-        <property name="availablefrom" type="timestamp" not-null="false">
-            <column name="AVAILABLEFROM">
-                <comment>
-                    AVAILABLEFROM AVAILABLETO date range when product will be available, for pre and back orders
-                </comment>
-            </column>
-        </property>
+        <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" index="PRODUCT_MCODE" not-null="false"/>
+        <property name="manufacturerPartCode" column="MANUFACTURER_PART_CODE" type="string" length="255" index="PRODUCT_MPCODE" not-null="false"/>
+        <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255" index="PRODUCT_SCODE" not-null="false"/>
+        <property name="supplierCatalogCode" column="SUPPLIER_CATALOG_CODE" type="string" length="255" index="PRODUCT_SCCODE" not-null="false"/>
+        <property name="pimCode" column="PIM_CODE" type="string" length="255" index="PRODUCT_PCODE" not-null="false"/>
+
+        <property name="availablefrom" column="AVAILABLEFROM" type="timestamp" not-null="false"/>
         <property name="availableto" column="AVAILABLETO" type="timestamp" not-null="false"/>
+
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>
@@ -1223,6 +1214,10 @@
 
         <property name="code" column="CODE" type="string" length="255" index="SKU_CODE" not-null="true"/>
         <property name="manufacturerCode" column="MANUFACTURER_CODE" type="string" length="255" index="SKU_MCODE" not-null="false"/>
+        <property name="manufacturerPartCode" column="MANUFACTURER_PART_CODE" type="string" length="255" index="SKU_MPCODE" not-null="false"/>
+        <property name="supplierCode" column="SUPPLIER_CODE" type="string" length="255" index="SKU_SCODE" not-null="false"/>
+        <property name="supplierCatalogCode" column="SUPPLIER_CATALOG_CODE" type="string" length="255" index="SKU_SCCODE" not-null="false"/>
+
         <property name="name" type="string" length="255" not-null="true">
             <column name="NAME" length="255" not-null="true"/>
         </property>

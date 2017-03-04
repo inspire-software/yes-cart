@@ -620,6 +620,9 @@
         VERSION bigint not null DEFAULT 0,
         CODE varchar(255) not null  unique,
         MANUFACTURER_CODE varchar(255),
+        MANUFACTURER_PART_CODE varchar(255),
+        SUPPLIER_CODE varchar(255),
+        SUPPLIER_CATALOG_CODE varchar(255),
         PIM_CODE varchar(255),
         AVAILABLEFROM timestamp,
         AVAILABLETO timestamp,
@@ -938,6 +941,9 @@
         VERSION bigint not null DEFAULT 0,
         CODE varchar(255) not null  unique,
         MANUFACTURER_CODE varchar(255),
+        MANUFACTURER_PART_CODE varchar(255),
+        SUPPLIER_CODE varchar(255),
+        SUPPLIER_CATALOG_CODE varchar(255),
         NAME varchar(255) not null,
         DISPLAYNAME varchar(4000),
         DESCRIPTION varchar(4000),
@@ -1566,8 +1572,14 @@
 
 
     create index PRODUCT_MCODE on TPRODUCT (MANUFACTURER_CODE);
+    create index PRODUCT_MPCODE on TPRODUCT (MANUFACTURER_PART_CODE);
+    create index PRODUCT_SCODE on TPRODUCT (SUPPLIER_CODE);
+    create index PRODUCT_SCCODE on TPRODUCT (SUPPLIER_CATALOG_CODE);
     create index PRODUCT_PCODE on TPRODUCT (PIM_CODE);
     create index SKU_MCODE on TSKU (MANUFACTURER_CODE);
+    create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
+    create index SKU_SCODE on TSKU (SUPPLIER_CODE);
+    create index SKU_SCCODE on TSKU (SUPPLIER_CATALOG_CODE);
     create index SKU_BCODE on TSKU (BARCODE);
 
 

@@ -680,3 +680,21 @@ alter table TCARRIERSLA add column EXTERNAL_REF varchar(40);
 --         foreign key (SHOP_ID)
 --         references TSHOP;
 
+--
+-- YC-777 Product must have manufacturerPartCode, supplierCode and supplierCatalogCode
+--
+
+alter table TPRODUCT add column MANUFACTURER_PART_CODE varchar(255);
+alter table TPRODUCT add column SUPPLIER_CODE varchar(255);
+alter table TPRODUCT add column SUPPLIER_CATALOG_CODE varchar(255);
+
+alter table TSKU add column MANUFACTURER_PART_CODE varchar(255);
+alter table TSKU add column SUPPLIER_CODE varchar(255);
+alter table TSKU add column SUPPLIER_CATALOG_CODE varchar(255);
+
+create index PRODUCT_MPCODE on TPRODUCT (MANUFACTURER_PART_CODE);
+create index PRODUCT_SCODE on TPRODUCT (SUPPLIER_CODE);
+create index PRODUCT_SCCODE on TPRODUCT (SUPPLIER_CATALOG_CODE);
+create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
+create index SKU_SCODE on TSKU (SUPPLIER_CODE);
+create index SKU_SCCODE on TSKU (SUPPLIER_CATALOG_CODE);
