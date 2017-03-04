@@ -319,6 +319,9 @@
   "CONTENT_TAB_CMS": "CMS",
 
   "PRODUCT_MANUFACTURER_CODE": "Код производителя",
+  "PRODUCT_MANUFACTURER_PART_CODE": "Номер детали производителя",
+  "PRODUCT_SUPPLIER_CODE": "Код поставщика",
+  "PRODUCT_SUPPLIER_CATALOG_CODE": "Каталог поставщика",
   "PRODUCT_PIM_CODE": "Ссылка PIM",
   "PRODUCT_BAR_CODE": "EAN/UPC",
   "PRODUCT_FROM": "Доступен с",

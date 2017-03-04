@@ -319,6 +319,9 @@
   "CONTENT_TAB_CMS": "CMS",
 
   "PRODUCT_MANUFACTURER_CODE": "Manufacturer code",
+  "PRODUCT_MANUFACTURER_PART_CODE": "Hersteller-Teilenummer",
+  "PRODUCT_SUPPLIER_CODE": "Lieferantencode",
+  "PRODUCT_SUPPLIER_CATALOG_CODE": "Lieferkatalog",
   "PRODUCT_PIM_CODE": "PIM reference",
   "PRODUCT_BAR_CODE": "EAN/UPC",
   "PRODUCT_FROM": "Available from",
