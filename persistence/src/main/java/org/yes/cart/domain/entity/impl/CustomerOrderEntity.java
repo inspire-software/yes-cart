@@ -18,11 +18,10 @@ package org.yes.cart.domain.entity.impl;
 
 
 import org.yes.cart.domain.entity.*;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -90,6 +89,8 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
     private String createdBy;
     private String updatedBy;
     private String guid;
+
+    private CustomerOrderDetAttributesImpl storedAttributes = new CustomerOrderDetAttributesImpl();
 
     public CustomerOrderEntity() {
     }
@@ -447,6 +448,34 @@ public class CustomerOrderEntity implements org.yes.cart.domain.entity.CustomerO
 
     public void setAppliedPromo(final String appliedPromo) {
         this.appliedPromo = appliedPromo;
+    }
+
+
+    public String getStoredAttributesInternal() {
+        return storedAttributes != null ? storedAttributes.toString() : null;
+    }
+
+    public void setStoredAttributesInternal(final String storedAttributesInternal) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(storedAttributesInternal);
+    }
+
+    public Pair<String, String> getValue(final String code) {
+        return storedAttributes != null ? storedAttributes.getValue(code) : null;
+    }
+
+    public void putValue(final String code, final String value, final String displayValue) {
+        if (storedAttributes == null) {
+            storedAttributes = new CustomerOrderDetAttributesImpl();
+        }
+        storedAttributes.putValue(code, value, displayValue);
+    }
+
+    public Map<String, Pair<String, String>> getAllValues() {
+        return storedAttributes != null ? storedAttributes.getAllValues() : Collections.<String, Pair<String, String>>emptyMap();
+    }
+
+    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+        this.storedAttributes = new CustomerOrderDetAttributesImpl(allValues);
     }
 
     public Date getCreatedTimestamp() {

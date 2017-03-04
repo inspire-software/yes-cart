@@ -73,6 +73,8 @@ export interface CustomerOrderInfoVO {
   b2bApprovedDate : Date;
   b2bRemarks : string;
 
+  allValues: Pair<string, Pair<string, string>>[];
+
 }
 
 export interface CustomerOrderTransitionResultVO {

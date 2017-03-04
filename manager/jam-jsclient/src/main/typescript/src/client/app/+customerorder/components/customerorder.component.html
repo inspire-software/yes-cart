@@ -168,10 +168,12 @@
               <div class="row">
                 <div class="col-xs-3"><strong>{{ 'CUSTOMERORDER_PROMOTIONS' | translate }}</strong></div>
                 <div class="col-xs-9">
-                  <ul>
-                    <li *ngFor="let pItem of customerorder.promotions">{{ pItem.code }} {{ pItem.name }}</li>
-                  </ul>
+                  <div *ngFor="let pItem of customerorder.promotions">{{ pItem.code }} {{ pItem.name }}</div>
                 </div>
+              </div>
+              <div class="row" *ngFor="let allValue of customerorder.allValues">
+                <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
+                <div class="col-xs-9">{{ allValue.second.first }} {{ allValue.second.second }}</div>
               </div>
             </div>
           </div>

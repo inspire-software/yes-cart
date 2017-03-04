@@ -698,3 +698,10 @@ create index PRODUCT_SCCODE on TPRODUCT (SUPPLIER_CATALOG_CODE);
 create index SKU_MPCODE on TSKU (MANUFACTURER_PART_CODE);
 create index SKU_SCODE on TSKU (SUPPLIER_CODE);
 create index SKU_SCCODE on TSKU (SUPPLIER_CATALOG_CODE);
+
+--
+-- YC-778 CustomerOrder should have getAllValues()
+--
+
+alter table TCUSTOMERORDER add column STORED_ATTRIBUTES longtext;
+-- alter table TCUSTOMERORDER add column STORED_ATTRIBUTES varchar(4000);

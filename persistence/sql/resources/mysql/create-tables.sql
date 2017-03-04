@@ -329,6 +329,7 @@
         MULTIPLE_SHIPMENT bit default 0 comment 'Wait for all skus in case of not all available.',
         ORDER_TIMESTAMP datetime not null,
         ORDER_IP varchar(45),
+        STORED_ATTRIBUTES longtext,
         CREATED_TIMESTAMP datetime,
         UPDATED_TIMESTAMP datetime,
         CREATED_BY varchar(64),

@@ -337,6 +337,7 @@
         MULTIPLE_SHIPMENT smallint default 0,
         ORDER_TIMESTAMP timestamp not null,
         ORDER_IP varchar(45),
+        STORED_ATTRIBUTES varchar(4000),
         CREATED_TIMESTAMP timestamp,
         UPDATED_TIMESTAMP timestamp,
         CREATED_BY varchar(64),

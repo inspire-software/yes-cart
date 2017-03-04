@@ -1995,6 +1995,8 @@
             </column>
         </property>
 
+        <property name="storedAttributesInternal" column="STORED_ATTRIBUTES" type="string"/>
+
         <property name="orderStatus" column="ORDERSTATUS" type="string" length="64" not-null="true"/>
 
         <property name="eligibleForExport" column="ELIGIBLE_FOR_EXPORT" type="string" length="20" index="CUSTOMERORDER_ELIGEXP"/>

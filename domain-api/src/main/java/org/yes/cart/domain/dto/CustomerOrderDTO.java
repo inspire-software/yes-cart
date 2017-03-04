@@ -17,9 +17,11 @@
 package org.yes.cart.domain.dto;
 
 import org.yes.cart.domain.entity.Identifiable;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Order DTO interface.
@@ -610,6 +612,16 @@ public interface CustomerOrderDTO extends Identifiable {
      */
     void setAppliedPromo(String appliedPromo);
 
+
+    /**
+     * @return all values mapped to codes
+     */
+    Map<String, Pair<String, String>> getAllValues();
+
+    /**
+     * @param allValues all values
+     */
+    void setAllValues(Map<String, Pair<String, String>> allValues);
 
 
 }

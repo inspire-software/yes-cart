@@ -20,9 +20,11 @@ import com.inspiresoftware.lib.dto.geda.annotations.Dto;
 import com.inspiresoftware.lib.dto.geda.annotations.DtoField;
 import org.yes.cart.constants.Constants;
 import org.yes.cart.domain.dto.CustomerOrderDTO;
+import org.yes.cart.domain.misc.Pair;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * User: Igor Azarny iazarny@yahoo.com
@@ -138,6 +140,9 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
     private Date b2bApprovedDate;
     @DtoField(value = "b2bRemarks", readOnly = true)
     private String b2bRemarks;
+
+    @DtoField(value = "allValues", readOnly = true)
+    private Map<String, Pair<String, String>> allValues;
 
 
     /**
@@ -663,6 +668,20 @@ public class CustomerOrderDTOImpl implements CustomerOrderDTO {
      */
     public void setB2bRemarks(final String b2bRemarks) {
         this.b2bRemarks = b2bRemarks;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Map<String, Pair<String, String>> getAllValues() {
+        return allValues;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setAllValues(final Map<String, Pair<String, String>> allValues) {
+        this.allValues = allValues;
     }
 
     /**
