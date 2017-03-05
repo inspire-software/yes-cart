@@ -39,6 +39,7 @@ import org.yes.cart.util.ShopCodeContext;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -62,6 +63,8 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
     private final ProductSkuService productSkuService;
 
     private final Map<String, String> supplierTemplates;
+
+    private String exporterId = "EmailNotificationOrderExporterImpl";
 
     public EmailNotificationOrderExporterImpl(final TaskExecutor taskExecutor,
                                               final ThemeService themeService,
@@ -149,7 +152,7 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
 
     /** {@inheritDoc} */
     @Override
-    public Set<Long> export(final CustomerOrder customerOrder, final Collection<CustomerOrderDelivery> customerOrderDeliveries) {
+    public ExportResult export(final CustomerOrder customerOrder, final Collection<CustomerOrderDelivery> customerOrderDeliveries) {
 
         final Properties map = getSupplierNotificationsMap(customerOrder);
 
@@ -172,21 +175,43 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
         }
 
         final Set<Long> exported = new HashSet<Long>();
+        final Map<String, String> audit = new HashMap<String, String>();
+        final String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
         for (final Map.Entry<String, List<CustomerOrderDelivery>> entry : deliveriesBySupplierCode.entrySet()) {
+
+            final StringBuilder auditInfo = new StringBuilder();
+
+            final String notify = map.getProperty(entry.getKey());
+
+            auditInfo.append(notify).append(' ').append(customerOrder.getOrderStatus());
 
             fillNotificationParameters(
                     customerOrder, entry.getValue(),
                     supplierTemplates.get(customerOrder.getOrderStatus()),
                     Collections.<String, Object>singletonMap("supplierTemplateKey", entry.getKey()),
-                    StringUtils.split(map.getProperty(entry.getKey()), ','));
+                    StringUtils.split(notify, ','));
 
             for (final CustomerOrderDelivery delivery : entry.getValue()) {
                 exported.add(delivery.getCustomerOrderDeliveryId());
+                auditInfo.append(' ').append(delivery.getDeliveryNum());
             }
+
+            audit.put(getExporterId() + ": " + entry.getKey() + ": " + timestamp, auditInfo.toString());
 
         }
 
-        return exported;
+        return new ExportResult() {
+            @Override
+            public Set<Long> getExportedDeliveryIds() {
+                return exported;
+            }
+
+            @Override
+            public Map<String, String> getOrderAuditParams() {
+                return audit;
+            }
+        };
 
     }
 
@@ -282,5 +307,19 @@ public class EmailNotificationOrderExporterImpl implements OrderExporter {
         autoExportListener.registerExporter(this);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public String getExporterId() {
+        return exporterId;
+    }
 
+    /**
+     * Exporter ID.
+     *
+     * @param exporterId ID
+     */
+    public void setExporterId(final String exporterId) {
+        this.exporterId = exporterId;
+    }
 }

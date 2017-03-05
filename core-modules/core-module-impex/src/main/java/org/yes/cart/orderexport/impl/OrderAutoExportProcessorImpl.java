@@ -81,6 +81,7 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
         }
 
         final Set<Long> exported = new HashSet<Long>();
+        final Map<String, String> audit = new HashMap<String, String>();
 
         if (eligibleDeliveries.isEmpty()) {
             log.warn("Auto export for order {} in {} has no eligible deliveries. at least one delivery must be marked as eligible.",
@@ -93,7 +94,9 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
                 log.debug("Order {} in {} is eligible for auto export", customerOrder.getOrdernum(), customerOrder.getOrderStatus());
                 for (final OrderExporter exporter : exporters) {
 
-                    exported.addAll(exporter.export(customerOrder, eligibleDeliveries));
+                    final OrderExporter.ExportResult result = exporter.export(customerOrder, eligibleDeliveries);
+                    exported.addAll(result.getExportedDeliveryIds());
+                    audit.putAll(result.getOrderAuditParams());
 
                 }
 
@@ -131,6 +134,9 @@ public class OrderAutoExportProcessorImpl implements OrderAutoExportProcessor {
             }
         } else {
             log.debug("Order {} was marked as blocked", customerOrder.getOrdernum());
+        }
+        for (final Map.Entry<String, String> auditEntry : audit.entrySet()) {
+            customerOrder.putValue(auditEntry.getKey(), auditEntry.getValue(), "AUDITEXPORT");
         }
         customerOrderService.update(customerOrder);
     }

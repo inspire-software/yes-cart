@@ -172,8 +172,10 @@
                 </div>
               </div>
               <div class="row" *ngFor="let allValue of customerorder.allValues">
-                <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
-                <div class="col-xs-9">{{ allValue.second.first }} {{ allValue.second.second }}</div>
+                <template [ngIf]="allValue.second.second != 'AUDITEXPORT'">
+                  <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
+                  <div class="col-xs-9">{{ allValue.second.first }} {{ allValue.second.second }}</div>
+                </template>
               </div>
             </div>
           </div>
@@ -343,6 +345,12 @@
                     </template>
                   </div>
                 </div>
+              </div>
+              <div class="row" *ngFor="let allValue of customerorder.allValues">
+                <template [ngIf]="allValue.second.second == 'AUDITEXPORT'">
+                  <div class="col-xs-3"><strong>{{ allValue.first }}</strong></div>
+                  <div class="col-xs-9">{{ allValue.second.first }}</div>
+                </template>
               </div>
             </div>
           </div>

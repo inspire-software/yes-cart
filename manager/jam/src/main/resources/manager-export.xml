@@ -126,6 +126,7 @@
             </map>
         </constructor-arg>
         <property name="orderAutoExportListener" ref="orderAutoExportProcessorInternal"/>
+        <property name="exporterId" value="EMAIL"/>
     </bean>
 
 
