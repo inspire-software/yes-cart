@@ -74,7 +74,7 @@
   </yc-modal>
 
   <yc-modal #editModalDialog
-            title="{{ 'SHOP_TAB_URL' | translate }}"
+            title="{{ 'SHOP_TAB_ALIAS' | translate }}"
             cancelLabel="{{ 'MODAL_BUTTON_CANCEL' | translate }}"
             positiveLabel="{{ 'MODAL_BUTTON_SAVE' | translate }}"
             [valid]="validForSave"
@@ -83,7 +83,7 @@
     <form role="form" [formGroup]="shopAliasForm">
       <fieldset>
         <div class="row">
-          <div class="col-lg-3">{{ 'SHOP_URL' | translate }}</div>
+          <div class="col-lg-3">{{ 'CODE' | translate }}</div>
           <div class="col-lg-9">
             <input class="form-control" formControlName="alias" type="text" [(ngModel)]="aliasToEdit.alias">
             <div [hidden]="shopAliasForm.controls['alias'].valid || shopAliasForm.controls['alias'].pristine" class="alert alert-danger">
